@@ -1,0 +1,29 @@
+{
+  "credentials": {
+    "username": "f4:4d:30:ee:c9:1d",
+    "password": "4156ac789eaa0dc23d5cfb570a23f950ea9bcc63877b3a78a6a86604892d2d01"
+  },
+  "api": {
+    "base_url": "https://unistudious.com",
+    "login_endpoint": "/api_slc/login_check",
+    "whats_new_endpoint": "/slc/get-whats-news",
+    "timeout": 30
+  },
+  "sync": {
+    "interval_minutes": 5,
+    "status_file": "data/sync_status.json",
+    "token_refresh_interval_minutes": 45
+  },
+  "database": {
+    "host": "localhost",
+    "port": 3306,
+    "user": "root",
+    "password": "",
+    "database": "unistudious"
+  },
+  "network": {
+    "check_url": "https://www.google.com",
+    "check_timeout": 5
+  },
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NzAwNjQ2MTUsImV4cCI6MTc3MDY2OTQxNSwicm9sZXMiOlsiUk9MRV9TTEMiXSwidXNlcm5hbWUiOiJmNDo0ZDozMDplZTpjOToxZCJ9.Q34F7G40Mpf6wLAvD0pUs2Kg88Yg4FFtQA1SORHcVVW_lc-Dijlw1oGjdVrmzEwjGuDOEjz5WO1D2293EIZtuGHp-HxftHlfbckzP0pl_rXAwFzb7A5F7x_svEXMxpQbcsSCFaG9418f5gOfBwrgd_MLqW6xckEAr1r8WICg1Py2QvGyHDIQrljmbGNC_94Mfz4m40znwtbZ9bwy093ytBME3XZhFcD35019vMsPHK4UWg64y2s4Of3jNKRUhutWRw-oJoF8kbBaDa0KGmeQziQYp0eR9fXJLDbaiTAKuwMj_vQm9dLhudcgw8YcaoxM6gu12WpIiwVkVNQkcJoF8A"
+}

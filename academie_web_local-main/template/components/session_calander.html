@@ -1,0 +1,509 @@
+<div class="content-body ">
+    <div class="container-fluid">
+        <div id="calendar-info"
+             data-session-id="12"
+             data-account-id="3"
+             data-local-id="8"
+             style="display: none;">
+        </div>
+        <!-- row -->
+        <div class="top-bar p-2">
+            <div class="row">
+                <div class="col-md-4">
+                    <a href="/dashboard/show-session-config/12" class="btn btn-secondary btn-custom">
+                        <i class="fas fa-arrow-left"></i> Return
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-3 col-xxl-4">
+                <div class="card">
+                    <div class="card-body">
+                        <button type="button"
+                                id="superGroupBtn"
+                                class="btn btn-warning w-100"
+                                data-bs-toggle="modal"
+                                data-bs-target="#superGroupModal"
+                                data-account-id="3"
+                                data-session-id="12"
+                                data-local-id="8">
+                            <i class="ti-plus me-2"></i> Create Special Group
+                        </button>
+                        <hr class="mb-4 mt-4">
+                        <h4 class="card-intro-title">Groups</h4>
+                        <div class="mb-3">
+                                <input type="text" id="group-calander-filter" class="form-control" placeholder="Search by Group Name">
+                            </div>
+                        <div class="mb-3">
+                            <a href="{{ url_for('dashboard.show_create_group_session', id_session=id_session) }}" class="btn btn-primary btn-event w-100">
+                                <span class="align-middle"><i class="ti-plus me-2"></i></span> Create New
+                            </a>
+                        </div>
+                        <div class="">
+                            <div id="external-events" class="my-3">
+                                <p>Drag and drop your event or click in the calendar</p>
+                                    <div id="my-custom-events" class="my-3"></div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-9 col-xxl-8">
+
+                <div class="card">
+                    <div class="row card-header">
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-primary mb-3 float-start" id="copyGroupBtn" data-bs-toggle="modal" data-bs-target="#copyIntervalModal">
+                                        Copy Group to Other Interval
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-danger float-end" data-bs-toggle="modal" data-bs-target="#deleteIntervalModal">
+                                        Delete Data from Interval
+                                    </button>
+                                </div>
+                            </div>
+                    <div class="card-body">
+                        <div id="calendar" class="app-fullcalendar"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- BEGIN MODAL -->
+            <div class="modal fade none-border" id="event-modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title"><strong>Add New Event</strong></h4>
+                        </div>
+                        <div class="modal-body"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default waves-effect" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-success save-event waves-effect waves-light">Create event</button>
+                            <button type="button" class="btn btn-danger delete-event waves-effect waves-light" data-bs-toggle="modal">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal Add Category -->
+            <div class="modal fade none-border" id="add-category">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title"><strong>Add a category</strong></h4>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="control-label form-label">Category Name</label>
+                                        <input class="form-control form-white" placeholder="Enter name" type="text" name="category-name">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="control-label form-label">Choose Category Color</label>
+                                        <select class="form-control form-white" data-placeholder="Choose a color..." name="category-color">
+                                            <option value="success">Success</option>
+                                            <option value="danger">Danger</option>
+                                            <option value="info">Info</option>
+                                            <option value="pink">Pink</option>
+                                            <option value="primary">Primary</option>
+                                            <option value="warning">Warning</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger light waves-effect" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary waves-effect waves-light save-category" data-bs-toggle="modal">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CREATE EVENT MODAL -->
+<div class="modal fade" id="createEventModal" tabindex="-1" aria-labelledby="createEventModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createEventModalLabel">Create Event</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createEventForm">
+                    <div class="mb-3">
+                        <label for="createEventTitle" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="createEventTitle" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="createEventDate" class="form-label">Start Date</label>
+                        <input type="date" class="form-control" id="createEventDate" required>
+                    </div>
+
+                    <!-- Type Select -->
+                    <div class="custom-select" id="createTypeSessionSelect" data-name="createTypeSessionSelect">
+                        <div class="selected" data-value="">Select Type</div>
+                        <div class="options">
+                            <div data-value="">Select Type</div>
+                            <div data-value="P">Presence (P)</div>
+                            <div data-value="O">Online (O)</div>
+                        </div>
+                    </div>
+
+                    <!-- Room Select -->
+                    <div class="mb-3">
+                        <label class="form-label">Room</label>
+                        <div class="custom-select" id="createEventRoom" data-name="createEventRoom">
+                            <div class="selected" data-value="">Select a Room</div>
+                            <div class="options">
+                                <div data-value="">Select a Room</div>
+                                <!-- Add your room options here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subject Select -->
+                    <div class="mb-3">
+                        <label class="form-label">Teacher And Subject</label>
+                        <div class="custom-select" id="createEventSubject" data-name="createEventSubject">
+                            <div class="selected" data-value="">Select a Subject and Teacher</div>
+                            <div class="options">
+                                <div data-value="">Select a Subject and Teacher</div>
+                                <!-- Your subject options will go here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Completion Tag (keep as multiple select) -->
+                    <div class="mb-3">
+                        <label class="form-label">Completion Tag</label>
+                        <div class="custom-select" id="createEventCompletionTag" data-name="createEventCompletionTag">
+                            <div class="selected" data-value="">Select Completion Tag(s)</div>
+                            <div class="options">
+                                <div data-value="1">Bronze</div>
+                                <div data-value="2">Silver</div>
+                                <div data-value="3">Gold</div>
+                                <div data-value="4">Platinum</div>
+                                <div data-value="5">Diamond</div>
+                                <div data-value="6">Master</div>
+                                <div data-value="7">Grand Master</div>
+                                <div data-value="8">Legendary</div>
+                                <div data-value="10">fonction 1</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <style>
+
+                        .custom-select .selected {
+                            padding: 4px;
+                        }
+                        .custom-select .options {
+                            display: none;
+                            position: absolute;
+                            top: 100%;
+                            left: 0;
+                            right: 0;
+                            border: 1px solid #ccc;
+                            background: white;
+                            max-height: 200px;
+                            overflow-y: auto;
+                            z-index: 10;
+                        }
+                        .custom-select .options div {
+                            padding: 8px;
+                        }
+                        .custom-select .options div:hover {
+                            background: #f0f0f0;
+                        }
+                        .custom-select.open .options {
+                            display: block;
+                        }
+                        .custom-select .options div.selected-option {
+                            background: #007bff;
+                            color: white;
+                        }
+                    </style>
+                    <script>
+                        document.querySelectorAll('.custom-select').forEach(select => {
+                            const selected = select.querySelector('.selected');
+                            const optionsContainer = select.querySelector('.options');
+                            let selectedValues = [];
+
+                            // Store initial values
+                            selected.dataset.selectedValues = JSON.stringify(selectedValues);
+
+                            selected.addEventListener('click', () => {
+                                select.classList.toggle('open');
+                            });
+
+                            optionsContainer.querySelectorAll('div').forEach(option => {
+                                option.addEventListener('click', e => {
+                                    e.stopPropagation();
+                                    const value = option.dataset.value;
+
+                                    if (selectedValues.includes(value)) {
+                                        selectedValues = selectedValues.filter(v => v !== value);
+                                        option.classList.remove('selected-option');
+                                    } else {
+                                        selectedValues.push(value);
+                                        option.classList.add('selected-option');
+                                    }
+
+                                    // Update display
+                                    selected.textContent = selectedValues.length
+                                        ? selectedValues.map(v => optionsContainer.querySelector(`[data-value="${v}"]`).textContent).join(', ')
+                                        : selected.dataset.placeholder || 'Select...';
+
+                                    // Store values in data attribute so they're accessible
+                                    selected.dataset.selectedValues = JSON.stringify(selectedValues);
+                                    select.dataset.selectedValues = JSON.stringify(selectedValues);
+                                });
+                            });
+
+                            document.addEventListener('click', e => {
+                                if (!select.contains(e.target)) {
+                                    select.classList.remove('open');
+                                }
+                            });
+                        });
+                    </script>
+
+
+                    <!-- Duplicate Select -->
+                    <div class="mb-3">
+                        <label class="form-label">Duplicate</label>
+                        <div class="custom-select" id="createEventDuplicate" data-name="createEventDuplicate">
+                            <div class="selected" data-value="">Select an Option</div>
+                            <div class="options">
+                                <div data-value="">Select an Option</div>
+                                <div data-value="none">Not Duplicate</div>
+                                <div data-value="daily">Per Day</div>
+                                <div data-value="weekly">Per Week</div>
+                                <div data-value="biweekly">Every 2 Weeks</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3" id="createStartTimeFields" style="display: none;">
+                        <label for="createEventStartTime" class="form-label">Start Time</label>
+                        <input type="time" class="form-control" id="createEventStartTime">
+                    </div>
+                    <div class="mb-3" id="createEndTimeFields" style="display: none;">
+                        <label for="createEventEndTime" class="form-label">End Time</label>
+                        <input type="time" class="form-control" id="createEventEndTime">
+                    </div>
+                    <div class="mb-3" id="createEventEndFields" style="display: none;">
+                        <label for="createEventEndDate" class="form-label">End Date</label>
+                        <input type="date" class="form-control" id="createEventEndDate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="createEventDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="createEventDescription" rows="3"></textarea>
+                    </div>
+
+                    <!-- Hidden fields -->
+                    <input type="hidden" id="createEventGroupId">
+                    <input type="hidden" id="createEventGroupCapacity">
+                    <input type="hidden" id="createEventSessionId">
+                    <input type="hidden" id="createEventAccountId">
+                    <input type="hidden" id="createEventLocalId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="createSaveEventButton">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--============ MODAL OF DELETING ============-->
+<div class="modal fade" id="deleteIntervalModal" tabindex="-1" aria-labelledby="deleteIntervalModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteIntervalModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete all Calendars from this interval?
+                <div class="mt-3 mb-3">
+                    <label for="deleteTargetStartDate">Start Date</label>
+                    <input type="date" id="deleteTargetStartDate" class="form-control" min="2025-07-10" max="2025-08-10" required>
+                </div>
+                <div class="mb-3">
+                    <label for="deleteTargetEndDate">End Date</label>
+                    <input type="date" id="deleteTargetEndDate" class="form-control" min="" max="2025-08-10" required>
+                </div>
+            </div>
+            <input type="hidden" id="" value="12">
+            <input type="hidden" id="" value="8">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="confirmDeleteInterval" class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--Model of creating Special Group-->
+<div class="modal fade" id="superGroupModal" tabindex="-1" aria-labelledby="superGroupModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="superGroupModalLabel">New Special Group</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="eventSpecialGroupForm">
+                    <div class="mb-3">
+                        <label for="eventSpecialTitle" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="eventSpecialTitle">
+                        <div id="eventTitleSpecialError" class="alert alert-danger d-none mt-2"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventSpecialCapacity" class="form-label">Capacity</label>
+                        <input type="text" class="form-control" id="eventSpecialCapacity">
+                        <div id="eventCapacitySpecialError" class="alert alert-danger d-none mt-2"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventSpecialAccessType" class="form-label">Access Type</label>
+                        <select class="form-control" id="eventSpecialAccessType">
+                            <option value="" selected disabled>Select Access Type</option>
+                            <option value="true">Request to Join</option>
+                            <option value="false">Directly Join</option>
+                        </select>
+                        <div id="eventAccessTypeError" class="alert alert-danger d-none mt-2"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventSpecialDate" class="form-label">Start Date</label>
+                        <input type="date" class="form-control" id="eventSpecialDate" min="2026-01-16" max="2025-08-10">
+                        <div id="eventDateSpecialError" class="alert alert-danger d-none mt-2"></div>
+                    </div>
+                    <div class="mb-3" id="typeSessionContainerSuper">
+                        <label for="typeSpecialSessionSelect" class="form-label">Type</label>
+                        <select class="form-control" id="typeSpecialSessionSelect">
+                            <option value="" selected>Selected Type</option>
+                            <option value="P">Presence (P)</option>
+                            <option value="O">Online (O)</option>
+                        </select>
+                        <div id="typeSessionSelectSpecialError" class="alert alert-danger d-none mt-2"></div>
+                    </div>
+                    <div class="mb-3" id="startTimeFields">
+                        <label for="eventSpecialStartTime" class="form-label">Start Time</label>
+                        <input type="time" class="form-control" id="eventSpecialStartTime">
+                        <div id="eventStartTimeSpecialError" class="alert alert-danger d-none mt-2" role="alert"></div>
+                    </div>
+                    <div class="mb-3" id="endTimeFields">
+                        <label for="eventSpecialEndTime" class="form-label">End Time</label>
+                        <input type="time" class="form-control" id="eventSpecialEndTime">
+                        <div id="eventEndTimeSpecialError" class="alert alert-danger d-none mt-2" role="alert"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventSpecialRoom" class="form-label">Room</label>
+                        <select class="form-control" id="eventSpecialRoom" required>
+                            <option value="" selected disabled>Select a Room</option>
+                            <option value="7">class khalil</option>
+                            <option value="8">class haythm</option>
+                            <option value="9">classe test</option>
+                            <option value="10">classe kasmi</option>
+                        </select>
+                        <div id="eventRoomSpecialError" class="alert alert-danger d-none mt-2"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventSpecialTeacher" class="form-label">Select a Teacher</label>
+                        <select class="form-control" id="eventSpecialTeacher" required>
+                            <option value="" selected disabled>Select a Teacher</option>
+                            <option value="4">Mkaissi khalil</option>
+                            <option value="692">sami tester</option>
+                        </select>
+                        <div id="eventTeacherSpecialError" class="alert alert-danger d-none mt-2"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventSpecialSubject" class="form-label">Select a Subject</label>
+                        <select class="form-control" id="eventSpecialSubject" required>
+                            <option value="" selected disabled>Select a Subject</option>
+                            <option value="1">Math</option>
+                            <option value="2">Cultural Studies</option>
+                            <option value="4">Programming</option>
+                        </select>
+                        <div id="eventSubjectSpecialError" class="alert alert-danger d-none mt-2"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventSpecialCompletionTagCalender" class="form-label">Completion Tag</label>
+                        <select class="form-control" id="eventSpecialCompletionTagCalender" multiple required>
+                            <option value="1">Bronze</option>
+                            <option value="2">Silver</option>
+                            <option value="3">Gold</option>
+                            <option value="4">Platinum</option>
+                            <option value="5">Diamond</option>
+                            <option value="6">Master</option>
+                            <option value="7">Grand Master</option>
+                            <option value="8">Legendary</option>
+                            <option value="10">fonction 1</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventSpecialDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="eventSpecialDescription" rows="3"></textarea>
+                    </div>
+                    <input type="hidden" id="eventSpecialSessionId" value="12">
+                    <input type="hidden" id="eventSpecialAccountId" value="3">
+                    <input type="hidden" id="eventSpecialLocalId" value="8">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="saveEventSpecialGroupButton" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="copyIntervalModal" tabindex="-1" aria-labelledby="copyIntervalModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="copyIntervalModalLabel">Copy Group to Another Interval</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="copyIntervalForm">
+                    <div class="mb-3">
+                        <label for="sourceInterval" class="form-label">Source Interval for session: Session Test</label>
+                        <input type="text" class="form-control" id="sourceInterval" name="sourceInterval" readonly value="From 10/07/2025 to 10/08/2025">
+                    </div>
+                    <div class="mb-3">
+                        <label for="targetStartDate" class="form-label">Select Target Interval Start Date</label>
+                        <input type="date" class="form-control" id="targetStartDate" name="targetStartDate" min="2025-07-10" max="2025-08-10" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="targetEndDate" class="form-label">Select Target Interval End Date</label>
+                        <input type="date" class="form-control" id="targetEndDate" name="targetEndDate" min="" max="2025-08-10" required>
+                    </div>
+                    <div class="mb-3" id="copyDateStartContainer" style="display:none;">
+                        <label for="copyDateStart" class="form-label">Select Copy Start Date</label>
+                        <input type="date" class="form-control" id="copyDateStart" name="copyDateStart" min="2025-07-10" max="2025-08-10">
+                    </div>
+                    <input type="hidden" id="sessionId" value="12">
+                    <input type="hidden" id="localId" value="8">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" id="copyGroupConfirm">Copy Group</button>
+            </div>
+        </div>
+    </div>
+</div>
