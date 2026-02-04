@@ -90,8 +90,8 @@
 												</select>
 											</div>
 											<!-- Button trigger modal -->
-											<button type="button" class="btn btn-primary ms-sm-2 ms-0 mt-sm-0 mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
-												+ New schedule
+											<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal">
+												<i class="bi bi-plus-circle me-2"></i>Add Schedule
 											</button>
 										</div>
 									</div>
@@ -242,50 +242,202 @@
 					</div>
 				</div>
 			</div>
-				<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-					<div class="modal-dialog modal-dialog-center">
+				<!-- Add/Edit Event Modal -->
+				<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered">
 						<div class="modal-content">
 							<div class="modal-header">
-								<h1 class="modal-title fs-5" id="exampleModalLabel">New Schedule</h1>
+								<h5 class="modal-title" id="eventModalLabel">Add New Schedule</h5>
 								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 							</div>
 							<div class="modal-body">
-								<div class="row">
-									<div class="col-xl-6">
-										<div class="mb-3">
-											<label for="exampleFormControlInput1" class="form-label">First Name</label>
-											<input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Harry">
-										</div>
-										<div class="mb-3">
-											<label for="exampleFormControlInput2" class="form-label">Admission Date</label>
-											<input type="date" class="form-control" id="exampleFormControlInput2">
-										</div>
+								<form id="eventForm">
+									<div class="mb-3">
+										<label for="eventTitle" class="form-label">Group</label>
+										<select class="form-control" id="group_id">
+											<option value="" selected>GROUP 1 </option>
+											<option value="P">GROUP 2</option>
+											<option value="O">GROUP 3</option>
+										</select>
 									</div>
-									<div class="col-xl-6">
-										<div class="mb-3">
-											<label for="exampleFormControlInput3" class="form-label">Last Name</label>
-											<input type="text" class="form-control" id="exampleFormControlInput3" placeholder="Potter">
-										</div>
-										<div class="mb-3">
-											<label for="exampleFormControlInput2" class="form-label">Class</label>
-											<select class="default-select" aria-label="Default select example">
-												<option selected>Select</option>
-												<option value="1">12th</option>
-												<option value="2">10th</option>
-												<option value="3">8th</option>
-											  </select>
-										</div>
+
+									<div class="mb-3">
+										<label for="eventDate" class="form-label">Start Date</label>
+										<input type="date" class="form-control" id="eventDate">
+										<div id="eventDateError" class="alert alert-danger d-none mt-2" role="alert"></div>
 									</div>
-								</div>
+
+									<div class="mb-3" id="typeSessionContainer">
+										<label for="typeSessionSelect" class="form-label">Type</label>
+										<select class="form-control" id="typeSessionSelect">
+											<option value="" selected>Select Type</option>
+											<option value="P">Presence (P)</option>
+											<option value="O">Online (O)</option>
+										</select>
+										<div id="typeSessionSelectError" class="alert alert-danger d-none mt-2" role="alert"></div>
+									</div>
+
+									<div class="mb-3">
+										<label for="eventRoom" class="form-label">Room</label>
+										<select class="form-control" id="eventRoom" required>
+											<option value="" selected disabled>Select a Room</option>
+											<option value="7">class khalil</option>
+											<option value="8">class haythm</option>
+											<option value="9">classe test</option>
+											<option value="10">classe kasmi</option>
+										</select>
+										<div id="eventRoomError" class="alert alert-danger d-none mt-2" role="alert"></div>
+									</div>
+
+									<div class="mb-3">
+										<label for="eventSubject" class="form-label">Teacher And Subject</label>
+										<select class="form-control" id="eventSubject" required>
+											<option value="" selected disabled>Select a Subject and Teacher</option>
+											<option value="65" data-subject="1" data-user="375">Subject : Math - Teacher : hedi laater</option>
+											<option value="66" data-subject="1" data-user="374">Subject : Math - Teacher : youssef kasmi</option>
+										</select>
+										<div id="eventSubjectError" class="alert alert-danger d-none mt-2" role="alert"></div>
+									</div>
+
+									<div class="mb-3">
+										<label for="eventCompletionTagCalander" class="form-label">Completion Tag</label>
+										<select class="form-control" id="eventCompletionTagCalander" multiple>
+											<option value="1">Bronze</option>
+											<option value="2">Silver</option>
+											<option value="3">Gold</option>
+											<option value="4">Platinum</option>
+											<option value="5">Diamond</option>
+											<option value="6">Master</option>
+											<option value="7">Grand Master</option>
+											<option value="8">Legendary</option>
+											<option value="10">fonction 1</option>
+										</select>
+									</div>
+
+									<div class="mb-3">
+										<label for="eventDuplicate" class="form-label">Duplicate</label>
+										<select class="form-control" id="eventDuplicate">
+											<option value="" selected disabled>Select an Option</option>
+											<option value="none">Not Duplicate</option>
+											<option value="daily">Per Day</option>
+											<option value="weekly">Per Week</option>
+											<option value="biweekly">Every 2 Weeks</option>
+										</select>
+										<div id="eventDuplicateError" class="alert alert-danger d-none mt-2" role="alert"></div>
+									</div>
+
+									<div class="mb-3 d-none" id="startTimeFields"></div>
+									<div class="mb-3 d-none" id="endTimeFields"></div>
+									<div class="mb-3 d-none" id="eventEndFields"></div>
+
+									<div class="mb-3">
+										<label for="eventDescription" class="form-label">Description</label>
+										<textarea class="form-control" id="eventDescription" name="eventDescription" rows="3" placeholder="Enter event description"></textarea>
+									</div>
+
+									<input type="hidden" id="eventGroupId" value="75">
+									<input type="hidden" id="eventGroupCapacity" value="25">
+									<input type="hidden" id="eventSessionId" value="12">
+									<input type="hidden" id="eventAccountId" value="3">
+									<input type="hidden" id="eventLocalId" value="8">
+								</form>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-primary">Save changes</button>
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+								<button type="button" class="btn btn-primary" id="saveEventButton">Save</button>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+
+
+
+	<!-- modal of the information of the calander -->
+	<!-- Event Details Modal -->
+		<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+    	<div class="modal-dialog modal-dialog-centered">
+        	<div class="modal-content">
+            	<div class="modal-header">
+					<h5 class="modal-title" id="eventModalLabel">
+						<i class="bi bi-calendar-event me-2"></i>Event Details
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+            	<div class="modal-body">
+                	<form id="editGroupForm">
+                    	<div class="mb-3">
+                        	<label for="groupRef" class="form-label fw-bold">
+                            	<i class="bi bi-hash text-primary"></i> Reference ID
+                        	</label>
+                        	<input type="text" class="form-control" id="groupRef" name="groupRef" readonly>
+                    	</div>
+
+                    	<div class="mb-3">
+                        	<label for="groupName" class="form-label fw-bold">
+                            	<i class="bi bi-card-heading text-primary"></i> Name
+                        	</label>
+                        	<input type="text" class="form-control" id="groupName" name="groupName" readonly>
+                    	</div>
+
+                    	<div class="row">
+                        	<div class="col-md-6 mb-3">
+                            	<label for="eventDate" class="form-label fw-bold">
+                                	<i class="bi bi-calendar-check text-success"></i> Start Date
+                            	</label>
+                            	<input type="date" class="form-control" id="eventDate" name="eventDate" readonly>
+                        	</div>
+                        	<div class="col-md-6 mb-3">
+                            	<label for="eventEndDate" class="form-label fw-bold">
+                                	<i class="bi bi-calendar-x text-danger"></i> End Date
+                            	</label>
+                            	<input type="date" class="form-control" id="eventEndDate" name="eventEndDate" readonly>
+                        	</div>
+                    	</div>
+
+                    	<div class="row">
+                        	<div class="col-md-6 mb-3">
+                            	<label for="eventStartTime" class="form-label fw-bold">
+                                	<i class="bi bi-clock text-success"></i> Start Time
+                            	</label>
+                            	<input type="time" class="form-control" id="eventStartTime" name="eventStartTime" readonly>
+                        	</div>
+                        	<div class="col-md-6 mb-3">
+                            	<label for="eventEndTime" class="form-label fw-bold">
+                                	<i class="bi bi-clock-history text-danger"></i> End Time
+                            	</label>
+                            	<input type="time" class="form-control" id="eventEndTime" name="eventEndTime" readonly>
+                        	</div>
+                    	</div>
+
+                    	<div class="mb-3">
+                        	<label for="typeSessionEdit" class="form-label fw-bold">
+                            	<i class="bi bi-tag text-primary"></i> Type
+                        	</label>
+                        	<input type="text" class="form-control" id="typeSessionEdit" name="typeSessionEdit" readonly>
+                    	</div>
+
+                    	<div class="mb-3">
+                        	<label for="description" class="form-label fw-bold">
+                            	<i class="bi bi-text-paragraph text-primary"></i> Description
+                        	</label>
+                        	<textarea class="form-control" id="description" name="description" rows="3" readonly></textarea>
+                    	</div>
+
+                    	<input type="hidden" id="groupId" name="groupId">
+                	</form>
+            	</div>
+            	<div class="modal-footer">
+                	<button type="button" class="btn btn-success" id="saveEventGroupCalendar" style="display:none;">
+                    	<i class="bi bi-save me-1"></i>Save
+                	</button>
+                	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    	<i class="bi bi-x-circle me-1"></i>Close
+                	</button>
+            	</div>
+        	</div>
+    	</div>
+	</div>
     <!-- Required vendors -->
     <script src="/static/vendor/global/global.min.js"></script>
 	<script src="/static/vendor/chart.js/Chart.bundle.min.js"></script>
