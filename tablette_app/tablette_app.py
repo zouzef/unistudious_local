@@ -12,6 +12,7 @@ from auth.token_manager import token_manager
 from routes.tablet_routes import tablet_bp
 from routes.attendance_routes import attendance_bp
 from routes.student_routes import student_bp
+from routes.calender_routes import calendar_bp
 
 # Import websocket handlers
 from websockets.events import register_socketio_events, start_background_tasks
@@ -31,6 +32,7 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 app.register_blueprint(tablet_bp)
 app.register_blueprint(attendance_bp)
 app.register_blueprint(student_bp)
+app.register_blueprint(calendar_bp)
 
 # ============= Register WebSocket Events =============
 register_socketio_events(socketio)
@@ -55,7 +57,7 @@ if __name__ == "__main__":
     socketio.run(
         app,
         host="0.0.0.0",
-        port=5012,
+        port=5013,
         debug=True,
         ssl_context=('cert.pem', 'key.pem'),
         allow_unsafe_werkzeug=True

@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const sessionId = dataEl.dataset.sessionId;
     const roomId = dataEl.dataset.roomId;
 
-    console.log('Session ID:', sessionId); // For debugging
-    console.log('Room ID:', roomId); // For debugging
+    console.log('Session ID:', sessionId);
+    console.log('Room ID:', roomId);
 
     // Initialize calendar on the 'calendar' div
     var calendarEl = document.getElementById('calendar');
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
         center: 'title',
         right: 'dayGridMonth,timeGridWeek,timeGridDay'
       },
-      initialDate: new Date(), // Use current date instead of hardcoded
+      initialDate: new Date(),
       navLinks: true,
       editable: true,
       droppable: true,
@@ -26,34 +26,45 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Fetch events from your endpoint
       events: function(info, successCallback, failureCallback) {
-        console.log('Fetching calendar events...'); // For debugging
-        fetch(`/get-all-calander/${roomId}`)
+        console.log('Fetching calendar events...');
+        fetch(`/get-calendar-room/${roomId}`)
           .then(response => {
-            console.log('Response status:', response.status); // For debugging
+            console.log('Response status:', response.status);
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
             return response.json();
           })
           .then(data => {
-            console.log('Calendar data received:', data); // For debugging
-            if (data.Message === "Success") {
+            console.log('Calendar data received:', data);
+
+            // Check for "Successfully got calendar room" message
+            if (data.Message === "Successfully got calendar room" && data.Data) {
               // Transform your data to FullCalendar format
-              const events = data.data.map(item => ({
+              const events = data.Data.map(item => ({
                 id: item.id,
-                title: item.name || item.subjectName, // Use group name or subject
-                start: item.start,
-                end: item.end,
+                title: item.title, // This is "Groub FFF" in your data
+                start: item.start_time, // Note: underscore, not camelCase
+                end: item.end_time,     // Note: underscore, not camelCase
+                backgroundColor: item.color, // Use the color from your data
+                borderColor: item.color,
                 extendedProps: {
                   description: item.description,
-                  teacherName: item.teacherFullName,
-                  subjectName: item.subjectName,
-                  roomName: item.roomName,
-                  sessionName: item.sessionName,
-                  localName: item.localName
+                  ref: item.ref,
+                  sessionId: item.session_id,
+                  groupSessionId: item.group_session_id,
+                  teacherId: item.teacher_id,
+                  subjectId: item.subject_id,
+                  roomId: item.room_id,
+                  status: item.status,
+                  enabled: item.enabled,
+                  type: item.type
                 }
               }));
-              console.log('Transformed events:', events); // For debugging
+              console.log('Transformed events:', events);
               successCallback(events);
             } else {
-              console.error('Failed to fetch events - Message not Success');
+              console.error('Failed to fetch events - unexpected response format');
               failureCallback(new Error('Failed to fetch events'));
             }
           })
@@ -63,15 +74,17 @@ document.addEventListener('DOMContentLoaded', function() {
           });
       },
 
-      // Optional: Display event details on click
+      // Display event details on click
       eventClick: function(info) {
         alert('Event: ' + info.event.title + '\n' +
-              'Teacher: ' + info.event.extendedProps.teacherName + '\n' +
-              'Subject: ' + info.event.extendedProps.subjectName + '\n' +
-              'Room: ' + info.event.extendedProps.roomName);
+              'Description: ' + info.event.extendedProps.description + '\n' +
+              'Reference: ' + info.event.extendedProps.ref + '\n' +
+              'Type: ' + info.event.extendedProps.type + '\n' +
+              'Start: ' + info.event.start.toLocaleString() + '\n' +
+              'End: ' + info.event.end.toLocaleString());
       }
     });
 
     calendar.render();
-    console.log('Calendar rendered'); // For debugging
+    console.log('Calendar rendered');
 });

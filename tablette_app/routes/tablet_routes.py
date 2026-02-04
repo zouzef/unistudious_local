@@ -35,6 +35,7 @@ def tablet_page(tablet_id):
         if not attendance_calendar or "data" not in attendance_calendar:
             return render_template("no_session.html",
                                    message="No sessions found",
+                                   room_id=room,
                                    tablet_id=tablet_id)
 
         # Find the session for this tablet's room
@@ -43,6 +44,8 @@ def tablet_page(tablet_id):
         if not session_room:
             return render_template("no_session.html",
                                    message="No session for this room",
+                                   room_id=room,
+
                                    tablet_id=tablet_id)
 
         # Parse session times
@@ -52,6 +55,8 @@ def tablet_page(tablet_id):
         if not session_start_str or not session_end_str:
             return render_template("no_session.html",
                                    message="Session time data is missing",
+                                   room_id=room,
+
                                    tablet_id=tablet_id)
 
         try:

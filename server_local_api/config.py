@@ -4,7 +4,7 @@ import json
 
 class Config:
     """Application configuration"""
-
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     # Load database config from JSON file
     CONFIG_FILE = os.path.join(os.path.dirname(__file__), 'configuration.json')
 
@@ -44,5 +44,5 @@ class Config:
     DEBUG = server_config.get('debug', True)
 
     # SSL Configuration ← MODIFIED: Load from JSON
-    SSL_CERT = server_config.get('ssl_cert', 'cert.pem')
-    SSL_KEY = server_config.get('ssl_key', 'key.pem')
+    SSL_CERT = os.path.join(BASE_DIR, server_config.get('ssl_cert', 'cert.pem'))
+    SSL_KEY = os.path.join(BASE_DIR, server_config.get('ssl_key', 'Key.pem'))

@@ -16,6 +16,11 @@ from services.attendance_service import (
 attendance_bp = Blueprint('attendance', __name__)
 
 
+
+
+
+
+
 @attendance_bp.route('/attendance/<int:session_id>')
 def api_get_attendance(session_id):
     """Get attendance data for a session."""

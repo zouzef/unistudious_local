@@ -583,3 +583,58 @@ def get_subject_account(account_id):
     except Exception as e:
         print(f"Error in get_subject_account: {str(e)}")
         return jsonify({"Message": f"Error: {e} in getting subject_account"}), 500  # ← Added status code
+
+
+
+# =======================================
+# ENDPOINT 10: Get Calendar per Room
+#========================================
+def check_room_id(room_id):
+    try:
+        query = """
+            SELECT COUNT(*) AS nbr FROM room WHERE id = %s
+        """
+        values = (room_id,)
+        result = Database.execute_query(query, values)
+        if result and len(result) > 0:
+            return result[0]['nbr'] > 0
+        return False  # Explicit return for empty results
+    except Exception as e:
+        print(f"Error checking room_id: {e}")  # Log the error
+        return False
+
+
+@calendar_bp.route('/get-calendar-room/<int:room_id>', methods=['GET'])
+def get_calendar_room(room_id):
+    try:
+        # Validate room exists first
+        if not check_room_id(room_id):
+            return jsonify({"Message": "Room not found"}), 404
+
+        query = """
+            SELECT * FROM relation_calander_group_session WHERE room_id = %s
+        """
+        values = (room_id,)
+        result = Database.execute_query(query, values)
+
+        if result and len(result) > 0:
+            # Convert datetime objects to ISO format strings
+            for item in result:
+                if 'start_time' in item and item['start_time']:
+                    item['start_time'] = item['start_time'].isoformat()
+                if 'end_time' in item and item['end_time']:
+                    item['end_time'] = item['end_time'].isoformat()
+                if 'created_at' in item and item['created_at']:
+                    item['created_at'] = item['created_at'].isoformat()
+                if 'updated_at' in item and item['updated_at']:
+                    item['updated_at'] = item['updated_at'].isoformat()
+                if 'timestamp' in item and item['timestamp']:
+                    item['timestamp'] = item['timestamp'].isoformat()
+
+            return jsonify({"Message": "Successfully got calendar room", "Data": result}), 200
+        else:
+            return jsonify({"Message": "No calendar data found for this room"}), 404
+
+    except Exception as e:
+        print(f"Error in get_calendar_room: {e}")
+        return jsonify({"Message": f"Error: {e} coming from get calendar room"}), 500
