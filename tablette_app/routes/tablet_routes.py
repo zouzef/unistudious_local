@@ -5,7 +5,8 @@ from services.tablet_service import (
     fetch_all_tablets,
     is_tablet_registered,
     get_tablet_room,
-    get_room_name
+    get_room_name,
+    fetch_slc_info
 )
 from services.attendance_service import (
     fetch_attendance,

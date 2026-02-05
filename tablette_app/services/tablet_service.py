@@ -60,3 +60,18 @@ def get_room_name(room_id, tablets):
         if tablet["roomId"] == room_id:
             return tablet.get("roomName", f"Room {room_id}")
     return f"Room {room_id}"
+
+
+def fetch_slc_info():
+    try:
+        url = f"{base_url}/get_slc_id"
+        response = requests.get(url,verify=False)
+        response.raise_for_status()
+        if response.status_code == 200:
+            print("Response get_slc_id: ",response.json())
+            return response.json()
+        else:
+            return None
+
+    except Exception as e:
+        return None

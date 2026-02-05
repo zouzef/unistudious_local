@@ -121,3 +121,24 @@ def get_rooms_by_local(local_id):
         return jsonify({
             "message": f"Error {str(e)}"
         }), 500
+
+
+@slc_bp.route('/get_slc_id',methods =['GET'])
+def get_slc_id():
+    try:
+        query= """
+            SELECT * FROM slc LIMIT 1;
+        """
+        result = Database.execute_query(query)
+        if result:
+            return jsonify({
+                "Message":"Success",
+                "data":result,
+            }),200
+        else:
+            return jsonify({
+                "Message":"Bad requests",
+                "data":None
+            }),404
+    except Exception as e:
+        return jsonify({"Message":f"Error: {e}"}),500
