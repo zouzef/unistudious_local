@@ -3,7 +3,9 @@ from datetime import datetime
 from services.calender_service import (
 	fetch_calender_room,
 	fetch_group_session,
-	fetch_room
+	fetch_room,
+	fetch_session,
+	fetch_teacher
 )
 
 
@@ -40,7 +42,32 @@ def getRoomLocal(local_id):
 		room_data = fetch_room(local_id)
 		if room_data:
 			return jsonify(room_data),200
+
 		else:
 			return jsonify({"Message": "No data found or error in params"}),404
 	except Exception as e:
-		return jsonify({"Message": f"Erro: {str(e)}"}),500
+		return jsonify({"Message": f"Error: {str(e)}"}),500
+
+@calendar_bp.route('/get-session/<int:account_id>',methods=['GET'])
+def get_session(account_id):
+	try:
+		session_data = fetch_session(account_id)
+		if session_data:
+			return jsonify(session_data),200
+		else:
+			return jsonify({"Message": "No data found or error in params"}),404
+	except Exception as e:
+		return jsonify({"Message": f"Error: {str(e)}"}),500
+
+@calendar_bp.route('/get-teacher/<int:session_id>',methods=['GET'])
+def get_Teacher_Session(session_id):
+	try:
+		teacher_data = fetch_teacher(session_id)
+
+		print(teacher_data)
+		if teacher_data:
+			return jsonify(teacher_data),200
+		else:
+			return jsonify({"Message":"No data found or Error in parms"}),404
+	except Exception as e:
+		return jsonify({"Message":f"Error: {str(e)}"}),500

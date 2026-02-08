@@ -52,3 +52,31 @@ def fetch_room(local_id):
 	except Exception as e:
 		print(f"Unexpected error: {e}")
 		return None
+
+
+def fetch_session(account_id):
+	try:
+		url = f"{base_url}/get_session_detail/{account_id}"
+		response = requests.get(url,verify=False)
+		response.raise_for_status()
+		if response.status_code == 200:
+			return response.json()
+		else:
+			return None
+	except Exception as Err:
+		print(F"Error: {Err} coming from get_session")
+		return None
+
+
+def fetch_teacher(session_id):
+	try:
+		url = f"{base_url}/get_teacher/{session_id}"
+		response = requests.get(url, verify=False)
+		response.raise_for_status()
+		if response.status_code == 200:
+			return response.json()
+		else:
+			return None
+	except Exception as e :
+		print(f"Error: {e} coming from get_teacher ")
+		return None

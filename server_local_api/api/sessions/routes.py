@@ -19,7 +19,6 @@ sessions_bp = Blueprint('sessions', __name__, url_prefix='/scl')
 
 # ENDPOINT 1: Get session details by account
 @sessions_bp.route('/get_session_detail/<int:account_id>', methods=['GET'])
-
 def get_session_detail(account_id):
     try:
         query = """
@@ -138,3 +137,6 @@ def get_session_detail(account_id):
             "message": "An error occurred",
             "error": str(e)
         }), 500
+
+
+

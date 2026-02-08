@@ -734,3 +734,419 @@ jQuery(window).on('resize',function () {
    }, 1000);
 });
 /*  Window Resize END */
+
+
+
+
+/*================== ADD CALANDER FUNCTION TO LOAD DATA FROM THE BACKEND ===================*/
+async function loadRooms(localId) {
+    const roomSelect = document.getElementById('eventRooms');
+
+    if (!roomSelect) {
+        console.error('Room select not found');
+        return;
+    }
+
+    console.log('Loading rooms...');
+
+    // Destroy selectpicker if it exists
+    if ($(roomSelect).data('selectpicker')) {
+        $(roomSelect).selectpicker('destroy');
+    }
+
+    // Clear existing options
+    roomSelect.innerHTML = '<option value="" selected disabled>Select a Room</option>';
+
+    try {
+        const response = await fetch(`/get-room-local/${localId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            const rooms = result.data;
+
+            if (Array.isArray(rooms) && rooms.length > 0) {
+                rooms.forEach(room => {
+                    const option = document.createElement('option');
+                    option.value = room.id;
+                    option.textContent = room.name;
+                    roomSelect.appendChild(option);
+                });
+
+                console.log('Rooms loaded successfully:', rooms.length);
+
+                // Reinitialize selectpicker after adding options
+                $(roomSelect).selectpicker('refresh');
+            } else {
+                roomSelect.innerHTML += '<option value="" disabled>No rooms available</option>';
+                $(roomSelect).selectpicker('refresh');
+            }
+        } else {
+            console.error('Error fetching rooms');
+            roomSelect.innerHTML += '<option value="" disabled>Error loading rooms</option>';
+            $(roomSelect).selectpicker('refresh');
+        }
+    } catch (error) {
+        console.error('Network error:', error);
+        roomSelect.innerHTML += '<option value="" disabled>Connection error</option>';
+        $(roomSelect).selectpicker('refresh');
+    }
+}
+
+//Load Group
+async function loadGroups(accountId, sessionId) {
+    const groupSelect = document.getElementById('group_id');
+
+    if (!groupSelect) {
+        console.error('Group select not found');
+        return;
+    }
+
+    console.log('Loading groups...');
+
+    // Destroy selectpicker if it exists
+    if ($(groupSelect).data('selectpicker')) {
+        $(groupSelect).selectpicker('destroy');
+    }
+
+    // Clear existing options
+    groupSelect.innerHTML = '<option value="" selected disabled>Select a Group</option>';
+
+    try {
+        const response = await fetch(`/get-group-session/${accountId}/${sessionId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Full API result:', result);
+
+            // Adjust this based on your actual response structure
+            const groups = result.data || result;
+
+            if (Array.isArray(groups) && groups.length > 0) {
+                groups.forEach(group => {
+                    const option = document.createElement('option');
+                    option.value = group.id;
+                    option.textContent = group.name;
+                    groupSelect.appendChild(option);
+                });
+
+                console.log('Groups loaded successfully:', groups.length);
+
+                // Reinitialize selectpicker after adding options
+                $(groupSelect).selectpicker('refresh');
+            } else {
+                groupSelect.innerHTML += '<option value="" disabled>No groups available</option>';
+                $(groupSelect).selectpicker('refresh');
+            }
+        } else {
+            const error = await response.json();
+            console.error('Error fetching groups:', error.Message);
+            groupSelect.innerHTML += '<option value="" disabled>Error loading groups</option>';
+            $(groupSelect).selectpicker('refresh');
+        }
+    } catch (error) {
+        console.error('Network error:', error);
+        groupSelect.innerHTML += '<option value="" disabled>Connection error</option>';
+        $(groupSelect).selectpicker('refresh');
+    }
+}
+
+// Load Session
+async function loadSessions(accountId) {
+    const sessionSelect = document.getElementById('session');
+
+    if (!sessionSelect) {
+        console.error('Session select not found');
+        return;
+    }
+
+    console.log('Loading sessions...');
+
+    // Destroy selectpicker if it exists
+    if ($(sessionSelect).data('selectpicker')) {
+        $(sessionSelect).selectpicker('destroy');
+    }
+
+    // Clear existing options
+    sessionSelect.innerHTML = '<option value="" selected disabled>Select Session</option>';
+
+    try {
+        const response = await fetch(`/get-session/${accountId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Full API result:', result);
+
+            // Adjust based on your actual response structure
+            const sessions = result.data || result;
+
+            if (Array.isArray(sessions) && sessions.length > 0) {
+                sessions.forEach(session => {
+                    const option = document.createElement('option');
+                    option.value = session.id;
+                    option.textContent = session.name;
+                    sessionSelect.appendChild(option);
+                });
+
+                console.log('Sessions loaded successfully:', sessions.length);
+
+                // Reinitialize selectpicker after adding options
+                $(sessionSelect).selectpicker('refresh');
+            } else {
+                sessionSelect.innerHTML += '<option value="" disabled>No sessions available</option>';
+                $(sessionSelect).selectpicker('refresh');
+            }
+        } else {
+            const error = await response.json();
+            console.error('Error fetching sessions:', error.Message);
+            sessionSelect.innerHTML += '<option value="" disabled>Error loading sessions</option>';
+            $(sessionSelect).selectpicker('refresh');
+        }
+    } catch (error) {
+        console.error('Network error:', error);
+        sessionSelect.innerHTML += '<option value="" disabled>Connection error</option>';
+        $(sessionSelect).selectpicker('refresh');
+    }
+}
+
+// Load Teachers
+async function loadTeachers(sessionId) {
+    const teacherSelect = document.getElementById('eventSubject');
+
+    if (!teacherSelect) {
+        console.error('Teacher select not found');
+        return;
+    }
+
+    console.log('Loading teachers for session:', sessionId);
+
+    // Destroy selectpicker if it exists
+    if ($(teacherSelect).data('selectpicker')) {
+        $(teacherSelect).selectpicker('destroy');
+    }
+
+    // Clear existing options
+    teacherSelect.innerHTML = '<option value="" selected disabled>Select a Subject and Teacher</option>';
+
+    try {
+        const response = await fetch(`/get-teacher/${sessionId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Full API result:', result);
+
+            // Adjust based on your actual response structure
+            const teachers = result.data || result;
+
+            if (Array.isArray(teachers) && teachers.length > 0) {
+                teachers.forEach(teacher => {
+                    const option = document.createElement('option');
+                    option.value = teacher.id; // Adjust based on your data structure
+                    option.setAttribute('data-subject', teacher.subject_id); // Adjust field name
+                    option.setAttribute('data-user', teacher.user_id); // Adjust field name
+                    option.textContent = `Subject : ${teacher.subject_name} - Teacher : ${teacher.full_name}`; // Adjust field names
+                    teacherSelect.appendChild(option);
+                });
+
+                console.log('Teachers loaded successfully:', teachers.length);
+
+                // Reinitialize selectpicker after adding options
+                $(teacherSelect).selectpicker('refresh');
+            } else {
+                teacherSelect.innerHTML += '<option value="" disabled>No teachers available</option>';
+                $(teacherSelect).selectpicker('refresh');
+            }
+        } else {
+            const error = await response.json();
+            console.error('Error fetching teachers:', error.Message);
+            teacherSelect.innerHTML += '<option value="" disabled>Error loading teachers</option>';
+            $(teacherSelect).selectpicker('refresh');
+        }
+    } catch (error) {
+        console.error('Network error:', error);
+        teacherSelect.innerHTML += '<option value="" disabled>Connection error</option>';
+        $(teacherSelect).selectpicker('refresh');
+    }
+}
+
+// Clear groups function
+function clearGroups() {
+    const groupSelect = document.getElementById('group_id');
+
+    if (groupSelect) {
+        // Destroy selectpicker if it exists
+        if ($(groupSelect).data('selectpicker')) {
+            $(groupSelect).selectpicker('destroy');
+        }
+
+        // Reset to default
+        groupSelect.innerHTML = '<option value="" selected disabled>Select a Group</option>';
+        $(groupSelect).selectpicker('refresh');
+    }
+}
+
+// Clear teachers function
+function clearTeachers() {
+    const teacherSelect = document.getElementById('eventSubject');
+
+    if (teacherSelect) {
+        // Destroy selectpicker if it exists
+        if ($(teacherSelect).data('selectpicker')) {
+            $(teacherSelect).selectpicker('destroy');
+        }
+
+        // Reset to default
+        teacherSelect.innerHTML = '<option value="" selected disabled>Select a Subject and Teacher</option>';
+        $(teacherSelect).selectpicker('refresh');
+    }
+}
+
+// SINGLE DOMContentLoaded with all listeners
+// SINGLE DOMContentLoaded with all listeners
+document.addEventListener('DOMContentLoaded', function() {
+    const eventModal = document.getElementById('eventModal');
+
+    if (eventModal) {
+        // When modal opens
+        eventModal.addEventListener('shown.bs.modal', function() {
+            const accountId = document.getElementById('eventAccountId').value;
+            const localId = document.getElementById('eventLocalId').value;
+
+            console.log('Modal shown, loading data...');
+
+            // Load sessions first
+            if (accountId) {
+                loadSessions(accountId);
+            }
+
+            // Load rooms
+            if (localId) {
+                loadRooms(localId);
+            }
+
+            // Clear groups and teachers initially
+            clearGroups();
+            clearTeachers();
+        });
+    }
+
+    // Listen for session selection change
+    const sessionSelect = document.getElementById('session');
+    if (sessionSelect) {
+        // Use jQuery change event for selectpicker compatibility
+        $(sessionSelect).on('change', function() {
+            const selectedSessionId = $(this).val();
+            const accountId = document.getElementById('eventAccountId').value;
+
+            console.log('Session selected:', selectedSessionId);
+
+            if (selectedSessionId && accountId) {
+                // Load groups for the selected session
+                loadGroups(accountId, selectedSessionId);
+                // Load teachers for the selected session
+                loadTeachers(selectedSessionId);
+            } else {
+                // Clear groups and teachers if no session selected
+                clearGroups();
+                clearTeachers();
+            }
+        });
+    }
+
+    // ============= ADD THIS SAVE BUTTON HANDLER HERE =============
+    const saveEventButton = document.getElementById('saveEventButton');
+    if (saveEventButton) {
+        saveEventButton.addEventListener('click', function() {
+            // Get all form values
+            const formData = {
+                session_id: document.getElementById('session').value,
+                group_id: document.getElementById('group_id').value,
+                type: document.getElementById('typeSessionSelect').value,
+                room_id: document.getElementById('eventRooms').value,
+                subject_teacher_id: document.getElementById('eventSubject').value,
+                subject_id: document.getElementById('eventSubject').selectedOptions[0]?.getAttribute('data-subject'),
+                user_id: document.getElementById('eventSubject').selectedOptions[0]?.getAttribute('data-user'),
+                completion_tags: Array.from(document.getElementById('eventCompletionTagCalander').selectedOptions).map(opt => opt.value),
+                duplicate: document.getElementById('eventDuplicate').value,
+                start_time: document.getElementById('eventStartTime').value,
+                end_time: document.getElementById('eventEndTime').value,
+                end_date: document.getElementById('eventEndDate').value,
+                description: document.getElementById('eventDescription').value,
+                // Hidden fields
+                account_id: document.getElementById('eventAccountId').value,
+                local_id: document.getElementById('eventLocalId').value
+            };
+
+            // Display in console
+            console.log('=== FORM DATA ===');
+            console.log('Session ID:', formData.session_id);
+            console.log('Group ID:', formData.group_id);
+            console.log('Type:', formData.type);
+            console.log('Room ID:', formData.room_id);
+            console.log('Subject/Teacher ID:', formData.subject_teacher_id);
+            console.log('Subject ID:', formData.subject_id);
+            console.log('User ID:', formData.user_id);
+            console.log('Completion Tags:', formData.completion_tags);
+            console.log('Duplicate:', formData.duplicate);
+            console.log('Start Time:', formData.start_time);
+            console.log('End Time:', formData.end_time);
+            console.log('End Date:', formData.end_date);
+            console.log('Description:', formData.description);
+            console.log('Account ID:', formData.account_id);
+            console.log('Local ID:', formData.local_id);
+            console.log('=================');
+            console.log('Full Object:', formData);
+
+            // Validation
+            if (!formData.session_id) {
+                alert('Please select a session');
+                return;
+            }
+            if (!formData.group_id) {
+                alert('Please select a group');
+                return;
+            }
+            if (!formData.type) {
+                alert('Please select a type');
+                return;
+            }
+            if (!formData.room_id) {
+                alert('Please select a room');
+                return;
+            }
+            if (!formData.subject_teacher_id) {
+                alert('Please select a teacher and subject');
+                return;
+            }
+            if (!formData.duplicate) {
+                alert('Please select duplicate option');
+                return;
+            }
+
+            console.log('✅ All validations passed!');
+        });
+    }
+    // ============= END OF SAVE BUTTON HANDLER =============
+});
+
+
+

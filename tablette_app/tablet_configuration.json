@@ -1,6 +1,6 @@
 {
   "url":{
-    "API_BASE_URL": "https://172.28.20.178:5004/scl",
+    "API_BASE_URL": "https://192.168.1.27:5004/scl",
     "get_all_tablets": "/get-all-tablets",
     "get_all_calendar": "/get-all-calender",
     "update-attendance-note": "/update-attendance-note",

@@ -75,3 +75,6 @@ def fetch_slc_info():
 
     except Exception as e:
         return None
+
+
+
