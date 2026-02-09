@@ -638,3 +638,127 @@ def get_calendar_room(room_id):
     except Exception as e:
         print(f"Error in get_calendar_room: {e}")
         return jsonify({"Message": f"Error: {e} coming from get calendar room"}), 500
+
+
+
+# =======================================
+# ENDPOINT 11: Create calander request
+#========================================
+def check_session(session_id):
+    try:
+        query = """SELECT COUNT(*) AS nbr FROM session WHERE id = %s"""
+        values = (session_id,)
+        result = Database.execute_query(query,values)
+        if result and len(result) > 0:
+            return result[0]['nbr'] > 0
+        return False
+    except Exception:
+        return False
+
+def check_group(group_id):
+    try:
+        query = """SELECT COUNT(*) AS nbr FROM relation_group_local_session WHERE id = %s"""
+        values = (group_id,)
+        result = Database.execute_query(query,values)
+        if result and len(result)> 0 :
+            return result[0]['nbr']>0
+        return False
+
+    except Exception as e:
+        return False
+
+def check_user(user_id):
+    try:
+        query = """SELECT COUNT(*) AS nbr FROM user WHERE id = %s """
+        values = (user_id,)
+        result = Database.execute_query(query,values)
+        if result and len(result)> 0:
+            return result[0]['nbr']
+    except Exception:
+        return False
+
+def check_subject(subject_id):
+    try:
+        query =""" SELECT COUNT(*) AS nbr FROM subject_config where id = %s """
+        values = (subject_id,)
+        result = Database.execute_query(query,values)
+        if result and len(result)>0:
+            return result[0]['nbr']
+
+    except Exception :
+        return False
+
+
+@calendar_bp.route('/create-calander_request/<int:session_id>', methods=['POST'])
+def create_calander_request(session_id):
+    try:
+        if not (check_session(session_id)):
+            return jsonify({
+                "Message": "There is no session_id"
+            }), 404
+
+        calander_data = request.get_json()
+        room_id = calander_data.get('room_id')
+        group_id = calander_data.get('group_id')
+        subject_id = calander_data.get('subject_id')
+        user_id = calander_data.get('user_id')
+        completion_tag = calander_data.get('tag')
+        duplicate = calander_data.get('duplicate')
+        start_time = calander_data.get('start_time')
+        end_time = calander_data.get('end_time')
+        end_date = calander_data.get('end_date')
+        description = calander_data.get('description')
+        account_id = calander_data.get('account_id')
+        create_time = datetime.now()
+        type = calander_data.get('type')
+
+        # **FIX: Convert list to comma-separated string**
+        if isinstance(completion_tag, list):
+            completion_tag = ','.join(map(str, completion_tag))
+
+        if not (check_room_id(room_id) and check_user(user_id) and check_subject(subject_id) and check_group(group_id)):
+            return jsonify({"Message": "Invalid params"}), 400
+
+        query = """INSERT INTO calendar_request(
+                        session_id,
+                        group_id,
+                        room_id,
+                        subject_id,
+                        user_id,
+                        completion_tags,
+                        duplicate,
+                        start_time,
+                        end_time,
+                        end_date,
+                        description,
+                        account_id,
+                        type,
+                        created_at
+                    )values(
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s
+                    );"""
+        values = (session_id, group_id, room_id, subject_id, user_id, completion_tag, duplicate, start_time, end_time,
+                  end_date, description, account_id, type, create_time)
+
+        result = Database.execute_query(query, values)
+        return jsonify({"Message": "Calendar request created successfully"}), 201
+
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "Message": "Error in create_calendar_request",
+            "data": []
+        }), 500

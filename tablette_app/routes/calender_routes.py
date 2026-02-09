@@ -5,7 +5,9 @@ from services.calender_service import (
 	fetch_group_session,
 	fetch_room,
 	fetch_session,
-	fetch_teacher
+	fetch_teacher,
+	request_calander
+
 )
 
 
@@ -48,6 +50,7 @@ def getRoomLocal(local_id):
 	except Exception as e:
 		return jsonify({"Message": f"Error: {str(e)}"}),500
 
+
 @calendar_bp.route('/get-session/<int:account_id>',methods=['GET'])
 def get_session(account_id):
 	try:
@@ -58,6 +61,7 @@ def get_session(account_id):
 			return jsonify({"Message": "No data found or error in params"}),404
 	except Exception as e:
 		return jsonify({"Message": f"Error: {str(e)}"}),500
+
 
 @calendar_bp.route('/get-teacher/<int:session_id>',methods=['GET'])
 def get_Teacher_Session(session_id):
@@ -71,3 +75,67 @@ def get_Teacher_Session(session_id):
 			return jsonify({"Message":"No data found or Error in parms"}),404
 	except Exception as e:
 		return jsonify({"Message":f"Error: {str(e)}"}),500
+
+
+@calendar_bp.route('/create-calander_request/<int:session_id>', methods=['POST'])
+def create_calander(session_id):
+	try:
+		calander_data = request.get_json()
+
+		if not calander_data:
+			return jsonify({
+				"Message": "Error: No data provided",
+				"Status": "error"
+			}), 400
+
+		# List of required fields
+		required_fields = [
+			'session_id',
+			'group_id',
+			'type',
+			'room_id',
+			'subject_id',
+			'user_id',
+			'duplicate',
+			'start_time',
+			'end_time',
+			'end_date',
+			'description',
+			'account_id',
+			'tag'
+		]
+
+		# Check if any required field is None or missing
+		missing_or_none_fields = []
+
+		for field in required_fields:
+			if field not in calander_data or calander_data[field] is None:
+				missing_or_none_fields.append(field)
+
+		if missing_or_none_fields:
+			return jsonify({
+				"Message": f"Error: Missing or None values for fields: {', '.join(missing_or_none_fields)}",
+				"Status": "error"
+			}), 400
+
+		# Process the calendar data
+		response = request_calander(calander_data)
+
+		if response:
+			return jsonify({
+				"Message": "Success",
+				"Status": "success"
+			}), 200
+		else:
+			return jsonify({
+				"Message": "Error in create calendar",
+				"Status": "error"
+			}), 400
+
+	except Exception as e:
+		print(f"Error in create_calander: {str(e)}")
+
+		return jsonify({
+			"Message": f"Error: {str(e)}",
+			"Status": "error"
+		}), 500

@@ -20,6 +20,7 @@ tablet_bp = Blueprint('tablet', __name__)
 def tablet_page(tablet_id):
     """Display tablet page with current session info."""
     try:
+        print("hii")
         tablette = fetch_all_tablets()
         if not is_tablet_registered(tablet_id, tablette):
             return render_template("not_found.html", message="Tablet not registered")
@@ -31,7 +32,7 @@ def tablet_page(tablet_id):
 
         # Get all scheduled sessions
         attendance_calendar = fetch_attendance()
-        print(attendance_calendar)
+
 
         if not attendance_calendar or "data" not in attendance_calendar:
             return render_template("no_session.html",
@@ -49,6 +50,10 @@ def tablet_page(tablet_id):
 
                                    tablet_id=tablet_id)
 
+        calender_id = session_room.get("id")
+        slc_info = fetch_slc_info()
+        slc_id = slc_info.get('Data', {}).get('id') if slc_info and isinstance(slc_info.get('Data'), dict) else None
+
         # Parse session times
         session_start_str = session_room.get("start")
         session_end_str = session_room.get("end")
@@ -57,7 +62,6 @@ def tablet_page(tablet_id):
             return render_template("no_session.html",
                                    message="Session time data is missing",
                                    room_id=room,
-
                                    tablet_id=tablet_id)
 
         try:
@@ -80,7 +84,9 @@ def tablet_page(tablet_id):
                 "index.html",
                 tablet_id=tablet_id,
                 session_info=session_room,
-                room_name=room_name
+                room_name=room_name,
+                calendar_id = calender_id ,
+                slc_id = slc_id
             )
 
         return render_template("no_session.html",

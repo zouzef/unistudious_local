@@ -5,6 +5,9 @@ from auth.token_manager import token_manager
 from utils.config import config
 
 import urllib3
+
+# from server_local_api.api.sessions.routes import sessions_bp
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 base_url = config["url"]["API_BASE_URL"]
@@ -80,3 +83,13 @@ def fetch_teacher(session_id):
 	except Exception as e :
 		print(f"Error: {e} coming from get_teacher ")
 		return None
+
+
+def request_calander(calander_data):
+	try:
+		session_id = calander_data['session_id']
+		url = f"{base_url}/create-calander_request/{session_id}"
+		response = requests.post(url,verify=False,json=calander_data)
+		return response.ok
+	except Exception:
+		return False

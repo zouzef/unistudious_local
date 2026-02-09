@@ -860,6 +860,22 @@ async function loadGroups(accountId, sessionId) {
     }
 }
 
+// Clear groups function
+function clearGroups() {
+    const groupSelect = document.getElementById('group_id');
+
+    if (groupSelect) {
+        // Destroy selectpicker if it exists
+        if ($(groupSelect).data('selectpicker')) {
+            $(groupSelect).selectpicker('destroy');
+        }
+
+        // Reset to default
+        groupSelect.innerHTML = '<option value="" selected disabled>Select a Group</option>';
+        $(groupSelect).selectpicker('refresh');
+    }
+}
+
 // Load Session
 async function loadSessions(accountId) {
     const sessionSelect = document.getElementById('session');
@@ -923,8 +939,8 @@ async function loadSessions(accountId) {
     }
 }
 
-// Load Teachers
-async function loadTeachers(sessionId) {
+// Load Teachers - UPDATED to accept group_id parameter
+async function loadTeachers(sessionId, groupId) {
     const teacherSelect = document.getElementById('eventSubject');
 
     if (!teacherSelect) {
@@ -932,7 +948,7 @@ async function loadTeachers(sessionId) {
         return;
     }
 
-    console.log('Loading teachers for session:', sessionId);
+    console.log('Loading teachers for session:', sessionId, 'and group:', groupId);
 
     // Destroy selectpicker if it exists
     if ($(teacherSelect).data('selectpicker')) {
@@ -942,8 +958,17 @@ async function loadTeachers(sessionId) {
     // Clear existing options
     teacherSelect.innerHTML = '<option value="" selected disabled>Select a Subject and Teacher</option>';
 
+    // Check if both sessionId and groupId are provided
+    if (!sessionId || !groupId) {
+        console.log('Session ID or Group ID is missing, cannot load teachers');
+        teacherSelect.innerHTML += '<option value="" disabled>Please select a session and group first</option>';
+        $(teacherSelect).selectpicker('refresh');
+        return;
+    }
+
     try {
-        const response = await fetch(`/get-teacher/${sessionId}`, {
+        // Updated to include group_id in the API call
+        const response = await fetch(`/get-teacher/${groupId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -972,7 +997,7 @@ async function loadTeachers(sessionId) {
                 // Reinitialize selectpicker after adding options
                 $(teacherSelect).selectpicker('refresh');
             } else {
-                teacherSelect.innerHTML += '<option value="" disabled>No teachers available</option>';
+                teacherSelect.innerHTML += '<option value="" disabled>No teachers available for this group</option>';
                 $(teacherSelect).selectpicker('refresh');
             }
         } else {
@@ -985,22 +1010,6 @@ async function loadTeachers(sessionId) {
         console.error('Network error:', error);
         teacherSelect.innerHTML += '<option value="" disabled>Connection error</option>';
         $(teacherSelect).selectpicker('refresh');
-    }
-}
-
-// Clear groups function
-function clearGroups() {
-    const groupSelect = document.getElementById('group_id');
-
-    if (groupSelect) {
-        // Destroy selectpicker if it exists
-        if ($(groupSelect).data('selectpicker')) {
-            $(groupSelect).selectpicker('destroy');
-        }
-
-        // Reset to default
-        groupSelect.innerHTML = '<option value="" selected disabled>Select a Group</option>';
-        $(groupSelect).selectpicker('refresh');
     }
 }
 
@@ -1020,7 +1029,47 @@ function clearTeachers() {
     }
 }
 
-// SINGLE DOMContentLoaded with all listeners
+
+// Function to create calendar event via API
+async function createCalendarEvent(formData) {
+    try {
+        const response = await fetch(`/create-calander_request/${formData.session_id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                session_id: formData.session_id,
+                group_id: formData.group_id,
+                type: formData.type,
+                room_id: formData.room_id,
+                subject_id: formData.subject_id,
+                user_id: formData.user_id,
+                duplicate: formData.duplicate,
+                start_time: formData.start_time,
+                end_time: formData.end_time,
+                end_date: formData.end_date,
+                description: formData.description,
+                account_id: formData.account_id,
+                tag: formData.completion_tags // The endpoint expects 'tag' not 'completion_tags'
+            })
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.Status === 'success') {
+            console.log('✅ Calendar event created successfully');
+            return { success: true, data: result };
+        } else {
+            console.error('❌ Error creating calendar event:', result.Message);
+            return { success: false, error: result.Message };
+        }
+    } catch (error) {
+        console.error('❌ Network error:', error);
+        return { success: false, error: 'Connection error. Please try again.' };
+    }
+}
+
 // SINGLE DOMContentLoaded with all listeners
 document.addEventListener('DOMContentLoaded', function() {
     const eventModal = document.getElementById('eventModal');
@@ -1062,8 +1111,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (selectedSessionId && accountId) {
                 // Load groups for the selected session
                 loadGroups(accountId, selectedSessionId);
-                // Load teachers for the selected session
-                loadTeachers(selectedSessionId);
+                // Clear teachers when session changes (will be loaded when group is selected)
+                clearTeachers();
             } else {
                 // Clear groups and teachers if no session selected
                 clearGroups();
@@ -1072,29 +1121,160 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ============= ADD THIS SAVE BUTTON HANDLER HERE =============
+    // ADDED: Listen for group selection change
+    const groupSelect = document.getElementById('group_id');
+    if (groupSelect) {
+        // Use jQuery change event for selectpicker compatibility
+        $(groupSelect).on('change', function() {
+            const selectedGroupId = $(this).val();
+            const selectedSessionId = document.getElementById('session').value;
+
+            console.log('Group selected:', selectedGroupId);
+            console.log('Current session:', selectedSessionId);
+
+            if (selectedGroupId && selectedSessionId) {
+                // Load teachers for the selected session and group
+                loadTeachers(selectedSessionId, selectedGroupId);
+            } else {
+                // Clear teachers if no group selected
+                clearTeachers();
+            }
+        });
+    }
+
+
+    // ============= SAVE BUTTON HANDLER HERE =============
     const saveEventButton = document.getElementById('saveEventButton');
     if (saveEventButton) {
-        saveEventButton.addEventListener('click', function() {
+        saveEventButton.addEventListener('click', async function() {
             // Get all form values
+            const sessionSelect = document.getElementById('session');
+            const groupSelect = document.getElementById('group_id');
+            const teacherSelect = document.getElementById('eventSubject');
+            const startTimeInput = document.getElementById('eventStartTime');
+            const endTimeInput = document.getElementById('eventEndTime');
+            const descriptionInput = document.getElementById('eventDescription');
+
             const formData = {
-                session_id: document.getElementById('session').value,
-                group_id: document.getElementById('group_id').value,
+                session_id: sessionSelect.value,
+                group_id: groupSelect.value,
                 type: document.getElementById('typeSessionSelect').value,
                 room_id: document.getElementById('eventRooms').value,
-                subject_teacher_id: document.getElementById('eventSubject').value,
-                subject_id: document.getElementById('eventSubject').selectedOptions[0]?.getAttribute('data-subject'),
-                user_id: document.getElementById('eventSubject').selectedOptions[0]?.getAttribute('data-user'),
+                subject_id: teacherSelect.selectedOptions[0]?.getAttribute('data-subject'),
+                user_id: teacherSelect.selectedOptions[0]?.getAttribute('data-user'),
                 completion_tags: Array.from(document.getElementById('eventCompletionTagCalander').selectedOptions).map(opt => opt.value),
                 duplicate: document.getElementById('eventDuplicate').value,
-                start_time: document.getElementById('eventStartTime').value,
-                end_time: document.getElementById('eventEndTime').value,
+                start_time: startTimeInput.value,
+                end_time: endTimeInput.value,
                 end_date: document.getElementById('eventEndDate').value,
-                description: document.getElementById('eventDescription').value,
+                description: descriptionInput.value,
                 // Hidden fields
                 account_id: document.getElementById('eventAccountId').value,
                 local_id: document.getElementById('eventLocalId').value
             };
+
+            // Generate automatic description if description is empty
+            if (!formData.description || formData.description.trim() === '') {
+                const selectedGroup = groupSelect.options[groupSelect.selectedIndex];
+                const selectedTeacher = teacherSelect.options[teacherSelect.selectedIndex];
+
+                if (selectedGroup && selectedTeacher && formData.start_time && formData.end_time) {
+                    const groupName = selectedGroup.textContent || 'Unknown Group';
+                    const teacherText = selectedTeacher.textContent;
+
+                    let subjectName = 'Unknown Subject';
+                    let teacherName = 'Unknown Teacher';
+
+                    if (teacherText) {
+                        const patterns = [
+                            /Subject\s*:\s*(.+?)(?:\s*-|$)/i,
+                            /Subject\s*:\s*(.+)/i,
+                            /(.+?)\s*-\s*Teacher/i
+                        ];
+
+                        for (const pattern of patterns) {
+                            const match = teacherText.match(pattern);
+                            if (match && match[1]) {
+                                subjectName = match[1].trim();
+                                break;
+                            }
+                        }
+
+                        const teacherPatterns = [
+                            /Teacher\s*:\s*(.+?)$/i,
+                            /-\s*Teacher\s*:\s*(.+?)$/i,
+                            /-\s*(.+?)$/i
+                        ];
+
+                        for (const pattern of teacherPatterns) {
+                            const match = teacherText.match(pattern);
+                            if (match && match[1]) {
+                                teacherName = match[1].trim();
+                                break;
+                            }
+                        }
+
+                        if (subjectName === 'Unknown Subject' && !teacherText.includes('Subject :')) {
+                            subjectName = teacherText;
+                        }
+                    }
+
+                    let formattedStart = formData.start_time;
+                    let formattedEnd = formData.end_time;
+
+                    try {
+                        if (formData.start_time.includes('T')) {
+                            const startDateTime = new Date(formData.start_time);
+                            const endDateTime = new Date(formData.end_time);
+
+                            if (!isNaN(startDateTime.getTime()) && !isNaN(endDateTime.getTime())) {
+                                const formatDateTime = (date) => {
+                                    const year = date.getFullYear();
+                                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                                    const day = String(date.getDate()).padStart(2, '0');
+                                    const hours = String(date.getHours()).padStart(2, '0');
+                                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                                    return `${year}-${month}-${day} ${hours}:${minutes}`;
+                                };
+
+                                formattedStart = formatDateTime(startDateTime);
+                                formattedEnd = formatDateTime(endDateTime);
+                            }
+                        } else if (formData.end_date) {
+                            const startDateTimeStr = `${formData.end_date}T${formData.start_time}`;
+                            const endDateTimeStr = `${formData.end_date}T${formData.end_time}`;
+
+                            const startDateTime = new Date(startDateTimeStr);
+                            const endDateTime = new Date(endDateTimeStr);
+
+                            if (!isNaN(startDateTime.getTime()) && !isNaN(endDateTime.getTime())) {
+                                const formatDateTime = (date) => {
+                                    const year = date.getFullYear();
+                                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                                    const day = String(date.getDate()).padStart(2, '0');
+                                    const hours = String(date.getHours()).padStart(2, '0');
+                                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                                    return `${year}-${month}-${day} ${hours}:${minutes}`;
+                                };
+
+                                formattedStart = formatDateTime(startDateTime);
+                                formattedEnd = formatDateTime(endDateTime);
+                            } else {
+                                formattedStart = `${formData.end_date} ${formData.start_time}`;
+                                formattedEnd = `${formData.end_date} ${formData.end_time}`;
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error formatting datetime:', error);
+                    }
+
+                    formData.description = `Group "${groupName}" has learning from ${formattedStart} to ${formattedEnd} on Subject "${subjectName}" with Teacher "${teacherName}"`;
+                    console.log('✅ Auto-generated description:', formData.description);
+                } else {
+                    const groupName = groupSelect.options[groupSelect.selectedIndex]?.textContent || 'Group';
+                    formData.description = `Learning session for ${groupName}`;
+                }
+            }
 
             // Display in console
             console.log('=== FORM DATA ===');
@@ -1102,7 +1282,6 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Group ID:', formData.group_id);
             console.log('Type:', formData.type);
             console.log('Room ID:', formData.room_id);
-            console.log('Subject/Teacher ID:', formData.subject_teacher_id);
             console.log('Subject ID:', formData.subject_id);
             console.log('User ID:', formData.user_id);
             console.log('Completion Tags:', formData.completion_tags);
@@ -1114,7 +1293,6 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Account ID:', formData.account_id);
             console.log('Local ID:', formData.local_id);
             console.log('=================');
-            console.log('Full Object:', formData);
 
             // Validation
             if (!formData.session_id) {
@@ -1133,7 +1311,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Please select a room');
                 return;
             }
-            if (!formData.subject_teacher_id) {
+            if (!formData.subject_id || !formData.user_id) {
                 alert('Please select a teacher and subject');
                 return;
             }
@@ -1143,8 +1321,22 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             console.log('✅ All validations passed!');
+
+            // **NEW: Call the API to create calendar event**
+            const result = await createCalendarEvent(formData);
+
+            if (result.success) {
+                alert('Calendar event created successfully!');
+                // Close the modal
+                $('#eventModal').modal('hide');
+                // Optionally refresh the calendar or reload the page
+                // location.reload();
+            } else {
+                alert(`Failed to create calendar event: ${result.error}`);
+            }
         });
     }
+
     // ============= END OF SAVE BUTTON HANDLER =============
 });
 

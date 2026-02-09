@@ -152,16 +152,19 @@
   // initial render
   generateCalendar(currentMonth, currentYear);
 
+  // ✅ Get both IDs from Flask
+  let calendarId = "{{ calendar_id }}";
+  let slcId = "{{ slc_id }}";
 
-  let path = "/students/${studentId}"; // your path
-  let fullUrl = window.location.origin + path; // make it a full URL if needed
+  // ✅ Build URL with slc_id and calendar_id
+  let fullUrl = `https://www.unistudious.com/${slcId}/${calendarId}`;
 
+  // ✅ Generate QR code
   new QRCode(document.getElementById("qrcode"), {
     text: fullUrl,
     width: 200,
     height: 200
   });
-
 
 </script>
 

@@ -36,32 +36,33 @@ def get_group(account_id, session_id):
 
         # Get groups with students in one query
         query = """
-            SELECT 
-                g.id,
-                g.session_id,
-                g.local_id,
-                g.name,
-                g.capacity,
-                g.status,
-                u.id as user_id,
-                u.username,
-                u.full_name,
-                u.email,
-                u.phone,
-                r.id as relation_id
-            FROM relation_group_local_session g
-            LEFT JOIN relation_user_session r 
-                ON r.relation_group_local_session_id = g.id 
-                AND r.enabled = 1
-            LEFT JOIN user u 
-                ON u.id = r.user_id 
-                AND u.enabled = 1
-            WHERE g.session_id = %s 
-                AND g.account_id = %s 
-                AND g.enabled = 1 
-                AND g.special_group IS NULL
-            ORDER BY g.id, u.username
-        """
+                    SELECT 
+                        g.id,
+                        g.session_id,
+                        g.local_id,
+                        g.name,
+                        g.capacity,
+                        g.status,
+                        u.id as user_id,
+                        u.username,
+                        u.full_name,
+                        u.email,
+                        u.phone,
+                        r.id as relation_id
+                    FROM relation_group_local_session g
+                    LEFT JOIN relation_user_session r 
+                        ON r.relation_group_local_session_id = g.id 
+                        AND r.enabled = 1
+                    LEFT JOIN user u 
+                        ON u.id = r.user_id 
+                        AND u.enabled = 1
+                    WHERE g.session_id = %s 
+                        AND g.account_id = %s 
+                        AND g.enabled = 1 
+                        AND g.special_group IS NULL
+                    ORDER BY g.id, u.username
+                    LIMIT 1000  -- Add reasonable limit
+                """
         results = Database.execute_query(query, (session_id, account_id))
 
         # Group the results by group_id
@@ -124,25 +125,50 @@ def get_group(account_id, session_id):
 # ========================================
 # ENDPOINT 2: Get teachers by session
 # ========================================
-@users_bp.route('/get_teacher/<int:session_id>', methods=['GET'])
+@users_bp.route('/get_teacher/<int:group_id>', methods=['GET'])
 # @token_required
-def get_teacher(session_id):
+def get_teacher(group_id):
     try:
         query = """
-            SELECT id, username, email, full_name, phone, img_link
-            FROM user 
-            WHERE enabled = 1 
-            AND JSON_CONTAINS(roles, '"ROLE_TEACHER"')
+            SELECT 
+                u.id as user_id, 
+                u.username, 
+                u.email, 
+                u.full_name, 
+                u.phone, 
+                u.img_link,
+                rtsg.subject_id,
+                CASE 
+                    WHEN sc.name = 'Other' THEN acs.other_subject
+                    ELSE sc.name
+                END as subject_name
+            FROM user u
+            INNER JOIN relation_teacher_to_subject_group rtsg 
+                ON rtsg.user_id = u.id 
+                AND rtsg.relation_group_local_session_id = %s
+                AND rtsg.enabled = 1
+            INNER JOIN subject_config sc 
+                ON sc.id = rtsg.subject_id
+            LEFT JOIN account_subject acs
+                ON acs.subject_config_id = rtsg.subject_id
+                AND acs.enabled = 1
+            WHERE u.enabled = 1 
+            AND (JSON_CONTAINS(u.roles, '"ROLE_TEACHER"') OR JSON_CONTAINS(u.roles, '"ROLE_ADMIN"'))
         """
-        # ↑ Remove the comma after img_link (you had: img_link,)
 
-        teachers = Database.execute_query(query)
-        print(f"Found {len(teachers)} Teachers")
+        teachers = Database.execute_query(query,(group_id,))
+
+
+
+
+
+        print(teachers)
         return jsonify({"Message": "Success", "data": teachers}), 200
 
     except Exception as e:
         print(f"Error: {e} coming from get_teacher")
         return jsonify({"Message": f"Error {e} coming from server"}), 500
+
 
 
 # ========================================

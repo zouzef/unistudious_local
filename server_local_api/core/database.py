@@ -1,25 +1,26 @@
 import mysql.connector
-from mysql.connector import Error
+from mysql.connector import Error, pooling
 import sys
 import os
 
-# Add parent directory to path so we can import config
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import Config
 
 
-
 class Database:
-    """Database connection manager"""
+    """Database connection manager with connection pooling"""
 
-    _connection = None
+    _connection_pool = None
 
     @staticmethod
-    def get_connection():
-        """Get database connection (singleton pattern)"""
-        if Database._connection is None or not Database._connection.is_connected():
+    def get_pool():
+        """Get or create connection pool"""
+        if Database._connection_pool is None:
             try:
-                Database._connection = mysql.connector.connect(
+                Database._connection_pool = pooling.MySQLConnectionPool(
+                    pool_name="mypool",
+                    pool_size=32,
+                    pool_reset_session=True,
                     host=Config.DB_HOST,
                     port=Config.DB_PORT,
                     user=Config.DB_USER,
@@ -31,20 +32,25 @@ class Database:
                     connect_timeout=Config.DB_CONNECT_TIMEOUT,
                     auth_plugin='mysql_native_password'
                 )
-                print("✅ Database connected successfully")
+                print("✅ Database connection pool created successfully")
             except Error as e:
-                print(f"❌ Database connection error: {e}")
+                print(f"❌ Database pool creation error: {e}")
                 raise e
 
-        return Database._connection
+        return Database._connection_pool
 
     @staticmethod
     def execute_query(query, params=None, fetch=True):
         """Execute a query and return results"""
-        connection = Database.get_connection()
-        cursor = connection.cursor(dictionary=True)
+        pool = Database.get_pool()
+        connection = None
+        cursor = None
 
         try:
+            connection = pool.get_connection()
+            connection.ping(reconnect=True)
+
+            cursor = connection.cursor(dictionary=True)
             cursor.execute(query, params or ())
 
             if fetch:
@@ -57,12 +63,15 @@ class Database:
         except Error as e:
             print(f"❌ Query error: {e}")
             raise e
-        finally:
-            cursor.close()
 
-    @staticmethod
-    def close_connection():
-        """Close database connection"""
-        if Database._connection and Database._connection.is_connected():
-            Database._connection.close()
-            print("✅ Database connection closed")
+        finally:
+            if cursor:
+                try:
+                    cursor.close()
+                except:
+                    pass
+            if connection:  # ← MOVED INSIDE finally block, same indent as "if cursor:"
+                try:
+                    connection.close()
+                except:
+                    pass
