@@ -31102,3 +31102,44 @@ input[type="date"]::-webkit-calendar-picker-indicator {
       color: #fff; }
 
 /*# sourceMappingURL=style.css.map */
+
+
+/*custom css*/
+/* Button: simple icon button */
+.description-btn {
+	background: none;
+	    border: none;
+		cursor: pointer;
+		padding: 1px;
+		opacity: 0.7;
+		transition: opacity 0.2s ease;
+}
+
+.description-btn:hover {
+		opacity: 1;
+}
+
+/* Description container */
+.description-box {
+	background: #f8f9fa;
+	color: #333;
+	padding: 5px 6px;
+	border-radius: 6px;
+	border: 1px solid #e0e0e0;
+    font-size: 11px;
+}
+
+/* Card item – subtle appearance */
+.calendar-card-item {
+	animation: fadeInSimple 0.25s ease;
+}
+
+/* Minimal animation */
+@keyframes fadeInSimple {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+    }
+}

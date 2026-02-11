@@ -698,12 +698,14 @@ def create_calander_request(session_id):
             }), 404
 
         calander_data = request.get_json()
+
         room_id = calander_data.get('room_id')
         group_id = calander_data.get('group_id')
         subject_id = calander_data.get('subject_id')
         user_id = calander_data.get('user_id')
         completion_tag = calander_data.get('tag')
         duplicate = calander_data.get('duplicate')
+        start_date = calander_data.get('start_date')  # NEW
         start_time = calander_data.get('start_time')
         end_time = calander_data.get('end_time')
         end_date = calander_data.get('end_date')
@@ -712,9 +714,19 @@ def create_calander_request(session_id):
         create_time = datetime.now()
         type = calander_data.get('type')
 
-        # **FIX: Convert list to comma-separated string**
+        # Convert list to comma-separated string
         if isinstance(completion_tag, list):
             completion_tag = ','.join(map(str, completion_tag))
+
+        # Convert empty strings to None for date/time fields
+        if start_date == '' or start_date is None:
+            start_date = None
+        if end_date == '' or end_date is None:
+            end_date = None
+        if start_time == '' or start_time is None:
+            start_time = None
+        if end_time == '' or end_time is None:
+            end_time = None
 
         if not (check_room_id(room_id) and check_user(user_id) and check_subject(subject_id) and check_group(group_id)):
             return jsonify({"Message": "Invalid params"}), 400
@@ -727,6 +739,7 @@ def create_calander_request(session_id):
                         user_id,
                         completion_tags,
                         duplicate,
+                        start_date,
                         start_time,
                         end_time,
                         end_date,
@@ -748,16 +761,17 @@ def create_calander_request(session_id):
                         %s,
                         %s,
                         %s,
+                        %s,
                         %s
                     );"""
-        values = (session_id, group_id, room_id, subject_id, user_id, completion_tag, duplicate, start_time, end_time,
-                  end_date, description, account_id, type, create_time)
+        values = (session_id, group_id, room_id, subject_id, user_id, completion_tag, duplicate,
+                  start_date, start_time, end_time, end_date, description, account_id, type, create_time)
 
         result = Database.execute_query(query, values)
         return jsonify({"Message": "Calendar request created successfully"}), 201
 
     except Exception as e:
-        print(e)
+        print(f"❌ Query error: {e}")
         return jsonify({
             "Message": "Error in create_calendar_request",
             "data": []
@@ -776,7 +790,44 @@ def get_calander_request(room_id):
                 "Message": f"Error: this room doesn't exist"
             }), 404
 
-        query = """SELECT * FROM calendar_request WHERE room_id = %s and accepted = 0 and enabled = 1"""
+        query = """
+            SELECT 
+                cr.id,
+                cr.session_id,
+                cr.group_id,
+                cr.type,
+                cr.room_id,
+                cr.subject_id,
+                cr.user_id,
+                u.username,
+                cr.completion_tags,
+                cr.duplicate,
+                cr.start_time,
+                cr.end_time,
+                cr.end_date,
+                cr.description,
+                cr.account_id,
+                cr.accepted,
+                cr.created_at,
+                cr.updated_at,
+                cr.enabled,
+                cr.start_date,
+                grp.name AS group_name,
+                s.name AS session_name,
+                CASE 
+                    WHEN sc.name = 'other' THEN acs.other_subject
+                    ELSE sc.name
+                END AS subject_name
+            FROM calendar_request cr
+            INNER JOIN relation_group_local_session grp ON cr.group_id = grp.id
+            INNER JOIN session s ON cr.session_id = s.id
+            INNER JOIN subject_config sc ON cr.subject_id = sc.id
+            INNER JOIN user u ON cr.user_id = u.id
+            LEFT JOIN account_subject acs ON cr.subject_id = acs.id AND sc.name = 'other'
+            WHERE cr.room_id = %s 
+                AND cr.accepted = 0 
+                AND cr.enabled = 1
+        """
         values = (room_id,)
         result = Database.execute_query(query, values)
 
@@ -785,6 +836,7 @@ def get_calander_request(room_id):
             serialized_result = []
             for row in result:
                 serialized_row = {
+                    'start_date': row['start_date'],
                     'id': row['id'],
                     'session_id': row['session_id'],
                     'group_id': row['group_id'],
@@ -792,6 +844,7 @@ def get_calander_request(room_id):
                     'room_id': row['room_id'],
                     'subject_id': row['subject_id'],
                     'user_id': row['user_id'],
+                    'username': row['username'],
                     'completion_tags': row['completion_tags'],
                     'duplicate': row['duplicate'],
                     # Convert timedelta to string (HH:MM:SS format)
@@ -805,7 +858,11 @@ def get_calander_request(room_id):
                     # Convert datetime to string (YYYY-MM-DD HH:MM:SS format)
                     'created_at': row['created_at'].strftime('%Y-%m-%d %H:%M:%S') if row['created_at'] else None,
                     'updated_at': row['updated_at'].strftime('%Y-%m-%d %H:%M:%S') if row['updated_at'] else None,
-                    'enabled': row['enabled']
+                    'enabled': row['enabled'],
+                    # Additional joined fields
+                    'group_name': row['group_name'],
+                    'session_name': row['session_name'],
+                    'subject_name': row['subject_name']
                 }
                 serialized_result.append(serialized_row)
 

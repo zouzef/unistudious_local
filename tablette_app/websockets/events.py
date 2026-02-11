@@ -65,6 +65,32 @@ def register_socketio_events(socketio):
         """Placeholder for custom events."""
         pass
 
+    @socketio.on('join_calendar_room')
+    def handle_join_calendar_room(data):
+        room_id = str(data.get('room_id'))
+        room_name = f'calendar_room_{room_id}'
+
+        join_room(room_name)
+
+        print("---- SOCKET DEBUG ----")
+        print("SID:", request.sid)
+
+        print("----------------------")
+
+        emit('status', {'message': f'Joined {room_name}'})
+
+    @socketio.on('leave_calandar_room')
+    def handle_leave_calendar_room(data):
+        try:
+            room_id = data.get('room_id')
+            if room_id:
+                leave_room(f'calendar_room_{room_id}')
+                print(f'Client {request.sid} left calendar room {room_id}')
+
+        except Exception as e:
+            print(f"DEBUG: Exception in handle_leaver_calendar_room: {e}")
+            emit('status',{'message': f'Failed to leave calendar room {room_id}'})
+
 
 def background_attendance_checker(socketio):
     """Background thread to check for attendance updates."""

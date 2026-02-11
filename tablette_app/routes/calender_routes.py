@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import current_app,Blueprint, jsonify, request
 from datetime import datetime
 from services.calender_service import (
 	fetch_calender_room,
@@ -123,6 +123,32 @@ def create_calander(session_id):
 		response = request_calander(calander_data)
 
 		if response:
+			# ✅ **NEW: Emit WebSocket event after successful creation**
+			try:
+				room_id = calander_data.get('room_id')
+
+				# Get the updated calendar data for this room
+				updated_calendar_data = fetch_calander_request(room_id)
+
+				# Get socketio instance from current_app
+				from flask import current_app
+				socketio = current_app.extensions.get('socketio')
+
+				if socketio and updated_calendar_data:
+					socketio.emit('calendar_update',
+								  {
+									  'room_id': room_id,
+									  'data': updated_calendar_data,
+									  'message': 'New calendar request added from tablet',
+									  'timestamp': datetime.now().isoformat()
+								  },
+								  room=f'calendar_room_{room_id}'
+								  )
+					print(f'✅ Emitted calendar_update to calendar_room_{room_id}')
+			except Exception as ws_error:
+				print(f'⚠️ WebSocket emit failed: {ws_error}')
+			# Don't fail the request if WebSocket fails
+
 			return jsonify({
 				"Message": "Success",
 				"Status": "success"
@@ -142,20 +168,23 @@ def create_calander(session_id):
 		}), 500
 
 
-
 @calendar_bp.route('/get-calander-request/<int:room_id>', methods=['GET'])
 def get_calander_request(room_id):
-	try:
-		calander_data = fetch_calander_request(room_id)
-		if calander_data:
-			return jsonify({
-				calander_data
-			}),200
-		else:
-			return jsonify({
-				"Message":"Error coming from the server"
-			}),404
-	except Exception as e:
-		return jsonify({
-			"Message":f"Error: {e} coming from get_calander"
-		}),500
+    try:
+       calander_data = fetch_calander_request(room_id)
+
+       if calander_data:
+          # Just return the data directly, don't wrap it again
+          return jsonify(calander_data), 200
+       else:
+          return jsonify({
+             "Message": "No calendar requests found",
+             "data": []
+          }), 404
+
+    except Exception as e:
+       print(f"Error in get_calander_request: {str(e)}")
+       return jsonify({
+          "Message": f"Error: {str(e)} coming from get_calander",
+          "data": []
+       }), 500
