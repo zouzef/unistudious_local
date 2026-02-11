@@ -93,3 +93,16 @@ def request_calander(calander_data):
 		return response.ok
 	except Exception:
 		return False
+
+
+def fetch_calander_request(room_id):
+	try:
+		url = f"{base_url}/get-calander_request/{room_id}"
+		response = requests.get(url,verify=False)
+		response.raise_for_status()
+		if response.status_code == 200:
+			return response.json()
+		else:
+			return None
+	except Exception:
+		return None

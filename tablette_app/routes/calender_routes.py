@@ -6,7 +6,8 @@ from services.calender_service import (
 	fetch_room,
 	fetch_session,
 	fetch_teacher,
-	request_calander
+	request_calander,
+	fetch_calander_request
 
 )
 
@@ -139,3 +140,22 @@ def create_calander(session_id):
 			"Message": f"Error: {str(e)}",
 			"Status": "error"
 		}), 500
+
+
+
+@calendar_bp.route('/get-calander-request/<int:room_id>', methods=['GET'])
+def get_calander_request(room_id):
+	try:
+		calander_data = fetch_calander_request(room_id)
+		if calander_data:
+			return jsonify({
+				calander_data
+			}),200
+		else:
+			return jsonify({
+				"Message":"Error coming from the server"
+			}),404
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from get_calander"
+		}),500
