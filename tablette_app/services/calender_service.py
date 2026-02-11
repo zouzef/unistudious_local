@@ -99,7 +99,6 @@ def fetch_calander_request(room_id):
 	try:
 		url = f"{base_url}/get-calander_request/{room_id}"
 		response = requests.get(url,verify=False)
-		print(response.json())
 		response.raise_for_status()
 		if response.status_code == 200:
 			return response.json()

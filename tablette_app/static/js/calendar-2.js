@@ -88,6 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Display event details in modal on click
       eventClick: function(info) {
+
         // Prevent the browser from navigating
         info.jsEvent.preventDefault();
 
@@ -133,6 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Handle date click (when clicking on empty day)
       dateClick: function(info) {
+        alert("hii");
         alert('Clicked on: ' + info.dateStr);
       }
     });

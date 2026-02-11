@@ -69,14 +69,7 @@ def register_socketio_events(socketio):
     def handle_join_calendar_room(data):
         room_id = str(data.get('room_id'))
         room_name = f'calendar_room_{room_id}'
-
         join_room(room_name)
-
-        print("---- SOCKET DEBUG ----")
-        print("SID:", request.sid)
-
-        print("----------------------")
-
         emit('status', {'message': f'Joined {room_name}'})
 
     @socketio.on('leave_calandar_room')
