@@ -19,6 +19,6 @@
     "ssl_key": "key.pem"
   },
   "academie_local_server": {
-    "": ""
+    "url": "https://172.28.20.178:5015"
   }
 }

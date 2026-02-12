@@ -2622,10 +2622,43 @@ socket.on('connect_error', function(error) {
     console.error("Connection error:", error);
 });
 
-// ============ ADD THIS - NOTIFICATION LISTENER ============
-socket.on('calendar_notification', function(notification) {
-    console.log("📩 Notification received:", notification);
+// ============ FETCH NOTIFICATIONS FROM DATABASE ============
+async function loadNotifications() {
+    const accountId = window.ACCOUNT_ID;
 
+    try {
+        const response = await fetch(`/api/get-notification/${accountId}`);
+        const data = await response.json();
+
+        if (data.success && data.notifications) {
+            const notificationList = document.querySelector('#DZ_W_Notification1 ul.timeline');
+
+            if (!notificationList) {
+                console.error("❌ Notification list not found!");
+                return;
+            }
+
+            // Clear existing notifications
+            notificationList.innerHTML = '';
+
+            // Add each notification to the list
+            data.notifications.forEach(notification => {
+                addNotificationToUI(notification);
+            });
+
+            // Update badge count
+            updateNotificationBadge(data.unread_count);
+
+            console.log(`✅ Loaded ${data.total} notifications (${data.unread_count} unread)`);
+        }
+    } catch (error) {
+        console.error("❌ Error loading notifications:", error);
+    }
+}
+
+// ============ ADD NOTIFICATION TO UI ============
+
+function addNotificationToUI(notification) {
     const notificationList = document.querySelector('#DZ_W_Notification1 ul.timeline');
 
     if (!notificationList) {
@@ -2634,32 +2667,115 @@ socket.on('calendar_notification', function(notification) {
     }
 
     const li = document.createElement('li');
+    li.dataset.notificationId = notification.id;
+    li.className = notification.is_read ? 'read' : 'unread';
+
+    // Format the time
+    const timeAgo = formatTimeAgo(notification.created_at);
+
+    // Determine notification label and icon based on type
+    let notificationLabel = '';
+    let iconHtml = '';
+
+    switch(notification.type) {
+        case 'tablet_notif':
+            notificationLabel = 'Notification From the tablet';
+            iconHtml = '<i class="fas fa-tablet-alt" style="font-size: 24px; color: #3b82f6;"></i>';
+            break;
+        case 'general':
+            notificationLabel = 'New Notification';
+            iconHtml = '<i class="fas fa-bell" style="font-size: 24px; color: #6c757d;"></i>';
+            break;
+        case 'alert':
+            notificationLabel = 'Alert';
+            iconHtml = '<i class="fas fa-exclamation-triangle" style="font-size: 24px; color: #f59e0b;"></i>';
+            break;
+        case 'reminder':
+            notificationLabel = 'Reminder';
+            iconHtml = '<i class="fas fa-clock" style="font-size: 24px; color: #8b5cf6;"></i>';
+            break;
+        default:
+            notificationLabel = 'New Notification';
+            iconHtml = '<i class="fas fa-bell" style="font-size: 24px; color: #6c757d;"></i>';
+    }
+
     li.innerHTML = `
         <div class="timeline-panel">
             <div class="media me-2">
-                <img alt="image" width="50" src="${notification.avatar || '/static/assets/images/avatar/1.jpg'}">
+                ${iconHtml}
             </div>
             <div class="media-body">
-                <h6 class="mb-1">${notification.title}</h6>
-                <small class="d-block">${notification.time}</small>
+                <h6 class="mb-1">${notificationLabel}</h6>
+                <small class="d-block"><strong>${notification.title}</strong></small>
+                <small class="d-block">${notification.message}</small>
+                <small class="d-block text-muted">${timeAgo}</small>
             </div>
         </div>
     `;
-    notificationList.prepend(li);
 
-    // Update notification count badge (if you have one)
+    // Add to the TOP of the list (prepend)
+    notificationList.prepend(li);
+}
+
+// ============ UPDATE NOTIFICATION BADGE ============
+function updateNotificationBadge(count) {
+    const badge = document.getElementById('notificationCount');
+    if (badge) {
+        if (count > 0) {
+            badge.textContent = count;
+            badge.style.display = 'inline-block';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+}
+
+// ============ FORMAT TIME AGO ============
+function formatTimeAgo(timestamp) {
+    const now = new Date();
+    const time = new Date(timestamp);
+    const diffMs = now - time;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+
+    return time.toLocaleDateString();
+}
+
+// ============ REAL-TIME NOTIFICATION LISTENER ============
+socket.on('calendar_notification', function(notification) {
+    console.log("📩 Real-time notification received:", notification);
+
+    // Add new notification at the TOP
+    addNotificationToUI({
+        id: Date.now(), // Temporary ID (will be replaced on reload)
+        title: notification.title,
+        message: notification.message || '',
+        is_read: false,
+        created_at: new Date().toISOString(),
+        data: notification
+    });
+
+    // Update badge count
     const badge = document.getElementById('notificationCount');
     if (badge) {
         const currentCount = parseInt(badge.textContent) || 0;
-        badge.textContent = currentCount + 1;
-        badge.style.display = 'inline-block';
+        updateNotificationBadge(currentCount + 1);
     }
 
-    console.log("✅ Notification added to UI");
+    console.log("✅ Real-time notification added to UI");
 });
-// ========================================================
 
+// ============ NOTIFICATION DROPDOWN TOGGLE ============
 document.addEventListener('DOMContentLoaded', function() {
+    // Load notifications when page loads
+    loadNotifications();
+
     const notificationToggle = document.getElementById('notificationToggle');
     const notificationDropdown = document.getElementById('notificationDropdown');
 
@@ -2668,6 +2784,11 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             e.stopPropagation();
             notificationDropdown.classList.toggle('show');
+
+            // Reload notifications when dropdown is opened
+            if (notificationDropdown.classList.contains('show')) {
+                loadNotifications();
+            }
         });
 
         document.addEventListener('click', function(e) {
@@ -2681,3 +2802,111 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+
+// Add this to your JavaScript file
+document.addEventListener('DOMContentLoaded', function() {
+    loadCalendarRequests();
+});
+
+async function loadCalendarRequests() {
+    const accountId = window.ACCOUNT_ID; // Make sure this is defined
+
+    try {
+        const response = await fetch(`/api/get-calendar-request/${accountId}`);
+        const data = await response.json();
+
+        if (response.ok && data.requests) {
+            displayCalendarRequests(data.requests);
+        } else {
+            console.error('No calendar requests found');
+        }
+    } catch (error) {
+        console.error('Error loading calendar requests:', error);
+    }
+}
+
+function displayCalendarRequests(requests) {
+    const tbody = document.querySelector('#example-1 tbody');
+    tbody.innerHTML = ''; // Clear existing rows
+
+    requests.forEach(request => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>
+                <div class="trans-list">
+                    <img src="${request.avatar || '/static/assets/images/avatar/default.jpg'}"
+                         alt="" class="avatar avatar-sm me-3">
+                    <h4>${request.name}</h4>
+                </div>
+            </td>
+            <td><span class="text-primary font-w600">ID ${request.id}</span></td>
+            <td>
+                <div class="d-flex align-items-center">
+                    <div class="icon-box icon-box-sm bg-secondary">
+                        <svg width="16" height="16" viewBox="0 0 18 24" fill="none">
+                            <!-- Your SVG here -->
+                        </svg>
+                    </div>
+                    <div class="ms-2">
+                        <span class="mb-0">Class</span>
+                        <h6 class="text-primary mb-0 font-w600">${request.class || 'N/A'}</h6>
+                    </div>
+                </div>
+            </td>
+            <td><span class="doller font-w600">${request.fees || '$0'}</span></td>
+            <td>${request.rank || 'N/A'}</td>
+            <td>
+                <ul class="tbl-action">
+                    <li>
+                        <button onclick="viewRequest(${request.id})" class="btn btn-sm">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <!-- Your action SVG -->
+                            </svg>
+                        </button>
+                        <div class="dropdown custom-dropdown">
+                            <div class="btn sharp tp-btn" data-bs-toggle="dropdown">
+                                <svg width="18" height="6" viewBox="0 0 24 6" fill="none">
+                                    <!-- Your dots SVG -->
+                                </svg>
+                            </div>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="javascript:void(0);" onclick="approveRequest(${request.id})">Approve</a>
+                                <a class="dropdown-item" href="javascript:void(0);" onclick="rejectRequest(${request.id})">Reject</a>
+                                <a class="dropdown-item" href="javascript:void(0);" onclick="viewDetails(${request.id})">View Details</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    // Reinitialize DataTable if you're using it
+    if ($.fn.DataTable.isDataTable('#example-1')) {
+        $('#example-1').DataTable().destroy();
+    }
+    $('#example-1').DataTable();
+}
+
+// Action functions
+function viewRequest(id) {
+    console.log('View request:', id);
+    // Add your view logic
+}
+
+function approveRequest(id) {
+    console.log('Approve request:', id);
+    // Add your approve logic
+}
+
+function rejectRequest(id) {
+    console.log('Reject request:', id);
+    // Add your reject logic
+}
+
+function viewDetails(id) {
+    console.log('View details:', id);
+    // Add your details logic
+}

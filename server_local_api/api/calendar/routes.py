@@ -5,12 +5,14 @@ import os
 
 # Add parent directories to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
 from config import Config
 from core.database import Database
 from core.middleware import token_required
 import random
 import string
 import requests
+import json
 
 # Create blueprint
 calendar_bp = Blueprint('calendar', __name__, url_prefix='/scl')
@@ -689,8 +691,41 @@ def check_subject(subject_id):
     except Exception :
         return False
 
+
+
+
+
+
+# ================================ NOTIFICATION PART ================================
+
+def save_notification(notification_payload, user_id):
+    try:
+        query = """
+            INSERT INTO notification (user_id, title, message, type, notif_data)
+            VALUES (%s, %s, %s, %s, %s) 
+        """
+        values = (
+            user_id,
+            notification_payload.get('title', 'New Notification'),
+            notification_payload.get('message', ''),
+            "tablet_notif",
+            json.dumps(notification_payload)  # Convert dict to JSON string
+        )
+        Database.execute_query(query, values)
+        return True
+    except Exception as e:
+        print(f"❌ Failed to save notification: {e}")
+        return False
+
+
 def send_notification(notification_payload):
-    # Send notification to Academie Platform
+    # Save notification to database FIRST (so it's always stored)
+    user_id = notification_payload.get('account_id')
+
+    if user_id:
+        save_notification(notification_payload, user_id)
+
+    # Then send real-time notification to Academie Platform
     try:
         academie_url = "https://172.28.20.178:5015/api/notify-calendar-request"
         response = requests.post(
@@ -699,10 +734,6 @@ def send_notification(notification_payload):
             verify=False,
             timeout=5
         )
-
-        print(f"📬 Response Status Code: {response.status_code}")
-        print(f"📬 Response Headers: {response.headers}")
-        print(f"📬 Response Body: {response.text}")
 
         if response.status_code == 200:
             print(f"✅ Notification sent to Academie Platform for account ")
@@ -916,3 +947,193 @@ def get_calander_request(room_id):
         return jsonify({
             "Message": f"Error: {str(e)} from get_calander_request"
         }), 500
+
+
+
+# =======================================
+# ENDPOINT 13: GET NOTIFICATION
+# =======================================
+@calendar_bp.route('/get-notification/<account_id>', methods=['GET'])
+def get_notification(account_id):
+    try:
+        query = """
+            SELECT 
+                n.id,
+                n.user_id,
+                n.title,
+                n.message,
+                n.type,
+                n.is_read,
+                n.created_at,
+                n.notif_data
+            FROM notification n 
+            WHERE user_id = %s
+            ORDER BY is_read ASC, created_at DESC
+        """
+        values = (account_id,)
+        result = Database.execute_query(query, values)
+
+        if result:
+            notifications = []
+            unread_count = 0
+
+            for row in result:
+                # Parse JSON data if it exists
+                notif_data = None
+                if row['notif_data']:
+                    try:
+                        notif_data = json.loads(row['notif_data'])
+                    except:
+                        notif_data = row['notif_data']
+
+                notification = {
+                    'id': row['id'],
+                    'user_id': row['user_id'],
+                    'title': row['title'],
+                    'message': row['message'],
+                    'type': row['type'],
+                    'is_read': bool(row['is_read']),
+                    'created_at': row['created_at'].isoformat() if row['created_at'] else None,
+                    'data': notif_data
+                }
+
+                notifications.append(notification)
+
+                if not row['is_read']:
+                    unread_count += 1
+
+            return jsonify({
+                'success': True,
+                'notifications': notifications,
+                'total': len(notifications),
+                'unread_count': unread_count
+            }), 200
+        else:
+            return jsonify({
+                'success': True,
+                'notifications': [],
+                'total': 0,
+                'unread_count': 0
+            }), 200
+
+    except Exception as e:
+        print(f"❌ Error fetching notifications: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'notifications': [],
+            'total': 0,
+            'unread_count': 0
+        }), 500
+
+
+
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from get_notification ",
+
+        }),500
+
+
+# =======================================
+# ENDPOINT 14: GET CALANDER_REQUQST
+# =======================================
+@calendar_bp.route('/get-calander_request/<int:account_id>', methods=['GET'])
+def get_calander_req(account_id):
+    try:
+        print("\n \n \n \n \n \n \n hiii")
+        query = """
+            SELECT 
+                cr.id,
+                cr.session_id,
+                cr.group_id,
+                cr.type,
+                cr.room_id,
+                cr.subject_id,
+                cr.user_id,
+                u.username,
+                cr.completion_tags,
+                cr.duplicate,
+                cr.start_time,
+                cr.end_time,
+                cr.end_date,
+                cr.description,
+                cr.account_id,
+                cr.accepted,
+                cr.created_at,
+                cr.updated_at,
+                cr.enabled,
+                cr.start_date,
+                grp.name AS group_name,
+                s.name AS session_name,
+                CASE 
+                    WHEN sc.name = 'other' THEN acs.other_subject
+                    ELSE sc.name
+                END AS subject_name
+            FROM calendar_request cr
+            INNER JOIN relation_group_local_session grp ON cr.group_id = grp.id
+            INNER JOIN session s ON cr.session_id = s.id
+            INNER JOIN subject_config sc ON cr.subject_id = sc.id
+            INNER JOIN user u ON cr.user_id = u.id
+            LEFT JOIN account_subject acs ON cr.subject_id = acs.id AND sc.name = 'other'
+            WHERE
+                cr.account_id = %s
+                cr.accepted = 0 
+                AND cr.enabled = 1
+        """
+        values=(account_id,)
+        result = Database.execute_query(query,values)
+        if result:
+            # Convert the result to JSON-serializable format
+            serialized_result = []
+            for row in result:
+                serialized_row = {
+                    'start_date': row['start_date'],
+                    'id': row['id'],
+                    'session_id': row['session_id'],
+                    'group_id': row['group_id'],
+                    'type': row['type'],
+                    'room_id': row['room_id'],
+                    'subject_id': row['subject_id'],
+                    'user_id': row['user_id'],
+                    'username': row['username'],
+                    'completion_tags': row['completion_tags'],
+                    'duplicate': row['duplicate'],
+                    # Convert timedelta to string (HH:MM:SS format)
+                    'start_time': str(row['start_time']) if row['start_time'] else None,
+                    'end_time': str(row['end_time']) if row['end_time'] else None,
+                    # Convert date to string (YYYY-MM-DD format)
+                    'end_date': row['end_date'].strftime('%Y-%m-%d') if row['end_date'] else None,
+                    'description': row['description'],
+                    'account_id': row['account_id'],
+                    'accepted': row['accepted'],
+                    # Convert datetime to string (YYYY-MM-DD HH:MM:SS format)
+                    'created_at': row['created_at'].strftime('%Y-%m-%d %H:%M:%S') if row['created_at'] else None,
+                    'updated_at': row['updated_at'].strftime('%Y-%m-%d %H:%M:%S') if row['updated_at'] else None,
+                    'enabled': row['enabled'],
+                    # Additional joined fields
+                    'group_name': row['group_name'],
+                    'session_name': row['session_name'],
+                    'subject_name': row['subject_name']
+                }
+                serialized_result.append(serialized_row)
+
+            return jsonify({
+                "Message": "Success",
+                "data": serialized_result
+            }), 200
+        else:
+            return jsonify({
+                "Message": "No calendar requests found"
+            }), 404
+
+
+
+
+    except Exception as e:
+        print(f"Error {e} coming from calander_req")
+        return jsonify({
+            "Message":"Error"
+        }),500
+

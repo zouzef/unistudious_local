@@ -256,6 +256,27 @@
                         #notificationToggle {
                             cursor: pointer;
                         }
+                        #DZ_W_Notification1 ul.timeline li {
+                            transition: background-color 0.3s ease;
+                            padding: 10px;
+                            border-radius: 8px;
+                            cursor: pointer;
+                        }
+
+                        #DZ_W_Notification1 ul.timeline li:hover {
+                            background-color: #f3f4f6;
+                        }
+
+                        /* For unread notifications - slightly different hover color */
+                        #DZ_W_Notification1 ul.timeline li.unread:hover {
+                            background-color: #e0e7ff;
+                        }
+
+                        /* Optional: Add a subtle border on hover */
+                        #DZ_W_Notification1 ul.timeline li:hover {
+                            background-color: #f3f4f6;
+                            border-left: 3px solid #3b82f6;
+                        }
                     </style>
 
 

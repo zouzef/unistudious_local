@@ -299,6 +299,54 @@ def notify_calendar_request():
 		}), 500
 
 
+# Show notification
+@dashboard_bp.route('/api/get-notification/<int:account_id>',methods=['GET'])
+def get_notification(account_id):
+	try:
+		url = f"{BASE_URL}/get-notification/{account_id}"
+		response = requests.get(url,verify=False)
+		response.raise_for_status()
+		if response.status_code == 200:
+			return jsonify(response.json()),200
+		else:
+			return jsonify({
+				"Message":"There is no notification for this account_id"
+			}),402
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from the get_notification"
+		}),500
+
+
+# ==========================================
+# CALANDER-REQUEST FUNCTIONS
+# ==========================================
+
+@dashboard_bp.route('/api/get-calendar-request/<int:account_id>', methods=['GET'])
+def get_calendar_request(account_id):
+	try:
+		print("hiiii")
+		url = f"{BASE_URL}get-calander_request/{account_id}"  # Fixed: add account_id to URL
+		response = requests.get(url, verify=False)
+		response.raise_for_status()
+
+		if response.status_code == 200:
+			return jsonify(response.json()), 200  # Fixed: remove extra braces
+		else:
+			return jsonify({
+				"message": "There is no Data!!"
+			}), 404
+
+	except Exception as e:
+		print(f"Error: {e} coming from get_calendar_request")
+		return jsonify({
+			"message": f"Error: {str(e)}"
+		}), 500
+
+
+
+
+
 # ==========================================
 # GROUP FUNCTIONS
 # ==========================================
