@@ -10,6 +10,7 @@ from core.database import Database
 from core.middleware import token_required
 import random
 import string
+import requests
 
 # Create blueprint
 calendar_bp = Blueprint('calendar', __name__, url_prefix='/scl')
@@ -688,6 +689,40 @@ def check_subject(subject_id):
     except Exception :
         return False
 
+def send_notification(notification_payload):
+    # Send notification to Academie Platform
+    try:
+        academie_url = "https://172.28.20.178:5015/api/notify-calendar-request"
+        response = requests.post(
+            academie_url,
+            json=notification_payload,
+            verify=False,
+            timeout=5
+        )
+
+        print(f"📬 Response Status Code: {response.status_code}")
+        print(f"📬 Response Headers: {response.headers}")
+        print(f"📬 Response Body: {response.text}")
+
+        if response.status_code == 200:
+            print(f"✅ Notification sent to Academie Platform for account ")
+        else:
+            print(f"⚠️ Failed to send notification: {response.status_code}")
+            print(f"⚠️ Response content: {response.text}")
+
+    except requests.exceptions.Timeout as timeout_error:
+        print(f"⏱️ Timeout error: {timeout_error}")
+    except requests.exceptions.ConnectionError as conn_error:
+        print(f"🔌 Connection error: {conn_error}")
+    except requests.exceptions.RequestException as req_error:
+        print(f"❌ Request error: {req_error}")
+    except Exception as notify_error:
+        print(f"⚠️ Unexpected error sending notification: {type(notify_error).__name__}")
+        print(f"⚠️ Error details: {notify_error}")
+        import traceback
+        print(f"⚠️ Traceback:\n{traceback.format_exc()}")
+
+
 
 @calendar_bp.route('/create-calander_request/<int:session_id>', methods=['POST'])
 def create_calander_request(session_id):
@@ -705,14 +740,14 @@ def create_calander_request(session_id):
         user_id = calander_data.get('user_id')
         completion_tag = calander_data.get('tag')
         duplicate = calander_data.get('duplicate')
-        start_date = calander_data.get('start_date')  # NEW
+        start_date = calander_data.get('start_date')
         start_time = calander_data.get('start_time')
         end_time = calander_data.get('end_time')
         end_date = calander_data.get('end_date')
         description = calander_data.get('description')
         account_id = calander_data.get('account_id')
         create_time = datetime.now()
-        type = calander_data.get('type')
+        type_session = calander_data.get('type')
 
         # Convert list to comma-separated string
         if isinstance(completion_tag, list):
@@ -732,51 +767,52 @@ def create_calander_request(session_id):
             return jsonify({"Message": "Invalid params"}), 400
 
         query = """INSERT INTO calendar_request(
-                        session_id,
-                        group_id,
-                        room_id,
-                        subject_id,
-                        user_id,
-                        completion_tags,
-                        duplicate,
-                        start_date,
-                        start_time,
-                        end_time,
-                        end_date,
-                        description,
-                        account_id,
-                        type,
-                        created_at
-                    )values(
-                        %s,
-                        %s,
-                        %s,
-                        %s,
-                        %s,
-                        %s,
-                        %s,
-                        %s,
-                        %s,
-                        %s,
-                        %s,
-                        %s,
-                        %s,
-                        %s,
-                        %s
+                        session_id, group_id, room_id, subject_id, user_id,
+                        completion_tags, duplicate, start_date, start_time, end_time, end_date,
+                        description, account_id, type, created_at
+                    ) VALUES (
+                        %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
                     );"""
-        values = (session_id, group_id, room_id, subject_id, user_id, completion_tag, duplicate,
-                  start_date, start_time, end_time, end_date, description, account_id, type, create_time)
 
-        result = Database.execute_query(query, values)
-        return jsonify({"Message": "Calendar request created successfully"}), 201
+        values = (session_id, group_id, room_id, subject_id, user_id, completion_tag, duplicate,
+                  start_date, start_time, end_time, end_date, description, account_id, type_session, create_time)
+
+        result = Database.execute_query(query, values, fetch=False)
+        if result:
+            notification_payload = {
+                    'request_id': result,
+                    'account_id': account_id,
+                    'session_id': session_id,
+                    'room_id': room_id,
+                    'group_id': group_id,
+                    'subject_id': subject_id,
+                    'user_id': user_id,
+                    'description': description,
+                    'start_date': str(start_date) if start_date else None,
+                    'start_time': str(start_time) if start_time else None,
+                    'end_time': str(end_time) if end_time else None,
+                    'end_date': str(end_date) if end_date else None,
+                    'type': type_session,
+                    'created_at': create_time.strftime('%Y-%m-%d %H:%M:%S')
+                 }
+            send_notification(notification_payload)
+            return jsonify({
+                "success":True,
+                "message":"Calendar request created successfully"
+            })
+
+        else:
+            return jsonify({"bad":""}),404
+
 
     except Exception as e:
         print(f"❌ Query error: {e}")
+        import traceback
+        print(f"❌ Traceback:\n{traceback.format_exc()}")
         return jsonify({
             "Message": "Error in create_calendar_request",
-            "data": []
+            "error": str(e)
         }), 500
-
 
 
 # =======================================

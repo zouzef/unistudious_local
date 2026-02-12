@@ -1,4 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
+from flask_socketio import join_room, leave_room, emit
+from websockets import get_socketio
 import requests
 from nacl.pwhash import verify
 from datetime import datetime
@@ -245,6 +247,70 @@ def create_calander():
 
 
 
+
+def send_calendar_request_notification(socketio, account_id, data):
+	try:
+		socketio.emit(
+			'calendar_notification',
+            {
+                'title': data.get('title', 'No title'),
+                'time': data.get('time', 'No time'),
+                'avatar': data.get('avatar', None)
+            },
+			room=f"admin_{account_id}"  # or your own room logic
+		)
+		return True
+	except:
+		return False
+
+
+# Notification par for the calender-request
+@dashboard_bp.route('/api/notify-calendar-request', methods=['POST'])
+def notify_calendar_request():
+	try:
+		notification_data = request.get_json()
+		print(notification_data)
+		if not notification_data:
+			return jsonify({"Message": "No data provided"}), 400
+
+		account_id = notification_data.get('account_id')
+
+		if not account_id:
+			return jsonify({"Message": "account_id is required"}), 400
+
+		# Get SocketIO instance
+		socketio = get_socketio()
+
+		if socketio:
+			# Send notification to connected admin
+			success = send_calendar_request_notification(
+				socketio,
+				account_id,
+				notification_data
+			)
+
+			if success:
+				print(f"✅ Notification broadcasted to admin {account_id}")
+				return jsonify({
+					"Message": "Notification sent successfully",
+					"account_id": account_id
+				}), 200
+			else:
+				print(f"⚠️ Admin {account_id} is not connected")
+				return jsonify({
+					"Message": "Admin not connected, notification saved",
+					"account_id": account_id
+				}), 200
+		else:
+			print("❌ SocketIO not initialized")
+			return jsonify({"Message": "WebSocket not available"}), 500
+
+	except Exception as e:
+		print(f"❌ Error in notify_calendar_request: {e}")
+		return jsonify({
+			"Message": "Error processing notification",
+			"error": str(e)
+		}), 500
 
 
 # ==========================================

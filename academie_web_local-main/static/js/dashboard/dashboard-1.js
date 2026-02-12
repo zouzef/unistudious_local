@@ -6,89 +6,89 @@
  var dlabChartlist = function(){
 	var screenWidth = $(window).width();
 		//let draw = Chart.controllers.line.__super__.draw; //draw shadow
-	var marketChart = function(){
-		 var options = {
-          series: [{
-          name: 'series1',
-          data: [200, 400, 300, 400, 200, 400]
-        }, {
-          name: 'series2',
-          data: [500, 300, 400, 200, 500, 200]
-        }],
-          chart: {
-          height: 280,
-          type: 'area',
-		  toolbar:{
-			  show:false
-		  }
-        },
-		colors:["var(--rgba-primary-1)","#f5a792"],
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: 'smooth',
-		  width:3,
-		  colors:["var(--primary)","var(--secondary)"],
-        },
-		legend:{
-			show:false
-		},
-		grid:{
-			show:false,
-			strokeDashArray: 6,
-			borderColor: '#dadada',
-		},
-		yaxis: {
-		  labels: {
-			style: {
-				colors: '#B5B5C3',
-				fontSize: '12px',
-				fontFamily: 'Poppins',
-				fontWeight: 400
-				
-			},
-			formatter: function (value) {
-			  return value + "k";
-			}
-		  },
-		},
-        xaxis: {
-          categories: ["Week 01","Week 02","Week 03","Week 04","Week 05","Week 06"],
-		  labels:{
-			  style: {
-				colors: '#B5B5C3',
-				fontSize: '12px',
-				fontFamily: 'Poppins',
-				fontWeight: 400
-				
-			},
-		  }
-        },
-		fill:{
-			type:'solid',
-			opacity:0.05
-		},
-        tooltip: {
-          x: {
-            format: 'dd/MM/yy HH:mm'
-          },
-        },
-        };
-
-        var chart = new ApexCharts(document.querySelector("#marketChart"), options);
-        chart.render();
-
-		jQuery('#dzOldSeries').on('change',function(){
-			jQuery(this).toggleClass('disabled');
-			chart.toggleSeries('series1');
-		});
-		
-		jQuery('#dzNewSeries').on('change',function(){
-			jQuery(this).toggleClass('disabled');
-			chart.toggleSeries('series2');
-		});
-	}
+//	var marketChart = function(){
+//		 var options = {
+//          series: [{
+//          name: 'series1',
+//          data: [200, 400, 300, 400, 200, 400]
+//        }, {
+//          name: 'series2',
+//          data: [500, 300, 400, 200, 500, 200]
+//        }],
+//          chart: {
+//          height: 280,
+//          type: 'area',
+//		  toolbar:{
+//			  show:false
+//		  }
+//        },
+//		colors:["var(--rgba-primary-1)","#f5a792"],
+//        dataLabels: {
+//          enabled: false
+//        },
+//        stroke: {
+//          curve: 'smooth',
+//		  width:3,
+//		  colors:["var(--primary)","var(--secondary)"],
+//        },
+//		legend:{
+//			show:false
+//		},
+//		grid:{
+//			show:false,
+//			strokeDashArray: 6,
+//			borderColor: '#dadada',
+//		},
+//		yaxis: {
+//		  labels: {
+//			style: {
+//				colors: '#B5B5C3',
+//				fontSize: '12px',
+//				fontFamily: 'Poppins',
+//				fontWeight: 400
+//
+//			},
+//			formatter: function (value) {
+//			  return value + "k";
+//			}
+//		  },
+//		},
+//        xaxis: {
+//          categories: ["Week 01","Week 02","Week 03","Week 04","Week 05","Week 06"],
+//		  labels:{
+//			  style: {
+//				colors: '#B5B5C3',
+//				fontSize: '12px',
+//				fontFamily: 'Poppins',
+//				fontWeight: 400
+//
+//			},
+//		  }
+//        },
+//		fill:{
+//			type:'solid',
+//			opacity:0.05
+//		},
+//        tooltip: {
+//          x: {
+//            format: 'dd/MM/yy HH:mm'
+//          },
+//        },
+//        };
+//
+//        var chart = new ApexCharts(document.querySelector("#marketChart"), options);
+//        chart.render();
+//
+//		jQuery('#dzOldSeries').on('change',function(){
+//			jQuery(this).toggleClass('disabled');
+//			chart.toggleSeries('series1');
+//		});
+//
+//		jQuery('#dzNewSeries').on('change',function(){
+//			jQuery(this).toggleClass('disabled');
+//			chart.toggleSeries('series2');
+//		});
+//	}
 	var chartTimeline = function(){
 		
 		var optionsTimeline = {
@@ -193,7 +193,7 @@
 		var chartTimelineRender =  new ApexCharts(document.querySelector("#chartTimeline"), optionsTimeline);
 		 chartTimelineRender.render();
 	}
-	var overiewChart = function(){
+	/*var overiewChart = function(){
 		 var options = {
           series: [{
           name: 'Number of Projects',
@@ -242,8 +242,8 @@
             inverseColors: false,
             shade: 'light',
             type: "vertical",
-            /* opacityFrom: 0.85,
-            opacityTo: 0.55, */
+            *//* opacityFrom: 0.85,
+            opacityTo: 0.55, *//*
 			colorStops : [
 				[
 					{
@@ -398,7 +398,7 @@
 			]);
 		})
 	 
-	}
+	}*/
 	var NewCustomers = function(){
 			var options = {
 					  series: [
@@ -745,10 +745,10 @@
 				handleDatetimepicker();
 				chartBarRunning();
 				swipercard();
-				marketChart();
+//				marketChart();
 				//NewCustomers();
 				//chartTimeline();
-				overiewChart();
+//				overiewChart();
 			},
 			
 			resize:function(){

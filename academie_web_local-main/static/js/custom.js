@@ -313,12 +313,16 @@ handlePreloader();
 	   }
    }
    var handleDatetimepicker = function(){
-	   if(jQuery("#datetimepicker1").length>0) {
-		   $('#datetimepicker1').datetimepicker({
-			   inline: true,
-		   });
-	   }
-   }
+        if (
+            jQuery("#datetimepicker1").length > 0 &&
+            typeof $.fn.datetimepicker === "function"
+        ) {
+            $('#datetimepicker1').datetimepicker({
+                inline: true,
+            });
+        }
+    };
+
    var handleCkEditor = function(){
 	   if(jQuery("#ckeditor").length>0) {
 		   ClassicEditor
@@ -2585,5 +2589,62 @@ $(document).ready(function() {
 
 
 
+const protocol = window.location.protocol;
+const host = window.location.host;
+
+const socket = io(`${protocol}//${host}`, {
+    transports: ["websocket"],
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 1000
+});
+
+socket.on('connect', function() {
+    console.log("✅ Socket connected:", socket.id);
+
+    // Use Jinja2 to safely inject account_id
+    const accountId = {{ account_id|tojson }};  // Use tojson filter for safety
+    socket.emit('register_admin', { account_id: accountId });
+});
 
 
+socket.on('registration_success', function(data) {
+    console.log("✅ Registered as admin:", data);
+});
+
+socket.on('registration_failed', function(data) {
+    console.error("❌ Registration failed:", data);
+});
+
+socket.on('disconnect', function(reason) {
+    console.log("❌ Socket disconnected:", reason);
+});
+
+socket.on('connect_error', function(error) {
+    console.error("Connection error:", error);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const notificationList = document.querySelector('#DZ_W_Notification1 ul.timeline');
+
+    // Notice: event name is 'new_calendar_request' as defined in events.py
+    socket.on('new_calendar_request', function(response) {
+        console.log("📩 Notification received:", response);
+
+        const notification = response.data;  // data is nested inside response
+
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <div class="timeline-panel">
+                <div class="media me-2">
+                    <img alt="image" width="50" src="${notification.avatar || '/static/assets/images/avatar/1.jpg'}">
+                </div>
+                <div class="media-body">
+                    <h6 class="mb-1">${notification.title}</h6>
+                    <small class="d-block">${notification.time}</small>
+                </div>
+            </div>
+        `;
+        notificationList.prepend(li);
+    });
+});

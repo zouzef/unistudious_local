@@ -17,5 +17,8 @@
     "debug": true,
     "ssl_cert": "cert.pem",
     "ssl_key": "key.pem"
+  },
+  "academie_local_server": {
+    "": ""
   }
 }
