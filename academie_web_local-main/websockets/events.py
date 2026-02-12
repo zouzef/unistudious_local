@@ -52,10 +52,6 @@ def register_socketio_events(socketio):
 	def handle_register_admin(data):
 		"""
 		Register an admin to receive notifications
-
-		Expected data: {
-			'account_id': int
-		}
 		"""
 		try:
 			account_id = data.get('account_id')
@@ -65,6 +61,9 @@ def register_socketio_events(socketio):
 					'error': 'account_id is required'
 				})
 				return
+
+			# Convert to string for consistency
+			account_id = str(account_id)  # ← ADD THIS LINE
 
 			# Store the admin connection
 			connected_admins[account_id] = request.sid
@@ -131,31 +130,32 @@ def register_socketio_events(socketio):
 
 
 def send_calendar_request_notification(socketio, account_id, notification_data):
-	"""
-	Send a calendar request notification to a specific admin
-
-	Args:
-		socketio: SocketIO instance
-		account_id: ID of the admin to notify
-		notification_data: Dictionary containing notification details
-
-	Returns:
-		bool: True if notification was sent, False otherwise
-	"""
 	try:
+		# Convert to string for consistency
+		account_id = str(account_id)  # ← ADD THIS LINE
+
+		print(f"🔍 Looking for admin {account_id} in {list(connected_admins.keys())}")  # Debug
+
 		if account_id in connected_admins:
-			# Admin is connected, send notification
+			formatted_notification = {
+				'title': notification_data.get('description', 'New Calendar Request'),
+				'time': notification_data.get('created_at', datetime.now().strftime('%Y-%m-%d %H:%M:%S')),
+				'avatar': None,
+				'request_id': notification_data.get('request_id'),
+				'start_date': notification_data.get('start_date'),
+				'start_time': notification_data.get('start_time'),
+				'end_time': notification_data.get('end_time')
+			}
+
+			print(f"📤 Sending formatted notification: {formatted_notification}")
+
 			socketio.emit(
-				'new_calendar_request',
-				{
-					'type': 'calendar_request',
-					'data': notification_data,
-					'timestamp': datetime.now().isoformat()
-				},
+				'calendar_notification',
+				formatted_notification,
 				room=f'admin_{account_id}'
 			)
 
-			print(f'📨 Notification sent to admin {account_id}')
+			print(f'✅ Notification sent to admin {account_id}')
 			return True
 		else:
 			print(f'⚠️ Admin {account_id} is not currently connected')
@@ -163,6 +163,8 @@ def send_calendar_request_notification(socketio, account_id, notification_data):
 
 	except Exception as e:
 		print(f"❌ Error sending notification to admin {account_id}: {e}")
+		import traceback
+		print(traceback.format_exc())
 		return False
 
 

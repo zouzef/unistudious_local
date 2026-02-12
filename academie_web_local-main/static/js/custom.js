@@ -2602,11 +2602,9 @@ const socket = io(`${protocol}//${host}`, {
 socket.on('connect', function() {
     console.log("✅ Socket connected:", socket.id);
 
-    // Use Jinja2 to safely inject account_id
-    const accountId = {{ account_id|tojson }};  // Use tojson filter for safety
+    const accountId = window.ACCOUNT_ID;
     socket.emit('register_admin', { account_id: accountId });
 });
-
 
 socket.on('registration_success', function(data) {
     console.log("✅ Registered as admin:", data);
@@ -2624,27 +2622,62 @@ socket.on('connect_error', function(error) {
     console.error("Connection error:", error);
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+// ============ ADD THIS - NOTIFICATION LISTENER ============
+socket.on('calendar_notification', function(notification) {
+    console.log("📩 Notification received:", notification);
+
     const notificationList = document.querySelector('#DZ_W_Notification1 ul.timeline');
 
-    // Notice: event name is 'new_calendar_request' as defined in events.py
-    socket.on('new_calendar_request', function(response) {
-        console.log("📩 Notification received:", response);
+    if (!notificationList) {
+        console.error("❌ Notification list not found!");
+        return;
+    }
 
-        const notification = response.data;  // data is nested inside response
-
-        const li = document.createElement('li');
-        li.innerHTML = `
-            <div class="timeline-panel">
-                <div class="media me-2">
-                    <img alt="image" width="50" src="${notification.avatar || '/static/assets/images/avatar/1.jpg'}">
-                </div>
-                <div class="media-body">
-                    <h6 class="mb-1">${notification.title}</h6>
-                    <small class="d-block">${notification.time}</small>
-                </div>
+    const li = document.createElement('li');
+    li.innerHTML = `
+        <div class="timeline-panel">
+            <div class="media me-2">
+                <img alt="image" width="50" src="${notification.avatar || '/static/assets/images/avatar/1.jpg'}">
             </div>
-        `;
-        notificationList.prepend(li);
-    });
+            <div class="media-body">
+                <h6 class="mb-1">${notification.title}</h6>
+                <small class="d-block">${notification.time}</small>
+            </div>
+        </div>
+    `;
+    notificationList.prepend(li);
+
+    // Update notification count badge (if you have one)
+    const badge = document.getElementById('notificationCount');
+    if (badge) {
+        const currentCount = parseInt(badge.textContent) || 0;
+        badge.textContent = currentCount + 1;
+        badge.style.display = 'inline-block';
+    }
+
+    console.log("✅ Notification added to UI");
+});
+// ========================================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    const notificationToggle = document.getElementById('notificationToggle');
+    const notificationDropdown = document.getElementById('notificationDropdown');
+
+    if (notificationToggle && notificationDropdown) {
+        notificationToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            notificationDropdown.classList.toggle('show');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!notificationToggle.contains(e.target) && !notificationDropdown.contains(e.target)) {
+                notificationDropdown.classList.remove('show');
+            }
+        });
+
+        notificationDropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
 });

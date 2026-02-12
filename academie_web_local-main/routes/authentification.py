@@ -2,11 +2,8 @@ from flask import Blueprint, render_template, request, jsonify, session, redirec
 import requests
 import urllib3
 
-# Disable SSL warnings (since you're using verify=False)
-
 # Create a Blueprint for authentication
 auth_bp = Blueprint('auth', __name__)
-
 
 # ===============================
 # VARIABLES
@@ -14,26 +11,27 @@ auth_bp = Blueprint('auth', __name__)
 BASE_URL = " https://172.28.20.178:5004/scl/"
 
 
-
 def check_login(username, password):
 	payload = {
-		"username": username,  # ✅ Correct - string keys
-		"password": password  # ✅ Correct - string keys
+		"username": username,
+		"password": password
 	}
 	url = f"{BASE_URL}authentification-moderateur"
 
 	try:
 		response = requests.post(url, json=payload, verify=False, timeout=10)
 
-
 		if response.status_code == 200:
-			return True
+			data = response.json()
+			print(f"✅ Login successful, account_id: {data.get('account_id')}")  # ← DEBUG
+			return True, data.get('account_id', 3)
 		else:
-			return False
+			print(f"❌ Login failed, status: {response.status_code}")  # ← DEBUG
+			return False, None
 
 	except requests.exceptions.RequestException as e:
-		print(f"DEBUG: Request failed: {e}")
-		return False
+		print(f"❌ Request failed: {e}")
+		return False, None
 
 
 @auth_bp.route('/login', methods=['GET'])
@@ -50,18 +48,24 @@ def login_post():
 	username = data.get('username')
 	password = data.get('password')
 
-	# Validate input
 	if not username or not password:
 		return jsonify({
 			'success': False,
 			'message': 'Username and password required'
 		}), 400
 
-	# Check login
-	if check_login(username, password):
-		# Store in session
+	# Get login result and account_id
+	success, account_id = check_login(username, password)
+
+	if success:
+		session.permanent = True
 		session['moderator_id'] = username
 		session['moderator_name'] = username
+		session['account_id'] = account_id
+
+		# ← ADD DEBUG LOGGING
+		print(f"✅ Session set: moderator_id={username}, account_id={account_id}")
+		print(f"✅ Session contents: {dict(session)}")
 
 		return jsonify({
 			'success': True,

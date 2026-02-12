@@ -1,9 +1,11 @@
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
 from flask_socketio import join_room, leave_room, emit
+from websockets.events import send_calendar_request_notification
 from websockets import get_socketio
 import requests
 from nacl.pwhash import verify
 from datetime import datetime
+
 
 
 
@@ -246,22 +248,6 @@ def create_calander():
 		return jsonify({"Message":"Error coming from server"}),500
 
 
-
-
-def send_calendar_request_notification(socketio, account_id, data):
-	try:
-		socketio.emit(
-			'calendar_notification',
-            {
-                'title': data.get('title', 'No title'),
-                'time': data.get('time', 'No time'),
-                'avatar': data.get('avatar', None)
-            },
-			room=f"admin_{account_id}"  # or your own room logic
-		)
-		return True
-	except:
-		return False
 
 
 # Notification par for the calender-request
@@ -643,8 +629,8 @@ def get_calender_statistic(calander_id):
 @dashboard_bp.route('/dashboard', methods=['GET'])
 def dashboard():
 	"""Main dashboard page"""
-	if 'moderator_id' not in session:
-		return redirect(url_for('auth.login'))
+	# if 'moderator_id' not in session:
+	# 	return redirect(url_for('auth.login'))
 
 	account_id = session.get('account_id', 3)
 	sessions = get_session_slc(account_id)
@@ -655,6 +641,7 @@ def dashboard():
 						   sessions=sessions,
 						   data_modera=data_modera,
 						   local_details=local_details,
+						   account_id=account_id,
 						   page='home')
 
 
