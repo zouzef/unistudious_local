@@ -455,7 +455,7 @@ def delete_attendance_by_id(id_attendance):
 # ENDPOINT 7: Get list of students to add to attendance
 # ========================================
 @attendance_bp.route('/list-add-student-attendance/<int:calender_id>', methods=["GET"])
-@token_required
+# @token_required
 def list_add_student_attendance(calender_id):
     try:
         # Step 1: Get current attendance to exclude existing students

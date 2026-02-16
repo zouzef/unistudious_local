@@ -2830,65 +2830,246 @@ async function loadCalendarRequests() {
 }
 
 function displayCalendarRequests(requests) {
-    const tbody = document.querySelector('#example-1 tbody');
+    const tbody = document.querySelector('#example tbody');
     tbody.innerHTML = ''; // Clear existing rows
+
+    // Check if the table has an "Action" column
+    const headers = document.querySelectorAll('#example thead th');
+    const hasActionColumn = Array.from(headers).some(th => th.textContent.trim() === 'Action');
 
     requests.forEach(request => {
         const row = document.createElement('tr');
+
+        // Determine status display based on accepted value
+        let statusHTML = '';
+        if (request.accepted === 0 || request.accepted === null) {
+            statusHTML = `
+                <span class="badge light" style="background-color: #f8d7da; color: #721c24; padding: 8px 12px; border-radius: 4px;">
+                    <i class="fa fa-times-circle me-1"></i>Not Affected
+                </span>
+            `;
+        } else {
+            statusHTML = `
+                <button class="btn btn-sm" style="background-color: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: default;" disabled>
+                    <i class="fa fa-check-circle me-1"></i>Affected
+                </button>
+            `;
+        }
+
+        // Action dropdown HTML (only if needed)
+        let actionHTML = '';
+        if (hasActionColumn) {
+            actionHTML = `
+                <td>
+                    <ul class="tbl-action">
+                        <li>
+                            <div class="custom-dropdown dropdown">
+                                <a href="javascript:void(0);" class="btn sharp btn-light dropdown-toggle-manual" data-request-id="${request.id}">
+                                    <svg width="24" height="6" viewBox="0 0 24 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12.0012 0.359985C11.6543 0.359985 11.3109 0.428302 10.9904 0.561035C10.67 0.693767 10.3788 0.888317 10.1335 1.13358C9.88829 1.37883 9.69374 1.67 9.56101 1.99044C9.42828 2.31089 9.35996 2.65434 9.35996 3.00119C9.35996 3.34803 9.42828 3.69148 9.56101 4.01193C9.69374 4.33237 9.88829 4.62354 10.1335 4.8688C10.3788 5.11405 10.67 5.3086 10.9904 5.44134C11.3109 5.57407 11.6543 5.64239 12.0012 5.64239C12.7017 5.64223 13.3734 5.36381 13.8686 4.86837C14.3638 4.37294 14.6419 3.70108 14.6418 3.00059C14.6416 2.3001 14.3632 1.62836 13.8677 1.13315C13.3723 0.637942 12.7004 0.359826 12 0.359985H12.0012ZM3.60116 0.359985C3.25431 0.359985 2.91086 0.428302 2.59042 0.561035C2.26997 0.693767 1.97881 0.888317 1.73355 1.13358C1.48829 1.37883 1.29374 1.67 1.16101 1.99044C1.02828 2.31089 0.959961 2.65434 0.959961 3.00119C0.959961 3.34803 1.02828 3.69148 1.16101 4.01193C1.29374 4.33237 1.48829 4.62354 1.73355 4.8688C1.97881 5.11405 2.26997 5.3086 2.59042 5.44134C2.91086 5.57407 3.25431 5.64239 3.60116 5.64239C4.30165 5.64223 4.97339 5.36381 5.4686 4.86837C5.9638 4.37294 6.24192 3.70108 6.24176 3.00059C6.2416 2.3001 5.96318 1.62836 5.46775 1.13315C4.97231 0.637942 4.30045 0.359826 3.59996 0.359985H3.60116ZM20.4012 0.359985C20.0543 0.359985 19.7109 0.428302 19.3904 0.561035C19.07 0.693767 18.7788 0.888317 18.5336 1.13358C18.2883 1.37883 18.0937 1.67 17.961 1.99044C17.8283 2.31089 17.76 2.65434 17.76 3.00119C17.76 3.34803 17.8283 3.69148 17.961 4.01193C18.0937 4.33237 18.2883 4.62354 18.5336 4.8688C18.7788 5.11405 19.07 5.3086 19.3904 5.44134C19.7109 5.57407 20.0543 5.64239 20.4012 5.64239C21.1017 5.64223 21.7734 5.36381 22.2686 4.86837C22.7638 4.37294 23.0419 3.70108 23.0418 3.00059C23.0416 2.3001 22.7632 1.62836 22.2677 1.13315C21.7723 0.637942 21.1005 0.359826 20.4 0.359985H20.4012Z" fill="#A098AE"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </td>
+            `;
+        }
+
         row.innerHTML = `
+            <td>${request.id}</td>
             <td>
                 <div class="trans-list">
-                    <img src="${request.avatar || '/static/assets/images/avatar/default.jpg'}"
-                         alt="" class="avatar avatar-sm me-3">
-                    <h4>${request.username || 'N/A'}</h4>
+                    ${request.username || 'N/A'}
                 </div>
             </td>
-            <td><span class="text-primary font-w600">ID ${request.id}</span></td>
             <td>
                 <div class="d-flex align-items-center">
-                    <div class="icon-box icon-box-sm bg-secondary">
-                        <svg width="16" height="16" viewBox="0 0 18 24" fill="none">
-                            <!-- Your SVG here -->
-                        </svg>
-                    </div>
                     <div class="ms-2">
-                        <span class="mb-0">Subject</span>
-                        <h6 class="text-primary mb-0 font-w600">${request.subject_name || 'N/A'}</h6>
+                        ${request.subject_name || 'N/A'}
                     </div>
                 </div>
             </td>
-            <td><span class="doller font-w600">${request.start_date || 'N/A'}</span></td>
+            <td>
+                ${request.room_name || 'N/A'}
+            </td>
             <td>${request.session_name || 'N/A'}</td>
             <td>
-                <ul class="tbl-action">
-                    <li>
-                        <button onclick="viewRequest(${request.id})" class="btn btn-sm">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                <!-- Your action SVG -->
-                            </svg>
-                        </button>
-                        <div class="dropdown custom-dropdown">
-                            <div class="btn sharp tp-btn" data-bs-toggle="dropdown">
-                                <svg width="18" height="6" viewBox="0 0 24 6" fill="none">
-                                    <!-- Your dots SVG -->
-                                </svg>
-                            </div>
-                            <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="javascript:void(0);" onclick="approveRequest(${request.id})">Approve</a>
-                                <a class="dropdown-item" href="javascript:void(0);" onclick="rejectRequest(${request.id})">Reject</a>
-                                <a class="dropdown-item" href="javascript:void(0);" onclick="viewDetails(${request.id})">View Details</a>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+                ${statusHTML}
             </td>
+            <td>${request.start_date || 'N/A'}</td>
+            ${actionHTML}
         `;
         tbody.appendChild(row);
     });
 
-    // Reinitialize DataTable if you're using it
-    if ($.fn.DataTable.isDataTable('#example-1')) {
-        $('#example-1').DataTable().destroy();
+    // Reinitialize DataTables
+    if (typeof $.fn.DataTable !== 'undefined') {
+        if ($.fn.DataTable.isDataTable('#example')) {
+            $('#example').DataTable().destroy();
+        }
+        $('#example').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "lengthChange": true
+        });
     }
-    $('#example-1').DataTable();
+}
+
+// Updated event delegation with dynamic positioning
+document.addEventListener('DOMContentLoaded', function() {
+    // Create a container for dropdowns in body
+    if (!document.getElementById('dropdown-container')) {
+        const container = document.createElement('div');
+        container.id = 'dropdown-container';
+        document.body.appendChild(container);
+    }
+
+    // Handle dropdown toggle clicks
+    document.addEventListener('click', function(e) {
+        // Toggle dropdown
+        if (e.target.closest('.dropdown-toggle-manual')) {
+            e.preventDefault();
+            const dropdownToggle = e.target.closest('.dropdown-toggle-manual');
+            const requestId = dropdownToggle.getAttribute('data-request-id');
+
+            // Remove existing dropdown menus
+            document.querySelectorAll('.dynamic-dropdown-menu').forEach(menu => menu.remove());
+
+            // Get button position
+            const rect = dropdownToggle.getBoundingClientRect();
+
+            // Create dropdown menu
+            const menu = document.createElement('div');
+            menu.className = 'dropdown-menu dropdown-menu-end dynamic-dropdown-menu show';
+            menu.style.position = 'fixed';
+            menu.style.top = `${rect.bottom + window.scrollY}px`;
+            menu.style.left = `${rect.right - 160 + window.scrollX}px`; // 160px is menu width
+            menu.style.zIndex = '9999';
+            menu.style.minWidth = '160px';
+
+            menu.innerHTML = `
+                <a class="dropdown-item" href="javascript:void(0);" data-action="approve" data-id="${requestId}">Approve</a>
+                <a class="dropdown-item" href="javascript:void(0);" data-action="reject" data-id="${requestId}">Reject</a>
+                <a class="dropdown-item" href="javascript:void(0);" data-action="view" data-id="${requestId}">View Details</a>
+            `;
+
+            document.getElementById('dropdown-container').appendChild(menu);
+
+            return;
+        }
+
+        // Handle dropdown item clicks
+        if (e.target.closest('.dropdown-item')) {
+            e.preventDefault();
+            const item = e.target.closest('.dropdown-item');
+            const action = item.getAttribute('data-action');
+            const id = item.getAttribute('data-id');
+
+            // Remove dropdown
+            document.querySelectorAll('.dynamic-dropdown-menu').forEach(menu => menu.remove());
+
+            // Perform action
+            if (action === 'approve') {
+                approveRequest(id);
+            } else if (action === 'reject') {
+                rejectRequest(id);
+            } else if (action === 'view') {
+                viewDetails(id);
+            }
+            return;
+        }
+
+        // Close dropdown when clicking outside
+        if (!e.target.closest('.custom-dropdown') && !e.target.closest('.dynamic-dropdown-menu')) {
+            document.querySelectorAll('.dynamic-dropdown-menu').forEach(menu => menu.remove());
+        }
+    });
+
+    // Close dropdowns on scroll
+    window.addEventListener('scroll', function() {
+        document.querySelectorAll('.dynamic-dropdown-menu').forEach(menu => menu.remove());
+    }, true);
+});
+
+// Action functions with SweetAlert2
+function approveRequest(id) {
+    console.log('Approving request:', id);
+
+    Swal.fire({
+        title: 'Approve Request?',
+        text: `Are you sure you want to approve request #${id}?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, approve it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Add your API call here
+            // Example:
+            // fetch(`/api/approve-request/${id}`, { method: 'POST' })
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         if (data.success) {
+            //             Swal.fire('Approved!', 'Request has been approved.', 'success');
+            //             loadCalendarRequests(); // Reload data
+            //         }
+            //     });
+
+            Swal.fire(
+                'Approved!',
+                `Request #${id} has been approved successfully.`,
+                'success'
+            ).then(() => {
+                // Reload the calendar requests
+                loadCalendarRequests();
+            });
+        }
+    });
+}
+
+function rejectRequest(id) {
+    console.log('Rejecting request:', id);
+
+    Swal.fire({
+        title: 'Reject Request?',
+        text: `Are you sure you want to reject request #${id}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, reject it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Add your API call here
+            // Example:
+            // fetch(`/api/reject-request/${id}`, { method: 'POST' })
+            //     .then(response => response.json())
+            //     .then(data => {
+            //         if (data.success) {
+            //             Swal.fire('Rejected!', 'Request has been rejected.', 'success');
+            //             loadCalendarRequests(); // Reload data
+            //         }
+            //     });
+
+            Swal.fire(
+                'Rejected!',
+                `Request #${id} has been rejected.`,
+                'success'
+            ).then(() => {
+                // Reload the calendar requests
+                loadCalendarRequests();
+            });
+        }
+    });
+}
+
+function viewDetails(id) {
+    console.log('Viewing details:', id);
+    window.location.href = `/dashboard/calendar-request-details/${id}`;
 }

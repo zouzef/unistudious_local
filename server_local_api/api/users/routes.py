@@ -159,10 +159,49 @@ def get_teacher(group_id):
         teachers = Database.execute_query(query,(group_id,))
 
 
+        return jsonify({"Message": "Success", "data": teachers}), 200
+
+    except Exception as e:
+        print(f"Error: {e} coming from get_teacher")
+        return jsonify({"Message": f"Error {e} coming from server"}), 500
 
 
+@users_bp.route('/get_teacher_session/<int:session_id>', methods=['GET'])
+# @token_required
+def get_teacher_session(session_id):
+    try:
+        query = """
+            SELECT 
+				u.id as user_id, 
+				u.username, 
+				u.email, 
+				u.full_name, 
+				u.phone, 
+				u.img_link,
+				rtsg.subject_id,
+				CASE 
+					WHEN sc.name = 'Other' THEN acs.other_subject
+					ELSE sc.name
+				END as subject_name
+			FROM user u
+			INNER JOIN relation_teacher_to_subject_group rtsg 
+				ON rtsg.user_id = u.id 
+				AND rtsg.enabled = 1
+			INNER JOIN relation_group_local_session rgls
+				ON rgls.id = rtsg.relation_group_local_session_id
+				AND rgls.session_id = %s
+			INNER JOIN subject_config sc 
+				ON sc.id = rtsg.subject_id
+			LEFT JOIN account_subject acs
+				ON acs.subject_config_id = rtsg.subject_id
+				AND acs.enabled = 1
+			WHERE u.enabled = 1 
+			AND (JSON_CONTAINS(u.roles, '"ROLE_TEACHER"') OR JSON_CONTAINS(u.roles, '"ROLE_ADMIN"'))
+        """
 
-        print(teachers)
+        teachers = Database.execute_query(query,(session_id,))
+
+
         return jsonify({"Message": "Success", "data": teachers}), 200
 
     except Exception as e:

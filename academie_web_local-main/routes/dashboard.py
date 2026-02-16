@@ -88,7 +88,7 @@ def get_room(local_id):
 @dashboard_bp.route("/api/get_teacher/<int:session_id>")
 def get_teacher(session_id):
 	"""Get teachers from session"""
-	url = f"{BASE_URL}get_teacher/{session_id}"
+	url = f"{BASE_URL}get_teacher_session/{session_id}"
 	try:
 		response = requests.get(url, verify=False)
 		response.raise_for_status()
@@ -248,8 +248,6 @@ def create_calander():
 		return jsonify({"Message":"Error coming from server"}),500
 
 
-
-
 # Notification par for the calender-request
 @dashboard_bp.route('/api/notify-calendar-request', methods=['POST'])
 def notify_calendar_request():
@@ -343,9 +341,6 @@ def get_calendar_request(account_id):
 		return jsonify({
 			"message": f"Error: {str(e)}"
 		}), 500
-
-
-
 
 
 # ==========================================
@@ -709,6 +704,7 @@ def show_sessions():
 
 	return render_template('index.html',
 						   sessions=sessions,
+						   account_id=account_id,
 						   page='show-session')
 
 
@@ -753,10 +749,45 @@ def show_create_session_calendar(id_session):
 	"""Create/edit session calendar page"""
 	if 'moderator_id' not in session:
 		return redirect(url_for('auth.login'))
-
+	account_id = session.get('account_id', 3)
 	return render_template('index.html',
 						   id_session=id_session,
+						   account_id=account_id,
 						   page='session_calander')
+
+# ==========================================
+# CALENDAR REQUEST ROUTES
+# ==========================================
+
+@dashboard_bp.route('/dashboard/show-calander-request/<int:account_id>')
+def show_calander_request(account_id):
+	if 'moderator_id' not in session:
+		return redirect(url_for('auth.login'))
+	return render_template('index.html',
+						   account_id=account_id,
+						   page = 'calander_request_page'
+	)
+
+
+@dashboard_bp.route('/api/approve-calander-request/<int:calander_id>')
+def approve_calander_request(calander_id):
+	try:
+		url = f"{BASE_URL}approve_calander_request/{calander_id}"
+		response = requests.post(url,verify=False)
+		response.raise_for_status()
+		if response.status_code:
+			return jsonify({
+				response.json()
+			}),200
+		else:
+			return jsonify({
+				"Message":"Error coming from server"
+			}),404
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error {e}"
+		}),500
 
 
 # ==========================================
@@ -815,6 +846,8 @@ def show_attendance_presence(id_calander):
 	if 'moderator_id' not in session:
 		return redirect(url_for('auth.login'))
 
+	account_id = session.get('account_id', 3)  # ← ADD THIS LINE
+
 	calender_detail = detail_calender_by_id(id_calander)
 	attendance = attendance_by_id(id_calander)
 	print(attendance)
@@ -844,6 +877,7 @@ def show_attendance_presence(id_calander):
 						   calender_detail=calender_detail,
 						   attendance=attendance,
 						   student=list_student,
+						   account_id=account_id,  # ← ADD THIS LINE
 						   page='show_attendance_presence')
 
 

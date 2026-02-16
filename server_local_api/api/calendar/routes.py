@@ -256,8 +256,8 @@ def data_account_api(id):
 @calendar_bp.route('/get_calendar_session/<int:id_session>/<int:id_account>', methods=['GET'])
 def get_calendar_session(id_session, id_account):
     try:
-        print(id_session)
-        print(id_account)
+        print("\n \n \n \n \n \n session_id:",id_session)
+        print("\n \n \n \n \n \n account_id:",id_account)
         query = """
             SELECT * FROM relation_calander_group_session 
             WHERE enabled = 1 AND session_id = %s AND account_id = %s
@@ -1067,6 +1067,7 @@ def get_calander_req(account_id):
                 cr.start_date,
                 grp.name AS group_name,
                 s.name AS session_name,
+                r.name AS room_name,
                 CASE 
                     WHEN sc.name = 'other' THEN acs.other_subject
                     ELSE sc.name
@@ -1076,6 +1077,7 @@ def get_calander_req(account_id):
             INNER JOIN session s ON cr.session_id = s.id
             INNER JOIN subject_config sc ON cr.subject_id = sc.id
             INNER JOIN user u ON cr.user_id = u.id
+            INNER JOIN room r ON cr.room_id = r.id
             LEFT JOIN account_subject acs ON cr.subject_id = acs.id AND sc.name = 'other'
             WHERE
                 cr.account_id = %s
@@ -1095,6 +1097,7 @@ def get_calander_req(account_id):
                     'group_id': row['group_id'],
                     'type': row['type'],
                     'room_id': row['room_id'],
+                    'room_name':row['room_name'],
                     'subject_id': row['subject_id'],
                     'user_id': row['user_id'],
                     'username': row['username'],
@@ -1137,3 +1140,46 @@ def get_calander_req(account_id):
             "Message":"Error"
         }),500
 
+
+# =======================================
+# ENDPOINT 15: APPROVE CALANDER_REQUEST
+# =======================================
+def check_calander_request_id(calander_id):
+    try:
+        query = """
+            SELECT COUNT(*) AS nbr FROM calendar_request 
+            WHERE enabled = 1
+        """
+        result = Database.execute_query(query)
+        return result[0]['nbr']>0
+    except Exception:
+        return False
+
+
+@calendar_bp.route('/approve_calander_request/<int:calander_id>',methods=['POST'])
+def approve_calander_request(calander_id):
+    try:
+        if not(check_calander_request_id(calander_id)):
+            return jsonify({
+                "Message":"Error:check the id of the calander_request"
+            }),404
+
+        query = """
+            UPDATE calendar_request set accepted = 1
+            WHERE id = %s
+        """
+        values=(calander_id,)
+
+        result = Database.execute_query(query,values)
+
+
+
+        return jsonify({
+            "Message":result
+        }),200
+
+
+    except Exception as e:
+        return jsonify({
+            "Message":f"Error: {e} coming from the server !!"
+        }),500
