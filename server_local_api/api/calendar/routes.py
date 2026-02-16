@@ -1039,10 +1039,10 @@ def get_notification(account_id):
 # =======================================
 # ENDPOINT 14: GET CALANDER_REQUQST
 # =======================================
-@calendar_bp.route('/get-calander_request/<int:account_id>', methods=['GET'])
+@calendar_bp.route('/get-calander_requestt/<int:account_id>', methods=['GET'])
 def get_calander_req(account_id):
     try:
-        print("\n \n \n \n \n \n \n hiii")
+
         query = """
             SELECT 
                 cr.id,
@@ -1079,7 +1079,7 @@ def get_calander_req(account_id):
             LEFT JOIN account_subject acs ON cr.subject_id = acs.id AND sc.name = 'other'
             WHERE
                 cr.account_id = %s
-                cr.accepted = 0 
+                AND cr.accepted = 0 
                 AND cr.enabled = 1
         """
         values=(account_id,)

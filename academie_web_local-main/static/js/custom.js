@@ -2816,8 +2816,11 @@ async function loadCalendarRequests() {
         const response = await fetch(`/api/get-calendar-request/${accountId}`);
         const data = await response.json();
 
-        if (response.ok && data.requests) {
-            displayCalendarRequests(data.requests);
+        console.log('Response data:', data); // Add this to debug
+
+        // FIX: Change from data.requests to data.data
+        if (response.ok && data.data) {
+            displayCalendarRequests(data.data);
         } else {
             console.error('No calendar requests found');
         }
@@ -2837,7 +2840,7 @@ function displayCalendarRequests(requests) {
                 <div class="trans-list">
                     <img src="${request.avatar || '/static/assets/images/avatar/default.jpg'}"
                          alt="" class="avatar avatar-sm me-3">
-                    <h4>${request.name}</h4>
+                    <h4>${request.username || 'N/A'}</h4>
                 </div>
             </td>
             <td><span class="text-primary font-w600">ID ${request.id}</span></td>
@@ -2849,13 +2852,13 @@ function displayCalendarRequests(requests) {
                         </svg>
                     </div>
                     <div class="ms-2">
-                        <span class="mb-0">Class</span>
-                        <h6 class="text-primary mb-0 font-w600">${request.class || 'N/A'}</h6>
+                        <span class="mb-0">Subject</span>
+                        <h6 class="text-primary mb-0 font-w600">${request.subject_name || 'N/A'}</h6>
                     </div>
                 </div>
             </td>
-            <td><span class="doller font-w600">${request.fees || '$0'}</span></td>
-            <td>${request.rank || 'N/A'}</td>
+            <td><span class="doller font-w600">${request.start_date || 'N/A'}</span></td>
+            <td>${request.session_name || 'N/A'}</td>
             <td>
                 <ul class="tbl-action">
                     <li>
@@ -2888,25 +2891,4 @@ function displayCalendarRequests(requests) {
         $('#example-1').DataTable().destroy();
     }
     $('#example-1').DataTable();
-}
-
-// Action functions
-function viewRequest(id) {
-    console.log('View request:', id);
-    // Add your view logic
-}
-
-function approveRequest(id) {
-    console.log('Approve request:', id);
-    // Add your approve logic
-}
-
-function rejectRequest(id) {
-    console.log('Reject request:', id);
-    // Add your reject logic
-}
-
-function viewDetails(id) {
-    console.log('View details:', id);
-    // Add your details logic
 }

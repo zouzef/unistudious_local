@@ -325,12 +325,13 @@ def get_notification(account_id):
 @dashboard_bp.route('/api/get-calendar-request/<int:account_id>', methods=['GET'])
 def get_calendar_request(account_id):
 	try:
-		print("hiiii")
-		url = f"{BASE_URL}get-calander_request/{account_id}"  # Fixed: add account_id to URL
+
+		url = f"{BASE_URL}get-calander_requestt/{account_id}"  # Fixed: add account_id to URL
 		response = requests.get(url, verify=False)
 		response.raise_for_status()
 
 		if response.status_code == 200:
+			print(response.json())
 			return jsonify(response.json()), 200  # Fixed: remove extra braces
 		else:
 			return jsonify({
