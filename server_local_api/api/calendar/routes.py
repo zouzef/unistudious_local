@@ -312,68 +312,78 @@ def generate_unique_ref(group_id,session_id,local_id,account_id):
 
 
 # Function to test if the room reserved or no
-def isRoomReserved(room_id, start_time, end_time):
+def isRoomReserved(room_id, start_date, start_time, end_time):
     try:
         query = """
             SELECT COUNT(*) as nbr FROM relation_calander_group_session 
             WHERE room_id = %s 
-            AND DATE(start_time) = DATE(%s)
-            AND start_time < %s 
-            AND end_time > %s
+            AND DATE(start_time) = %s
+            AND TIME(start_time) < %s 
+            AND TIME(end_time) > %s
             AND enabled = 1 
         """
-        values = (room_id, start_time, end_time, start_time)
+        values = (room_id, start_date, end_time, start_time)
 
-        result = Database.execute_query(query,values)
-        if result and len(result) > 0 :
-            return result[0]['nbr'] > 0  # FIXED
+        result = Database.execute_query(query, values)
+        print(f"DEBUG isRoomReserved -> result:{result}")
+
+        if result and len(result) > 0:
+            return result[0]['nbr'] > 0
+        return False
 
     except Exception as db_error:
         print(f"Database Error: {db_error}")
-        return True
+        return False
 
 
 # Check if the group is alreay in the time or no
-def isGroupTypeConflit(group_id, start_time, end_time):
+def isGroupTypeConflit(group_id, start_date, start_time, end_time):
     try:
         query = """
             SELECT COUNT(*) as nbr FROM relation_calander_group_session 
             WHERE group_session_id = %s 
-            AND DATE(start_time) = DATE(%s)
-            AND start_time < %s
-            AND end_time > %s
+            AND DATE(start_time) = %s
+            AND TIME(start_time) < %s
+            AND TIME(end_time) > %s
             AND enabled = 1
         """
-        values = (group_id, start_time, end_time, start_time)
+        values = (group_id, start_date, end_time, start_time)
 
-        result = Database.execute_query(query,values)
-        if result and len(result)>0:
-            return result[0]['nbr']>0
+        result = Database.execute_query(query, values)
+        if result and len(result) > 0:
+            return result[0]['nbr'] > 0
+        return False
+
     except Exception as e:
         print(f"Database Error: {e}")
-        return True
+        return False
 
 
 # Check if the subject and the teacher is on the time or no
-def isSubjectTeacherConflit(teacher_id, start_time, end_time):
+def isSubjectTeacherConflit(teacher_id, start_date, start_time, end_time):
     try:
         query = """
             SELECT COUNT(*) AS nbr FROM relation_calander_group_session
-            WHERE enabled = 1 
-            AND teacher_id = %s
-            AND DATE(start_time) = DATE(%s)
-            AND start_time < %s
-            AND end_time > %s 
+            WHERE teacher_id = %s
+            AND DATE(start_time) = %s
+            AND TIME(start_time) < %s
+            AND TIME(end_time) > %s
+            AND enabled = 1 
         """
-        values = (teacher_id, start_time, end_time, start_time)
+        values = (teacher_id, start_date, end_time, start_time)
 
+        print(f"DEBUG Teacher -> teacher_id:{teacher_id} start_date:{start_date} start_time:{start_time} end_time:{end_time}")
+        print(f"DEBUG Teacher -> values sent to query: {values}")
+        result = Database.execute_query(query, values)
+        print(f"DEBUG Teacher -> result: {result}")
 
-        result = Database.execute_query(query,values)
-        if result and len(result)>0:
-            return result[0]['nbr']>0
+        if result and len(result) > 0:
+            return result[0]['nbr'] > 0
+        return False
+
     except Exception as e:
         print(f"Database Error: {e}")
-        return True
+        return False
 
 
 # Check if the color generated or no
@@ -1144,6 +1154,7 @@ def get_calander_req(account_id):
 # =======================================
 # ENDPOINT 15: APPROVE CALANDER_REQUEST
 # =======================================
+
 def check_calander_request_id(calander_id):
     try:
         query = """
@@ -1158,30 +1169,156 @@ def check_calander_request_id(calander_id):
         return False
 
 
-@calendar_bp.route('/approve_calander_request/<int:calander_id>',methods=['POST'])
-def approve_calander_request(calander_id):
+@calendar_bp.route('/approve_calander_request/<int:request_id>', methods=['POST'])
+def approve_calander_request(request_id):
     try:
-        if not(check_calander_request_id(calander_id)):
-            return jsonify({
-                "Message":"Error:check the id of the calander_request"
-            }),404
+        if not(check_calander_request_id(request_id)):
+            return jsonify({"Message": "Error: check the id of the calander_request"}), 404
 
         query = """
-            UPDATE calendar_request set accepted = 1
-            WHERE id = %s
+            SELECT
+                cr.*,
+                l.id as local_id,
+                grp.name as name
+            FROM calendar_request cr, local l, relation_group_local_session grp  
+            WHERE 
+                cr.id = %s AND
+                cr.account_id = l.account_id AND 
+                cr.group_id = grp.id 
         """
-        values=(calander_id,)
+        calander_data = Database.execute_query(query, (request_id,), fetch=True)
 
-        result = Database.execute_query(query,values)
-        print(result)
+        if not calander_data:
+            return jsonify({"Message": "Request Not Found"}), 404
 
+        calander_data = calander_data[0]
+
+        # Extract values
+        session_id  = calander_data['session_id']
+        group_id    = calander_data['group_id']
+        room_id     = calander_data['room_id']
+        subject_id  = calander_data['subject_id']
+        teacher_id  = calander_data['user_id']
+        account_id  = calander_data['account_id']
+        description = calander_data['description']
+        type_val    = calander_data['type']
+        local_id    = calander_data['local_id']
+        title       = calander_data['name']
+
+        # Convert timedelta to proper time string "HH:MM:SS"
+        def timedelta_to_str(td):
+            total_seconds = int(td.total_seconds())
+            hours, remainder = divmod(total_seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            return f"{hours:02}:{minutes:02}:{seconds:02}"
+
+        start_time = timedelta_to_str(calander_data['start_time'])
+        end_time   = timedelta_to_str(calander_data['end_time'])
+
+        # Convert date to string "YYYY-MM-DD"
+        start_date = calander_data['start_date'].strftime('%Y-%m-%d') if calander_data['start_date'] else None
+
+        # ── Conflict checks (pass start_date, start_time, end_time separately) ───
+        if isRoomReserved(room_id, start_date, start_time, end_time):
+            return jsonify({
+                "Message": "Room already reserved",
+                "Error": "Room-Conflict"
+            }), 402
+
+        if isGroupTypeConflit(group_id, start_date, start_time, end_time):
+            return jsonify({
+                "Message": "Group not available in this time",
+                "Error": "Group-Conflict"
+            }), 402
+
+        if isSubjectTeacherConflit(teacher_id, start_date, start_time, end_time):
+            return jsonify({
+                "Message": "Teacher not available in this time",
+                "Error": "Teacher-Conflict"
+            }), 402
+
+        # ── Generate unique color ─────────────────────────────────────
+        color = generate_random_color()
+        attempts = 0
+        max_attempts = 50
+        while check_color(color) and attempts < max_attempts:
+            color = generate_random_color()
+            attempts += 1
+
+        if attempts >= max_attempts:
+            return jsonify({
+                "Message": "Could not generate unique color",
+                "Error": "Warning: could not find unique color after 50 attempts"
+            }), 402
+
+        # ── Generate additional fields ────────────────────────────────
+        status                = 1
+        ref                   = generate_unique_ref(group_id, session_id, local_id, account_id)
+        enabled               = 1
+        create_time           = datetime.now()
+        timestamp             = create_time
+        teacher_present       = 0
+        force_teacher_present = 0
+
+        # Combine date + time for DB insert
+        start_datetime = f"{start_date} {start_time}"
+        end_datetime   = f"{start_date} {end_time}"
+
+        # ── Insert into calendar table ────────────────────────────────
+        insert_query = """
+            INSERT INTO relation_calander_group_session
+            (session_id, account_id, local_id, group_session_id, room_id, teacher_id, subject_id,
+            color, status, description, start_time, end_time, ref, refresh, title, enabled,
+            created_at, timestamp, updated_at, type, teacher_present, force_teacher_present, slc_use)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """
+        insert_values = (
+            session_id,
+            account_id,
+            local_id,
+            group_id,
+            room_id,
+            teacher_id,
+            subject_id,
+            color,
+            status,
+            description,
+            start_datetime,  # full datetime for DB
+            end_datetime,    # full datetime for DB
+            ref,
+            0,
+            title,
+            enabled,
+            create_time,
+            timestamp,
+            None,
+            type_val,
+            teacher_present,
+            force_teacher_present,
+            1
+        )
+        new_calander_id = Database.execute_query(insert_query, insert_values, fetch=False)
+
+        # ── Mark request as accepted ──────────────────────────────────
+        update_query = "UPDATE calendar_request SET accepted = 1 WHERE id = %s"
+        Database.execute_query(update_query, (request_id,), fetch=False)
 
         return jsonify({
-            "Message":result
-        }),200
-
+            "Message": "Calendar entry created and request approved successfully",
+            "calander_id": new_calander_id,
+            "request_id": request_id,
+            "ref": ref,
+            "color": color
+        }), 201
 
     except Exception as e:
-        return jsonify({
-            "Message":f"Error: {e} coming from the server !!"
-        }),500
+        return jsonify({"Message": f"Error: {e} coming from the server!!"}), 500
+
+
+# =======================================
+# ENDPOINT 16: REJECT CALANDER_REQUEST
+# =======================================
+
+@calendar_bp.route('/reject_calander_request/<int:request_id>',methods=['POST'])
+def reject_calander_request(request_id):
+    pass

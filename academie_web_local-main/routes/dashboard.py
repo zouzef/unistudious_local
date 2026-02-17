@@ -14,7 +14,7 @@ from datetime import datetime
 # CONFIGURATION
 # ==========================================
 dashboard_bp = Blueprint('dashboard', __name__)
-BASE_URL = " https://172.28.20.178:5004/scl/"
+BASE_URL = " https://192.168.1.27:5004/scl/"
 
 
 # ==========================================
@@ -767,27 +767,39 @@ def show_calander_request(account_id):
 						   page = 'calander_request_page'
 	)
 
-
-@dashboard_bp.route('/api/approve-calander-request/<int:calander_id>')
-def approve_calander_request(calander_id):
+# Approve calander request from the admin
+@dashboard_bp.route('/api/approve-calander-request/<int:calander_request_id>', methods=['POST'])
+def approve_calander_request(calander_request_id):
 	try:
-		url = f"{BASE_URL}approve_calander_request/{calander_id}"
+		url = f"{BASE_URL}approve_calander_request/{calander_request_id}"
 		response = requests.post(url,verify=False)
 		response.raise_for_status()
-		if response.status_code:
-			return jsonify({
-				response.json()
-			}),200
+		if response.status_code==201:
+			return jsonify(response.json()), 200
 		else:
 			return jsonify({
-				"Message":"Error coming from server"
+				"Message":"Check params"
 			}),404
 
 	except Exception as e:
 		return jsonify({
-			"Message":f"Error {e}"
-		}),500
+            "Message": f"Error {e}"
+        }), 500
 
+# Reject calander request from the admin
+@dashboard_bp.route('/api/reject-calander-request/<int:calander_request_id>', methods=['POST'])
+def reject_calander_request(calander_request_id):
+	try:
+		url = f"{BASE_URL}reject_calander_request/{calander_request_id}"
+		response = requests.post(url,verify=False)
+		response.raise_for_status()
+		return jsonify(response.json()),200
+
+	except Exception as e:
+		print(f"Error: {e} coming from reject calander_request")
+		return jsonify({
+			"Message":f"Error: {e} in reject_calander_request"
+		}),500
 
 # ==========================================
 # GROUP ROUTES
