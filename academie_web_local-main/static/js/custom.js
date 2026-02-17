@@ -2929,64 +2929,54 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Handle dropdown toggle clicks
     document.addEventListener('click', function(e) {
-        // Toggle dropdown
-        if (e.target.closest('.dropdown-toggle-manual')) {
-            e.preventDefault();
-            const dropdownToggle = e.target.closest('.dropdown-toggle-manual');
-            const requestId = dropdownToggle.getAttribute('data-request-id');
+    // Toggle dropdown - ONLY for manual dropdowns (not Bootstrap ones)
+    if (e.target.closest('.dropdown-toggle-manual')) {
+        e.preventDefault();
+        e.stopPropagation(); // prevent Bootstrap from also reacting
+        const dropdownToggle = e.target.closest('.dropdown-toggle-manual');
+        const requestId = dropdownToggle.getAttribute('data-request-id');
 
-            // Remove existing dropdown menus
-            document.querySelectorAll('.dynamic-dropdown-menu').forEach(menu => menu.remove());
+        document.querySelectorAll('.dynamic-dropdown-menu').forEach(menu => menu.remove());
 
-            // Get button position
-            const rect = dropdownToggle.getBoundingClientRect();
+        const rect = dropdownToggle.getBoundingClientRect();
+        const menu = document.createElement('div');
+        menu.className = 'dropdown-menu dropdown-menu-end dynamic-dropdown-menu show';
+        menu.style.position = 'fixed';
+        menu.style.top = `${rect.bottom + window.scrollY}px`;
+        menu.style.left = `${rect.right - 160 + window.scrollX}px`;
+        menu.style.zIndex = '9999';
+        menu.style.minWidth = '160px';
 
-            // Create dropdown menu
-            const menu = document.createElement('div');
-            menu.className = 'dropdown-menu dropdown-menu-end dynamic-dropdown-menu show';
-            menu.style.position = 'fixed';
-            menu.style.top = `${rect.bottom + window.scrollY}px`;
-            menu.style.left = `${rect.right - 160 + window.scrollX}px`; // 160px is menu width
-            menu.style.zIndex = '9999';
-            menu.style.minWidth = '160px';
+        menu.innerHTML = `
+            <a class="dropdown-item" href="javascript:void(0);" data-action="approve" data-id="${requestId}">Approve</a>
+            <a class="dropdown-item" href="javascript:void(0);" data-action="reject" data-id="${requestId}">Reject</a>
+            <a class="dropdown-item" href="javascript:void(0);" data-action="view" data-id="${requestId}">View Details</a>
+        `;
 
-            menu.innerHTML = `
-                <a class="dropdown-item" href="javascript:void(0);" data-action="approve" data-id="${requestId}">Approve</a>
-                <a class="dropdown-item" href="javascript:void(0);" data-action="reject" data-id="${requestId}">Reject</a>
-                <a class="dropdown-item" href="javascript:void(0);" data-action="view" data-id="${requestId}">View Details</a>
-            `;
+        document.getElementById('dropdown-container').appendChild(menu);
+        return;
+    }
 
-            document.getElementById('dropdown-container').appendChild(menu);
+    // Handle dropdown item clicks
+    if (e.target.closest('.dynamic-dropdown-menu .dropdown-item')) {
+        e.preventDefault();
+        const item = e.target.closest('.dropdown-item');
+        const action = item.getAttribute('data-action');
+        const id = item.getAttribute('data-id');
 
-            return;
-        }
+        document.querySelectorAll('.dynamic-dropdown-menu').forEach(menu => menu.remove());
 
-        // Handle dropdown item clicks
-        if (e.target.closest('.dropdown-item')) {
-            e.preventDefault();
-            const item = e.target.closest('.dropdown-item');
-            const action = item.getAttribute('data-action');
-            const id = item.getAttribute('data-id');
+        if (action === 'approve') approveRequest(id);
+        else if (action === 'reject') rejectRequest(id);
+        else if (action === 'view') viewDetails(id);
+        return;
+    }
 
-            // Remove dropdown
-            document.querySelectorAll('.dynamic-dropdown-menu').forEach(menu => menu.remove());
-
-            // Perform action
-            if (action === 'approve') {
-                approveRequest(id);
-            } else if (action === 'reject') {
-                rejectRequest(id);
-            } else if (action === 'view') {
-                viewDetails(id);
-            }
-            return;
-        }
-
-        // Close dropdown when clicking outside
-        if (!e.target.closest('.custom-dropdown') && !e.target.closest('.dynamic-dropdown-menu')) {
-            document.querySelectorAll('.dynamic-dropdown-menu').forEach(menu => menu.remove());
-        }
-    });
+    // Close ONLY dynamic dropdowns, don't touch Bootstrap dropdowns
+    if (!e.target.closest('.dropdown-toggle-manual') && !e.target.closest('.dynamic-dropdown-menu')) {
+        document.querySelectorAll('.dynamic-dropdown-menu').forEach(menu => menu.remove());
+    }
+});
 
     // Close dropdowns on scroll
     window.addEventListener('scroll', function() {
@@ -3073,3 +3063,7 @@ function viewDetails(id) {
     console.log('Viewing details:', id);
     window.location.href = `/dashboard/calendar-request-details/${id}`;
 }
+
+
+
+

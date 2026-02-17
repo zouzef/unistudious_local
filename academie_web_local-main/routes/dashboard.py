@@ -516,7 +516,6 @@ def create_group(session_id):
 # ==========================================
 # ATTENDANCE FUNCTIONS
 # ==========================================
-
 def attendance_by_id(calendar_id):
 	"""Get the attendance of the calendar"""
 	url = f"{BASE_URL}get-attendance/{calendar_id}"

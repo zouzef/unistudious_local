@@ -31253,4 +31253,9 @@ tbody tr:hover td:first-child {
     display: block;
 }
 
+table { width: 100% !important; min-width: unset !important; }
+.dataTables_wrapper { width: 100%; }
+
+.table-responsive { width: 100%; overflow-x: auto; }
+
 
