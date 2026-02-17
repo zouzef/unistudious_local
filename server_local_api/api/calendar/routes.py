@@ -1148,9 +1148,11 @@ def check_calander_request_id(calander_id):
     try:
         query = """
             SELECT COUNT(*) AS nbr FROM calendar_request 
-            WHERE enabled = 1
+            WHERE enabled = 1 AND id = %s
         """
-        result = Database.execute_query(query)
+        values =(calander_id,)
+        result = Database.execute_query(query,values)
+
         return result[0]['nbr']>0
     except Exception:
         return False
@@ -1171,7 +1173,7 @@ def approve_calander_request(calander_id):
         values=(calander_id,)
 
         result = Database.execute_query(query,values)
-
+        print(result)
 
 
         return jsonify({

@@ -1240,7 +1240,7 @@ function load_teachers(session_id) {
 
                     // Set text - adjust based on your teacher object structure
                     const subjectName = teacher.subject_name || 'Math';  // if you have subject_name
-                    const teacherName = `${teacher.first_name} ${teacher.last_name}`;  // or teacher.full_name
+                    const teacherName = `${teacher.full_name}`;  // or teacher.full_name
 
                     optionDiv.textContent = `Subject : ${subjectName} - Teacher : ${teacherName}`;
 
@@ -2950,7 +2950,7 @@ document.addEventListener('DOMContentLoaded', function() {
         menu.innerHTML = `
             <a class="dropdown-item" href="javascript:void(0);" data-action="approve" data-id="${requestId}">Approve</a>
             <a class="dropdown-item" href="javascript:void(0);" data-action="reject" data-id="${requestId}">Reject</a>
-            <a class="dropdown-item" href="javascript:void(0);" data-action="view" data-id="${requestId}">View Details</a>
+            
         `;
 
         document.getElementById('dropdown-container').appendChild(menu);
