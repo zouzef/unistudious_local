@@ -1091,7 +1091,6 @@ def get_calander_req(account_id):
             LEFT JOIN account_subject acs ON cr.subject_id = acs.id AND sc.name = 'other'
             WHERE
                 cr.account_id = %s
-                AND cr.accepted = 0 
                 AND cr.enabled = 1
         """
         values=(account_id,)
@@ -1220,22 +1219,30 @@ def approve_calander_request(request_id):
 
         # ── Conflict checks (pass start_date, start_time, end_time separately) ───
         if isRoomReserved(room_id, start_date, start_time, end_time):
+            print("Room Reserved")
+            reject_calander_request(request_id)
             return jsonify({
                 "Message": "Room already reserved",
                 "Error": "Room-Conflict"
             }), 402
 
         if isGroupTypeConflit(group_id, start_date, start_time, end_time):
+            print("Group Reserved")
+            reject_calander_request(request_id)
             return jsonify({
                 "Message": "Group not available in this time",
                 "Error": "Group-Conflict"
             }), 402
 
         if isSubjectTeacherConflit(teacher_id, start_date, start_time, end_time):
+            print("Teacher Reserved")
+            reject_calander_request(request_id)
             return jsonify({
                 "Message": "Teacher not available in this time",
                 "Error": "Teacher-Conflict"
             }), 402
+
+
 
         # ── Generate unique color ─────────────────────────────────────
         color = generate_random_color()
@@ -1309,7 +1316,7 @@ def approve_calander_request(request_id):
             "request_id": request_id,
             "ref": ref,
             "color": color
-        }), 201
+        }), 200
 
     except Exception as e:
         return jsonify({"Message": f"Error: {e} coming from the server!!"}), 500
@@ -1321,4 +1328,53 @@ def approve_calander_request(request_id):
 
 @calendar_bp.route('/reject_calander_request/<int:request_id>',methods=['POST'])
 def reject_calander_request(request_id):
-    pass
+    try:
+        if not(check_calander_request_id(request_id)):
+            return jsonify({
+                "Message":"Error: check calander_request_id"
+            }),404
+        query = """
+            UPDATE calendar_request 
+            SET accepted = 2 
+            WHERE id = %s AND enabled = 1;
+        """
+        values = (request_id,)
+        response = Database.execute_query(query,values,fetch=False)
+
+        return jsonify({
+            "Message":"calander_request_rejected"
+        }),200
+
+    except Exception as e:
+        print(f"Error: {e} from reject_calander_request")
+        return jsonify({
+            "Message":f"Error: {e} from reject_calander_request"
+        }),5000
+
+# =======================================
+# ENDPOINT 17: DELETE CALANDER_REQUEST
+# =======================================
+
+@calendar_bp.route('/delete_calander_request/<int:request_id>',methods=['POST'])
+def delete_calander_request(request_id):
+    try:
+        if not(check_calander_request_id(request_id)):
+            return jsonify({
+                "Message":"check you calander_request_id"
+            }),404
+
+        query ="""
+            UPDATE calendar_request
+            SET enabled = 0 
+            WHERE id = %s
+        """
+        values = (request_id,)
+        Result = Database.execute_query(query,values,fetch=False)
+        return jsonify({
+            "Message":"Requeset Deleted succefully"
+        }),200
+    except Exception as e:
+        print(f"Error: {e} in deleting calander_reqeust")
+        return jsonify({
+            "Message":f"Error: {e} in deleting calander_request"
+        }),500

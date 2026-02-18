@@ -480,3 +480,28 @@ def create_group(session_id):
     except Exception as e:
         print(f"Error: {e} coming from create-group")
         return jsonify({"Message": f"Error: {str(e)}"}), 500
+
+
+# =============================================
+# ENDPOINT 7: Get all users
+# =============================================
+@users_bp.route('/get-all-users/<int:account_id>',methods=['GET'])
+def get_all_user(account_id):
+    try:
+        query ="""
+            SELECT 
+                u.username,u.full_name,u.img_link,u.id,rus.session_id
+            FROM user u,relation_user_session rus
+            WHERE u.enabled = 1 AND rus.session_id in (select s.id from session s WHERE  s.account_id = %s)
+            AND rus.user_id = u.id
+        """
+        response = Database.execute_query(query,(account_id,),fetch=True)
+        return jsonify({
+            "Message":"Success",
+            "data":response
+        }),200
+
+    except Exception as e :
+        return jsonify({
+            "Message":f"Error: {e} coming from get_all_users"
+        }),500

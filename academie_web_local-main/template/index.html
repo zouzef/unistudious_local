@@ -96,18 +96,6 @@
     Sidebar end
 ***********************************-->
 
-<!--****
-Wallet Sidebar
-****-->
-
-<!--**********************************
-    Content body start
-***********************************-->
-<!--**********************************
-    Content body start
-***********************************-->
-
-
 {% if page == 'home' %}
 
 {% include 'components/home_page.html' %}
@@ -158,32 +146,32 @@ Wallet Sidebar
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 {%include 'components/show_attendance_presence.html' %}
 
-{% elif page == 'create-session' %}
-{% include 'components/create_session.html' %}
+            <!-- Create session page part-->
+{% elif page == 'create-session'%}
+{% include 'components/create_session.html'%}
+            <!-- End Create session page part-->
+
+            <!-- Unknown page part-->
 {% elif page == 'show-unknown-student'%}
 {% include 'components/show_unknown_student.html'%}
-{% elif page == 'calander_request_page' %}
+            <!-- End Unknown page part-->
+
+            <!-- Calander_request part  -->
+{% elif page == 'calander_request_page'%}
 {% include 'components/calander_request_page.html'%}
+            <!-- End Calander_request part  -->
+
+            <!-- Student part  -->
+{% elif page == 'my_student'%}
+{% include 'components/my_student.html'%}
+{% elif page == 'platform_student'%}
+{% include 'components/platform_student.html'%}
+         <!-- End Student part  -->
 {% endif %}
-<!--**********************************
-    Content body end
-***********************************-->
-<!--**********************************
-    Footer start
-***********************************-->
-<div class="footer footer-outer">
-    <div class="copyright">
-        <p>Copyright © Designed &amp; Developed by <a href="https://dexignlab.com/" target="_blank">DexignLab</a> 2023
-        </p>
-    </div>
-</div>
 
 </div>
 
 
-<!--**********************************
-    Main wrapper end
-***********************************-->
 
 <!--***********************************-->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

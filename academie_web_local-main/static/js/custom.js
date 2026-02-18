@@ -312,7 +312,7 @@ handlePreloader();
 		   });
 	   }
    }
-   var handleDatetimepicker = function(){
+    var handleDatetimepicker = function(){
         if (
             jQuery("#datetimepicker1").length > 0 &&
             typeof $.fn.datetimepicker === "function"
@@ -320,6 +320,19 @@ handlePreloader();
             $('#datetimepicker1').datetimepicker({
                 inline: true,
             });
+
+            setTimeout(function() {
+                $('#datetimepicker1').next('.bootstrap-datetimepicker-widget')
+                    .find('li')
+                    .removeClass('collapsing')
+                    .each(function() {
+                        if ($(this).hasClass('collapse') && !$(this).hasClass('show')) {
+                            // leave hidden ones as they are
+                        } else {
+                            $(this).removeClass('collapse').addClass('show');
+                        }
+                    });
+            }, 0);
         }
     };
 
@@ -2844,16 +2857,25 @@ function displayCalendarRequests(requests) {
         let statusHTML = '';
         if (request.accepted === 0 || request.accepted === null) {
             statusHTML = `
-                <span class="badge light" style="background-color: #f8d7da; color: #721c24; padding: 8px 12px; border-radius: 4px;">
-                    <i class="fa fa-times-circle me-1"></i>Not Affected
+                <span class="badge light badge-primary" style="padding: 8px 12px; border-radius: 4px;">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="me-2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>Not Affected
                 </span>
             `;
         } else {
-            statusHTML = `
-                <button class="btn btn-sm" style="background-color: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: default;" disabled>
-                    <i class="fa fa-check-circle me-1"></i>Affected
-                </button>
-            `;
+            if(request.accepted === 1 || request.accepted === null){
+                statusHTML = `
+                    <button class="badge badge-lg light badge-success" style="border: none; padding: 8px 16px; border-radius: 4px; cursor: default;" disabled>
+                        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="me-2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>Affected
+                    </button>
+                `;
+            }
+            else{
+                statusHTML = `
+                    <button class="badge badge-lg light badge-danger" style="border: none; padding: 8px 16px; border-radius: 4px; cursor: default;" disabled>
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="me-2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>Rejected
+                    </button>
+                `;
+            }
         }
 
         // Action dropdown HTML (only if needed)
@@ -2950,6 +2972,7 @@ document.addEventListener('DOMContentLoaded', function() {
         menu.innerHTML = `
             <a class="dropdown-item" href="javascript:void(0);" data-action="approve" data-id="${requestId}">Approve</a>
             <a class="dropdown-item" href="javascript:void(0);" data-action="reject" data-id="${requestId}">Reject</a>
+            <a class="dropdown-item" href="javascript:void(0);" data-action="delete" data-id="${requestId}">Delete</a>
             
         `;
 
@@ -2968,7 +2991,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (action === 'approve') approveRequest(id);
         else if (action === 'reject') rejectRequest(id);
-        else if (action === 'view') viewDetails(id);
+        else if (action === 'delete') deleteRequest(id);
         return;
     }
 
@@ -2986,7 +3009,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Action functions with SweetAlert2
 function approveRequest(id) {
-    console.log('Approving request:', id);
 
     Swal.fire({
         title: 'Approve Request?',
@@ -2998,33 +3020,71 @@ function approveRequest(id) {
         confirmButtonText: 'Yes, approve it!',
         cancelButtonText: 'Cancel'
     }).then((result) => {
-        if (result.isConfirmed) {
-            // Add your API call here
-            // Example:
-            // fetch(`/api/approve-request/${id}`, { method: 'POST' })
-            //     .then(response => response.json())
-            //     .then(data => {
-            //         if (data.success) {
-            //             Swal.fire('Approved!', 'Request has been approved.', 'success');
-            //             loadCalendarRequests(); // Reload data
-            //         }
-            //     });
 
-            Swal.fire(
-                'Approved!',
-                `Request #${id} has been approved successfully.`,
-                'success'
-            ).then(() => {
-                // Reload the calendar requests
-                loadCalendarRequests();
+        if (!result.isConfirmed) return;
+
+        fetch(`/api/approve-calander-request/${id}`, {
+            method: 'POST'
+        })
+        .then(response => {
+            return response.json().then(data => ({ status: response.status, data }));
+        })
+        .then(({ status, data }) => {
+
+            if (status === 200) {
+                Swal.fire(
+                    'Approved!',
+                    `Request #${id} has been approved successfully.`,
+                    'success'
+                ).then(() => {
+                    loadCalendarRequests();
+                });
+                return;
+            }
+
+            // ── Handle conflict errors ────────────────────────────────
+            const conflictMessages = {
+                'Room-Conflict':    { icon: '🏢', title: 'Room Already Reserved',       text: 'This room is not available at the selected time.' },
+                'Group-Conflict':   { icon: '👥', title: 'Group Not Available',          text: 'This group already has a session scheduled at this time.' },
+                'Teacher-Conflict': { icon: '👨‍🏫', title: 'Teacher Not Available',        text: 'This teacher already has a session scheduled at this time.' },
+            };
+
+            const errorKey   = data.Error;
+            const conflict   = conflictMessages[errorKey];
+
+            if (conflict) {
+                loadCalendarRequests()
+                Swal.fire({
+                    icon: 'warning',
+                    title: `${conflict.icon} ${conflict.title}`,
+                    text: conflict.text,
+                    confirmButtonColor: '#f0ad4e',
+                });
+            } else {
+                // Generic fallback for other errors (color, not found, etc.)
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Approval Failed',
+                    text: data.Message || 'Something went wrong while approving the request.',
+                    confirmButtonColor: '#d33',
+                });
+            }
+
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Network Error',
+                text: 'Could not reach the server. Please try again.',
+                confirmButtonColor: '#d33',
             });
-        }
+        });
+
     });
 }
 
 function rejectRequest(id) {
-    console.log('Rejecting request:', id);
-
     Swal.fire({
         title: 'Reject Request?',
         text: `Are you sure you want to reject request #${id}?`,
@@ -3036,17 +3096,32 @@ function rejectRequest(id) {
         cancelButtonText: 'Cancel'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Add your API call here
-            // Example:
-            // fetch(`/api/reject-request/${id}`, { method: 'POST' })
-            //     .then(response => response.json())
-            //     .then(data => {
-            //         if (data.success) {
-            //             Swal.fire('Rejected!', 'Request has been rejected.', 'success');
-            //             loadCalendarRequests(); // Reload data
-            //         }
-            //     });
-
+             fetch(`/api/reject-calander-request/${id}`, {
+                method: 'POST'
+              })
+             .then(response => {
+                    if (!response.ok) {
+                    throw new Error("Server error");
+             }
+             return response.json();
+             })
+             .then(data => {
+                Swal.fire(
+                'rejected!',
+                `Request #${id} has been rejected successfully.`,
+                'success'
+                ).then(() => {
+                    loadCalendarRequests();
+                });
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                Swal.fire(
+                    'Error!',
+                    'Something went wrong while approving the request.',
+                    'error'
+                );
+            });
             Swal.fire(
                 'Rejected!',
                 `Request #${id} has been rejected.`,
@@ -3059,11 +3134,54 @@ function rejectRequest(id) {
     });
 }
 
-function viewDetails(id) {
-    console.log('Viewing details:', id);
-    window.location.href = `/dashboard/calendar-request-details/${id}`;
+function deleteRequest(id) {
+    Swal.fire({
+    title:'Delete Requests?',
+    text:'Are you sure you want to reject request # ${id}?',
+    icon:'warning',
+    showCancelButton:true,
+    confirmButtonColor:'#d33',
+    cancelButtonColor:'#6c757d',
+    confirmButtonText:'Yes, delete it!',
+    cancelButtonText:'Cancel'
+    }).then((result)=>{
+        if(result.isConfirmed){
+         fetch(`/api/delete-calander-request/${id}`,{
+            method:'POST'
+         })
+         .then(response => {
+            if(!response.ok){
+                throw new Error("Server error");
+            }
+         return response.json()
+         })
+         .then(data => {
+            Swal.fire(
+                'Deleted!',
+                `Request #${id} has been rejected successfully.`,
+                'success'
+            ).then(() => {
+                loadCalendarRequests();
+            });
+         })
+         .catch(error => {
+            console.error("Error:",error);
+            Swal.fire(
+                'Error!',
+                'Something went wrong while deleting the request.',
+                'error'
+            );
+         });
+         Swal.fire(
+            'Deleted!',
+            'Request #${id} has been Deleted .',
+            'success'
+         ).then(() => {
+            loadCalendarRequests();
+
+         });
+        }
+    });
 }
-
-
 
 

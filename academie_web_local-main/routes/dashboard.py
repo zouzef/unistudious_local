@@ -14,7 +14,7 @@ from datetime import datetime
 # CONFIGURATION
 # ==========================================
 dashboard_bp = Blueprint('dashboard', __name__)
-BASE_URL = " https://192.168.1.27:5004/scl/"
+BASE_URL = " https://192.168.0.43:5004/scl/"
 
 
 # ==========================================
@@ -770,19 +770,15 @@ def show_calander_request(account_id):
 # Approve calander request from the admin
 @dashboard_bp.route('/api/approve-calander-request/<int:calander_request_id>', methods=['POST'])
 def approve_calander_request(calander_request_id):
-	try:
-		url = f"{BASE_URL}approve_calander_request/{calander_request_id}"
-		response = requests.post(url,verify=False)
-		response.raise_for_status()
-		if response.status_code==201:
-			return jsonify(response.json()), 200
-		else:
-			return jsonify({
-				"Message":"Check params"
-			}),404
+    try:
+        url = f"{BASE_URL}approve_calander_request/{calander_request_id}"
+        response = requests.post(url, verify=False)
 
-	except Exception as e:
-		return jsonify({
+        # ── Just forward the JSON + status code, no raise_for_status() ──
+        return jsonify(response.json()), response.status_code
+
+    except Exception as e:
+        return jsonify({
             "Message": f"Error {e}"
         }), 500
 
@@ -793,13 +789,36 @@ def reject_calander_request(calander_request_id):
 		url = f"{BASE_URL}reject_calander_request/{calander_request_id}"
 		response = requests.post(url,verify=False)
 		response.raise_for_status()
-		return jsonify(response.json()),200
+		return jsonify({
+			"success": True,
+			"message": "Request Rejected successfully"
+		}), 200
 
 	except Exception as e:
 		print(f"Error: {e} coming from reject calander_request")
 		return jsonify({
 			"Message":f"Error: {e} in reject_calander_request"
 		}),500
+
+
+@dashboard_bp.route('/api/delete-calander-request/<int:calander_request_id>',methods=['POST'])
+def delete_calander_request(calander_request_id):
+	try:
+		url=f"{BASE_URL}/delete_calander_request/{calander_request_id}"
+		response = requests.post(url,verify=False)
+		response.raise_for_status()
+		return jsonify({
+			"success": True,
+			"message": "Request Deleted successfully"
+		}), 200
+
+	except Exception as e:
+		print("Error: {e} Coming from deleting calander_request")
+		return jsonify({
+			"Message":f"Error: {e} in deleting calander_request"
+		}),500
+
+
 
 # ==========================================
 # GROUP ROUTES
@@ -938,3 +957,35 @@ def show_user_session(id_user, id_session):
 						   id_user=id_user,
 						   id_session=id_session,
 						   page='show_payment_user_session')
+
+
+# ==========================================
+# MY STUDENT ROUTES
+# ==========================================
+
+@dashboard_bp.route('/api/get-all-users/<int:account_id>',methods=['GET'])
+def get_all_users(account_id):
+	try:
+		url = f"{BASE_URL}get-all-users/{account_id}"
+		response = requests.post(url,verify=False)
+		response.raise_for_status()
+		return jsonify({
+			"Message":"Success",
+			"data":response.json()
+		}),200
+
+	except Exception as e:
+		print(f"Error: {e} coming from get_all users")
+		return jsonify({
+			"Message":"Error coming from get_all_users"
+		}),500
+
+@dashboard_bp.route('/dashboard/my-student')
+def show_my_student():
+	"""Show my student"""
+	account_id = session.get('account_id')
+	return render_template(
+		'index.html',
+		page='my_student',
+		account_id=account_id
+	)
