@@ -14,7 +14,7 @@ from datetime import datetime
 # CONFIGURATION
 # ==========================================
 dashboard_bp = Blueprint('dashboard', __name__)
-BASE_URL = " https://192.168.0.43:5004/scl/"
+BASE_URL = " https://192.168.1.246:5004/scl/"
 
 
 # ==========================================
@@ -83,6 +83,18 @@ def get_room(local_id):
 	except Exception as e:
 		print(f"Error {e} coming from get_room")
 		return jsonify({"Message": f"Error {e}"}), 500
+
+
+@dashboard_bp.route("/api/get-sessions/<int:account_id>",methods=['GET'])
+def get_sessions(account_id):
+	try:
+		session_data = get_session_slc(account_id)
+
+		return jsonify(session_data),200
+	except Exception as e :
+		return jsonify({
+			"Message":f"Error: {e} coming from get sessions"
+		}),500
 
 
 @dashboard_bp.route("/api/get_teacher/<int:session_id>")
@@ -253,7 +265,6 @@ def create_calander():
 def notify_calendar_request():
 	try:
 		notification_data = request.get_json()
-		print(notification_data)
 		if not notification_data:
 			return jsonify({"Message": "No data provided"}), 400
 
@@ -329,7 +340,6 @@ def get_calendar_request(account_id):
 		response.raise_for_status()
 
 		if response.status_code == 200:
-			print(response.json())
 			return jsonify(response.json()), 200  # Fixed: remove extra braces
 		else:
 			return jsonify({
@@ -543,7 +553,6 @@ def update_attendance(status, attendance_id):
 		payload = {
 			"status": is_present
 		}
-		print(payload)
 		response = requests.post(url, json=payload, headers={'Content-Type': 'application/json'}, verify=False)
 		if response.status_code == 200:
 			print("response==200")
@@ -841,9 +850,6 @@ def show_create_group_session(id_session):
 	else:
 		local_id = 1  # Default fallback
 
-	print(f"account_id: {account_id}")
-	print(f"local_id: {local_id}")
-	print(f"id_session: {id_session}")
 
 	return render_template('index.html',
 						   id_session=id_session,
@@ -880,7 +886,6 @@ def show_attendance_presence(id_calander):
 
 	calender_detail = detail_calender_by_id(id_calander)
 	attendance = attendance_by_id(id_calander)
-	print(attendance)
 	list_student = get_list_student(id_calander)
 
 	# Parse datetime strings if they exist
@@ -967,7 +972,7 @@ def show_user_session(id_user, id_session):
 def get_all_users(account_id):
 	try:
 		url = f"{BASE_URL}get-all-users/{account_id}"
-		response = requests.post(url,verify=False)
+		response = requests.get(url,verify=False)
 		response.raise_for_status()
 		return jsonify({
 			"Message":"Success",

@@ -5,15 +5,15 @@ var Akademi  = function(){
    var screenHeight = $( window ).height();
 
    var handlePreloader = function(){
-    // Wait for the page to fully load
-    window.addEventListener('load', function() {
-        // Page is loaded, now hide preloader
-        jQuery('#preloader').fadeOut(500, function() {
-            jQuery(this).remove();
-        });
-        $('#main-wrapper').addClass('show');
-    });
-}
+          window.addEventListener('load', function() {
+            jQuery('#preloader').fadeOut(500, function() {
+              jQuery(this).remove();
+              initPage(); // ✅ new
+            });
+            $('#main-wrapper').addClass('show');
+          });
+   }
+
 
 
 
@@ -432,11 +432,9 @@ handlePreloader();
 		   $('body').scrollspy({target: ".navbar", offset: headerHeight + 2});  
 	   }
    }
-   var handelBootstrapSelect = function(){
-    /* Bootstrap Select box function by  = bootstrap-select.min.js */
+    var handelBootstrapSelect = function(){
         if(jQuery('select').length > 0){
-            // Only initialize selectpicker for selects NOT inside modals
-            jQuery('select').not('.modal select').selectpicker();
+            jQuery('select').not('.modal select, .no-selectpicker').selectpicker(); // 👈 exclude yours
         }
     }
    /* Header Fixed ============ */
@@ -3184,4 +3182,119 @@ function deleteRequest(id) {
     });
 }
 
+/* --------------- Load users from the database and display it in the html components ---------------  */
+const accountId = window.ACCOUNT_ID;
+let allUsers = [];
+
+// ==================== SESSIONS ====================
+async function loadSessions(accountId) {
+  const select = document.getElementById("session-select");
+
+  try {
+    const response = await fetch(`/api/get-sessions/${accountId}`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+    const result = await response.json();
+    const sessions = Array.isArray(result) ? result : (result.data ?? []);
+
+    select.innerHTML = `<option value="" disabled selected>Select Session</option>`;
+
+    if (!sessions.length) {
+      select.innerHTML += `<option disabled>No sessions available</option>`;
+      return;
+    }
+
+    sessions.forEach(session => {
+      const option = document.createElement("option");
+      option.value = session.id;
+      option.textContent = session.name ?? `Session ${session.id}`;
+      select.appendChild(option);
+    });
+
+  } catch (error) {
+    console.error("❌ Error loading sessions:", error);
+  }
+}
+
+// ==================== USERS ====================
+async function loadUsers(accountId) {
+  const container = document.getElementById("user-container");
+
+  try {
+    container.innerHTML = `
+      <div class="col-12 text-center py-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>`;
+
+    const response = await fetch(`/api/get-all-users/${accountId}`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+    const result = await response.json();
+    allUsers = result.data?.data ?? result.data ?? [];
+
+    renderUsers(allUsers);
+
+  } catch (error) {
+    console.error("❌ Error loading users:", error);
+    container.innerHTML = `
+      <div class="col-12">
+        <div class="alert alert-danger" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          Failed to load users. Please try again.
+        </div>
+      </div>`;
+  }
+}
+
+function renderUsers(users) {
+  const container = document.getElementById("user-container");
+
+  if (!users.length) {
+    container.innerHTML = `
+      <div class="col-12 text-center py-4 text-muted">
+        <i class="bi bi-people fs-1"></i>
+        <p class="mt-2">No users found.</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = users.map(user => `
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body d-flex flex-column align-items-center text-center p-4">
+          <h6 class="card-title mb-1 fw-semibold">${user.full_name}</h6>
+          <p class="text-muted small mb-2">@${user.username}</p>
+          <span class="badge bg-primary-subtle text-primary rounded-pill small">
+            Session: ${user.session_id}
+          </span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ==================== FILTER ====================
+document.getElementById("session-select").addEventListener("change", function () {
+  const selectedSessionId = this.value;
+
+  if (!selectedSessionId) {
+    renderUsers(allUsers);
+    return;
+  }
+
+  const filtered = allUsers.filter(user =>
+    String(user.session_id) === String(selectedSessionId)
+  );
+
+  renderUsers(filtered);
+});
+
+// ==================== INIT ====================
+// Both called from handlePreloader in custom.js after preloader is removed
+function initPage() {
+  loadSessions(accountId);
+  loadUsers(accountId);
+}
 

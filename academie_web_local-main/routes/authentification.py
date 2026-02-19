@@ -8,7 +8,7 @@ auth_bp = Blueprint('auth', __name__)
 # ===============================
 # VARIABLES
 # ===============================
-BASE_URL = "https://192.168.0.43:5004/scl/"
+BASE_URL = "https://192.168.1.246:5004/scl/"
 
 
 def check_login(username, password):

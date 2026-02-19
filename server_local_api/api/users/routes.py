@@ -120,8 +120,6 @@ def get_group(account_id, session_id):
 # TEACHER ENDPOINTS
 # ========================================
 
-
-
 # ========================================
 # ENDPOINT 2: Get teachers by session
 # ========================================
@@ -218,7 +216,6 @@ def get_teacher_session(session_id):
     except Exception as e:
         print(f"Error: {e} coming from get_teacher")
         return jsonify({"Message": f"Error {e} coming from server"}), 500
-
 
 
 # ========================================
@@ -488,11 +485,13 @@ def create_group(session_id):
 @users_bp.route('/get-all-users/<int:account_id>',methods=['GET'])
 def get_all_user(account_id):
     try:
+
         query ="""
-            SELECT 
-                u.username,u.full_name,u.img_link,u.id,rus.session_id
-            FROM user u,relation_user_session rus
-            WHERE u.enabled = 1 AND rus.session_id in (select s.id from session s WHERE  s.account_id = %s)
+            SELECT DISTINCT
+                u.username, u.full_name, u.img_link, u.id, rus.session_id
+            FROM user u, relation_user_session rus
+            WHERE u.enabled = 1 
+            AND rus.session_id IN (SELECT s.id FROM session s WHERE s.account_id = %s)
             AND rus.user_id = u.id
         """
         response = Database.execute_query(query,(account_id,),fetch=True)
