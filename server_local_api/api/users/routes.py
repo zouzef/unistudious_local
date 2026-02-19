@@ -488,7 +488,7 @@ def get_all_user(account_id):
 
         query ="""
             SELECT DISTINCT
-                u.username, u.full_name, u.img_link, u.id, rus.session_id
+                u.username, u.full_name,u.email,u.phone, u.img_link, u.id, rus.session_id
             FROM user u, relation_user_session rus
             WHERE u.enabled = 1 
             AND rus.session_id IN (SELECT s.id FROM session s WHERE s.account_id = %s)

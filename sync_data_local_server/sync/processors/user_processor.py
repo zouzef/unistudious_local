@@ -69,7 +69,8 @@ def insert_users(db, user_data):
                     "ref_slc": user.get("refSlc"),
                     "timestamp": format_date(user.get("timestamp")),
                     "created_at": format_date(user.get("createdAt")),
-                    "updated_at": format_date(user.get("updatedAt"))
+                    "updated_at": format_date(user.get("updatedAt")),
+                    "isvirtual": True if user.get("isvirtual")==True else False,
                 }
 
                 # Check if user exists
@@ -105,7 +106,8 @@ def insert_users(db, user_data):
                         "use_token": "useToken",
                         "ref_slc": "ref_slc",
                         "timestamp": "timestamp",
-                        "updated_at": "updated_at"
+                        "updated_at": "updated_at",
+                        "isvirtual": "isvirtual",
                     }
 
                     for new_key, db_key in field_mapping.items():
@@ -139,7 +141,8 @@ def insert_users(db, user_data):
                             useToken = %s,
                             ref_slc = %s,
                             timestamp = %s,
-                            updated_at = %s
+                            updated_at = %s,
+                            isvirtual = %s
                         WHERE id = %s
                     """
 
@@ -159,6 +162,7 @@ def insert_users(db, user_data):
                         new_data["ref_slc"],
                         new_data["timestamp"],
                         new_data["updated_at"],
+                        new_data["isvirtual"],
                         user_id
                     ))
 
@@ -205,14 +209,16 @@ def insert_users(db, user_data):
                             mastodon_access_token, general_notification, message_notification,
                             calendar_notification, sms_notification, login_notification,
                             horsline, ref_slc, apple_id, open_source_user_name,
-                            rocket_chat_user_id, fcm_web, fcm_android, fcm_ios, releaseToken, useToken
+                            rocket_chat_user_id, fcm_web, fcm_android, fcm_ios, releaseToken, useToken,
+                            isvirtual
                         ) VALUES (
                             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s,
-                            %s, %s, %s, %s, %s, %s
+                            %s, %s, %s, %s, %s, %s,
+                            %s
                         )
                     """
 
@@ -257,7 +263,8 @@ def insert_users(db, user_data):
                         default_values["fcm_android"],
                         default_values["fcm_ios"],
                         new_data["release_token"],
-                        new_data["use_token"]
+                        new_data["use_token"],
+                        new_data["isvirtual"]
                     ))
 
                     result["inserted"] += 1
@@ -322,7 +329,7 @@ def update_users(db, user_data):
                 user_id = user.get("userId")
                 if not user_id:
                     raise ValueError("Missing required field: userId")
-
+                print("\n \n \n \n \n",user.get('isVirtual'))
                 # Prepare new data
                 new_data = {
                     "uuid": user.get("uuid"),
@@ -340,7 +347,8 @@ def update_users(db, user_data):
                     "use_token": user.get("useToken"),
                     "ref_slc": user.get("refSlc"),
                     "timestamp": format_date(user.get("timestamp")),
-                    "updated_at": format_date(user.get("updatedAt"))
+                    "updated_at": format_date(user.get("updatedAt")),
+                    "isvirtual": True if user.get("isVirtual")==True else False,
                 }
 
                 # Check if user exists
@@ -375,7 +383,8 @@ def update_users(db, user_data):
                         "use_token": "useToken",
                         "ref_slc": "ref_slc",
                         "timestamp": "timestamp",
-                        "updated_at": "updated_at"
+                        "updated_at": "updated_at",
+                        "isvirtual": "isvirtual",
                     }
 
                     for new_key, db_key in field_mapping.items():
@@ -409,7 +418,8 @@ def update_users(db, user_data):
                             useToken = %s,
                             ref_slc = %s,
                             timestamp = %s,
-                            updated_at = %s
+                            updated_at = %s,
+                            isvirtual = %s
                         WHERE id = %s
                     """
 
@@ -429,6 +439,7 @@ def update_users(db, user_data):
                         new_data["ref_slc"],
                         new_data["timestamp"],
                         new_data["updated_at"],
+                        new_data["isVirtual"],
                         user_id
                     ))
 
@@ -475,14 +486,16 @@ def update_users(db, user_data):
                             mastodon_access_token, general_notification, message_notification,
                             calendar_notification, sms_notification, login_notification,
                             horsline, ref_slc, apple_id, open_source_user_name,
-                            rocket_chat_user_id, fcm_web, fcm_android, fcm_ios, releaseToken, useToken
+                            rocket_chat_user_id, fcm_web, fcm_android, fcm_ios, releaseToken, useToken,
+                            isvirtual
                         ) VALUES (
                             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s,
-                            %s, %s, %s, %s, %s, %s
+                            %s, %s, %s, %s, %s, %s,
+                            %s
                         )
                     """
 
@@ -528,7 +541,8 @@ def update_users(db, user_data):
                         default_values["fcm_android"],
                         default_values["fcm_ios"],
                         new_data["release_token"],
-                        new_data["use_token"]
+                        new_data["use_token"],
+                        new_data["isVirtual"]
                     ))
 
                     result["inserted"] += 1
