@@ -3185,32 +3185,29 @@ function deleteRequest(id) {
 /* --------------- Load users from the database and display it in the html components ---------------  */
 const accountId = window.ACCOUNT_ID;
 let allUsers = [];
+let currentPage = 1;
+let currentUsers = []; // users currently being displayed (filtered or all)
+const USERS_PER_PAGE = 12;
 
 // ==================== SESSIONS ====================
 async function loadSessions(accountId) {
   const select = document.getElementById("session-select");
-
   try {
     const response = await fetch(`/api/get-sessions/${accountId}`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
     const result = await response.json();
     const sessions = Array.isArray(result) ? result : (result.data ?? []);
-
     select.innerHTML = `<option value="" disabled selected>Select Session</option>`;
-
     if (!sessions.length) {
       select.innerHTML += `<option disabled>No sessions available</option>`;
       return;
     }
-
     sessions.forEach(session => {
       const option = document.createElement("option");
       option.value = session.id;
       option.textContent = session.name ?? `Session ${session.id}`;
       select.appendChild(option);
     });
-
   } catch (error) {
     console.error("❌ Error loading sessions:", error);
   }
@@ -3219,7 +3216,6 @@ async function loadSessions(accountId) {
 // ==================== USERS ====================
 async function loadUsers(accountId) {
   const container = document.getElementById("user-container");
-
   try {
     container.innerHTML = `
       <div class="col-12 text-center py-4">
@@ -3227,15 +3223,13 @@ async function loadUsers(accountId) {
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>`;
-
     const response = await fetch(`/api/get-all-users/${accountId}`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
     const result = await response.json();
     allUsers = result.data?.data ?? result.data ?? [];
-
-    renderUsers(allUsers);
-
+    currentUsers = allUsers;
+    currentPage = 1;
+    renderUsers(currentUsers, currentPage);
   } catch (error) {
     console.error("❌ Error loading users:", error);
     container.innerHTML = `
@@ -3248,7 +3242,8 @@ async function loadUsers(accountId) {
   }
 }
 
-function renderUsers(users) {
+// ==================== RENDER ====================
+function renderUsers(users, page) {
   const container = document.getElementById("user-container");
 
   if (!users.length) {
@@ -3257,44 +3252,410 @@ function renderUsers(users) {
         <i class="bi bi-people fs-1"></i>
         <p class="mt-2">No users found.</p>
       </div>`;
+    renderPagination(0, page);
     return;
   }
 
-  container.innerHTML = users.map(user => `
-    <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-      <div class="card h-100 shadow-sm border-0">
-        <div class="card-body d-flex flex-column align-items-center text-center p-4">
-          <h6 class="card-title mb-1 fw-semibold">${user.full_name}</h6>
-          <p class="text-muted small mb-2">@${user.username}</p>
-          <span class="badge bg-primary-subtle text-primary rounded-pill small">
-            Session: ${user.session_id}
-          </span>
+  // Slice users for current page
+  const start = (page - 1) * USERS_PER_PAGE;
+  const end = start + USERS_PER_PAGE;
+  const pageUsers = users.slice(start, end);
+
+    container.innerHTML = pageUsers.map(user => `
+      <div class="col-xl-3 col-lg-4 col-sm-6 user-card" data-name="${user.full_name}" data-sessions="${user.session_id}">
+        <div class="card contact_list text-center">
+          <div class="card-body">
+            <div class="user-content">
+              <div class="user-info">
+                <div class="user-img">
+                  <img
+
+                    alt="${user.full_name}"
+                    class="avatar avatar-xl"
+                    onerror="this.src='/assets/admin/images/defult-admin.png'"
+                  >
+                </div>
+                <div class="user-details">
+                  <h4 class="user-name mb-0">${user.full_name}</h4>
+                  <p>Platform Student</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
-    </div>
-  `).join('');
+    `).join('');
+
+  renderPagination(users.length, page);
+}
+
+// ==================== PAGINATION ====================
+function renderPagination(totalUsers, page) {
+  const controls = document.getElementById("pagination-controls");
+  const totalPages = Math.ceil(totalUsers / USERS_PER_PAGE);
+
+  if (totalPages <= 1) {
+    controls.innerHTML = '';
+    return;
+  }
+
+  // Build page numbers to show (always show first, last, current, and neighbors)
+  let pages = new Set();
+  pages.add(1);
+  pages.add(totalPages);
+  pages.add(page);
+  if (page - 1 > 0) pages.add(page - 1);
+  if (page + 1 <= totalPages) pages.add(page + 1);
+  pages = [...pages].sort((a, b) => a - b);
+
+  let paginationHTML = `
+    <li class="page-item ${page === 1 ? 'disabled' : ''}">
+      <a class="page-link" id="prev-page" href="javascript:void(0);">
+        <i class="fa-solid fa-chevron-left"></i>
+      </a>
+    </li>`;
+
+  let prev = null;
+  pages.forEach(p => {
+    // Add ellipsis if there's a gap
+    if (prev && p - prev > 1) {
+      paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+    }
+    paginationHTML += `
+      <li class="page-item ${p === page ? 'active' : ''}">
+        <a class="page-link" href="javascript:void(0);" data-page="${p}">${p}</a>
+      </li>`;
+    prev = p;
+  });
+
+  paginationHTML += `
+    <li class="page-item ${page === totalPages ? 'disabled' : ''}">
+      <a class="page-link" id="next-page" href="javascript:void(0);">
+        <i class="fa-solid fa-chevron-right"></i>
+      </a>
+    </li>`;
+
+  controls.innerHTML = paginationHTML;
+
+  // ✅ Attach click events after rendering
+  controls.querySelectorAll('[data-page]').forEach(btn => {
+    btn.addEventListener('click', function () {
+      currentPage = parseInt(this.dataset.page);
+      renderUsers(currentUsers, currentPage);
+    });
+  });
+
+  const prevBtn = document.getElementById("prev-page");
+  const nextBtn = document.getElementById("next-page");
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', function () {
+      if (currentPage > 1) {
+        currentPage--;
+        renderUsers(currentUsers, currentPage);
+      }
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', function () {
+      const totalPages = Math.ceil(currentUsers.length / USERS_PER_PAGE);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderUsers(currentUsers, currentPage);
+      }
+    });
+  }
 }
 
 // ==================== FILTER ====================
 document.getElementById("session-select").addEventListener("change", function () {
   const selectedSessionId = this.value;
+  currentPage = 1; // ✅ Reset to page 1 on filter change
 
   if (!selectedSessionId) {
-    renderUsers(allUsers);
+    currentUsers = allUsers;
+  } else {
+    currentUsers = allUsers.filter(user =>
+      String(user.session_id) === String(selectedSessionId)
+    );
+  }
+
+  renderUsers(currentUsers, currentPage);
+});
+
+
+// ==================== LOAD TABLE USERS ====================
+// ==================== LOAD TABLE USERS ====================
+async function loadTableUsers(accountId) {
+  const tbody = document.querySelector('#example8 tbody');
+
+  if (!tbody) {
+    console.error("❌ #example8 tbody not found in DOM");
     return;
   }
 
-  const filtered = allUsers.filter(user =>
-    String(user.session_id) === String(selectedSessionId)
-  );
+  try {
+    // Destroy existing DataTable instance before touching the DOM
+    if (typeof $.fn.DataTable !== 'undefined' && $.fn.DataTable.isDataTable('#example8')) {
+      $('#example8').DataTable().destroy();
+    }
 
-  renderUsers(filtered);
-});
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="text-center py-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </td>
+      </tr>`;
+
+    const response = await fetch(`/api/get-all-users/${accountId}`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+    const result = await response.json();
+    const users = result.data?.data ?? result.data ?? [];
+
+    if (!users.length) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="5" class="text-center py-4 text-muted">No users found.</td>
+        </tr>`;
+      return;
+    }
+
+    tbody.innerHTML = users.map(user => `
+      <tr id="student-row-${user.id}" class="selected">
+        <td class="student-name">
+          <div class="trans-list">
+            <h4>${user.full_name ?? '-'}</h4>
+          </div>
+        </td>
+        <td class="student-phone">
+          <div class="trans-list">
+            <h4>${user.phone ?? '-'}</h4>
+          </div>
+        </td>
+        <td class="student-email">
+          <div class="trans-list">
+            <h4>${user.email ?? '-'}</h4>
+          </div>
+        </td>
+        <td class="student-type">
+          <span class="badge light badge-primary">
+            <i class="fa fa-circle text-primary me-1"></i>
+            Real
+          </span>
+        </td>
+        <td>
+          <a data-user-id="${user.id}"
+             data-id="${user.id}"
+             data-account-id="${accountId}"
+             class="btn btn-sm btn-success btn-associate-virtual-user">
+            Associate Student
+          </a>
+          <a data-user-id="${user.id}"
+             class="btn btn-sm btn-info btn-manage-sessions-virtual-user">
+            Manage Sessions
+          </a>
+          <a data-user-id="${user.id}"
+             data-id="${user.id}"
+             data-name="${user.full_name ?? ''}"
+             data-account-id="${accountId}"
+             class="btn btn-sm btn-primary btn-edit-virtual-user">
+            Edit
+          </a>
+          <a href="/dashboard/show-profile/${user.id}"
+             class="btn btn-sm btn-warning">
+            Show Profile
+          </a>
+        </td>
+      </tr>
+    `).join('');
+
+    // ✅ Safe DataTables init with retry if not loaded yet
+    initDataTable();
+
+  } catch (error) {
+    console.error("❌ Error loading table users:", error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5">
+          <div class="alert alert-danger m-3">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            Failed to load users. Please try again.
+          </div>
+        </td>
+      </tr>`;
+  }
+}
+
+// ==================== DATATABLE INIT WITH RETRY ====================
+function initDataTable() {
+  if (typeof $.fn.DataTable === 'undefined') {
+    console.warn("⚠️ DataTables not ready, retrying in 300ms...");
+    setTimeout(initDataTable, 300);
+    return;
+  }
+
+  if ($.fn.DataTable.isDataTable('#example8')) {
+    $('#example8').DataTable().destroy();
+  }
+
+  $('#example8').DataTable({
+    pageLength: 10,
+    lengthChange: true,
+    searching: true,
+    ordering: true,
+    info: true,
+    pagingType: "simple_numbers",
+    language: {
+      paginate: {
+        previous: '<i class="fa-solid fa-angle-left"></i>',
+        next: '<i class="fa-solid fa-angle-right"></i>'
+      }
+    }
+  });
+}
+
+
+async function loadTableUsers(accountId) {
+  const tbody = document.querySelector('#example8 tbody');
+
+  if (!tbody) {
+    console.error("❌ #example8 tbody not found in DOM");
+    return;
+  }
+
+  try {
+    // Destroy existing DataTable instance before touching the DOM
+    if (typeof $.fn.DataTable !== 'undefined' && $.fn.DataTable.isDataTable('#example8')) {
+      $('#example8').DataTable().destroy();
+    }
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="text-center py-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </td>
+      </tr>`;
+
+    const response = await fetch(`/api/get-all-users/${accountId}`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+    const result = await response.json();
+    const users = result.data?.data ?? result.data ?? [];
+
+    if (!users.length) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="5" class="text-center py-4 text-muted">No users found.</td>
+        </tr>`;
+      return;
+    }
+
+    tbody.innerHTML = users.map(user => `
+      <tr id="student-row-${user.id}" class="selected">
+        <td class="student-name">
+          <div class="trans-list">
+            <h4>${user.full_name ?? '-'}</h4>
+          </div>
+        </td>
+        <td class="student-phone">
+          <div class="trans-list">
+            <h4>${user.phone ?? '-'}</h4>
+          </div>
+        </td>
+        <td class="student-email">
+          <div class="trans-list">
+            <h4>${user.email ?? '-'}</h4>
+          </div>
+        </td>
+        <td class="student-type">
+          <span class="badge light badge-primary">
+            <i class="fa fa-circle text-primary me-1"></i>
+            Real
+          </span>
+        </td>
+        <td>
+          <a data-user-id="${user.id}"
+             data-id="${user.id}"
+             data-account-id="${accountId}"
+             class="btn btn-sm btn-success btn-associate-virtual-user">
+            Associate Student
+          </a>
+          <a data-user-id="${user.id}"
+             class="btn btn-sm btn-info btn-manage-sessions-virtual-user">
+            Manage Sessions
+          </a>
+          <a data-user-id="${user.id}"
+             data-id="${user.id}"
+             data-name="${user.full_name ?? ''}"
+             data-account-id="${accountId}"
+             class="btn btn-sm btn-primary btn-edit-virtual-user">
+            Edit
+          </a>
+          <a href="/dashboard/show-profile/${user.id}"
+             class="btn btn-sm btn-warning">
+            Show Profile
+          </a>
+        </td>
+      </tr>
+    `).join('');
+
+    // ✅ Safe DataTables init with retry if not loaded yet
+    initDataTable();
+
+  } catch (error) {
+    console.error("❌ Error loading table users:", error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5">
+          <div class="alert alert-danger m-3">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            Failed to load users. Please try again.
+          </div>
+        </td>
+      </tr>`;
+  }
+}
+
+
+// ==================== DATATABLE INIT WITH RETRY ====================
+function initDataTable() {
+  if (typeof $.fn.DataTable === 'undefined') {
+    console.warn("⚠️ DataTables not ready, retrying in 300ms...");
+    setTimeout(initDataTable, 300);
+    return;
+  }
+
+  if ($.fn.DataTable.isDataTable('#example8')) {
+    $('#example8').DataTable().destroy();
+  }
+
+  $('#example8').DataTable({
+    pageLength: 10,
+    lengthChange: true,
+    searching: true,
+    ordering: true,
+    info: true,
+    pagingType: "simple_numbers",
+    language: {
+      paginate: {
+        previous: '<i class="fa-solid fa-angle-left"></i>',
+        next: '<i class="fa-solid fa-angle-right"></i>'
+      }
+    }
+  });
+}
+
 
 // ==================== INIT ====================
-// Both called from handlePreloader in custom.js after preloader is removed
 function initPage() {
+  loadTableUsers(accountId);
   loadSessions(accountId);
   loadUsers(accountId);
 }
-

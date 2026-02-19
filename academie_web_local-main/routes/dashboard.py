@@ -14,7 +14,7 @@ from datetime import datetime
 # CONFIGURATION
 # ==========================================
 dashboard_bp = Blueprint('dashboard', __name__)
-BASE_URL = " https://192.168.1.246:5004/scl/"
+BASE_URL = " https://172.28.20.178:5004/scl/"
 
 
 # ==========================================
@@ -992,5 +992,18 @@ def show_my_student():
 	return render_template(
 		'index.html',
 		page='my_student',
+		account_id=account_id
+	)
+
+# ==========================================
+# Platform Student
+# ==========================================
+
+@dashboard_bp.route('/dashboard/platform_student')
+def show_platform_student():
+	account_id = session.get('account_id')
+	return render_template(
+		'index.html',
+		page='platform_student',
 		account_id=account_id
 	)
