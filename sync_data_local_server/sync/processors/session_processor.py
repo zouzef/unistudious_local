@@ -4,6 +4,7 @@ Handles inserting and updating session records in the database
 """
 import sys
 import os
+from processors.image_downloader import download_session_image
 
 # Add parent directories to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -11,7 +12,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 from utils.helpers import format_date
 
 
-def insert_sessions(db, session_data):
+def insert_sessions(db, session_data, token):
     """
     Handle 'created' sessions from API
     Logic:
@@ -21,6 +22,7 @@ def insert_sessions(db, session_data):
     Args:
         db: Database instance
         session_data: Dictionary with 'created' key
+        token: Authentication token for image download
 
     Returns:
         dict: Statistics (inserted, updated, skipped, errors)
@@ -190,6 +192,8 @@ def insert_sessions(db, session_data):
                     result["updated"] += 1
                     print(f"      ✅ Updated successfully")
 
+                    download_session_image(session_id, new_data["img_link"], token)
+
                 else:
                     # DOES NOT EXIST → INSERT
                     print(f"      ✨ New session - inserting...")
@@ -247,6 +251,8 @@ def insert_sessions(db, session_data):
                     result["inserted"] += 1
                     print(f"      ✅ Inserted successfully")
 
+                    download_session_image(session_id, new_data["img_link"], token)
+
             except Exception as err:
                 print(f"      ❌ Error processing session ID {session.get('id', 'unknown')}: {err}")
                 result["errors"] += 1
@@ -262,7 +268,7 @@ def insert_sessions(db, session_data):
     return result
 
 
-def update_sessions(db, session_data):
+def update_sessions(db, session_data, token):
     """
     Handle 'updated' sessions from API
     Logic:
@@ -272,6 +278,7 @@ def update_sessions(db, session_data):
     Args:
         db: Database instance
         session_data: Dictionary with 'updated' key
+        token: Authentication token for image download
 
     Returns:
         dict: Statistics (inserted, updated, skipped, errors)
@@ -418,6 +425,8 @@ def update_sessions(db, session_data):
                     result["updated"] += 1
                     print(f"      ✅ Updated successfully")
 
+                    download_session_image(session_id, new_data["img_link"], token)
+
                 else:
                     # DOES NOT EXIST → INSERT (don't skip!)
                     print(f"      ⚠️  Session not found in DB - inserting...")
@@ -477,6 +486,8 @@ def update_sessions(db, session_data):
                     result["inserted"] += 1
                     print(f"      ✅ Inserted successfully")
 
+                    download_session_image(session_id, new_data["img_link"], token)
+
             except Exception as err:
                 print(f"      ❌ Error processing session ID {session.get('id', 'unknown')}: {err}")
                 result["errors"] += 1
@@ -492,13 +503,14 @@ def update_sessions(db, session_data):
     return result
 
 
-def process_sessions(db, session_data):
+def process_sessions(db, session_data, token):
     """
     Process session data (handles both 'created' and 'updated' sections)
 
     Args:
         db: Database instance
         session_data: Dictionary with 'created' and/or 'updated' keys
+        token: Authentication token for image download
 
     Returns:
         dict: Combined statistics
@@ -514,12 +526,12 @@ def process_sessions(db, session_data):
     # Process 'created' section
     if session_data.get("created"):
         print(f"\n✨ Processing 'created' section ({len(session_data['created'])} records)...")
-        results["created_section"] = insert_sessions(db, session_data)
+        results["created_section"] = insert_sessions(db, session_data, token)
 
     # Process 'updated' section
     if session_data.get("updated"):
         print(f"\n🔄 Processing 'updated' section ({len(session_data['updated'])} records)...")
-        results["updated_section"] = update_sessions(db, session_data)
+        results["updated_section"] = update_sessions(db, session_data, token)
 
     # Print total summary
     total_inserted = results["created_section"]["inserted"] + results["updated_section"]["inserted"]

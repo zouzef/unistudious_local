@@ -42,7 +42,7 @@ def auth_moderator():
 
         # Fetch user with roles
         query = """
-            SELECT roles FROM user WHERE username = %s AND enabled = 1
+            SELECT id,roles FROM user WHERE username = %s AND enabled = 1
         """
         result = Database.execute_query(query, (username,))
 
@@ -51,6 +51,7 @@ def auth_moderator():
 
         # Parse the JSON roles field
         roles_data = json.loads(result[0]['roles']) if result[0]['roles'] else {}
+        user_id = result[0]['id']
 
         # Extract role values (since it's stored as a dict with numeric keys)
         if isinstance(roles_data, dict):
@@ -62,7 +63,10 @@ def auth_moderator():
         has_all_roles = all(role in user_roles for role in REQUIRED_MODERATOR_ROLES)
 
         if has_all_roles:
-            return jsonify({"message": "success"}), 200
+            return jsonify({
+                "message": "success",
+                "user_id": user_id
+            }), 200
         else:
             missing_roles = [role for role in REQUIRED_MODERATOR_ROLES if role not in user_roles]
             print(f"DEBUG: Missing roles: {missing_roles}")

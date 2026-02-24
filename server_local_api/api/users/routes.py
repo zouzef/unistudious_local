@@ -1,10 +1,9 @@
-from flask import Blueprint, jsonify,request
+from flask import Blueprint, jsonify, request
+from flask import send_file
 import sys
 import os
 import json
-from datetime import datetime,timedelta
-
-
+from datetime import datetime, timedelta
 
 # Add parent directories to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -17,10 +16,8 @@ from core.middleware import token_required
 # ========================================
 
 
-
 # Create blueprint
 users_bp = Blueprint('users', __name__, url_prefix='/scl')
-
 
 
 # ========================================
@@ -30,12 +27,12 @@ users_bp = Blueprint('users', __name__, url_prefix='/scl')
 @users_bp.route('/get-group/<int:account_id>/<int:session_id>', methods=['GET'])
 # @token_required
 def get_group(account_id, session_id):
-    try:
-        print("Account_id:", account_id)
-        print("Session_id:", session_id)
+	try:
+		print("Account_id:", account_id)
+		print("Session_id:", session_id)
 
-        # Get groups with students in one query
-        query = """
+		# Get groups with students in one query
+		query = """
                     SELECT 
                         g.id,
                         g.session_id,
@@ -63,57 +60,56 @@ def get_group(account_id, session_id):
                     ORDER BY g.id, u.username
                     LIMIT 1000  -- Add reasonable limit
                 """
-        results = Database.execute_query(query, (session_id, account_id))
+		results = Database.execute_query(query, (session_id, account_id))
 
-        # Group the results by group_id
-        groups = {}
+		# Group the results by group_id
+		groups = {}
 
-        for row in results:
-            group_id = row['id']
+		for row in results:
+			group_id = row['id']
 
-            # Create group entry if it doesn't exist
-            if group_id not in groups:
-                groups[group_id] = {
-                    'id': row['id'],
-                    'session_id': row['session_id'],
-                    'local_id': row['local_id'],
-                    'name': row['name'],
-                    'capacity': row['capacity'],
-                    'status': row['status'],
-                    'list_student': []
-                }
+			# Create group entry if it doesn't exist
+			if group_id not in groups:
+				groups[group_id] = {
+					'id': row['id'],
+					'session_id': row['session_id'],
+					'local_id': row['local_id'],
+					'name': row['name'],
+					'capacity': row['capacity'],
+					'status': row['status'],
+					'list_student': []
+				}
 
-            # Add student if exists (LEFT JOIN may return NULL)
-            if row['user_id']:
-                groups[group_id]['list_student'].append({
-                    'user_id': row['user_id'],
-                    'username': row['username'],
-                    'full_name': row['full_name'],
-                    'email': row['email'],
-                    'phone': row['phone'],
-                    'relation_id': row['relation_id']
-                })
+			# Add student if exists (LEFT JOIN may return NULL)
+			if row['user_id']:
+				groups[group_id]['list_student'].append({
+					'user_id': row['user_id'],
+					'username': row['username'],
+					'full_name': row['full_name'],
+					'email': row['email'],
+					'phone': row['phone'],
+					'relation_id': row['relation_id']
+				})
 
-        # Convert dictionary to list
-        groups_list = list(groups.values())
+		# Convert dictionary to list
+		groups_list = list(groups.values())
 
-        print(f"Found {len(groups_list)} groups")
+		print(f"Found {len(groups_list)} groups")
 
-        return jsonify({
-            "success": True,
-            "data": groups_list,
-            "count": len(groups_list)
-        }), 200
+		return jsonify({
+			"success": True,
+			"data": groups_list,
+			"count": len(groups_list)
+		}), 200
 
-    except Exception as err:
-        print(f"Error: {err}")
-        return jsonify({
-            "success": False,
-            "message": str(err),
-            "data": [],
-            "count": 0
-        }), 500
-
+	except Exception as err:
+		print(f"Error: {err}")
+		return jsonify({
+			"success": False,
+			"message": str(err),
+			"data": [],
+			"count": 0
+		}), 500
 
 
 # ========================================
@@ -126,8 +122,8 @@ def get_group(account_id, session_id):
 @users_bp.route('/get_teacher/<int:group_id>', methods=['GET'])
 # @token_required
 def get_teacher(group_id):
-    try:
-        query = """
+	try:
+		query = """
             SELECT 
                 u.id as user_id, 
                 u.username, 
@@ -154,21 +150,20 @@ def get_teacher(group_id):
             AND (JSON_CONTAINS(u.roles, '"ROLE_TEACHER"') OR JSON_CONTAINS(u.roles, '"ROLE_ADMIN"'))
         """
 
-        teachers = Database.execute_query(query,(group_id,))
+		teachers = Database.execute_query(query, (group_id,))
 
+		return jsonify({"Message": "Success", "data": teachers}), 200
 
-        return jsonify({"Message": "Success", "data": teachers}), 200
-
-    except Exception as e:
-        print(f"Error: {e} coming from get_teacher")
-        return jsonify({"Message": f"Error {e} coming from server"}), 500
+	except Exception as e:
+		print(f"Error: {e} coming from get_teacher")
+		return jsonify({"Message": f"Error {e} coming from server"}), 500
 
 
 @users_bp.route('/get_teacher_session/<int:session_id>', methods=['GET'])
 # @token_required
 def get_teacher_session(session_id):
-    try:
-        query = """
+	try:
+		query = """
             SELECT 
                 u.id as user_id, 
                 u.username, 
@@ -208,14 +203,13 @@ def get_teacher_session(session_id):
                 u.img_link
         """
 
-        teachers = Database.execute_query(query,(session_id,))
+		teachers = Database.execute_query(query, (session_id,))
 
+		return jsonify({"Message": "Success", "data": teachers}), 200
 
-        return jsonify({"Message": "Success", "data": teachers}), 200
-
-    except Exception as e:
-        print(f"Error: {e} coming from get_teacher")
-        return jsonify({"Message": f"Error {e} coming from server"}), 500
+	except Exception as e:
+		print(f"Error: {e} coming from get_teacher")
+		return jsonify({"Message": f"Error {e} coming from server"}), 500
 
 
 # ========================================
@@ -224,58 +218,58 @@ def get_teacher_session(session_id):
 @users_bp.route('/affect_user_group/<int:session_id>', methods=['POST'])
 # @token_required
 def affect_user_group_endpoint(session_id):
-    try:
-        # Get JSON data from request
-        data = request.get_json()
-        print(f"Received data: {data}")
-        print(f"Session ID: {session_id}")
+	try:
+		# Get JSON data from request
+		data = request.get_json()
+		print(f"Received data: {data}")
+		print(f"Session ID: {session_id}")
 
-        # Extract specific fields
-        user_id = data.get('user_id')
-        group_id = data.get('group_id')
+		# Extract specific fields
+		user_id = data.get('user_id')
+		group_id = data.get('group_id')
 
-        print(f"User ID: {user_id}, Group ID: {group_id}")
+		print(f"User ID: {user_id}, Group ID: {group_id}")
 
-        # Validate
-        if not user_id or not group_id:
-            return jsonify({
-                "status": "error",
-                "message": "Missing user_id or group_id"
-            }), 400
+		# Validate
+		if not user_id or not group_id:
+			return jsonify({
+				"status": "error",
+				"message": "Missing user_id or group_id"
+			}), 400
 
-        # Check if user exists
-        query = """
+		# Check if user exists
+		query = """
             SELECT COUNT(id) as nbr FROM user WHERE id = %s AND enabled = 1
         """
-        result = Database.execute_query(query, (user_id,))
+		result = Database.execute_query(query, (user_id,))
 
-        if not result or result[0]['nbr'] == 0:
-            print(f"User {user_id} not found")
-            return jsonify({
-                "status": "error",
-                "message": "User not found"
-            }), 404
+		if not result or result[0]['nbr'] == 0:
+			print(f"User {user_id} not found")
+			return jsonify({
+				"status": "error",
+				"message": "User not found"
+			}), 404
 
-        print(f"User {user_id} exists")
+		print(f"User {user_id} exists")
 
-        # Check if group exists
-        query = """
+		# Check if group exists
+		query = """
             SELECT COUNT(id) as nbr FROM relation_group_local_session
             WHERE id = %s AND enabled = 1
         """
-        result = Database.execute_query(query, (group_id,))
+		result = Database.execute_query(query, (group_id,))
 
-        if not result or result[0]['nbr'] == 0:
-            print(f"Group {group_id} not found")
-            return jsonify({
-                "status": "error",
-                "message": "Group not found"
-            }), 404
+		if not result or result[0]['nbr'] == 0:
+			print(f"Group {group_id} not found")
+			return jsonify({
+				"status": "error",
+				"message": "Group not found"
+			}), 404
 
-        print(f"Group {group_id} exists")
+		print(f"Group {group_id} exists")
 
-        # Update user's group assignment
-        query = """
+		# Update user's group assignment
+		query = """
             UPDATE relation_user_session
             SET relation_group_local_session_id = %s
             WHERE user_id = %s 
@@ -285,25 +279,25 @@ def affect_user_group_endpoint(session_id):
             ORDER BY id ASC
             LIMIT 1
         """
-        Database.execute_query(query, (group_id, user_id, session_id), fetch=False)
+		Database.execute_query(query, (group_id, user_id, session_id), fetch=False)
 
-        print(f"User assigned to group successfully")
-        return jsonify({
-            "status": "success",
-            "message": f"User assigned to group successfully",
-            "data": {
-                "user_id": user_id,
-                "group_id": group_id,
-                "session_id": session_id
-            }
-        }), 200
+		print(f"User assigned to group successfully")
+		return jsonify({
+			"status": "success",
+			"message": f"User assigned to group successfully",
+			"data": {
+				"user_id": user_id,
+				"group_id": group_id,
+				"session_id": session_id
+			}
+		}), 200
 
-    except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({
-            "status": "error",
-            "message": f"Error: {str(e)}"
-        }), 500
+	except Exception as e:
+		print(f"Error: {e}")
+		return jsonify({
+			"status": "error",
+			"message": f"Error: {str(e)}"
+		}), 500
 
 
 # =============================================
@@ -312,23 +306,23 @@ def affect_user_group_endpoint(session_id):
 @users_bp.route('/user_not_affected/<int:session_id>/<int:account_id>', methods=['GET'])
 # @token_required
 def get_user_not_affected(session_id, account_id):
-    try:
-        # Validate session exists and belongs to this account
-        query = """
+	try:
+		# Validate session exists and belongs to this account
+		query = """
             SELECT id, name 
             FROM session 
             WHERE id = %s AND account_id = %s AND enabled = 1
         """
-        session_data = Database.execute_query(query, (session_id, account_id))
+		session_data = Database.execute_query(query, (session_id, account_id))
 
-        if not session_data:
-            return jsonify({
-                "status": "error",
-                "message": "Session not found."
-            }), 404
+		if not session_data:
+			return jsonify({
+				"status": "error",
+				"message": "Session not found."
+			}), 404
 
-        # Get users NOT assigned to groups with relation IDs
-        query = """
+		# Get users NOT assigned to groups with relation IDs
+		query = """
             SELECT 
                 r.id as relation_id,
                 r.user_id,
@@ -343,72 +337,72 @@ def get_user_not_affected(session_id, account_id):
                      OR r.relation_group_local_session_id = 0)
             ORDER BY u.full_name
         """
-        relations = Database.execute_query(query, (session_id,))
+		relations = Database.execute_query(query, (session_id,))
 
-        # Group by user and build response
-        users = {}
+		# Group by user and build response
+		users = {}
 
-        for relation in relations:
-            user_id = relation['user_id']
+		for relation in relations:
+			user_id = relation['user_id']
 
-            if user_id not in users:
-                users[user_id] = {
-                    'userId': user_id,
-                    'userName': relation['full_name'] or relation['username'],
-                    'sessionId': session_id,
-                    'sessionName': session_data[0]['name'],
-                    'sessionCount': 1,
-                }
-            else:
-                users[user_id]['sessionCount'] += 1
+			if user_id not in users:
+				users[user_id] = {
+					'userId': user_id,
+					'userName': relation['full_name'] or relation['username'],
+					'sessionId': session_id,
+					'sessionName': session_data[0]['name'],
+					'sessionCount': 1,
+				}
+			else:
+				users[user_id]['sessionCount'] += 1
 
-        # Convert to list
-        students = list(users.values())
+		# Convert to list
+		students = list(users.values())
 
-        print(f"Users not affected to groups: {students}")
+		print(f"Users not affected to groups: {students}")
 
-        return jsonify({"students": students}), 200
+		return jsonify({"students": students}), 200
 
-    except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({
-            "status": "error",
-            "message": "Unexpected error occurred."
-        }), 500
+	except Exception as e:
+		print(f"Error: {e}")
+		return jsonify({
+			"status": "error",
+			"message": "Unexpected error occurred."
+		}), 500
 
 
 # =============================================
 # ENDPOINT 5: Delete group
 # =============================================
-@users_bp.route('/delete-group/<int:group_id>',methods=['POST'])
+@users_bp.route('/delete-group/<int:group_id>', methods=['POST'])
 def delete_group(group_id):
-    try:
-        print(group_id)
-        # Disable the group
-        query = """ 
+	try:
+		print(group_id)
+		# Disable the group
+		query = """ 
             UPDATE relation_group_local_session
             SET enabled = 0
             WHERE id = %s     
         """
-        values = (group_id,)
-        result = Database.execute_query(query, values)
-        # Check if any rows were affected
-        if result == 0 or (isinstance(result, dict) and result.get('rowcount', 0) == 0):
-            return jsonify({"Message": "Group not found"}), 404
+		values = (group_id,)
+		result = Database.execute_query(query, values)
+		# Check if any rows were affected
+		if result == 0 or (isinstance(result, dict) and result.get('rowcount', 0) == 0):
+			return jsonify({"Message": "Group not found"}), 404
 
-        # Remove group association from users
-        query2 = """
+		# Remove group association from users
+		query2 = """
             UPDATE relation_user_session 
             SET relation_group_local_session_id = NULL 
             WHERE relation_group_local_session_id = %s
         """
-        Database.execute_query(query2, values, fetch=False)
+		Database.execute_query(query2, values, fetch=False)
 
-        return jsonify({"Message": "Group deleted successfully"}), 200
+		return jsonify({"Message": "Group deleted successfully"}), 200
 
-    except Exception as e:
-        print(f"Error: {e} coming from delete group")
-        return jsonify({"Message": f"Error: {str(e)}"}), 500
+	except Exception as e:
+		print(f"Error: {e} coming from delete group")
+		return jsonify({"Message": f"Error: {str(e)}"}), 500
 
 
 # =============================================
@@ -416,77 +410,77 @@ def delete_group(group_id):
 # =============================================
 @users_bp.route('/create_group/<int:session_id>', methods=['POST'])
 def create_group(session_id):
-    try:
-        data = request.get_json()
+	try:
+		data = request.get_json()
 
-        # Validate required fields
-        if (not data.get('group_name') or not data.get('capacity')
-                or not data.get('subject_id') or not data.get('teacher_id')
-                or not data.get('account_id') or not data.get('local_id')):
-            return jsonify({"Message": "Missing required fields"}), 400
+		# Validate required fields
+		if (not data.get('group_name') or not data.get('capacity')
+				or not data.get('subject_id') or not data.get('teacher_id')
+				or not data.get('account_id') or not data.get('local_id')):
+			return jsonify({"Message": "Missing required fields"}), 400
 
-        # Extract data
-        local_id = data['local_id']
-        account_id = data['account_id']
-        name = data['group_name']
-        capacity = data['capacity']
-        subject_id = data['subject_id']
-        teacher_id = data['teacher_id']
-        status = 1
-        enabled = 1
-        special_group = data.get('special_group', None)  # Will be None if not provided
-        access_type = data.get('access_type', 0)
+		# Extract data
+		local_id = data['local_id']
+		account_id = data['account_id']
+		name = data['group_name']
+		capacity = data['capacity']
+		subject_id = data['subject_id']
+		teacher_id = data['teacher_id']
+		status = 1
+		enabled = 1
+		special_group = data.get('special_group', None)  # Will be None if not provided
+		access_type = data.get('access_type', 0)
 
-        current_time = datetime.now()
-        print(f"Creating group at: {current_time}")
+		current_time = datetime.now()
+		print(f"Creating group at: {current_time}")
 
-        # Insert group
-        query = """
+		# Insert group
+		query = """
             INSERT INTO relation_group_local_session 
             (session_id, local_id, account_id, name, capacity, status, enabled, created_at, timestamp, special_group, access_type, slc_use)
             VALUES (%s, %s, %s, %s, %s, %s, %s, NOW(), NOW(), %s, %s, 1)
         """
-        values = (session_id, local_id, account_id, name, capacity, status, enabled, special_group, access_type)
+		values = (session_id, local_id, account_id, name, capacity, status, enabled, special_group, access_type)
 
-        result = Database.execute_query(query, values, fetch=False)
+		result = Database.execute_query(query, values, fetch=False)
 
-        # Get the last inserted ID
-        if isinstance(result, int):
-            group_id = result
-        elif isinstance(result, dict) and 'lastrowid' in result:
-            group_id = result['lastrowid']
-        elif isinstance(result, dict) and 'id' in result:
-            group_id = result['id']
-        else:
-            group_id = None
+		# Get the last inserted ID
+		if isinstance(result, int):
+			group_id = result
+		elif isinstance(result, dict) and 'lastrowid' in result:
+			group_id = result['lastrowid']
+		elif isinstance(result, dict) and 'id' in result:
+			group_id = result['id']
+		else:
+			group_id = None
 
-        # Insert teacher-subject relationship
-        query2 = """
+		# Insert teacher-subject relationship
+		query2 = """
             INSERT INTO relation_teacher_to_subject_group
             (relation_group_local_session_id, subject_id, user_id, enabled, created_at, timestamp, slc_use)
             VALUES (%s, %s, %s, 1, NOW(), NOW(), 1)
         """
-        values2 = (group_id, subject_id, teacher_id)
-        Database.execute_query(query2, values2, fetch=False)
+		values2 = (group_id, subject_id, teacher_id)
+		Database.execute_query(query2, values2, fetch=False)
 
-        return jsonify({
-            "Message": "Group created successfully",
-            "group_id": group_id
-        }), 201
+		return jsonify({
+			"Message": "Group created successfully",
+			"group_id": group_id
+		}), 201
 
-    except Exception as e:
-        print(f"Error: {e} coming from create-group")
-        return jsonify({"Message": f"Error: {str(e)}"}), 500
+	except Exception as e:
+		print(f"Error: {e} coming from create-group")
+		return jsonify({"Message": f"Error: {str(e)}"}), 500
 
 
 # =============================================
 # ENDPOINT 7: Get all users
 # =============================================
-@users_bp.route('/get-all-users/<int:account_id>',methods=['GET'])
+@users_bp.route('/get-all-users/<int:account_id>', methods=['GET'])
 def get_all_user(account_id):
-    try:
+	try:
 
-        query ="""
+		query = """
             SELECT DISTINCT
                 u.username, u.full_name,u.email,u.phone, u.img_link, u.id, rus.session_id
             FROM user u, relation_user_session rus
@@ -494,13 +488,73 @@ def get_all_user(account_id):
             AND rus.session_id IN (SELECT s.id FROM session s WHERE s.account_id = %s)
             AND rus.user_id = u.id
         """
-        response = Database.execute_query(query,(account_id,),fetch=True)
-        return jsonify({
-            "Message":"Success",
-            "data":response
-        }),200
+		response = Database.execute_query(query, (account_id,), fetch=True)
+		return jsonify({
+			"Message": "Success",
+			"data": response
+		}), 200
 
-    except Exception as e :
-        return jsonify({
-            "Message":f"Error: {e} coming from get_all_users"
-        }),500
+	except Exception as e:
+		return jsonify({
+			"Message": f"Error: {e} coming from get_all_users"
+		}), 500
+
+
+# =============================================
+# ENDPOINT 8: Get Profile image of user
+# =============================================
+@users_bp.route('/get-profile-image/<int:user_id>', methods=['GET'])
+def get_profile_file(user_id):
+	try:
+		query = """
+            SELECT username, img_link FROM user WHERE id = %s
+        """
+		values = (user_id,)
+		result = Database.execute_query(query, values, fetch=True)
+
+		if not result:
+			# User not found - return default image
+			default_img_path = os.path.join(
+				os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+				'static/assets/images/profile.svg'
+			)
+			return send_file(default_img_path)
+
+		img_filename = result[0]['img_link']
+
+		# If user has no image set, return default
+		if not img_filename or img_filename.strip() == '':
+			default_img_path = os.path.join(
+				os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+				'static/assets/images/profile.svg'
+			)
+			return send_file(default_img_path)
+
+		BASE_UPLOAD_FOLDER = os.path.join(
+			os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+			f'uploads/user_img/user_{user_id}'
+		)
+		img_path = os.path.join(BASE_UPLOAD_FOLDER, img_filename)
+
+		# If image file doesn't exist, return default
+		if not os.path.exists(img_path):
+			print(f"⚠️ Image not found at {img_path}, returning default")
+			default_img_path = os.path.join(
+				os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+				'static/assets/images/profile.svg'
+			)
+			return send_file(default_img_path)
+
+		return send_file(img_path)
+
+	except Exception as e:
+		print(f"Error: {e} coming from get_user_image")
+		# Return default image on error instead of 500
+		try:
+			default_img_path = os.path.join(
+				os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+				'static/assets/images/profile.svg'
+			)
+			return send_file(default_img_path)
+		except:
+			return jsonify({"message": "Error loading image"}), 500

@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request,send_file
 from datetime import datetime
 import sys
 import os
@@ -137,6 +137,67 @@ def get_session_detail(account_id):
             "message": "An error occurred",
             "error": str(e)
         }), 500
+
+
+
+#ENDPOINT 2: Get session image
+@sessions_bp.route('/get_session_image/<int:session_id>',methods=['GET'])
+def get_session_image(session_id):
+    try:
+        query = """
+            SELECT img_link FROM session WHERE id = %s
+        """
+        values = (session_id,)
+        result = Database.execute_query(query,values,fetch=True)
+
+        if not result :
+            # Session not found - return defalt image
+                default_img_path = os.path.join(
+                    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                    'static/assets/images/session-defult.png'
+                )
+                return send_file(default_img_path)
+        img_filename = result[0]['img_link']
+
+        # If session has no image set, return default
+        if not img_filename or img_filename.strip() == '':
+            default_img_path = os.path.join(
+                os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                'static/assets/images/session-defult.png'
+            )
+            return send_file(default_img_path)
+
+        BASE_UPLOAD_FOLDER = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+            f'uploads/session_img/session_{session_id}'
+        )
+        img_path = os.path.join(BASE_UPLOAD_FOLDER, img_filename)
+
+        # If image file doesn't exist, return default
+        if not os.path.exists(img_path):
+            print(f"⚠️ Image not found at {img_path}, returning default")
+            default_img_path = os.path.join(
+                os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                'static/assets/images/session-defult.png'
+            )
+            return send_file(default_img_path)
+
+        return send_file(img_path)
+
+
+    except Exception as e:
+        print(f"Error: {e} coming from get_session_image")
+        #Return default image on error instead of 500
+        try:
+            default_img_path = os.path.join(
+                os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                'static/assets/images/session-defult.png'
+            )
+            return send_file(default_img_path)
+        except Exception as e:
+            return jsonify({
+                "Message":"Error loading image"
+            }),500
 
 
 

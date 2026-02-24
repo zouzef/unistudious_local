@@ -8,7 +8,7 @@ auth_bp = Blueprint('auth', __name__)
 # ===============================
 # VARIABLES
 # ===============================
-BASE_URL = "https://172.28.20.178:5004/scl/"
+BASE_URL = "https://192.168.1.246:5004/scl/"
 
 
 def check_login(username, password):
@@ -23,15 +23,19 @@ def check_login(username, password):
 
 		if response.status_code == 200:
 			data = response.json()
-			print(f"✅ Login successful, account_id: {data.get('account_id')}")  # ← DEBUG
-			return True, data.get('account_id', 3)
+
+			user_id = data.get('user_id')  # ← Get user_id from response
+			account_id = data.get('account_id',3)
+
+			print(f"✅ Login successful, user_id: {user_id}, account_id: {account_id}")
+			return True, user_id, account_id  # ← Return both IDs
 		else:
-			print(f"❌ Login failed, status: {response.status_code}")  # ← DEBUG
-			return False, None
+			print(f"❌ Login failed, status: {response.status_code}")
+			return False, None, None
 
 	except requests.exceptions.RequestException as e:
 		print(f"❌ Request failed: {e}")
-		return False, None
+		return False, None, None
 
 
 @auth_bp.route('/login', methods=['GET'])
@@ -54,17 +58,17 @@ def login_post():
 			'message': 'Username and password required'
 		}), 400
 
-	# Get login result and account_id
-	success, account_id = check_login(username, password)
+	# Get login result, user_id, and account_id
+	success, user_id, account_id = check_login(username, password)
 
 	if success:
 		session.permanent = True
 		session['moderator_id'] = username
 		session['moderator_name'] = username
+		session['user_id'] = user_id  # ← Store user_id in session
 		session['account_id'] = account_id
 
-		# ← ADD DEBUG LOGGING
-		print(f"✅ Session set: moderator_id={username}, account_id={account_id}")
+		print(f"✅ Session set: moderator_id={username}, user_id={user_id}, account_id={account_id}")
 		print(f"✅ Session contents: {dict(session)}")
 
 		return jsonify({

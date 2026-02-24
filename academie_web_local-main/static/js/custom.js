@@ -3181,27 +3181,61 @@ function deleteRequest(id) {
         }
     });
 }
+/* ===============================================
+   USER MANAGEMENT - STRUCTURED VERSION
+   =============================================== */
 
-/* --------------- Load users from the database and display it in the html components ---------------  */
-const accountId = window.ACCOUNT_ID;
-let allUsers = [];
-let currentPage = 1;
-let currentUsers = []; // users currently being displayed (filtered or all)
-const USERS_PER_PAGE = 12;
+// ==================== CONFIGURATION ====================
+const CONFIG = {
+  USERS_PER_PAGE: 12,
+  DATATABLE_RETRY_DELAY: 300
+};
 
-// ==================== SESSIONS ====================
-async function loadSessions(accountId) {
-  const select = document.getElementById("session-select");
-  try {
+// ==================== STATE MANAGEMENT ====================
+const state = {
+  accountId: window.ACCOUNT_ID,
+  allUsers: [],
+  currentUsers: [],
+  currentPage: 1
+};
+
+// ==================== API CALLS ====================
+const API = {
+  async fetchSessions(accountId) {
     const response = await fetch(`/api/get-sessions/${accountId}`);
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const result = await response.json();
-    const sessions = Array.isArray(result) ? result : (result.data ?? []);
+    return Array.isArray(result) ? result : (result.data ?? []);
+  },
+
+  async fetchUsers(accountId) {
+    const response = await fetch(`/api/get-all-users/${accountId}`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    const result = await response.json();
+    return result.data?.data ?? result.data ?? [];
+  },
+
+  async fetchProfileImage(userId) {
+    const response = await fetch(`/api/get_profile_img/${userId}`);
+    if (!response.ok) throw new Error('Failed to load profile image');
+    return await response.blob();
+  }
+};
+
+// ==================== SESSION MANAGEMENT ====================
+async function loadSessions(accountId) {
+  const select = document.getElementById("session-select");
+
+  try {
+    const sessions = await API.fetchSessions(accountId);
+
     select.innerHTML = `<option value="" disabled selected>Select Session</option>`;
+
     if (!sessions.length) {
       select.innerHTML += `<option disabled>No sessions available</option>`;
       return;
     }
+
     sessions.forEach(session => {
       const option = document.createElement("option");
       option.value = session.id;
@@ -3213,23 +3247,30 @@ async function loadSessions(accountId) {
   }
 }
 
-// ==================== USERS ====================
+// ==================== USER CARD DISPLAY ====================
 async function loadUsers(accountId) {
   const container = document.getElementById("user-container");
+
   try {
+    // Show loading spinner
     container.innerHTML = `
       <div class="col-12 text-center py-4">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>`;
-    const response = await fetch(`/api/get-all-users/${accountId}`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const result = await response.json();
-    allUsers = result.data?.data ?? result.data ?? [];
-    currentUsers = allUsers;
-    currentPage = 1;
-    renderUsers(currentUsers, currentPage);
+
+    // Fetch users
+    const users = await API.fetchUsers(accountId);
+
+    // Update state
+    state.allUsers = users;
+    state.currentUsers = users;
+    state.currentPage = 1;
+
+    // Render users
+    renderUsers(state.currentUsers, state.currentPage);
+
   } catch (error) {
     console.error("❌ Error loading users:", error);
     container.innerHTML = `
@@ -3242,7 +3283,24 @@ async function loadUsers(accountId) {
   }
 }
 
-// ==================== RENDER ====================
+async function loadUserProfileImages() {
+  const userImages = document.querySelectorAll('.user-img img');
+
+  userImages.forEach(async (img) => {
+    const userId = img.dataset.userId;
+    if (!userId) return;
+
+    try {
+      const blob = await API.fetchProfileImage(userId);
+      const imageUrl = URL.createObjectURL(blob);
+      img.src = imageUrl;
+    } catch (error) {
+      console.error(`Error loading image for user ${userId}:`, error);
+      // Keep default image on error
+    }
+  });
+}
+
 function renderUsers(users, page) {
   const container = document.getElementById("user-container");
 
@@ -3257,54 +3315,52 @@ function renderUsers(users, page) {
   }
 
   // Slice users for current page
-  const start = (page - 1) * USERS_PER_PAGE;
-  const end = start + USERS_PER_PAGE;
+  const start = (page - 1) * CONFIG.USERS_PER_PAGE;
+  const end = start + CONFIG.USERS_PER_PAGE;
   const pageUsers = users.slice(start, end);
 
-    container.innerHTML = pageUsers.map(user => `
-      <div class="col-xl-3 col-lg-4 col-sm-6 user-card" data-name="${user.full_name}" data-sessions="${user.session_id}">
-        <div class="card contact_list text-center">
-          <div class="card-body">
-            <div class="user-content">
-              <div class="user-info">
-                <div class="user-img">
-                  <img
-
-                    alt="${user.full_name}"
-                    class="avatar avatar-xl"
-                    onerror="this.src='/assets/admin/images/defult-admin.png'"
-                  >
-                </div>
-                <div class="user-details">
-                  <h4 class="user-name mb-0">${user.full_name}</h4>
-                  <p>Platform Student</p>
-                </div>
+  container.innerHTML = pageUsers.map(user => `
+    <div class="col-xl-3 col-lg-4 col-sm-6 user-card" data-name="${user.full_name}" data-sessions="${user.session_id}">
+      <div class="card contact_list text-center">
+        <div class="card-body">
+          <div class="user-content">
+            <div class="user-info">
+              <div class="user-img">
+                <img
+                  src="../static/assets/images/profile.svg"
+                  alt="${user.full_name}"
+                  class="avatar avatar-xl"
+                  data-user-id="${user.id}"
+                  onerror="this.src=''"
+                >
+              </div>
+              <div class="user-details">
+                <h4 class="user-name mb-0">${user.full_name}</h4>
+                <p>Platform Student</p>
               </div>
             </div>
-
           </div>
         </div>
       </div>
-    `).join('');
+    </div>
+  `).join('');
 
   renderPagination(users.length, page);
+  loadUserProfileImages();
 }
 
 // ==================== PAGINATION ====================
 function renderPagination(totalUsers, page) {
   const controls = document.getElementById("pagination-controls");
-  const totalPages = Math.ceil(totalUsers / USERS_PER_PAGE);
+  const totalPages = Math.ceil(totalUsers / CONFIG.USERS_PER_PAGE);
 
   if (totalPages <= 1) {
     controls.innerHTML = '';
     return;
   }
 
-  // Build page numbers to show (always show first, last, current, and neighbors)
-  let pages = new Set();
-  pages.add(1);
-  pages.add(totalPages);
-  pages.add(page);
+  // Build page numbers
+  let pages = new Set([1, totalPages, page]);
   if (page - 1 > 0) pages.add(page - 1);
   if (page + 1 <= totalPages) pages.add(page + 1);
   pages = [...pages].sort((a, b) => a - b);
@@ -3318,7 +3374,6 @@ function renderPagination(totalUsers, page) {
 
   let prev = null;
   pages.forEach(p => {
-    // Add ellipsis if there's a gap
     if (prev && p - prev > 1) {
       paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
     }
@@ -3338,55 +3393,65 @@ function renderPagination(totalUsers, page) {
 
   controls.innerHTML = paginationHTML;
 
-  // ✅ Attach click events after rendering
+  // Attach event listeners
+  attachPaginationEvents(totalPages);
+}
+
+function attachPaginationEvents(totalPages) {
+  const controls = document.getElementById("pagination-controls");
+
+  // Page number clicks
   controls.querySelectorAll('[data-page]').forEach(btn => {
-    btn.addEventListener('click', function () {
-      currentPage = parseInt(this.dataset.page);
-      renderUsers(currentUsers, currentPage);
+    btn.addEventListener('click', function() {
+      state.currentPage = parseInt(this.dataset.page);
+      renderUsers(state.currentUsers, state.currentPage);
     });
   });
 
+  // Previous button
   const prevBtn = document.getElementById("prev-page");
-  const nextBtn = document.getElementById("next-page");
-
   if (prevBtn) {
-    prevBtn.addEventListener('click', function () {
-      if (currentPage > 1) {
-        currentPage--;
-        renderUsers(currentUsers, currentPage);
+    prevBtn.addEventListener('click', function() {
+      if (state.currentPage > 1) {
+        state.currentPage--;
+        renderUsers(state.currentUsers, state.currentPage);
       }
     });
   }
 
+  // Next button
+  const nextBtn = document.getElementById("next-page");
   if (nextBtn) {
-    nextBtn.addEventListener('click', function () {
-      const totalPages = Math.ceil(currentUsers.length / USERS_PER_PAGE);
-      if (currentPage < totalPages) {
-        currentPage++;
-        renderUsers(currentUsers, currentPage);
+    nextBtn.addEventListener('click', function() {
+      if (state.currentPage < totalPages) {
+        state.currentPage++;
+        renderUsers(state.currentUsers, state.currentPage);
       }
     });
   }
 }
 
-// ==================== FILTER ====================
-document.getElementById("session-select").addEventListener("change", function () {
-  const selectedSessionId = this.value;
-  currentPage = 1; // ✅ Reset to page 1 on filter change
+// ==================== FILTERING ====================
+function initSessionFilter() {
+  const select = document.getElementById("session-select");
 
-  if (!selectedSessionId) {
-    currentUsers = allUsers;
-  } else {
-    currentUsers = allUsers.filter(user =>
-      String(user.session_id) === String(selectedSessionId)
-    );
-  }
+  select.addEventListener("change", function() {
+    const selectedSessionId = this.value;
+    state.currentPage = 1;
 
-  renderUsers(currentUsers, currentPage);
-});
+    if (!selectedSessionId) {
+      state.currentUsers = state.allUsers;
+    } else {
+      state.currentUsers = state.allUsers.filter(user =>
+        String(user.session_id) === String(selectedSessionId)
+      );
+    }
 
+    renderUsers(state.currentUsers, state.currentPage);
+  });
+}
 
-// ==================== LOAD TABLE USERS ====================
+// ==================== TABLE DISPLAY ====================
 async function loadTableUsers(accountId) {
   const tbody = document.querySelector('#example8 tbody');
 
@@ -3396,11 +3461,10 @@ async function loadTableUsers(accountId) {
   }
 
   try {
-    // Destroy existing DataTable instance before touching the DOM
-    if (typeof $.fn.DataTable !== 'undefined' && $.fn.DataTable.isDataTable('#example8')) {
-      $('#example8').DataTable().destroy();
-    }
+    // Destroy existing DataTable
+    destroyDataTable('#example8');
 
+    // Show loading
     tbody.innerHTML = `
       <tr>
         <td colspan="5" class="text-center py-4">
@@ -3410,11 +3474,8 @@ async function loadTableUsers(accountId) {
         </td>
       </tr>`;
 
-    const response = await fetch(`/api/get-all-users/${accountId}`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-    const result = await response.json();
-    const users = result.data?.data ?? result.data ?? [];
+    // Fetch users
+    const users = await API.fetchUsers(accountId);
 
     if (!users.length) {
       tbody.innerHTML = `
@@ -3424,6 +3485,7 @@ async function loadTableUsers(accountId) {
       return;
     }
 
+    // Render table rows
     tbody.innerHTML = users.map(user => `
       <tr id="student-row-${user.id}" class="selected">
         <td class="student-name">
@@ -3473,8 +3535,8 @@ async function loadTableUsers(accountId) {
       </tr>
     `).join('');
 
-    // ✅ Safe DataTables init with retry if not loaded yet
-    initDataTable();
+    // Initialize DataTable
+    initDataTable('#example8');
 
   } catch (error) {
     console.error("❌ Error loading table users:", error);
@@ -3490,19 +3552,23 @@ async function loadTableUsers(accountId) {
   }
 }
 
-// ==================== DATATABLE INIT WITH RETRY ====================
-function initDataTable() {
+// ==================== DATATABLES UTILITIES ====================
+function destroyDataTable(selector) {
+  if (typeof $.fn.DataTable !== 'undefined' && $.fn.DataTable.isDataTable(selector)) {
+    $(selector).DataTable().destroy();
+  }
+}
+
+function initDataTable(selector) {
   if (typeof $.fn.DataTable === 'undefined') {
-    console.warn("⚠️ DataTables not ready, retrying in 300ms...");
-    setTimeout(initDataTable, 300);
+    console.warn("⚠️ DataTables not ready, retrying in " + CONFIG.DATATABLE_RETRY_DELAY + "ms...");
+    setTimeout(() => initDataTable(selector), CONFIG.DATATABLE_RETRY_DELAY);
     return;
   }
 
-  if ($.fn.DataTable.isDataTable('#example8')) {
-    $('#example8').DataTable().destroy();
-  }
+  destroyDataTable(selector);
 
-  $('#example8').DataTable({
+  $(selector).DataTable({
     pageLength: 10,
     lengthChange: true,
     searching: true,
@@ -3518,143 +3584,17 @@ function initDataTable() {
   });
 }
 
-
-async function loadTableUsers2(accountId) {
-  const tbody = document.querySelector('#example8 tbody');
-
-  if (!tbody) {
-    console.error("❌ #example8 tbody not found in DOM");
-    return;
-  }
-  try {
-    // Destroy existing DataTable instance before touching the DOM
-    if (typeof $.fn.DataTable !== 'undefined' && $.fn.DataTable.isDataTable('#example8')) {
-      $('#example8').DataTable().destroy();
-    }
-
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="5" class="text-center py-4">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </td>
-      </tr>`;
-
-    const response = await fetch(`/api/get-all-users/${accountId}`);
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-    const result = await response.json();
-    const users = result.data?.data ?? result.data ?? [];
-
-    if (!users.length) {
-      tbody.innerHTML = `
-        <tr>
-          <td colspan="5" class="text-center py-4 text-muted">No users found.</td>
-        </tr>`;
-      return;
-    }
-
-    tbody.innerHTML = users.map(user => `
-      <tr id="student-row-${user.id}" class="selected">
-        <td class="student-name">
-          <div class="trans-list">
-            <h4>${user.full_name ?? '-'}</h4>
-          </div>
-        </td>
-        <td class="student-phone">
-          <div class="trans-list">
-            <h4>${user.phone ?? '-'}</h4>
-          </div>
-        </td>
-        <td class="student-email">
-          <div class="trans-list">
-            <h4>${user.email ?? '-'}</h4>
-          </div>
-        </td>
-        <td class="student-type">
-          <span class="badge light badge-primary">
-            <i class="fa fa-circle text-primary me-1"></i>
-            Real
-          </span>
-        </td>
-        <td>
-          <a data-user-id="${user.id}"
-             data-id="${user.id}"
-             data-account-id="${accountId}"
-             class="btn btn-sm btn-success btn-associate-virtual-user">
-            Associate Student
-          </a>
-          <a data-user-id="${user.id}"
-             class="btn btn-sm btn-info btn-manage-sessions-virtual-user">
-            Manage Sessions
-          </a>
-          <a data-user-id="${user.id}"
-             data-id="${user.id}"
-             data-name="${user.full_name ?? ''}"
-             data-account-id="${accountId}"
-             class="btn btn-sm btn-primary btn-edit-virtual-user">
-            Edit
-          </a>
-          <a href="/dashboard/show-profile/${user.id}"
-             class="btn btn-sm btn-warning">
-            Show Profile
-          </a>
-        </td>
-      </tr>
-    `).join('');
-
-    // ✅ Safe DataTables init with retry if not loaded yet
-    initDataTable();
-
-  } catch (error) {
-    console.error("❌ Error loading table users:", error);
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="5">
-          <div class="alert alert-danger m-3">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            Failed to load users. Please try again.
-          </div>
-        </td>
-      </tr>`;
-  }
-}
-
-
-// ==================== DATATABLE INIT WITH RETRY ====================
-function initDataTable() {
-  if (typeof $.fn.DataTable === 'undefined') {
-    console.warn("⚠️ DataTables not ready, retrying in 300ms...");
-    setTimeout(initDataTable, 300);
-    return;
-  }
-
-  if ($.fn.DataTable.isDataTable('#example8')) {
-    $('#example8').DataTable().destroy();
-  }
-
-  $('#example8').DataTable({
-    pageLength: 10,
-    lengthChange: true,
-    searching: true,
-    ordering: true,
-    info: true,
-    pagingType: "simple_numbers",
-    language: {
-      paginate: {
-        previous: '<i class="fa-solid fa-angle-left"></i>',
-        next: '<i class="fa-solid fa-angle-right"></i>'
-      }
-    }
-  });
-}
-
-
-// ==================== INIT ====================
+// ==================== INITIALIZATION ====================
 function initPage() {
-  loadTableUsers(accountId);
-  loadTableUsers2(accountId)
-  loadSessions(accountId);
-  loadUsers(accountId);
+  loadSessions(state.accountId);
+  loadUsers(state.accountId);
+  loadTableUsers(state.accountId);
+  initSessionFilter();
+}
+
+// Auto-initialize when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initPage);
+} else {
+  initPage();
 }

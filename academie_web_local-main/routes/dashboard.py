@@ -1,11 +1,13 @@
-from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
+from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for,send_file,current_app
+import io
 from flask_socketio import join_room, leave_room, emit
 from websockets.events import send_calendar_request_notification
 from websockets import get_socketio
 import requests
 from nacl.pwhash import verify
 from datetime import datetime
-
+import os
+import sys
 
 
 
@@ -14,7 +16,7 @@ from datetime import datetime
 # CONFIGURATION
 # ==========================================
 dashboard_bp = Blueprint('dashboard', __name__)
-BASE_URL = " https://172.28.20.178:5004/scl/"
+BASE_URL = "https://192.168.1.246:5004/scl/"
 
 
 # ==========================================
@@ -113,6 +115,100 @@ def get_teacher(session_id):
 	except Exception as e:
 		print(f"Error {e}")
 		return jsonify({"message": f"Error {e} coming from get teacher"}), 500
+
+
+# SESSION IMAGE ROUTES
+@dashboard_bp.route('/api/get_session_img/<int:session_id>', methods=['GET'])
+def get_session_img(session_id):
+	try:
+		url = f"{BASE_URL}get_session_image/{session_id}"
+		response = requests.get(url, verify=False)
+		response.raise_for_status()
+		if response.status_code == 200:
+			return send_file(
+				io.BytesIO(response.content),
+				mimetype=response.headers.get('Content-Type', 'image/svg+xml'),
+				as_attachment=False
+			)
+	except requests.exceptions.RequestException as e:
+		print(f"⚠️ Request error for user {session_id}: {e}")
+		return send_default_session_img()
+	except Exception as e:
+		print(f"❌ Unexpected error for user {session_id}: {e}")
+		return send_default_session_img(), 500
+
+
+def send_default_session_img():
+		"""Helper function to send the default profile image"""
+		try:
+			default_img_path = os.path.join(
+				current_app.root_path,
+				'static/assets/images/session-default.png'
+			)
+			return send_file(default_img_path, mimetype='image/png')
+		except Exception as e:
+			print(f"❌ Could not load default image: {e}")
+			# Return minimal transparent 1x1 PNG as last resort
+			import base64
+			transparent_png = base64.b64decode(
+				'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+			)
+			return send_file(
+				io.BytesIO(transparent_png),
+				mimetype='image/png',
+				as_attachment=False
+			)
+
+# PROFILE IMAGE ROUTES
+@dashboard_bp.route("/api/get_profile_img/<int:user_id>", methods=['GET'])
+def get_profile_img(user_id):
+	try:
+		url = f"{BASE_URL}get-profile-image/{user_id}"
+		response = requests.get(url, verify=False, timeout=10)
+
+		# If backend returns an image successfully, pass it through
+		if response.status_code == 200:
+			return send_file(
+				io.BytesIO(response.content),
+				mimetype=response.headers.get('Content-Type', 'image/svg+xml'),
+				as_attachment=False
+			)
+
+		# If backend returns error, fall back to default image
+		print(f"⚠️ Backend returned {response.status_code} for user {user_id}")
+		return send_default_image()
+
+	except requests.exceptions.RequestException as e:
+		print(f"⚠️ Request error for user {user_id}: {e}")
+		return send_default_image()
+
+	except Exception as e:
+		print(f"❌ Unexpected error for user {user_id}: {e}")
+		return send_default_image()
+
+
+def send_default_image():
+	"""Helper function to send the default profile image"""
+	try:
+		default_img_path = os.path.join(
+			current_app.root_path,
+			'static/assets/images/defult-admin.png'
+		)
+		print(default_img_path)
+		return send_file(default_img_path, mimetype='image/png')
+	except Exception as e:
+		print(f"❌ Could not load default image: {e}")
+		# Return minimal transparent 1x1 PNG as last resort
+		import base64
+		transparent_png = base64.b64decode(
+			'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+		)
+		return send_file(
+			io.BytesIO(transparent_png),
+			mimetype='image/png',
+			as_attachment=False
+		)
+
 
 
 # ==========================================

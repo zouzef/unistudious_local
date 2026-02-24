@@ -288,8 +288,44 @@
                                     <div class="d-flex align-items-center sidebar-info">
 
                                     </div>
-                                    <img src="/static/assets/images/user.jpg" alt="">
+                                    <img src="/static/assets/images/profile.svg" alt="user-profile">
                                 </div>
+
+                                <script>
+                                    async function loadUserProfileImage(userId) {
+                                        try {
+                                            const response = await fetch(`/api/get_profile_img/${userId}`);
+
+                                            if (!response.ok) {
+                                                throw new Error('Failed to load profile image');
+                                            }
+
+                                            const blob = await response.blob();
+                                            const imageUrl = URL.createObjectURL(blob);
+
+                                            const profileImg = document.querySelector('.sidebar-info + img');
+                                            if (profileImg) {
+                                                profileImg.src = imageUrl;
+                                                profileImg.alt = 'User Profile';
+                                            }
+
+                                        } catch (error) {
+                                            console.error('Error loading profile image:', error);
+                                        }
+                                    }
+
+                                    // Load on page ready
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        const userId = {{ session.get('user_id') | tojson }};  // ← Use tojson filter
+                                        console.log('User ID from session:', userId);  // ← Debug
+
+                                        if (userId) {
+                                            loadUserProfileImage(userId);
+                                        } else {
+                                            console.error('No user_id found in session');
+                                        }
+                                    });
+                                </script>
                             </a>
 
                         </div>

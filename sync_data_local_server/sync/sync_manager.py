@@ -171,7 +171,7 @@ def process_sync_data(db, data):
     if 'session' in data:
         from sync.processors.session_processor import process_sessions
         print("\n Session")
-        process_sessions(db,data['session'])
+        process_sessions(db,data['session'],token)
 
     if 'slc' in data:
         from sync.processors.slc_processor import process_slcs
