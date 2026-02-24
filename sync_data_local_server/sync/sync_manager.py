@@ -110,6 +110,8 @@ def process_sync_data(db, data):
     print("\n"+"="*60)
     print("Processing SYNC DATA ")
     print("="*60)
+    from core.auth import get_token
+    token = get_token()
 
     if 'account' in data:
         from sync.processors.account_processor import process_accounts
@@ -161,8 +163,6 @@ def process_sync_data(db, data):
         print("\n Relatioon User Session: ")
         process_user_session_relations(db,data['relationUserSession'])
 
-
-
     if 'local_with_room' in data:
         from sync.processors.local_room_processor import process_local_and_rooms
         print("\n local_with_room")
@@ -191,7 +191,12 @@ def process_sync_data(db, data):
     if 'user' in data:
         from sync.processors.user_processor import process_users
         print("\n User: ")
-        process_users(db,data['user'])
+        process_users(db, data['user'], token)
+
+    if 'admin' in data:
+        from sync.processors.user_processor import process_admins
+        print("\n Admin: ")
+        process_admins(db, data['admin'], token)
 
 
 

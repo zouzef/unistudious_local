@@ -2971,7 +2971,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <a class="dropdown-item" href="javascript:void(0);" data-action="approve" data-id="${requestId}">Approve</a>
             <a class="dropdown-item" href="javascript:void(0);" data-action="reject" data-id="${requestId}">Reject</a>
             <a class="dropdown-item" href="javascript:void(0);" data-action="delete" data-id="${requestId}">Delete</a>
-            
+
         `;
 
         document.getElementById('dropdown-container').appendChild(menu);
@@ -3387,7 +3387,6 @@ document.getElementById("session-select").addEventListener("change", function ()
 
 
 // ==================== LOAD TABLE USERS ====================
-// ==================== LOAD TABLE USERS ====================
 async function loadTableUsers(accountId) {
   const tbody = document.querySelector('#example8 tbody');
 
@@ -3520,14 +3519,13 @@ function initDataTable() {
 }
 
 
-async function loadTableUsers(accountId) {
+async function loadTableUsers2(accountId) {
   const tbody = document.querySelector('#example8 tbody');
 
   if (!tbody) {
     console.error("❌ #example8 tbody not found in DOM");
     return;
   }
-
   try {
     // Destroy existing DataTable instance before touching the DOM
     if (typeof $.fn.DataTable !== 'undefined' && $.fn.DataTable.isDataTable('#example8')) {
@@ -3656,6 +3654,7 @@ function initDataTable() {
 // ==================== INIT ====================
 function initPage() {
   loadTableUsers(accountId);
+  loadTableUsers2(accountId)
   loadSessions(accountId);
   loadUsers(accountId);
 }
