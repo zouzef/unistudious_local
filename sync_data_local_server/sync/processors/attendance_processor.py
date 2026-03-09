@@ -113,7 +113,8 @@ def insert_attendances(db, attendance_data):
                             created_at = %s,
                             updated_at = %s,
                             timestamp = %s,
-                            slc_edit = %s
+                            slc_edit = %s,
+                            id_prod = %s
                         WHERE id = %s
                     """
 
@@ -134,6 +135,7 @@ def insert_attendances(db, attendance_data):
                         new_data["updated_at"],
                         new_data["timestamp"],
                         new_data["slc_edit"],
+                        attendance_id,
                         attendance_id
                     ))
 
@@ -148,8 +150,8 @@ def insert_attendances(db, attendance_data):
                         INSERT INTO attendance (
                             id, user_id, account_id, calander_id, session_id, group_session_id,
                             is_present, day, note, is_editable, enabled,
-                            releaseToken, useToken, created_at, updated_at, timestamp, slc_edit
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                            releaseToken, useToken, created_at, updated_at, timestamp, slc_edit,id_prod
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s)
                     """
 
                     db.execute_query(insert_query, (
@@ -169,7 +171,8 @@ def insert_attendances(db, attendance_data):
                         new_data["created_at"],
                         new_data["updated_at"],
                         new_data["timestamp"],
-                        new_data["slc_edit"]
+                        new_data["slc_edit"],
+                        attendance_id
                     ))
 
                     result["inserted"] += 1
@@ -293,7 +296,8 @@ def update_attendances(db, attendance_data):
                             useToken = %s,
                             updated_at = %s,
                             timestamp = %s,
-                            slc_edit = %s
+                            slc_edit = %s,
+                            id_prod = %s
                         WHERE id = %s
                     """
 
@@ -313,6 +317,7 @@ def update_attendances(db, attendance_data):
                         new_data["updated_at"],
                         new_data["timestamp"],
                         new_data["slc_edit"],
+                        attendance_id,
                         attendance_id
                     ))
 
@@ -327,8 +332,8 @@ def update_attendances(db, attendance_data):
                         INSERT INTO attendance (
                             id, user_id, account_id, calander_id, session_id, group_session_id,
                             is_present, day, note, is_editable, enabled,
-                            releaseToken, useToken, created_at, updated_at, timestamp, slc_edit
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                            releaseToken, useToken, created_at, updated_at, timestamp, slc_edit,id_prod
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s)
                     """
 
                     # For records in 'updated' that don't exist, use updated_at as created_at
@@ -349,7 +354,8 @@ def update_attendances(db, attendance_data):
                         new_data["updated_at"],  # Use updated_at as created_at
                         new_data["updated_at"],
                         new_data["timestamp"],
-                        new_data["slc_edit"]
+                        new_data["slc_edit"],
+                        attendance_id
                     ))
 
                     result["inserted"] += 1

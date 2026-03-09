@@ -19,6 +19,7 @@ from utils.helpers import (
     save_last_sync_time,
     check_internet_connection
 )
+from sync.data_pusher import DataPusher
 
 
 def sync_data_once(settings):
@@ -75,6 +76,8 @@ def sync_data_once(settings):
 
         if not fetcher.has_new_data(data):
             print("\nℹ️  No new data to sync. Database is up to date.")
+            pusher = DataPusher(settings)
+            pusher.detect_and_push_local_changes(db)
             # Still save sync time even if no data
             save_last_sync_time(sync_start_time)
             return True
@@ -82,6 +85,11 @@ def sync_data_once(settings):
         # Step 7: Process the data
         print("\n📊 New data found! Processing...")
         process_sync_data(db, data)
+
+
+        print("\n🚀 Pushing local changes to remote...")
+        pusher = DataPusher(settings)
+        pusher.detect_and_push_local_changes(db)
 
         # Step 8: Save new sync time (use the time from BEFORE the API call)
         print("\n💾 Saving sync status...")
