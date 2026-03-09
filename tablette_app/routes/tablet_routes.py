@@ -1,12 +1,15 @@
 """Tablet-related API endpoints."""
-from flask import Blueprint, render_template, session, jsonify
+from flask import Blueprint, render_template, session, jsonify,Response,send_file
 from datetime import datetime, timedelta
+import os
+
 from services.tablet_service import (
     fetch_all_tablets,
     is_tablet_registered,
     get_tablet_room,
     get_room_name,
-    fetch_slc_info
+    fetch_slc_info,
+    fetch_user_profile_image
 )
 from services.attendance_service import (
     fetch_attendance,
@@ -20,7 +23,6 @@ tablet_bp = Blueprint('tablet', __name__)
 def tablet_page(tablet_id):
     """Display tablet page with current session info."""
     try:
-        print("hii")
         tablette = fetch_all_tablets()
         if not is_tablet_registered(tablet_id, tablette):
             return render_template("not_found.html", message="Tablet not registered")
@@ -62,7 +64,9 @@ def tablet_page(tablet_id):
             return render_template("no_session.html",
                                    message="Session time data is missing",
                                    room_id=room,
-                                   tablet_id=tablet_id)
+                                   tablet_id=tablet_id
+
+                                   )
 
         try:
             # Try the new format first
@@ -74,7 +78,7 @@ def tablet_page(tablet_id):
             session_end = datetime.strptime(session_end_str, "%Y-%m-%d %H:%M:%S")
 
         now = datetime.now()
-
+        print(session_start)
         # Show session only if current time is within the session duration
         if session_start - timedelta(minutes=5) <= now <= session_end:
             # Get room name from tablets data
@@ -86,12 +90,18 @@ def tablet_page(tablet_id):
                 session_info=session_room,
                 room_name=room_name,
                 calendar_id = calender_id ,
-                slc_id = slc_id
+                slc_id = slc_id,
+                room_id=room,
+                session_id=calender_id
             )
 
         return render_template("no_session.html",
                                message="No ongoing session at the moment",
-                               tablet_id=tablet_id)
+                               tablet_id=tablet_id,
+                                room_id = room,
+                                session_id = calender_id
+
+                               )
 
     except Exception as e:
         print(f"DEBUG: Exception in tablet_page: {e}")
@@ -140,6 +150,28 @@ def check_session(tablet_id):
     except Exception as e:
         print(f"DEBUG: Exception in check_session: {e}")
         return jsonify({'status': 'error', 'message': str(e)}), 500
+
+
+
+@tablet_bp.route('/api/get-profile-image/<int:user_id>', methods=['GET'])
+def get_profile_img(user_id):
+    try:
+        image_data, content_type = fetch_user_profile_image(user_id)
+
+        if image_data:
+            return Response(image_data, content_type=content_type)
+
+        # Return default image if nothing returned
+        default_img_path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            'static/assets/images/profile.svg'
+        )
+        return send_file(default_img_path)
+
+    except Exception as e:
+        print(f"Error: {e} coming from get_profile_img")
+        return jsonify({"Message": f"Error: {e}"}), 500
+
 
 
 @tablet_bp.route('/test-images')

@@ -180,4 +180,56 @@
         </div>
     </div>
 </div>
+<script>
 
+    async function loadCalendarRequestss() {
+        const accountId = window.ACCOUNT_ID;
+        try {
+            const response = await fetch(`/api/get-calendar-request/${accountId}`);
+            const data = await response.json();
+
+            const tbody = document.querySelector('#example tbody');
+            if (!tbody) return;
+
+            tbody.innerHTML = '';
+            const requests = (data.data || []).slice(0, 5);
+
+            if (requests.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No calendar requests found</td></tr>`;
+                return;
+            }
+
+            requests.forEach(item => {
+                let statusBadge = '';
+                if (item.accepted === 0) {
+                    statusBadge = '<span class="badge badge-sm light badge-warning">Pending</span>';
+                } else if (item.accepted === 1) {
+                    statusBadge = '<span class="badge badge-sm light badge-success">Approved</span>';
+                } else if (item.accepted === 2) {
+                    statusBadge = '<span class="badge badge-sm light badge-danger">Rejected</span>';
+                }
+
+                const date = item.start_date
+                    ? `${item.start_date} ${item.start_time || ''} - ${item.end_time || ''}`
+                    : 'N/A';
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${item.id}</td>
+                        <td>${item.username || 'N/A'}</td>
+                        <td>${item.subject_name || 'N/A'}</td>
+                        <td>${item.room_name || 'N/A'}</td>
+                        <td>${item.session_name || 'N/A'}</td>
+                        <td>${statusBadge}</td>
+                        <td>${date}</td>
+                    </tr>`;
+            });
+
+        } catch (error) {
+            console.error('❌ Error loading calendar requests:', error);
+        }
+    }
+
+    // ← call directly, no DOMContentLoaded
+    loadCalendarRequestss();
+</script>

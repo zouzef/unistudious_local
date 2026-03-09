@@ -474,7 +474,7 @@ def create_group(session_id):
 
 
 # =============================================
-# ENDPOINT 7: Get all users
+# ENDPOINT 7: Get all users / Get all users (virtuel)
 # =============================================
 @users_bp.route('/get-all-users/<int:account_id>', methods=['GET'])
 def get_all_user(account_id):
@@ -482,11 +482,12 @@ def get_all_user(account_id):
 
 		query = """
             SELECT DISTINCT
-                u.username, u.full_name,u.email,u.phone, u.img_link, u.id, rus.session_id
+                u.username, u.full_name,u.email,u.phone, u.img_link, u.id,u.isvirtual, rus.session_id
             FROM user u, relation_user_session rus
             WHERE u.enabled = 1 
             AND rus.session_id IN (SELECT s.id FROM session s WHERE s.account_id = %s)
-            AND rus.user_id = u.id
+            AND rus.user_id = u.id 
+            ORDER BY u.created_at DESC
         """
 		response = Database.execute_query(query, (account_id,), fetch=True)
 		return jsonify({
@@ -501,7 +502,86 @@ def get_all_user(account_id):
 
 
 # =============================================
-# ENDPOINT 8: Get Profile image of user
+# ENDPOINT 8: Update User
+# =============================================
+@users_bp.route('/update-user/<int:id>',methods=['POST'])
+def update_user(id):
+	try:
+		query = """
+			SELECT COUNT(*) as nbr FROM user WHERE id = %s
+		"""
+		values = (id,)
+		result = Database.execute_query(query,values)
+		if result[0]['nbr']==0:
+			return jsonify({
+				"Message":"User not found"
+			}),404
+
+
+
+		data = request.get_json()
+		name   = data.get('name')
+		email  = data.get('email')
+		phone  = data.get('phone')
+		status = data.get('status')
+		query = """
+		            UPDATE user
+		            SET
+		                username       = %s,
+		                email      = %s,
+		                phone      = %s,
+		                status     = %s,
+		                slc_edit   = 1,
+		                updated_at = NOW()
+		            WHERE id = %s
+		        """
+		values = (name, email, phone, status,id)
+		result = Database.execute_query(query,values,fetch=False)
+		return jsonify({
+			"Message":"user updated successfully"
+		})
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from update_user"
+		}),500
+
+
+# =============================================
+# ENDPOINT 9: Delete user
+# =============================================
+@users_bp.route('/delete-user/<int:id>',methods=['POST'])
+def delete_user(id):
+	try:
+
+		query = """
+					SELECT COUNT(*) as nbr FROM user WHERE id = %s
+				"""
+		values = (id,)
+		result = Database.execute_query(query, values)
+		if result[0]['nbr'] == 0:
+			return jsonify({
+				"Message": "User not found"
+			}), 404
+
+
+		query = """
+			UPDATE user 
+			SET enabled = 0 , slc_edit = 1
+			WHERE id = %s
+		"""
+		values = (id,)
+		result = Database.execute_query(query,values,fetch=False)
+		return jsonify({
+			"Message":"user delete with success"
+		}),200
+	except Exception as e:
+		return jsonify({
+			"Message":"Error: {e} coming from the delete user"
+		}),500
+
+
+# =============================================
+# ENDPOINT 9: Get Profile image of user
 # =============================================
 @users_bp.route('/get-profile-image/<int:user_id>', methods=['GET'])
 def get_profile_file(user_id):
@@ -558,3 +638,11 @@ def get_profile_file(user_id):
 			return send_file(default_img_path)
 		except:
 			return jsonify({"message": "Error loading image"}), 500
+
+
+# =============================================
+# ENDPOINT 10: Affect user to session
+# =============================================
+
+
+

@@ -77,4 +77,18 @@ def fetch_slc_info():
         return None
 
 
+def fetch_user_profile_image(user_id):
+    """Fetch user profile image from the remote server."""
+    try:
+        headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
+        url = f"{base_url}/get-profile-image/{user_id}"
+        response = requests.get(url, headers=headers, verify=False, stream=True)
 
+        if response.ok:
+            return response.content, response.headers.get('Content-Type', 'image/jpeg')
+        else:
+            return None, None
+
+    except Exception as e:
+        print(f"Error fetching profile image for user {user_id}: {e}")
+        return None, None

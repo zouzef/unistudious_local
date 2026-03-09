@@ -1,7 +1,7 @@
 """Main Flask application for tablet attendance system."""
 from flask import Flask
 from flask_socketio import SocketIO
-
+from websockets.events import register_socketio_events, start_background_tasks, init_socketio
 # Import configuration
 from utils.config import config
 
@@ -27,7 +27,8 @@ app.secret_key = config["config"]["SECRET_KEY"]
 
 # Initialize SocketIO
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
-
+register_socketio_events(socketio)
+init_socketio(socketio)
 # ============= Register Blueprints =============
 app.register_blueprint(tablet_bp)
 app.register_blueprint(attendance_bp)

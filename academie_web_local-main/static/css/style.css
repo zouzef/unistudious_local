@@ -324,6 +324,10 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
     scroll-behavior: smooth; } }
 
 body {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   margin: 0;
   font-family: var(--bs-body-font-family);
   font-size: var(--bs-body-font-size);
@@ -13101,7 +13105,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
     font-size: 12px; }
   .sidebar-right .bg-label-pattern {
     background: transparent;
-    background-image: url("../images/pattern/pattern5.png");
+
     background-size: 130%; }
   .sidebar-right .bootstrap-select {
     height: 3rem;
@@ -28403,7 +28407,7 @@ a.btn.dlab-load-more {
   width: 60px;
   height: 60px;
   display: inline-block;
-  background: url("../images/like.png");
+
   cursor: pointer;
   margin: -25px -15px; }
 

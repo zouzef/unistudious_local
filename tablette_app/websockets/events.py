@@ -9,6 +9,15 @@ from services.attendance_service import get_calendar_details
 # Store active connections
 active_connections = {}
 
+_socketio_instance = None
+
+def init_socketio(socketio):
+    global _socketio_instance
+    _socketio_instance = socketio
+
+def get_socketio():
+    return _socketio_instance
+
 
 def register_socketio_events(socketio):
     """Register all SocketIO event handlers."""

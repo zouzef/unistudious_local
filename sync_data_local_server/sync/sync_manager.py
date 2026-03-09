@@ -113,90 +113,100 @@ def process_sync_data(db, data):
     from core.auth import get_token
     token = get_token()
 
+    def normalize(raw):
+        if isinstance(raw, list):
+            return {"created": raw}
+        return raw
+
     if 'account' in data:
         from sync.processors.account_processor import process_accounts
         print("\n ACCOUNTS: ")
-        process_accounts(db,data['account'])
+        process_accounts(db, normalize(data['account']))
 
     if 'accountSubject' in data:
         from sync.processors.account_subject_processor import process_account_subjects
         print("\n Account_subject: ")
-        process_account_subjects(db,data['accountSubject'])
+        process_account_subjects(db, normalize(data['accountSubject']))
 
     if 'attendance' in data:
         from sync.processors.attendance_processor import process_attendances
         print("\n Attendance: ")
-        process_attendances(db,data['attendance'])
+        process_attendances(db, normalize(data['attendance']))
 
     if 'calendar' in data:
         from sync.processors.calendar_processor import process_calendars
         print("\n Calendar: ")
-        process_calendars(db,data['calendar'])
+        process_calendars(db, normalize(data['calendar']))
 
-    if 'slcCamera' in data :
+    if 'slcCamera' in data:
         from sync.processors.camera_processor import process_cameras
         print("\n Camera: ")
-        process_cameras(db,data['slcCamera'])
+        process_cameras(db, normalize(data['slcCamera']))
 
     if 'formation' in data:
         from sync.processors.formation_processor import process_formations
         print("\n Formation: ")
-        process_formations(db,data['formation'])
+        process_formations(db, normalize(data['formation']))
 
     if 'group' in data:
         from sync.processors.group_local_session_processor import process_groups
         print("\n Groups: ")
-        process_groups(db,data['group'])
+        process_groups(db, normalize(data['group']))
 
     if 'slcLocal' in data:
         from sync.processors.slc_local_processor import process_slc_local
         print("\n SLC local: ")
-        process_slc_local(db,data['slcLocal'])
+        process_slc_local(db, normalize(data['slcLocal']))
 
     if 'relationTeacherAndSubjectData' in data:
         from sync.processors.relation_teacher_subject_processor import process_teacher_subject_relations
         print("\n Teacher Subjects")
-        process_teacher_subject_relations(db,data['relationTeacherAndSubjectData'])
+        process_teacher_subject_relations(db, normalize(data['relationTeacherAndSubjectData']))
 
     if 'relationUserSession' in data:
         from sync.processors.user_session_processor import process_user_session_relations
-        print("\n Relatioon User Session: ")
-        process_user_session_relations(db,data['relationUserSession'])
+        print("\n Relation User Session: ")
+        process_user_session_relations(db, normalize(data['relationUserSession']))
 
     if 'local_with_room' in data:
         from sync.processors.local_room_processor import process_local_and_rooms
         print("\n local_with_room")
-        process_local_and_rooms(db,data['local_with_room'])
+        process_local_and_rooms(db, normalize(data['local_with_room']))
 
     if 'session' in data:
         from sync.processors.session_processor import process_sessions
         print("\n Session")
-        process_sessions(db,data['session'],token)
+        process_sessions(db, normalize(data['session']), token)
 
     if 'slc' in data:
         from sync.processors.slc_processor import process_slcs
         print("\n SLC")
-        process_slcs(db,data['slc'])
+        process_slcs(db, normalize(data['slc']))
 
     if 'subject' in data:
         from sync.processors.subject_config_processor import process_subjects
         print("\n Subject: ")
-        process_subjects(db,data['subject'])
+        process_subjects(db, normalize(data['subject']))
 
     if 'slcTablet' in data:
         from sync.processors.tablet_processor import process_tablets
         print("\n SlcTablet: ")
-        process_tablets(db,data['slcTablet'])
+        process_tablets(db, normalize(data['slcTablet']))
 
     if 'user' in data:
         from sync.processors.user_processor import process_users
         print("\n User: ")
-        process_users(db, data['user'], token)
+        process_users(db, normalize(data['user']), token)
 
     if 'admin' in data:
         from sync.processors.user_processor import process_admins
         print("\n Admin: ")
-        process_admins(db, data['admin'], token)
+        process_admins(db, normalize(data['admin']), token)
+
+    if 'virtualUser' in data:
+        from sync.processors.VirtuelUser_processor import process_virtuelUser
+        print("\n VirtuelUser: ")
+        process_virtuelUser(db,normalize(data['virtualUser']), token)
 
 
 

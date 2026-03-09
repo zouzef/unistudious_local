@@ -10,7 +10,7 @@
     "timeout": 30
   },
   "sync": {
-    "interval_minutes": 5,
+    "interval_minutes": 2,
     "status_file": "data/sync_status.json",
     "token_refresh_interval_minutes": 45
   },
@@ -25,5 +25,5 @@
     "check_url": "https://www.google.com",
     "check_timeout": 5
   },
-  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NzE5MzM0MDUsImV4cCI6MTc3MjUzODIwNSwicm9sZXMiOlsiUk9MRV9TTEMiXSwidXNlcm5hbWUiOiJmNDo0ZDozMDplZTpjOToxZCJ9.KRlVU2KVyNOaH8oHnX96Htjx00zerE0EbHSu-S95VjYL37Q05VsolH5fg54q1RAZmR-qvw2AuwxeHieGu-xnJKT_prmQKg9J9co11FJkPYWYyNrZELoaR5cMWiE_AdPG0-KJfOC_Y9GiD5eLfOeQNTrT2WMnMmIkMYmfLU1S-JKzmlI9JD8K95GhPU2yywnjhHYo9oTlOmGYZfJ2OmpcmMXMilsLmVIUWyeVzBuCKL68gTpQ1Npagf8KDtiUR5y7Y2yWNmfKJ3EzcMGDQEaitfIa66hIH_s0yC-yRhQh-Jk_LUhNFNkJFKxJrifpmwSOKhd7cwaHTL-otTyviT72kQ"
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3NzI2Mjc3OTMsImV4cCI6MTc3MzIzMjU5Mywicm9sZXMiOlsiUk9MRV9TTEMiXSwidXNlcm5hbWUiOiJmNDo0ZDozMDplZTpjOToxZCJ9.fpxzbQDYCyBO9Ya8ytJq3Fj9AiTWkQ1kfnr2gkeGaLxZeSFoamjdwPkbgoxN_kGsP4lkNJyJQLQsiEhSjxabUR3b77B6np0uJO3XYde3nFPa0m0WpweYwWilhEauzL3e9KgB8TwqzS0Oz06U7uIcRpZvnZBdiWLhwpZJYBdwvwOgD1mTsRGNXWhSIE1Z4rLpYOXA9Co3bya64PYCCRpBpe70-RlMchdASd-lv4M_Mrkz4kPmHW4u0k6rI0Gs6JG76aESlYHPLtyw_9qzFxYGmCUI0Mfrj_ZB5TgnL84s4QLpLL9Z_wgWrqpqBREgx04lTBqXoLgX5lkDs7O69Dv20g"
 }

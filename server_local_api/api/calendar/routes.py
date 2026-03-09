@@ -721,7 +721,7 @@ def save_notification(notification_payload, user_id):
             "tablet_notif",
             json.dumps(notification_payload)  # Convert dict to JSON string
         )
-        Database.execute_query(query, values)
+        Database.execute_query(query, values,fetch=False)
         return True
     except Exception as e:
         print(f"❌ Failed to save notification: {e}")
@@ -737,7 +737,7 @@ def send_notification(notification_payload):
 
     # Then send real-time notification to Academie Platform
     try:
-        academie_url = "https://172.28.20.178:5015/api/notify-calendar-request"
+        academie_url = " https://192.168.1.246:5015/api/notify-calendar-request"
         response = requests.post(
             academie_url,
             json=notification_payload,
@@ -836,6 +836,7 @@ def create_calander_request(session_id):
                     'type': type_session,
                     'created_at': create_time.strftime('%Y-%m-%d %H:%M:%S')
                  }
+            print("\n \n \n \n \n",notification_payload)
             send_notification(notification_payload)
             return jsonify({
                 "success":True,
@@ -859,13 +860,12 @@ def create_calander_request(session_id):
 # =======================================
 # ENDPOINT 12: get calander request
 #========================================
+
 @calendar_bp.route('/get-calander_request/<int:room_id>', methods=['GET'])
 def get_calander_request(room_id):
     try:
         if not (check_room_id(room_id)):
-            return jsonify({
-                "Message": f"Error: this room doesn't exist"
-            }), 404
+            return jsonify({"Message": f"Error: this room doesn't exist"}), 404
 
         query = """
             SELECT 
@@ -896,68 +896,50 @@ def get_calander_request(room_id):
                     ELSE sc.name
                 END AS subject_name
             FROM calendar_request cr
-            INNER JOIN relation_group_local_session grp ON cr.group_id = grp.id
-            INNER JOIN session s ON cr.session_id = s.id
-            INNER JOIN subject_config sc ON cr.subject_id = sc.id
-            INNER JOIN user u ON cr.user_id = u.id
-            LEFT JOIN account_subject acs ON cr.subject_id = acs.id AND sc.name = 'other'
+            JOIN relation_group_local_session grp ON cr.group_id = grp.id
+            JOIN session s ON cr.session_id = s.id
+            JOIN subject_config sc ON cr.subject_id = sc.id
+            JOIN user u ON cr.user_id = u.id
+            JOIN account_subject acs ON cr.subject_id = acs.id AND sc.name = 'other'
             WHERE cr.room_id = %s 
                 AND cr.accepted = 0 
                 AND cr.enabled = 1
         """
-        values = (room_id,)
-        result = Database.execute_query(query, values)
+        result = Database.execute_query(query, (room_id,))
 
-        if result:
-            # Convert the result to JSON-serializable format
-            serialized_result = []
-            for row in result:
-                serialized_row = {
-                    'start_date': row['start_date'],
-                    'id': row['id'],
-                    'session_id': row['session_id'],
-                    'group_id': row['group_id'],
-                    'type': row['type'],
-                    'room_id': row['room_id'],
-                    'subject_id': row['subject_id'],
-                    'user_id': row['user_id'],
-                    'username': row['username'],
-                    'completion_tags': row['completion_tags'],
-                    'duplicate': row['duplicate'],
-                    # Convert timedelta to string (HH:MM:SS format)
-                    'start_time': str(row['start_time']) if row['start_time'] else None,
-                    'end_time': str(row['end_time']) if row['end_time'] else None,
-                    # Convert date to string (YYYY-MM-DD format)
-                    'end_date': row['end_date'].strftime('%Y-%m-%d') if row['end_date'] else None,
-                    'description': row['description'],
-                    'account_id': row['account_id'],
-                    'accepted': row['accepted'],
-                    # Convert datetime to string (YYYY-MM-DD HH:MM:SS format)
-                    'created_at': row['created_at'].strftime('%Y-%m-%d %H:%M:%S') if row['created_at'] else None,
-                    'updated_at': row['updated_at'].strftime('%Y-%m-%d %H:%M:%S') if row['updated_at'] else None,
-                    'enabled': row['enabled'],
-                    # Additional joined fields
-                    'group_name': row['group_name'],
-                    'session_name': row['session_name'],
-                    'subject_name': row['subject_name']
-                }
-                serialized_result.append(serialized_row)
+        serialized_result = []
+        for row in result:
+            serialized_result.append({
+                'id':              row['id'],
+                'start_date':      row['start_date'].strftime('%Y-%m-%d')        if row['start_date']  else None,
+                'end_date':        row['end_date'].strftime('%Y-%m-%d')          if row['end_date']    else None,
+                'start_time':      str(row['start_time'])                        if row['start_time']  else None,
+                'end_time':        str(row['end_time'])                          if row['end_time']    else None,
+                'created_at':      row['created_at'].strftime('%Y-%m-%d %H:%M:%S') if row['created_at'] else None,
+                'updated_at':      row['updated_at'].strftime('%Y-%m-%d %H:%M:%S') if row['updated_at'] else None,
+                'session_id':      row['session_id'],
+                'group_id':        row['group_id'],
+                'type':            row['type'],
+                'room_id':         row['room_id'],
+                'subject_id':      row['subject_id'],
+                'user_id':         row['user_id'],
+                'username':        row['username'],
+                'completion_tags': row['completion_tags'],
+                'duplicate':       row['duplicate'],
+                'description':     row['description'],
+                'account_id':      row['account_id'],
+                'accepted':        row['accepted'],
+                'enabled':         row['enabled'],
+                'group_name':      row['group_name'],
+                'session_name':    row['session_name'],
+                'subject_name':    row['subject_name'],
+            })
 
-            return jsonify({
-                "Message": "Success",
-                "data": serialized_result
-            }), 200
-        else:
-            return jsonify({
-                "Message": "No calendar requests found"
-            }), 404
+        return jsonify({"Message": "Success", "data": serialized_result}), 200
 
     except Exception as e:
         print(f"Error in get_calander_request: {str(e)}")
-        return jsonify({
-            "Message": f"Error: {str(e)} from get_calander_request"
-        }), 500
-
+        return jsonify({"Message": f"Error: {str(e)} from get_calander_request"}), 500
 
 
 # =======================================

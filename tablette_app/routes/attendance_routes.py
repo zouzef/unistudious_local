@@ -1,6 +1,7 @@
 """Attendance-related API endpoints."""
 from flask import Blueprint, jsonify, request
 from datetime import datetime
+from websockets.events import get_socketio
 from services.attendance_service import (
     fetch_attendance,
     get_attendance_by_id,
@@ -14,11 +15,6 @@ from services.attendance_service import (
 )
 
 attendance_bp = Blueprint('attendance', __name__)
-
-
-
-
-
 
 
 @attendance_bp.route('/attendance/<int:session_id>')
@@ -80,7 +76,7 @@ def add_note(attendance_id):
 def change_status_student(id_attendance):
     """Change attendance status for a student."""
     try:
-        from app import socketio  # Import here to avoid circular import
+        socketio = get_socketio()
 
         data = request.get_json() or {}
         session_id = data.get('session_id')

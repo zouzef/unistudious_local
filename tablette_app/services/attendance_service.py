@@ -166,7 +166,7 @@ def reset_attendance(calendar_id):
         url = f"{base_url}{config['url']['reset_attendance_api']}/{calendar_id}"
         headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
 
-        response = requests.get(url, headers=headers, verify=False)
+        response = requests.post(url, headers=headers, verify=False)
         response.raise_for_status()
 
         if response.status_code == 200:

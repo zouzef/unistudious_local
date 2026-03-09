@@ -18,7 +18,7 @@ attendance_bp = Blueprint('attendance', __name__, url_prefix='/scl')
 # ENDPOINT 1: Get attendance by calendar
 # ========================================
 @attendance_bp.route('/get-attendance/<int:calendar_id>', methods=['GET'])
-@token_required
+
 def get_todays_attendance(calendar_id):
     try:
         query = """
@@ -77,7 +77,7 @@ def get_todays_attendance(calendar_id):
 # ENDPOINT 2: Get student's groups for attendance
 # ========================================
 @attendance_bp.route('/attendance-get-group-student-select/<int:calendarId>/<int:userId>', methods=["GET"])
-@token_required
+
 def get_attendance_group_student(calendarId, userId):
     try:
         account_id = userId
@@ -136,6 +136,7 @@ def insert_attendance_audit(attendance_id, userId, calendarId, groupId,
                             relationId, addToGroup, selectedGroupId, joinToGroup,
                             action_type="ADD_STUDENT"):
     """Insert audit trail for attendance actions"""
+
     formatted_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     audit_data = {
         "userId": userId,
@@ -157,7 +158,7 @@ def insert_attendance_audit(attendance_id, userId, calendarId, groupId,
 
 
 @attendance_bp.route('/attendance-save-user', methods=['POST'])
-@token_required
+
 def add_student_attendance():
     try:
         data = request.get_json()
@@ -253,7 +254,6 @@ def add_student_attendance():
 
         # CASE 2: Join user to current calendar's group (joinToGroup = true)
         elif joinToGroup and not addToGroup:
-            print("hii")
             query = """
                 SELECT id FROM relation_user_session
                 WHERE user_id = %s AND session_id = %s
@@ -330,7 +330,7 @@ def add_student_attendance():
 # ENDPOINT 4: Get attendance statistics
 # ========================================
 @attendance_bp.route('/attendance-statistics/<int:id_calender>', methods=['GET'])
-@token_required
+
 def statistics_attendance(id_calender):
     try:
         print(id_calender)
@@ -377,7 +377,7 @@ def statistics_attendance(id_calender):
 # ENDPOINT 5: Delete attendance
 # ========================================
 @attendance_bp.route('/delete_attendance_api/<int:calender_id>/<int:user_id>', methods=['DELETE'])
-@token_required
+
 def delete_attendance_api(calender_id, user_id):
     try:
         # Check if attendance exists
@@ -420,7 +420,7 @@ def delete_attendance_api(calender_id, user_id):
 # ENDPOINT 6: Delete attendance by ID
 # ========================================
 @attendance_bp.route('/attendance-delete-student/<int:id_attendance>', methods=['DELETE'])
-@token_required
+
 def delete_attendance_by_id(id_attendance):
     try:
         print(id_attendance)
@@ -455,7 +455,7 @@ def delete_attendance_by_id(id_attendance):
 # ENDPOINT 7: Get list of students to add to attendance
 # ========================================
 @attendance_bp.route('/list-add-student-attendance/<int:calender_id>', methods=["GET"])
-# @token_required
+
 def list_add_student_attendance(calender_id):
     try:
         # Step 1: Get current attendance to exclude existing students
@@ -537,7 +537,7 @@ def list_add_student_attendance(calender_id):
 # ENDPOINT 8: Get next attendance session
 # ========================================
 @attendance_bp.route('/get-next-attendance/<int:calendarId>', methods=['GET'])
-@token_required
+
 def get_next_attendance_scl(calendarId):
     try:
         print(f"Looking for next attendance after calendar ID: {calendarId}")
@@ -591,7 +591,7 @@ def get_next_attendance_scl(calendarId):
 # ENDPOINT 9: Get next single attendance (alternative)
 # ========================================
 @attendance_bp.route('/get-next-single-attendance/<int:calendarId>', methods=['GET'])
-@token_required
+
 def get_next_single_attendance(calendarId):
     try:
         print(f"Looking for next single attendance after calendar ID: {calendarId}")
@@ -644,7 +644,7 @@ def get_next_single_attendance(calendarId):
 # ENDPOINT 10: Get all future attendances (v2)
 # ========================================
 @attendance_bp.route('/get-next-attendance-v2/<int:calendarId>', methods=['GET'])
-@token_required
+
 def get_next_attendance_v2(calendarId):
     try:
         print(f"Looking for next attendance after calendar ID: {calendarId} (Version 2)")
@@ -715,7 +715,6 @@ def get_next_attendance_v2(calendarId):
 # ENDPOINT 11: Reset attendance for a calendar
 # ========================================
 @attendance_bp.route('/reset_attendance/<int:calender_id>', methods=['POST'])
-# @token_required
 def reset_attendance(calender_id):
     try:
         # Check if there are any records to reset
@@ -758,7 +757,7 @@ def reset_attendance(calender_id):
 # ENDPOINT 12: Get static attendance counts
 # ========================================
 @attendance_bp.route('/static_attendance/<int:calander_id>', methods=['GET'])
-# @token_required
+
 def static_attendance(calander_id):
     try:
         query = """
@@ -824,7 +823,7 @@ def get_slc_mac(attendance_id):
         return None
 
 @attendance_bp.route('/update-attendance-student/<int:id_attendance>', methods=['POST'])
-@token_required
+
 def update_attendance_status(id_attendance):
     try:
         # Get data from request (supports both JSON and form data)
@@ -875,7 +874,7 @@ def update_attendance_status(id_attendance):
 # ENDPOINT 14: Update attendance note
 # ========================================
 @attendance_bp.route('/update-attendance-note/<int:attendanceId>', methods=['POST'])
-@token_required
+
 def update_attendance_note(attendanceId):
     try:
         print(f"Received request for attendance ID: {attendanceId}")

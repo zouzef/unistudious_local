@@ -337,7 +337,7 @@ def delete_calander(session_id):
 # Create calander
 @dashboard_bp.route('/api/create-calander', methods=['POST'])
 def create_calander():
-	url = f"{BASE_URL}/create_calander"
+	url = f"{BASE_URL}create_calander"
 	try:
 		response = requests.post(url,verify=False)
 		response.raise_for_status()
@@ -408,7 +408,7 @@ def notify_calendar_request():
 @dashboard_bp.route('/api/get-notification/<int:account_id>',methods=['GET'])
 def get_notification(account_id):
 	try:
-		url = f"{BASE_URL}/get-notification/{account_id}"
+		url = f"{BASE_URL}get-notification/{account_id}"
 		response = requests.get(url,verify=False)
 		response.raise_for_status()
 		if response.status_code == 200:
@@ -434,7 +434,7 @@ def get_calendar_request(account_id):
 		url = f"{BASE_URL}get-calander_requestt/{account_id}"  # Fixed: add account_id to URL
 		response = requests.get(url, verify=False)
 		response.raise_for_status()
-
+		print(response,"\n\n \n \n \n \n")
 		if response.status_code == 200:
 			return jsonify(response.json()), 200  # Fixed: remove extra braces
 		else:
@@ -742,7 +742,7 @@ def reset_attendance(calander_id):
 	"""Reset attendance"""
 	url = f"{BASE_URL}reset_attendance/{calander_id}"
 	try:
-		response = requests.get(url, verify=False)
+		response = requests.post(url, verify=False)
 		response.raise_for_status()
 		if response.status_code == 200:
 			return jsonify({"Message": "Operation reset success! "}), 200
@@ -865,8 +865,8 @@ def show_create_session_calendar(id_session):
 
 @dashboard_bp.route('/dashboard/show-calander-request/<int:account_id>')
 def show_calander_request(account_id):
-	if 'moderator_id' not in session:
-		return redirect(url_for('auth.login'))
+	# if 'moderator_id' not in session:
+	# 	return redirect(url_for('auth.login'))
 	return render_template('index.html',
 						   account_id=account_id,
 						   page = 'calander_request_page'
@@ -1091,10 +1091,123 @@ def show_my_student():
 		account_id=account_id
 	)
 
+
+# =====================================
+# VIRTUAL USER ROUTES
+# =====================================
+""" Update virtuel user data """
+@dashboard_bp.route('/api/update-virtuel-user/<int:id>',methods=['POST'])
+def update_virtuel_user(id):
+	try:
+		url = f"{BASE_URL}update-virtual-user/{id}"
+		data = request.get_json()
+		response = requests.post(url,json=data,verify=False)
+		response.raise_for_status()
+		if response.status_code == 200:
+			return jsonify({
+				"Message":"Virtual user Updated with success "
+			}),200
+		else:
+			return jsonify({
+				"Message":"Virtual user not updated "
+			}),404
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from updating virtual user"
+		}),500
+
+
+""" Delete virtuel user data """
+@dashboard_bp.route('/api/delete-virtuel-user/<int:id>',methods=['POST'])
+def delete_virtuel_user(id):
+	try:
+		url=f"{BASE_URL}delete-virtuel-user/{id}"
+		response = requests.post(url,verify=False)
+		response.raise_for_status()
+		if response.status_code==200:
+			return jsonify({"Message": "Virtuel_user deleted "}),200
+		else:
+			return jsonify({"Message":"Virtuel_user not deleted "}),404
+
+
+	except Exception as e:
+		return jsonify({
+			"Message": f"Error :{e} coming from delete virtuel_user"
+		}),500
+
+
+# """ Create virtuel user data """
+# @dashboard_bp.route('/api/create-virtuel-user',method=['POST'])
+# def create_virtuel_user():
+# 	try:
+# 		data = request.get_json()
+# 		url = f"{BASE_URL}create_virtuel_user"
+# 		response = requests.post(url,json=data,verify=False)
+# 		response.raise_for_status()
+# 		if response.status_code== 200:
+# 			return jsonify({
+# 				"Message":"Virtuel user create with success"
+# 			}),200
+# 		else:
+# 			return jsonify({
+# 				"Message":"Virtuel user not created"
+# 			}),404
+# 	except Exception as e:
+# 		return jsonify({
+# 			"Message":f"Error : {e} coming from create virtuel user"
+# 		}),500
+
+
+# =====================================
+# USER ROUTES
+# =====================================
+""" Update user data """
+@dashboard_bp.route('/api/update-user/<int:id>',methods=['POST'])
+def update_user(id):
+	try:
+
+		url = f"{BASE_URL}update-user/{id}"
+		data = request.get_json()
+		response = requests.post(url,json=data,verify=False)
+		response.raise_for_status()
+		if response.status_code==200:
+			return jsonify({
+				"Message":"User updated with Success "
+			}),200
+		else:
+			return jsonify({
+				"Message":response.json()
+			}),response.status_code
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error {e} coming frim update user"
+		}),500
+
+""" Delete user data """
+@dashboard_bp.route('/api/delete-user/<int:id>',methods=['POST'])
+def delete_user(id):
+	try:
+		url = f"{BASE_URL}delete-user/{id}"
+		response = requests.post(url,verify= False)
+		response.raise_for_status()
+		if response.status_code==200:
+			return jsonify({
+				"Message":"User deleted with Success "
+			}),200
+		else:
+			return jsonify({
+				"Message":"User not deleted "
+			}),404
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error : {e} coming from delete user"
+		}),500
+
+
 # ==========================================
 # Platform Student
 # ==========================================
-
 @dashboard_bp.route('/dashboard/platform_student')
 def show_platform_student():
 	account_id = session.get('account_id')

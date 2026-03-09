@@ -33,19 +33,20 @@
                         <hr class="mb-4 mt-4">
                         <h4 class="card-intro-title">Groups</h4>
                         <div class="mb-3">
-                                <input type="text" id="group-calander-filter" class="form-control" placeholder="Search by Group Name">
-                            </div>
+                            <input type="text" id="group-calander-filter" class="form-control"
+                                   placeholder="Search by Group Name">
+                        </div>
                         <div class="mb-3">
-                            <a href="{{ url_for('dashboard.show_create_group_session', id_session=id_session) }}" class="btn btn-primary btn-event w-100">
+                            <a href="{{ url_for('dashboard.show_create_group_session', id_session=id_session) }}"
+                               class="btn btn-primary btn-event w-100">
                                 <span class="align-middle"><i class="ti-plus me-2"></i></span> Create New
                             </a>
                         </div>
                         <div class="">
                             <div id="external-events" class="my-3">
                                 <p>Drag and drop your event or click in the calendar</p>
-                                    <div id="my-custom-events" class="my-3"></div>
+                                <div id="my-custom-events" class="my-3"></div>
                             </div>
-
 
 
                         </div>
@@ -56,17 +57,19 @@
 
                 <div class="card">
                     <div class="row card-header">
-                                <div class="col-md-6">
-                                    <button type="button" class="btn btn-primary mb-3 float-start" id="copyGroupBtn" data-bs-toggle="modal" data-bs-target="#copyIntervalModal">
-                                        Copy Group to Other Interval
-                                    </button>
-                                </div>
-                                <div class="col-md-6">
-                                    <button type="button" class="btn btn-danger float-end" data-bs-toggle="modal" data-bs-target="#deleteIntervalModal">
-                                        Delete Data from Interval
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-primary mb-3 float-start" id="copyGroupBtn"
+                                    data-bs-toggle="modal" data-bs-target="#copyIntervalModal">
+                                Copy Group to Other Interval
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-danger float-end" data-bs-toggle="modal"
+                                    data-bs-target="#deleteIntervalModal">
+                                Delete Data from Interval
+                            </button>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <div id="calendar" class="app-fullcalendar"></div>
                     </div>
@@ -81,9 +84,14 @@
                         </div>
                         <div class="modal-body"></div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default waves-effect" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-success save-event waves-effect waves-light">Create event</button>
-                            <button type="button" class="btn btn-danger delete-event waves-effect waves-light" data-bs-toggle="modal">Delete</button>
+                            <button type="button" class="btn btn-default waves-effect" data-bs-dismiss="modal">Close
+                            </button>
+                            <button type="button" class="btn btn-success save-event waves-effect waves-light">Create
+                                event
+                            </button>
+                            <button type="button" class="btn btn-danger delete-event waves-effect waves-light"
+                                    data-bs-toggle="modal">Delete
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -100,11 +108,13 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label class="control-label form-label">Category Name</label>
-                                        <input class="form-control form-white" placeholder="Enter name" type="text" name="category-name">
+                                        <input class="form-control form-white" placeholder="Enter name" type="text"
+                                               name="category-name">
                                     </div>
                                     <div class="col-md-6">
                                         <label class="control-label form-label">Choose Category Color</label>
-                                        <select class="form-control form-white" data-placeholder="Choose a color..." name="category-color">
+                                        <select class="form-control form-white" data-placeholder="Choose a color..."
+                                                name="category-color">
                                             <option value="success">Success</option>
                                             <option value="danger">Danger</option>
                                             <option value="info">Info</option>
@@ -117,8 +127,12 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger light waves-effect" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary waves-effect waves-light save-category" data-bs-toggle="modal">Save</button>
+                            <button type="button" class="btn btn-danger light waves-effect" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="button" class="btn btn-primary waves-effect waves-light save-category"
+                                    data-bs-toggle="modal">Save
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -326,7 +340,8 @@
 
 
 <!--============ MODAL OF DELETING ============-->
-<div class="modal fade" id="deleteIntervalModal" tabindex="-1" aria-labelledby="deleteIntervalModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteIntervalModal" tabindex="-1" aria-labelledby="deleteIntervalModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -337,7 +352,8 @@
                 Are you sure you want to delete all Calendars from this interval?
                 <div class="mt-3 mb-3">
                     <label for="deleteTargetStartDate">Start Date</label>
-                    <input type="date" id="deleteTargetStartDate" class="form-control" min="2025-07-10" max="2025-08-10" required>
+                    <input type="date" id="deleteTargetStartDate" class="form-control" min="2025-07-10" max="2025-08-10"
+                           required>
                 </div>
                 <div class="mb-3">
                     <label for="deleteTargetEndDate">End Date</label>
@@ -353,7 +369,6 @@
         </div>
     </div>
 </div>
-
 
 
 <!--Model of creating Special Group-->
@@ -471,7 +486,8 @@
 </div>
 
 
-<div class="modal fade" id="copyIntervalModal" tabindex="-1" aria-labelledby="copyIntervalModalLabel" aria-hidden="true">
+<div class="modal fade" id="copyIntervalModal" tabindex="-1" aria-labelledby="copyIntervalModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -482,19 +498,23 @@
                 <form id="copyIntervalForm">
                     <div class="mb-3">
                         <label for="sourceInterval" class="form-label">Source Interval for session: Session Test</label>
-                        <input type="text" class="form-control" id="sourceInterval" name="sourceInterval" readonly value="From 10/07/2025 to 10/08/2025">
+                        <input type="text" class="form-control" id="sourceInterval" name="sourceInterval" readonly
+                               value="From 10/07/2025 to 10/08/2025">
                     </div>
                     <div class="mb-3">
                         <label for="targetStartDate" class="form-label">Select Target Interval Start Date</label>
-                        <input type="date" class="form-control" id="targetStartDate" name="targetStartDate" min="2025-07-10" max="2025-08-10" required>
+                        <input type="date" class="form-control" id="targetStartDate" name="targetStartDate"
+                               min="2025-07-10" max="2025-08-10" required>
                     </div>
                     <div class="mb-3">
                         <label for="targetEndDate" class="form-label">Select Target Interval End Date</label>
-                        <input type="date" class="form-control" id="targetEndDate" name="targetEndDate" min="" max="2025-08-10" required>
+                        <input type="date" class="form-control" id="targetEndDate" name="targetEndDate" min=""
+                               max="2025-08-10" required>
                     </div>
                     <div class="mb-3" id="copyDateStartContainer" style="display:none;">
                         <label for="copyDateStart" class="form-label">Select Copy Start Date</label>
-                        <input type="date" class="form-control" id="copyDateStart" name="copyDateStart" min="2025-07-10" max="2025-08-10">
+                        <input type="date" class="form-control" id="copyDateStart" name="copyDateStart" min="2025-07-10"
+                               max="2025-08-10">
                     </div>
                     <input type="hidden" id="sessionId" value="12">
                     <input type="hidden" id="localId" value="8">
@@ -507,3 +527,645 @@
         </div>
     </div>
 </div>
+
+
+<script>
+
+    /*==========================================*/
+    /* ======== FUNCTION TO LOAD GROUP ========*/
+    /*==========================================*/
+
+    function loadGroupsToExternalEvents(accountId, sessionId) {
+        fetch(`/api/get-group/${sessionId}/${accountId}`, {
+            method: 'GET',
+        })
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            if (data.data) {
+                const groups = data.data;
+                const container = document.getElementById('my-custom-events');
+
+                // Clear previous groups
+                container.innerHTML = '';
+
+                // Colors to cycle through
+                const colors = ['bg-info'];
+
+                // Create div for each group
+                groups.forEach((group, index) => {
+                    const color = colors[index % colors.length];
+                    const buttonClass = color.replace('bg-', 'btn-');
+
+                    const groupDiv = document.createElement('div');
+                    groupDiv.className = `external-event ${buttonClass} light`;
+                    groupDiv.setAttribute('data-class', color);
+                    groupDiv.innerHTML = `
+                        <i class="fa fa-move"></i>
+                        <span>${group.name}</span>
+                    `;
+
+                    container.appendChild(groupDiv);
+
+<!--                    console.log(`Group ${index + 1}:`, {-->
+<!--                        id: group.id,-->
+<!--                        name: group.name,-->
+<!--                        capacity: group.capacity,-->
+<!--                        session_id: group.session_id,-->
+<!--                        local_id: group.local_id,-->
+<!--                        status: group.status-->
+<!--                    });-->
+                });
+
+
+            } else {
+                console.error('No data.data found');
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching groups:", error);
+        });
+    }
+
+
+    // Call it when page loads - get accountId and sessionId from data attributes
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get data from the calendar-info div
+        const calendarInfo = document.getElementById('calendar-info');
+        if (calendarInfo) {
+            const local_id = parseInt(calendarInfo.getAttribute('data-local-id'));
+            load_room(local_id);
+            loadGroupsToExternalEvents(3,12)
+
+        }
+        // Removed the error log - this is normal on non-calendar pages
+    });
+
+
+    /*==========================================*/
+    /* ======== FUNCTION TO LOAD ROOM ========*/
+    /*==========================================*/
+
+
+    function load_room(local_id) {
+        fetch(`/api/get_room/${local_id}`, {
+            method: 'GET',
+        })
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            if (data.Room) {
+                const rooms = data.Room;
+
+
+                // Get the room options container
+                const roomOptions = document.querySelector('.custom-select[data-name="createEventRoom"] .options');
+
+                if (roomOptions) {
+                    // Clear existing options except the first one (placeholder)
+                    roomOptions.innerHTML = '<div data-value="">Select a Room</div>';
+
+                    // Add rooms dynamically
+                    rooms.forEach(room => {
+                        const optionDiv = document.createElement('div');
+                        optionDiv.setAttribute('data-value', room.id);  // Assuming room has 'id' property
+                        optionDiv.textContent = room.name;  // Assuming room has 'name' property
+                        roomOptions.appendChild(optionDiv);
+                    });
+
+                } else {
+                    console.error('Room options container not found');
+                }
+            } else {
+                console.error('No Room data found');
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching room:", error);
+        });
+    }
+
+
+    // Call it when page loads - get local_id from data attributes
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get data from the calendar-info div
+        const calendarInfo = document.getElementById('calendar-info');
+        if (calendarInfo) {
+            const local_id = parseInt(calendarInfo.getAttribute('data-local-id'));
+            load_room(local_id);
+        } else {
+            console.error('calendar-info element not found');
+        }
+    });
+
+
+    /*==========================================*/
+    /* ======== FUNCTION TO LOAD TEACHER ========*/
+    /*==========================================*/
+
+    function load_teachers(session_id) {
+        fetch(`/api/get_teacher/${session_id}`, {
+            method: 'GET',
+        })
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            if (data.teacher) {
+                const teachers = data.teacher;
+
+                // Get the teacher/subject options container
+                const teacherOptions = document.querySelector('.custom-select[data-name="createEventSubject"] .options');
+
+                if (teacherOptions) {
+                    // Clear existing options except the first one (placeholder)
+                    teacherOptions.innerHTML = '<div data-value="">Select a Subject and Teacher</div>';
+
+                    // Add teachers dynamically
+                    teachers.forEach(teacher => {
+                        const optionDiv = document.createElement('div');
+
+                        // Set attributes - adjust these based on your teacher object structure
+                        optionDiv.setAttribute('data-value', teacher.id);  // or teacher.teacher_id
+                        optionDiv.setAttribute('data-subject', teacher.subject_id || '1');  // if you have subject_id
+                        optionDiv.setAttribute('data-user', teacher.id);
+
+                        // Set text - adjust based on your teacher object structure
+                        const subjectName = teacher.subject_name || 'Math';  // if you have subject_name
+                        const teacherName = `${teacher.full_name}`;  // or teacher.full_name
+
+                        optionDiv.textContent = `Subject : ${subjectName} - Teacher : ${teacherName}`;
+
+                        teacherOptions.appendChild(optionDiv);
+                    });
+
+
+                    // Re-initialize the click handlers for the new options
+                    initCustomSelects();
+                } else {
+                    console.error('Teacher options container not found');
+                }
+            } else {
+                console.error('No teacher data found');
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching teachers:", error);
+        });
+    }
+
+
+    // Update your DOMContentLoaded to also load teachers
+    document.addEventListener('DOMContentLoaded', function() {
+        const calendarInfo = document.getElementById('calendar-info');
+        if (calendarInfo) {
+            const session_id = parseInt(calendarInfo.getAttribute('data-session-id'));
+            const local_id = parseInt(calendarInfo.getAttribute('data-local-id'));
+
+            load_room(local_id);
+
+            load_teachers(session_id);
+        } else {
+            console.error('calendar-info element not found');
+        }
+    });
+
+
+    // Add this JavaScript to handle the modal dropdown shows
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // Prevent Bootstrap Select from initializing on modal selects
+        $('#createEventModal select, #viewEventModal select').addClass('no-selectpicker');
+
+        // Handle when duplicate dropdown changes - CREATE MODAL (use regular change event)
+        const createEventDuplicate = document.getElementById('createEventDuplicate');
+        if (createEventDuplicate) {
+            createEventDuplicate.addEventListener('change', function() {
+                const value = this.value;
+                const startTimeFields = document.getElementById('createStartTimeFields');
+                const endTimeFields = document.getElementById('createEndTimeFields');
+                const eventEndFields = document.getElementById('createEventEndFields');
+
+                if (value !== 'none' && value !== '') {
+                    startTimeFields.style.display = 'block';
+                    endTimeFields.style.display = 'block';
+                    eventEndFields.style.display = 'block';
+                } else {
+                    startTimeFields.style.display = 'none';
+                    endTimeFields.style.display = 'none';
+                    eventEndFields.style.display = 'none';
+                }
+            });
+        }
+
+
+        // Handle save event button for CREATE modal
+        const createSaveEventButton = document.getElementById('createSaveEventButton');
+        if (createSaveEventButton) {
+            createSaveEventButton.addEventListener('click', function() {
+                const eventForm = document.getElementById('createEventForm');
+
+                if (!eventForm.checkValidity()) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+
+                // Get form data - using CREATE modal IDs
+                const formData = {
+                    title: document.getElementById('createEventTitle').value,
+                    date: document.getElementById('createEventDate').value,
+                    type: document.getElementById('createTypeSessionSelect').value,
+                    room: document.getElementById('createEventRoom').value,
+                    subject: document.getElementById('createEventSubject').value,
+                    completionTags: (() => {
+                        const element = document.getElementById('createEventCompletionTag');
+                        if (!element) return [];
+
+                        // Get all selected options (with 'selected-option' class)
+                        const selectedOptions = element.querySelectorAll('.options .selected-option');
+
+                        // Extract values from data-value attributes
+                        const selectedValues = Array.from(selectedOptions).map(option =>
+                            option.getAttribute('data-value')
+                        ).filter(value => value !== null && value !== '');
+
+                        return selectedValues;
+                    })(), // <-- Note the () at the end to execute immediately
+
+                    duplicate: (() => {
+                        const element = document.getElementById('createEventDuplicate');
+                        if (!element) return '';
+
+                        const selectedElement = element.querySelector('.selected');
+                        return selectedElement ? selectedElement.getAttribute('data-value') || '' : '';
+                    })(), // <-- Execute immediately
+                    duplicate: document.getElementById('createEventDuplicate').value,
+                    startTime: document.getElementById('createEventStartTime').value || null,
+                    endTime: document.getElementById('createEventEndTime').value || null,
+                    endDate: document.getElementById('createEventEndDate').value || null,
+                    description: document.getElementById('createEventDescription').value,
+                    groupId: document.getElementById('createEventGroupId').value,
+                    groupCapacity: document.getElementById('createEventGroupCapacity').value,
+                    sessionId: document.getElementById('createEventSessionId').value,
+                    accountId: document.getElementById('createEventAccountId').value,
+                    localId: document.getElementById('createEventLocalId').value
+                };
+
+
+                // Send to backend
+                fetch('/api/create-calander', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Event created successfully!');
+                        const eventModal = bootstrap.Modal.getInstance(document.getElementById('createEventModal'));
+                        eventModal.hide();
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to create event');
+                });
+            });
+        }
+
+        // Handle save event button for VIEW modal
+        const viewSaveEventButton = document.getElementById('viewSaveEventButton');
+        if (viewSaveEventButton) {
+            viewSaveEventButton.addEventListener('click', function() {
+                const viewEventForm = document.getElementById('viewEventForm');
+
+                if (!viewEventForm.checkValidity()) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+
+                const formData = {
+                    title: document.getElementById('viewEventTitle').value,
+                    date: document.getElementById('viewEventDate').value,
+                    type: document.getElementById('viewTypeSessionSelect').value,
+                    room: document.getElementById('viewEventRoom').value,
+                    subject: document.getElementById('viewEventSubject').value,
+                    completionTags: (() => {
+                        const element = document.getElementById('createEventCompletionTag');
+                        if (!element) return [];
+
+                        // Get all selected options (with 'selected-option' class)
+                        const selectedOptions = element.querySelectorAll('.options .selected-option');
+
+                        // Extract values from data-value attributes
+                        const selectedValues = Array.from(selectedOptions).map(option =>
+                            option.getAttribute('data-value')
+                        ).filter(value => value !== null && value !== '');
+
+                        return selectedValues;
+                    })(), // <-- Note the () at the end to execute immediately
+
+                    duplicate: (() => {
+                        const element = document.getElementById('createEventDuplicate');
+                        if (!element) return '';
+
+                        const selectedElement = element.querySelector('.selected');
+                        return selectedElement ? selectedElement.getAttribute('data-value') || '' : '';
+                    })(),
+                    duplicate: document.getElementById('viewEventDuplicate').value,
+                    startTime: document.getElementById('viewEventStartTime').value || null,
+                    endTime: document.getElementById('viewEventEndTime').value || null,
+                    endDate: document.getElementById('viewEventEndDate').value || null,
+                    description: document.getElementById('viewEventDescription').value,
+                    groupId: document.getElementById('viewEventGroupId').value,
+                    groupCapacity: document.getElementById('viewEventGroupCapacity').value,
+                    sessionId: document.getElementById('viewEventSessionId').value,
+                    accountId: document.getElementById('viewEventAccountId').value,
+                    localId: document.getElementById('viewEventLocalId').value
+                };
+
+                fetch('/api/update-event', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Event updated successfully!');
+                        const viewEventModal = bootstrap.Modal.getInstance(document.getElementById('viewEventModal'));
+                        viewEventModal.hide();
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to update event');
+                });
+            });
+        }
+    });
+
+
+    /* =========================================*/
+    /* =========== JS MODAL ADD GROUP TO CALENDAR =========== */
+    /* =========================================*/
+
+    // Initialize all custom selects - GLOBAL FUNCTION
+    function initCustomSelects() {
+        document.querySelectorAll('.custom-select').forEach(selectEl => {
+            const selected = selectEl.querySelector('.selected');
+            const options = selectEl.querySelector('.options');
+
+            // Remove old event listeners to avoid duplicates
+            const newSelected = selected.cloneNode(true);
+            selected.parentNode.replaceChild(newSelected, selected);
+
+            // Toggle dropdown
+            newSelected.onclick = (e) => {
+                e.stopPropagation();
+                // Close other dropdowns
+                document.querySelectorAll('.custom-select').forEach(s => {
+                    if (s !== selectEl) s.classList.remove('active');
+                });
+                selectEl.classList.toggle('active');
+            };
+
+            // Handle option selection
+            const updatedOptions = selectEl.querySelector('.options');
+            updatedOptions.querySelectorAll('div').forEach(opt => {
+                opt.onclick = (e) => {
+                    e.stopPropagation();
+                    const value = opt.getAttribute('data-value');
+                    const text = opt.textContent;
+
+                    const currentSelected = selectEl.querySelector('.selected');
+                    currentSelected.textContent = text;
+                    currentSelected.setAttribute('data-value', value);
+                    selectEl.classList.remove('active');
+
+                    // Trigger change event for duplicate field
+                    if (selectEl.getAttribute('data-name') === 'createEventDuplicate') {
+                        handleDuplicateChange(value);
+                    }
+                };
+            });
+        });
+    }
+
+
+    // Handle duplicate field show/hide - GLOBAL FUNCTION
+    function handleDuplicateChange(value) {
+        const startTimeFields = document.getElementById('createStartTimeFields');
+        const endTimeFields = document.getElementById('createEndTimeFields');
+        const eventEndFields = document.getElementById('createEventEndFields');
+
+        if (!startTimeFields || !endTimeFields || !eventEndFields) {
+            return;
+        }
+
+        if (value === 'none') {
+            // "Not Duplicate" - show time fields but hide end date
+            startTimeFields.style.display = 'block';
+            endTimeFields.style.display = 'block';
+            eventEndFields.style.display = 'none';
+        } else if (value && value !== '') {
+            // Any duplicate option - show all fields
+            startTimeFields.style.display = 'block';
+            endTimeFields.style.display = 'block';
+            eventEndFields.style.display = 'block';
+        } else {
+            // No selection - hide all
+            startTimeFields.style.display = 'none';
+            endTimeFields.style.display = 'none';
+            eventEndFields.style.display = 'none';
+        }
+    }
+
+    // Get value from custom select - GLOBAL FUNCTION
+    function getCustomSelectValue(name) {
+        const select = document.querySelector(`.custom-select[data-name="${name}"]`);
+        if (select) {
+            return select.querySelector('.selected').getAttribute('data-value') || '';
+        }
+        return '';
+    }
+
+
+    // Initialize when modal opens
+    document.addEventListener('DOMContentLoaded', function() {
+        const createModalElement = document.getElementById('createEventModal');
+        if (createModalElement) {
+            createModalElement.addEventListener('shown.bs.modal', function() {
+                initCustomSelects();
+            });
+        }
+
+        // Handle save button
+        const createSaveEventButton = document.getElementById('createSaveEventButton');
+        if (createSaveEventButton) {
+            createSaveEventButton.addEventListener('click', function() {
+                const formData = {
+                    title: document.getElementById('createEventTitle').value,
+                    date: document.getElementById('createEventDate').value,
+                    type: getCustomSelectValue('createTypeSessionSelect'),
+                    room: getCustomSelectValue('createEventRoom'),
+                    subject: getCustomSelectValue('createEventSubject'),
+                    completionTags: (() => {
+                        const element = document.getElementById('createEventCompletionTag');
+                        if (!element) return [];
+
+                        // Get all selected options (with 'selected-option' class)
+                        const selectedOptions = element.querySelectorAll('.options .selected-option');
+
+                        // Extract values from data-value attributes
+                        const selectedValues = Array.from(selectedOptions).map(option =>
+                            option.getAttribute('data-value')
+                        ).filter(value => value !== null && value !== '');
+
+                        return selectedValues;
+                    })(), // <-- Note the () at the end to execute immediately
+
+                    duplicate: (() => {
+                        const element = document.getElementById('createEventDuplicate');
+                        if (!element) return '';
+
+                        const selectedElement = element.querySelector('.selected');
+                        return selectedElement ? selectedElement.getAttribute('data-value') || '' : '';
+                    })(), // <-- Execute immediately
+
+                    startTime: document.getElementById('createEventStartTime').value || null,
+                    endTime: document.getElementById('createEventEndTime').value || null,
+                    endDate: document.getElementById('createEventEndDate').value || null,
+                    description: document.getElementById('createEventDescription').value,
+                    groupId: document.getElementById('createEventGroupId').value,
+                    groupCapacity: document.getElementById('createEventGroupCapacity').value,
+                    sessionId: document.getElementById('createEventSessionId').value,
+                    accountId: document.getElementById('createEventAccountId').value,
+                    localId: document.getElementById('createEventLocalId').value
+                };
+
+
+
+                // Validate
+                if (!formData.title || !formData.date || !formData.type || !formData.room || !formData.subject) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+
+                // Send to backend
+                fetch('/api/create-event', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Event created successfully!');
+                        const eventModal = bootstrap.Modal.getInstance(document.getElementById('createEventModal'));
+                        eventModal.hide();
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to create event');
+                });
+            });
+        }
+    });
+
+
+    // Handle delete interval confirmation
+    document.addEventListener('DOMContentLoaded', function() {
+        const confirmDeleteBtn = document.getElementById('confirmDeleteInterval');
+
+        if (confirmDeleteBtn) {
+            confirmDeleteBtn.addEventListener('click', async function() {
+                const sessionId = document.getElementById('sessionId').value;
+                const startDate = document.getElementById('deleteTargetStartDate').value;
+                const endDate = document.getElementById('deleteTargetEndDate').value;
+
+
+
+                // Validate inputs
+                if (!startDate || !endDate) {
+                    alert('Please select both start and end dates');
+                    return;
+                }
+
+                // Validate that end date is after start date
+                if (new Date(endDate) < new Date(startDate)) {
+                    alert('End date must be after start date');
+                    return;
+                }
+
+                try {
+                    // Disable button to prevent double clicks
+                    const deleteBtn = document.getElementById('confirmDeleteInterval');
+                    deleteBtn.disabled = true;
+                    deleteBtn.textContent = 'Deleting...';
+
+                    const response = await fetch(`/api/delete-calander/${sessionId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            start_date: startDate,
+                            end_date: endDate
+                        })
+                    });
+
+
+                    const result = await response.json();
+
+
+                    if (response.ok) {
+                        alert('Calendar interval deleted successfully!');
+
+                        // Close the modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('deleteIntervalModal'));
+                        modal.hide();
+
+                        // Reset form
+                        document.getElementById('deleteTargetStartDate').value = '';
+                        document.getElementById('deleteTargetEndDate').value = '';
+
+                        // Optionally reload the page or update the calendar view
+                        location.reload();
+
+                    } else {
+                        console.error('Server error:', result);
+                        alert(`Error: ${result.message || 'Failed to delete interval'}`);
+                    }
+
+                } catch (error) {
+                    console.error('Fetch error details:', error);
+                    alert('An error occurred while deleting the interval. Check console for details.');
+                } finally {
+                    // Re-enable button
+                    const deleteBtn = document.getElementById('confirmDeleteInterval');
+                    deleteBtn.disabled = false;
+                    deleteBtn.textContent = 'Delete';
+                }
+            });
+        }
+    });
+
+
+</script>

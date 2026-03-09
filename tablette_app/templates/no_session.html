@@ -93,7 +93,7 @@
 										<div class="ms-3">
 											<!-- Button trigger modal -->
 											<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal">
-												<i class="bi bi-plus-circle me-2"></i>Add Schedule
+												<i class="bi bi-plus-circle me-2"></i> + Add Schedule
 											</button>
 
 										</div>
@@ -400,6 +400,28 @@
 <!--	<script src="/static/js/demo.js"></script>-->
 	<script src="/static/js/custom.js"></script>
 
+	<script>
+    const tabletId = "{{ tablet_id }}";
+
+    function checkForSession() {
+        fetch(`/tablet/${encodeURIComponent(tabletId)}/check_session`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Checking for session:', data.status);
+                if (data.status === 'active') {
+                    // Session started — go back to the active page
+                    window.location.href = `/tablet/${encodeURIComponent(tabletId)}`;
+                }
+            })
+            .catch(err => {
+                console.error('Error checking session:', err);
+            });
+    }
+
+    // Check immediately, then every 10 seconds
+    checkForSession();
+    setInterval(checkForSession, 10000);
+</script>
 </body>
 
 <!-- Mirrored from akademi.dexignlab.com/xhtml/celandar.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 04 Mar 2025 13:05:52 GMT -->

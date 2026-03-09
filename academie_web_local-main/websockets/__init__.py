@@ -19,10 +19,10 @@ def init_socketio(app):
     global socketio
     socketio = SocketIO(
         app,
-        cors_allowed_origins="*",  # Allow all origins (adjust for production)
-        async_mode='threading',     # Changed from 'eventlet' to 'threading'
-        logger=True,                # Enable logging
-        engineio_logger=True        # Enable engine.io logging
+        cors_allowed_origins="*",
+        async_mode='eventlet',
+        logger=True,
+        engineio_logger=True
     )
 
     # Register event handlers

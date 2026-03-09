@@ -20,7 +20,6 @@ def login_tablet():
     }
     try:
         response=requests.post(url,json=payload,verify=False)
-        response.raise_for_status()
         login_data= response.json()
         token=login_data.get("token")
         if(token):
