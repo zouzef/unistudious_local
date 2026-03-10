@@ -79,3 +79,32 @@ class DataPusher:
         print("\n" + "="*60)
         print("✅ PUSH LOCAL CHANGES COMPLETED")
         print("="*60)
+
+if __name__ == "__main__":
+    import time
+    from datetime import datetime
+    from config.settings import get_settings
+    from core.database import Database
+    from core.auth import init_auth,start_auto_refresh
+
+    # Load settings properly
+    settings = get_settings("config/config.json")
+
+    # Init auth (needed for API calls in pushers)
+    init_auth(settings)
+    start_auto_refresh()
+    time.sleep(1)
+
+    while True:
+        print(f"\n Running at {datetime.now()}")
+
+        db = Database(settings)
+        db.connect()
+
+        pusher = DataPusher(settings)
+        pusher.detect_and_push_local_changes(db)
+
+        db.disconnect()
+
+        print(f"\n Waiting 60 seconds before next check ...")
+        time.sleep(60)
