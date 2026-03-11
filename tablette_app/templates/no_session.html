@@ -5,402 +5,482 @@
 <head>
 
     <meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="author" content="DexignLab" >
-	<meta name="robots" content="" >
-	<meta name="keywords" content="school, school admin, education, academy, admin dashboard, college, college management, education management, institute, school management, school management system, student management, teacher management, university, university management" >
-	<meta name="description" content="Discover Akademi - the ultimate admin dashboard and Bootstrap 5 template. Specially designed for professionals, and for business. Akademi provides advanced features and an easy-to-use interface for creating a top-quality website with School and Education Dashboard" >
-	<meta property="og:title" content="Akademi : School and Education Management Admin Dashboard Template" >
-	<meta property="og:description" content="Akademi - the ultimate admin dashboard and Bootstrap 5 template. Specially designed for professionals, and for business. Akademi provides advanced features and an easy-to-use interface for creating a top-quality website with School and Education Dashboard">
-	<meta property="og:image" content="social-image.html" >
-	<meta name="format-detection" content="telephone=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="DexignLab">
+    <meta name="robots" content="">
+    <meta name="keywords"
+          content="school, school admin, education, academy, admin dashboard, college, college management, education management, institute, school management, school management system, student management, teacher management, university, university management">
+    <meta name="description"
+          content="Discover Akademi - the ultimate admin dashboard and Bootstrap 5 template. Specially designed for professionals, and for business. Akademi provides advanced features and an easy-to-use interface for creating a top-quality website with School and Education Dashboard">
+    <meta property="og:title" content="Akademi : School and Education Management Admin Dashboard Template">
+    <meta property="og:description"
+          content="Akademi - the ultimate admin dashboard and Bootstrap 5 template. Specially designed for professionals, and for business. Akademi provides advanced features and an easy-to-use interface for creating a top-quality website with School and Education Dashboard">
+    <meta property="og:image" content="social-image.html">
+    <meta name="format-detection" content="telephone=no">
 
-	<!-- Mobile Specific -->
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Mobile Specific -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<!-- Page Title Here -->
-	<title>Akademi : School and Education Management Admin Dashboard Template</title>
+    <!-- Page Title Here -->
+    <title>Akademi : School and Education Management Admin Dashboard Template</title>
 
-<!-- FAVICONS ICON -->
-	<link rel="shortcut icon" type="image/png" href="/static/assets/images/favicon.png" >
-	<link rel="stylesheet" href="/static/vendor/fullcalendar-5.11.0/lib/main.css">
-	<link href="/static/vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
-	<link href="/static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="/static/vendor/jquery-nice-select/css/nice-select.css">
-	<link href="/static/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <!-- FAVICONS ICON -->
+    <link rel="shortcut icon" type="image/png" href="/static/assets/images/favicon.png">
+    <link rel="stylesheet" href="/static/vendor/fullcalendar-5.11.0/lib/main.css">
+    <link href="/static/vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
+    <link href="/static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/vendor/jquery-nice-select/css/nice-select.css">
+    <link href="/static/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
-	<link rel="stylesheet" href="/static/css/sweetalert2.min.css">
+    <link rel="stylesheet" href="/static/css/sweetalert2.min.css">
 
-	<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-	<!-- Style css -->
-      <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <!-- Style css -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <link href="/static/css/style4.css" rel="stylesheet">
 
 </head>
 <body>
 
-    <!--*******************
-        Preloader start
-    ********************-->
+<!--*******************
+    Preloader start
+********************-->
 
-    <div id="preloader">
-	  <div class="loader">
-		<div class="dots">
-			  <div class="dot mainDot"></div>
-			  <div class="dot"></div>
-			  <div class="dot"></div>
-			  <div class="dot"></div>
-			  <div class="dot"></div>
-		</div>
+<div id="preloader">
+    <div class="loader">
+        <div class="dots">
+            <div class="dot mainDot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
 
-		</div>
-	</div>
-    <!--*******************
-        Preloader end
-    ********************-->
+    </div>
+</div>
+<!--*******************
+    Preloader end
+********************-->
 
-    <!--**********************************
-        Main wrapper start
-    ***********************************-->
-    <div id="main-wrapper">
-		<div class="content-body" style="margin-left: 0 !important; margin-top: 0 !important; padding-top: 20px;">
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-xl-12">
-						<!-- Row -->
-						<div class="row">
-							<!--column-->
-							<div class="col-xl-12">
-								<div class="page-title flex-wrap">
-									<div class="d-flex align-items-center">
-										<h2 class="heading mb-sm-0 ">Calendar</h2>
-									</div>
-									<div class="d-flex align-items-center flex-wrap">
-										<select class="default-select" aria-label="Default select example">
-											<option selected>January</option>
-											<option value="1">February</option>
-											<option value="2">March</option>
-											<option value="3">April</option>
-										</select>
-										<div class="ms-3">
-											<select class="default-select" aria-label="Default select example">
-												<option selected>Year</option>
-												<option value="1">2023</option>
-												<option value="2">2022</option>
-												<option value="3">2021</option>
-											</select>
-										</div>
-										<div class="ms-3">
-											<!-- Button trigger modal -->
-											<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eventModal">
-												<i class="bi bi-plus-circle me-2"></i> + Add Schedule
-											</button>
+<!--**********************************
+    Main wrapper start
+***********************************-->
+<div id="main-wrapper">
+    <div class="content-body" style="margin-left: 0 !important; margin-top: 0 !important; padding-top: 20px;">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-12">
+                    <!-- Row -->
+                    <div class="row">
+                        <!--column-->
+                        <div class="col-xl-12">
+                            <div class="page-title flex-wrap">
+                                <div class="d-flex align-items-center">
+                                    <img id="academie-logo" src="" alt="Academie Logo"
+                                         style="width: 80px; height: 80px; border-radius: 10%; object-fit: cover; margin-right: 12px; display: none;">
 
-										</div>
+                                    <div class="d-flex flex-column align-items-start">
+                                        <h2 class="heading mb-sm-0" id="academie-title"></h2>
+                                        <p class="mb-0">Schedule & Calendar System</p>
+                                    </div>
+
+                                    <script>
+                                        const urlParts = window.location.pathname.split('/');
+                                        const tablet_id = urlParts[urlParts.length - 1];
+
+                                        // Load academie name
+                                        fetch(`/get-data-account-tablet/${tablet_id}`)
+                                            .then(response => response.json())
+                                            .then(result => {
+                                                if (result.status === "ok" && result.data) {
+                                                    const academieName = result.data.name;
+                                                    document.getElementById('academie-title').textContent = academieName + " - Calendar";
+                                                }
+                                            })
+                                            .catch(error => console.error('Error fetching academie name:', error));
+
+                                        // Load academie image
+                                        const img = document.getElementById('academie-logo');
+                                        img.src = `/api/get-academie-image/${tablet_id}`;
+                                        img.onload = () => img.style.display = 'block';
+                                        img.onerror = () => img.style.display = 'none';
+                                    </script>
+                                </div>
+                                <div class="d-flex align-items-center flex-wrap">
+
+                                    <div class="ms-3">
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                data-bs-target="#eventModal">
+                                            <i class="bi bi-plus-circle me-2"></i> + Add Schedule
+                                        </button>
+
+                                    </div>
 
 
-									</div>
-								</div>
-							</div>
-							<!--column-->
-							<div class="col-12 col-md-8 col-lg-8 col-xl-8">
-								<div class="card">
-									<div id='calendare'
-										 data-session-id="{{ session_id }}"
-										 data-room-id="{{ room_id }}">
-									</div>
-									<div class="card-body">
-										<div id="calendar" class="app-fullcalendar"></div>
-									</div>
-								</div>
-							</div>
-							<!--/column-->
-							<div class="col-12 col-md-4 col-lg-4 col-xl-4">
+                                </div>
+                            </div>
+                        </div>
+                        <!--column-->
+                        <div class="col-12 col-md-8 col-lg-8 col-xl-8">
+                            <div class="card">
+                                <div id='calendare'
+                                     data-session-id="{{ session_id }}"
+                                     data-room-id="{{ room_id }}">
+                                </div>
+                                <div class="card-body">
+                                    <div id="calendar" class="app-fullcalendar"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/column-->
+                        <div class="col-12 col-md-4 col-lg-4 col-xl-4">
 
-								<div class="row">
-									<div class="col-xl-12">
-										<div class="card">
-											<div class="card-body">
-												<h3 class="heading">Schedule Request</h3>
+                            <div class="row">
+                                <!--                                <div class="col-xl-12">-->
+                                <!--                                    <div class="card">-->
+                                <!--                                        <div class="card-body">-->
+                                <!--                                            <h3 class="heading">-->
+                                <!--                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"-->
+                                <!--                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"-->
+                                <!--                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"-->
+                                <!--                                                     style="margin-right: 8px; vertical-align: middle;">-->
+                                <!--                                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>-->
+                                <!--                                                    <line x1="16" y1="2" x2="16" y2="6"></line>-->
+                                <!--                                                    <line x1="8" y1="2" x2="8" y2="6"></line>-->
+                                <!--                                                    <line x1="3" y1="10" x2="21" y2="10"></line>-->
+                                <!--                                                    <line x1="8" y1="14" x2="8" y2="14"></line>-->
+                                <!--                                                    <line x1="12" y1="14" x2="12" y2="14"></line>-->
+                                <!--                                                </svg>-->
+                                <!--                                                Schedule Request-->
+                                <!--                                            </h3>-->
+                                <!--                                        </div>-->
+                                <!--                                    </div>-->
+                                <!--                                </div>-->
+                                <div class="col-xl-12">
+                                    <div class="card">
+                                        <div class="card-body text-center py-4">
+                                            <h4 style="font-size: 22px; font-weight: 700; color: #2c3e50; margin-bottom: 6px;">
+                                                📲 Download Unistudious
+                                            </h4>
+                                            <p style="font-size: 14px; color: #7f8c8d; margin-bottom: 20px;">
+                                                Scan to download our app
+                                            </p>
 
-											</div>
-										</div>
-									</div>
-									<!-- Add this ID to your container div -->
-									<div class="row" id="calendar-cards-container">
-										<!-- Dynamic cards will be inserted here -->
-									</div>
+                                            <!-- Two QR codes side by side -->
+                                            <div style="display: flex; justify-content: center; gap: 20px;">
 
-									<!-- Pagination Controls -->
-										<div class="col-xl-12" id="pagination-container" style="display: none;">
-											<div class="d-flex justify-content-center align-items-center mb-5">
-											   <button type="button" id="prev-page" class="btn btn-primary btn-sm me-3" disabled>
-												 &lt;
-											   </button>
+                                                <!-- Android -->
+                                                <div style="text-align: center;">
+                                                    <div style="background: #f8f9fa; border-radius: 12px; padding: 10px; display: inline-block; margin-bottom: 8px;">
+                                                        <div id="qr-android-static"
+                                                             style="width: 130px; height: 130px;"></div>
+                                                    </div>
+                                                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px;">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#3DDC84">
+                                                            <path d="M17.523 15.341l1.188 2.056a.5.5 0 01-.866.5l-1.203-2.083A7.967 7.967 0 0112 16.5a7.967 7.967 0 01-4.642-1.686L6.155 17.897a.5.5 0 01-.866-.5l1.188-2.056A7.983 7.983 0 014 9.5h16a7.983 7.983 0 01-2.477 5.841zM8.5 11a1 1 0 100 2 1 1 0 000-2zm7 0a1 1 0 100 2 1 1 0 000-2zM7.102 3.152l-1.2-2.078a.5.5 0 01.866-.5l1.215 2.104A7.954 7.954 0 0112 2c1.48 0 2.863.402 4.017 1.098l1.215-2.104a.5.5 0 11.866.5l-1.2 2.078A7.984 7.984 0 0120 9.5H4a7.984 7.984 0 013.102-6.348z"/>
+                                                        </svg>
+                                                        <span style="font-size: 14px; font-weight: 600; color: #3DDC84;">Android</span>
+                                                    </div>
+                                                </div>
 
-											   <div class="pagination-info">
+                                                <!-- Divider -->
+                                                <div style="width: 1px; background: #ecf0f1;"></div>
+
+                                                <!-- iOS -->
+                                                <div style="text-align: center;">
+                                                    <div style="background: #f8f9fa; border-radius: 12px; padding: 10px; display: inline-block; margin-bottom: 8px;">
+                                                        <div id="qr-ios-static"
+                                                             style="width: 130px; height: 130px;"></div>
+                                                    </div>
+                                                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px;">
+                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#555">
+                                                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                                                        </svg>
+                                                        <span style="font-size: 14px; font-weight: 600; color: #555;">iOS</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Add this ID to your container div -->
+<!--                                <div class="row" id="calendar-cards-container">-->
+<!--                                    &lt;!&ndash; Dynamic cards will be inserted here &ndash;&gt;-->
+<!--                                </div>-->
+
+                                <!-- Pagination Controls -->
+                                <div class="col-xl-12" id="pagination-container" style="display: none;">
+                                    <div class="d-flex justify-content-center align-items-center mb-5">
+                                        <button type="button" id="prev-page" class="btn btn-primary btn-sm me-3"
+                                                disabled>
+                                            &lt;
+                                        </button>
+
+                                        <div class="pagination-info">
 												 <span class="badge badge-primary badge-lg">
-												   Page <span id="current-page">1</span> of <span id="total-pages">1</span>
+												   Page <span id="current-page">1</span> of <span
+                                                         id="total-pages">1</span>
 												 </span>
-											   </div>
+                                        </div>
 
-											   <button type="button" id="next-page" class="btn btn-primary btn-sm ms-3">
-												  &gt;
-											   </button>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-		<!-- Add/Edit Event Modal -->
-		<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="eventModalLabel">Add New Schedule</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<form id="eventForm">
-							<div class="mb-3">
-								<label for="eventTitle" class='form-label'>Session</label>
-								<select class="form-control" id="session">
-									<option value="" selected> SELECT SESSION </option>
-								</select>
-							</div>
-							<div class="mb-3">
-								<label for="eventTitle" class="form-label">Group</label>
-								<select class="form-control" id="group_id">
-									<option value="" selected> SELECT GROUP</option>
-								</select>
-							</div>
-							<div class="mb-3" id="typeSessionContainer">
-								<label for="typeSessionSelect" class="form-label">Type</label>
-								<select class="form-control" id="typeSessionSelect">
-									<option value="" selected>Select Type</option>
-									<option value="P">Presence (P)</option>
-									<option value="O">Online (O)</option>
-								</select>
-								<div id="typeSessionSelectError" class="alert alert-danger d-none mt-2" role="alert"></div>
-							</div>
+                                        <button type="button" id="next-page" class="btn btn-primary btn-sm ms-3">
+                                            &gt;
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Add/Edit Event Modal -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventModalLabel">Add New Schedule</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="eventForm">
+                    <div class="mb-3">
+                        <label for="eventTitle" class='form-label'>Session</label>
+                        <select class="form-control" id="session">
+                            <option value="" selected> SELECT SESSION</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventTitle" class="form-label">Group</label>
+                        <select class="form-control" id="group_id">
+                            <option value="" selected> SELECT GROUP</option>
+                        </select>
+                    </div>
+                    <div class="mb-3" id="typeSessionContainer">
+                        <label for="typeSessionSelect" class="form-label">Type</label>
+                        <select class="form-control" id="typeSessionSelect">
+                            <option value="" selected>Select Type</option>
+                            <option value="P">Presence (P)</option>
+                            <option value="O">Online (O)</option>
+                        </select>
+                        <div id="typeSessionSelectError" class="alert alert-danger d-none mt-2" role="alert"></div>
+                    </div>
 
-							<div class="mb-3" id="startDateContainer">
-								<label for="eventStartDate" class="form-label">Start Date</label>
-								<input type="date" class="form-control" id="eventStartDate" required>
-								<div id="eventStartDateError" class="alert alert-danger d-none mt-2" role="alert"></div>
-							</div>
+                    <div class="mb-3" id="startDateContainer">
+                        <label for="eventStartDate" class="form-label">Start Date</label>
+                        <input type="date" class="form-control" id="eventStartDate" required>
+                        <div id="eventStartDateError" class="alert alert-danger d-none mt-2" role="alert"></div>
+                    </div>
 
-							<div class="mb-3">
-								<label for="eventRooms" class="form-label">Room</label>
-								<select class="form-control" id="eventRooms" required>
-									<option value="" selected disabled>Select a Room</option>
-								</select>
-								<div id="eventRoomError" class="alert alert-danger d-none mt-2" role="alert"></div>
-							</div>
-							<div class="mb-3">
-								<label for="eventSubject" class="form-label">Teacher And Subject</label>
-								<select class="form-control" id="eventSubject" required>
-									<option value="" selected disabled>Select a Subject and Teacher</option>
-								</select>
-								<div id="eventSubjectError" class="alert alert-danger d-none mt-2" role="alert"></div>
-							</div>
-							<div class="mb-3">
-								<label for="eventCompletionTagCalander" class="form-label">Completion Tag</label>
-								<select class="form-control" id="eventCompletionTagCalander" multiple>
-									<option value="1">Bronze</option>
-									<option value="2">Silver</option>
-									<option value="3">Gold</option>
-									<option value="4">Platinum</option>
-									<option value="5">Diamond</option>
-									<option value="6">Master</option>
-									<option value="7">Grand Master</option>
-									<option value="8">Legendary</option>
-									<option value="10">fonction 1</option>
-								</select>
-							</div>
-							<div class="mb-3">
-								<label for="eventDuplicate" class="form-label">Duplicate</label>
-								<select class="form-control" id="eventDuplicate">
-									<option value="" selected disabled>Select an Option</option>
-									<option value="none">Not Duplicate</option>
-									<option value="daily">Per Day</option>
-									<option value="weekly">Per Week</option>
-									<option value="biweekly">Every 2 Weeks</option>
-								</select>
-								<div id="eventDuplicateError" class="alert alert-danger d-none mt-2" role="alert"></div>
-							</div>
-							<div class="mb-3 d-none" id="startTimeFields">
-								<label for="eventStartTime" class="form-label">Start Time</label>
-								<input type="time" class="form-control" id="eventStartTime">
-							</div>
-							<div class="mb-3 d-none" id="endTimeFields">
-								<label for="eventEndTime" class="form-label">End Time</label>
-								<input type="time" class="form-control" id="eventEndTime">
-							</div>
-							<div class="mb-3 d-none" id="eventEndFields">
-								<label for="eventEndDate" class="form-label">End Date (for recurring events)</label>
-								<input type="date" class="form-control" id="eventEndDate">
-							</div>
-							<div class="mb-3">
-								<label for="eventDescription" class="form-label">Description</label>
-								<textarea class="form-control" id="eventDescription" name="eventDescription" rows="3" placeholder="Enter event description"></textarea>
-							</div>
-							<input type="hidden" id="eventGroupId" value="75">
-							<input type="hidden" id="eventGroupCapacity" value="25">
-							<input type="hidden" id="eventSessionId" value="12">
-							<input type="hidden" id="eventAccountId" value="3">
-							<input type="hidden" id="eventLocalId" value="8">
-						</form>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-						<button type="button" class="btn btn-primary" id="saveEventButton">Save</button>
-					</div>
-				</div>
-			</div>
-			<style>
+                    <div class="mb-3">
+                        <label for="eventRooms" class="form-label">Room</label>
+                        <select class="form-control" id="eventRooms" required>
+                            <option value="" selected disabled>Select a Room</option>
+                        </select>
+                        <div id="eventRoomError" class="alert alert-danger d-none mt-2" role="alert"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventSubject" class="form-label">Teacher And Subject</label>
+                        <select class="form-control" id="eventSubject" required>
+                            <option value="" selected disabled>Select a Subject and Teacher</option>
+                        </select>
+                        <div id="eventSubjectError" class="alert alert-danger d-none mt-2" role="alert"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventCompletionTagCalander" class="form-label">Completion Tag</label>
+                        <select class="form-control" id="eventCompletionTagCalander" multiple>
+                            <option value="1">Bronze</option>
+                            <option value="2">Silver</option>
+                            <option value="3">Gold</option>
+                            <option value="4">Platinum</option>
+                            <option value="5">Diamond</option>
+                            <option value="6">Master</option>
+                            <option value="7">Grand Master</option>
+                            <option value="8">Legendary</option>
+                            <option value="10">fonction 1</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventDuplicate" class="form-label">Duplicate</label>
+                        <select class="form-control" id="eventDuplicate">
+                            <option value="" selected disabled>Select an Option</option>
+                            <option value="none">Not Duplicate</option>
+                            <option value="daily">Per Day</option>
+                            <option value="weekly">Per Week</option>
+                            <option value="biweekly">Every 2 Weeks</option>
+                        </select>
+                        <div id="eventDuplicateError" class="alert alert-danger d-none mt-2" role="alert"></div>
+                    </div>
+                    <div class="mb-3 d-none" id="startTimeFields">
+                        <label for="eventStartTime" class="form-label">Start Time</label>
+                        <input type="time" class="form-control" id="eventStartTime">
+                    </div>
+                    <div class="mb-3 d-none" id="endTimeFields">
+                        <label for="eventEndTime" class="form-label">End Time</label>
+                        <input type="time" class="form-control" id="eventEndTime">
+                    </div>
+                    <div class="mb-3 d-none" id="eventEndFields">
+                        <label for="eventEndDate" class="form-label">End Date (for recurring events)</label>
+                        <input type="date" class="form-control" id="eventEndDate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="eventDescription" name="eventDescription" rows="3"
+                                  placeholder="Enter event description"></textarea>
+                    </div>
+                    <input type="hidden" id="eventGroupId" value="75">
+                    <input type="hidden" id="eventGroupCapacity" value="25">
+                    <input type="hidden" id="eventSessionId" value="12">
+                    <input type="hidden" id="eventAccountId" value="3">
+                    <input type="hidden" id="eventLocalId" value="8">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveEventButton">Save</button>
+            </div>
+        </div>
+    </div>
+    <style>
 
-			</style>
+    </style>
 
-		</div>
-		<script>
-				document.getElementById('eventDuplicate').addEventListener('change', function() {
-					const startTimeFields = document.getElementById('startTimeFields');
-					const endTimeFields = document.getElementById('endTimeFields');
-					const eventEndFields = document.getElementById('eventEndFields');
+</div>
+<script>
+    document.getElementById('eventDuplicate').addEventListener('change', function() {
+        const startTimeFields = document.getElementById('startTimeFields');
+        const endTimeFields = document.getElementById('endTimeFields');
+        const eventEndFields = document.getElementById('eventEndFields');
 
-					const value = this.value;
+        const value = this.value;
 
-					if (value === 'none') {
-						// Show only start and end time for non-duplicate events
-						startTimeFields.classList.remove('d-none');
-						endTimeFields.classList.remove('d-none');
-						eventEndFields.classList.add('d-none');
-					} else if (value === 'daily' || value === 'weekly' || value === 'biweekly') {
-						// Show all fields for recurring events
-						startTimeFields.classList.remove('d-none');
-						endTimeFields.classList.remove('d-none');
-						eventEndFields.classList.remove('d-none');
-					} else {
-						// Hide all fields if nothing is selected
-						startTimeFields.classList.add('d-none');
-						endTimeFields.classList.add('d-none');
-						eventEndFields.classList.add('d-none');
-					}
-				});
-				</script>
-	</div>
-
-
-	<!-- modal of the information of the calander -->
-	<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
-    	<div class="modal-dialog modal-dialog-centered">
-        	<div class="modal-content">
-            	<div class="modal-header">
-					<h5 class="modal-title" id="eventModalLabel">
-						<i class="bi bi-calendar-event me-2"></i>Event Details
-					</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-            	<div class="modal-body">
-                	<form id="editGroupForm">
-                    	<div class="mb-3">
-                        	<label for="groupRef" class="form-label fw-bold">
-                            	<i class="bi bi-hash text-primary"></i> Reference ID
-                        	</label>
-                        	<input type="text" class="form-control" id="groupRef" name="groupRef" readonly>
-                    	</div>
-
-                    	<div class="mb-3">
-                        	<label for="groupName" class="form-label fw-bold">
-                            	<i class="bi bi-card-heading text-primary"></i> Name
-                        	</label>
-                        	<input type="text" class="form-control" id="groupName" name="groupName" readonly>
-                    	</div>
-
-                    	<div class="row">
-                        	<div class="col-md-6 mb-3">
-                            	<label for="eventDate" class="form-label fw-bold">
-                                	<i class="bi bi-calendar-check text-success"></i> Start Date
-                            	</label>
-                            	<input type="date" class="form-control" id="eventDate" name="eventDate" readonly>
-                        	</div>
-                        	<div class="col-md-6 mb-3">
-                            	<label for="eventEndDate" class="form-label fw-bold">
-                                	<i class="bi bi-calendar-x text-danger"></i> End Date
-                            	</label>
-                            	<input type="date" class="form-control" id="eventEndDate" name="eventEndDate" readonly>
-                        	</div>
-                    	</div>
-
-                    	<div class="row">
-                        	<div class="col-md-6 mb-3">
-                            	<label for="eventStartTime" class="form-label fw-bold">
-                                	<i class="bi bi-clock text-success"></i> Start Time
-                            	</label>
-                            	<input type="time" class="form-control" id="eventStartTime" name="eventStartTime" readonly>
-                        	</div>
-                        	<div class="col-md-6 mb-3">
-                            	<label for="eventEndTime" class="form-label fw-bold">
-                                	<i class="bi bi-clock-history text-danger"></i> End Time
-                            	</label>
-                            	<input type="time" class="form-control" id="eventEndTime" name="eventEndTime" readonly>
-                        	</div>
-                    	</div>
-
-                    	<div class="mb-3">
-                        	<label for="typeSessionEdit" class="form-label fw-bold">
-                            	<i class="bi bi-tag text-primary"></i> Type
-                        	</label>
-                        	<input type="text" class="form-control" id="typeSessionEdit" name="typeSessionEdit" readonly>
-                    	</div>
-
-                    	<div class="mb-3">
-                        	<label for="description" class="form-label fw-bold">
-                            	<i class="bi bi-text-paragraph text-primary"></i> Description
-                        	</label>
-                        	<textarea class="form-control" id="description" name="description" rows="3" readonly></textarea>
-                    	</div>
-
-                    	<input type="hidden" id="groupId" name="groupId">
-                	</form>
-            	</div>
-            	<div class="modal-footer">
-                	<button type="button" class="btn btn-success" id="saveEventGroupCalendar" style="display:none;">
-                    	<i class="bi bi-save me-1"></i>Save
-                	</button>
-                	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    	<i class="bi bi-x-circle me-1"></i>Close
-                	</button>
-            	</div>
-        	</div>
-    	</div>
-	</div>
-    <!-- Required vendors -->
-    <script src="/static/vendor/global/global.min.js"></script>
-	<script src="/static/vendor/chart.js/Chart.bundle.min.js"></script>
-	<script src="/static/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-
-	<script src="/static/vendor/fullcalendar-5.11.0/lib/main.js"></script>
+        if (value === 'none') {
+            // Show only start and end time for non-duplicate events
+            startTimeFields.classList.remove('d-none');
+            endTimeFields.classList.remove('d-none');
+            eventEndFields.classList.add('d-none');
+        } else if (value === 'daily' || value === 'weekly' || value === 'biweekly') {
+            // Show all fields for recurring events
+            startTimeFields.classList.remove('d-none');
+            endTimeFields.classList.remove('d-none');
+            eventEndFields.classList.remove('d-none');
+        } else {
+            // Hide all fields if nothing is selected
+            startTimeFields.classList.add('d-none');
+            endTimeFields.classList.add('d-none');
+            eventEndFields.classList.add('d-none');
+        }
+    });
+</script>
+</div>
 
 
-		<!-- SweetAlert2 JS (LOCAL) -->
-	<script src="/static/js/sweetalert2.min.js"></script>
+<!-- modal of the information of the calander -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventModalLabel">
+                    <i class="bi bi-calendar-event me-2"></i>Event Details
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editGroupForm">
+                    <div class="mb-3">
+                        <label for="groupRef" class="form-label fw-bold">
+                            <i class="bi bi-hash text-primary"></i> Reference ID
+                        </label>
+                        <input type="text" class="form-control" id="groupRef" name="groupRef" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="groupName" class="form-label fw-bold">
+                            <i class="bi bi-card-heading text-primary"></i> Name
+                        </label>
+                        <input type="text" class="form-control" id="groupName" name="groupName" readonly>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="eventDate" class="form-label fw-bold">
+                                <i class="bi bi-calendar-check text-success"></i> Start Date
+                            </label>
+                            <input type="date" class="form-control" id="eventDate" name="eventDate" readonly>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="eventEndDate" class="form-label fw-bold">
+                                <i class="bi bi-calendar-x text-danger"></i> End Date
+                            </label>
+                            <input type="date" class="form-control" id="eventEndDate" name="eventEndDate" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="eventStartTime" class="form-label fw-bold">
+                                <i class="bi bi-clock text-success"></i> Start Time
+                            </label>
+                            <input type="time" class="form-control" id="eventStartTime" name="eventStartTime" readonly>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="eventEndTime" class="form-label fw-bold">
+                                <i class="bi bi-clock-history text-danger"></i> End Time
+                            </label>
+                            <input type="time" class="form-control" id="eventEndTime" name="eventEndTime" readonly>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="typeSessionEdit" class="form-label fw-bold">
+                            <i class="bi bi-tag text-primary"></i> Type
+                        </label>
+                        <input type="text" class="form-control" id="typeSessionEdit" name="typeSessionEdit" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label fw-bold">
+                            <i class="bi bi-text-paragraph text-primary"></i> Description
+                        </label>
+                        <textarea class="form-control" id="description" name="description" rows="3" readonly></textarea>
+                    </div>
+
+                    <input type="hidden" id="groupId" name="groupId">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="saveEventGroupCalendar" style="display:none;">
+                    <i class="bi bi-save me-1"></i>Save
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-1"></i>Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Required vendors -->
+<script src="/static/vendor/global/global.min.js"></script>
+<script src="/static/vendor/chart.js/Chart.bundle.min.js"></script>
+<script src="/static/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+
+<script src="/static/vendor/fullcalendar-5.11.0/lib/main.js"></script>
 
 
+<!-- SweetAlert2 JS (LOCAL) -->
+<script src="/static/js/sweetalert2.min.js"></script>
 
-	<script src="/static/js/calendar-2.js"></script>
+
+<script src="/static/js/calendar-2.js"></script>
 <!--    <script src="/static/js/custom.min.js"></script>-->
 <!--	<script src="/static/js/dlabnav-init.js"></script>-->
 <!--	<script src="/static/js/demo.js"></script>-->
-	<script src="/static/js/custom.js"></script>
+<script src="/static/js/custom.js"></script>
 
-	<script>
+<script>
     const tabletId = "{{ tablet_id }}";
 
     function checkForSession() {
@@ -422,6 +502,221 @@
     checkForSession();
     setInterval(checkForSession, 10000);
 </script>
+<script src="/static/vendor/qrcodejs/qrcode.min.js"></script>
+<script>
+    // Generate static QR codes once page loads
+    window.addEventListener('load', function() {
+        new QRCode(document.getElementById("qr-android-static"), {
+            text: "https://play.google.com/store/apps/details?id=com.unistudious.projet1v2&hl=fr",
+            width: 130,
+            height: 130,
+            colorDark: "#000000",
+            colorLight: "#f8f9fa",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+        new QRCode(document.getElementById("qr-ios-static"), {
+            text: "https://apps.apple.com/ch/app/unistudious/id6756975616",
+            width: 130,
+            height: 130,
+            colorDark: "#000000",
+            colorLight: "#f8f9fa",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    });
+</script>
+<!--&lt;!&ndash; QR Code Popup &ndash;&gt;-->
+<!--<div id="qr-popup" onclick="hideQRPopup()" style="-->
+<!--    display: none;-->
+<!--    position: fixed;-->
+<!--    top: 0; left: 0;-->
+<!--    width: 100%; height: 100%;-->
+<!--    background: rgba(0,0,0,0.6);-->
+<!--    z-index: 9999;-->
+<!--    justify-content: center;-->
+<!--    align-items: center;-->
+<!--    cursor: pointer;-->
+<!--    backdrop-filter: blur(4px);-->
+<!--">-->
+<!--    <div onclick="event.stopPropagation()" style="-->
+<!--        background: white;-->
+<!--        border-radius: 20px;-->
+<!--        padding: 30px 35px;-->
+<!--        text-align: center;-->
+<!--        box-shadow: 0 20px 60px rgba(0,0,0,0.3);-->
+<!--        max-width: 560px;-->
+<!--        width: 95%;-->
+<!--        position: relative;-->
+<!--    ">-->
+<!--        &lt;!&ndash; Close button &ndash;&gt;-->
+<!--        <button onclick="hideQRPopup()" style="-->
+<!--            position: absolute;-->
+<!--            top: 12px; right: 16px;-->
+<!--            background: none;-->
+<!--            border: none;-->
+<!--            font-size: 22px;-->
+<!--            cursor: pointer;-->
+<!--            color: #aaa;-->
+<!--            line-height: 1;-->
+<!--        ">✕-->
+<!--        </button>-->
+
+<!--        &lt;!&ndash; Title &ndash;&gt;-->
+<!--        <h4 style="font-size: 28px; font-weight: 700; color: #2c3e50; margin-bottom: 4px; margin-top: 8px;">-->
+<!--            📲 Download Unistudious-->
+<!--        </h4>-->
+<!--        <p style="font-size: 16px; color: #7f8c8d; margin-bottom: 20px;">-->
+<!--            Scan to download our app-->
+<!--        </p>-->
+
+<!--        &lt;!&ndash; Two QR codes side by side &ndash;&gt;-->
+<!--        <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 16px;">-->
+
+<!--            &lt;!&ndash; Android &ndash;&gt;-->
+<!--            <div style="text-align: center;">-->
+<!--                <div style="-->
+<!--                    background: #f8f9fa;-->
+<!--                    border-radius: 12px;-->
+<!--                    padding: 12px;-->
+<!--                    display: inline-block;-->
+<!--                    margin-bottom: 8px;-->
+<!--                ">-->
+<!--                    <div id="qr-android" style="width: 150px; height: 150px;"></div>-->
+<!--                </div>-->
+<!--                <div style="display: flex; align-items: center; justify-content: center; gap: 5px;">-->
+<!--                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#3DDC84">-->
+<!--                        <path d="M17.523 15.341l1.188 2.056a.5.5 0 01-.866.5l-1.203-2.083A7.967 7.967 0 0112 16.5a7.967 7.967 0 01-4.642-1.686L6.155 17.897a.5.5 0 01-.866-.5l1.188-2.056A7.983 7.983 0 014 9.5h16a7.983 7.983 0 01-2.477 5.841zM8.5 11a1 1 0 100 2 1 1 0 000-2zm7 0a1 1 0 100 2 1 1 0 000-2zM7.102 3.152l-1.2-2.078a.5.5 0 01.866-.5l1.215 2.104A7.954 7.954 0 0112 2c1.48 0 2.863.402 4.017 1.098l1.215-2.104a.5.5 0 11.866.5l-1.2 2.078A7.984 7.984 0 0120 9.5H4a7.984 7.984 0 013.102-6.348z"/>-->
+<!--                    </svg>-->
+<!--                    <span style="font-size: 16px; font-weight: 600; color: #3DDC84;">Android</span>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Divider &ndash;&gt;-->
+<!--            <div style="width: 1px; background: #ecf0f1;"></div>-->
+
+<!--            &lt;!&ndash; iOS &ndash;&gt;-->
+<!--            <div style="text-align: center;">-->
+<!--                <div style="-->
+<!--                    background: #f8f9fa;-->
+<!--                    border-radius: 12px;-->
+<!--                    padding: 12px;-->
+<!--                    display: inline-block;-->
+<!--                    margin-bottom: 8px;-->
+<!--                ">-->
+<!--                    <div id="qr-ios" style="width: 150px; height: 150px;"></div>-->
+<!--                </div>-->
+<!--                <div style="display: flex; align-items: center; justify-content: center; gap: 5px;">-->
+<!--                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#555">-->
+<!--                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>-->
+<!--                    </svg>-->
+<!--                    <span style="font-size: 12px; font-weight: 600; color: #555;">iOS</span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Progress bar &ndash;&gt;-->
+<!--        <div style="background: #ecf0f1; border-radius: 10px; height: 4px; overflow: hidden; margin-top: 8px;">-->
+<!--            <div id="qr-progress" style="-->
+<!--                height: 100%;-->
+<!--                background: linear-gradient(90deg, #667eea, #764ba2);-->
+<!--                border-radius: 10px;-->
+<!--                width: 100%;-->
+<!--                transition: width 15s linear;-->
+<!--            "></div>-->
+<!--        </div>-->
+<!--        <p style="font-size: 14px; color: #bbb; margin-top: 6px;" id="qr-countdown">Closing in 15s</p>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<style>-->
+<!--    @keyframes fadeIn {-->
+<!--        from { opacity: 0; }-->
+<!--        to   { opacity: 1; }-->
+<!--    }-->
+<!--    @keyframes slideUp {-->
+<!--        from { transform: translateY(40px); opacity: 0; }-->
+<!--        to   { transform: translateY(0); opacity: 1; }-->
+<!--    }-->
+<!--</style>-->
+
+
+<!--<script>-->
+<!--    let qrTimer = null;-->
+<!--    let qrCountdownTimer = null;-->
+<!--    let qrCountdown = 15;-->
+<!--    let qrGenerated = false;-->
+
+<!--    function generateQRCodes() {-->
+<!--        if (qrGenerated) return;-->
+
+<!--        // Android QR-->
+<!--        new QRCode(document.getElementById("qr-android"), {-->
+<!--            text: "https://play.google.com/store/apps/details?id=com.unistudious.projet1v2&hl=fr",-->
+<!--            width: 150,-->
+<!--            height: 150,-->
+<!--            colorDark: "#000000",-->
+<!--            colorLight: "#f8f9fa",-->
+<!--            correctLevel: QRCode.CorrectLevel.H-->
+<!--        });-->
+
+<!--        // iOS QR-->
+<!--        new QRCode(document.getElementById("qr-ios"), {-->
+<!--            text: "https://apps.apple.com/ch/app/unistudious/id6756975616",-->
+<!--            width: 150,-->
+<!--            height: 150,-->
+<!--            colorDark: "#000000",-->
+<!--            colorLight: "#f8f9fa",-->
+<!--            correctLevel: QRCode.CorrectLevel.H-->
+<!--        });-->
+
+<!--        qrGenerated = true;-->
+<!--    }-->
+
+<!--    function showQRPopup() {-->
+<!--        generateQRCodes();-->
+
+<!--        const popup = document.getElementById('qr-popup');-->
+<!--        popup.style.display = 'flex';-->
+<!--        popup.style.animation = 'fadeIn 0.5s ease';-->
+
+<!--        // Reset and start progress bar-->
+<!--        const progress = document.getElementById('qr-progress');-->
+<!--        progress.style.transition = 'none';-->
+<!--        progress.style.width = '100%';-->
+<!--        setTimeout(() => {-->
+<!--            progress.style.transition = 'width 15s linear';-->
+<!--            progress.style.width = '0%';-->
+<!--        }, 50);-->
+
+<!--        // Countdown text-->
+<!--        qrCountdown = 15;-->
+<!--        document.getElementById('qr-countdown').textContent = `Closing in ${qrCountdown}s`;-->
+<!--        qrCountdownTimer = setInterval(() => {-->
+<!--            qrCountdown&#45;&#45;;-->
+<!--            document.getElementById('qr-countdown').textContent = `Closing in ${qrCountdown}s`;-->
+<!--            if (qrCountdown <= 0) clearInterval(qrCountdownTimer);-->
+<!--        }, 1000);-->
+
+<!--        // Auto hide after 15 seconds-->
+<!--        qrTimer = setTimeout(() => hideQRPopup(), 15000);-->
+<!--    }-->
+
+<!--    function hideQRPopup() {-->
+<!--        const popup = document.getElementById('qr-popup');-->
+<!--        popup.style.animation = 'fadeIn 0.3s ease reverse';-->
+<!--        setTimeout(() => {-->
+<!--            popup.style.display = 'none';-->
+<!--            popup.style.animation = 'fadeIn 0.5s ease';-->
+<!--        }, 300);-->
+<!--        clearTimeout(qrTimer);-->
+<!--        clearInterval(qrCountdownTimer);-->
+<!--    }-->
+
+<!--    // Show after 3 seconds on page load, then every 3 minutes-->
+<!--    setTimeout(() => showQRPopup(), 3000);-->
+<!--    setInterval(() => showQRPopup(), 3 * 60 * 1000);-->
+<!--</script>-->
+
 </body>
 
 <!-- Mirrored from akademi.dexignlab.com/xhtml/celandar.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 04 Mar 2025 13:05:52 GMT -->

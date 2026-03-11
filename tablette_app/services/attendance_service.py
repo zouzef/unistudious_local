@@ -208,3 +208,16 @@ def get_account_data(calendar_id):
     except Exception as e:
         print(f"DEBUG: Error {e} from get_account_data")
         return {"status": "error", "message": str(e)}
+
+def get_account_data_tablet(tablet_id):
+    try:
+        url = f"{base_url}{config['url']['get_data_account_tablet']}/{tablet_id}"
+        response = requests.get(url,verify=False)
+        response.raise_for_status()
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return {"status": "error"}
+    except Exception as e:
+        print(f"DEBUG: Error {e} from get_account_data_tablet")
+        return {"status": "error","message":str(e)}

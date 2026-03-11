@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify,send_file
 import sys
 import os
 from datetime import datetime
@@ -122,7 +122,7 @@ def get_rooms_by_local(local_id):
             "message": f"Error {str(e)}"
         }), 500
 
-
+# ENDPOINT 3: Get slc id
 @slc_bp.route('/get_slc_id',methods =['GET'])
 def get_slc_id():
     try:
@@ -142,3 +142,84 @@ def get_slc_id():
             }),404
     except Exception as e:
         return jsonify({"Message":f"Error: {e}"}),500
+
+
+# ENDPOINT 4: GET Academie Name
+@slc_bp.route('/get_academie_info/<int:tablet_id>', methods=['GET'])
+def get_academie_info(tablet_id):
+    try:
+
+        query = """
+            SELECT a.name, t.id 
+            FROM tablet t, account a, slc s 
+            WHERE 
+                t.mac_id = %s 
+                AND t.slc_id = s.id
+                AND s.account_id = a.id;
+        """
+        rows = Database.execute_query(query, (tablet_id,),fetch=True)
+        if not rows:
+            return jsonify({
+                "status": "error",
+                "message": "No academie found for this tablet"
+            }), 404
+
+        return jsonify({
+            "status": "ok",
+            "data": rows[0]
+        }), 200
+
+    except Exception as e:
+        print(f"Error: {e} coming from get_academie_info")
+        return jsonify({
+            "status": "error",
+            "message": "Error coming from get_academie_info"
+        }), 500
+
+
+# ENDPOINT 5: Get Academie Image
+@slc_bp.route('/get_academie_image/<int:tablet_id>', methods=['GET'])
+def get_academie_image(tablet_id):
+    try:
+        query = """
+            SELECT a.file_link, a.id 
+            FROM tablet t, account a, slc s 
+            WHERE 
+                t.mac_id = %s 
+                AND t.slc_id = s.id
+                AND s.account_id = a.id;
+        """
+        rows = Database.execute_query(query, (tablet_id,))
+
+        if not rows:
+            return jsonify({
+                "status": "error",
+                "message": "No academie found for this tablet"
+            }), 404
+
+        account_id = rows[0]["id"]
+        file_link = rows[0]["file_link"]
+
+        if not file_link:
+            return jsonify({
+                "status": "error",
+                "message": "No image found for this academie"
+            }), 404
+
+        # Build path relative to this file → no absolute path
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        image_path = os.path.join(base_dir, "uploads", "academie_img", f"academie_{account_id}", file_link)
+        if not os.path.exists(image_path):
+            return jsonify({
+                "status": "error",
+                "message": "Image file not found on server"
+            }), 404
+
+        return send_file(image_path)
+
+    except Exception as e:
+        print(f"Error: {e} coming from get_academie_image")
+        return jsonify({
+            "status": "error",
+            "message": "Error coming from get_academie_image"
+        }), 500

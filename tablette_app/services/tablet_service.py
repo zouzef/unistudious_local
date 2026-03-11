@@ -92,3 +92,15 @@ def fetch_user_profile_image(user_id):
     except Exception as e:
         print(f"Error fetching profile image for user {user_id}: {e}")
         return None, None
+
+def fech_academie_image(tablet_id):
+    try:
+        url = f"{base_url}/get_academie_image/{tablet_id}"
+        response = requests.get(url, verify=False,stream=True)
+        if response.ok:
+            return response.content,response.headers.get('Content-type', 'image/jpeg')
+        else:
+            return None,None
+    except Exception as e:
+        print(f"Error fetching profile image for user {tablet_id}: {e}")
+        return None, None

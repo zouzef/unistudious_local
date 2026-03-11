@@ -129,7 +129,7 @@ def process_sync_data(db, data):
     if 'account' in data:
         from sync.processors.account_processor import process_accounts
         print("\n ACCOUNTS: ")
-        process_accounts(db, normalize(data['account']))
+        process_accounts(db, normalize(data['account']),token)
 
     if 'accountSubject' in data:
         from sync.processors.account_subject_processor import process_account_subjects

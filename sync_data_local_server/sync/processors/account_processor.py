@@ -10,27 +10,12 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 
 from utils.helpers import format_date
 from core.auth import get_token
+from processors.image_downloader import download_academie_image
 
 
-def download_account_image(file_link):
-    """
-    Download account image (placeholder - implement based on your download logic)
-
-    Args:
-        file_link: Image URL to download
-    """
-    try:
-        if file_link:
-            token = get_token()
-            # TODO: Implement your image download logic here
-            # from download_images.download_images_local import download_image
-            # download_image(token, file_link)
-            print(f"      📷 Image: {file_link}")
-    except Exception as e:
-        print(f"      ⚠️  Image download failed: {e}")
 
 
-def insert_accounts(db, account_data):
+def insert_accounts(db, account_data,token):
     """
     Handle 'created' accounts from API
     Logic:
@@ -107,7 +92,7 @@ def insert_accounts(db, account_data):
 
                     # Download image if changed
                     if new_data["file_link"] and new_data["file_link"] != existing.get("file_link"):
-                        download_account_image(new_data["file_link"])
+                        download_academie_image(account_id, new_data["file_link"], token)
 
                     update_query = """
                         UPDATE account SET
@@ -139,7 +124,7 @@ def insert_accounts(db, account_data):
 
                     # Download image
                     if new_data["file_link"]:
-                        download_account_image(new_data["file_link"])
+                        download_academie_image(account_id, new_data["file_link"], token)
 
                     insert_query = """
                         INSERT INTO account (id, name, file_link, status, created_at, updated_at, timestamp)
@@ -174,7 +159,7 @@ def insert_accounts(db, account_data):
     return result
 
 
-def update_accounts(db, account_data):
+def update_accounts(db, account_data,token):
     """
     Handle 'updated' accounts from API
     Logic:
@@ -251,7 +236,7 @@ def update_accounts(db, account_data):
 
                     # Download image if changed
                     if new_data["file_link"] and new_data["file_link"] != existing.get("file_link"):
-                        download_account_image(new_data["file_link"])
+                        download_academie_image(account_id, new_data["file_link"], token)
 
                     update_query = """
                         UPDATE account SET
@@ -318,7 +303,7 @@ def update_accounts(db, account_data):
     return result
 
 
-def process_accounts(db, account_data):
+def process_accounts(db, account_data,token):
     """
     Process account data (handles both 'created' and 'updated' sections)
 
@@ -340,12 +325,12 @@ def process_accounts(db, account_data):
     # Process 'created' section
     if account_data.get("created"):
         print(f"\n✨ Processing 'created' section ({len(account_data['created'])} records)...")
-        results["created_section"] = insert_accounts(db, account_data)
+        results["created_section"] = insert_accounts(db, account_data,token)
 
     # Process 'updated' section
     if account_data.get("updated"):
         print(f"\n🔄 Processing 'updated' section ({len(account_data['updated'])} records)...")
-        results["updated_section"] = update_accounts(db, account_data)
+        results["updated_section"] = update_accounts(db, account_data,token)
 
     # Print total summary
     total_inserted = results["created_section"]["inserted"] + results["updated_section"]["inserted"]

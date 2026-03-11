@@ -16,6 +16,7 @@
     "delete_attendance_api": "/delete_attendance_api",
     "get_statics_attendance": "/static_attendance",
     "get_data_account": "/data_account",
+    "get_data_account_tablet": "/get_academie_info",
     "get-group": "/get-group-calender",
     "show-attendance-unknown": "/show-attendance-unknown",
     "associate_folder_user": "/associate-known-student-attendance",

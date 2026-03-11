@@ -11,7 +11,8 @@ from services.attendance_service import (
     get_attendance_statistics,
     reset_attendance,
     delete_attendance,
-    get_account_data
+    get_account_data,
+    get_account_data_tablet
 )
 
 attendance_bp = Blueprint('attendance', __name__)
@@ -154,6 +155,16 @@ def get_data_account_route(calendar_id):
         print(f"DEBUG: Error {e} come from get_data_account")
         return jsonify({"status": "error", "message": "error from get_data_account"}), 500
 
+@attendance_bp.route('/get-data-account-tablet/<int:tablet_id>',methods=['GET'])
+def get_data_academie(tablet_id):
+    try:
+
+        result = get_account_data_tablet(tablet_id)
+        print(result)
+        return jsonify(result),200
+    except Exception as e:
+        print(f"DEBUG: Error {e} come from get_data_academie")
+        return jsonify({"status": "error", "message": "error from get_data_academie"}), 500
 
 @attendance_bp.route('/trigger-update/<int:session_id>')
 def trigger_update(session_id):

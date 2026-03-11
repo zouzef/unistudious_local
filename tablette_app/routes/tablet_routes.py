@@ -9,7 +9,8 @@ from services.tablet_service import (
     get_tablet_room,
     get_room_name,
     fetch_slc_info,
-    fetch_user_profile_image
+    fetch_user_profile_image,
+    fech_academie_image
 )
 from services.attendance_service import (
     fetch_attendance,
@@ -172,6 +173,23 @@ def get_profile_img(user_id):
         print(f"Error: {e} coming from get_profile_img")
         return jsonify({"Message": f"Error: {e}"}), 500
 
+@tablet_bp.route('/api/get-academie-image/<int:tablet_mac>',methods=['GET'])
+def get_academie_image(tablet_mac):
+    try:
+        image_data,content_type =fech_academie_image(tablet_mac)
+        if image_data:
+            return Response(image_data, content_type=content_type)
+
+        # Return default image if nothing returned
+        default_img_path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            'static/assets/images/profile.svg'
+        )
+        return send_file(default_img_path)
+
+    except Exception as e:
+        print(f"Error: {e} coming from get_academie_img")
+        return jsonify({"Message":f"Error: {e}"}),500
 
 
 @tablet_bp.route('/test-images')
