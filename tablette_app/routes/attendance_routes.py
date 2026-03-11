@@ -178,3 +178,5 @@ def trigger_update(session_id):
     }, room=f'session_{session_id}')
 
     return jsonify({"status": "success", "message": "Update triggered"})
+
+
