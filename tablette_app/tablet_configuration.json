@@ -1,5 +1,5 @@
 {
-  "url":{
+  "url": {
     "API_BASE_URL": "https://192.168.1.246:5004/scl",
     "get_all_tablets": "/get-all-tablets",
     "get_all_calendar": "/get-all-calender",
@@ -21,11 +21,9 @@
     "associate_folder_user": "/associate-known-student-attendance",
     "delete_image_from_folder": "/delete_image_folder"
   },
-  "config":{
+  "config": {
     "SECRET_KEY": "localhost123S",
     "username": "40:c7:11:f9:ca:80",
     "password": "bmax123"
-
   }
-
 }

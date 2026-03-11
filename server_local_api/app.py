@@ -1,9 +1,10 @@
 from flask import Flask
 from config import Config
-
+from update_tablet_config import update_tablet_config
 
 def create_app():
     """Application factory"""
+    update_tablet_config()
     app = Flask(__name__)
     app.config.from_object(Config)
 
@@ -62,6 +63,7 @@ def create_app():
 
 
 if __name__ == '__main__':
+
     app = create_app()
     app.run(
         host=Config.SERVER_HOST,
