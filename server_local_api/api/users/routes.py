@@ -4,6 +4,9 @@ import sys
 import os
 import json
 from datetime import datetime, timedelta
+import bcrypt
+import mysql.connector
+from flask import Blueprint, request,jsonify
 
 # Add parent directories to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -646,3 +649,68 @@ def get_profile_file(user_id):
 
 
 
+# =============================================
+# ENDPOINT 11: User authetificate
+# =============================================
+import json
+
+@users_bp.route('/Authentificate-Teacher', methods=['POST'])
+def authentification_teacher():
+	try:
+		data = request.get_json()
+		if not data:
+			return jsonify({
+                "Message": "Error: Teacher Data is Missing"
+            }), 400
+
+		username = data.get("username")
+		password = data.get("password")
+
+		if not username or not password:
+			return jsonify({
+                "Message": "Error: Username or Password Missing"
+            }), 422
+
+		# 1. Fetch user from DB by username
+		query = "SELECT username, password, roles FROM user WHERE username = %s"
+		user = Database.execute_query(query, (username,), fetch=True)
+
+		# 2. Check if user exists
+		if not user:
+			return jsonify({
+                "Message": "Error: User Not Found"
+            }), 404
+
+		# 3. Verify password against Symfony bcrypt hash ($2y$ → $2b$)
+		hashed_password = user[0]["password"].replace("$2y$", "$2b$")
+		password_match = bcrypt.checkpw(
+			password.encode("utf-8"),
+			hashed_password.encode("utf-8")
+		)
+
+		if not password_match:
+			return jsonify({
+                "Message": "Error: Invalid Password"
+            }), 401
+
+		# 4. Check role — must be ROLE_TEACHER or ROLE_ADMIN
+		roles = json.loads(user[0]["roles"])  # "[\"ROLE_TEACHER\"]" → ["ROLE_TEACHER"]
+
+		allowed_roles = {"ROLE_TEACHER", "ROLE_ADMIN"}
+		if not allowed_roles.intersection(set(roles)):
+			return jsonify({
+                "Message": "Error: Access Denied — Not a Teacher or Admin"
+            }), 403
+
+		# 5. Success
+		return jsonify({
+            "Message": "Authentication Successful",
+            "username": user[0]["username"],
+            "roles": roles
+        }), 200
+
+	except Exception as e:
+		return jsonify({
+            "Message": "Error coming from server",
+            "Error": str(e)
+        }), 500
