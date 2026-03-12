@@ -181,6 +181,7 @@ def get_academie_info(tablet_id):
 @slc_bp.route('/get_academie_image/<int:tablet_id>', methods=['GET'])
 def get_academie_image(tablet_id):
     try:
+        print(tablet_id)
         query = """
             SELECT a.file_link, a.id 
             FROM tablet t, account a, slc s 

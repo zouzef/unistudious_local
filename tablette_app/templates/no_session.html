@@ -110,8 +110,7 @@
 
                                     <div class="ms-3">
                                         <!-- Button trigger modal -->
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                data-bs-target="#eventModal">
+                                        <button type="button" class="btn btn-primary" onclick="openAuthModal()">
                                             <i class="bi bi-plus-circle me-2"></i> + Add Schedule
                                         </button>
 
@@ -205,9 +204,9 @@
                                     </div>
                                 </div>
                                 <!-- Add this ID to your container div -->
-<!--                                <div class="row" id="calendar-cards-container">-->
-<!--                                    &lt;!&ndash; Dynamic cards will be inserted here &ndash;&gt;-->
-<!--                                </div>-->
+                                <!--                                <div class="row" id="calendar-cards-container">-->
+                                <!--                                    &lt;!&ndash; Dynamic cards will be inserted here &ndash;&gt;-->
+                                <!--                                </div>-->
 
                                 <!-- Pagination Controls -->
                                 <div class="col-xl-12" id="pagination-container" style="display: none;">
@@ -378,90 +377,333 @@
 </div>
 
 
-<!-- modal of the information of the calander -->
-<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+<!-- NEW: Event Details Modal -->
+<div class="modal fade" id="eventDetailModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="eventModalLabel">
-                    <i class="bi bi-calendar-event me-2"></i>Event Details
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content" style="border-radius: 16px; overflow: hidden; border: none;">
+
+            <!-- Colored Header -->
+            <div id="modal-header-banner" style="
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 30px 24px 50px;
+                position: relative;
+                text-align: center;
+            ">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        style="position: absolute; top: 14px; right: 16px;"></button>
+
+                <!-- Teacher image -->
+                <img id="modal-teacher-img"
+                     src=""
+                     alt="Teacher"
+                     style="width: 80px; height: 80px; border-radius: 50%;
+                            object-fit: cover; border: 3px solid white;
+                            margin-bottom: 10px;">
+
+                <!-- Title -->
+                <h4 id="modal-title" style="color: white; font-weight: 700; margin: 0; font-size: 20px;"></h4>
+                <span id="modal-type-badge" style="
+                    display: inline-block;
+                    margin-top: 8px;
+                    padding: 3px 14px;
+                    border-radius: 20px;
+                    font-size: 12px;
+                    font-weight: 600;
+                    background: rgba(255,255,255,0.25);
+                    color: white;
+                "></span>
             </div>
-            <div class="modal-body">
-                <form id="editGroupForm">
-                    <div class="mb-3">
-                        <label for="groupRef" class="form-label fw-bold">
-                            <i class="bi bi-hash text-primary"></i> Reference ID
-                        </label>
-                        <input type="text" class="form-control" id="groupRef" name="groupRef" readonly>
-                    </div>
 
-                    <div class="mb-3">
-                        <label for="groupName" class="form-label fw-bold">
-                            <i class="bi bi-card-heading text-primary"></i> Name
-                        </label>
-                        <input type="text" class="form-control" id="groupName" name="groupName" readonly>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="eventDate" class="form-label fw-bold">
-                                <i class="bi bi-calendar-check text-success"></i> Start Date
-                            </label>
-                            <input type="date" class="form-control" id="eventDate" name="eventDate" readonly>
+            <!-- Body -->
+            <div class="modal-body" style="padding: 0; margin-top: -24px;">
+                <div style="
+                    background: white;
+                    border-radius: 16px;
+                    padding: 24px;
+                    margin: 0 12px;
+                    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+                ">
+                    <!-- Ref -->
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                        <div style="background: #f0f0ff; border-radius: 10px; padding: 8px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#667eea"
+                                 stroke-width="2">
+                                <path d="M4 4h16v16H4z"/>
+                                <path d="M8 2v4M16 2v4M4 10h16"/>
+                            </svg>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="eventEndDate" class="form-label fw-bold">
-                                <i class="bi bi-calendar-x text-danger"></i> End Date
-                            </label>
-                            <input type="date" class="form-control" id="eventEndDate" name="eventEndDate" readonly>
+                        <div>
+                            <p style="margin:0; font-size: 11px; color: #aaa;">Reference</p>
+                            <p id="modal-ref" style="margin:0; font-weight: 600; color: #2c3e50;"></p>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="eventStartTime" class="form-label fw-bold">
-                                <i class="bi bi-clock text-success"></i> Start Time
-                            </label>
-                            <input type="time" class="form-control" id="eventStartTime" name="eventStartTime" readonly>
+                    <!-- Date -->
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                        <div style="background: #fff0f0; border-radius: 10px; padding: 8px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e74c3c"
+                                 stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2"/>
+                                <path d="M16 2v4M8 2v4M3 10h18"/>
+                            </svg>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="eventEndTime" class="form-label fw-bold">
-                                <i class="bi bi-clock-history text-danger"></i> End Time
-                            </label>
-                            <input type="time" class="form-control" id="eventEndTime" name="eventEndTime" readonly>
+                        <div>
+                            <p style="margin:0; font-size: 11px; color: #aaa;">Date</p>
+                            <p id="modal-date" style="margin:0; font-weight: 600; color: #2c3e50;"></p>
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="typeSessionEdit" class="form-label fw-bold">
-                            <i class="bi bi-tag text-primary"></i> Type
-                        </label>
-                        <input type="text" class="form-control" id="typeSessionEdit" name="typeSessionEdit" readonly>
+                    <!-- Time -->
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                        <div style="background: #fffbe6; border-radius: 10px; padding: 8px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f39c12"
+                                 stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 6v6l4 2"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p style="margin:0; font-size: 11px; color: #aaa;">Time</p>
+                            <p id="modal-time" style="margin:0; font-weight: 600; color: #2c3e50;"></p>
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="description" class="form-label fw-bold">
-                            <i class="bi bi-text-paragraph text-primary"></i> Description
-                        </label>
-                        <textarea class="form-control" id="description" name="description" rows="3" readonly></textarea>
+                    <!-- Teacher -->
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                        <div style="background: #f0fff4; border-radius: 10px; padding: 8px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#27ae60"
+                                 stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p style="margin:0; font-size: 11px; color: #aaa;">Teacher</p>
+                            <p id="modal-teacher" style="margin:0; font-weight: 600; color: #2c3e50;"></p>
+                        </div>
                     </div>
 
-                    <input type="hidden" id="groupId" name="groupId">
-                </form>
+                    <!-- Description -->
+                    <div id="modal-description-container" style="
+                        background: #f8f9fa;
+                        border-radius: 12px;
+                        padding: 14px;
+                        margin-top: 8px;
+                        display: none;
+                    ">
+                        <p style="margin:0; font-size: 11px; color: #aaa; margin-bottom: 4px;">Description</p>
+                        <p id="modal-description" style="margin:0; font-size: 14px; color: #555; line-height: 1.5;"></p>
+                    </div>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="saveEventGroupCalendar" style="display:none;">
-                    <i class="bi bi-save me-1"></i>Save
-                </button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-circle me-1"></i>Close
-                </button>
+
+            <!-- Footer -->
+            <div class="modal-footer" style="border: none; padding: 16px 24px;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+
+
+<!-- Authentication Modal -->
+<div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 16px; overflow: hidden; border: none;">
+
+            <!-- Header -->
+            <div style="
+                background: #4D44B5;
+                padding: 30px 24px;
+                text-align: center;
+                position: relative;
+            ">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        style="position: absolute; top: 14px; right: 16px;"></button>
+                <div style="
+                    width: 60px; height: 60px;
+                    background: rgba(255,255,255,0.2);
+                    border-radius: 50%;
+                    display: flex; align-items: center; justify-content: center;
+                    margin: 0 auto 12px;
+                ">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <h4 style="color: white; font-weight: 700; margin: 0; font-size: 20px;">Teacher Authentication</h4>
+                <p style="color: rgba(255,255,255,0.7); margin: 6px 0 0; font-size: 13px;">Please verify your identity
+                    to continue</p>
+            </div>
+
+            <!-- Tab switcher -->
+            <div style="display: flex; border-bottom: 2px solid #f0f0f0;">
+                <button id="tab-password" onclick="switchAuthTab('password')" style="
+                    flex: 1; padding: 14px;
+                    border: none; background: white;
+                    font-weight: 600; font-size: 14px;
+                    color: #4D44B5;
+                    border-bottom: 3px solid #4D44B5;
+                    cursor: pointer;
+                ">
+                    🔑 Username & Password
+                </button>
+                <button id="tab-qr" onclick="switchAuthTab('qr')" style="
+                    flex: 1; padding: 14px;
+                    border: none; background: white;
+                    font-weight: 600; font-size: 14px;
+                    color: #aaa;
+                    border-bottom: 3px solid transparent;
+                    cursor: pointer;
+                ">
+                    📷 Scan QR Code
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body" style="padding: 24px;">
+
+                <!-- PASSWORD TAB -->
+                <div id="auth-password-tab">
+                    <div style="margin-bottom: 16px;">
+                        <label style="font-size: 13px; font-weight: 600; color: #555; margin-bottom: 6px; display: block;">Username</label>
+                        <div style="position: relative;">
+                            <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);"
+                                 width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            <input type="text" id="auth-username" placeholder="Enter your username"
+                                   style="
+                                    width: 100%; padding: 12px 12px 12px 38px;
+                                    border: 2px solid #f0f0f0; border-radius: 10px;
+                                    font-size: 14px; outline: none;
+                                    box-sizing: border-box;
+                                    transition: border-color 0.2s;
+                                "
+                                   onfocus="this.style.borderColor='#4D44B5'"
+                                   onblur="this.style.borderColor='#f0f0f0'">
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="font-size: 13px; font-weight: 600; color: #555; margin-bottom: 6px; display: block;">Password</label>
+                        <div style="position: relative;">
+                            <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);"
+                                 width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            <input type="password" id="auth-password" placeholder="Enter your password"
+                                   style="
+                                    width: 100%; padding: 12px 12px 12px 38px;
+                                    border: 2px solid #f0f0f0; border-radius: 10px;
+                                    font-size: 14px; outline: none;
+                                    box-sizing: border-box;
+                                    transition: border-color 0.2s;
+                                "
+                                   onfocus="this.style.borderColor='#4D44B5'"
+                                   onblur="this.style.borderColor='#f0f0f0'"
+                                   onkeypress="if(event.key==='Enter') submitAuth()">
+                        </div>
+                    </div>
+
+                    <div id="auth-error" style="
+                        display: none;
+                        background: #ffeaea;
+                        border-radius: 8px;
+                        padding: 10px 14px;
+                        color: #e74c3c;
+                        font-size: 13px;
+                        margin-bottom: 16px;
+                    ">❌ Invalid username or password
+                    </div>
+
+                    <button onclick="submitAuth()" style="
+                        width: 100%; padding: 13px;
+                        background: #4D44B5; color: white;
+                        border: none; border-radius: 10px;
+                        font-size: 15px; font-weight: 600;
+                        cursor: pointer;
+                        transition: background 0.2s;
+                    "
+                            onmouseover="this.style.background='#3d35a0'"
+                            onmouseout="this.style.background='#4D44B5'">
+                        Login & Continue
+                    </button>
+                </div>
+
+                <!-- QR TAB -->
+                <div id="auth-qr-tab" style="display: none; text-align: center;">
+                    <p style="font-size: 14px; color: #777; margin-bottom: 16px;">
+                        Point your QR code at the camera to authenticate
+                    </p>
+
+                    <!-- Camera preview -->
+                    <div style="
+                        position: relative;
+                        width: 100%;
+                        max-width: 280px;
+                        margin: 0 auto 16px;
+                        border-radius: 12px;
+                        overflow: hidden;
+                        background: #000;
+                    ">
+                        <video id="auth-camera" autoplay playsinline style="
+                            width: 100%;
+                            display: block;
+                            border-radius: 12px;
+                        "></video>
+                        <!-- Scan frame overlay -->
+                        <div style="
+                            position: absolute;
+                            top: 50%; left: 50%;
+                            transform: translate(-50%, -50%);
+                            width: 160px; height: 160px;
+                            border: 3px solid #4D44B5;
+                            border-radius: 12px;
+                            box-shadow: 0 0 0 9999px rgba(0,0,0,0.4);
+                        "></div>
+                        <!-- Scanning line animation -->
+                        <div id="scan-line" style="
+                            position: absolute;
+                            left: calc(50% - 80px);
+                            top: calc(50% - 80px);
+                            width: 160px; height: 3px;
+                            background: #4D44B5;
+                            animation: scanLine 2s linear infinite;
+                        "></div>
+                    </div>
+
+                    <canvas id="auth-canvas" style="display: none;"></canvas>
+
+                    <div id="qr-scan-status" style="
+                        font-size: 13px; color: #777;
+                        margin-bottom: 16px;
+                    ">📷 Camera starting...
+                    </div>
+
+                    <button onclick="stopCamera(); switchAuthTab('password')" style="
+                        padding: 10px 24px;
+                        background: #f0f0f0; color: #555;
+                        border: none; border-radius: 10px;
+                        font-size: 14px; cursor: pointer;
+                    ">← Back to Login
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes scanLine {
+        0%   { top: calc(50% - 80px); }
+        50%  { top: calc(50% + 77px); }
+        100% { top: calc(50% - 80px); }
+    }
+</style>
+
 <!-- Required vendors -->
 <script src="/static/vendor/global/global.min.js"></script>
 <script src="/static/vendor/chart.js/Chart.bundle.min.js"></script>
@@ -525,6 +767,157 @@
         });
     });
 </script>
+
+<script>
+    let cameraStream = null;
+    let qrScanInterval = null;
+
+    function openAuthModal() {
+        // Reset form
+        document.getElementById('auth-username').value = '';
+        document.getElementById('auth-password').value = '';
+        document.getElementById('auth-error').style.display = 'none';
+        switchAuthTab('password');
+        const modal = new bootstrap.Modal(document.getElementById('authModal'));
+        modal.show();
+    }
+
+    function switchAuthTab(tab) {
+        const passwordTab = document.getElementById('auth-password-tab');
+        const qrTab = document.getElementById('auth-qr-tab');
+        const tabPassword = document.getElementById('tab-password');
+        const tabQr = document.getElementById('tab-qr');
+
+        if (tab === 'password') {
+            passwordTab.style.display = 'block';
+            qrTab.style.display = 'none';
+            tabPassword.style.color = '#4D44B5';
+            tabPassword.style.borderBottom = '3px solid #4D44B5';
+            tabQr.style.color = '#aaa';
+            tabQr.style.borderBottom = '3px solid transparent';
+            stopCamera();
+        } else {
+            passwordTab.style.display = 'none';
+            qrTab.style.display = 'block';
+            tabPassword.style.color = '#aaa';
+            tabPassword.style.borderBottom = '3px solid transparent';
+            tabQr.style.color = '#4D44B5';
+            tabQr.style.borderBottom = '3px solid #4D44B5';
+            startCamera();
+        }
+    }
+
+    function submitAuth() {
+        const username = document.getElementById('auth-username').value.trim();
+        const password = document.getElementById('auth-password').value.trim();
+
+        if (!username || !password) {
+            document.getElementById('auth-error').style.display = 'block';
+            document.getElementById('auth-error').textContent = '❌ Please enter username and password';
+            return;
+        }
+
+        // TODO: Replace with real API call when backend is ready
+        // For now show loading then open schedule modal
+        const btn = event.target;
+        btn.textContent = 'Verifying...';
+        btn.disabled = true;
+
+        // Simulate API call — replace this with real fetch when ready
+        setTimeout(() => {
+            btn.textContent = 'Login & Continue';
+            btn.disabled = false;
+
+            // TODO: Remove this and use real response
+            // For now always succeeds — replace with API check
+            onAuthSuccess();
+        }, 1000);
+
+        /* UNCOMMENT THIS WHEN BACKEND IS READY:
+        fetch('/auth/verify-teacher', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        })
+        .then(r => r.json())
+        .then(result => {
+            btn.textContent = 'Login & Continue';
+            btn.disabled = false;
+            if (result.status === 'ok') {
+                onAuthSuccess();
+            } else {
+                document.getElementById('auth-error').style.display = 'block';
+                document.getElementById('auth-error').textContent = '❌ Invalid username or password';
+            }
+        });
+        */
+    }
+
+    function onAuthSuccess() {
+        // Close auth modal
+        bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
+        stopCamera();
+
+        // Open the schedule modal
+        setTimeout(() => {
+            const scheduleModal = new bootstrap.Modal(document.getElementById('eventModal'));
+            scheduleModal.show();
+        }, 300);
+    }
+
+    // ── Camera / QR ──────────────────────────────────────────
+
+    function startCamera() {
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+            .then(stream => {
+                cameraStream = stream;
+                const video = document.getElementById('auth-camera');
+                video.srcObject = stream;
+                document.getElementById('qr-scan-status').textContent = '🔍 Scanning for QR code...';
+
+                // Start scanning frames
+                qrScanInterval = setInterval(() => scanQRFrame(), 500);
+            })
+            .catch(err => {
+                document.getElementById('qr-scan-status').textContent = '❌ Camera not available';
+                console.error('Camera error:', err);
+            });
+    }
+
+    function stopCamera() {
+        if (cameraStream) {
+            cameraStream.getTracks().forEach(track => track.stop());
+            cameraStream = null;
+        }
+        if (qrScanInterval) {
+            clearInterval(qrScanInterval);
+            qrScanInterval = null;
+        }
+    }
+
+    function scanQRFrame() {
+        const video = document.getElementById('auth-camera');
+        const canvas = document.getElementById('auth-canvas');
+        if (!video || video.readyState !== video.HAVE_ENOUGH_DATA) return;
+
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+        // TODO: Add QR decode logic here when backend is ready
+        // You can use jsQR library: jsQR(imageData.data, imageData.width, imageData.height)
+        // if (code) { verifyQRCode(code.data); }
+    }
+
+    // Close camera when modal closes
+    document.getElementById('authModal')?.addEventListener('hidden.bs.modal', function() {
+        stopCamera();
+    });
+</script>
+
+
 <!--&lt;!&ndash; QR Code Popup &ndash;&gt;-->
 <!--<div id="qr-popup" onclick="hideQRPopup()" style="-->
 <!--    display: none;-->

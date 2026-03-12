@@ -596,7 +596,7 @@ def get_profile_file(user_id):
 			# User not found - return default image
 			default_img_path = os.path.join(
 				os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-				'static/assets/images/profile.svg'
+				'static/assets/images/user-profile.png'
 			)
 			return send_file(default_img_path)
 
@@ -621,7 +621,7 @@ def get_profile_file(user_id):
 			print(f"⚠️ Image not found at {img_path}, returning default")
 			default_img_path = os.path.join(
 				os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-				'static/assets/images/profile.svg'
+				'static/assets/images/user-profile.png'
 			)
 			return send_file(default_img_path)
 

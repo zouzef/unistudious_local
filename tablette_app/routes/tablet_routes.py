@@ -165,7 +165,7 @@ def get_profile_img(user_id):
         # Return default image if nothing returned
         default_img_path = os.path.join(
             os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-            'static/assets/images/profile.svg'
+            'static/assets/images/user-profile.png'
         )
         return send_file(default_img_path)
 
