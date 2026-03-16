@@ -329,7 +329,7 @@ if __name__ == "__main__":
         time.sleep(1)
 
         # Run continuous sync automatically
-        run_continuous_sync(settingsc)
+        run_continuous_sync(settings)
 
 
     except KeyboardInterrupt:
