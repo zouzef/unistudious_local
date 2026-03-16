@@ -328,8 +328,9 @@ if __name__ == "__main__":
         # Give the auth system a moment to initialize
         time.sleep(1)
 
-        # Run sync with options
-        run_sync_with_options(settings)
+        # Run continuous sync automatically
+        run_continuous_sync(settings)
+
 
     except KeyboardInterrupt:
         print("\n\n👋 Stopped by user")
