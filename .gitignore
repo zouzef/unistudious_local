@@ -1,0 +1,4 @@
+server_local_api/uploads/*
+sync_data_local_server/data/*
+**/__pycache__/
+*.pyc
