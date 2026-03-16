@@ -10,7 +10,8 @@ from services.tablet_service import (
     get_room_name,
     fetch_slc_info,
     fetch_user_profile_image,
-    fech_academie_image
+    fech_academie_image,
+    authentification_teacher
 )
 from services.attendance_service import (
     fetch_attendance,
@@ -198,11 +199,25 @@ def test_images():
     return render_template('test2.html')
 
 
-# @tablet_bp.route('/api/teacher-authentificate',methods=['POST'])
-# def teacher_authentificate():
-#     try:
-#
-#     except Exception as e:
-#         return jsonify({
-#             "Message":f"Error: {e} coming from teacher_authentification"
-#         }),500
+@tablet_bp.route('/api/teacher-authentificate', methods=['POST'])
+def teacher_authentificate():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({
+                "Message": "Error: Request body is missing"
+            }), 400
+
+        result = authentification_teacher(data)
+
+        if result is None:
+            return jsonify({
+                "Message": "Error: Authentication service unavailable"
+            }), 503
+
+        return jsonify(result["body"]), result["status_code"]
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from teacher_authentification"
+        }), 500

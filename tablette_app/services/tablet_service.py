@@ -110,10 +110,12 @@ def fech_academie_image(tablet_id):
 def authentification_teacher(data):
     try:
         url = f"{base_url}/Authentificate-Teacher"
-        response = requests.post(url,verify=False)
-        if response.ok:
-            return response.status_code
-        else:
-            return None
+        response = requests.post(url, json=data, verify=False)
+
+        return {
+            "body": response.json(),
+            "status_code": response.status_code
+        }
+
     except Exception as e:
         return None
