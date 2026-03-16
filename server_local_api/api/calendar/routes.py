@@ -625,7 +625,13 @@ def get_calendar_room(room_id):
             return jsonify({"Message": "Room not found"}), 404
 
         query = """
-            SELECT * FROM relation_calander_group_session WHERE room_id = %s
+            SELECT r.*
+             FROM
+              relation_calander_group_session r,session s 
+              WHERE r.room_id = %s 
+              AND r.enabled = 1 
+              AND r.session_id = s.id 
+              AND s.enabled = 1
         """
         values = (room_id,)
         result = Database.execute_query(query, values)

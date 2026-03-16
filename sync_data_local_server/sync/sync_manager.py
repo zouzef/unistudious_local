@@ -87,9 +87,9 @@ def sync_data_once(settings):
         process_sync_data(db, data)
 
 
-        # print("\n🚀 Pushing local changes to remote...")
-        # pusher = DataPusher(settings)
-        # pusher.detect_and_push_local_changes(db)
+        print("\n🚀 Pushing local changes to remote...")
+        pusher = DataPusher(settings)
+        pusher.detect_and_push_local_changes(db)
 
         # Step 8: Save new sync time (use the time from BEFORE the API call)
         print("\n💾 Saving sync status...")

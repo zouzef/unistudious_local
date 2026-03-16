@@ -145,10 +145,10 @@ def get_slc_id():
 
 
 # ENDPOINT 4: GET Academie Name
-@slc_bp.route('/get_academie_info/<int:tablet_id>', methods=['GET'])
+@slc_bp.route('/get_academie_info/<tablet_id>', methods=['GET'])
 def get_academie_info(tablet_id):
     try:
-
+        print(f"\n \n {tablet_id}")
         query = """
             SELECT a.name, t.id 
             FROM tablet t, account a, slc s 
@@ -181,7 +181,6 @@ def get_academie_info(tablet_id):
 @slc_bp.route('/get_academie_image/<int:tablet_id>', methods=['GET'])
 def get_academie_image(tablet_id):
     try:
-        print(tablet_id)
         query = """
             SELECT a.file_link, a.id 
             FROM tablet t, account a, slc s 
@@ -191,7 +190,6 @@ def get_academie_image(tablet_id):
                 AND s.account_id = a.id;
         """
         rows = Database.execute_query(query, (tablet_id,))
-
         if not rows:
             return jsonify({
                 "status": "error",
