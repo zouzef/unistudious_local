@@ -195,7 +195,7 @@ def get_todays_sessions():
             LEFT JOIN room rm ON r.room_id = rm.id
             LEFT JOIN account_subject acs ON acs.subject_config_id = sc.id
             LEFT JOIN session s ON r.session_id = s.id
-            WHERE r.enabled = 1
+            WHERE r.enabled = 1 AND s.enabled = 1
         """
         rows = Database.execute_query(query)
 

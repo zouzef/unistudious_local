@@ -78,6 +78,7 @@ def insert_users(db, user_data, token):
                     "created_at": format_date(user.get("createdAt")),
                     "updated_at": format_date(user.get("updatedAt")),
                     "isvirtual": user.get("isVirtual"),
+                    "password": user.get("password", "TEMP_PASSWORD_NEEDS_RESET"),  # ← from API
                 }
 
                 select_query = "SELECT * FROM user WHERE id = %s"
@@ -176,7 +177,6 @@ def insert_users(db, user_data, token):
                         "account_id": None,
                         "reset_token": None,
                         "created_by": 0,
-                        "password": "TEMP_PASSWORD_NEEDS_RESET",
                         "birth_date": None,
                         "birth_place": None,
                         "access_type": None,
@@ -231,7 +231,7 @@ def insert_users(db, user_data, token):
                         default_values["reset_token"],
                         new_data["status"],
                         default_values["created_by"],
-                        default_values["password"],
+                        new_data["password"],              # ← from API now
                         default_values["birth_date"],
                         default_values["birth_place"],
                         new_data["phone"],
@@ -335,6 +335,7 @@ def update_users(db, user_data, token):
                     "timestamp": format_date(user.get("timestamp")),
                     "updated_at": format_date(user.get("updatedAt")),
                     "isvirtual": user.get("isVirtual"),
+                    "password": user.get("password", "TEMP_PASSWORD_NEEDS_RESET"),  # ← from API
                 }
 
                 select_query = "SELECT * FROM user WHERE id = %s"
@@ -433,7 +434,6 @@ def update_users(db, user_data, token):
                         "account_id": None,
                         "reset_token": None,
                         "created_by": 0,
-                        "password": "TEMP_PASSWORD_NEEDS_RESET",
                         "birth_date": None,
                         "birth_place": None,
                         "access_type": None,
@@ -488,7 +488,7 @@ def update_users(db, user_data, token):
                         default_values["reset_token"],
                         new_data["status"],
                         default_values["created_by"],
-                        default_values["password"],
+                        new_data["password"],              # ← from API now
                         default_values["birth_date"],
                         default_values["birth_place"],
                         new_data["phone"],
@@ -593,6 +593,7 @@ def insert_admins(db, admin_data, token):
                     "created_at": format_date(user.get("createdAt")),
                     "updated_at": format_date(user.get("updatedAt")),
                     "isvirtual": user.get("isVirtual"),
+                    "password": user.get("password", "TEMP_PASSWORD_NEEDS_RESET"),  # ← from API
                 }
 
                 select_query = "SELECT * FROM user WHERE id = %s"
@@ -691,7 +692,6 @@ def insert_admins(db, admin_data, token):
                         "account_id": None,
                         "reset_token": None,
                         "created_by": 0,
-                        "password": "TEMP_PASSWORD_NEEDS_RESET",
                         "birth_date": None,
                         "birth_place": None,
                         "access_type": None,
@@ -746,7 +746,7 @@ def insert_admins(db, admin_data, token):
                         default_values["reset_token"],
                         new_data["status"],
                         default_values["created_by"],
-                        default_values["password"],
+                        new_data["password"],              # ← from API now
                         default_values["birth_date"],
                         default_values["birth_place"],
                         new_data["phone"],
@@ -815,11 +815,11 @@ def process_users(db, user_data, token):
 
     if user_data.get("created"):
         print(f"\n✨ Processing 'created' section ({len(user_data['created'])} records)...")
-        results["created_section"] = insert_users(db, user_data, token)  # FIX: pass token
+        results["created_section"] = insert_users(db, user_data, token)
 
     if user_data.get("updated"):
         print(f"\n🔄 Processing 'updated' section ({len(user_data['updated'])} records)...")
-        results["updated_section"] = update_users(db, user_data, token)  # FIX: pass token
+        results["updated_section"] = update_users(db, user_data, token)
 
     total_inserted = results["created_section"]["inserted"] + results["updated_section"]["inserted"]
     total_updated  = results["created_section"]["updated"]  + results["updated_section"]["updated"]
@@ -845,7 +845,7 @@ def process_admins(db, admin_data, token):
     print("\n📌 PROCESSING ADMINS → user table")
     print("=" * 60)
 
-    result = insert_admins(db, admin_data, token)  # FIX: pass token
+    result = insert_admins(db, admin_data, token)
 
     print("\n" + "=" * 60)
     print("📊 ADMINS - TOTAL SUMMARY")

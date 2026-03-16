@@ -1,5 +1,5 @@
 """Tablet-related API endpoints."""
-from flask import Blueprint, render_template, session, jsonify,Response,send_file
+from flask import Blueprint, render_template, session, jsonify,Response,send_file,request
 from datetime import datetime, timedelta
 import os
 
@@ -153,7 +153,6 @@ def check_session(tablet_id):
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 
-
 @tablet_bp.route('/api/get-profile-image/<int:user_id>', methods=['GET'])
 def get_profile_img(user_id):
     try:
@@ -172,6 +171,7 @@ def get_profile_img(user_id):
     except Exception as e:
         print(f"Error: {e} coming from get_profile_img")
         return jsonify({"Message": f"Error: {e}"}), 500
+
 
 @tablet_bp.route('/api/get-academie-image/<int:tablet_mac>',methods=['GET'])
 def get_academie_image(tablet_mac):
@@ -196,3 +196,13 @@ def get_academie_image(tablet_mac):
 def test_images():
     """Test route for images."""
     return render_template('test2.html')
+
+
+# @tablet_bp.route('/api/teacher-authentificate',methods=['POST'])
+# def teacher_authentificate():
+#     try:
+#
+#     except Exception as e:
+#         return jsonify({
+#             "Message":f"Error: {e} coming from teacher_authentification"
+#         }),500

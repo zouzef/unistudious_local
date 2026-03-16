@@ -93,6 +93,7 @@ def fetch_user_profile_image(user_id):
         print(f"Error fetching profile image for user {user_id}: {e}")
         return None, None
 
+
 def fech_academie_image(tablet_id):
     try:
         url = f"{base_url}/get_academie_image/{tablet_id}"
@@ -104,3 +105,15 @@ def fech_academie_image(tablet_id):
     except Exception as e:
         print(f"Error fetching profile image for user {tablet_id}: {e}")
         return None, None
+
+
+def authentification_teacher(data):
+    try:
+        url = f"{base_url}/Authentificate-Teacher"
+        response = requests.post(url,verify=False)
+        if response.ok:
+            return response.status_code
+        else:
+            return None
+    except Exception as e:
+        return None
