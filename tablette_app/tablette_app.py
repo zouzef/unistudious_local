@@ -26,7 +26,8 @@ app = Flask(__name__, template_folder='templates')
 app.secret_key = config["config"]["SECRET_KEY"]
 
 # Initialize SocketIO
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading', ping_timeout=60, ping_interval=25)
+
 register_socketio_events(socketio)
 init_socketio(socketio)
 # ============= Register Blueprints =============
