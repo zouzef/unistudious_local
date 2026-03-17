@@ -110,8 +110,8 @@ def fetch_calander_request(room_id):
 
 def create_calander(data):
 	try:
-		url = f"{base_url}/create"
-		response = requests.post(url,json=data,verify=False,timeout=10)
+		url = f"{base_url}/create_calender"
+		response = requests.post(url, json=data, verify=False, timeout=10)
 		return response.status_code
 	except requests.exceptions.ConnectionError:
 		print("Error in create_calander: Server unreachable")

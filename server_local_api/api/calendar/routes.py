@@ -410,10 +410,11 @@ def check_color(color):
 @calendar_bp.route('/create_calender',methods=['POST'])
 def create_calander():
     try:
+
         data = request.get_json() or {}
         if not data:
             return jsonify({"Message": "No data from the request"}), 400
-
+        print("calander_data:", data)
         # Required fields
         required_keys = [
             'session_id', 'account_id', 'local_id', 'group_id',
@@ -458,20 +459,22 @@ def create_calander():
         title = data['title']
         type_val = data['type']
 
+        start_date = start_time.split(' ')[0]
+
         # Conflict checks
-        if isRoomReserved(room_id, start_time, end_time):
+        if isRoomReserved(room_id, start_date, start_time, end_time):
             return jsonify({
                 "Message": "Room already reserved!",
                 "Error": "Room-Conflict",
             }), 402
 
-        if isGroupTypeConflit(group_id, start_time, end_time):
+        if isGroupTypeConflit(group_id, start_date, start_time, end_time):
             return jsonify({
                 "Message": "Group not available in this time",
                 "Error": "Group-Conflict"
             }), 402
 
-        if isSubjectTeacherConflit(teacher_id, start_time, end_time):
+        if isSubjectTeacherConflit(teacher_id, start_date, start_time, end_time):
             return jsonify({
                 "Message": "Teacher not available in this time",
                 "Error": "Teacher-Conflict"
@@ -541,7 +544,7 @@ def create_calander():
             "calander_id": calander_id,
             "ref": ref,
             "color": color
-        }), 201
+        }), 200
 
     except Exception as e:
         print(f"Error from Server: {e}")
@@ -615,7 +618,6 @@ def check_room_id(room_id):
     except Exception as e:
         print(f"Error checking room_id: {e}")  # Log the error
         return False
-
 
 @calendar_bp.route('/get-calendar-room/<int:room_id>', methods=['GET'])
 def get_calendar_room(room_id):
@@ -733,7 +735,6 @@ def save_notification(notification_payload, user_id):
         print(f"❌ Failed to save notification: {e}")
         return False
 
-
 def send_notification(notification_payload):
     # Save notification to database FIRST (so it's always stored)
     user_id = notification_payload.get('account_id')
@@ -768,7 +769,6 @@ def send_notification(notification_payload):
         print(f"⚠️ Error details: {notify_error}")
         import traceback
         print(f"⚠️ Traceback:\n{traceback.format_exc()}")
-
 
 
 @calendar_bp.route('/create-calander_request/<int:session_id>', methods=['POST'])

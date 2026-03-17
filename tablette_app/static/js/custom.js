@@ -964,24 +964,26 @@ async function fetchCalendarRequests(roomId) {
 
 async function createCalendarEvent(formData) {
     try {
-        const response = await fetch(`/create-calander_request/${formData.session_id}`, {
+        const response = await fetch('/api/create-calender-tablet', {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                session_id:  formData.session_id,
-                group_id:    formData.group_id,
-                type:        formData.type,
-                room_id:     formData.room_id,
-                subject_id:  formData.subject_id,
-                user_id:     formData.user_id,
-                duplicate:   formData.duplicate,
-                start_date:  formData.start_date,
-                start_time:  formData.start_time,
-                end_time:    formData.end_time,
-                end_date:    formData.end_date,
-                description: formData.description,
-                account_id:  formData.account_id,
-                tag:         formData.completion_tags
+                session_id:      formData.session_id,
+                group_id:        formData.group_id,
+                type:            formData.type,
+                room_id:         formData.room_id,
+                subject_id:      formData.subject_id,
+                teacher_id:      formData.user_id,
+                duplicate:       formData.duplicate,
+                start_date:      formData.start_date,
+                start_time:      `${formData.start_date} ${formData.start_time}`,  // ← combined
+                end_time:        `${formData.start_date} ${formData.end_time}`,    // ← combined
+                end_date:        formData.end_date || null,                        // ← empty string → null
+                description:     formData.description,
+                title:           formData.description,
+                account_id:      formData.account_id,
+                local_id:        formData.local_id,
+                completion_tags: formData.completion_tags
             })
         });
 
