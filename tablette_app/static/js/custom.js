@@ -419,8 +419,7 @@ var Akademi  = function(){
 	   if($('.header').length > 0 && $(".scroll").length > 0)
 	   {
 		   var headerHeight =   parseInt($('.header').css('height'), 10);
-		   //alert(headerHeight); 
-		   
+
 		   $(".scroll").unbind().on('click',function(event) 
 		   {
 			   event.preventDefault();

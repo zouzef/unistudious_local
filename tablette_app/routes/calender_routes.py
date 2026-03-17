@@ -7,6 +7,8 @@ from services.calender_service import (
 	fetch_session,
 	fetch_teacher,
 	request_calander,
+	create_calander,
+
 	fetch_calander_request
 
 )
@@ -79,7 +81,7 @@ def get_Teacher_Session(session_id):
 
 
 @calendar_bp.route('/create-calander_request/<int:session_id>', methods=['POST'])
-def create_calander(session_id):
+def create_calander_request(session_id):
 	try:
 		calander_data = request.get_json()
 
@@ -166,6 +168,68 @@ def create_calander(session_id):
 			"Message": f"Error: {str(e)}",
 			"Status": "error"
 		}), 500
+
+
+@calendar_bp.route('/api/create-calender-tablet', methods=['POST'])
+def create_calander_tablet():
+    try:
+        calander_data = request.get_json()
+        if not calander_data:
+            return jsonify({
+                "Message": "Error: No Data Provided",
+                "Status": "Error"
+            }), 400
+
+        # List of required fields
+        required_fields = [
+            'session_id',
+            'group_id',
+            'type',
+            'room_id',
+            'subject_id',
+            'user_id',
+            'duplicate',
+            'start_date',
+            'start_time',
+            'end_time',
+            'end_date',
+            'description',
+            'account_id',
+            'local_id'
+        ]
+
+        # Check if any required field is missing or None
+        missing_or_none_fields = [
+            field for field in required_fields
+            if field not in calander_data or calander_data[field] is None
+        ]
+
+        if missing_or_none_fields:
+            return jsonify({
+                "Message": f"Error: Missing or None values for fields: {', '.join(missing_or_none_fields)}",
+                "Status": "error"
+            }), 400
+
+        # completion_tags is optional — default to empty list if not provided
+        calander_data.setdefault('completion_tags', [])
+
+        # Process the calendar data
+        response = create_calander(calander_data)
+
+        if response == 200:
+            return jsonify({"Message": "Data Created With Success"}), 200
+        elif response == 404:
+            return jsonify({"Message": "Error in Calendar Creation"}), 404
+        elif response == 503:
+            return jsonify({"Message": "Error: Calendar Service Unreachable"}), 503
+        elif response == 504:
+            return jsonify({"Message": "Error: Calendar Service Timed Out"}), 504
+        else:
+            return jsonify({"Message": "Error Coming From Server"}), 500
+
+    except Exception as e:
+        print(f"Error in create_calander_tablet: {e}")
+        return jsonify({"Message": "Error Coming From Server"}), 500
 
 
 @calendar_bp.route('/get-calander-request/<int:room_id>', methods=['GET'])

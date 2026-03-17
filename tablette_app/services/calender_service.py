@@ -106,3 +106,19 @@ def fetch_calander_request(room_id):
 			return None
 	except Exception:
 		return None
+
+
+def create_calander(data):
+	try:
+		url = f"{base_url}/create"
+		response = requests.post(url,json=data,verify=False,timeout=10)
+		return response.status_code
+	except requests.exceptions.ConnectionError:
+		print("Error in create_calander: Server unreachable")
+		return 503
+	except requests.exceptions.Timeout:
+		print("Error in create_calander: Request timed out")
+		return 504
+	except Exception as e:
+		print(f"Error in create_calander: {e}")
+		return 500

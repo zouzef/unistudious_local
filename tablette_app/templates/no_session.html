@@ -1,51 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- Mirrored from akademi.dexignlab.com/xhtml/celandar.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 04 Mar 2025 13:05:52 GMT -->
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="author" content="DexignLab">
     <meta name="robots" content="">
-    <meta name="keywords"
-          content="school, school admin, education, academy, admin dashboard, college, college management, education management, institute, school management, school management system, student management, teacher management, university, university management">
-    <meta name="description"
-          content="Discover Akademi - the ultimate admin dashboard and Bootstrap 5 template. Specially designed for professionals, and for business. Akademi provides advanced features and an easy-to-use interface for creating a top-quality website with School and Education Dashboard">
+    <meta name="keywords" content="school, school admin, education, academy, admin dashboard, college, college management, education management, institute, school management, school management system, student management, teacher management, university, university management">
+    <meta name="description" content="Discover Akademi - the ultimate admin dashboard and Bootstrap 5 template. Specially designed for professionals, and for business. Akademi provides advanced features and an easy-to-use interface for creating a top-quality website with School and Education Dashboard">
     <meta property="og:title" content="Akademi : School and Education Management Admin Dashboard Template">
-    <meta property="og:description"
-          content="Akademi - the ultimate admin dashboard and Bootstrap 5 template. Specially designed for professionals, and for business. Akademi provides advanced features and an easy-to-use interface for creating a top-quality website with School and Education Dashboard">
+    <meta property="og:description" content="Akademi - the ultimate admin dashboard and Bootstrap 5 template. Specially designed for professionals, and for business. Akademi provides advanced features and an easy-to-use interface for creating a top-quality website with School and Education Dashboard">
     <meta property="og:image" content="social-image.html">
     <meta name="format-detection" content="telephone=no">
-
-    <!-- Mobile Specific -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Page Title Here -->
     <title>Akademi : School and Education Management Admin Dashboard Template</title>
 
-    <!-- FAVICONS ICON -->
+    <!-- ── Vendor Stylesheets ── -->
     <link rel="shortcut icon" type="image/png" href="/static/assets/images/favicon.png">
     <link rel="stylesheet" href="/static/vendor/fullcalendar-5.11.0/lib/main.css">
     <link href="/static/vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
     <link href="/static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/vendor/jquery-nice-select/css/nice-select.css">
     <link href="/static/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="/static/css/sweetalert2.min.css">
-
-    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-    <!-- Style css -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <link href="/static/css/style4.css" rel="stylesheet">
+
+    <!-- ── Socket.IO ── -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+    <!-- ══════════════════════════════════════════
+         PAGE STYLES
+    ══════════════════════════════════════════ -->
+    <style>
+
+        /* ── QR Scan Line Animation ── */
+        @keyframes scanLine {
+            0%   { top: calc(50% - 80px); }
+            50%  { top: calc(50% + 77px); }
+            100% { top: calc(50% - 80px); }
+        }
+
+    </style>
 
 </head>
 <body>
 
-<!--*******************
-    Preloader start
-********************-->
-
+<!-- ══════════════════════════════════════════
+     PRELOADER
+══════════════════════════════════════════ -->
 <div id="preloader">
     <div class="loader">
         <div class="dots">
@@ -55,72 +58,42 @@
             <div class="dot"></div>
             <div class="dot"></div>
         </div>
-
     </div>
 </div>
-<!--*******************
-    Preloader end
-********************-->
 
-<!--**********************************
-    Main wrapper start
-***********************************-->
+
+<!-- ══════════════════════════════════════════
+     MAIN WRAPPER
+══════════════════════════════════════════ -->
 <div id="main-wrapper">
     <div class="content-body" style="margin-left: 0 !important; margin-top: 0 !important; padding-top: 20px;">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-xl-12">
-                    <!-- Row -->
                     <div class="row">
-                        <!--column-->
+
+                        <!-- ── Page Title ── -->
                         <div class="col-xl-12">
                             <div class="page-title flex-wrap">
                                 <div class="d-flex align-items-center">
                                     <img id="academie-logo" src="" alt="Academie Logo"
                                          style="width: 80px; height: 80px; border-radius: 10%; object-fit: cover; margin-right: 12px; display: none;">
-
                                     <div class="d-flex flex-column align-items-start">
                                         <h2 class="heading mb-sm-0" id="academie-title"></h2>
                                         <p class="mb-0">Schedule & Calendar System</p>
                                     </div>
-
-                                    <script>
-                                        const urlParts = window.location.pathname.split('/');
-                                        const tablet_id = urlParts[urlParts.length - 1];
-
-                                        // Load academie name
-                                        fetch(`/get-data-account-tablet/${tablet_id}`)
-                                            .then(response => response.json())
-                                            .then(result => {
-                                                if (result.status === "ok" && result.data) {
-                                                    const academieName = result.data.name;
-                                                    document.getElementById('academie-title').textContent = academieName + " - Calendar";
-                                                }
-                                            })
-                                            .catch(error => console.error('Error fetching academie name:', error));
-
-                                        // Load academie image
-                                        const img = document.getElementById('academie-logo');
-                                        img.src = `/api/get-academie-image/${tablet_id}`;
-                                        img.onload = () => img.style.display = 'block';
-                                        img.onerror = () => img.style.display = 'none';
-                                    </script>
                                 </div>
                                 <div class="d-flex align-items-center flex-wrap">
-
                                     <div class="ms-3">
-                                        <!-- Button trigger modal -->
                                         <button type="button" class="btn btn-primary" onclick="openAuthModal()">
                                             <i class="bi bi-plus-circle me-2"></i> + Add Schedule
                                         </button>
-
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
-                        <!--column-->
+
+                        <!-- ── Calendar Column ── -->
                         <div class="col-12 col-md-8 col-lg-8 col-xl-8">
                             <div class="card">
                                 <div id='calendare'
@@ -132,30 +105,12 @@
                                 </div>
                             </div>
                         </div>
-                        <!--/column-->
-                        <div class="col-12 col-md-4 col-lg-4 col-xl-4">
 
+                        <!-- ── Sidebar Column ── -->
+                        <div class="col-12 col-md-4 col-lg-4 col-xl-4">
                             <div class="row">
-                                <!--                                <div class="col-xl-12">-->
-                                <!--                                    <div class="card">-->
-                                <!--                                        <div class="card-body">-->
-                                <!--                                            <h3 class="heading">-->
-                                <!--                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"-->
-                                <!--                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"-->
-                                <!--                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"-->
-                                <!--                                                     style="margin-right: 8px; vertical-align: middle;">-->
-                                <!--                                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>-->
-                                <!--                                                    <line x1="16" y1="2" x2="16" y2="6"></line>-->
-                                <!--                                                    <line x1="8" y1="2" x2="8" y2="6"></line>-->
-                                <!--                                                    <line x1="3" y1="10" x2="21" y2="10"></line>-->
-                                <!--                                                    <line x1="8" y1="14" x2="8" y2="14"></line>-->
-                                <!--                                                    <line x1="12" y1="14" x2="12" y2="14"></line>-->
-                                <!--                                                </svg>-->
-                                <!--                                                Schedule Request-->
-                                <!--                                            </h3>-->
-                                <!--                                        </div>-->
-                                <!--                                    </div>-->
-                                <!--                                </div>-->
+
+                                <!-- QR Code Download Card -->
                                 <div class="col-xl-12">
                                     <div class="card">
                                         <div class="card-body text-center py-4">
@@ -165,15 +120,12 @@
                                             <p style="font-size: 14px; color: #7f8c8d; margin-bottom: 20px;">
                                                 Scan to download our app
                                             </p>
-
-                                            <!-- Two QR codes side by side -->
                                             <div style="display: flex; justify-content: center; gap: 20px;">
 
-                                                <!-- Android -->
+                                                <!-- Android QR -->
                                                 <div style="text-align: center;">
                                                     <div style="background: #f8f9fa; border-radius: 12px; padding: 10px; display: inline-block; margin-bottom: 8px;">
-                                                        <div id="qr-android-static"
-                                                             style="width: 130px; height: 130px;"></div>
+                                                        <div id="qr-android-static" style="width: 130px; height: 130px;"></div>
                                                     </div>
                                                     <div style="display: flex; align-items: center; justify-content: center; gap: 5px;">
                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="#3DDC84">
@@ -186,11 +138,10 @@
                                                 <!-- Divider -->
                                                 <div style="width: 1px; background: #ecf0f1;"></div>
 
-                                                <!-- iOS -->
+                                                <!-- iOS QR -->
                                                 <div style="text-align: center;">
                                                     <div style="background: #f8f9fa; border-radius: 12px; padding: 10px; display: inline-block; margin-bottom: 8px;">
-                                                        <div id="qr-ios-static"
-                                                             style="width: 130px; height: 130px;"></div>
+                                                        <div id="qr-ios-static" style="width: 130px; height: 130px;"></div>
                                                     </div>
                                                     <div style="display: flex; align-items: center; justify-content: center; gap: 5px;">
                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="#555">
@@ -199,44 +150,39 @@
                                                         <span style="font-size: 14px; font-weight: 600; color: #555;">iOS</span>
                                                     </div>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Add this ID to your container div -->
-                                <!--                                <div class="row" id="calendar-cards-container">-->
-                                <!--                                    &lt;!&ndash; Dynamic cards will be inserted here &ndash;&gt;-->
-                                <!--                                </div>-->
 
                                 <!-- Pagination Controls -->
                                 <div class="col-xl-12" id="pagination-container" style="display: none;">
                                     <div class="d-flex justify-content-center align-items-center mb-5">
-                                        <button type="button" id="prev-page" class="btn btn-primary btn-sm me-3"
-                                                disabled>
-                                            &lt;
-                                        </button>
-
+                                        <button type="button" id="prev-page" class="btn btn-primary btn-sm me-3" disabled>&lt;</button>
                                         <div class="pagination-info">
-												 <span class="badge badge-primary badge-lg">
-												   Page <span id="current-page">1</span> of <span
-                                                         id="total-pages">1</span>
-												 </span>
+                                            <span class="badge badge-primary badge-lg">
+                                                Page <span id="current-page">1</span> of <span id="total-pages">1</span>
+                                            </span>
                                         </div>
-
-                                        <button type="button" id="next-page" class="btn btn-primary btn-sm ms-3">
-                                            &gt;
-                                        </button>
+                                        <button type="button" id="next-page" class="btn btn-primary btn-sm ms-3">&gt;</button>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- Add/Edit Event Modal -->
+
+
+<!-- ══════════════════════════════════════════
+     MODAL: ADD / EDIT SCHEDULE
+══════════════════════════════════════════ -->
 <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -247,15 +193,15 @@
             <div class="modal-body">
                 <form id="eventForm">
                     <div class="mb-3">
-                        <label for="eventTitle" class='form-label'>Session</label>
+                        <label for="session" class='form-label'>Session</label>
                         <select class="form-control" id="session">
-                            <option value="" selected> SELECT SESSION</option>
+                            <option value="" selected>SELECT SESSION</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="eventTitle" class="form-label">Group</label>
+                        <label for="group_id" class="form-label">Group</label>
                         <select class="form-control" id="group_id">
-                            <option value="" selected> SELECT GROUP</option>
+                            <option value="" selected>SELECT GROUP</option>
                         </select>
                     </div>
                     <div class="mb-3" id="typeSessionContainer">
@@ -267,13 +213,11 @@
                         </select>
                         <div id="typeSessionSelectError" class="alert alert-danger d-none mt-2" role="alert"></div>
                     </div>
-
                     <div class="mb-3" id="startDateContainer">
                         <label for="eventStartDate" class="form-label">Start Date</label>
                         <input type="date" class="form-control" id="eventStartDate" required>
                         <div id="eventStartDateError" class="alert alert-danger d-none mt-2" role="alert"></div>
                     </div>
-
                     <div class="mb-3">
                         <label for="eventRooms" class="form-label">Room</label>
                         <select class="form-control" id="eventRooms" required>
@@ -343,46 +287,17 @@
             </div>
         </div>
     </div>
-    <style>
-
-    </style>
-
-</div>
-<script>
-    document.getElementById('eventDuplicate').addEventListener('change', function() {
-        const startTimeFields = document.getElementById('startTimeFields');
-        const endTimeFields = document.getElementById('endTimeFields');
-        const eventEndFields = document.getElementById('eventEndFields');
-
-        const value = this.value;
-
-        if (value === 'none') {
-            // Show only start and end time for non-duplicate events
-            startTimeFields.classList.remove('d-none');
-            endTimeFields.classList.remove('d-none');
-            eventEndFields.classList.add('d-none');
-        } else if (value === 'daily' || value === 'weekly' || value === 'biweekly') {
-            // Show all fields for recurring events
-            startTimeFields.classList.remove('d-none');
-            endTimeFields.classList.remove('d-none');
-            eventEndFields.classList.remove('d-none');
-        } else {
-            // Hide all fields if nothing is selected
-            startTimeFields.classList.add('d-none');
-            endTimeFields.classList.add('d-none');
-            eventEndFields.classList.add('d-none');
-        }
-    });
-</script>
 </div>
 
 
-<!-- NEW: Event Details Modal -->
+<!-- ══════════════════════════════════════════
+     MODAL: EVENT DETAILS
+══════════════════════════════════════════ -->
 <div class="modal fade" id="eventDetailModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="border-radius: 16px; overflow: hidden; border: none;">
 
-            <!-- Colored Header -->
+            <!-- Colored Banner Header -->
             <div id="modal-header-banner" style="
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 padding: 30px 24px 50px;
@@ -391,45 +306,25 @@
             ">
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         style="position: absolute; top: 14px; right: 16px;"></button>
-
-                <!-- Teacher image -->
-                <img id="modal-teacher-img"
-                     src=""
-                     alt="Teacher"
-                     style="width: 80px; height: 80px; border-radius: 50%;
-                            object-fit: cover; border: 3px solid white;
-                            margin-bottom: 10px;">
-
-                <!-- Title -->
+                <img id="modal-teacher-img" src="" alt="Teacher"
+                     style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid white; margin-bottom: 10px;">
                 <h4 id="modal-title" style="color: white; font-weight: 700; margin: 0; font-size: 20px;"></h4>
                 <span id="modal-type-badge" style="
-                    display: inline-block;
-                    margin-top: 8px;
-                    padding: 3px 14px;
-                    border-radius: 20px;
-                    font-size: 12px;
-                    font-weight: 600;
-                    background: rgba(255,255,255,0.25);
-                    color: white;
+                    display: inline-block; margin-top: 8px; padding: 3px 14px;
+                    border-radius: 20px; font-size: 12px; font-weight: 600;
+                    background: rgba(255,255,255,0.25); color: white;
                 "></span>
             </div>
 
-            <!-- Body -->
+            <!-- Detail Body (overlaps header) -->
             <div class="modal-body" style="padding: 0; margin-top: -24px;">
-                <div style="
-                    background: white;
-                    border-radius: 16px;
-                    padding: 24px;
-                    margin: 0 12px;
-                    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
-                ">
-                    <!-- Ref -->
+                <div style="background: white; border-radius: 16px; padding: 24px; margin: 0 12px; box-shadow: 0 -4px 20px rgba(0,0,0,0.08);">
+
+                    <!-- Reference Row -->
                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
                         <div style="background: #f0f0ff; border-radius: 10px; padding: 8px;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#667eea"
-                                 stroke-width="2">
-                                <path d="M4 4h16v16H4z"/>
-                                <path d="M8 2v4M16 2v4M4 10h16"/>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#667eea" stroke-width="2">
+                                <path d="M4 4h16v16H4z"/><path d="M8 2v4M16 2v4M4 10h16"/>
                             </svg>
                         </div>
                         <div>
@@ -438,13 +333,11 @@
                         </div>
                     </div>
 
-                    <!-- Date -->
+                    <!-- Date Row -->
                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
                         <div style="background: #fff0f0; border-radius: 10px; padding: 8px;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e74c3c"
-                                 stroke-width="2">
-                                <rect x="3" y="4" width="18" height="18" rx="2"/>
-                                <path d="M16 2v4M8 2v4M3 10h18"/>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e74c3c" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
                             </svg>
                         </div>
                         <div>
@@ -453,13 +346,11 @@
                         </div>
                     </div>
 
-                    <!-- Time -->
+                    <!-- Time Row -->
                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
                         <div style="background: #fffbe6; border-radius: 10px; padding: 8px;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f39c12"
-                                 stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <path d="M12 6v6l4 2"/>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f39c12" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
                             </svg>
                         </div>
                         <div>
@@ -468,13 +359,11 @@
                         </div>
                     </div>
 
-                    <!-- Teacher -->
+                    <!-- Teacher Row -->
                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
                         <div style="background: #f0fff4; border-radius: 10px; padding: 8px;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#27ae60"
-                                 stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                <circle cx="12" cy="7" r="4"/>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
                             </svg>
                         </div>
                         <div>
@@ -483,21 +372,18 @@
                         </div>
                     </div>
 
-                    <!-- Description -->
+                    <!-- Description Row (hidden by default) -->
                     <div id="modal-description-container" style="
-                        background: #f8f9fa;
-                        border-radius: 12px;
-                        padding: 14px;
-                        margin-top: 8px;
-                        display: none;
+                        background: #f8f9fa; border-radius: 12px; padding: 14px;
+                        margin-top: 8px; display: none;
                     ">
                         <p style="margin:0; font-size: 11px; color: #aaa; margin-bottom: 4px;">Description</p>
                         <p id="modal-description" style="margin:0; font-size: 14px; color: #555; line-height: 1.5;"></p>
                     </div>
+
                 </div>
             </div>
 
-            <!-- Footer -->
             <div class="modal-footer" style="border: none; padding: 16px 24px;">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
@@ -506,224 +392,178 @@
 </div>
 
 
-<!-- Authentication Modal -->
+<!-- ══════════════════════════════════════════
+     MODAL: TEACHER AUTHENTICATION
+══════════════════════════════════════════ -->
 <div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="border-radius: 16px; overflow: hidden; border: none;">
 
             <!-- Header -->
-            <div style="
-                background: #4D44B5;
-                padding: 30px 24px;
-                text-align: center;
-                position: relative;
-            ">
+            <div style="background: #4D44B5; padding: 30px 24px; text-align: center; position: relative;">
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         style="position: absolute; top: 14px; right: 16px;"></button>
-                <div style="
-                    width: 60px; height: 60px;
-                    background: rgba(255,255,255,0.2);
-                    border-radius: 50%;
-                    display: flex; align-items: center; justify-content: center;
-                    margin: 0 auto 12px;
-                ">
+                <div style="width: 60px; height: 60px; background: rgba(255,255,255,0.2); border-radius: 50%;
+                            display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                     </svg>
                 </div>
                 <h4 style="color: white; font-weight: 700; margin: 0; font-size: 20px;">Teacher Authentication</h4>
-                <p style="color: rgba(255,255,255,0.7); margin: 6px 0 0; font-size: 13px;">Please verify your identity
-                    to continue</p>
+                <p style="color: rgba(255,255,255,0.7); margin: 6px 0 0; font-size: 13px;">Please verify your identity to continue</p>
             </div>
 
-            <!-- Tab switcher -->
+            <!-- Tab Switcher -->
             <div style="display: flex; border-bottom: 2px solid #f0f0f0;">
                 <button id="tab-password" onclick="switchAuthTab('password')" style="
-                    flex: 1; padding: 14px;
-                    border: none; background: white;
-                    font-weight: 600; font-size: 14px;
-                    color: #4D44B5;
-                    border-bottom: 3px solid #4D44B5;
-                    cursor: pointer;
-                ">
+                    flex: 1; padding: 14px; border: none; background: white;
+                    font-weight: 600; font-size: 14px; color: #4D44B5;
+                    border-bottom: 3px solid #4D44B5; cursor: pointer;">
                     🔑 Username & Password
                 </button>
                 <button id="tab-qr" onclick="switchAuthTab('qr')" style="
-                    flex: 1; padding: 14px;
-                    border: none; background: white;
-                    font-weight: 600; font-size: 14px;
-                    color: #aaa;
-                    border-bottom: 3px solid transparent;
-                    cursor: pointer;
-                ">
+                    flex: 1; padding: 14px; border: none; background: white;
+                    font-weight: 600; font-size: 14px; color: #aaa;
+                    border-bottom: 3px solid transparent; cursor: pointer;">
                     📷 Scan QR Code
                 </button>
             </div>
 
-            <!-- Body -->
+            <!-- Modal Body -->
             <div class="modal-body" style="padding: 24px;">
 
-                <!-- PASSWORD TAB -->
+                <!-- Password Tab -->
                 <div id="auth-password-tab">
                     <div style="margin-bottom: 16px;">
                         <label style="font-size: 13px; font-weight: 600; color: #555; margin-bottom: 6px; display: block;">Username</label>
                         <div style="position: relative;">
                             <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);"
                                  width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                <circle cx="12" cy="7" r="4"/>
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
                             </svg>
                             <input type="text" id="auth-username" placeholder="Enter your username"
-                                   style="
-                                    width: 100%; padding: 12px 12px 12px 38px;
-                                    border: 2px solid #f0f0f0; border-radius: 10px;
-                                    font-size: 14px; outline: none;
-                                    box-sizing: border-box;
-                                    transition: border-color 0.2s;
-                                "
+                                   style="width: 100%; padding: 12px 12px 12px 38px; border: 2px solid #f0f0f0;
+                                          border-radius: 10px; font-size: 14px; outline: none;
+                                          box-sizing: border-box; transition: border-color 0.2s;"
                                    onfocus="this.style.borderColor='#4D44B5'"
                                    onblur="this.style.borderColor='#f0f0f0'">
                         </div>
                     </div>
-
                     <div style="margin-bottom: 20px;">
                         <label style="font-size: 13px; font-weight: 600; color: #555; margin-bottom: 6px; display: block;">Password</label>
                         <div style="position: relative;">
                             <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);"
                                  width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2">
-                                <rect x="3" y="11" width="18" height="11" rx="2"/>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                             </svg>
                             <input type="password" id="auth-password" placeholder="Enter your password"
-                                   style="
-                                    width: 100%; padding: 12px 12px 12px 38px;
-                                    border: 2px solid #f0f0f0; border-radius: 10px;
-                                    font-size: 14px; outline: none;
-                                    box-sizing: border-box;
-                                    transition: border-color 0.2s;
-                                "
+                                   style="width: 100%; padding: 12px 12px 12px 38px; border: 2px solid #f0f0f0;
+                                          border-radius: 10px; font-size: 14px; outline: none;
+                                          box-sizing: border-box; transition: border-color 0.2s;"
                                    onfocus="this.style.borderColor='#4D44B5'"
                                    onblur="this.style.borderColor='#f0f0f0'"
                                    onkeypress="if(event.key==='Enter') submitAuth()">
                         </div>
                     </div>
-
                     <div id="auth-error" style="
-                        display: none;
-                        background: #ffeaea;
-                        border-radius: 8px;
-                        padding: 10px 14px;
-                        color: #e74c3c;
-                        font-size: 13px;
-                        margin-bottom: 16px;
-                    ">❌ Invalid username or password
+                        display: none; background: #ffeaea; border-radius: 8px;
+                        padding: 10px 14px; color: #e74c3c; font-size: 13px; margin-bottom: 16px;">
+                        ❌ Invalid username or password
                     </div>
-
                     <button onclick="submitAuth()" style="
-                        width: 100%; padding: 13px;
-                        background: #4D44B5; color: white;
-                        border: none; border-radius: 10px;
-                        font-size: 15px; font-weight: 600;
-                        cursor: pointer;
-                        transition: background 0.2s;
-                    "
+                        width: 100%; padding: 13px; background: #4D44B5; color: white;
+                        border: none; border-radius: 10px; font-size: 15px; font-weight: 600;
+                        cursor: pointer; transition: background 0.2s;"
                             onmouseover="this.style.background='#3d35a0'"
                             onmouseout="this.style.background='#4D44B5'">
                         Login & Continue
                     </button>
                 </div>
 
-                <!-- QR TAB -->
+                <!-- QR Tab -->
                 <div id="auth-qr-tab" style="display: none; text-align: center;">
                     <p style="font-size: 14px; color: #777; margin-bottom: 16px;">
                         Point your QR code at the camera to authenticate
                     </p>
-
-                    <!-- Camera preview -->
-                    <div style="
-                        position: relative;
-                        width: 100%;
-                        max-width: 280px;
-                        margin: 0 auto 16px;
-                        border-radius: 12px;
-                        overflow: hidden;
-                        background: #000;
-                    ">
-                        <video id="auth-camera" autoplay playsinline style="
-                            width: 100%;
-                            display: block;
-                            border-radius: 12px;
-                        "></video>
-                        <!-- Scan frame overlay -->
-                        <div style="
-                            position: absolute;
-                            top: 50%; left: 50%;
-                            transform: translate(-50%, -50%);
-                            width: 160px; height: 160px;
-                            border: 3px solid #4D44B5;
-                            border-radius: 12px;
-                            box-shadow: 0 0 0 9999px rgba(0,0,0,0.4);
-                        "></div>
-                        <!-- Scanning line animation -->
-                        <div id="scan-line" style="
-                            position: absolute;
-                            left: calc(50% - 80px);
-                            top: calc(50% - 80px);
-                            width: 160px; height: 3px;
-                            background: #4D44B5;
-                            animation: scanLine 2s linear infinite;
-                        "></div>
+                    <div style="position: relative; width: 100%; max-width: 280px; margin: 0 auto 16px;
+                                border-radius: 12px; overflow: hidden; background: #000;">
+                        <video id="auth-camera" autoplay playsinline style="width: 100%; display: block; border-radius: 12px;"></video>
+                        <!-- Scan Frame Overlay -->
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                                    width: 160px; height: 160px; border: 3px solid #4D44B5; border-radius: 12px;
+                                    box-shadow: 0 0 0 9999px rgba(0,0,0,0.4);"></div>
+                        <!-- Animated Scan Line -->
+                        <div id="scan-line" style="position: absolute; left: calc(50% - 80px); top: calc(50% - 80px);
+                                                   width: 160px; height: 3px; background: #4D44B5;
+                                                   animation: scanLine 2s linear infinite;"></div>
                     </div>
-
                     <canvas id="auth-canvas" style="display: none;"></canvas>
-
-                    <div id="qr-scan-status" style="
-                        font-size: 13px; color: #777;
-                        margin-bottom: 16px;
-                    ">📷 Camera starting...
+                    <div id="qr-scan-status" style="font-size: 13px; color: #777; margin-bottom: 16px;">
+                        📷 Camera starting...
                     </div>
-
                     <button onclick="stopCamera(); switchAuthTab('password')" style="
-                        padding: 10px 24px;
-                        background: #f0f0f0; color: #555;
-                        border: none; border-radius: 10px;
-                        font-size: 14px; cursor: pointer;
-                    ">← Back to Login
+                        padding: 10px 24px; background: #f0f0f0; color: #555;
+                        border: none; border-radius: 10px; font-size: 14px; cursor: pointer;">
+                        ← Back to Login
                     </button>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
 
-<style>
-    @keyframes scanLine {
-        0%   { top: calc(50% - 80px); }
-        50%  { top: calc(50% + 77px); }
-        100% { top: calc(50% - 80px); }
-    }
-</style>
 
-<!-- Required vendors -->
+<!-- ══════════════════════════════════════════
+     VENDOR SCRIPTS
+══════════════════════════════════════════ -->
 <script src="/static/vendor/global/global.min.js"></script>
 <script src="/static/vendor/chart.js/Chart.bundle.min.js"></script>
 <script src="/static/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-
 <script src="/static/vendor/fullcalendar-5.11.0/lib/main.js"></script>
-
-
-<!-- SweetAlert2 JS (LOCAL) -->
 <script src="/static/js/sweetalert2.min.js"></script>
+<script src="/static/vendor/qrcodejs/qrcode.min.js"></script>
 
-
+<!-- ── App Scripts ── -->
 <script src="/static/js/calendar-2.js"></script>
-<!--    <script src="/static/js/custom.min.js"></script>-->
-<!--	<script src="/static/js/dlabnav-init.js"></script>-->
-<!--	<script src="/static/js/demo.js"></script>-->
 <script src="/static/js/custom.js"></script>
 
+
+<!-- ══════════════════════════════════════════
+     PAGE SCRIPTS
+══════════════════════════════════════════ -->
 <script>
+
+    /* ─────────────────────────────────────────
+       TABLET & ACADEMIE INITIALISATION
+    ───────────────────────────────────────── */
+
     const tabletId = "{{ tablet_id }}";
+
+    // Resolve tablet ID from URL path
+    const urlParts = window.location.pathname.split('/');
+    const tablet_id = urlParts[urlParts.length - 1];
+
+    // Load academie display name into the page title
+    fetch(`/get-data-account-tablet/${tablet_id}`)
+        .then(response => response.json())
+        .then(result => {
+            if (result.status === "ok" && result.data) {
+                document.getElementById('academie-title').textContent = result.data.name + " - Calendar";
+            }
+        })
+        .catch(error => console.error('Error fetching academie name:', error));
+
+    // Load academie logo image
+    const img = document.getElementById('academie-logo');
+    img.src = `/api/get-academie-image/${tablet_id}`;
+    img.onload  = () => img.style.display = 'block';
+    img.onerror = () => img.style.display = 'none';
+
+
+    /* ─────────────────────────────────────────
+       SESSION POLLING — redirect when active
+    ───────────────────────────────────────── */
 
     function checkForSession() {
         fetch(`/tablet/${encodeURIComponent(tabletId)}/check_session`)
@@ -731,141 +571,185 @@
             .then(data => {
                 console.log('Checking for session:', data.status);
                 if (data.status === 'active') {
-                    // Session started — go back to the active page
                     window.location.href = `/tablet/${encodeURIComponent(tabletId)}`;
                 }
             })
-            .catch(err => {
-                console.error('Error checking session:', err);
-            });
+            .catch(err => console.error('Error checking session:', err));
     }
 
-    // Check immediately, then every 10 seconds
+    // Poll immediately then every 10 seconds
     checkForSession();
     setInterval(checkForSession, 10000);
-</script>
-<script src="/static/vendor/qrcodejs/qrcode.min.js"></script>
-<script>
-    // Generate static QR codes once page loads
-    window.addEventListener('load', function() {
+
+
+    /* ─────────────────────────────────────────
+       STATIC QR CODES (Android + iOS)
+    ───────────────────────────────────────── */
+
+    window.addEventListener('load', function () {
         new QRCode(document.getElementById("qr-android-static"), {
             text: "https://play.google.com/store/apps/details?id=com.unistudious.projet1v2&hl=fr",
-            width: 130,
-            height: 130,
-            colorDark: "#000000",
-            colorLight: "#f8f9fa",
+            width: 130, height: 130,
+            colorDark: "#000000", colorLight: "#f8f9fa",
             correctLevel: QRCode.CorrectLevel.H
         });
 
         new QRCode(document.getElementById("qr-ios-static"), {
             text: "https://apps.apple.com/ch/app/unistudious/id6756975616",
-            width: 130,
-            height: 130,
-            colorDark: "#000000",
-            colorLight: "#f8f9fa",
+            width: 130, height: 130,
+            colorDark: "#000000", colorLight: "#f8f9fa",
             correctLevel: QRCode.CorrectLevel.H
         });
     });
-</script>
 
-<script>
-    let cameraStream = null;
-    let qrScanInterval = null;
+
+    /* ─────────────────────────────────────────
+       SCHEDULE MODAL — duplicate field visibility
+    ───────────────────────────────────────── */
+
+    document.getElementById('eventDuplicate').addEventListener('change', function () {
+        const startTimeFields = document.getElementById('startTimeFields');
+        const endTimeFields   = document.getElementById('endTimeFields');
+        const eventEndFields  = document.getElementById('eventEndFields');
+        const value = this.value;
+
+        if (value === 'none') {
+            // Single event: show time fields, hide end date
+            startTimeFields.classList.remove('d-none');
+            endTimeFields.classList.remove('d-none');
+            eventEndFields.classList.add('d-none');
+        } else if (['daily', 'weekly', 'biweekly'].includes(value)) {
+            // Recurring event: show all fields
+            startTimeFields.classList.remove('d-none');
+            endTimeFields.classList.remove('d-none');
+            eventEndFields.classList.remove('d-none');
+        } else {
+            // No selection: hide everything
+            startTimeFields.classList.add('d-none');
+            endTimeFields.classList.add('d-none');
+            eventEndFields.classList.add('d-none');
+        }
+    });
+
+
+    /* ─────────────────────────────────────────
+       AUTH MODAL — open / tab switching
+    ───────────────────────────────────────── */
 
     function openAuthModal() {
-        // Reset form
         document.getElementById('auth-username').value = '';
         document.getElementById('auth-password').value = '';
         document.getElementById('auth-error').style.display = 'none';
         switchAuthTab('password');
-        const modal = new bootstrap.Modal(document.getElementById('authModal'));
-        modal.show();
+        new bootstrap.Modal(document.getElementById('authModal')).show();
     }
 
     function switchAuthTab(tab) {
         const passwordTab = document.getElementById('auth-password-tab');
-        const qrTab = document.getElementById('auth-qr-tab');
+        const qrTab       = document.getElementById('auth-qr-tab');
         const tabPassword = document.getElementById('tab-password');
-        const tabQr = document.getElementById('tab-qr');
+        const tabQr       = document.getElementById('tab-qr');
 
         if (tab === 'password') {
             passwordTab.style.display = 'block';
-            qrTab.style.display = 'none';
-            tabPassword.style.color = '#4D44B5';
+            qrTab.style.display       = 'none';
+            tabPassword.style.color        = '#4D44B5';
             tabPassword.style.borderBottom = '3px solid #4D44B5';
-            tabQr.style.color = '#aaa';
+            tabQr.style.color        = '#aaa';
             tabQr.style.borderBottom = '3px solid transparent';
             stopCamera();
         } else {
             passwordTab.style.display = 'none';
-            qrTab.style.display = 'block';
-            tabPassword.style.color = '#aaa';
+            qrTab.style.display       = 'block';
+            tabPassword.style.color        = '#aaa';
             tabPassword.style.borderBottom = '3px solid transparent';
-            tabQr.style.color = '#4D44B5';
+            tabQr.style.color        = '#4D44B5';
             tabQr.style.borderBottom = '3px solid #4D44B5';
             startCamera();
         }
     }
 
+    // Close camera when auth modal is dismissed
+    document.getElementById('authModal')?.addEventListener('hidden.bs.modal', function () {
+        stopCamera();
+    });
+
+
+    /* ─────────────────────────────────────────
+       AUTH — username/password submission
+    ───────────────────────────────────────── */
+
     function submitAuth() {
-        const username = document.getElementById('auth-username').value.trim();
-        const password = document.getElementById('auth-password').value.trim();
+        const username  = document.getElementById('auth-username').value.trim();
+        const password  = document.getElementById('auth-password').value.trim();
+        const authError = document.getElementById('auth-error');
 
         if (!username || !password) {
-            document.getElementById('auth-error').style.display = 'block';
-            document.getElementById('auth-error').textContent = '❌ Please enter username and password';
+            authError.style.display = 'block';
+            authError.textContent   = '❌ Please enter username and password';
             return;
         }
 
-        // TODO: Replace with real API call when backend is ready
-        // For now show loading then open schedule modal
+        authError.style.display = 'none';
+
         const btn = event.target;
         btn.textContent = 'Verifying...';
-        btn.disabled = true;
+        btn.disabled    = true;
 
-        // Simulate API call — replace this with real fetch when ready
-        setTimeout(() => {
-            btn.textContent = 'Login & Continue';
-            btn.disabled = false;
-
-            // TODO: Remove this and use real response
-            // For now always succeeds — replace with API check
-            onAuthSuccess();
-        }, 1000);
-
-        /* UNCOMMENT THIS WHEN BACKEND IS READY:
-        fetch('/auth/verify-teacher', {
+        fetch('/api/teacher-authentificate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
         })
-        .then(r => r.json())
-        .then(result => {
+        .then(r => r.json().then(data => ({ status: r.status, body: data })))
+        .then(({ status, body }) => {
             btn.textContent = 'Login & Continue';
-            btn.disabled = false;
-            if (result.status === 'ok') {
+            btn.disabled    = false;
+
+            if (status === 200) {
                 onAuthSuccess();
             } else {
-                document.getElementById('auth-error').style.display = 'block';
-                document.getElementById('auth-error').textContent = '❌ Invalid username or password';
+                authError.style.display = 'block';
+                authError.textContent   = `❌ ${body.Message || 'Invalid username or password'}`;
             }
+        })
+        .catch(err => {
+            btn.textContent = 'Login & Continue';
+            btn.disabled    = false;
+            authError.style.display = 'block';
+            authError.textContent   = '❌ Network error, please try again';
+            console.error('Auth error:', err);
         });
-        */
     }
 
+    // Called on successful authentication
     function onAuthSuccess() {
-        // Close auth modal
         bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
         stopCamera();
 
-        // Open the schedule modal
+        // Show success alert, then open schedule modal after confirmation
         setTimeout(() => {
-            const scheduleModal = new bootstrap.Modal(document.getElementById('eventModal'));
-            scheduleModal.show();
+            Swal.fire({
+                icon: 'success',
+                title: 'Authentication Successful',
+                text: '✅ Welcome! You can now add a schedule.',
+                confirmButtonText: 'Continue',
+                confirmButtonColor: '#4D44B5',
+                timer: 3000,
+                timerProgressBar: true,
+            }).then(() => {
+                new bootstrap.Modal(document.getElementById('eventModal')).show();
+            });
         }, 300);
     }
 
-    // ── Camera / QR ──────────────────────────────────────────
+
+    /* ─────────────────────────────────────────
+       CAMERA — QR code scanning
+    ───────────────────────────────────────── */
+
+    let cameraStream   = null;
+    let qrScanInterval = null;
 
     function startCamera() {
         navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
@@ -875,7 +759,7 @@
                 video.srcObject = stream;
                 document.getElementById('qr-scan-status').textContent = '🔍 Scanning for QR code...';
 
-                // Start scanning frames
+                // Scan a frame every 500ms
                 qrScanInterval = setInterval(() => scanQRFrame(), 500);
             })
             .catch(err => {
@@ -896,221 +780,23 @@
     }
 
     function scanQRFrame() {
-        const video = document.getElementById('auth-camera');
+        const video  = document.getElementById('auth-camera');
         const canvas = document.getElementById('auth-canvas');
         if (!video || video.readyState !== video.HAVE_ENOUGH_DATA) return;
 
-        canvas.width = video.videoWidth;
+        canvas.width  = video.videoWidth;
         canvas.height = video.videoHeight;
+
         const ctx = canvas.getContext('2d');
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-        // TODO: Add QR decode logic here when backend is ready
-        // You can use jsQR library: jsQR(imageData.data, imageData.width, imageData.height)
+        // QR decode logic — requires jsQR library
+        // const code = jsQR(imageData.data, imageData.width, imageData.height);
         // if (code) { verifyQRCode(code.data); }
     }
 
-    // Close camera when modal closes
-    document.getElementById('authModal')?.addEventListener('hidden.bs.modal', function() {
-        stopCamera();
-    });
 </script>
 
-
-<!--&lt;!&ndash; QR Code Popup &ndash;&gt;-->
-<!--<div id="qr-popup" onclick="hideQRPopup()" style="-->
-<!--    display: none;-->
-<!--    position: fixed;-->
-<!--    top: 0; left: 0;-->
-<!--    width: 100%; height: 100%;-->
-<!--    background: rgba(0,0,0,0.6);-->
-<!--    z-index: 9999;-->
-<!--    justify-content: center;-->
-<!--    align-items: center;-->
-<!--    cursor: pointer;-->
-<!--    backdrop-filter: blur(4px);-->
-<!--">-->
-<!--    <div onclick="event.stopPropagation()" style="-->
-<!--        background: white;-->
-<!--        border-radius: 20px;-->
-<!--        padding: 30px 35px;-->
-<!--        text-align: center;-->
-<!--        box-shadow: 0 20px 60px rgba(0,0,0,0.3);-->
-<!--        max-width: 560px;-->
-<!--        width: 95%;-->
-<!--        position: relative;-->
-<!--    ">-->
-<!--        &lt;!&ndash; Close button &ndash;&gt;-->
-<!--        <button onclick="hideQRPopup()" style="-->
-<!--            position: absolute;-->
-<!--            top: 12px; right: 16px;-->
-<!--            background: none;-->
-<!--            border: none;-->
-<!--            font-size: 22px;-->
-<!--            cursor: pointer;-->
-<!--            color: #aaa;-->
-<!--            line-height: 1;-->
-<!--        ">✕-->
-<!--        </button>-->
-
-<!--        &lt;!&ndash; Title &ndash;&gt;-->
-<!--        <h4 style="font-size: 28px; font-weight: 700; color: #2c3e50; margin-bottom: 4px; margin-top: 8px;">-->
-<!--            📲 Download Unistudious-->
-<!--        </h4>-->
-<!--        <p style="font-size: 16px; color: #7f8c8d; margin-bottom: 20px;">-->
-<!--            Scan to download our app-->
-<!--        </p>-->
-
-<!--        &lt;!&ndash; Two QR codes side by side &ndash;&gt;-->
-<!--        <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 16px;">-->
-
-<!--            &lt;!&ndash; Android &ndash;&gt;-->
-<!--            <div style="text-align: center;">-->
-<!--                <div style="-->
-<!--                    background: #f8f9fa;-->
-<!--                    border-radius: 12px;-->
-<!--                    padding: 12px;-->
-<!--                    display: inline-block;-->
-<!--                    margin-bottom: 8px;-->
-<!--                ">-->
-<!--                    <div id="qr-android" style="width: 150px; height: 150px;"></div>-->
-<!--                </div>-->
-<!--                <div style="display: flex; align-items: center; justify-content: center; gap: 5px;">-->
-<!--                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#3DDC84">-->
-<!--                        <path d="M17.523 15.341l1.188 2.056a.5.5 0 01-.866.5l-1.203-2.083A7.967 7.967 0 0112 16.5a7.967 7.967 0 01-4.642-1.686L6.155 17.897a.5.5 0 01-.866-.5l1.188-2.056A7.983 7.983 0 014 9.5h16a7.983 7.983 0 01-2.477 5.841zM8.5 11a1 1 0 100 2 1 1 0 000-2zm7 0a1 1 0 100 2 1 1 0 000-2zM7.102 3.152l-1.2-2.078a.5.5 0 01.866-.5l1.215 2.104A7.954 7.954 0 0112 2c1.48 0 2.863.402 4.017 1.098l1.215-2.104a.5.5 0 11.866.5l-1.2 2.078A7.984 7.984 0 0120 9.5H4a7.984 7.984 0 013.102-6.348z"/>-->
-<!--                    </svg>-->
-<!--                    <span style="font-size: 16px; font-weight: 600; color: #3DDC84;">Android</span>-->
-<!--                </div>-->
-<!--            </div>-->
-
-<!--            &lt;!&ndash; Divider &ndash;&gt;-->
-<!--            <div style="width: 1px; background: #ecf0f1;"></div>-->
-
-<!--            &lt;!&ndash; iOS &ndash;&gt;-->
-<!--            <div style="text-align: center;">-->
-<!--                <div style="-->
-<!--                    background: #f8f9fa;-->
-<!--                    border-radius: 12px;-->
-<!--                    padding: 12px;-->
-<!--                    display: inline-block;-->
-<!--                    margin-bottom: 8px;-->
-<!--                ">-->
-<!--                    <div id="qr-ios" style="width: 150px; height: 150px;"></div>-->
-<!--                </div>-->
-<!--                <div style="display: flex; align-items: center; justify-content: center; gap: 5px;">-->
-<!--                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#555">-->
-<!--                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>-->
-<!--                    </svg>-->
-<!--                    <span style="font-size: 12px; font-weight: 600; color: #555;">iOS</span>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--        &lt;!&ndash; Progress bar &ndash;&gt;-->
-<!--        <div style="background: #ecf0f1; border-radius: 10px; height: 4px; overflow: hidden; margin-top: 8px;">-->
-<!--            <div id="qr-progress" style="-->
-<!--                height: 100%;-->
-<!--                background: linear-gradient(90deg, #667eea, #764ba2);-->
-<!--                border-radius: 10px;-->
-<!--                width: 100%;-->
-<!--                transition: width 15s linear;-->
-<!--            "></div>-->
-<!--        </div>-->
-<!--        <p style="font-size: 14px; color: #bbb; margin-top: 6px;" id="qr-countdown">Closing in 15s</p>-->
-<!--    </div>-->
-<!--</div>-->
-
-<!--<style>-->
-<!--    @keyframes fadeIn {-->
-<!--        from { opacity: 0; }-->
-<!--        to   { opacity: 1; }-->
-<!--    }-->
-<!--    @keyframes slideUp {-->
-<!--        from { transform: translateY(40px); opacity: 0; }-->
-<!--        to   { transform: translateY(0); opacity: 1; }-->
-<!--    }-->
-<!--</style>-->
-
-
-<!--<script>-->
-<!--    let qrTimer = null;-->
-<!--    let qrCountdownTimer = null;-->
-<!--    let qrCountdown = 15;-->
-<!--    let qrGenerated = false;-->
-
-<!--    function generateQRCodes() {-->
-<!--        if (qrGenerated) return;-->
-
-<!--        // Android QR-->
-<!--        new QRCode(document.getElementById("qr-android"), {-->
-<!--            text: "https://play.google.com/store/apps/details?id=com.unistudious.projet1v2&hl=fr",-->
-<!--            width: 150,-->
-<!--            height: 150,-->
-<!--            colorDark: "#000000",-->
-<!--            colorLight: "#f8f9fa",-->
-<!--            correctLevel: QRCode.CorrectLevel.H-->
-<!--        });-->
-
-<!--        // iOS QR-->
-<!--        new QRCode(document.getElementById("qr-ios"), {-->
-<!--            text: "https://apps.apple.com/ch/app/unistudious/id6756975616",-->
-<!--            width: 150,-->
-<!--            height: 150,-->
-<!--            colorDark: "#000000",-->
-<!--            colorLight: "#f8f9fa",-->
-<!--            correctLevel: QRCode.CorrectLevel.H-->
-<!--        });-->
-
-<!--        qrGenerated = true;-->
-<!--    }-->
-
-<!--    function showQRPopup() {-->
-<!--        generateQRCodes();-->
-
-<!--        const popup = document.getElementById('qr-popup');-->
-<!--        popup.style.display = 'flex';-->
-<!--        popup.style.animation = 'fadeIn 0.5s ease';-->
-
-<!--        // Reset and start progress bar-->
-<!--        const progress = document.getElementById('qr-progress');-->
-<!--        progress.style.transition = 'none';-->
-<!--        progress.style.width = '100%';-->
-<!--        setTimeout(() => {-->
-<!--            progress.style.transition = 'width 15s linear';-->
-<!--            progress.style.width = '0%';-->
-<!--        }, 50);-->
-
-<!--        // Countdown text-->
-<!--        qrCountdown = 15;-->
-<!--        document.getElementById('qr-countdown').textContent = `Closing in ${qrCountdown}s`;-->
-<!--        qrCountdownTimer = setInterval(() => {-->
-<!--            qrCountdown&#45;&#45;;-->
-<!--            document.getElementById('qr-countdown').textContent = `Closing in ${qrCountdown}s`;-->
-<!--            if (qrCountdown <= 0) clearInterval(qrCountdownTimer);-->
-<!--        }, 1000);-->
-
-<!--        // Auto hide after 15 seconds-->
-<!--        qrTimer = setTimeout(() => hideQRPopup(), 15000);-->
-<!--    }-->
-
-<!--    function hideQRPopup() {-->
-<!--        const popup = document.getElementById('qr-popup');-->
-<!--        popup.style.animation = 'fadeIn 0.3s ease reverse';-->
-<!--        setTimeout(() => {-->
-<!--            popup.style.display = 'none';-->
-<!--            popup.style.animation = 'fadeIn 0.5s ease';-->
-<!--        }, 300);-->
-<!--        clearTimeout(qrTimer);-->
-<!--        clearInterval(qrCountdownTimer);-->
-<!--    }-->
-
-<!--    // Show after 3 seconds on page load, then every 3 minutes-->
-<!--    setTimeout(() => showQRPopup(), 3000);-->
-<!--    setInterval(() => showQRPopup(), 3 * 60 * 1000);-->
-<!--</script>-->
-
 </body>
-
-<!-- Mirrored from akademi.dexignlab.com/xhtml/celandar.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 04 Mar 2025 13:05:52 GMT -->
 </html>
