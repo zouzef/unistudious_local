@@ -76,8 +76,8 @@ def sync_data_once(settings):
 
         if not fetcher.has_new_data(data):
             print("\nℹ️  No new data to sync. Database is up to date.")
-            # pusher = DataPusher(settings)
-            # pusher.detect_and_push_local_changes(db)
+            pusher = DataPusher(settings)
+            pusher.detect_and_push_local_changes(db)
             # Still save sync time even if no data
             save_last_sync_time(sync_start_time)
             return True

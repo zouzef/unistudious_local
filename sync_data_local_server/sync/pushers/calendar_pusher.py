@@ -28,7 +28,7 @@ def _send_calendar(settings, payload):
 				print(f"❌ Invalid JSON response: {response.text}")
 				return False, None
 
-			remote_id = response_data.get('attendance', {}).get('id')
+			remote_id = response_data.get('calendarId')  # ✅ Get calendarId from response
 			print(f"✅ Remote API success: {response_data}")
 			return True, remote_id
 		else:
@@ -45,6 +45,7 @@ def _send_calendar(settings, payload):
 
 def _send_update_calander(settings, calendar_id, payload):
 	try:
+
 		token = get_token()
 		headers = {"Authorization": f"Bearer {token}"}
 		url = f"{settings.api_base_url}/slc/edit-calendar/{calendar_id}"

@@ -4,6 +4,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from sync.pushers.attendance_pusher import push_add, push_update
+from sync.pushers.calendar_pusher import _send_calendar, _send_update_calander, _send_delete_calander
 
 class DataPusher:
 
@@ -36,6 +37,99 @@ class DataPusher:
             else:
                 print(f"❌ {table_name} audit #{audit_id} failed — will retry next cycle")
 
+    def push_calendar_add(self, row,db):
+        """Handle calendar INSERT action"""
+        try:
+            import json
+
+            # Parse the new_data JSON field
+            new_data = json.loads(row.get('new_data', '{}'))
+
+            # Extract date and time parts
+            start_datetime = new_data.get('start_time', '')
+            end_datetime = new_data.get('end_time', '')
+
+            # Extract time in HH:MM format (remove seconds if present)
+            start_time = start_datetime.split(' ')[1][:5] if start_datetime else None  # Gets HH:MM
+            end_time = end_datetime.split(' ')[1][:5] if end_datetime else None  # Gets HH:MM
+
+            # Map to camelCase field names that the API expects
+            payload = {
+                'groupId': new_data.get('group_id'),
+                'sessionId': new_data.get('session_id'),
+                'localId': new_data.get('local_id'),
+                'teacherId': new_data.get('teacher_id'),
+                'accountId': new_data.get('account_id'),  # ✅ Required
+                'startDate': start_datetime.split(' ')[0] if start_datetime else None,
+                'endDate': '',  # ✅ Empty for one-time events
+                'startTime': start_time,  # ✅ HH:MM format
+                'endTime': end_time,  # ✅ HH:MM format
+                'eventType': 'none',  # ✅ One-time event (not recurring)
+                'typeSession': new_data.get('type'),  # ✅ P or O
+                'eventTitle': new_data.get('title'),
+                'description': new_data.get('description'),
+                'completionTag': [],  # ✅ Empty array for now
+            }
+
+            # Optional fields
+            if new_data.get('room_id'):
+                payload['roomId'] = new_data.get('room_id')
+            if new_data.get('subject_id'):
+                payload['subjectId'] = new_data.get('subject_id')
+
+            print(f"📦 Calendar payload: {payload}")
+            success, remote_id = _send_calendar(self.settings, payload)
+            print(remote_id)
+
+            # ✅ ADD THIS BLOCK:
+            if success and remote_id:
+                local_calendar_id = row.get('id_calander')  # Get local calendar ID from audit
+
+                cursor = db.connection.cursor()
+                cursor.execute("""
+                    UPDATE relation_calander_group_session 
+                    SET id_prod = %s 
+                    WHERE id = %s
+                """, (remote_id, local_calendar_id))
+                db.connection.commit()
+                cursor.close()
+
+                print(f"✅ Updated local calendar #{local_calendar_id} with remote id_prod: {remote_id}")
+
+            return success
+
+        except Exception as e:
+            print(f"❌ Error in push_calendar_add: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+
+    def push_calendar_update(self, row, db):
+        """Handle calendar UPDATE action"""
+        try:
+            calendar_id = row.get('calendar_id')
+            payload = {
+                'calendar_date': row.get('calendar_date'),
+                'start_time': row.get('start_time'),
+                'end_time': row.get('end_time'),
+            }
+            success = _send_update_calander(self.settings, calendar_id, payload)
+            return success
+        except Exception as e:
+            print(f"❌ Error in push_calendar_update: {e}")
+            return False
+
+    def push_calendar_delete(self, row, db):
+        """Handle calendar DELETE action"""
+        try:
+            calendar_id = row.get('calendar_id')
+            payload = {}
+            success = _send_delete_calander(self.settings, calendar_id, payload)
+            return success
+        except Exception as e:
+            print(f"❌ Error in push_calendar_delete: {e}")
+            return False
+
     def detect_and_push_local_changes(self, db):
         print("\n" + "="*60)
         print("🚀 STARTING PUSH LOCAL CHANGES TO REMOTE")
@@ -65,6 +159,27 @@ class DataPusher:
 						"ADD_STUDENT": lambda row: push_add(db, self.settings, row),
 						"UPDATE": lambda row: push_update(db, self.settings, row)
 					}
+                )
+            cursor.execute("""
+                SELECT * FROM relation_calander_group_audit
+                WHERE is_synced = 0
+                ORDER BY audit_id ASC
+            """)
+            calendar_rows = cursor.fetchall()
+            print("\n \n \n \n \n \n \n ",calendar_rows)
+            if not calendar_rows:
+                print(" No pending calendar changes to push")
+            else:
+                print(f"📋 Found {len(calendar_rows)} pending calendar change(s)")
+                self._process_audit_rows(
+                    cursor,conn,
+                    "relation_calander_group_audit",
+                    calendar_rows,
+                    {
+                        "INSERT": lambda row: self.push_calendar_add(row, db),  # ✅ CORRECT
+                        "UPDATE": lambda row: self.push_calendar_update(row, db),  # ✅ CORRECT
+                        "DELETE": lambda row: self.push_calendar_delete(row, db)   # ✅ CORRECT
+                    }
                 )
 
         except Exception as e:

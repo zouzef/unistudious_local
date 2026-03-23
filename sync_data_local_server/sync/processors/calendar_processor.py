@@ -83,7 +83,8 @@ def insert_calendars(db, calendar_data):
     """
     Handle 'created' calendars from API
     Logic:
-    - If record exists in DB → UPDATE it
+    - Check if id_prod already exists (avoid duplicates from local pushes)
+    - If record exists in DB by id → UPDATE it
     - If record does NOT exist → INSERT it
 
     Args:
@@ -117,8 +118,19 @@ def insert_calendars(db, calendar_data):
                 if not calendar_id:
                     raise ValueError("Missing required field: id")
 
+                # ✅ FIRST: Check if this remote ID already exists as id_prod (from local push)
+                check_prod_query = "SELECT id FROM relation_calander_group_session WHERE id_prod = %s"
+                existing_by_prod = db.fetch_query(check_prod_query, (calendar_id,))
+
+                if existing_by_prod:
+                    print(
+                        f"   [{i}/{len(created_calendars)}] Calendar ID {calendar_id} already exists as id_prod (local id: {existing_by_prod[0]['id']}) - skipped to avoid duplicate")
+                    result["skipped"] += 1
+                    continue
+
                 # Prepare new data
                 new_data = {
+                    "id_prod": calendar_id,  # ✅ Store remote ID as id_prod
                     "session_id": calendar.get("sessionId"),
                     "account_id": calendar.get("accountId"),
                     "local_id": calendar.get("localId"),
@@ -146,7 +158,7 @@ def insert_calendars(db, calendar_data):
                     "timestamp": format_date(calendar.get("timestamp"))
                 }
 
-                # Check if record exists
+                # Check if record exists by id (local record)
                 select_query = "SELECT * FROM relation_calander_group_session WHERE id = %s"
                 existing_records = db.fetch_query(select_query, (calendar_id,))
 
@@ -175,6 +187,7 @@ def insert_calendars(db, calendar_data):
 
                     update_query = """
                         UPDATE relation_calander_group_session SET
+                            id_prod = %s,
                             session_id = %s,
                             account_id = %s,
                             local_id = %s,
@@ -204,6 +217,7 @@ def insert_calendars(db, calendar_data):
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["session_id"],
                         new_data["account_id"],
                         new_data["local_id"],
@@ -241,16 +255,17 @@ def insert_calendars(db, calendar_data):
 
                     insert_query = """
                         INSERT INTO relation_calander_group_session (
-                            id, session_id, account_id, local_id, group_session_id, room_id,
+                            id, id_prod, session_id, account_id, local_id, group_session_id, room_id,
                             teacher_id, subject_id, color, status, description, start_time,
                             end_time, ref, date, refresh, title, enabled, type,
                             teacher_present, force_teacher_present, releaseToken, useToken,
                             created_at, updated_at, timestamp
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """
 
                     db.execute_query(insert_query, (
                         calendar_id,
+                        new_data["id_prod"],
                         new_data["session_id"],
                         new_data["account_id"],
                         new_data["local_id"],
@@ -280,14 +295,6 @@ def insert_calendars(db, calendar_data):
 
                     result["inserted"] += 1
                     print(f"      ✅ Inserted successfully")
-
-                    # Optional: Create attendance records for this calendar
-                    # Uncomment the lines below if you want to auto-create attendance
-                    # if new_data["session_id"] and new_data["group_session_id"] and new_data["account_id"] and new_data["date"]:
-                    #     insert_attendance_calendar(
-                    #         db, calendar_id, new_data["session_id"],
-                    #         new_data["group_session_id"], new_data["account_id"], new_data["date"]
-                    #     )
 
             except Exception as err:
                 print(f"      ❌ Error processing calendar ID {calendar.get('id', 'unknown')}: {err}")

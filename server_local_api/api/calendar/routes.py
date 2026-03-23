@@ -406,6 +406,28 @@ def check_color(color):
 # ========================================
 # ENDPOINT 8: Create calendar api
 # ========================================
+def get_name_group(id):
+    try:
+        query = """
+            SELECT name 
+            FROM relation_group_local_session
+            WHERE id = %s
+        """
+        values = (id,)
+        result = Database.execute_query(query, values, fetch=True)
+
+        # ✅ Check if result exists and return the name
+        if result and len(result) > 0:
+            return result[0]['name']  # Return the name from first row
+        else:
+            return None  # No group found
+
+    except Exception as e:
+        print(f"❌ Error getting group name: {e}")
+        return None
+
+
+
 # Create calendar api 
 @calendar_bp.route('/create_calender',methods=['POST'])
 def create_calander():
@@ -456,7 +478,7 @@ def create_calander():
         description = data['description']
         start_time = data['start_time']
         end_time = data['end_time']
-        title = data['title']
+        title = get_name_group(group_id) or "Unknown Group"
         type_val = data['type']
 
         start_date = start_time.split(' ')[0]
