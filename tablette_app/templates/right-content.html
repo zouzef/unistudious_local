@@ -1,201 +1,323 @@
+<div class="col-lg-3">
 
-<div class="col-lg-3" >
-                <!-- Calendar -->
-                <div class="card mt-3 mb-3" >
-
-                    <div class="card-body">
-                        <div id="calendar" class="calendar">
-                            <div class="calendar">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <button class="btn btn-sm btn-outline-secondary" id="prevBtn">&lt;</button>
-                                    <h5 id="calendar-header" class="mb-0 text-center"></h5>
-                                    <button class="btn btn-sm btn-outline-secondary" id="nextBtn">&gt;</button>
-                                </div>
-
-                                <div id="calendar-grid">
-
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <div class="summary-cards">
-                    <div class="card mb-3 summary-card-purple">
-                        <div class="card-body2">
-                            <h4 class="titre" style="color:rgb(55, 48, 163); font-size:22px;">scan for presence</h4>
-                            <p style="color:black; font-size:12px; color:rgb(99, 102, 241);">Students can scan this QR code to mark their attendance</p>
-                            <div id="qrcode" style="padding-top:15px;"></div>
-                        </div>
-                    </div>
-
-                </div>
+    <!-- Qr code -->
+    <div class="summary-cards mt-3 mb-3">
+        <div class="card mb-3 summary-card-purple">
+            <div class="card-body2">
+                <h4 class="titre" style="color:rgb(55, 48, 163); font-size:22px;">scan for presence</h4>
+                <p style="color:black; font-size:12px; color:rgb(99, 102, 241);">Students can scan this QR code to mark
+                    their attendance</p>
+                <div id="qrcode" style="padding-top:15px;"></div>
             </div>
+        </div>
+
+    </div>
+
+    <!-- Calendar -->
+    <div class="card mt-3 mb-3">
+        <div class="card-body">
+            <div id="calendar" class="calendar">
+                <div class="calendar">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <button class="btn btn-sm btn-outline-secondary" id="prevBtn">&lt;</button>
+                        <h5 id="calendar-header" class="mb-0 text-center"></h5>
+                        <button class="btn btn-sm btn-outline-secondary" id="nextBtn">&gt;</button>
+                    </div>
+
+                    <div id="calendar-grid">
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Attendance QR fullscreen overlay -->
+
+
+<!-- Attendance QR fullscreen overlay -->
+<div id="attendance-qr-overlay" style="
+    position: fixed; inset: 0; z-index: 9999;
+    background: linear-gradient(135deg, #2d2680 0%, #4D44B5 50%, #6c63cc 100%);
+    display: none; align-items: center; justify-content: center;
+    flex-direction: column;
+    cursor: pointer;
+">
+    <!-- Title -->
+    <div style="text-align: center; margin-bottom: 50px; animation: fadeSlideDown 0.6s ease;">
+        <div style="
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 12px 20px;
+            margin: 0 auto 16px;
+            display: inline-block;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        ">
+            <img src="../static/assets/images/UNISTUDIOS.png"
+                 alt="Unistudious Logo"
+                 style="height: 42px; width: auto; display: block;">
+        </div>
+        <h2 style="color: white; font-size: 28px; font-weight: 800; margin: 0 0 8px; letter-spacing: -0.5px;">
+            Mark your attendance
+        </h2>
+        <p style="color: rgba(255,255,255,0.6); font-size: 15px; margin: 0;">
+            Scan the QR code with the Unistudious app
+        </p>
+    </div>
+
+    <!-- QR Card -->
+    <div style="
+        display: flex; flex-direction: column; align-items: center;
+        animation: floatUpDown 4s ease-in-out infinite;
+    ">
+        <div style="
+            background: white;
+            border-radius: 28px;
+            padding: 24px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.1);
+            margin-bottom: 24px;
+            position: relative;
+            display: inline-block;
+        ">
+            <!-- Corner decorations -->
+            <div style="position:absolute;top:10px;left:10px;width:20px;height:20px;border-top:3px solid #4D44B5;border-left:3px solid #4D44B5;border-radius:4px 0 0 0;"></div>
+            <div style="position:absolute;top:10px;right:10px;width:20px;height:20px;border-top:3px solid #4D44B5;border-right:3px solid #4D44B5;border-radius:0 4px 0 0;"></div>
+            <div style="position:absolute;bottom:10px;left:10px;width:20px;height:20px;border-bottom:3px solid #4D44B5;border-left:3px solid #4D44B5;border-radius:0 0 0 4px;"></div>
+            <div style="position:absolute;bottom:10px;right:10px;width:20px;height:20px;border-bottom:3px solid #4D44B5;border-right:3px solid #4D44B5;border-radius:0 0 4px 0;"></div>
+
+            <!-- QR Code -->
+            <div id="qr-overlay-attendance"></div>
+        </div>
+
+        <!-- Badge -->
+        <div style="
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            padding: 10px 28px;
+            display: flex; align-items: center; gap: 10px;
+        ">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <polyline points="16 11 18 13 22 9"/>
+            </svg>
+            <span style="color: white; font-size: 16px; font-weight: 700;">Attendance check-in</span>
+        </div>
+    </div>
+
+    <!-- Tap to dismiss -->
+    <div style="
+        position: absolute; bottom: 36px;
+        display: flex; align-items: center; gap: 8px;
+        animation: pulse 2s ease-in-out infinite;
+    ">
+        <div style="width: 6px; height: 6px; background: rgba(255,255,255,0.4); border-radius: 50%;"></div>
+        <span style="color: rgba(255,255,255,0.45); font-size: 13px; letter-spacing: 0.5px;">Tap anywhere to dismiss</span>
+        <div style="width: 6px; height: 6px; background: rgba(255,255,255,0.4); border-radius: 50%;"></div>
+    </div>
+</div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
-
-
-
-
-<!-- Script -->
-<script>
-  const monthNames = [
-    "January","February","March","April","May","June",
-    "July","August","September","October","November","December"
-  ];
-
-  const calendarGrid = document.getElementById("calendar-grid");
-  const calendarHeader = document.getElementById("calendar-header");
-  const prevBtn = document.getElementById("prevBtn");
-  const nextBtn = document.getElementById("nextBtn");
-
-  let today = new Date();
-  let currentMonth = today.getMonth(); // 0..11
-  let currentYear = today.getFullYear();
-
-  function generateCalendar(month, year) {
-    calendarGrid.innerHTML = "";
-
-    // header: weekday names
-    const daysOfWeek = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-    let headerRow = document.createElement("div");
-    headerRow.className = "row text-center mb-2";
-    daysOfWeek.forEach(day => {
-      let col = document.createElement("div");
-      col.className = "col calendar-day-header";
-      col.textContent = day;
-      headerRow.appendChild(col);
-    });
-    calendarGrid.appendChild(headerRow);
-
-    // compute first weekday and days in month
-    const firstDay = new Date(year, month, 1).getDay(); // day of week for the 1st of the month
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const prevMonthLastDay = new Date(year, month, 0).getDate();
-
-    let date = 1;
-    let nextMonthDate = 1;
-
-    // always render 6 rows for stable layout
-    for (let week = 0; week < 6; week++) {
-      let weekRow = document.createElement("div");
-      weekRow.className = "row text-center";
-
-      for (let d = 0; d < 7; d++) {
-        let col = document.createElement("div");
-        col.className = "col calendar-day";
-
-        if (week === 0 && d < firstDay) {
-          // previous month
-          col.classList.add("text-muted");
-          col.textContent = prevMonthLastDay - firstDay + d + 1;
-        } else if (date > daysInMonth) {
-          // next month
-          col.classList.add("text-muted");
-          col.textContent = nextMonthDate++;
-        } else {
-          // current month
-          // create an inner element so active styling looks like your design
-          let span = document.createElement("span");
-          span.textContent = date;
-          // highlight today
-          if (
-            date === today.getDate() &&
-            month === today.getMonth() &&
-            year === today.getFullYear()
-          ) {
-            span.classList.add("calendar-day-active");
-          }
-          col.appendChild(span);
-          // if span appended, we already set content; skip setting col.textContent below
-          date++;
-        }
-
-        // if no child nodes (i.e. we set text directly for prev/next month), leave it
-        if (!col.hasChildNodes()) {
-          // already set textContent above for prev/next month cases
-        }
-
-        weekRow.appendChild(col);
-      }
-
-      calendarGrid.appendChild(weekRow);
-    }
-
-    // update header month + year (correct indexing)
-    calendarHeader.textContent = `${monthNames[month]} ${year}`;
-  }
-
-  // navigation
-  prevBtn.addEventListener("click", () => {
-    currentMonth--;
-    if (currentMonth < 0) {
-      currentMonth = 11;
-      currentYear--;
-    }
-    generateCalendar(currentMonth, currentYear);
-  });
-
-  nextBtn.addEventListener("click", () => {
-    currentMonth++;
-    if (currentMonth > 11) {
-      currentMonth = 0;
-      currentYear++;
-    }
-    generateCalendar(currentMonth, currentYear);
-  });
-
-  // initial render
-  generateCalendar(currentMonth, currentYear);
-
-  // ✅ Get both IDs from Flask
-  let calendarId = "{{ calendar_id }}";
-  let slcId = "{{ slc_id }}";
-
-  // ✅ Build URL with slc_id and calendar_id
-  let fullUrl = `https://www.unistudious.com/${slcId}/${calendarId}`;
-
-  // ✅ Generate QR code
-  new QRCode(document.getElementById("qrcode"), {
-    text: fullUrl,
-    width: 200,
-    height: 200
-  });
-
-</script>
-
-
-
-
 <style>
-  .calendar-day-header {
-      font-weight: 600;
-      padding: 8px 0;
-      background-color: transparent;
-  }
-  .calendar-day {
-      padding: 10px 0;
-      border: 1px solid #f1f1f1;
-  }
-  .calendar-day-active {
-      background-color: #5a47cf;
-      color: #fff;
-      font-weight: 700;
-      border-radius: 6px;
-      display: inline-block;
-      min-width: 28px;
-      padding: 4px 8px;
-  }
-  .text-muted {
-      color: #bdbdbd !important;
-  }
-  /* ensure grid spacing */
-  #calendar-grid .row { margin-bottom: 6px; }
-
-
-
+    @keyframes floatUpDown {
+        0%, 100% { transform: translateY(0px); }
+        50%       { transform: translateY(-14px); }
+    }
+    @keyframes fadeSlideDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50%       { opacity: 0.4; }
+    }
+    #qr-overlay-attendance {
+        width: 400px;
+        height: 400px;
+        overflow: hidden;
+    }
+    #qr-overlay-attendance > div,
+    #qr-overlay-attendance canvas,
+    #qr-overlay-attendance img {
+        width: 400px !important;
+        height: 400px !important;
+        display: block !important;
+    }
+    .calendar-day-header {
+        font-weight: 600;
+        padding: 8px 0;
+        background-color: transparent;
+    }
+    .calendar-day {
+        padding: 10px 0;
+        border: 1px solid #f1f1f1;
+    }
+    .calendar-day-active {
+        background-color: #5a47cf;
+        color: #fff;
+        font-weight: 700;
+        border-radius: 6px;
+        display: inline-block;
+        min-width: 28px;
+        padding: 4px 8px;
+    }
+    .text-muted { color: #bdbdbd !important; }
+    #calendar-grid .row { margin-bottom: 6px; }
 </style>
+
+<script>
+    /* ── Calendar ── */
+    const monthNames = [
+      "January","February","March","April","May","June",
+      "July","August","September","October","November","December"
+    ];
+
+    const calendarGrid    = document.getElementById("calendar-grid");
+    const calendarHeader  = document.getElementById("calendar-header");
+    const prevBtn         = document.getElementById("prevBtn");
+    const nextBtn         = document.getElementById("nextBtn");
+
+    let today        = new Date();
+    let currentMonth = today.getMonth();
+    let currentYear  = today.getFullYear();
+
+    function generateCalendar(month, year) {
+        calendarGrid.innerHTML = "";
+
+        const daysOfWeek = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+        let headerRow = document.createElement("div");
+        headerRow.className = "row text-center mb-2";
+        daysOfWeek.forEach(day => {
+            let col = document.createElement("div");
+            col.className = "col calendar-day-header";
+            col.textContent = day;
+            headerRow.appendChild(col);
+        });
+        calendarGrid.appendChild(headerRow);
+
+        const firstDay         = new Date(year, month, 1).getDay();
+        const daysInMonth      = new Date(year, month + 1, 0).getDate();
+        const prevMonthLastDay = new Date(year, month, 0).getDate();
+
+        let date          = 1;
+        let nextMonthDate = 1;
+
+        for (let week = 0; week < 6; week++) {
+            let weekRow = document.createElement("div");
+            weekRow.className = "row text-center";
+
+            for (let d = 0; d < 7; d++) {
+                let col = document.createElement("div");
+                col.className = "col calendar-day";
+
+                if (week === 0 && d < firstDay) {
+                    col.classList.add("text-muted");
+                    col.textContent = prevMonthLastDay - firstDay + d + 1;
+                } else if (date > daysInMonth) {
+                    col.classList.add("text-muted");
+                    col.textContent = nextMonthDate++;
+                } else {
+                    let span = document.createElement("span");
+                    span.textContent = date;
+                    if (
+                        date === today.getDate() &&
+                        month === today.getMonth() &&
+                        year === today.getFullYear()
+                    ) {
+                        span.classList.add("calendar-day-active");
+                    }
+                    col.appendChild(span);
+                    date++;
+                }
+                weekRow.appendChild(col);
+            }
+            calendarGrid.appendChild(weekRow);
+        }
+
+        calendarHeader.textContent = `${monthNames[month]} ${year}`;
+    }
+
+    prevBtn.addEventListener("click", () => {
+        currentMonth--;
+        if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+        generateCalendar(currentMonth, currentYear);
+    });
+
+    nextBtn.addEventListener("click", () => {
+        currentMonth++;
+        if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+        generateCalendar(currentMonth, currentYear);
+    });
+
+    generateCalendar(currentMonth, currentYear);
+
+    /* ── QR variables (declared once) ── */
+    let calendarId    = "{{ calendar_id }}";
+    let slcId         = "{{ slc_id }}";
+    let attendanceUrl = `https://www.unistudious.com/${slcId}/${calendarId}`;
+
+    /* ── Small inline QR (sidebar card) ── */
+    new QRCode(document.getElementById("qrcode"), {
+        text: attendanceUrl,
+        width: 200,
+        height: 200
+    });
+
+    /* ─────────────────────────────────────────
+       ATTENDANCE QR FULLSCREEN OVERLAY
+    ───────────────────────────────────────── */
+
+    let attendanceQrTimer     = null;
+    let attendanceQrGenerated = false;
+    const QR_IDLE_SECONDS     = 10;
+
+    function generateAttendanceOverlayQR() {
+        if (attendanceQrGenerated) return;
+
+        new QRCode(document.getElementById("qr-overlay-attendance"), {
+            text: attendanceUrl,
+            width: 400,      /* ← must match CSS, was wrongly 260 before */
+            height: 400,
+            colorDark: "#2d2680",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+        attendanceQrGenerated = true;
+    }
+
+    function showAttendanceOverlay() {
+        generateAttendanceOverlayQR();
+        document.getElementById("attendance-qr-overlay").style.display = "flex";
+    }
+
+    function hideAttendanceOverlay() {
+        document.getElementById("attendance-qr-overlay").style.display = "none";
+        resetAttendanceOverlayTimer();
+    }
+
+    function resetAttendanceOverlayTimer() {
+        clearTimeout(attendanceQrTimer);
+        attendanceQrTimer = setTimeout(showAttendanceOverlay, QR_IDLE_SECONDS * 1000);
+    }
+
+    ['touchstart', 'mousemove', 'keydown', 'click'].forEach(evt => {
+        document.addEventListener(evt, () => {
+            const overlay = document.getElementById("attendance-qr-overlay");
+            if (overlay.style.display === "flex") {
+                hideAttendanceOverlay();
+            } else {
+                resetAttendanceOverlayTimer();
+            }
+        }, { passive: true });
+    });
+
+    resetAttendanceOverlayTimer();
+</script>

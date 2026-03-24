@@ -177,7 +177,7 @@ def get_todays_sessions():
                 u.full_name AS teacherFullName,
                 r.subject_id AS subjectId,
                 CASE
-                    WHEN sc.id != 1 THEN sc.name 
+                    WHEN sc.name != 'Other' THEN sc.name 
                     ELSE acs.other_subject
                 END AS subjectName,
                 r.local_id AS localId,
@@ -190,10 +190,9 @@ def get_todays_sessions():
             FROM relation_calander_group_session r
             LEFT JOIN user u ON r.teacher_id = u.id
             LEFT JOIN local l ON r.local_id = l.id
-            LEFT JOIN relation_teacher_to_subject_group rtsg ON r.subject_id = rtsg.id
-            LEFT JOIN subject_config sc ON rtsg.subject_id = sc.id
+            LEFT JOIN subject_config sc ON r.subject_id = sc.id
+            LEFT JOIN account_subject acs ON acs.subject_config_id = sc.id AND sc.name = 'Other'
             LEFT JOIN room rm ON r.room_id = rm.id
-            LEFT JOIN account_subject acs ON acs.subject_config_id = sc.id
             LEFT JOIN session s ON r.session_id = s.id
             WHERE r.enabled = 1 AND s.enabled = 1
         """

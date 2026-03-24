@@ -609,7 +609,7 @@ def get_profile_file(user_id):
 		if not img_filename or img_filename.strip() == '':
 			default_img_path = os.path.join(
 				os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-				'static/assets/images/profile.svg'
+				'static/assets/images/user-profile.png'
 			)
 			return send_file(default_img_path)
 
