@@ -79,6 +79,8 @@ def get_calendar_details(session_id):
     url = f"{base_url}{end_point}/{session_id}"
     try:
         response = requests.get(url, headers=headers, verify=False)
+        print(session_id)
+        print(response.json())
         response.raise_for_status()
         return response.json()
     except requests.RequestException as e:

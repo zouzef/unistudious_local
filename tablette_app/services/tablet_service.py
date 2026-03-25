@@ -68,8 +68,9 @@ def fetch_slc_info():
         response = requests.get(url,verify=False)
         response.raise_for_status()
         if response.status_code == 200:
-            print("Response get_slc_id: ",response.json())
-            return response.json()
+            data=response.json().get("data")
+
+            return data
         else:
             return None
 

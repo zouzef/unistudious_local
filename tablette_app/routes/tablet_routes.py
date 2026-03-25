@@ -55,9 +55,9 @@ def tablet_page(tablet_id):
                                    tablet_id=tablet_id)
 
         calender_id = session_room.get("id")
+        id_prod = session_room.get("id_prod")
         slc_info = fetch_slc_info()
-        slc_id = slc_info.get('Data', {}).get('id') if slc_info and isinstance(slc_info.get('Data'), dict) else None
-
+        slc_id = slc_info[0].get("id")
         # Parse session times
         session_start_str = session_room.get("start")
         session_end_str = session_room.get("end")
@@ -85,13 +85,15 @@ def tablet_page(tablet_id):
         if session_start - timedelta(minutes=5) <= now <= session_end:
             # Get room name from tablets data
             room_name = get_room_name(room, tablette)
-
+            print("slc_id: \n")
+            print(slc_id)
             return render_template(
                 "index.html",
                 tablet_id=tablet_id,
                 session_info=session_room,
                 room_name=room_name,
                 calendar_id = calender_id ,
+                id_prod = id_prod,
                 slc_id = slc_id,
                 room_id=room,
                 session_id=calender_id

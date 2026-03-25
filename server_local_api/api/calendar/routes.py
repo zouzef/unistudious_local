@@ -176,6 +176,7 @@ def get_todays_sessions():
                 u.uuid AS teacherUuid,
                 u.full_name AS teacherFullName,
                 r.subject_id AS subjectId,
+                r.id_prod AS id_prod,
                 CASE
                     WHEN sc.name != 'Other' THEN sc.name 
                     ELSE acs.other_subject
@@ -435,7 +436,6 @@ def create_calander():
         data = request.get_json() or {}
         if not data:
             return jsonify({"Message": "No data from the request"}), 400
-        print("calander_data:", data)
         # Required fields
         required_keys = [
             'session_id', 'account_id', 'local_id', 'group_id',
@@ -559,10 +559,59 @@ def create_calander():
 
         # Execute insert query using Database helper
         calander_id = Database.execute_query(query, values, fetch=False)
+        if calander_id:
+            query = """
+                SELECT DISTINCT user_id
+                FROM relation_user_session
+                WHERE relation_group_local_session_id = %s
+            """
+            values = (group_id,)
+            print(value)
+            result = Database.execute_query(query, values, fetch=True)
+            user_ids = [row['user_id'] for row in result]
+
+            if user_ids:
+                for user_id in user_ids:
+                    attendance_query = """
+                        INSERT INTO attendance 
+                        (
+                            user_id,
+                            session_id,
+                            account_id,
+                            group_session_id,
+                            calander_id,
+                            is_present,
+                            day,
+                            note,
+                            is_editable,
+                            enabled,
+                            created_at,
+                            timestamp,
+                            slc_edit
+                        )
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    """
+                    attendance_values = (
+                        user_id,
+                        session_id,
+                        account_id,
+                        group_id,  # group_session_id
+                        calander_id,
+                        0,  # is_present: 0 = absent by default
+                        start_date,  # day: extracted earlier from start_time
+                        None,  # note: empty by default
+                        1,  # is_editable: 1 = editable
+                        1,  # enabled
+                        create_time,
+                        timestamp,
+                        1  # slc_edit
+                    )
+                    Database.execute_query(attendance_query, attendance_values, fetch=False)
 
         return jsonify({
             "Message": "Calendar entry created successfully",
             "calander_id": calander_id,
+            "attendance_created": len(user_ids) if user_ids else 0,
             "ref": ref,
             "color": color
         }), 200

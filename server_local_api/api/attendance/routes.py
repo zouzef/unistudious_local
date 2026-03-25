@@ -18,7 +18,6 @@ attendance_bp = Blueprint('attendance', __name__, url_prefix='/scl')
 # ENDPOINT 1: Get attendance by calendar
 # ========================================
 @attendance_bp.route('/get-attendance/<int:calendar_id>', methods=['GET'])
-
 def get_todays_attendance(calendar_id):
     try:
         query = """
@@ -77,7 +76,6 @@ def get_todays_attendance(calendar_id):
 # ENDPOINT 2: Get student's groups for attendance
 # ========================================
 @attendance_bp.route('/attendance-get-group-student-select/<int:calendarId>/<int:userId>', methods=["GET"])
-
 def get_attendance_group_student(calendarId, userId):
     try:
         account_id = userId
@@ -158,7 +156,6 @@ def insert_attendance_audit(attendance_id, userId, calendarId, groupId,
 
 
 @attendance_bp.route('/attendance-save-user', methods=['POST'])
-
 def add_student_attendance():
     try:
         data = request.get_json()
@@ -330,7 +327,6 @@ def add_student_attendance():
 # ENDPOINT 4: Get attendance statistics
 # ========================================
 @attendance_bp.route('/attendance-statistics/<int:id_calender>', methods=['GET'])
-
 def statistics_attendance(id_calender):
     try:
         print(id_calender)
@@ -377,7 +373,6 @@ def statistics_attendance(id_calender):
 # ENDPOINT 5: Delete attendance
 # ========================================
 @attendance_bp.route('/delete_attendance_api/<int:calender_id>/<int:user_id>', methods=['DELETE'])
-
 def delete_attendance_api(calender_id, user_id):
     try:
         # Check if attendance exists
@@ -420,7 +415,6 @@ def delete_attendance_api(calender_id, user_id):
 # ENDPOINT 6: Delete attendance by ID
 # ========================================
 @attendance_bp.route('/attendance-delete-student/<int:id_attendance>', methods=['DELETE'])
-
 def delete_attendance_by_id(id_attendance):
     try:
         print(id_attendance)
@@ -455,7 +449,6 @@ def delete_attendance_by_id(id_attendance):
 # ENDPOINT 7: Get list of students to add to attendance
 # ========================================
 @attendance_bp.route('/list-add-student-attendance/<int:calender_id>', methods=["GET"])
-
 def list_add_student_attendance(calender_id):
     try:
         # Step 1: Get current attendance to exclude existing students
@@ -537,7 +530,6 @@ def list_add_student_attendance(calender_id):
 # ENDPOINT 8: Get next attendance session
 # ========================================
 @attendance_bp.route('/get-next-attendance/<int:calendarId>', methods=['GET'])
-
 def get_next_attendance_scl(calendarId):
     try:
         print(f"Looking for next attendance after calendar ID: {calendarId}")
@@ -591,7 +583,6 @@ def get_next_attendance_scl(calendarId):
 # ENDPOINT 9: Get next single attendance (alternative)
 # ========================================
 @attendance_bp.route('/get-next-single-attendance/<int:calendarId>', methods=['GET'])
-
 def get_next_single_attendance(calendarId):
     try:
         print(f"Looking for next single attendance after calendar ID: {calendarId}")
@@ -644,7 +635,6 @@ def get_next_single_attendance(calendarId):
 # ENDPOINT 10: Get all future attendances (v2)
 # ========================================
 @attendance_bp.route('/get-next-attendance-v2/<int:calendarId>', methods=['GET'])
-
 def get_next_attendance_v2(calendarId):
     try:
         print(f"Looking for next attendance after calendar ID: {calendarId} (Version 2)")
@@ -757,7 +747,6 @@ def reset_attendance(calender_id):
 # ENDPOINT 12: Get static attendance counts
 # ========================================
 @attendance_bp.route('/static_attendance/<int:calander_id>', methods=['GET'])
-
 def static_attendance(calander_id):
     try:
         query = """
@@ -823,7 +812,6 @@ def get_slc_mac(attendance_id):
         return None
 
 @attendance_bp.route('/update-attendance-student/<int:id_attendance>', methods=['POST'])
-
 def update_attendance_status(id_attendance):
     try:
         # Get data from request (supports both JSON and form data)
@@ -874,7 +862,6 @@ def update_attendance_status(id_attendance):
 # ENDPOINT 14: Update attendance note
 # ========================================
 @attendance_bp.route('/update-attendance-note/<int:attendanceId>', methods=['POST'])
-
 def update_attendance_note(attendanceId):
     try:
         print(f"Received request for attendance ID: {attendanceId}")
@@ -916,3 +903,54 @@ def update_attendance_note(attendanceId):
 
     except Exception as e:
         return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
+
+
+# ========================================
+# ENDPOINT 15: Create attendance
+# ========================================
+@attendance_bp.route('/create-attendance/<int:group_id>',methods=['POST'])
+def create_attendance(group_id):
+    try:
+
+        query = """
+            SELECT DISTINCT user_id
+            FROM relation_user_session
+            WHERE relation_group_local_session_id = %s
+            
+        """
+        values = (group_id,)
+        result = Database.execute_query(query,values,fetch=True)
+        user_ids = [row['user_id'] for row in result]
+        if user_ids :
+            for i in user_ids:
+                query = """
+                    INSERT INTO attendance 
+                    (
+                    user_id,
+                    session_id,
+                    account_id,
+                    group_session_id,
+                    calander_id,
+                    is_present,
+                    day,
+                    note,
+                    is_editale,
+                    enabled,
+                    created_at,
+                    timestamp,
+                    slc_edit
+                    )
+                    values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                """
+                values=(i,)
+
+
+
+        return jsonify({
+            "Message":"Succes in creating attendance"
+        }),200
+    except Exception as e:
+        return jsonify({
+            "Message":"Error in create_attendance"
+
+        }),500
