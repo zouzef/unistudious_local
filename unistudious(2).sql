@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 25, 2026 at 09:09 AM
+-- Generation Time: Mar 25, 2026 at 03:40 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -1036,7 +1036,11 @@ INSERT INTO `attendance` (`id`, `user_id`, `session_id`, `account_id`, `group_se
 (9369, 750, 25, 3, 153, 1937, NULL, 0, '2026-03-16 12:10:30', NULL, 1, 1, '2026-03-16 11:06:02', '2026-03-16 11:06:02', NULL, 0, NULL, 0, 0, 9369),
 (9370, 3, 25, 3, 153, 1937, NULL, 0, '2026-03-16 12:10:30', NULL, 1, 1, '2026-03-16 11:06:02', '2026-03-16 11:06:02', NULL, 0, NULL, 0, 0, 9370),
 (9371, 3, 12, 3, 73, 1940, NULL, 0, '2026-03-23 12:40:30', NULL, 1, 1, '2026-03-23 11:36:02', '2026-03-23 11:36:02', NULL, 0, NULL, 0, 0, 9371),
-(9372, 3, 12, 3, 73, 1941, NULL, 0, '2026-03-23 13:05:30', NULL, 1, 1, '2026-03-23 12:03:01', '2026-03-23 12:03:01', NULL, 0, NULL, 0, 0, 9372);
+(9372, 3, 12, 3, 73, 1941, NULL, 0, '2026-03-23 13:05:30', NULL, 1, 1, '2026-03-23 12:03:01', '2026-03-23 12:03:01', NULL, 0, NULL, 0, 0, 9372),
+(9373, 3, 12, 3, 73, 1954, NULL, 0, '2026-03-25 00:00:00', NULL, 1, 1, '2026-03-25 15:00:39', '2026-03-25 15:00:39', NULL, NULL, NULL, 0, 0, NULL),
+(9374, 3, 12, 3, 73, 1955, NULL, 0, '2026-03-25 00:00:00', NULL, 1, 1, '2026-03-25 15:09:05', '2026-03-25 15:09:05', NULL, NULL, NULL, 0, 1, NULL),
+(9375, 3, 12, 3, 73, 1956, NULL, 0, '2026-03-25 00:00:00', NULL, 1, 1, '2026-03-25 15:20:17', '2026-03-25 15:20:17', NULL, NULL, NULL, 0, 1, NULL),
+(9376, 326, 12, 3, 73, 1956, NULL, 1, '2026-03-25 15:28:46', NULL, 1, 1, '2026-03-25 15:28:46', '2026-03-25 15:28:46', NULL, NULL, NULL, 0, 1, NULL);
 
 --
 -- Triggers `attendance`
@@ -1112,6 +1116,13 @@ CREATE TABLE `attendance_audit` (
   `is_synced` tinyint(1) DEFAULT 0,
   `id_attendance` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `attendance_audit`
+--
+
+INSERT INTO `attendance_audit` (`audit_id`, `action_type`, `old_data`, `new_data`, `changed_at`, `is_synced`, `id_attendance`) VALUES
+(189478, 'ADD_STUDENT', NULL, '{\"userId\": 326, \"calendarId\": \"1956\", \"groupId\": 73, \"relationId\": null, \"addToGroup\": false, \"selectedGroupId\": null, \"joinToGroup\": false}', '2026-03-25 14:28:46', 0, 9376);
 
 -- --------------------------------------------------------
 
@@ -1341,7 +1352,19 @@ INSERT INTO `relation_calander_group_audit` (`audit_id`, `action_type`, `old_dat
 (11, 'INSERT', NULL, '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 76, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-24 09:20:00\", \"end_time\": \"2026-03-24 09:30:00\", \"title\": \"group super admin test\", \"type\": \"P\", \"color\": \"#E3CA3D\", \"status\": 1, \"description\": \"Group \\\"group super admin test\\\" has learning from 2026-03-24 09:20 to 2026-03-24 09:30 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-761283-435\"}', '2026-03-24 08:15:52', 0, 1946),
 (12, 'INSERT', NULL, '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 4, \"subject_id\": 1, \"start_time\": \"2026-03-24 09:35:00\", \"end_time\": \"2026-03-24 09:50:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#009563\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-24 09:35 to 2026-03-24 09:50 on Subject \\\"Math\\\" with Teacher \\\"Mkaissi khalil\\\"\", \"ref\": \"group-731283-069\"}', '2026-03-24 08:31:18', 0, 1947),
 (13, 'INSERT', NULL, '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 4, \"subject_id\": 1, \"start_time\": \"2026-03-24 12:36:00\", \"end_time\": \"2026-03-24 12:41:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#4799CE\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-24 12:36 to 2026-03-24 12:41 on Subject \\\"Math\\\" with Teacher \\\"Mkaissi khalil\\\"\", \"ref\": \"group-731283-703\"}', '2026-03-24 10:36:52', 0, 1948),
-(14, 'UPDATE', '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 4, \"subject_id\": 1, \"start_time\": \"2026-03-24 12:36:00\", \"end_time\": \"2026-03-24 12:41:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#4799CE\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-24 12:36 to 2026-03-24 12:41 on Subject \\\"Math\\\" with Teacher \\\"Mkaissi khalil\\\"\", \"ref\": \"group-731283-703\"}', '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 4, \"subject_id\": 2, \"start_time\": \"2026-03-24 12:36:00\", \"end_time\": \"2026-03-24 12:41:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#4799CE\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-24 12:36 to 2026-03-24 12:41 on Subject \\\"Math\\\" with Teacher \\\"Mkaissi khalil\\\"\", \"ref\": \"group-731283-703\"}', '2026-03-24 10:48:27', 0, 1948);
+(14, 'UPDATE', '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 4, \"subject_id\": 1, \"start_time\": \"2026-03-24 12:36:00\", \"end_time\": \"2026-03-24 12:41:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#4799CE\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-24 12:36 to 2026-03-24 12:41 on Subject \\\"Math\\\" with Teacher \\\"Mkaissi khalil\\\"\", \"ref\": \"group-731283-703\"}', '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 4, \"subject_id\": 2, \"start_time\": \"2026-03-24 12:36:00\", \"end_time\": \"2026-03-24 12:41:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#4799CE\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-24 12:36 to 2026-03-24 12:41 on Subject \\\"Math\\\" with Teacher \\\"Mkaissi khalil\\\"\", \"ref\": \"group-731283-703\"}', '2026-03-24 10:48:27', 0, 1948),
+(15, 'INSERT', NULL, '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-25 09:27:00\", \"end_time\": \"2026-03-25 09:40:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#2C525E\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-25 09:27 to 2026-03-25 09:40 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-731283-407\"}', '2026-03-25 08:24:13', 0, 1949),
+(16, 'UPDATE', '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-25 09:27:00\", \"end_time\": \"2026-03-25 09:40:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#2C525E\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-25 09:27 to 2026-03-25 09:40 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-731283-407\"}', '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-25 09:27:00\", \"end_time\": \"2026-03-25 09:40:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#2C525E\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-25 09:27 to 2026-03-25 09:40 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-731283-407\"}', '2026-03-25 08:25:26', 0, 1949),
+(17, 'UPDATE', '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-25 09:27:00\", \"end_time\": \"2026-03-25 09:40:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#2C525E\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-25 09:27 to 2026-03-25 09:40 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-731283-407\"}', '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-25 09:27:00\", \"end_time\": \"2026-03-25 09:40:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#2C525E\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-25 09:27 to 2026-03-25 09:40 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-731283-407\"}', '2026-03-25 08:29:33', 0, 1949),
+(18, 'INSERT', NULL, '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-25 09:50:00\", \"end_time\": \"2026-03-25 09:55:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#10A107\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-25 09:50 to 2026-03-25 09:55 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-731283-219\"}', '2026-03-25 08:45:40', 0, 1950),
+(19, 'UPDATE', '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-25 09:50:00\", \"end_time\": \"2026-03-25 09:55:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#10A107\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-25 09:50 to 2026-03-25 09:55 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-731283-219\"}', '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-25 09:50:00\", \"end_time\": \"2026-03-25 09:55:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#10A107\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-25 09:50 to 2026-03-25 09:55 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-731283-219\"}', '2026-03-25 08:46:44', 0, 1950),
+(20, 'UPDATE', '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-25 09:50:00\", \"end_time\": \"2026-03-25 09:55:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#10A107\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-25 09:50 to 2026-03-25 09:55 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-731283-219\"}', '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-25 09:50:00\", \"end_time\": \"2026-03-25 09:55:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#10A107\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-25 09:50 to 2026-03-25 09:55 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-731283-219\"}', '2026-03-25 08:47:08', 0, 1950),
+(21, 'INSERT', NULL, '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-25 10:35:00\", \"end_time\": \"2026-03-25 10:45:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#68946F\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-25 10:35 to 2026-03-25 10:45 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-731283-382\"}', '2026-03-25 09:31:15', 0, 1951),
+(22, 'INSERT', NULL, '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 76, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-25 12:55:00\", \"end_time\": \"2026-03-25 13:10:00\", \"title\": \"group super admin test\", \"type\": \"P\", \"color\": \"#F84518\", \"status\": 1, \"description\": \"Group \\\"group super admin test\\\" has learning from 2026-03-25 12:55 to 2026-03-25 13:10 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-761283-142\"}', '2026-03-25 11:50:18', 0, 1952),
+(23, 'INSERT', NULL, '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-25 14:15:00\", \"end_time\": \"2026-03-25 14:20:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#CD4AC0\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-25 14:15 to 2026-03-25 14:20 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-731283-746\"}', '2026-03-25 13:09:29', 0, 1953),
+(24, 'INSERT', NULL, '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-25 15:04:00\", \"end_time\": \"2026-03-25 15:08:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#B0BD61\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-25 15:04 to 2026-03-25 15:08 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-731283-002\"}', '2026-03-25 14:00:39', 0, 1954),
+(25, 'INSERT', NULL, '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-25 15:12:00\", \"end_time\": \"2026-03-25 15:16:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#187851\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-25 15:12 to 2026-03-25 15:16 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-731283-247\"}', '2026-03-25 14:09:05', 0, 1955),
+(26, 'INSERT', NULL, '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-25 15:24:00\", \"end_time\": \"2026-03-25 15:30:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#7F8321\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-03-25 15:24 to 2026-03-25 15:30 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-731283-992\"}', '2026-03-25 14:20:17', 0, 1956);
 
 -- --------------------------------------------------------
 
@@ -2678,7 +2701,15 @@ INSERT INTO `relation_calander_group_session` (`id`, `session_id`, `account_id`,
 (1945, 12, 3, 8, 73, 8, 4, 1, '#F2D51A', 1, 'Group \"GROUP TEST\" has learning from 2026-03-23 13:05 to 2026-03-23 13:10 on Subject \"Math\" with Teacher \"Mkaissi khalil\"', '2026-03-23 13:05:00', '2026-03-23 13:10:00', 'group-731283-457', NULL, 0, 'GROUP TEST', 1, '2026-03-23 13:01:12', '2026-03-23 13:01:12', NULL, 'P', 0, 0, NULL, NULL, 1, 1941),
 (1946, 12, 3, 8, 76, 8, 374, 1, '#E3CA3D', 1, 'Group \"group super admin test\" has learning from 2026-03-24 09:20 to 2026-03-24 09:30 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-24 09:20:00', '2026-03-24 09:30:00', 'group-761283-435', NULL, 0, 'group super admin test', 1, '2026-03-24 09:15:52', '2026-03-24 09:15:52', NULL, 'P', 0, 0, NULL, NULL, 1, NULL),
 (1947, 12, 3, 8, 73, 8, 4, 1, '#009563', 1, 'Group \"GROUP TEST\" has learning from 2026-03-24 09:35 to 2026-03-24 09:50 on Subject \"Math\" with Teacher \"Mkaissi khalil\"', '2026-03-24 09:35:00', '2026-03-24 09:50:00', 'group-731283-069', NULL, 0, 'GROUP TEST', 1, '2026-03-24 09:31:18', '2026-03-24 09:31:18', NULL, 'P', 0, 0, NULL, NULL, 1, NULL),
-(1948, 12, 3, 8, 73, 8, 4, 2, '#4799CE', 1, 'Group \"GROUP TEST\" has learning from 2026-03-24 12:36 to 2026-03-24 12:41 on Subject \"Math\" with Teacher \"Mkaissi khalil\"', '2026-03-24 12:36:00', '2026-03-24 12:41:00', 'group-731283-703', NULL, 0, 'GROUP TEST', 1, '2026-03-24 11:36:52', '2026-03-24 11:36:52', NULL, 'P', 0, 0, NULL, NULL, 1, NULL);
+(1948, 12, 3, 8, 73, 8, 4, 2, '#4799CE', 1, 'Group \"GROUP TEST\" has learning from 2026-03-24 12:36 to 2026-03-24 12:41 on Subject \"Math\" with Teacher \"Mkaissi khalil\"', '2026-03-24 12:36:00', '2026-03-24 12:41:00', 'group-731283-703', NULL, 0, 'GROUP TEST', 1, '2026-03-24 11:36:52', '2026-03-24 11:36:52', NULL, 'P', 0, 0, NULL, NULL, 1, NULL),
+(1949, 12, 3, 8, 73, 8, 374, 1, '#2C525E', 1, 'Group \"GROUP TEST\" has learning from 2026-03-25 09:27 to 2026-03-25 09:40 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-25 09:27:00', '2026-03-25 09:40:00', 'group-731283-407', NULL, 0, 'GROUP TEST', 1, '2026-03-25 09:24:13', '2026-03-25 09:24:13', NULL, 'P', 0, 0, NULL, NULL, 1, NULL),
+(1950, 12, 3, 8, 73, 8, 374, 1, '#10A107', 1, 'Group \"GROUP TEST\" has learning from 2026-03-25 09:50 to 2026-03-25 09:55 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-25 09:50:00', '2026-03-25 09:55:00', 'group-731283-219', NULL, 0, 'GROUP TEST', 1, '2026-03-25 09:45:40', '2026-03-25 09:45:40', NULL, 'P', 0, 0, NULL, NULL, 1, NULL),
+(1951, 12, 3, 8, 73, 8, 374, 1, '#68946F', 1, 'Group \"GROUP TEST\" has learning from 2026-03-25 10:35 to 2026-03-25 10:45 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-25 10:35:00', '2026-03-25 10:45:00', 'group-731283-382', NULL, 0, 'GROUP TEST', 1, '2026-03-25 10:31:15', '2026-03-25 10:31:15', NULL, 'P', 0, 0, NULL, NULL, 1, NULL),
+(1952, 12, 3, 8, 76, 8, 374, 1, '#F84518', 1, 'Group \"group super admin test\" has learning from 2026-03-25 12:55 to 2026-03-25 13:10 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-25 12:55:00', '2026-03-25 13:10:00', 'group-761283-142', NULL, 0, 'group super admin test', 1, '2026-03-25 12:50:18', '2026-03-25 12:50:18', NULL, 'P', 0, 0, NULL, NULL, 1, NULL),
+(1953, 12, 3, 8, 73, 8, 374, 1, '#CD4AC0', 1, 'Group \"GROUP TEST\" has learning from 2026-03-25 14:15 to 2026-03-25 14:20 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-25 14:15:00', '2026-03-25 14:20:00', 'group-731283-746', NULL, 0, 'GROUP TEST', 1, '2026-03-25 14:09:29', '2026-03-25 14:09:29', NULL, 'P', 0, 0, NULL, NULL, 1, NULL),
+(1954, 12, 3, 8, 73, 8, 374, 1, '#B0BD61', 1, 'Group \"GROUP TEST\" has learning from 2026-03-25 15:04 to 2026-03-25 15:08 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-25 15:04:00', '2026-03-25 15:08:00', 'group-731283-002', NULL, 0, 'GROUP TEST', 1, '2026-03-25 15:00:39', '2026-03-25 15:00:39', NULL, 'P', 0, 0, NULL, NULL, 1, NULL),
+(1955, 12, 3, 8, 73, 8, 374, 1, '#187851', 1, 'Group \"GROUP TEST\" has learning from 2026-03-25 15:12 to 2026-03-25 15:16 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-25 15:12:00', '2026-03-25 15:16:00', 'group-731283-247', NULL, 0, 'GROUP TEST', 1, '2026-03-25 15:09:05', '2026-03-25 15:09:05', NULL, 'P', 0, 0, NULL, NULL, 1, NULL),
+(1956, 12, 3, 8, 73, 8, 374, 1, '#7F8321', 1, 'Group \"GROUP TEST\" has learning from 2026-03-25 15:24 to 2026-03-25 15:30 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-25 15:24:00', '2026-03-25 15:30:00', 'group-731283-992', NULL, 0, 'GROUP TEST', 1, '2026-03-25 15:20:17', '2026-03-25 15:20:17', NULL, 'P', 0, 0, NULL, NULL, 1, NULL);
 
 --
 -- Triggers `relation_calander_group_session`
@@ -5541,13 +5572,13 @@ ALTER TABLE `association_audit`
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9373;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9377;
 
 --
 -- AUTO_INCREMENT for table `attendance_audit`
 --
 ALTER TABLE `attendance_audit`
-  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=189478;
+  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=189479;
 
 --
 -- AUTO_INCREMENT for table `calendar_request`
@@ -5601,13 +5632,13 @@ ALTER TABLE `relation_calander_audit`
 -- AUTO_INCREMENT for table `relation_calander_group_audit`
 --
 ALTER TABLE `relation_calander_group_audit`
-  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `relation_calander_group_session`
 --
 ALTER TABLE `relation_calander_group_session`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1949;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1957;
 
 --
 -- AUTO_INCREMENT for table `relation_group_local_session`
