@@ -1,3 +1,5 @@
+from xmlrpc.client import FastParser
+
 from flask import Blueprint, jsonify, request
 from datetime import datetime,timedelta
 import sys
@@ -428,7 +430,7 @@ def get_name_group(id):
 
 
 
-# Create calendar api 
+# Create calendar api
 @calendar_bp.route('/create_calender',methods=['POST'])
 def create_calander():
     try:
@@ -480,7 +482,7 @@ def create_calander():
         title = get_name_group(group_id) or "Unknown Group"
         type_val = data['type']
 
-        start_date = start_time.split(' ')[0]
+        start_date = start_time
 
         # Conflict checks
         if isRoomReserved(room_id, start_date, start_time, end_time):
@@ -566,7 +568,6 @@ def create_calander():
                 WHERE relation_group_local_session_id = %s
             """
             values = (group_id,)
-            print(value)
             result = Database.execute_query(query, values, fetch=True)
             user_ids = [row['user_id'] for row in result]
 
@@ -606,7 +607,38 @@ def create_calander():
                         timestamp,
                         1  # slc_edit
                     )
-                    Database.execute_query(attendance_query, attendance_values, fetch=False)
+                    attendance_id = Database.execute_query(attendance_query, attendance_values, fetch=False)
+                    if attendance_id:
+                        audit_query = """
+                            INSERT INTO attendance_audit(
+                                action_type,
+                                old_data,
+                                new_data,
+                                is_synced,
+                                id_attendance
+                            )
+                            VALUES (%s, %s, %s, %s, %s)
+                        """
+                        new_data = {
+                            "user_id": user_id,
+                            "session_id": session_id,
+                            "account_id": account_id,
+                            "group_session_id": group_id,
+                            "calander_id":calander_id,
+                            "is_present":0,
+                            "day": start_date,
+                            "note": None,
+                            "is_editable": 1,
+                            "enabled": 1
+                        }
+                        audit_values = (
+                            "INSERT_attendance",
+                            None,
+                            json.dumps(new_data),
+                            0,
+                            attendance_id
+                        )
+                        Database.execute_query(audit_query,audit_values,fetch=False)
 
         return jsonify({
             "Message": "Calendar entry created successfully",

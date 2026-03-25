@@ -37,7 +37,6 @@ def tablet_page(tablet_id):
         # Get all scheduled sessions
         attendance_calendar = fetch_attendance()
 
-
         if not attendance_calendar or "data" not in attendance_calendar:
             return render_template("no_session.html",
                                    message="No sessions found",
@@ -51,13 +50,13 @@ def tablet_page(tablet_id):
             return render_template("no_session.html",
                                    message="No session for this room",
                                    room_id=room,
-
                                    tablet_id=tablet_id)
 
         calender_id = session_room.get("id")
         id_prod = session_room.get("id_prod")
         slc_info = fetch_slc_info()
         slc_id = slc_info[0].get("id")
+
         # Parse session times
         session_start_str = session_room.get("start")
         session_end_str = session_room.get("end")
@@ -66,9 +65,7 @@ def tablet_page(tablet_id):
             return render_template("no_session.html",
                                    message="Session time data is missing",
                                    room_id=room,
-                                   tablet_id=tablet_id
-
-                                   )
+                                   tablet_id=tablet_id)
 
         try:
             # Try the new format first
@@ -81,31 +78,39 @@ def tablet_page(tablet_id):
 
         now = datetime.now()
         print(session_start)
+
         # Show session only if current time is within the session duration
         if session_start - timedelta(minutes=5) <= now <= session_end:
             # Get room name from tablets data
             room_name = get_room_name(room, tablette)
             print("slc_id: \n")
             print(slc_id)
+
+            # ✅ NEW: Format times for the frontend (HH:MM:SS)
+            session_start_time = session_start.strftime("%H:%M:%S")
+            session_end_time = session_end.strftime("%H:%M:%S")
+            session_duration = int((session_end - session_start).total_seconds())
+
             return render_template(
                 "index.html",
                 tablet_id=tablet_id,
                 session_info=session_room,
                 room_name=room_name,
-                calendar_id = calender_id ,
-                id_prod = id_prod,
-                slc_id = slc_id,
+                calendar_id=calender_id,
+                id_prod=id_prod,
+                slc_id=slc_id,
                 room_id=room,
-                session_id=calender_id
+                session_id=calender_id,
+                session_start_time=session_start_time,  # ✅ NEW: HH:MM:SS format
+                session_end_time=session_end_time,  # ✅ NEW: HH:MM:SS format
+                session_duration=session_duration  # ✅ NEW: Duration in seconds
             )
 
         return render_template("no_session.html",
                                message="No ongoing session at the moment",
                                tablet_id=tablet_id,
-                                room_id = room,
-                                session_id = calender_id
-
-                               )
+                               room_id=room,
+                               session_id=calender_id)
 
     except Exception as e:
         print(f"DEBUG: Exception in tablet_page: {e}")
