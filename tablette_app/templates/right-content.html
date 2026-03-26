@@ -14,56 +14,57 @@
     </div>
 
     <!-- Session Progress Card -->
-    <div class="card session-card">
-        <div class="session-header">
-            <h4 class="mb-0">📊 Session Progress</h4>
+    <!--    <div class="card session-card">-->
+    <!--        <div class="session-header">-->
+    <!--        </div>-->
+
+    <div class="session-body summary-card-purple">
+        <p class="title-card p-1" style="color: rgb(55, 48, 163);text-align: center;">Session Progress</p>
+
+        <!-- Time Display - NOW DYNAMIC -->
+        <div class="time-display">
+            <div class="time-box start">
+                <h6>Start Time</h6>
+                <div class="time" id="startTime">{{ session_start_time }}</div>
+            </div>
+            <div class="time-box end">
+                <h6>End Time</h6>
+                <div class="time" id="endTime">{{ session_end_time }}</div>
+            </div>
         </div>
 
-        <div class="session-body summary-card-purple">
-            <!-- Time Display - NOW DYNAMIC -->
-            <div class="time-display">
-                <div class="time-box start">
-                    <h6>Start Time</h6>
-                    <div class="time" id="startTime">{{ session_start_time }}</div>
-                </div>
-                <div class="time-box end">
-                    <h6>End Time</h6>
-                    <div class="time" id="endTime">{{ session_end_time }}</div>
+        <!-- Progress Bar -->
+        <div class="progress-section">
+            <h6>Session Progress</h6>
+            <div class="progress">
+                <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%" aria-valuenow="0"
+                     aria-valuemin="0" aria-valuemax="100">
+                    0%
                 </div>
             </div>
+        </div>
 
-            <!-- Progress Bar -->
-            <div class="progress-section">
-                <h6>Session Progress</h6>
-                <div class="progress">
-                    <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%" aria-valuenow="0"
-                         aria-valuemin="0" aria-valuemax="100">
-                        0%
-                    </div>
-                </div>
+        <!-- Session Info -->
+        <div class="session-info">
+            <div class="info-item">
+                <label>Duration</label>
+                <div class="value" id="duration">00:00:00</div>
             </div>
-
-            <!-- Session Info -->
-            <div class="session-info">
-                <div class="info-item">
-                    <label>Duration</label>
-                    <div class="value" id="duration">00:00:00</div>
-                </div>
-                <div class="info-item">
-                    <label>Elapsed</label>
-                    <div class="value" id="elapsed">00:00:00</div>
-                </div>
-                <div class="info-item">
-                    <label>Remaining</label>
-                    <div class="value" id="remaining">00:00:00</div>
-                </div>
-                <div class="info-item">
-                    <label>Status</label>
-                    <div><span class="status-badge active" id="statusBadge">Not Started</span></div>
-                </div>
+            <div class="info-item">
+                <label>Elapsed</label>
+                <div class="value" id="elapsed">00:00:00</div>
+            </div>
+            <div class="info-item">
+                <label>Remaining</label>
+                <div class="value" id="remaining">00:00:00</div>
+            </div>
+            <div class="info-item">
+                <label>Status</label>
+                <div><span class="status-badge active" id="statusBadge">Not Started</span></div>
             </div>
         </div>
     </div>
+</div>
 
 </div>
 
@@ -76,33 +77,35 @@
     cursor: pointer;
 ">
     <!-- Title -->
-    <div style="text-align: center; margin-bottom: 50px; animation: fadeSlideDown 0.6s ease;">
-        <div style="
-            background: rgba(255,255,255,0.95);
-            border-radius: 16px;
-            padding: 12px 20px;
-            margin: 0 auto 16px;
-            display: inline-block;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-        ">
-            <img src="../static/assets/images/UNISTUDIOS.png"
-                 alt="Unistudious Logo"
-                 style="height: 42px; width: auto; display: block;">
-        </div>
-        <h2 style="color: white; font-size: 28px; font-weight: 800; margin: 0 0 8px; letter-spacing: -0.5px;">
-            Mark your attendance
-        </h2>
-        <p style="color: rgba(255,255,255,0.6); font-size: 15px; margin: 0;">
-            Scan the QR code with the Unistudious app
-        </p>
-    </div>
-
-    <!-- QR Card -->
+    <div style="text-align: center; margin-bottom: 50px; animation: fadeSlideDown<!-- Title -->
+    <div style=" text-align: center; margin-bottom: 20px; animation: fadeSlideDown 0.6s ease; padding-top: 20px;
+    ">
     <div style="
+            background: rgba(255,255,255,0.95);
+            border-radius: 12px;
+            padding: 6px 14px;
+            margin: 0 auto 8px;
+            display: inline-block;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        ">
+        <img src="../static/assets/images/UNISTUDIOS.png"
+             alt="Unistudious Logo"
+             style="height: 42px; width: auto; display: block;">
+    </div>
+    <h2 style="color: white; font-size: 28px; font-weight: 800; margin: 0 0 8px; letter-spacing: -0.5px;">
+        Mark your attendance
+    </h2>
+    <p style="color: rgba(255,255,255,0.6); font-size: 15px; margin: 0;">
+        Scan the QR code with the Unistudious app
+    </p>
+</div>
+
+<!-- QR Card -->
+<div style="
         display: flex; flex-direction: column; align-items: center;
         animation: floatUpDown 4s ease-in-out infinite;
     ">
-        <div style="
+    <div style="
             background: white;
             border-radius: 28px;
             padding: 24px;
@@ -111,18 +114,18 @@
             position: relative;
             display: inline-block;
         ">
-            <!-- Corner decorations -->
-            <div style="position:absolute;top:10px;left:10px;width:20px;height:20px;border-top:3px solid #4D44B5;border-left:3px solid #4D44B5;border-radius:4px 0 0 0;"></div>
-            <div style="position:absolute;top:10px;right:10px;width:20px;height:20px;border-top:3px solid #4D44B5;border-right:3px solid #4D44B5;border-radius:0 4px 0 0;"></div>
-            <div style="position:absolute;bottom:10px;left:10px;width:20px;height:20px;border-bottom:3px solid #4D44B5;border-left:3px solid #4D44B5;border-radius:0 0 0 4px;"></div>
-            <div style="position:absolute;bottom:10px;right:10px;width:20px;height:20px;border-bottom:3px solid #4D44B5;border-right:3px solid #4D44B5;border-radius:0 0 4px 0;"></div>
+        <!-- Corner decorations -->
+        <div style="position:absolute;top:10px;left:10px;width:20px;height:20px;border-top:3px solid #4D44B5;border-left:3px solid #4D44B5;border-radius:4px 0 0 0;"></div>
+        <div style="position:absolute;top:10px;right:10px;width:20px;height:20px;border-top:3px solid #4D44B5;border-right:3px solid #4D44B5;border-radius:0 4px 0 0;"></div>
+        <div style="position:absolute;bottom:10px;left:10px;width:20px;height:20px;border-bottom:3px solid #4D44B5;border-left:3px solid #4D44B5;border-radius:0 0 0 4px;"></div>
+        <div style="position:absolute;bottom:10px;right:10px;width:20px;height:20px;border-bottom:3px solid #4D44B5;border-right:3px solid #4D44B5;border-radius:0 0 4px 0;"></div>
 
-            <!-- QR Code -->
-            <div id="qr-overlay-attendance"></div>
-        </div>
+        <!-- QR Code -->
+        <div id="qr-overlay-attendance"></div>
+    </div>
 
-        <!-- Badge -->
-        <div style="
+    <!-- Badge -->
+    <div style="
             background: rgba(255,255,255,0.12);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.2);
@@ -130,26 +133,26 @@
             padding: 10px 28px;
             display: flex; align-items: center; gap: 10px;
         ">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                <circle cx="9" cy="7" r="4"/>
-                <polyline points="16 11 18 13 22 9"/>
-            </svg>
-            <span style="color: white; font-size: 16px; font-weight: 700;">Attendance check-in</span>
-        </div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <polyline points="16 11 18 13 22 9"/>
+        </svg>
+        <span style="color: white; font-size: 16px; font-weight: 700;">Attendance check-in</span>
     </div>
+</div>
 
-    <!-- Tap to dismiss -->
-    <div style="
-        position: absolute; bottom: 36px;
-        display: flex; align-items: center; gap: 8px;
-        animation: pulse 2s ease-in-out infinite;
-    ">
-        <div style="width: 6px; height: 6px; background: rgba(255,255,255,0.4); border-radius: 50%;"></div>
-        <span style="color: rgba(255,255,255,0.45); font-size: 13px; letter-spacing: 0.5px;">Tap anywhere to dismiss</span>
-        <div style="width: 6px; height: 6px; background: rgba(255,255,255,0.4); border-radius: 50%;"></div>
-    </div>
+<!-- Tap to dismiss -->
+<div style="
+    position: absolute; bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+    animation: pulse 2s ease-in-out infinite;
+">
+    <div style="width: 6px; height: 6px; background: rgba(255,255,255,0.4); border-radius: 50%;"></div>
+    <span style="color: rgba(255,255,255,0.45); font-size: 13px; letter-spacing: 0.5px;">Tap anywhere to dismiss</span>
+    <div style="width: 6px; height: 6px; background: rgba(255,255,255,0.4); border-radius: 50%;"></div>
+</div>
 </div>
 
 
@@ -169,15 +172,15 @@
         50%       { opacity: 0.4; }
     }
     #qr-overlay-attendance {
-        width: 400px;
-        height: 400px;
+        width: 335px;
+        height: 335px;
         overflow: hidden;
     }
     #qr-overlay-attendance > div,
     #qr-overlay-attendance canvas,
     #qr-overlay-attendance img {
-        width: 400px !important;
-        height: 400px !important;
+        width: 335px !important;
+        height: 335px !important;
         display: block !important;
     }
 
@@ -186,8 +189,7 @@
        ═══════════════════════════════════════════ */
 
     .session-card {
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
         border: none;
     }
 
@@ -195,14 +197,17 @@
         color: rgb(55, 48, 163);
         padding: 8px 12px;
         border-radius: 12px 12px 0 0;
+        background-color:
     }
 
-    .session-header h4 {
+    .title-card-p{
+        color:rgb(99, 102, 241);
         font-size: 14px;
         margin: 0 !important;
     }
 
     .session-body {
+        border-radius: 12px;
         padding: 12px;
     }
 

@@ -98,14 +98,23 @@
                                          style="width: 80px; height: 80px; border-radius: 10%; object-fit: cover; margin-right: 12px; display: none;">
                                     <div class="d-flex flex-column align-items-start">
                                         <h2 class="heading mb-sm-0" id="academie-title"></h2>
-                                        <p class="mb-0">Schedule & Calendar System</p>
+                                        <p class="mb-0" data-key="subtitle">Schedule & Calendar System</p>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-center flex-wrap">
                                     <div class="ms-3">
                                         <button type="button" class="btn btn-primary" onclick="openAuthModal()">
-                                            <i class="bi bi-plus-circle me-2"></i> + Add Schedule
+                                            <i class="bi bi-plus-circle me-2"></i><span data-key="addSchedule">  + Add Schedule </span>
                                         </button>
+                                    </div>
+                                    <!-- Language Switcher -->
+                                    <div class="ms-3">
+                                        <select onchange="setLang(this.value)" id="lang-select"
+                                                class="form-select-sm"
+                                                style="width: auto; cursor: pointer;">
+                                            <option value="en">English</option>
+                                            <option value="fr">Français</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -128,53 +137,53 @@
                         <div class="col-12 col-md-4 col-lg-4 col-xl-4">
                             <div class="row">
                                 <!-- QR Code Download Card -->
-<!--                                <div class="col-xl-12">-->
-<!--                                    <div class="card">-->
-<!--                                        <div class="card-body text-center py-4"-->
-<!--                                             style="border:2px solid rgb(77, 68, 181);border-radius:10px;background-color:rgb(235, 235, 249);">-->
-<!--                                            <h4 style="font-size: 22px; font-weight: 700; color: #2c3e50; margin-bottom: 6px;">-->
-<!--                                                📲 Download Unistudious-->
-<!--                                            </h4>-->
-<!--                                            <p style="font-size: 14px; color: #7f8c8d; margin-bottom: 20px;">-->
-<!--                                                Scan to download our app-->
-<!--                                            </p>-->
-<!--                                            <div style="display: flex; justify-content: center; gap: 20px;">-->
+                                <!--                                <div class="col-xl-12">-->
+                                <!--                                    <div class="card">-->
+                                <!--                                        <div class="card-body text-center py-4"-->
+                                <!--                                             style="border:2px solid rgb(77, 68, 181);border-radius:10px;background-color:rgb(235, 235, 249);">-->
+                                <!--                                            <h4 style="font-size: 22px; font-weight: 700; color: #2c3e50; margin-bottom: 6px;">-->
+                                <!--                                                📲 Download Unistudious-->
+                                <!--                                            </h4>-->
+                                <!--                                            <p style="font-size: 14px; color: #7f8c8d; margin-bottom: 20px;">-->
+                                <!--                                                Scan to download our app-->
+                                <!--                                            </p>-->
+                                <!--                                            <div style="display: flex; justify-content: center; gap: 20px;">-->
 
-<!--                                                &lt;!&ndash; Android QR &ndash;&gt;-->
-<!--                                                <div style="text-align: center;">-->
-<!--                                                    <div style="background: #f8f9fa; border-radius: 12px; padding: 10px; display: inline-block; margin-bottom: 8px;">-->
-<!--                                                        <div id="qr-android-static"-->
-<!--                                                             style="width: 130px; height: 130px;"></div>-->
-<!--                                                    </div>-->
-<!--                                                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px;">-->
-<!--                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#3DDC84">-->
-<!--                                                            <path d="M17.523 15.341l1.188 2.056a.5.5 0 01-.866.5l-1.203-2.083A7.967 7.967 0 0112 16.5a7.967 7.967 0 01-4.642-1.686L6.155 17.897a.5.5 0 01-.866-.5l1.188-2.056A7.983 7.983 0 014 9.5h16a7.983 7.983 0 01-2.477 5.841zM8.5 11a1 1 0 100 2 1 1 0 000-2zm7 0a1 1 0 100 2 1 1 0 000-2zM7.102 3.152l-1.2-2.078a.5.5 0 01.866-.5l1.215 2.104A7.954 7.954 0 0112 2c1.48 0 2.863.402 4.017 1.098l1.215-2.104a.5.5 0 11.866.5l-1.2 2.078A7.984 7.984 0 0120 9.5H4a7.984 7.984 0 013.102-6.348z"/>-->
-<!--                                                        </svg>-->
-<!--                                                        <span style="font-size: 14px; font-weight: 600; color: #3DDC84;">Android</span>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
+                                <!--                                                &lt;!&ndash; Android QR &ndash;&gt;-->
+                                <!--                                                <div style="text-align: center;">-->
+                                <!--                                                    <div style="background: #f8f9fa; border-radius: 12px; padding: 10px; display: inline-block; margin-bottom: 8px;">-->
+                                <!--                                                        <div id="qr-android-static"-->
+                                <!--                                                             style="width: 130px; height: 130px;"></div>-->
+                                <!--                                                    </div>-->
+                                <!--                                                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px;">-->
+                                <!--                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#3DDC84">-->
+                                <!--                                                            <path d="M17.523 15.341l1.188 2.056a.5.5 0 01-.866.5l-1.203-2.083A7.967 7.967 0 0112 16.5a7.967 7.967 0 01-4.642-1.686L6.155 17.897a.5.5 0 01-.866-.5l1.188-2.056A7.983 7.983 0 014 9.5h16a7.983 7.983 0 01-2.477 5.841zM8.5 11a1 1 0 100 2 1 1 0 000-2zm7 0a1 1 0 100 2 1 1 0 000-2zM7.102 3.152l-1.2-2.078a.5.5 0 01.866-.5l1.215 2.104A7.954 7.954 0 0112 2c1.48 0 2.863.402 4.017 1.098l1.215-2.104a.5.5 0 11.866.5l-1.2 2.078A7.984 7.984 0 0120 9.5H4a7.984 7.984 0 013.102-6.348z"/>-->
+                                <!--                                                        </svg>-->
+                                <!--                                                        <span style="font-size: 14px; font-weight: 600; color: #3DDC84;">Android</span>-->
+                                <!--                                                    </div>-->
+                                <!--                                                </div>-->
 
-<!--                                                &lt;!&ndash; Divider &ndash;&gt;-->
-<!--                                                <div style="width: 1px; background: #ecf0f1;"></div>-->
+                                <!--                                                &lt;!&ndash; Divider &ndash;&gt;-->
+                                <!--                                                <div style="width: 1px; background: #ecf0f1;"></div>-->
 
-<!--                                                &lt;!&ndash; iOS QR &ndash;&gt;-->
-<!--                                                <div style="text-align: center;">-->
-<!--                                                    <div style="background: #f8f9fa; border-radius: 12px; padding: 10px; display: inline-block; margin-bottom: 8px;">-->
-<!--                                                        <div id="qr-ios-static"-->
-<!--                                                             style="width: 130px; height: 130px;"></div>-->
-<!--                                                    </div>-->
-<!--                                                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px;">-->
-<!--                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#555">-->
-<!--                                                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>-->
-<!--                                                        </svg>-->
-<!--                                                        <span style="font-size: 14px; font-weight: 600; color: #555;">iOS</span>-->
-<!--                                                    </div>-->
-<!--                                                </div>-->
+                                <!--                                                &lt;!&ndash; iOS QR &ndash;&gt;-->
+                                <!--                                                <div style="text-align: center;">-->
+                                <!--                                                    <div style="background: #f8f9fa; border-radius: 12px; padding: 10px; display: inline-block; margin-bottom: 8px;">-->
+                                <!--                                                        <div id="qr-ios-static"-->
+                                <!--                                                             style="width: 130px; height: 130px;"></div>-->
+                                <!--                                                    </div>-->
+                                <!--                                                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px;">-->
+                                <!--                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#555">-->
+                                <!--                                                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>-->
+                                <!--                                                        </svg>-->
+                                <!--                                                        <span style="font-size: 14px; font-weight: 600; color: #555;">iOS</span>-->
+                                <!--                                                    </div>-->
+                                <!--                                                </div>-->
 
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
+                                <!--                                            </div>-->
+                                <!--                                        </div>-->
+                                <!--                                    </div>-->
+                                <!--                                </div>-->
 
                                 <!-- Pagination Controls -->
                                 <div class="col-xl-12" id="pagination-container" style="display: none;">
@@ -210,25 +219,25 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="eventModalLabel">Add New Schedule</h5>
+                <h5 class="modal-title" id="eventModalLabel" data-key="modalTitle">Add New Schedule</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="eventForm">
                     <div class="mb-3">
-                        <label for="session" class='form-label'>Session</label>
+                        <label for="session" class='form-label' data-key="labelSession">Session</label>
                         <select class="form-control" id="session">
                             <option value="" selected>SELECT SESSION</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="group_id" class="form-label">Group</label>
+                        <label for="group_id" class="form-label" data-key="labelGroup">Group</label>
                         <select class="form-control" id="group_id">
                             <option value="" selected>SELECT GROUP</option>
                         </select>
                     </div>
                     <div class="mb-3" id="typeSessionContainer">
-                        <label for="typeSessionSelect" class="form-label">Type</label>
+                        <label for="typeSessionSelect" class="form-label" data-key="labelType">Type</label>
                         <select class="form-control" id="typeSessionSelect">
                             <option value="" selected>Select Type</option>
                             <option value="P">Presence (P)</option>
@@ -237,26 +246,27 @@
                         <div id="typeSessionSelectError" class="alert alert-danger d-none mt-2" role="alert"></div>
                     </div>
                     <div class="mb-3" id="startDateContainer">
-                        <label for="eventStartDate" class="form-label">Start Date</label>
+                        <label for="eventStartDate" class="form-label" data-key="labelStartDate">Start Date</label>
                         <input type="date" class="form-control" id="eventStartDate" required>
                         <div id="eventStartDateError" class="alert alert-danger d-none mt-2" role="alert"></div>
                     </div>
                     <div class="mb-3">
-                        <label for="eventRooms" class="form-label">Room</label>
+                        <label for="eventRooms" class="form-label" data-key="labelRoom">Room</label>
                         <select class="form-control" id="eventRooms" required>
                             <option value="" selected disabled>Select a Room</option>
                         </select>
                         <div id="eventRoomError" class="alert alert-danger d-none mt-2" role="alert"></div>
                     </div>
                     <div class="mb-3">
-                        <label for="eventSubject" class="form-label">Teacher And Subject</label>
+                        <label for="eventSubject" class="form-label" data-key="labelSubject">Teacher And Subject</label>
                         <select class="form-control" id="eventSubject" required>
                             <option value="" selected disabled>Select a Subject and Teacher</option>
                         </select>
                         <div id="eventSubjectError" class="alert alert-danger d-none mt-2" role="alert"></div>
                     </div>
                     <div class="mb-3">
-                        <label for="eventCompletionTagCalander" class="form-label">Completion Tag</label>
+                        <label for="eventCompletionTagCalander" class="form-label" data-key="labelCompletion">Completion
+                            Tag</label>
                         <select class="form-control" id="eventCompletionTagCalander" multiple>
                             <option value="1">Bronze</option>
                             <option value="2">Silver</option>
@@ -270,7 +280,7 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="eventDuplicate" class="form-label">Duplicate</label>
+                        <label for="eventDuplicate" class="form-label" data-key="labelDuplicate">Duplicate</label>
                         <select class="form-control" id="eventDuplicate">
                             <option value="" selected disabled>Select an Option</option>
                             <option value="none">Not Duplicate</option>
@@ -281,19 +291,20 @@
                         <div id="eventDuplicateError" class="alert alert-danger d-none mt-2" role="alert"></div>
                     </div>
                     <div class="mb-3 d-none" id="startTimeFields">
-                        <label for="eventStartTime" class="form-label">Start Time</label>
+                        <label for="eventStartTime" class="form-label" data-key="labelStartTime">Start Time</label>
                         <input type="time" class="form-control" id="eventStartTime">
                     </div>
                     <div class="mb-3 d-none" id="endTimeFields">
-                        <label for="eventEndTime" class="form-label">End Time</label>
+                        <label for="eventEndTime" class="form-label" data-key="labelEndTime">End Time</label>
                         <input type="time" class="form-control" id="eventEndTime">
                     </div>
                     <div class="mb-3 d-none" id="eventEndFields">
-                        <label for="eventEndDate" class="form-label">End Date (for recurring events)</label>
+                        <label for="eventEndDate" class="form-label" data-key="labelEndDate">End Date (for recurring
+                            events)</label>
                         <input type="date" class="form-control" id="eventEndDate">
                     </div>
                     <div class="mb-3">
-                        <label for="eventDescription" class="form-label">Description</label>
+                        <label for="eventDescription" class="form-label" data-key="labelDescription">Description</label>
                         <textarea class="form-control" id="eventDescription" name="eventDescription" rows="3"
                                   placeholder="Enter event description"></textarea>
                     </div>
@@ -305,8 +316,9 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveEventButton">Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-key="btnCancel">Cancel
+                </button>
+                <button type="button" class="btn btn-primary" id="saveEventButton" data-key="btnSave">Save</button>
             </div>
         </div>
     </div>
@@ -416,7 +428,8 @@
             </div>
 
             <div class="modal-footer" style="border: none; padding: 16px 24px;">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-key="btnClose">Close
+                </button>
             </div>
         </div>
     </div>
@@ -440,8 +453,10 @@
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                     </svg>
                 </div>
-                <h4 style="color: white; font-weight: 700; margin: 0; font-size: 20px;">Teacher Authentication</h4>
-                <p style="color: rgba(255,255,255,0.7); margin: 6px 0 0; font-size: 13px;">Please verify your identity
+                <h4 style="color: white; font-weight: 700; margin: 0; font-size: 20px;" data-key="authTitle">Teacher
+                    Authentication</h4>
+                <p style="color: rgba(255,255,255,0.7); margin: 6px 0 0; font-size: 13px;" data-key="authSubtitle">
+                    Please verify your identity
                     to continue</p>
             </div>
 
@@ -451,13 +466,13 @@
                     flex: 1; padding: 14px; border: none; background: white;
                     font-weight: 600; font-size: 14px; color: #4D44B5;
                     border-bottom: 3px solid #4D44B5; cursor: pointer;">
-                    🔑 Username & Password
+                    <span data-key="tabPassword">🔑 Username & Password </span>
                 </button>
                 <button id="tab-qr" onclick="switchAuthTab('qr')" style="
                     flex: 1; padding: 14px; border: none; background: white;
                     font-weight: 600; font-size: 14px; color: #aaa;
                     border-bottom: 3px solid transparent; cursor: pointer;">
-                    📷 Scan QR Code
+                    <span data-key="tabQr">📷 Scan QR Code </span>
                 </button>
             </div>
 
@@ -467,7 +482,8 @@
                 <!-- Password Tab -->
                 <div id="auth-password-tab">
                     <div style="margin-bottom: 16px;">
-                        <label style="font-size: 13px; font-weight: 600; color: #555; margin-bottom: 6px; display: block;">Username</label>
+                        <label style="font-size: 13px; font-weight: 600; color: #555; margin-bottom: 6px; display: block;"
+                               data-key="labelUsername">Username</label>
                         <div style="position: relative;">
                             <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);"
                                  width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2">
@@ -483,7 +499,8 @@
                         </div>
                     </div>
                     <div style="margin-bottom: 20px;">
-                        <label style="font-size: 13px; font-weight: 600; color: #555; margin-bottom: 6px; display: block;">Password</label>
+                        <label style="font-size: 13px; font-weight: 600; color: #555; margin-bottom: 6px; display: block;"
+                               data-key="labelPassword">Password</label>
                         <div style="position: relative;">
                             <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%);"
                                  width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2">
@@ -509,7 +526,8 @@
                         border: none; border-radius: 10px; font-size: 15px; font-weight: 600;
                         cursor: pointer; transition: background 0.2s;"
                             onmouseover="this.style.background='#3d35a0'"
-                            onmouseout="this.style.background='#4D44B5'">
+                            onmouseout="this.style.background='#4D44B5'"
+                            data-key="btnLogin">
                         Login & Continue
                     </button>
                 </div>
@@ -538,7 +556,7 @@
                     </div>
                     <button onclick="stopCamera(); switchAuthTab('password')" style="
                         padding: 10px 24px; background: #f0f0f0; color: #555;
-                        border: none; border-radius: 10px; font-size: 14px; cursor: pointer;">
+                        border: none; border-radius: 10px; font-size: 14px; cursor: pointer;" data-key="btnBack">
                         ← Back to Login
                     </button>
                 </div>
@@ -1043,12 +1061,88 @@
     resetQROverlayTimer();
 
 
+    const translations = {
+      en: {
+        subtitle: "Schedule & Calendar System",
+        addSchedule: "+ Add Schedule",
+        modalTitle: "Add New Schedule",
+        labelSession: "Session",
+        labelGroup: "Group",
+        labelType: "Type",
+        labelStartDate: "Start Date",
+        labelRoom: "Room",
+        labelSubject: "Teacher And Subject",
+        labelCompletion: "Completion Tag",
+        labelDuplicate: "Duplicate",
+        labelStartTime: "Start Time",
+        labelEndTime: "End Time",
+        labelEndDate: "End Date (for recurring events)",
+        labelDescription: "Description",
+        btnCancel: "Cancel",
+        btnSave: "Save",
+        btnClose: "Close",
+        authTitle: "Teacher Authentication",
+        authSubtitle: "Please verify your identity to continue",
+        tabPassword: "🔑 Username & Password",
+        tabQr: "📷 Scan QR Code",
+        labelUsername: "Username",
+        labelPassword: "Password",
+        btnLogin: "Login & Continue",
+        btnBack: "← Back to Login",
+      },
+      fr: {
+        subtitle: "Système de Planning & Calendrier",
+        addSchedule: "+ Ajouter un Planning",
+        modalTitle: "Ajouter un Nouveau Planning",
+        labelSession: "Session",
+        labelGroup: "Groupe",
+        labelType: "Type",
+        labelStartDate: "Date de début",
+        labelRoom: "Salle",
+        labelSubject: "Enseignant et Matière",
+        labelCompletion: "Tag de Complétion",
+        labelDuplicate: "Dupliquer",
+        labelStartTime: "Heure de début",
+        labelEndTime: "Heure de fin",
+        labelEndDate: "Date de fin (événements récurrents)",
+        labelDescription: "Description",
+        btnCancel: "Annuler",
+        btnSave: "Enregistrer",
+        btnClose: "Fermer",
+        authTitle: "Authentification Enseignant",
+        authSubtitle: "Veuillez vérifier votre identité pour continuer",
+        tabPassword: "🔑 Nom d'utilisateur & Mot de passe",
+        tabQr: "📷 Scanner le QR Code",
+        labelUsername: "Nom d'utilisateur",
+        labelPassword: "Mot de passe",
+        btnLogin: "Se connecter & Continuer",
+        btnBack: "← Retour à la connexion",
+      }
+    };
+
+    function setLang(lang) {
+      localStorage.setItem('lang', lang);
+
+      document.querySelectorAll('[data-key]').forEach(el => {
+        const key = el.getAttribute('data-key');
+        if (translations[lang][key]) el.textContent = translations[lang][key];
+      });
+
+      // Update button styles
+      document.getElementById('btn-en').className =
+        lang === 'en' ? 'btn btn-sm btn-primary ms-2' : 'btn btn-sm btn-outline-secondary ms-2';
+      document.getElementById('btn-fr').className =
+        lang === 'fr' ? 'btn btn-sm btn-primary ms-2' : 'btn btn-sm btn-outline-secondary ms-2';
+
+      document.documentElement.lang = lang;
+      window.currentLang = lang;
+    }
+
+    // Load saved language on page start
+    const savedLang = localStorage.getItem('lang') || 'en';
+    setLang(savedLang);
 </script>
-
 <!-- This Script Will reload the page automaticlly -->
-
-
-
 
 
 </body>
