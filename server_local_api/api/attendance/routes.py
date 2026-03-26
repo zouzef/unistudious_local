@@ -908,49 +908,48 @@ def update_attendance_note(attendanceId):
 # ========================================
 # ENDPOINT 15: Create attendance
 # ========================================
-@attendance_bp.route('/create-attendance/<int:group_id>',methods=['POST'])
+import json
+
+
+@attendance_bp.route('/create-attendance/<int:group_id>', methods=['POST'])
 def create_attendance(group_id):
     try:
-
         query = """
-            SELECT DISTINCT user_id
-            FROM relation_user_session
-            WHERE relation_group_local_session_id = %s
-            
+            SELECT id_attendance, new_data 
+            FROM attendance_audit 
+            WHERE is_synced = 0 AND action_type = 'INSERT_attendance';
         """
-        values = (group_id,)
-        result = Database.execute_query(query,values,fetch=True)
-        user_ids = [row['user_id'] for row in result]
-        if user_ids :
-            for i in user_ids:
-                query = """
-                    INSERT INTO attendance 
-                    (
-                    user_id,
-                    session_id,
-                    account_id,
-                    group_session_id,
-                    calander_id,
-                    is_present,
-                    day,
-                    note,
-                    is_editale,
-                    enabled,
-                    created_at,
-                    timestamp,
-                    slc_edit
-                    )
-                    values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                """
-                values=(i,)
+
+        results = Database.execute_query(query, fetch=True)
+
+        for row in results:
+            # adjust depending on your structure
+            id_attendance = row[0] if isinstance(row, tuple) else row["id_attendance"]
+            new_data = row[1] if isinstance(row, tuple) else row["new_data"]
+
+            # convert JSON string → dict
+            data = json.loads(new_data)
+            calander_id = data.get("calander_id")
+            print("ID:", id_attendance)
+            print("DATA:", data)
+            print("CALANDER_ID:", calander_id)
+            query = """
+                SELECT id_prod FROM relation_calander_group_session where id = %s
+            """
+            values = (calander_id,)
+            results = Database.execute_query(query, values)
+            print("calander: ",results)
+
+
 
 
 
         return jsonify({
-            "Message":"Succes in creating attendance"
-        }),200
+            "message": "Success in creating attendance"
+        }), 200
+
     except Exception as e:
+        print("ERROR:", str(e))
         return jsonify({
-            "Message":"Error in create_attendance"
-
-        }),500
+            "message": "Error in create_attendance"
+        }), 500

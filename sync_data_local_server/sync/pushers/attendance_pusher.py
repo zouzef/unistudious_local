@@ -199,3 +199,24 @@ def push_update(db, settings, audit_row):
         import traceback
         traceback.print_exc()
         return False
+
+
+def send_new_attendance(db,calander_id,id_prod):
+
+    print("\n \n \n \n \n \n send new attendance \n \n \n \n \n \n \n ")
+
+    try:
+        query = """
+            SELECT * 
+            FROM attendance_audit
+            WHERE id_calander = %s AND is_synced = 0;        
+        """
+
+
+        values = (calander_id,)
+        result = db.execute_query(query,values,fetch=True)
+        print(result)
+
+
+    except Exception as e:
+        return None

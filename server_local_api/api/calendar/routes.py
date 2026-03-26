@@ -615,9 +615,10 @@ def create_calander():
                                 old_data,
                                 new_data,
                                 is_synced,
-                                id_attendance
+                                id_attendance,
+                                id_calander
                             )
-                            VALUES (%s, %s, %s, %s, %s)
+                            VALUES (%s, %s, %s, %s, %s, %s)
                         """
                         new_data = {
                             "user_id": user_id,
@@ -636,7 +637,8 @@ def create_calander():
                             None,
                             json.dumps(new_data),
                             0,
-                            attendance_id
+                            attendance_id,
+                            calander_id
                         )
                         Database.execute_query(audit_query,audit_values,fetch=False)
 

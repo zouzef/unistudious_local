@@ -3,7 +3,7 @@ import os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from sync.pushers.attendance_pusher import push_add, push_update
+from sync.pushers.attendance_pusher import push_add, push_update,send_new_attendance
 from sync.pushers.calendar_pusher import _send_calendar, _send_update_calander, _send_delete_calander
 
 class DataPusher:
@@ -91,6 +91,8 @@ class DataPusher:
                     SET id_prod = %s 
                     WHERE id = %s
                 """, (remote_id, local_calendar_id))
+
+                send_new_attendance(db,local_calendar_id,remote_id)
                 db.connection.commit()
                 cursor.close()
 
@@ -141,6 +143,30 @@ class DataPusher:
             cursor = conn.cursor(dictionary=True)
 
             cursor.execute("""
+                            SELECT * FROM relation_calander_group_audit
+                            WHERE is_synced = 0
+                            ORDER BY audit_id ASC
+                        """)
+            calendar_rows = cursor.fetchall()
+            print("\n \n \n \n \n \n \n ", calendar_rows)
+            if not calendar_rows:
+                print(" No pending calendar changes to push")
+            else:
+                print(f"📋 Found {len(calendar_rows)} pending calendar change(s)")
+                self._process_audit_rows(
+                    cursor, conn,
+                    "relation_calander_group_audit",
+                    calendar_rows,
+                    {
+                        "INSERT": lambda row: self.push_calendar_add(row, db),  # ✅ CORRECT
+                        "UPDATE": lambda row: self.push_calendar_update(row, db),  # ✅ CORRECT
+                        "DELETE": lambda row: self.push_calendar_delete(row, db)  # ✅ CORRECT
+                    }
+                )
+
+
+
+            cursor.execute("""
                 SELECT * FROM attendance_audit 
                 WHERE is_synced = 0 
                 ORDER BY audit_id ASC
@@ -160,27 +186,7 @@ class DataPusher:
 						"UPDATE": lambda row: push_update(db, self.settings, row)
 					}
                 )
-            cursor.execute("""
-                SELECT * FROM relation_calander_group_audit
-                WHERE is_synced = 0
-                ORDER BY audit_id ASC
-            """)
-            calendar_rows = cursor.fetchall()
-            print("\n \n \n \n \n \n \n ",calendar_rows)
-            if not calendar_rows:
-                print(" No pending calendar changes to push")
-            else:
-                print(f"📋 Found {len(calendar_rows)} pending calendar change(s)")
-                self._process_audit_rows(
-                    cursor,conn,
-                    "relation_calander_group_audit",
-                    calendar_rows,
-                    {
-                        "INSERT": lambda row: self.push_calendar_add(row, db),  # ✅ CORRECT
-                        "UPDATE": lambda row: self.push_calendar_update(row, db),  # ✅ CORRECT
-                        "DELETE": lambda row: self.push_calendar_delete(row, db)   # ✅ CORRECT
-                    }
-                )
+
 
         except Exception as e:
             print(f"❌ Fatal error in data_pusher: {e}")
