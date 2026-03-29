@@ -212,7 +212,8 @@ def insert_calendars(db, calendar_data):
                             useToken = %s,
                             created_at = %s,
                             updated_at = %s,
-                            timestamp = %s
+                            timestamp = %s,
+                            slc_edit = %s
                         WHERE id = %s
                     """
 
@@ -243,7 +244,8 @@ def insert_calendars(db, calendar_data):
                         new_data["created_at"],
                         new_data["updated_at"],
                         new_data["timestamp"],
-                        calendar_id
+                        calendar_id,
+                        0
                     ))
 
                     result["updated"] += 1
@@ -259,8 +261,8 @@ def insert_calendars(db, calendar_data):
                             teacher_id, subject_id, color, status, description, start_time,
                             end_time, ref, date, refresh, title, enabled, type,
                             teacher_present, force_teacher_present, releaseToken, useToken,
-                            created_at, updated_at, timestamp
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                            created_at, updated_at, timestamp,slc_edit
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s)
                     """
 
                     db.execute_query(insert_query, (
@@ -290,7 +292,8 @@ def insert_calendars(db, calendar_data):
                         new_data["useToken"],
                         new_data["created_at"],
                         new_data["updated_at"],
-                        new_data["timestamp"]
+                        new_data["timestamp"],
+                        0
                     ))
 
                     result["inserted"] += 1
@@ -375,6 +378,7 @@ def update_calendars(db, calendar_data):
                     "useToken": calendar.get("useToken"),
                     "updated_at": format_date(calendar.get("updatedAt")),
                     "timestamp": format_date(calendar.get("timestamp"))
+
                 }
 
                 # Check if record exists
@@ -429,7 +433,8 @@ def update_calendars(db, calendar_data):
                             releaseToken = %s,
                             useToken = %s,
                             updated_at = %s,
-                            timestamp = %s
+                            timestamp = %s,
+                            slc_edit = 0
                         WHERE id = %s
                     """
 

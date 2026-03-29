@@ -201,22 +201,72 @@ def push_update(db, settings, audit_row):
         return False
 
 
-def send_new_attendance(db,calander_id,id_prod):
-
-    print("\n \n \n \n \n \n send new attendance \n \n \n \n \n \n \n ")
-
+def service_send_dattendance(settings, data, id_prod):
     try:
-        query = """
-            SELECT * 
-            FROM attendance_audit
-            WHERE id_calander = %s AND is_synced = 0;        
-        """
+        token = get_token()
+        headers = {"Authorization": f"Bearer {token}"}
+        url = f"{settings.api_base_url}/slc/create-attendance"
 
+        user_id = data.get('user_id')  # ✅ now data is already a dict
+        print(f"👤 user_id = {user_id}")
 
-        values = (calander_id,)
-        result = db.execute_query(query,values,fetch=True)
-        print(result)
+        payload = {
+            "calendarId": id_prod,
+            "userId": user_id,
+        }
 
+        print("📤 Payload:", payload)
+
+        response = requests.post(url, data=payload, headers=headers)
+        print("📥 Response body:", response.text)
+        response.raise_for_status()
+        return True
 
     except Exception as e:
+        print(f"❌ Error in service_send_dattendance: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def send_new_attendance(db, settings, audit_row):
+    print("send_new_attendance called")
+
+    new_data = audit_row.get('new_data')
+    id_calander = audit_row.get('id_calander')
+    print("ID_CALANDER:", id_calander)
+
+    try:
+        conn = db.connection
+        cursor = conn.cursor(dictionary=True)
+
+        cursor.execute("""
+            SELECT id_prod  
+            FROM relation_calander_group_session
+            WHERE id = %s;
+        """, (id_calander,))
+
+        row = cursor.fetchone()
+        cursor.close()
+
+        if not row or not row['id_prod']:
+            print(f"❌ No id_prod found for id_calander={id_calander} — skipping")
+            return False
+
+        id_prod = row['id_prod']
+        print(f"🔗 id_prod = {id_prod}")
+
+        # Parse new_data JSON string → dict
+        parsed_data = json.loads(new_data)
+        user_id = parsed_data.get('user_id')
+        print(f"👤 user_id = {user_id}")
+
+        # Pass to service
+        result = service_send_dattendance(settings, parsed_data, id_prod)
+        return result
+
+    except Exception as e:
+        print(f"❌ Error in send_new_attendance: {e}")
+        import traceback
+        traceback.print_exc()
         return None

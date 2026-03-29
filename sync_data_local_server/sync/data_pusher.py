@@ -92,7 +92,7 @@ class DataPusher:
                     WHERE id = %s
                 """, (remote_id, local_calendar_id))
 
-                send_new_attendance(db,local_calendar_id,remote_id)
+                # send_new_attendance(db,local_calendar_id,remote_id)
                 db.connection.commit()
                 cursor.close()
 
@@ -183,7 +183,8 @@ class DataPusher:
                     attendance_rows,
 					{
 						"ADD_STUDENT": lambda row: push_add(db, self.settings, row),
-						"UPDATE": lambda row: push_update(db, self.settings, row)
+						"UPDATE": lambda row: push_update(db, self.settings, row),
+                        "INSERT_attendance": lambda  row: send_new_attendance(db,self.settings,row),
 					}
                 )
 
