@@ -61,15 +61,15 @@ def insert_attendance_calendar(db, calendar_id, session_id, group_session_id, ac
             INSERT INTO attendance (
                 id, user_id, session_id, account_id, group_session_id, calander_id,
                 payment_session_id, is_present, day, note, is_editable, enabled,
-                created_at, timestamp, updated_at, releaseToken, useToken, is_sync, slc_edit
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                created_at, timestamp, updated_at, releaseToken, useToken, is_sync
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
 
         for i, user_id in enumerate(user_list, 1):
             new_id = max_id + i
             db.execute_query(insert_query, (
                 new_id, user_id, session_id, account_id, group_session_id, calendar_id,
-                None, 0, day, None, 1, 1, created_at, created_at, None, 0, None, 0, 0
+                None, 0, day, None, 1, 1, created_at, created_at, None, 0, None, 0
             ))
             print(f"      ✅ Attendance inserted for user {user_id}")
 
@@ -212,8 +212,8 @@ def insert_calendars(db, calendar_data):
                             useToken = %s,
                             created_at = %s,
                             updated_at = %s,
-                            timestamp = %s,
-                            slc_edit = %s
+                            timestamp = %s
+                            
                         WHERE id = %s
                     """
 
@@ -244,8 +244,7 @@ def insert_calendars(db, calendar_data):
                         new_data["created_at"],
                         new_data["updated_at"],
                         new_data["timestamp"],
-                        calendar_id,
-                        0
+                        calendar_id
                     ))
 
                     result["updated"] += 1
@@ -261,8 +260,8 @@ def insert_calendars(db, calendar_data):
                             teacher_id, subject_id, color, status, description, start_time,
                             end_time, ref, date, refresh, title, enabled, type,
                             teacher_present, force_teacher_present, releaseToken, useToken,
-                            created_at, updated_at, timestamp,slc_edit
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s)
+                            created_at, updated_at, timestamp
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """
 
                     db.execute_query(insert_query, (
@@ -292,8 +291,7 @@ def insert_calendars(db, calendar_data):
                         new_data["useToken"],
                         new_data["created_at"],
                         new_data["updated_at"],
-                        new_data["timestamp"],
-                        0
+                        new_data["timestamp"]
                     ))
 
                     result["inserted"] += 1
@@ -433,8 +431,7 @@ def update_calendars(db, calendar_data):
                             releaseToken = %s,
                             useToken = %s,
                             updated_at = %s,
-                            timestamp = %s,
-                            slc_edit = 0
+                            timestamp = %s
                         WHERE id = %s
                     """
 

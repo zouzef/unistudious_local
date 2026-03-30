@@ -20,6 +20,7 @@ attendance_bp = Blueprint('attendance', __name__, url_prefix='/scl')
 @attendance_bp.route('/get-attendance/<int:calendar_id>', methods=['GET'])
 def get_todays_attendance(calendar_id):
     try:
+        print("\n \n \n \n \n \n id_attendance: ",calendar_id)
         query = """
             SELECT 
                 a.id,

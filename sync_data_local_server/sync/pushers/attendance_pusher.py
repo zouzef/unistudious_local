@@ -234,14 +234,13 @@ def send_new_attendance(db, settings, audit_row):
 
     new_data = audit_row.get('new_data')
     id_calander = audit_row.get('id_calander')
-    print("ID_CALANDER:", id_calander)
 
     try:
         conn = db.connection
         cursor = conn.cursor(dictionary=True)
 
         cursor.execute("""
-            SELECT id_prod  
+            SELECT id_prod
             FROM relation_calander_group_session
             WHERE id = %s;
         """, (id_calander,))
@@ -262,8 +261,22 @@ def send_new_attendance(db, settings, audit_row):
         print(f"👤 user_id = {user_id}")
 
         # Pass to service
-        result = service_send_dattendance(settings, parsed_data, id_prod)
-        return result
+        result,remote_id = service_send_dattendance(settings, parsed_data, id_prod)
+        if result and remote_id:
+            id_attendance = audit_row.get("id_attendance")
+            cursor = db.connection.cursor()
+            cursor.execute(
+                """
+                    UPDATE attendance
+                    SET id_prod = %s 
+                    WHERE id = %s
+                """,(remote_id,id_attendance)
+            )
+            db.connection.commit()
+            cursor.close()
+            print(f"✅ Updated local attendance #{id_attendance} with remote id_prod: {remote_id}")
+
+
 
     except Exception as e:
         print(f"❌ Error in send_new_attendance: {e}")
