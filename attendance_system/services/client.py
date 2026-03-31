@@ -15,7 +15,6 @@ class FlaskClient:
         self._set_token(token)
 
     def _set_token(self, token: str):
-        """Update the auth token in session headers."""
         self.token = token
         self.session.headers.update({
             "Authorization": f"Bearer {token}",
@@ -23,7 +22,6 @@ class FlaskClient:
         })
 
     def refresh_token(self, new_token: str):
-        """Call this when you get a new token after re-login."""
         logger.info("Refreshing client token...")
         self._set_token(new_token)
 
@@ -34,7 +32,7 @@ class FlaskClient:
             response = self.session.get(url, timeout=10, **kwargs)
             response.raise_for_status()
             return response
-        except requests.exceptions.ConnectionError  :
+        except requests.exceptions.ConnectionError:
             logger.error(f"Cannot connect to Flask server at {url}")
             raise
         except requests.exceptions.Timeout:

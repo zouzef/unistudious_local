@@ -60,8 +60,8 @@ def check_slc(mac, password):
         cursor = conn.cursor(dictionary=True)
 
         cursor.execute("""
-            SELECT * FROM special_table 
-            WHERE mac_slc = %s AND pass = %s
+            SELECT * FROM slc 
+            WHERE username = %s AND slc_password = %s
         """, (mac, password))
 
         rows = cursor.fetchone()

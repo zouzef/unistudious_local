@@ -1,19 +1,18 @@
 {
   "slc_config": {
-    "BASE_URL": "http://your-local-server:5000",
-    "USERNAME": "your_username",
-    "PASSWORD": "your_password"
+    "BASE_URL": "https://192.168.1.246:5004/scl",
+    "MAC": "f4:4d:30:ee:c9:1d",
+    "PASSWORD": "Khalilacademie123"
   },
   "compre_face": {
     "compreface_api_key": "your_key",
     "compreface_url": "http://localhost:8000"
   },
   "endpoints": {
-    "calendars":      "/calendars",
-    "cameras":        "/rooms/{room_id}/cameras",
-    "students":       "/sessions/{session_id}/students",
-    "recordings":     "/recordings",
-    "post_treatment": "/sessions/{session_id}/post-treatment",
-    "camera_stream":  "/cameras/{camera_id}/stream"
+    "calendars":      "/scl/calendars",
+    "cameras":        "/scl/rooms/{room_id}/cameras",
+    "students":       "/scl/sessions/{session_id}/students",
+    "recordings":     "/scl/recordings",
+    "post_treatment": "/scl/sessions/{session_id}/post-treatment"
   }
 }
