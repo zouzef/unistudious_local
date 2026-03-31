@@ -34,7 +34,7 @@ class FlaskClient:
             response = self.session.get(url, timeout=10, **kwargs)
             response.raise_for_status()
             return response
-        except requests.exceptions.ConnectionError:
+        except requests.exceptions.ConnectionError  :
             logger.error(f"Cannot connect to Flask server at {url}")
             raise
         except requests.exceptions.Timeout:

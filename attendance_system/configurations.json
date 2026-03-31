@@ -1,0 +1,19 @@
+{
+  "slc_config": {
+    "BASE_URL": "http://your-local-server:5000",
+    "USERNAME": "your_username",
+    "PASSWORD": "your_password"
+  },
+  "compre_face": {
+    "compreface_api_key": "your_key",
+    "compreface_url": "http://localhost:8000"
+  },
+  "endpoints": {
+    "calendars":      "/calendars",
+    "cameras":        "/rooms/{room_id}/cameras",
+    "students":       "/sessions/{session_id}/students",
+    "recordings":     "/recordings",
+    "post_treatment": "/sessions/{session_id}/post-treatment",
+    "camera_stream":  "/cameras/{camera_id}/stream"
+  }
+}
