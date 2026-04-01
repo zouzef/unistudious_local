@@ -1,0 +1,1793 @@
+2026-04-01 06:36:30  INFO      [main.py:24]  Server is starting
+2026-04-01 06:36:40  ERROR     [auth_service.py:28]  Cannot connect to Flask server at https://192.168.1.246:5004/scl/login_slc
+2026-04-01 06:36:40  ERROR     [main.py:29]  Login failed , Existing.
+2026-04-01 06:44:37  INFO      [main.py:24]  Server is starting
+2026-04-01 06:44:39  ERROR     [auth_service.py:34]  Login failed: 401 Client Error: UNAUTHORIZED for url: https://192.168.1.23:5004/scl/login_slc
+2026-04-01 06:44:39  ERROR     [main.py:29]  Login failed , Existing.
+2026-04-01 06:47:12  INFO      [main.py:24]  Server is starting
+2026-04-01 06:47:13  INFO      [auth_service.py:23]  Login successful.
+2026-04-01 06:47:13  INFO      [main.py:37]  Checking sessions at 06:47:13
+2026-04-01 06:47:13  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:47:13  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:47:13  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:47:23  INFO      [main.py:37]  Checking sessions at 06:47:23
+2026-04-01 06:47:23  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:47:23  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:47:23  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:47:33  INFO      [main.py:37]  Checking sessions at 06:47:33
+2026-04-01 06:47:33  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:47:33  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:47:33  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:47:43  INFO      [main.py:37]  Checking sessions at 06:47:43
+2026-04-01 06:47:43  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:47:43  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:47:43  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:47:53  INFO      [main.py:37]  Checking sessions at 06:47:53
+2026-04-01 06:47:53  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:47:53  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:47:53  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:48:03  INFO      [main.py:37]  Checking sessions at 06:48:03
+2026-04-01 06:48:03  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:48:04  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:48:04  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:48:14  INFO      [main.py:37]  Checking sessions at 06:48:14
+2026-04-01 06:48:14  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:48:14  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:48:14  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:48:24  INFO      [main.py:37]  Checking sessions at 06:48:24
+2026-04-01 06:48:24  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:48:24  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:48:24  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:48:34  INFO      [main.py:37]  Checking sessions at 06:48:34
+2026-04-01 06:48:34  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:48:34  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:48:34  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:48:44  INFO      [main.py:37]  Checking sessions at 06:48:44
+2026-04-01 06:48:44  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:48:44  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:48:44  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:48:54  INFO      [main.py:37]  Checking sessions at 06:48:54
+2026-04-01 06:48:54  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:48:54  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:48:54  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:49:04  INFO      [main.py:37]  Checking sessions at 06:49:04
+2026-04-01 06:49:04  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:49:04  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:49:04  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:49:14  INFO      [main.py:37]  Checking sessions at 06:49:14
+2026-04-01 06:49:14  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:49:14  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:49:14  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:49:24  INFO      [main.py:37]  Checking sessions at 06:49:24
+2026-04-01 06:49:24  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:49:24  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:49:24  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:49:34  INFO      [main.py:37]  Checking sessions at 06:49:34
+2026-04-01 06:49:34  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:49:34  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:49:34  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:49:44  INFO      [main.py:37]  Checking sessions at 06:49:44
+2026-04-01 06:49:44  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:49:45  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:49:45  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:49:55  INFO      [main.py:37]  Checking sessions at 06:49:55
+2026-04-01 06:49:55  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:49:55  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:49:55  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:50:05  INFO      [main.py:37]  Checking sessions at 06:50:05
+2026-04-01 06:50:05  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:50:05  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:50:05  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:50:15  INFO      [main.py:37]  Checking sessions at 06:50:15
+2026-04-01 06:50:15  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:50:15  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:50:15  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:50:25  INFO      [main.py:37]  Checking sessions at 06:50:25
+2026-04-01 06:50:25  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:50:25  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:50:25  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:50:35  INFO      [main.py:37]  Checking sessions at 06:50:35
+2026-04-01 06:50:35  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:50:35  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:50:35  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:50:45  INFO      [main.py:37]  Checking sessions at 06:50:45
+2026-04-01 06:50:45  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:50:45  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:50:45  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:50:55  INFO      [main.py:37]  Checking sessions at 06:50:55
+2026-04-01 06:50:55  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:50:55  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:50:55  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:51:05  INFO      [main.py:37]  Checking sessions at 06:51:05
+2026-04-01 06:51:05  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:51:05  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:51:05  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:51:15  INFO      [main.py:37]  Checking sessions at 06:51:15
+2026-04-01 06:51:15  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:51:16  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:51:16  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:51:26  INFO      [main.py:37]  Checking sessions at 06:51:26
+2026-04-01 06:51:26  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:51:26  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:51:26  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:51:36  INFO      [main.py:37]  Checking sessions at 06:51:36
+2026-04-01 06:51:36  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:51:36  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:51:36  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:51:46  INFO      [main.py:37]  Checking sessions at 06:51:46
+2026-04-01 06:51:46  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:51:46  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:51:46  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:51:56  INFO      [main.py:37]  Checking sessions at 06:51:56
+2026-04-01 06:51:56  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:51:56  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:51:56  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:52:06  INFO      [main.py:37]  Checking sessions at 06:52:06
+2026-04-01 06:52:06  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:52:06  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:52:06  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:52:16  INFO      [main.py:37]  Checking sessions at 06:52:16
+2026-04-01 06:52:16  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:52:16  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:52:16  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:52:26  INFO      [main.py:37]  Checking sessions at 06:52:26
+2026-04-01 06:52:26  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:52:26  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:52:26  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:52:36  INFO      [main.py:37]  Checking sessions at 06:52:36
+2026-04-01 06:52:36  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:52:36  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:52:36  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:52:46  INFO      [main.py:37]  Checking sessions at 06:52:46
+2026-04-01 06:52:46  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:52:46  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:52:46  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:52:56  INFO      [main.py:37]  Checking sessions at 06:52:56
+2026-04-01 06:52:56  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:52:57  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:52:57  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:53:07  INFO      [main.py:37]  Checking sessions at 06:53:07
+2026-04-01 06:53:07  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:53:07  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:53:07  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:53:17  INFO      [main.py:37]  Checking sessions at 06:53:17
+2026-04-01 06:53:17  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:53:17  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:53:17  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:53:27  INFO      [main.py:37]  Checking sessions at 06:53:27
+2026-04-01 06:53:27  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:53:27  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:53:27  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:53:37  INFO      [main.py:37]  Checking sessions at 06:53:37
+2026-04-01 06:53:37  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:53:37  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:53:37  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:53:47  INFO      [main.py:37]  Checking sessions at 06:53:47
+2026-04-01 06:53:47  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:53:47  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:53:47  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:53:57  INFO      [main.py:37]  Checking sessions at 06:53:57
+2026-04-01 06:53:57  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:53:57  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:53:57  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:54:07  INFO      [main.py:37]  Checking sessions at 06:54:07
+2026-04-01 06:54:07  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:54:07  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:54:07  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:54:17  INFO      [main.py:37]  Checking sessions at 06:54:17
+2026-04-01 06:54:17  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:54:17  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:54:17  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:54:27  INFO      [main.py:37]  Checking sessions at 06:54:27
+2026-04-01 06:54:27  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:54:27  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:54:28  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:54:38  INFO      [main.py:37]  Checking sessions at 06:54:38
+2026-04-01 06:54:38  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:54:38  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:54:38  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:54:48  INFO      [main.py:37]  Checking sessions at 06:54:48
+2026-04-01 06:54:48  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:54:48  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:54:48  INFO      [main.py:42]  No session found for today.
+2026-04-01 06:54:58  INFO      [main.py:37]  Checking sessions at 06:54:58
+2026-04-01 06:54:58  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 06:54:58  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 06:54:58  INFO      [main.py:42]  No session found for today.
+2026-04-01 07:14:20  INFO      [main.py:23]  Server is starting...
+2026-04-01 07:14:20  INFO      [auth_service.py:23]  Login successful.
+2026-04-01 07:14:20  INFO      [main.py:43]  Checking calendars at 07:14:20
+2026-04-01 07:14:20  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:14:20  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:14:20  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:14:30  INFO      [main.py:43]  Checking calendars at 07:14:30
+2026-04-01 07:14:30  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:14:30  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:14:30  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:14:40  INFO      [main.py:43]  Checking calendars at 07:14:40
+2026-04-01 07:14:40  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:14:41  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:14:41  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:14:51  INFO      [main.py:43]  Checking calendars at 07:14:51
+2026-04-01 07:14:51  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:14:51  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:14:51  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:15:01  INFO      [main.py:43]  Checking calendars at 07:15:01
+2026-04-01 07:15:01  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:15:01  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:15:01  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:15:11  INFO      [main.py:43]  Checking calendars at 07:15:11
+2026-04-01 07:15:11  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:15:11  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:15:11  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:15:21  INFO      [main.py:43]  Checking calendars at 07:15:21
+2026-04-01 07:15:21  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:15:21  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:15:21  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:15:31  INFO      [main.py:43]  Checking calendars at 07:15:31
+2026-04-01 07:15:31  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:15:31  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:15:31  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:15:41  INFO      [main.py:43]  Checking calendars at 07:15:41
+2026-04-01 07:15:41  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:15:41  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:15:41  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:15:51  INFO      [main.py:43]  Checking calendars at 07:15:51
+2026-04-01 07:15:51  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:15:51  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:15:51  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:16:01  INFO      [main.py:43]  Checking calendars at 07:16:01
+2026-04-01 07:16:01  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:16:01  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:16:01  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:16:11  INFO      [main.py:43]  Checking calendars at 07:16:11
+2026-04-01 07:16:11  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:16:12  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:16:12  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:16:22  INFO      [main.py:43]  Checking calendars at 07:16:22
+2026-04-01 07:16:22  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:16:22  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:16:22  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:16:32  INFO      [main.py:43]  Checking calendars at 07:16:32
+2026-04-01 07:16:32  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:16:32  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:16:32  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:16:42  INFO      [main.py:43]  Checking calendars at 07:16:42
+2026-04-01 07:16:42  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:16:42  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:16:42  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:16:52  INFO      [main.py:43]  Checking calendars at 07:16:52
+2026-04-01 07:16:52  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:16:52  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:16:52  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:17:02  INFO      [main.py:43]  Checking calendars at 07:17:02
+2026-04-01 07:17:02  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:17:02  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:17:02  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:17:12  INFO      [main.py:43]  Checking calendars at 07:17:12
+2026-04-01 07:17:12  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:17:12  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:17:12  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:17:22  INFO      [main.py:43]  Checking calendars at 07:17:22
+2026-04-01 07:17:22  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:17:22  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:17:22  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:17:32  INFO      [main.py:43]  Checking calendars at 07:17:32
+2026-04-01 07:17:32  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:17:32  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:17:32  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:17:42  INFO      [main.py:43]  Checking calendars at 07:17:42
+2026-04-01 07:17:42  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:17:42  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:17:42  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:17:52  INFO      [main.py:43]  Checking calendars at 07:17:52
+2026-04-01 07:17:52  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:17:53  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:17:53  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:18:03  INFO      [main.py:43]  Checking calendars at 07:18:03
+2026-04-01 07:18:03  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:18:03  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:18:03  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:18:13  INFO      [main.py:43]  Checking calendars at 07:18:13
+2026-04-01 07:18:13  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:18:13  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:18:13  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:18:23  INFO      [main.py:43]  Checking calendars at 07:18:23
+2026-04-01 07:18:23  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:18:23  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:18:23  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:18:33  INFO      [main.py:43]  Checking calendars at 07:18:33
+2026-04-01 07:18:33  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:18:33  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:18:33  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:18:43  INFO      [main.py:43]  Checking calendars at 07:18:43
+2026-04-01 07:18:43  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:18:43  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:18:43  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:18:53  INFO      [main.py:43]  Checking calendars at 07:18:53
+2026-04-01 07:18:53  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:18:53  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:18:53  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:19:03  INFO      [main.py:43]  Checking calendars at 07:19:03
+2026-04-01 07:19:03  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:19:03  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:19:03  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:19:13  INFO      [main.py:43]  Checking calendars at 07:19:13
+2026-04-01 07:19:13  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:19:13  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:19:13  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:19:23  INFO      [main.py:43]  Checking calendars at 07:19:23
+2026-04-01 07:19:23  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:19:23  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:19:23  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:19:33  INFO      [main.py:43]  Checking calendars at 07:19:33
+2026-04-01 07:19:33  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:19:34  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:19:34  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:19:44  INFO      [main.py:43]  Checking calendars at 07:19:44
+2026-04-01 07:19:44  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:19:44  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:19:44  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:19:54  INFO      [main.py:43]  Checking calendars at 07:19:54
+2026-04-01 07:19:54  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:19:54  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:19:54  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:20:04  INFO      [main.py:43]  Checking calendars at 07:20:04
+2026-04-01 07:20:04  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:20:04  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:20:04  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:20:14  INFO      [main.py:43]  Checking calendars at 07:20:14
+2026-04-01 07:20:14  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:20:14  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:20:14  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:20:24  INFO      [main.py:43]  Checking calendars at 07:20:24
+2026-04-01 07:20:24  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:20:24  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:20:24  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:20:34  INFO      [main.py:43]  Checking calendars at 07:20:34
+2026-04-01 07:20:34  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:20:34  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:20:34  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:20:44  INFO      [main.py:43]  Checking calendars at 07:20:44
+2026-04-01 07:20:44  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:20:44  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:20:44  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:20:54  INFO      [main.py:43]  Checking calendars at 07:20:54
+2026-04-01 07:20:54  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:20:54  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:20:54  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:21:04  INFO      [main.py:43]  Checking calendars at 07:21:04
+2026-04-01 07:21:04  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:21:05  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:21:05  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:21:15  INFO      [main.py:43]  Checking calendars at 07:21:15
+2026-04-01 07:21:15  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:21:15  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:21:15  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:21:25  INFO      [main.py:43]  Checking calendars at 07:21:25
+2026-04-01 07:21:25  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:21:25  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:21:25  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:21:35  INFO      [main.py:43]  Checking calendars at 07:21:35
+2026-04-01 07:21:35  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:21:35  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:21:35  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:21:45  INFO      [main.py:43]  Checking calendars at 07:21:45
+2026-04-01 07:21:45  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:21:45  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:21:45  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:21:55  INFO      [main.py:43]  Checking calendars at 07:21:55
+2026-04-01 07:21:55  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:21:55  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:21:55  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:22:05  INFO      [main.py:43]  Checking calendars at 07:22:05
+2026-04-01 07:22:05  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:22:05  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:22:05  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:22:15  INFO      [main.py:43]  Checking calendars at 07:22:15
+2026-04-01 07:22:15  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:22:15  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:22:15  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:22:25  INFO      [main.py:43]  Checking calendars at 07:22:25
+2026-04-01 07:22:25  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:22:25  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:22:25  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:22:35  INFO      [main.py:43]  Checking calendars at 07:22:35
+2026-04-01 07:22:35  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:22:35  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:22:35  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:22:45  INFO      [main.py:43]  Checking calendars at 07:22:45
+2026-04-01 07:22:45  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:22:46  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:22:46  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:22:56  INFO      [main.py:43]  Checking calendars at 07:22:56
+2026-04-01 07:22:56  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:22:56  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:22:56  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:23:06  INFO      [main.py:43]  Checking calendars at 07:23:06
+2026-04-01 07:23:06  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:23:06  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:23:06  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:23:16  INFO      [main.py:43]  Checking calendars at 07:23:16
+2026-04-01 07:23:16  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:23:16  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:23:16  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:23:26  INFO      [main.py:43]  Checking calendars at 07:23:26
+2026-04-01 07:23:26  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:23:26  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:23:26  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:23:36  INFO      [main.py:43]  Checking calendars at 07:23:36
+2026-04-01 07:23:36  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:23:36  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:23:36  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:23:46  INFO      [main.py:43]  Checking calendars at 07:23:46
+2026-04-01 07:23:46  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:23:46  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:23:46  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:23:56  INFO      [main.py:43]  Checking calendars at 07:23:56
+2026-04-01 07:23:56  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:23:56  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:23:56  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:24:06  INFO      [main.py:43]  Checking calendars at 07:24:06
+2026-04-01 07:24:06  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:24:06  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:24:06  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:24:16  INFO      [main.py:43]  Checking calendars at 07:24:16
+2026-04-01 07:24:16  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:24:17  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:24:17  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:24:27  INFO      [main.py:43]  Checking calendars at 07:24:27
+2026-04-01 07:24:27  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:24:27  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:24:27  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:24:37  INFO      [main.py:43]  Checking calendars at 07:24:37
+2026-04-01 07:24:37  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:24:37  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:24:37  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:24:47  INFO      [main.py:43]  Checking calendars at 07:24:47
+2026-04-01 07:24:47  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:24:47  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:24:47  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:24:57  INFO      [main.py:43]  Checking calendars at 07:24:57
+2026-04-01 07:24:57  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:24:57  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:24:57  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:25:07  INFO      [main.py:43]  Checking calendars at 07:25:07
+2026-04-01 07:25:07  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:25:07  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:25:07  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:25:17  INFO      [main.py:43]  Checking calendars at 07:25:17
+2026-04-01 07:25:17  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:25:17  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:25:17  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:25:27  INFO      [main.py:43]  Checking calendars at 07:25:27
+2026-04-01 07:25:27  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:25:27  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:25:27  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:25:37  INFO      [main.py:43]  Checking calendars at 07:25:37
+2026-04-01 07:25:37  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:25:37  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:25:37  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:25:47  INFO      [main.py:43]  Checking calendars at 07:25:47
+2026-04-01 07:25:47  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:25:47  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:25:47  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:25:57  INFO      [main.py:43]  Checking calendars at 07:25:57
+2026-04-01 07:25:57  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:25:58  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:25:58  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:26:08  INFO      [main.py:43]  Checking calendars at 07:26:08
+2026-04-01 07:26:08  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:26:08  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:26:08  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:26:18  INFO      [main.py:43]  Checking calendars at 07:26:18
+2026-04-01 07:26:18  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:26:18  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:26:18  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:26:28  INFO      [main.py:43]  Checking calendars at 07:26:28
+2026-04-01 07:26:28  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:26:28  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:26:28  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:26:38  INFO      [main.py:43]  Checking calendars at 07:26:38
+2026-04-01 07:26:38  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:26:38  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:26:38  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:26:48  INFO      [main.py:43]  Checking calendars at 07:26:48
+2026-04-01 07:26:48  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:26:48  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:26:48  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:26:58  INFO      [main.py:43]  Checking calendars at 07:26:58
+2026-04-01 07:26:58  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:26:58  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:26:58  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:27:08  INFO      [main.py:43]  Checking calendars at 07:27:08
+2026-04-01 07:27:08  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:27:08  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:27:08  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:27:18  INFO      [main.py:43]  Checking calendars at 07:27:18
+2026-04-01 07:27:18  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:27:18  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:27:18  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:27:28  INFO      [main.py:43]  Checking calendars at 07:27:28
+2026-04-01 07:27:28  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:27:29  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:27:29  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:27:39  INFO      [main.py:43]  Checking calendars at 07:27:39
+2026-04-01 07:27:39  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:27:39  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:27:39  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:27:49  INFO      [main.py:43]  Checking calendars at 07:27:49
+2026-04-01 07:27:49  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:27:49  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:27:49  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:27:59  INFO      [main.py:43]  Checking calendars at 07:27:59
+2026-04-01 07:27:59  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:27:59  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:27:59  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:28:09  INFO      [main.py:43]  Checking calendars at 07:28:09
+2026-04-01 07:28:09  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:28:09  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:28:09  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:28:19  INFO      [main.py:43]  Checking calendars at 07:28:19
+2026-04-01 07:28:19  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:28:19  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:28:19  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:28:29  INFO      [main.py:43]  Checking calendars at 07:28:29
+2026-04-01 07:28:29  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:28:29  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:28:29  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:28:39  INFO      [main.py:43]  Checking calendars at 07:28:39
+2026-04-01 07:28:39  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:28:39  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:28:39  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:28:49  INFO      [main.py:43]  Checking calendars at 07:28:49
+2026-04-01 07:28:49  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:28:49  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:28:49  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:28:59  INFO      [main.py:43]  Checking calendars at 07:28:59
+2026-04-01 07:28:59  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:28:59  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:28:59  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:29:09  INFO      [main.py:43]  Checking calendars at 07:29:09
+2026-04-01 07:29:09  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:29:10  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:29:10  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:29:20  INFO      [main.py:43]  Checking calendars at 07:29:20
+2026-04-01 07:29:20  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:29:20  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:29:20  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:29:30  INFO      [main.py:43]  Checking calendars at 07:29:30
+2026-04-01 07:29:30  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:29:30  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:29:30  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:29:40  INFO      [main.py:43]  Checking calendars at 07:29:40
+2026-04-01 07:29:40  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:29:40  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:29:40  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:29:50  INFO      [main.py:43]  Checking calendars at 07:29:50
+2026-04-01 07:29:50  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:29:50  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:29:50  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:30:00  INFO      [main.py:43]  Checking calendars at 07:30:00
+2026-04-01 07:30:00  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:30:00  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:30:00  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:30:10  INFO      [main.py:43]  Checking calendars at 07:30:10
+2026-04-01 07:30:10  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:30:10  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:30:10  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:30:20  INFO      [main.py:43]  Checking calendars at 07:30:20
+2026-04-01 07:30:20  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:30:20  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:30:20  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:30:30  INFO      [main.py:43]  Checking calendars at 07:30:30
+2026-04-01 07:30:30  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:30:30  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:30:30  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:30:40  INFO      [main.py:43]  Checking calendars at 07:30:40
+2026-04-01 07:30:40  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:30:40  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:30:40  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:30:50  INFO      [main.py:43]  Checking calendars at 07:30:50
+2026-04-01 07:30:50  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:30:51  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:30:51  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:31:01  INFO      [main.py:43]  Checking calendars at 07:31:01
+2026-04-01 07:31:01  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:31:01  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:31:01  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:31:11  INFO      [main.py:43]  Checking calendars at 07:31:11
+2026-04-01 07:31:11  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:31:11  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:31:11  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:31:21  INFO      [main.py:43]  Checking calendars at 07:31:21
+2026-04-01 07:31:21  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:31:21  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:31:21  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:31:31  INFO      [main.py:43]  Checking calendars at 07:31:31
+2026-04-01 07:31:31  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:31:31  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:31:31  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:31:41  INFO      [main.py:43]  Checking calendars at 07:31:41
+2026-04-01 07:31:41  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:31:41  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:31:41  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:31:51  INFO      [main.py:43]  Checking calendars at 07:31:51
+2026-04-01 07:31:51  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:31:51  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:31:51  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:32:01  INFO      [main.py:43]  Checking calendars at 07:32:01
+2026-04-01 07:32:01  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:32:01  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:32:01  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:32:11  INFO      [main.py:43]  Checking calendars at 07:32:11
+2026-04-01 07:32:11  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:32:11  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:32:11  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:32:21  INFO      [main.py:43]  Checking calendars at 07:32:21
+2026-04-01 07:32:21  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:32:21  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:32:21  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:32:31  INFO      [main.py:43]  Checking calendars at 07:32:31
+2026-04-01 07:32:31  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:32:32  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:32:32  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:32:42  INFO      [main.py:43]  Checking calendars at 07:32:42
+2026-04-01 07:32:42  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:32:42  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:32:42  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:32:52  INFO      [main.py:43]  Checking calendars at 07:32:52
+2026-04-01 07:32:52  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:32:52  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:32:52  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:33:02  INFO      [main.py:43]  Checking calendars at 07:33:02
+2026-04-01 07:33:02  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:33:02  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:33:02  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:33:12  INFO      [main.py:43]  Checking calendars at 07:33:12
+2026-04-01 07:33:12  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:33:12  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:33:12  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:33:22  INFO      [main.py:43]  Checking calendars at 07:33:22
+2026-04-01 07:33:22  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:33:22  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:33:22  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:33:32  INFO      [main.py:43]  Checking calendars at 07:33:32
+2026-04-01 07:33:32  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:33:32  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:33:32  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:33:42  INFO      [main.py:43]  Checking calendars at 07:33:42
+2026-04-01 07:33:42  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:33:42  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:33:42  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:33:52  INFO      [main.py:43]  Checking calendars at 07:33:52
+2026-04-01 07:33:52  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:33:52  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:33:52  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:34:02  INFO      [main.py:43]  Checking calendars at 07:34:02
+2026-04-01 07:34:02  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:34:03  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:34:03  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:34:13  INFO      [main.py:43]  Checking calendars at 07:34:13
+2026-04-01 07:34:13  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:34:13  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:34:13  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:34:23  INFO      [main.py:43]  Checking calendars at 07:34:23
+2026-04-01 07:34:23  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:34:23  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:34:23  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:34:33  INFO      [main.py:43]  Checking calendars at 07:34:33
+2026-04-01 07:34:33  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:34:33  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:34:33  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:34:43  INFO      [main.py:43]  Checking calendars at 07:34:43
+2026-04-01 07:34:43  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:34:43  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:34:43  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:34:53  INFO      [main.py:43]  Checking calendars at 07:34:53
+2026-04-01 07:34:53  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:34:53  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:34:53  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:35:03  INFO      [main.py:43]  Checking calendars at 07:35:03
+2026-04-01 07:35:03  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:35:03  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:35:03  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:35:13  INFO      [main.py:43]  Checking calendars at 07:35:13
+2026-04-01 07:35:13  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:35:13  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:35:13  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:35:23  INFO      [main.py:43]  Checking calendars at 07:35:23
+2026-04-01 07:35:23  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:35:23  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:35:23  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:35:33  INFO      [main.py:43]  Checking calendars at 07:35:33
+2026-04-01 07:35:33  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:35:34  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:35:34  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:35:44  INFO      [main.py:43]  Checking calendars at 07:35:44
+2026-04-01 07:35:44  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:35:44  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:35:44  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:35:54  INFO      [main.py:43]  Checking calendars at 07:35:54
+2026-04-01 07:35:54  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:35:54  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:35:54  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:36:04  INFO      [main.py:43]  Checking calendars at 07:36:04
+2026-04-01 07:36:04  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:36:04  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:36:04  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:36:14  INFO      [main.py:43]  Checking calendars at 07:36:14
+2026-04-01 07:36:14  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:36:14  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:36:14  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:36:24  INFO      [main.py:43]  Checking calendars at 07:36:24
+2026-04-01 07:36:24  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:36:24  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:36:24  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:36:34  INFO      [main.py:43]  Checking calendars at 07:36:34
+2026-04-01 07:36:34  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:36:34  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:36:34  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:36:44  INFO      [main.py:43]  Checking calendars at 07:36:44
+2026-04-01 07:36:44  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:36:44  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:36:44  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:36:54  INFO      [main.py:43]  Checking calendars at 07:36:54
+2026-04-01 07:36:54  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:36:54  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:36:54  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:37:04  INFO      [main.py:43]  Checking calendars at 07:37:04
+2026-04-01 07:37:04  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:37:04  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:37:04  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:37:14  INFO      [main.py:43]  Checking calendars at 07:37:14
+2026-04-01 07:37:14  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:37:15  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:37:15  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:37:25  INFO      [main.py:43]  Checking calendars at 07:37:25
+2026-04-01 07:37:25  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:37:25  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:37:25  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:37:35  INFO      [main.py:43]  Checking calendars at 07:37:35
+2026-04-01 07:37:35  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:37:35  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:37:35  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:37:45  INFO      [main.py:43]  Checking calendars at 07:37:45
+2026-04-01 07:37:45  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:37:45  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:37:45  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:37:55  INFO      [main.py:43]  Checking calendars at 07:37:55
+2026-04-01 07:37:55  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:37:55  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:37:55  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:38:05  INFO      [main.py:43]  Checking calendars at 07:38:05
+2026-04-01 07:38:05  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:38:05  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:38:05  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:38:15  INFO      [main.py:43]  Checking calendars at 07:38:15
+2026-04-01 07:38:15  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:38:15  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:38:15  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:38:25  INFO      [main.py:43]  Checking calendars at 07:38:25
+2026-04-01 07:38:25  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:38:25  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:38:25  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:38:35  INFO      [main.py:43]  Checking calendars at 07:38:35
+2026-04-01 07:38:35  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:38:35  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:38:35  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:38:45  INFO      [main.py:43]  Checking calendars at 07:38:45
+2026-04-01 07:38:45  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:38:45  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:38:46  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:38:56  INFO      [main.py:43]  Checking calendars at 07:38:56
+2026-04-01 07:38:56  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:38:56  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:38:56  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:39:06  INFO      [main.py:43]  Checking calendars at 07:39:06
+2026-04-01 07:39:06  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:39:06  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:39:06  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:39:16  INFO      [main.py:43]  Checking calendars at 07:39:16
+2026-04-01 07:39:16  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:39:16  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:39:16  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:39:26  INFO      [main.py:43]  Checking calendars at 07:39:26
+2026-04-01 07:39:26  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:39:26  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:39:26  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:39:36  INFO      [main.py:43]  Checking calendars at 07:39:36
+2026-04-01 07:39:36  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:39:36  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:39:36  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:39:46  INFO      [main.py:43]  Checking calendars at 07:39:46
+2026-04-01 07:39:46  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:39:46  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:39:46  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:39:56  INFO      [main.py:43]  Checking calendars at 07:39:56
+2026-04-01 07:39:56  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:39:56  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:39:56  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:40:06  INFO      [main.py:43]  Checking calendars at 07:40:06
+2026-04-01 07:40:06  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:40:06  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:40:06  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:40:16  INFO      [main.py:43]  Checking calendars at 07:40:16
+2026-04-01 07:40:16  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:40:16  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:40:16  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:40:26  INFO      [main.py:43]  Checking calendars at 07:40:26
+2026-04-01 07:40:26  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:40:27  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:40:27  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:40:37  INFO      [main.py:43]  Checking calendars at 07:40:37
+2026-04-01 07:40:37  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:40:37  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:40:37  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:40:47  INFO      [main.py:43]  Checking calendars at 07:40:47
+2026-04-01 07:40:47  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:40:47  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:40:47  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:40:57  INFO      [main.py:43]  Checking calendars at 07:40:57
+2026-04-01 07:40:57  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:40:57  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:40:57  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:41:07  INFO      [main.py:43]  Checking calendars at 07:41:07
+2026-04-01 07:41:07  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:41:07  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:41:07  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:41:17  INFO      [main.py:43]  Checking calendars at 07:41:17
+2026-04-01 07:41:17  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:41:17  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:41:17  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:41:27  INFO      [main.py:43]  Checking calendars at 07:41:27
+2026-04-01 07:41:27  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:41:27  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:41:27  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:41:37  INFO      [main.py:43]  Checking calendars at 07:41:37
+2026-04-01 07:41:37  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:41:37  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:41:37  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:41:47  INFO      [main.py:43]  Checking calendars at 07:41:47
+2026-04-01 07:41:47  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:41:47  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:41:47  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:41:57  INFO      [main.py:43]  Checking calendars at 07:41:57
+2026-04-01 07:41:57  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:41:57  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:41:57  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:42:07  INFO      [main.py:43]  Checking calendars at 07:42:07
+2026-04-01 07:42:07  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:42:08  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:42:08  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:42:18  INFO      [main.py:43]  Checking calendars at 07:42:18
+2026-04-01 07:42:18  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:42:18  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:42:18  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:42:28  INFO      [main.py:43]  Checking calendars at 07:42:28
+2026-04-01 07:42:28  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:42:28  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:42:28  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:42:38  INFO      [main.py:43]  Checking calendars at 07:42:38
+2026-04-01 07:42:38  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:42:38  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:42:38  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:42:48  INFO      [main.py:43]  Checking calendars at 07:42:48
+2026-04-01 07:42:48  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:42:48  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:42:48  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:42:58  INFO      [main.py:43]  Checking calendars at 07:42:58
+2026-04-01 07:42:58  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:42:58  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:42:58  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:43:08  INFO      [main.py:43]  Checking calendars at 07:43:08
+2026-04-01 07:43:08  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:43:08  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:43:08  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:43:18  INFO      [main.py:43]  Checking calendars at 07:43:18
+2026-04-01 07:43:18  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:43:18  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:43:18  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:43:28  INFO      [main.py:43]  Checking calendars at 07:43:28
+2026-04-01 07:43:28  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:43:28  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:43:28  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:43:38  INFO      [main.py:43]  Checking calendars at 07:43:38
+2026-04-01 07:43:38  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:43:38  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:43:38  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:43:48  INFO      [main.py:43]  Checking calendars at 07:43:48
+2026-04-01 07:43:48  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:43:49  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:43:49  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:43:59  INFO      [main.py:43]  Checking calendars at 07:43:59
+2026-04-01 07:43:59  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:43:59  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:43:59  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:44:09  INFO      [main.py:43]  Checking calendars at 07:44:09
+2026-04-01 07:44:09  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:44:09  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:44:09  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:44:19  INFO      [main.py:43]  Checking calendars at 07:44:19
+2026-04-01 07:44:19  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:44:19  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:44:19  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:44:29  INFO      [main.py:43]  Checking calendars at 07:44:29
+2026-04-01 07:44:29  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:44:29  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:44:29  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:44:39  INFO      [main.py:43]  Checking calendars at 07:44:39
+2026-04-01 07:44:39  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:44:39  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:44:39  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:44:49  INFO      [main.py:43]  Checking calendars at 07:44:49
+2026-04-01 07:44:49  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:44:49  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:44:49  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:44:59  INFO      [main.py:43]  Checking calendars at 07:44:59
+2026-04-01 07:44:59  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:44:59  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:44:59  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:45:09  INFO      [main.py:43]  Checking calendars at 07:45:09
+2026-04-01 07:45:09  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:45:09  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:45:09  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:45:19  INFO      [main.py:43]  Checking calendars at 07:45:19
+2026-04-01 07:45:19  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:45:20  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:45:20  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:45:30  INFO      [main.py:43]  Checking calendars at 07:45:30
+2026-04-01 07:45:30  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:45:30  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:45:30  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:45:40  INFO      [main.py:43]  Checking calendars at 07:45:40
+2026-04-01 07:45:40  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:45:40  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:45:40  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:45:50  INFO      [main.py:43]  Checking calendars at 07:45:50
+2026-04-01 07:45:50  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:45:50  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:45:50  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:46:00  INFO      [main.py:43]  Checking calendars at 07:46:00
+2026-04-01 07:46:00  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:46:00  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:46:00  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:46:10  INFO      [main.py:43]  Checking calendars at 07:46:10
+2026-04-01 07:46:10  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:46:10  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:46:10  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:46:20  INFO      [main.py:43]  Checking calendars at 07:46:20
+2026-04-01 07:46:20  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:46:20  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:46:20  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:46:30  INFO      [main.py:43]  Checking calendars at 07:46:30
+2026-04-01 07:46:30  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:46:30  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:46:30  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:46:40  INFO      [main.py:43]  Checking calendars at 07:46:40
+2026-04-01 07:46:40  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:46:40  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:46:40  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:46:50  INFO      [main.py:43]  Checking calendars at 07:46:50
+2026-04-01 07:46:50  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:46:50  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:46:50  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:47:00  INFO      [main.py:43]  Checking calendars at 07:47:00
+2026-04-01 07:47:00  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:47:01  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:47:01  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:47:11  INFO      [main.py:43]  Checking calendars at 07:47:11
+2026-04-01 07:47:11  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:47:11  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:47:11  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:47:21  INFO      [main.py:43]  Checking calendars at 07:47:21
+2026-04-01 07:47:21  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:47:21  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:47:21  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:47:31  INFO      [main.py:43]  Checking calendars at 07:47:31
+2026-04-01 07:47:31  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:47:31  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:47:31  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:47:41  INFO      [main.py:43]  Checking calendars at 07:47:41
+2026-04-01 07:47:41  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:47:41  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:47:41  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:47:51  INFO      [main.py:43]  Checking calendars at 07:47:51
+2026-04-01 07:47:51  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:47:51  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:47:51  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:48:01  INFO      [main.py:43]  Checking calendars at 07:48:01
+2026-04-01 07:48:01  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:48:01  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:48:01  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:48:11  INFO      [main.py:43]  Checking calendars at 07:48:11
+2026-04-01 07:48:11  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:48:11  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:48:11  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:48:21  INFO      [main.py:43]  Checking calendars at 07:48:21
+2026-04-01 07:48:21  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:48:21  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:48:21  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:48:31  INFO      [main.py:43]  Checking calendars at 07:48:31
+2026-04-01 07:48:31  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:48:31  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:48:31  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:48:41  INFO      [main.py:43]  Checking calendars at 07:48:41
+2026-04-01 07:48:41  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:48:42  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:48:42  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:48:52  INFO      [main.py:43]  Checking calendars at 07:48:52
+2026-04-01 07:48:52  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:48:52  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:48:52  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:49:02  INFO      [main.py:43]  Checking calendars at 07:49:02
+2026-04-01 07:49:02  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:49:02  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:49:02  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:49:12  INFO      [main.py:43]  Checking calendars at 07:49:12
+2026-04-01 07:49:12  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:49:12  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:49:12  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:49:22  INFO      [main.py:43]  Checking calendars at 07:49:22
+2026-04-01 07:49:22  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:49:22  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:49:22  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:49:32  INFO      [main.py:43]  Checking calendars at 07:49:32
+2026-04-01 07:49:32  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:49:32  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:49:32  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:49:42  INFO      [main.py:43]  Checking calendars at 07:49:42
+2026-04-01 07:49:42  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:49:42  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:49:42  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:49:52  INFO      [main.py:43]  Checking calendars at 07:49:52
+2026-04-01 07:49:52  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:49:52  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:49:52  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:50:02  INFO      [main.py:43]  Checking calendars at 07:50:02
+2026-04-01 07:50:02  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:50:02  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:50:02  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:50:12  INFO      [main.py:43]  Checking calendars at 07:50:12
+2026-04-01 07:50:12  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:50:12  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:50:12  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:50:22  INFO      [main.py:43]  Checking calendars at 07:50:22
+2026-04-01 07:50:22  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:50:23  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:50:23  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:50:33  INFO      [main.py:43]  Checking calendars at 07:50:33
+2026-04-01 07:50:33  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:50:33  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:50:33  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:50:43  INFO      [main.py:43]  Checking calendars at 07:50:43
+2026-04-01 07:50:43  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:50:43  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:50:43  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:50:53  INFO      [main.py:43]  Checking calendars at 07:50:53
+2026-04-01 07:50:53  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:50:53  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:50:53  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:51:03  INFO      [main.py:43]  Checking calendars at 07:51:03
+2026-04-01 07:51:03  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:51:03  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:51:03  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:51:13  INFO      [main.py:43]  Checking calendars at 07:51:13
+2026-04-01 07:51:13  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:51:13  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:51:13  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:51:23  INFO      [main.py:43]  Checking calendars at 07:51:23
+2026-04-01 07:51:23  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:51:23  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:51:23  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:51:33  INFO      [main.py:43]  Checking calendars at 07:51:33
+2026-04-01 07:51:33  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:51:33  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:51:33  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:51:43  INFO      [main.py:43]  Checking calendars at 07:51:43
+2026-04-01 07:51:43  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:51:43  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:51:43  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:51:53  INFO      [main.py:43]  Checking calendars at 07:51:53
+2026-04-01 07:51:53  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:51:53  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:51:53  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:52:03  INFO      [main.py:43]  Checking calendars at 07:52:03
+2026-04-01 07:52:03  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:52:04  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:52:04  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:52:14  INFO      [main.py:43]  Checking calendars at 07:52:14
+2026-04-01 07:52:14  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:52:14  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:52:14  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:52:24  INFO      [main.py:43]  Checking calendars at 07:52:24
+2026-04-01 07:52:24  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:52:24  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:52:24  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:52:34  INFO      [main.py:43]  Checking calendars at 07:52:34
+2026-04-01 07:52:34  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:52:34  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:52:34  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:52:44  INFO      [main.py:43]  Checking calendars at 07:52:44
+2026-04-01 07:52:44  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:52:44  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:52:44  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:52:54  INFO      [main.py:43]  Checking calendars at 07:52:54
+2026-04-01 07:52:54  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:52:54  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:52:54  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:53:04  INFO      [main.py:43]  Checking calendars at 07:53:04
+2026-04-01 07:53:04  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:53:04  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:53:04  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:53:14  INFO      [main.py:43]  Checking calendars at 07:53:14
+2026-04-01 07:53:14  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:53:14  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:53:14  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:53:24  INFO      [main.py:43]  Checking calendars at 07:53:24
+2026-04-01 07:53:24  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:53:24  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:53:24  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:53:34  INFO      [main.py:43]  Checking calendars at 07:53:34
+2026-04-01 07:53:34  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:53:35  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:53:35  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:53:45  INFO      [main.py:43]  Checking calendars at 07:53:45
+2026-04-01 07:53:45  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:53:45  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:53:45  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:53:55  INFO      [main.py:43]  Checking calendars at 07:53:55
+2026-04-01 07:53:55  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:53:55  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:53:55  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:54:05  INFO      [main.py:43]  Checking calendars at 07:54:05
+2026-04-01 07:54:05  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:54:05  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:54:05  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:54:15  INFO      [main.py:43]  Checking calendars at 07:54:15
+2026-04-01 07:54:15  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:54:15  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:54:15  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:54:25  INFO      [main.py:43]  Checking calendars at 07:54:25
+2026-04-01 07:54:25  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:54:25  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:54:25  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:54:35  INFO      [main.py:43]  Checking calendars at 07:54:35
+2026-04-01 07:54:35  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:54:35  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:54:35  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:54:45  INFO      [main.py:43]  Checking calendars at 07:54:45
+2026-04-01 07:54:45  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:54:45  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:54:45  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:54:55  INFO      [main.py:43]  Checking calendars at 07:54:55
+2026-04-01 07:54:55  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:54:55  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:54:55  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:55:05  INFO      [main.py:43]  Checking calendars at 07:55:05
+2026-04-01 07:55:05  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:55:05  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:55:05  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:55:15  INFO      [main.py:43]  Checking calendars at 07:55:15
+2026-04-01 07:55:15  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:55:16  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:55:16  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:55:26  INFO      [main.py:43]  Checking calendars at 07:55:26
+2026-04-01 07:55:26  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:55:26  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:55:26  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:55:36  INFO      [main.py:43]  Checking calendars at 07:55:36
+2026-04-01 07:55:36  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:55:36  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:55:36  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:55:46  INFO      [main.py:43]  Checking calendars at 07:55:46
+2026-04-01 07:55:46  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:55:46  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:55:46  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:55:56  INFO      [main.py:43]  Checking calendars at 07:55:56
+2026-04-01 07:55:56  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:55:56  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:55:56  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:56:06  INFO      [main.py:43]  Checking calendars at 07:56:06
+2026-04-01 07:56:06  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:56:06  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:56:06  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:56:16  INFO      [main.py:43]  Checking calendars at 07:56:16
+2026-04-01 07:56:16  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:56:16  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:56:16  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:56:26  INFO      [main.py:43]  Checking calendars at 07:56:26
+2026-04-01 07:56:26  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:56:26  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:56:26  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:56:36  INFO      [main.py:43]  Checking calendars at 07:56:36
+2026-04-01 07:56:36  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:56:36  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:56:36  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:56:46  INFO      [main.py:43]  Checking calendars at 07:56:46
+2026-04-01 07:56:46  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:56:47  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:56:47  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:56:57  INFO      [main.py:43]  Checking calendars at 07:56:57
+2026-04-01 07:56:57  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:56:57  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:56:57  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:57:07  INFO      [main.py:43]  Checking calendars at 07:57:07
+2026-04-01 07:57:07  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:57:07  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:57:07  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:57:17  INFO      [main.py:43]  Checking calendars at 07:57:17
+2026-04-01 07:57:17  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:57:17  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:57:17  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:57:27  INFO      [main.py:43]  Checking calendars at 07:57:27
+2026-04-01 07:57:27  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:57:27  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:57:27  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:57:37  INFO      [main.py:43]  Checking calendars at 07:57:37
+2026-04-01 07:57:37  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:57:37  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:57:37  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:57:47  INFO      [main.py:43]  Checking calendars at 07:57:47
+2026-04-01 07:57:47  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:57:47  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:57:47  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:57:57  INFO      [main.py:43]  Checking calendars at 07:57:57
+2026-04-01 07:57:57  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:57:57  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:57:57  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:58:07  INFO      [main.py:43]  Checking calendars at 07:58:07
+2026-04-01 07:58:07  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:58:07  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:58:07  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:58:17  INFO      [main.py:43]  Checking calendars at 07:58:17
+2026-04-01 07:58:17  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:58:18  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:58:18  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:58:28  INFO      [main.py:43]  Checking calendars at 07:58:28
+2026-04-01 07:58:28  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:58:28  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:58:28  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:58:38  INFO      [main.py:43]  Checking calendars at 07:58:38
+2026-04-01 07:58:38  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:58:38  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:58:38  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:58:48  INFO      [main.py:43]  Checking calendars at 07:58:48
+2026-04-01 07:58:48  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:58:48  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:58:48  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:58:58  INFO      [main.py:43]  Checking calendars at 07:58:58
+2026-04-01 07:58:58  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:58:58  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:58:58  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:59:08  INFO      [main.py:43]  Checking calendars at 07:59:08
+2026-04-01 07:59:08  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:59:08  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:59:08  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:59:18  INFO      [main.py:43]  Checking calendars at 07:59:18
+2026-04-01 07:59:18  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:59:18  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:59:18  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:59:28  INFO      [main.py:43]  Checking calendars at 07:59:28
+2026-04-01 07:59:28  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:59:28  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:59:28  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:59:38  INFO      [main.py:43]  Checking calendars at 07:59:38
+2026-04-01 07:59:38  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:59:38  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:59:38  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:59:48  INFO      [main.py:43]  Checking calendars at 07:59:48
+2026-04-01 07:59:48  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:59:48  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:59:48  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 07:59:58  INFO      [main.py:43]  Checking calendars at 07:59:58
+2026-04-01 07:59:58  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 07:59:59  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 07:59:59  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:00:09  INFO      [main.py:43]  Checking calendars at 08:00:09
+2026-04-01 08:00:09  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:00:09  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:00:09  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:00:19  INFO      [main.py:43]  Checking calendars at 08:00:19
+2026-04-01 08:00:19  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:00:19  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:00:19  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:00:29  INFO      [main.py:43]  Checking calendars at 08:00:29
+2026-04-01 08:00:29  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:00:29  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:00:29  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:00:39  INFO      [main.py:43]  Checking calendars at 08:00:39
+2026-04-01 08:00:39  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:00:39  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:00:39  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:00:49  INFO      [main.py:43]  Checking calendars at 08:00:49
+2026-04-01 08:00:49  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:00:49  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:00:49  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:00:59  INFO      [main.py:43]  Checking calendars at 08:00:59
+2026-04-01 08:00:59  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:00:59  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:00:59  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:01:09  INFO      [main.py:43]  Checking calendars at 08:01:09
+2026-04-01 08:01:09  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:01:09  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:01:09  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:01:19  INFO      [main.py:43]  Checking calendars at 08:01:19
+2026-04-01 08:01:19  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:01:19  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:01:19  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:01:29  INFO      [main.py:43]  Checking calendars at 08:01:29
+2026-04-01 08:01:29  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:01:30  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:01:30  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:01:40  INFO      [main.py:43]  Checking calendars at 08:01:40
+2026-04-01 08:01:40  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:01:40  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:01:40  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:01:50  INFO      [main.py:43]  Checking calendars at 08:01:50
+2026-04-01 08:01:50  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:01:50  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:01:50  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:02:00  INFO      [main.py:43]  Checking calendars at 08:02:00
+2026-04-01 08:02:00  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:02:00  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:02:00  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:02:10  INFO      [main.py:43]  Checking calendars at 08:02:10
+2026-04-01 08:02:10  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:02:10  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:02:10  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:02:20  INFO      [main.py:43]  Checking calendars at 08:02:20
+2026-04-01 08:02:20  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:02:20  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:02:20  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:02:30  INFO      [main.py:43]  Checking calendars at 08:02:30
+2026-04-01 08:02:30  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:02:30  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:02:30  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:02:40  INFO      [main.py:43]  Checking calendars at 08:02:40
+2026-04-01 08:02:40  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:02:40  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:02:40  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:02:50  INFO      [main.py:43]  Checking calendars at 08:02:50
+2026-04-01 08:02:50  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:02:50  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:02:50  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:03:00  INFO      [main.py:43]  Checking calendars at 08:03:00
+2026-04-01 08:03:00  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:03:01  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:03:01  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:03:11  INFO      [main.py:43]  Checking calendars at 08:03:11
+2026-04-01 08:03:11  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:03:11  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:03:11  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:03:21  INFO      [main.py:43]  Checking calendars at 08:03:21
+2026-04-01 08:03:21  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:03:21  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:03:21  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:03:31  INFO      [main.py:43]  Checking calendars at 08:03:31
+2026-04-01 08:03:31  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:03:31  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:03:31  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:03:41  INFO      [main.py:43]  Checking calendars at 08:03:41
+2026-04-01 08:03:41  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:03:41  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:03:41  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:03:51  INFO      [main.py:43]  Checking calendars at 08:03:51
+2026-04-01 08:03:51  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:03:51  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:03:51  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:04:01  INFO      [main.py:43]  Checking calendars at 08:04:01
+2026-04-01 08:04:01  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:04:01  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:04:01  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:04:11  INFO      [main.py:43]  Checking calendars at 08:04:11
+2026-04-01 08:04:11  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:04:11  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:04:11  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:04:21  INFO      [main.py:43]  Checking calendars at 08:04:21
+2026-04-01 08:04:21  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:04:21  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:04:21  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:04:31  INFO      [main.py:43]  Checking calendars at 08:04:31
+2026-04-01 08:04:31  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:04:31  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:04:31  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:04:41  INFO      [main.py:43]  Checking calendars at 08:04:41
+2026-04-01 08:04:42  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:04:42  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:04:42  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:04:52  INFO      [main.py:43]  Checking calendars at 08:04:52
+2026-04-01 08:04:52  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:04:52  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:04:52  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:05:02  INFO      [main.py:43]  Checking calendars at 08:05:02
+2026-04-01 08:05:02  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:05:02  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:05:02  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:05:12  INFO      [main.py:43]  Checking calendars at 08:05:12
+2026-04-01 08:05:12  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:05:12  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:05:12  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:05:22  INFO      [main.py:43]  Checking calendars at 08:05:22
+2026-04-01 08:05:22  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:05:22  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:05:22  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:05:32  INFO      [main.py:43]  Checking calendars at 08:05:32
+2026-04-01 08:05:32  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:05:32  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:05:32  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:05:42  INFO      [main.py:43]  Checking calendars at 08:05:42
+2026-04-01 08:05:42  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:05:42  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:05:42  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:05:52  INFO      [main.py:43]  Checking calendars at 08:05:52
+2026-04-01 08:05:52  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:05:52  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:05:52  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:06:02  INFO      [main.py:43]  Checking calendars at 08:06:02
+2026-04-01 08:06:02  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:06:02  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:06:02  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:06:12  INFO      [main.py:43]  Checking calendars at 08:06:12
+2026-04-01 08:06:12  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:06:13  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:06:13  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:06:23  INFO      [main.py:43]  Checking calendars at 08:06:23
+2026-04-01 08:06:23  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:06:23  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:06:23  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:06:33  INFO      [main.py:43]  Checking calendars at 08:06:33
+2026-04-01 08:06:33  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:06:33  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:06:33  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:06:43  INFO      [main.py:43]  Checking calendars at 08:06:43
+2026-04-01 08:06:43  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:06:43  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:06:43  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:06:53  INFO      [main.py:43]  Checking calendars at 08:06:53
+2026-04-01 08:06:53  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:06:53  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:06:53  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:07:03  INFO      [main.py:43]  Checking calendars at 08:07:03
+2026-04-01 08:07:03  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:07:03  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:07:03  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:07:13  INFO      [main.py:43]  Checking calendars at 08:07:13
+2026-04-01 08:07:13  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:07:13  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:07:13  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:07:23  INFO      [main.py:43]  Checking calendars at 08:07:23
+2026-04-01 08:07:23  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:07:23  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:07:23  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:07:33  INFO      [main.py:43]  Checking calendars at 08:07:33
+2026-04-01 08:07:33  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:07:33  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:07:33  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:07:43  INFO      [main.py:43]  Checking calendars at 08:07:43
+2026-04-01 08:07:43  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:07:43  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:07:43  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:07:53  INFO      [main.py:43]  Checking calendars at 08:07:53
+2026-04-01 08:07:53  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:07:54  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:07:54  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:08:04  INFO      [main.py:43]  Checking calendars at 08:08:04
+2026-04-01 08:08:04  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:08:04  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:08:04  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:08:14  INFO      [main.py:43]  Checking calendars at 08:08:14
+2026-04-01 08:08:14  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:08:14  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:08:14  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:08:24  INFO      [main.py:43]  Checking calendars at 08:08:24
+2026-04-01 08:08:24  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:08:24  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:08:24  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:08:34  INFO      [main.py:43]  Checking calendars at 08:08:34
+2026-04-01 08:08:34  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:08:34  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:08:34  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:08:44  INFO      [main.py:43]  Checking calendars at 08:08:44
+2026-04-01 08:08:44  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:08:44  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:08:44  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:08:54  INFO      [main.py:43]  Checking calendars at 08:08:54
+2026-04-01 08:08:54  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:08:54  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:08:54  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:09:04  INFO      [main.py:43]  Checking calendars at 08:09:04
+2026-04-01 08:09:04  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:09:04  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:09:04  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:09:14  INFO      [main.py:43]  Checking calendars at 08:09:14
+2026-04-01 08:09:14  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:09:14  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:09:14  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:09:24  INFO      [main.py:43]  Checking calendars at 08:09:24
+2026-04-01 08:09:24  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:09:24  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:09:25  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:09:35  INFO      [main.py:43]  Checking calendars at 08:09:35
+2026-04-01 08:09:35  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:09:35  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:09:35  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:09:45  INFO      [main.py:43]  Checking calendars at 08:09:45
+2026-04-01 08:09:45  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:09:45  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:09:45  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:09:55  INFO      [main.py:43]  Checking calendars at 08:09:55
+2026-04-01 08:09:55  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:09:55  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:09:55  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:10:05  INFO      [main.py:43]  Checking calendars at 08:10:05
+2026-04-01 08:10:05  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:10:05  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:10:05  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:10:15  INFO      [main.py:43]  Checking calendars at 08:10:15
+2026-04-01 08:10:15  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:10:15  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:10:15  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:10:25  INFO      [main.py:43]  Checking calendars at 08:10:25
+2026-04-01 08:10:25  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:10:25  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:10:25  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:10:35  INFO      [main.py:43]  Checking calendars at 08:10:35
+2026-04-01 08:10:35  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:10:35  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:10:35  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:10:45  INFO      [main.py:43]  Checking calendars at 08:10:45
+2026-04-01 08:10:45  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:10:45  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:10:45  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:10:55  INFO      [main.py:43]  Checking calendars at 08:10:55
+2026-04-01 08:10:55  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:10:55  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:10:55  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:11:06  INFO      [main.py:43]  Checking calendars at 08:11:06
+2026-04-01 08:11:06  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:11:06  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:11:06  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:11:16  INFO      [main.py:43]  Checking calendars at 08:11:16
+2026-04-01 08:11:16  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:11:16  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:11:16  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:11:26  INFO      [main.py:43]  Checking calendars at 08:11:26
+2026-04-01 08:11:26  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:11:26  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:11:26  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:11:36  INFO      [main.py:43]  Checking calendars at 08:11:36
+2026-04-01 08:11:36  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:11:36  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:11:36  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:11:46  INFO      [main.py:43]  Checking calendars at 08:11:46
+2026-04-01 08:11:46  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:11:46  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:11:46  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:11:56  INFO      [main.py:43]  Checking calendars at 08:11:56
+2026-04-01 08:11:56  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:11:56  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:11:56  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:12:06  INFO      [main.py:43]  Checking calendars at 08:12:06
+2026-04-01 08:12:06  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:12:06  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:12:06  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:12:16  INFO      [main.py:43]  Checking calendars at 08:12:16
+2026-04-01 08:12:16  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:12:16  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:12:16  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:12:26  INFO      [main.py:43]  Checking calendars at 08:12:26
+2026-04-01 08:12:26  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:12:26  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:12:26  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:12:36  INFO      [main.py:43]  Checking calendars at 08:12:36
+2026-04-01 08:12:36  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:12:37  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:12:37  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:12:47  INFO      [main.py:43]  Checking calendars at 08:12:47
+2026-04-01 08:12:47  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:12:47  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:12:47  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:12:57  INFO      [main.py:43]  Checking calendars at 08:12:57
+2026-04-01 08:12:57  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:12:57  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:12:57  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:13:07  INFO      [main.py:43]  Checking calendars at 08:13:07
+2026-04-01 08:13:07  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:13:07  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:13:07  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:13:17  INFO      [main.py:43]  Checking calendars at 08:13:17
+2026-04-01 08:13:17  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:13:17  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:13:17  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:13:27  INFO      [main.py:43]  Checking calendars at 08:13:27
+2026-04-01 08:13:27  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:13:27  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:13:27  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:13:37  INFO      [main.py:43]  Checking calendars at 08:13:37
+2026-04-01 08:13:37  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:13:37  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:13:37  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:13:47  INFO      [main.py:43]  Checking calendars at 08:13:47
+2026-04-01 08:13:47  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:13:47  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:13:47  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:13:57  INFO      [main.py:43]  Checking calendars at 08:13:57
+2026-04-01 08:13:57  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:13:57  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:13:57  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:14:07  INFO      [main.py:43]  Checking calendars at 08:14:07
+2026-04-01 08:14:07  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:14:07  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:14:07  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:14:17  INFO      [main.py:43]  Checking calendars at 08:14:17
+2026-04-01 08:14:17  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:14:18  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:14:18  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:14:28  INFO      [main.py:43]  Checking calendars at 08:14:28
+2026-04-01 08:14:28  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:14:28  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:14:28  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:14:38  INFO      [main.py:43]  Checking calendars at 08:14:38
+2026-04-01 08:14:38  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:14:38  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:14:38  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:14:48  INFO      [main.py:43]  Checking calendars at 08:14:48
+2026-04-01 08:14:48  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:14:48  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:14:48  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:14:58  INFO      [main.py:43]  Checking calendars at 08:14:58
+2026-04-01 08:14:58  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:14:58  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:14:58  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:15:08  INFO      [main.py:43]  Checking calendars at 08:15:08
+2026-04-01 08:15:08  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:15:08  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:15:08  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:15:18  INFO      [main.py:43]  Checking calendars at 08:15:18
+2026-04-01 08:15:18  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:15:18  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:15:18  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:15:28  INFO      [main.py:43]  Checking calendars at 08:15:28
+2026-04-01 08:15:28  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:15:28  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:15:28  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:15:38  INFO      [main.py:43]  Checking calendars at 08:15:38
+2026-04-01 08:15:38  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:15:38  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:15:38  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:15:48  INFO      [main.py:43]  Checking calendars at 08:15:48
+2026-04-01 08:15:48  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:15:49  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:15:49  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:15:59  INFO      [main.py:43]  Checking calendars at 08:15:59
+2026-04-01 08:15:59  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:15:59  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:15:59  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:16:09  INFO      [main.py:43]  Checking calendars at 08:16:09
+2026-04-01 08:16:09  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:16:09  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:16:09  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:16:19  INFO      [main.py:43]  Checking calendars at 08:16:19
+2026-04-01 08:16:19  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:16:19  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:16:19  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:16:29  INFO      [main.py:43]  Checking calendars at 08:16:29
+2026-04-01 08:16:29  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:16:29  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:16:29  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:16:39  INFO      [main.py:43]  Checking calendars at 08:16:39
+2026-04-01 08:16:39  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:16:39  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:16:39  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:16:49  INFO      [main.py:43]  Checking calendars at 08:16:49
+2026-04-01 08:16:49  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:16:49  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:16:49  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:16:59  INFO      [main.py:43]  Checking calendars at 08:16:59
+2026-04-01 08:16:59  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:16:59  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:16:59  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:17:09  INFO      [main.py:43]  Checking calendars at 08:17:09
+2026-04-01 08:17:09  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:17:09  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:17:09  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:17:19  INFO      [main.py:43]  Checking calendars at 08:17:19
+2026-04-01 08:17:19  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:17:19  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:17:19  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:17:29  INFO      [main.py:43]  Checking calendars at 08:17:29
+2026-04-01 08:17:29  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:17:30  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:17:30  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:17:40  INFO      [main.py:43]  Checking calendars at 08:17:40
+2026-04-01 08:17:40  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:17:40  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:17:40  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:17:50  INFO      [main.py:43]  Checking calendars at 08:17:50
+2026-04-01 08:17:50  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:17:50  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:17:50  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:18:00  INFO      [main.py:43]  Checking calendars at 08:18:00
+2026-04-01 08:18:00  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:18:00  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:18:00  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:18:10  INFO      [main.py:43]  Checking calendars at 08:18:10
+2026-04-01 08:18:10  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:18:10  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:18:10  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:18:20  INFO      [main.py:43]  Checking calendars at 08:18:20
+2026-04-01 08:18:20  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:18:20  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:18:20  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:18:30  INFO      [main.py:43]  Checking calendars at 08:18:30
+2026-04-01 08:18:30  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:18:30  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:18:30  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:18:40  INFO      [main.py:43]  Checking calendars at 08:18:40
+2026-04-01 08:18:40  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:18:40  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:18:40  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:18:50  INFO      [main.py:43]  Checking calendars at 08:18:50
+2026-04-01 08:18:50  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:18:50  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:18:50  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:19:00  INFO      [main.py:43]  Checking calendars at 08:19:00
+2026-04-01 08:19:00  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:19:00  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:19:00  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:19:10  INFO      [main.py:43]  Checking calendars at 08:19:10
+2026-04-01 08:19:10  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:19:11  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:19:11  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:19:21  INFO      [main.py:43]  Checking calendars at 08:19:21
+2026-04-01 08:19:21  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:19:21  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:19:21  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:19:31  INFO      [main.py:43]  Checking calendars at 08:19:31
+2026-04-01 08:19:31  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:19:31  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:19:31  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:19:41  INFO      [main.py:43]  Checking calendars at 08:19:41
+2026-04-01 08:19:41  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:19:41  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:19:41  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:19:51  INFO      [main.py:43]  Checking calendars at 08:19:51
+2026-04-01 08:19:51  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:19:51  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:19:51  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:20:01  INFO      [main.py:43]  Checking calendars at 08:20:01
+2026-04-01 08:20:01  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:20:01  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:20:01  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:20:11  INFO      [main.py:43]  Checking calendars at 08:20:11
+2026-04-01 08:20:11  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:20:11  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:20:11  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:20:21  INFO      [main.py:43]  Checking calendars at 08:20:21
+2026-04-01 08:20:21  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:20:21  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:20:21  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:20:31  INFO      [main.py:43]  Checking calendars at 08:20:31
+2026-04-01 08:20:31  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:20:31  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:20:31  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:20:41  INFO      [main.py:43]  Checking calendars at 08:20:41
+2026-04-01 08:20:41  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:20:41  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:20:42  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:20:52  INFO      [main.py:43]  Checking calendars at 08:20:52
+2026-04-01 08:20:52  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:20:52  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:20:52  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:21:02  INFO      [main.py:43]  Checking calendars at 08:21:02
+2026-04-01 08:21:02  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:21:02  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:21:02  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:21:12  INFO      [main.py:43]  Checking calendars at 08:21:12
+2026-04-01 08:21:12  DEBUG     [client.py:31]  GET https://192.168.1.23:5004/scl/get-all-calender
+2026-04-01 08:21:12  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-04-01 08:21:12  INFO      [main.py:49]  No calendars found for today.
+2026-04-01 08:21:21  INFO      [network.py:19]  Detected local IP: 192.168.1.23 — subnet: 192.168.1.0/24
+2026-04-01 08:21:21  INFO      [network.py:28]  Scanning network: 192.168.1.0/24
+2026-04-01 08:21:21  ERROR     [network.py:50]  Network scan failed: Sniffing and sending packets is not available at layer 2: winpcap is not installed. You may use conf.L3socket or conf.L3socket6 to access layer 3

@@ -1,25 +1,12 @@
 # test_services.py
-import json
-from services.auth_service import login_slc
-from services.client import FlaskClient
-from services.attendance_service import update_attendance
+from detection.network import scan_all_devices
 
-with open("configurations.json") as f:
-    config = json.load(f)
+print("Scanning network...")
+devices = scan_all_devices()
 
-token = login_slc(
-    base_url=config["slc_config"]["BASE_URL"],
-    mac=config["slc_config"]["MAC"],
-    password=config["slc_config"]["PASSWORD"]
-)
-
-client = FlaskClient(base_url=config["slc_config"]["BASE_URL"], token=token)
-
-# Use the real attendance id we saw in the previous test
-attendance_id = 9379
-result = update_attendance(client, attendance_id, is_present=False)
-
-if result:
-    print(f"✅ Attendance {attendance_id} updated successfully.")
+if devices:
+    print(f"✅ Found {len(devices)} device(s):")
+    for d in devices:
+        print(f"   IP: {d['ip']} — MAC: {d['mac']}")
 else:
-    print(f"❌ Failed to update attendance {attendance_id}.")
+    print("⚠️  No devices found.")

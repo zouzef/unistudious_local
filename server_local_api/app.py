@@ -1,10 +1,11 @@
 from flask import Flask
 from config import Config
-from update_tablet_config import update_tablet_config
+from update_tablet_config import update_tablet_config,update_attendance_system_config
 
 def create_app():
     """Application factory"""
     update_tablet_config()
+    update_attendance_system_config()
     app = Flask(__name__)
     app.config.from_object(Config)
 

@@ -47,3 +47,27 @@ def update_tablet_config():
 	print(f"   New URL: {new_url}")
 
 
+def update_attendance_system_config():
+    """Update attendance_system/configuration.json with current server IP."""
+
+    attendance_config_path = os.path.join(
+        os.path.dirname(__file__),
+        "../attendance_system/configurations.json"
+    )
+
+    current_ip = get_local_ip()
+    port = 5004  # your static port
+
+    with open(attendance_config_path, "r") as f:
+        config = json.load(f)
+
+    old_url = config["slc_config"]["BASE_URL"]
+    new_url = f"https://{current_ip}:{port}/scl"
+    config["slc_config"]["BASE_URL"] = new_url
+
+    with open(attendance_config_path, "w") as f:
+        json.dump(config, f, indent=2)
+
+    print(f"✅ Attendance config updated!")
+    print(f"   Old URL: {old_url}")
+    print(f"   New URL: {new_url}")
