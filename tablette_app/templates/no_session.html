@@ -316,9 +316,11 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-key="btnCancel">Cancel
-                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-key="btnCancel">Cancel</button>
                 <button type="button" class="btn btn-primary" id="saveEventButton" data-key="btnSave">Save</button>
+                <button type="button" class="btn btn-danger" id="saveAndDisconnectButton" data-key="btnSaveDisconnect">
+                    Save & Disconnect
+                </button>
             </div>
         </div>
     </div>
@@ -776,21 +778,7 @@
        STATIC QR CODES (Android + iOS)
     ───────────────────────────────────────── */
 
-    window.addEventListener('load', function () {
-        new QRCode(document.getElementById("qr-android-static"), {
-            text: "https://play.google.com/store/apps/details?id=com.unistudious.projet1v2&hl=fr",
-            width: 130, height: 130,
-            colorDark: "#000000", colorLight: "#f8f9fa",
-            correctLevel: QRCode.CorrectLevel.H
-        });
 
-        new QRCode(document.getElementById("qr-ios-static"), {
-            text: "https://apps.apple.com/ch/app/unistudious/id6756975616",
-            width: 130, height: 130,
-            colorDark: "#000000", colorLight: "#f8f9fa",
-            correctLevel: QRCode.CorrectLevel.H
-        });
-    });
 
 
     /* ─────────────────────────────────────────
@@ -911,6 +899,8 @@
     });
 
 
+
+
     /* ─────────────────────────────────────────
        AUTH — username/password submission
     ───────────────────────────────────────── */
@@ -983,6 +973,33 @@
             });
         }, 300);
     }
+
+    function disconnectTeacher() {
+        isAuthenticated = false;
+        clearTimeout(inactivityTimer);
+        clearInterval(countdownInterval);
+        inactivityTimer = null;
+        countdownInterval = null;
+        console.log('🔒 Teacher manually disconnected');
+    }
+    document.getElementById('saveAndDisconnectButton').addEventListener('click', function () {
+        // Trigger the same save logic as the normal Save button
+        document.getElementById('saveEventButton').click();
+
+        // Then disconnect after a short delay to let save complete
+        setTimeout(() => {
+            bootstrap.Modal.getInstance(document.getElementById('eventModal'))?.hide();
+            disconnectTeacher();
+            Swal.fire({
+                icon: 'info',
+                title: 'Disconnected',
+                text: '🔒 You have been disconnected successfully.',
+                confirmButtonColor: '#4D44B5',
+                timer: 3000,
+                timerProgressBar: true,
+            });
+        }, 300);
+    });
 
 
     /* ─────────────────────────────────────────
@@ -1080,7 +1097,10 @@
 
     function resetQROverlayTimer() {
         clearTimeout(qrOverlayTimer);
-        qrOverlayTimer = setTimeout(showQROverlay, QR_IDLE_SECONDS * 1000);
+        const anyModalOpen = document.querySelector('.modal.show');
+        if (!anyModalOpen) {
+            qrOverlayTimer = setTimeout(showQROverlay, QR_IDLE_SECONDS * 1000);
+        }
     }
 
     // Hide on any user interaction, restart idle timer otherwise
@@ -1111,6 +1131,20 @@
     // Start idle timer on page load
     resetQROverlayTimer();
 
+    // ── Pause QR overlay when ANY modal is open ──
+    document.querySelectorAll('.modal').forEach(function(modal) {
+        modal.addEventListener('show.bs.modal', function () {
+            clearTimeout(qrOverlayTimer);
+            document.getElementById('qr-fullscreen-overlay').style.display = 'none';
+        });
+
+        modal.addEventListener('hidden.bs.modal', function () {
+            const anyOpen = document.querySelector('.modal.show');
+            if (!anyOpen) {
+                resetQROverlayTimer();
+            }
+        });
+    });
 
     const translations = {
       en: {

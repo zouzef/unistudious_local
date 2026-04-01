@@ -207,7 +207,7 @@ def service_send_dattendance(settings, data, id_prod):
         headers = {"Authorization": f"Bearer {token}"}
         url = f"{settings.api_base_url}/slc/create-attendance"
 
-        user_id = data.get('user_id')  # ✅ now data is already a dict
+        user_id = data.get('user_id')
         print(f"👤 user_id = {user_id}")
 
         payload = {
@@ -220,13 +220,17 @@ def service_send_dattendance(settings, data, id_prod):
         response = requests.post(url, data=payload, headers=headers)
         print("📥 Response body:", response.text)
         response.raise_for_status()
-        return True
+
+        # ✅ Extract remote_id from response and return it
+        response_data = response.json()
+        remote_id = response_data.get('attendance', {}).get('id')
+        return True, remote_id
 
     except Exception as e:
         print(f"❌ Error in service_send_dattendance: {e}")
         import traceback
         traceback.print_exc()
-        return False
+        return False, None  # ✅ Always return a tuple
 
 
 def send_new_attendance(db, settings, audit_row):
