@@ -1,7 +1,3 @@
-"""
-SLC Data Processor
-Handles inserting and updating slc records in the database
-"""
 import sys
 import os
 
@@ -55,6 +51,7 @@ def insert_slcs(db, slc_data):
                     "username": slc.get("username"),
                     "slc_username": slc.get("slc_username"),
                     "slc_password": slc.get("slc_password"),
+                    "account_id": slc.get("accountId"),
                     "timestamp": format_date(slc.get("timestamp")),
                     "created_at": format_date(slc.get("createdAt")),
                     "updated_at": format_date(slc.get("updatedAt"))
@@ -87,12 +84,14 @@ def insert_slcs(db, slc_data):
                     # Data is different - UPDATE
                     print(f"      🔄 Already exists but data changed - updating...")
 
+                    # ✅ FIX 1: Added missing comma after account_id = %s
                     update_query = """
                         UPDATE slc SET
                             uuid = %s,
                             username = %s,
                             slc_username = %s,
                             slc_password = %s,
+                            account_id = %s,
                             timestamp = %s,
                             created_at = %s,
                             updated_at = %s
@@ -104,6 +103,7 @@ def insert_slcs(db, slc_data):
                         new_data["username"],
                         new_data["slc_username"],
                         new_data["slc_password"],
+                        new_data["account_id"],
                         new_data["timestamp"],
                         new_data["created_at"],
                         new_data["updated_at"],
@@ -117,11 +117,12 @@ def insert_slcs(db, slc_data):
                     # DOES NOT EXIST → INSERT
                     print(f"      ✨ New SLC - inserting...")
 
+                    # ✅ FIX 2: Changed 8 placeholders to 9 to match 9 columns
                     insert_query = """
                         INSERT INTO slc (
-                            id, uuid, username, slc_username, slc_password,
+                            id, uuid, username, slc_username, slc_password, account_id,
                             timestamp, created_at, updated_at
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """
 
                     db.execute_query(insert_query, (
@@ -130,6 +131,7 @@ def insert_slcs(db, slc_data):
                         new_data["username"],
                         new_data["slc_username"],
                         new_data["slc_password"],
+                        new_data["account_id"],
                         new_data["timestamp"],
                         new_data["created_at"],
                         new_data["updated_at"]
@@ -191,12 +193,13 @@ def update_slcs(db, slc_data):
                 if not slc_id:
                     raise ValueError("Missing required field: id")
 
-                # Prepare new data
+                # ✅ FIX 3: Added account_id to new_data so it gets saved
                 new_data = {
                     "uuid": slc.get("uuid"),
                     "username": slc.get("username"),
                     "slc_username": slc.get("slc_username"),
                     "slc_password": slc.get("slc_password"),
+                    "account_id": slc.get("accountId"),
                     "timestamp": format_date(slc.get("timestamp")),
                     "updated_at": format_date(slc.get("updatedAt"))
                 }
@@ -228,12 +231,14 @@ def update_slcs(db, slc_data):
                     # Data is different - UPDATE
                     print(f"      🔄 Data changed - updating...")
 
+                    # ✅ FIX 3 (cont): Added account_id to UPDATE query
                     update_query = """
                         UPDATE slc SET
                             uuid = %s,
                             username = %s,
                             slc_username = %s,
                             slc_password = %s,
+                            account_id = %s,
                             timestamp = %s,
                             updated_at = %s
                         WHERE id = %s
@@ -244,6 +249,7 @@ def update_slcs(db, slc_data):
                         new_data["username"],
                         new_data["slc_username"],
                         new_data["slc_password"],
+                        new_data["account_id"],
                         new_data["timestamp"],
                         new_data["updated_at"],
                         slc_id
@@ -256,20 +262,21 @@ def update_slcs(db, slc_data):
                     # DOES NOT EXIST → INSERT (don't skip!)
                     print(f"      ⚠️  SLC not found in DB - inserting...")
 
+                    # ✅ FIX 3 (cont): Added account_id to INSERT query
                     insert_query = """
                         INSERT INTO slc (
-                            id, uuid, username, slc_username, slc_password,
+                            id, uuid, username, slc_username, slc_password, account_id,
                             timestamp, created_at, updated_at
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """
 
-                    # For records in 'updated' that don't exist, use updated_at as created_at
                     db.execute_query(insert_query, (
                         slc_id,
                         new_data["uuid"],
                         new_data["username"],
                         new_data["slc_username"],
                         new_data["slc_password"],
+                        new_data["account_id"],
                         new_data["timestamp"],
                         new_data["updated_at"],  # Use updated_at as created_at
                         new_data["updated_at"]

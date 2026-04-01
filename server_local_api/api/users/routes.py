@@ -658,7 +658,6 @@ import json
 def authentification_teacher():
 	try:
 		data = request.get_json()
-		print(data)
 		if not data:
 			return jsonify({
                 "Message": "Error: Teacher Data is Missing"

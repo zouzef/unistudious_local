@@ -826,7 +826,53 @@
        AUTH MODAL — open / tab switching
     ───────────────────────────────────────── */
 
+    let isAuthenticated = false;
+    let inactivityTimer = null;
+    let countdownInterval = null; // ← add this line
+    const SESSION_DURATION = 5 * 60 * 1000; // 5 minutes
+
+    function resetInactivityTimer() {
+        if (!isAuthenticated) return; // ← add this guard
+
+        clearTimeout(inactivityTimer);
+        clearInterval(countdownInterval);
+
+        let secondsLeft = SESSION_DURATION / 1000;
+        countdownInterval = setInterval(() => {
+            secondsLeft--;
+            const mins = Math.floor(secondsLeft / 60);
+            const secs = secondsLeft % 60;
+            console.log(`⏳ Session expires in: ${mins}:${secs.toString().padStart(2, '0')}`);
+
+            if (secondsLeft <= 0) {
+                clearInterval(countdownInterval);
+            }
+        }, 1000);
+
+        inactivityTimer = setTimeout(() => {
+            isAuthenticated = false;
+            clearInterval(countdownInterval);
+            console.log('🔒 Session expired — teacher disconnected');
+        }, SESSION_DURATION);
+    }
+
+    // Reset timer on any interaction
+    ['touchstart', 'click', 'mousemove', 'keydown'].forEach(evt => {
+        document.addEventListener(evt, () => {
+            if (isAuthenticated) resetInactivityTimer();
+        });
+    });
+
+
+
+
     function openAuthModal() {
+        if (isAuthenticated) {
+            // Already logged in → skip auth, open schedule directly
+            new bootstrap.Modal(document.getElementById('eventModal')).show();
+            return;
+        }
+        // Not logged in → show auth modal
         document.getElementById('auth-username').value = '';
         document.getElementById('auth-password').value = '';
         document.getElementById('auth-error').style.display = 'none';
@@ -917,15 +963,20 @@
         bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
         stopCamera();
 
-        // Show success alert, then open schedule modal after confirmation
+        isAuthenticated = true;
+        resetInactivityTimer(); // start the 5-min countdown
+
         setTimeout(() => {
             Swal.fire({
                 icon: 'success',
                 title: 'Authentication Successful',
-                text: '✅ Welcome! You can now add a schedule.',
+                html: `
+                    ✅ Welcome! You can now add a schedule.<br><br>
+                    <small style="color: #888;">⏳ You will be automatically disconnected after <strong>5 minutes</strong> of inactivity.</small>
+                `,
                 confirmButtonText: 'Continue',
                 confirmButtonColor: '#4D44B5',
-                timer: 3000,
+                timer: 6000,
                 timerProgressBar: true,
             }).then(() => {
                 new bootstrap.Modal(document.getElementById('eventModal')).show();

@@ -41,7 +41,6 @@ def scan_all_devices(subnet: str = None) -> list:
             logger.info(f"Found {len(devices)} device(s) on network.")
             for d in devices:
                 logger.info(f"  IP: {d['ip']} — MAC: {d['mac']}")
-                logger.info("found  ip adress ")
         else:
             logger.warning("No devices found on network.")
 

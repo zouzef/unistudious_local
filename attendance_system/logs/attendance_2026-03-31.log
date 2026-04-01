@@ -4875,3 +4875,279 @@
 2026-03-31 16:01:27  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
 2026-03-31 16:01:27  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
 2026-03-31 16:01:27  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:01:37  INFO      [main.py:37]  Checking sessions at 16:01:37
+2026-03-31 16:01:37  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:01:37  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:01:37  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:01:47  INFO      [main.py:37]  Checking sessions at 16:01:47
+2026-03-31 16:01:47  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:01:47  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:01:47  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:01:57  INFO      [main.py:37]  Checking sessions at 16:01:57
+2026-03-31 16:01:57  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:01:57  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:01:57  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:02:07  INFO      [main.py:37]  Checking sessions at 16:02:07
+2026-03-31 16:02:07  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:02:07  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:02:07  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:02:17  INFO      [main.py:37]  Checking sessions at 16:02:17
+2026-03-31 16:02:17  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:02:17  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:02:17  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:02:27  INFO      [main.py:37]  Checking sessions at 16:02:27
+2026-03-31 16:02:27  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:02:27  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:02:27  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:02:37  INFO      [main.py:37]  Checking sessions at 16:02:37
+2026-03-31 16:02:37  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:02:37  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:02:37  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:02:47  INFO      [main.py:37]  Checking sessions at 16:02:47
+2026-03-31 16:02:47  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:02:47  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:02:47  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:02:57  INFO      [main.py:37]  Checking sessions at 16:02:57
+2026-03-31 16:02:57  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:02:57  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:02:57  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:03:07  INFO      [main.py:37]  Checking sessions at 16:03:07
+2026-03-31 16:03:07  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:03:07  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:03:07  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:03:17  INFO      [main.py:37]  Checking sessions at 16:03:17
+2026-03-31 16:03:17  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:03:17  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:03:17  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:03:27  INFO      [main.py:37]  Checking sessions at 16:03:27
+2026-03-31 16:03:27  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:03:27  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:03:27  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:03:37  INFO      [main.py:37]  Checking sessions at 16:03:37
+2026-03-31 16:03:37  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:03:37  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:03:37  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:03:47  INFO      [main.py:37]  Checking sessions at 16:03:47
+2026-03-31 16:03:47  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:03:47  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:03:47  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:03:57  INFO      [main.py:37]  Checking sessions at 16:03:57
+2026-03-31 16:03:57  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:03:58  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:03:58  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:04:08  INFO      [main.py:37]  Checking sessions at 16:04:08
+2026-03-31 16:04:08  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:04:08  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:04:08  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:04:18  INFO      [main.py:37]  Checking sessions at 16:04:18
+2026-03-31 16:04:18  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:04:18  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:04:18  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:04:28  INFO      [main.py:37]  Checking sessions at 16:04:28
+2026-03-31 16:04:28  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:04:28  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:04:28  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:04:38  INFO      [main.py:37]  Checking sessions at 16:04:38
+2026-03-31 16:04:38  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:04:38  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:04:38  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:04:48  INFO      [main.py:37]  Checking sessions at 16:04:48
+2026-03-31 16:04:48  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:04:48  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:04:48  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:04:58  INFO      [main.py:37]  Checking sessions at 16:04:58
+2026-03-31 16:04:58  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:04:58  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:04:58  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:05:08  INFO      [main.py:37]  Checking sessions at 16:05:08
+2026-03-31 16:05:08  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:05:08  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:05:08  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:05:18  INFO      [main.py:37]  Checking sessions at 16:05:18
+2026-03-31 16:05:18  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:05:18  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:05:18  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:05:28  INFO      [main.py:37]  Checking sessions at 16:05:28
+2026-03-31 16:05:28  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:05:28  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:05:28  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:05:38  INFO      [main.py:37]  Checking sessions at 16:05:38
+2026-03-31 16:05:38  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:05:38  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:05:38  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:05:48  INFO      [main.py:37]  Checking sessions at 16:05:48
+2026-03-31 16:05:48  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:05:48  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:05:48  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:05:58  INFO      [main.py:37]  Checking sessions at 16:05:58
+2026-03-31 16:05:58  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:05:58  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:05:58  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:06:08  INFO      [main.py:37]  Checking sessions at 16:06:08
+2026-03-31 16:06:08  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:06:08  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:06:08  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:06:18  INFO      [main.py:37]  Checking sessions at 16:06:18
+2026-03-31 16:06:18  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:06:18  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:06:18  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:06:28  INFO      [main.py:37]  Checking sessions at 16:06:28
+2026-03-31 16:06:28  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:06:28  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:06:28  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:06:38  INFO      [main.py:37]  Checking sessions at 16:06:38
+2026-03-31 16:06:38  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:06:38  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:06:38  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:06:48  INFO      [main.py:37]  Checking sessions at 16:06:48
+2026-03-31 16:06:48  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:06:48  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:06:48  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:06:58  INFO      [main.py:37]  Checking sessions at 16:06:58
+2026-03-31 16:06:58  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:06:58  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:06:58  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:07:08  INFO      [main.py:37]  Checking sessions at 16:07:08
+2026-03-31 16:07:08  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:07:08  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:07:08  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:07:18  INFO      [main.py:37]  Checking sessions at 16:07:18
+2026-03-31 16:07:18  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:07:19  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:07:19  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:07:29  INFO      [main.py:37]  Checking sessions at 16:07:29
+2026-03-31 16:07:29  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:07:29  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:07:29  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:07:39  INFO      [main.py:37]  Checking sessions at 16:07:39
+2026-03-31 16:07:39  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:07:39  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:07:39  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:07:49  INFO      [main.py:37]  Checking sessions at 16:07:49
+2026-03-31 16:07:49  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:07:49  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:07:49  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:07:59  INFO      [main.py:37]  Checking sessions at 16:07:59
+2026-03-31 16:07:59  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:07:59  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:07:59  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:08:09  INFO      [main.py:37]  Checking sessions at 16:08:09
+2026-03-31 16:08:09  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:08:09  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:08:09  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:08:19  INFO      [main.py:37]  Checking sessions at 16:08:19
+2026-03-31 16:08:19  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:08:19  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:08:19  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:08:29  INFO      [main.py:37]  Checking sessions at 16:08:29
+2026-03-31 16:08:29  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:08:29  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:08:29  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:08:39  INFO      [main.py:37]  Checking sessions at 16:08:39
+2026-03-31 16:08:39  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:08:39  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:08:39  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:08:49  INFO      [main.py:37]  Checking sessions at 16:08:49
+2026-03-31 16:08:49  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:08:49  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:08:49  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:08:59  INFO      [main.py:37]  Checking sessions at 16:08:59
+2026-03-31 16:08:59  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:08:59  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:08:59  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:09:09  INFO      [main.py:37]  Checking sessions at 16:09:09
+2026-03-31 16:09:09  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:09:09  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:09:09  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:09:19  INFO      [main.py:37]  Checking sessions at 16:09:19
+2026-03-31 16:09:19  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:09:19  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:09:19  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:09:29  INFO      [main.py:37]  Checking sessions at 16:09:29
+2026-03-31 16:09:29  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:09:29  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:09:29  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:09:39  INFO      [main.py:37]  Checking sessions at 16:09:39
+2026-03-31 16:09:39  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:09:39  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:09:39  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:09:49  INFO      [main.py:37]  Checking sessions at 16:09:49
+2026-03-31 16:09:49  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:09:49  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:09:49  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:09:59  INFO      [main.py:37]  Checking sessions at 16:09:59
+2026-03-31 16:09:59  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:09:59  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-03-31 16:09:59  INFO      [main.py:48]  Skipping session 1965 (already ended)
+2026-03-31 16:10:09  INFO      [main.py:37]  Checking sessions at 16:10:09
+2026-03-31 16:10:09  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:10:09  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-03-31 16:10:09  INFO      [main.py:42]  No session found for today.
+2026-03-31 16:10:19  INFO      [main.py:37]  Checking sessions at 16:10:19
+2026-03-31 16:10:19  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:10:19  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-03-31 16:10:19  INFO      [main.py:42]  No session found for today.
+2026-03-31 16:10:29  INFO      [main.py:37]  Checking sessions at 16:10:29
+2026-03-31 16:10:29  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:10:29  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-03-31 16:10:29  INFO      [main.py:42]  No session found for today.
+2026-03-31 16:10:39  INFO      [main.py:37]  Checking sessions at 16:10:39
+2026-03-31 16:10:39  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:10:39  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-03-31 16:10:39  INFO      [main.py:42]  No session found for today.
+2026-03-31 16:10:49  INFO      [main.py:37]  Checking sessions at 16:10:49
+2026-03-31 16:10:49  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:10:50  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-03-31 16:10:50  INFO      [main.py:42]  No session found for today.
+2026-03-31 16:11:00  INFO      [main.py:37]  Checking sessions at 16:11:00
+2026-03-31 16:11:00  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:11:00  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-03-31 16:11:00  INFO      [main.py:42]  No session found for today.
+2026-03-31 16:11:10  INFO      [main.py:37]  Checking sessions at 16:11:10
+2026-03-31 16:11:10  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:11:10  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-03-31 16:11:10  INFO      [main.py:42]  No session found for today.
+2026-03-31 16:11:20  INFO      [main.py:37]  Checking sessions at 16:11:20
+2026-03-31 16:11:20  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:11:20  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-03-31 16:11:20  INFO      [main.py:42]  No session found for today.
+2026-03-31 16:11:30  INFO      [main.py:37]  Checking sessions at 16:11:30
+2026-03-31 16:11:30  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:11:30  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-03-31 16:11:30  INFO      [main.py:42]  No session found for today.
+2026-03-31 16:11:40  INFO      [main.py:37]  Checking sessions at 16:11:40
+2026-03-31 16:11:40  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:11:40  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-03-31 16:11:40  INFO      [main.py:42]  No session found for today.
+2026-03-31 16:11:50  INFO      [main.py:37]  Checking sessions at 16:11:50
+2026-03-31 16:11:50  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:11:50  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-03-31 16:11:50  INFO      [main.py:42]  No session found for today.
+2026-03-31 16:12:00  INFO      [main.py:37]  Checking sessions at 16:12:00
+2026-03-31 16:12:00  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:12:00  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-03-31 16:12:00  INFO      [main.py:42]  No session found for today.
+2026-03-31 16:12:10  INFO      [main.py:37]  Checking sessions at 16:12:10
+2026-03-31 16:12:10  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:12:10  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-03-31 16:12:10  INFO      [main.py:42]  No session found for today.
+2026-03-31 16:12:20  INFO      [main.py:37]  Checking sessions at 16:12:20
+2026-03-31 16:12:20  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:12:20  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-03-31 16:12:20  INFO      [main.py:42]  No session found for today.
+2026-03-31 16:12:30  INFO      [main.py:37]  Checking sessions at 16:12:30
+2026-03-31 16:12:30  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:12:30  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-03-31 16:12:30  INFO      [main.py:42]  No session found for today.
+2026-03-31 16:12:40  INFO      [main.py:37]  Checking sessions at 16:12:40
+2026-03-31 16:12:40  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:12:40  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-03-31 16:12:40  INFO      [main.py:42]  No session found for today.
+2026-03-31 16:12:50  INFO      [main.py:37]  Checking sessions at 16:12:50
+2026-03-31 16:12:50  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:12:50  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-03-31 16:12:50  INFO      [main.py:42]  No session found for today.
+2026-03-31 16:13:00  INFO      [main.py:37]  Checking sessions at 16:13:00
+2026-03-31 16:13:00  DEBUG     [client.py:31]  GET https://192.168.1.246:5004/scl/get-all-calender
+2026-03-31 16:13:00  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-03-31 16:13:00  INFO      [main.py:42]  No session found for today.
