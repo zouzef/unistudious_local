@@ -8,7 +8,7 @@ from services.calender_service import (
 	fetch_teacher,
 	request_calander,
 	create_calander,
-
+	fetch_all_teacher,
 	fetch_calander_request
 
 )
@@ -79,6 +79,19 @@ def get_Teacher_Session(session_id):
 	except Exception as e:
 		return jsonify({"Message":f"Error: {str(e)}"}),500
 
+
+@calendar_bp.route('/get-all-teacher',methods=['GET'])
+def get_all_teacher():
+	try:
+		teachers_data = fetch_all_teacher()
+		if teachers_data:
+			return jsonify(teachers_data), 200
+		else:
+			return jsonify({"Message": "No data found or Error in parms"}), 404
+	except Exception as e:
+		return jsonify({
+			"Message":"Error coming from get_all_teacher"
+		}),500
 
 @calendar_bp.route('/create-calander_request/<int:session_id>', methods=['POST'])
 def create_calander_request(session_id):
@@ -181,7 +194,6 @@ def create_calander_tablet():
                 "Status": "Error"
             }), 400
 
-		# List of required fields
 		# List of required fields
 		required_fields = [
 			'session_id',

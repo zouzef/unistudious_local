@@ -207,12 +207,41 @@ def get_teacher_session(session_id):
         """
 
 		teachers = Database.execute_query(query, (session_id,))
-
+		print("result: ",teachers)
 		return jsonify({"Message": "Success", "data": teachers}), 200
 
 	except Exception as e:
 		print(f"Error: {e} coming from get_teacher")
 		return jsonify({"Message": f"Error {e} coming from server"}), 500
+
+
+@users_bp.route('/get_all_teachers',methods=['GET'])
+def get_all_teachers():
+	try:
+		query = """
+		    SELECT *
+		    FROM user u
+		    WHERE u.enabled = 1 AND
+		    (JSON_CONTAINS(u.roles, '"ROLE_TEACHER"') OR JSON_CONTAINS(u.roles, '"ROLE_ADMIN"')) AND
+		    
+		"""
+		result = Database.execute_query(query,fetch=True)
+		if result :
+			return jsonify({
+				"Message":"Success",
+				"Data":result
+			}),200
+		else:
+			return jsonify({
+				"Message":"There is no Teacher"
+			}),404
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e}",
+
+		}),500
+
 
 
 # ========================================

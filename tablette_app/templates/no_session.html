@@ -216,112 +216,360 @@
      MODAL: ADD / EDIT SCHEDULE
 ══════════════════════════════════════════ -->
 <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="eventModalLabel" data-key="modalTitle">Add New Schedule</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content"
+             style="border-radius: 16px; overflow: hidden; border: none; box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
+
+            <!-- ── Purple Header Banner ── -->
+            <div style="background: #4D44B5; padding: 24px; text-align: center; position: relative;">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        style="position: absolute; top: 14px; right: 16px;"></button>
+                <div style="width: 52px; height: 52px; background: rgba(255,255,255,0.2); border-radius: 50%;
+                            display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2"/>
+                        <path d="M16 2v4M8 2v4M3 10h18"/>
+                    </svg>
+                </div>
+                <h4 id="eventModalLabel" data-key="modalTitle"
+                    style="color: white; font-weight: 700; margin: 0; font-size: 18px;">Add New Schedule</h4>
+                <p style="color: rgba(255,255,255,0.7); margin: 4px 0 0; font-size: 12px;">
+                    Fill in the details below to create a calendar
+                </p>
             </div>
-            <div class="modal-body">
+
+            <!-- ── Modal Body ── -->
+            <div class="modal-body" style="padding: 24px; background: #f8f9fc;">
                 <form id="eventForm">
-                    <div class="mb-3">
-                        <label for="session" class='form-label' data-key="labelSession">Session</label>
-                        <select class="form-control" id="session">
-                            <option value="" selected>SELECT SESSION</option>
-                        </select>
+
+                    <!-- Row 1: Session + Group -->
+                    <div class="row mb-3">
+                        <div class="col-12 col-md-6 mb-3 mb-md-0">
+                            <label for="session" class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;"
+                                   data-key="labelSession">Session</label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
+                                         stroke-width="2">
+                                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                                    </svg>
+                                </span>
+                                <select class="form-control" id="session"
+                                        style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee;
+                                               font-size: 13px; background: white;"
+                                        onfocus="this.style.borderColor='#4D44B5'"
+                                        onblur="this.style.borderColor='#eee'">
+                                    <option value="" selected>SELECT SESSION</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="group_id" class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;"
+                                   data-key="labelGroup">Group</label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
+                                         stroke-width="2">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="9" cy="7" r="4"/>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                    </svg>
+                                </span>
+                                <select class="form-control" id="group_id"
+                                        style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee;
+                                               font-size: 13px; background: white;"
+                                        onfocus="this.style.borderColor='#4D44B5'"
+                                        onblur="this.style.borderColor='#eee'">
+                                    <option value="" selected>SELECT GROUP</option>
+                                </select>
+                            </div>
+                            <!-- Create Special Group Button -->
+                            <button type="button" onclick="openSpecialGroupModal()"
+                                    style="margin-top: 6px; background: none; border: 2px dashed #4D44B5;
+                                           color: #4D44B5; border-radius: 10px; padding: 5px 14px;
+                                           font-size: 12px; font-weight: 600; cursor: pointer; width: 100%;
+                                           transition: background 0.2s;"
+                                    onmouseover="this.style.background='#f0eeff'"
+                                    onmouseout="this.style.background='none'">
+                                ＋ Create Special Group
+                            </button>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="group_id" class="form-label" data-key="labelGroup">Group</label>
-                        <select class="form-control" id="group_id">
-                            <option value="" selected>SELECT GROUP</option>
-                        </select>
+
+                    <!-- Row 2: Type + Start Date -->
+                    <div class="row mb-3" id="typeSessionContainer">
+                        <div class="col-12 col-md-6 mb-3 mb-md-0">
+                            <label for="typeSessionSelect" class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;"
+                                   data-key="labelType">Type</label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
+                                         stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="M12 8v4M12 16h.01"/>
+                                    </svg>
+                                </span>
+                                <select class="form-control" id="typeSessionSelect"
+                                        style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee;
+                                               font-size: 13px; background: white;"
+                                        onfocus="this.style.borderColor='#4D44B5'"
+                                        onblur="this.style.borderColor='#eee'">
+                                    <option value="" selected>Select Type</option>
+                                    <option value="P">Presence (P)</option>
+                                    <option value="O">Online (O)</option>
+                                </select>
+                            </div>
+                            <div id="typeSessionSelectError" class="alert alert-danger d-none mt-2" role="alert"></div>
+                        </div>
+                        <div class="col-12 col-md-6" id="startDateContainer">
+                            <label for="eventStartDate" class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;"
+                                   data-key="labelStartDate">Start Date</label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
+                                         stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2"/>
+                                        <path d="M16 2v4M8 2v4M3 10h18"/>
+                                    </svg>
+                                </span>
+                                <input type="date" class="form-control" id="eventStartDate" required
+                                       style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee;
+                                              font-size: 13px; background: white;"
+                                       onfocus="this.style.borderColor='#4D44B5'"
+                                       onblur="this.style.borderColor='#eee'">
+                            </div>
+                            <div id="eventStartDateError" class="alert alert-danger d-none mt-2" role="alert"></div>
+                        </div>
                     </div>
-                    <div class="mb-3" id="typeSessionContainer">
-                        <label for="typeSessionSelect" class="form-label" data-key="labelType">Type</label>
-                        <select class="form-control" id="typeSessionSelect">
-                            <option value="" selected>Select Type</option>
-                            <option value="P">Presence (P)</option>
-                            <option value="O">Online (O)</option>
-                        </select>
-                        <div id="typeSessionSelectError" class="alert alert-danger d-none mt-2" role="alert"></div>
+
+                    <!-- Row 3: Room + Subject -->
+                    <div class="row mb-3">
+                        <div class="col-12 col-md-6 mb-3 mb-md-0">
+                            <label for="eventRooms" class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;"
+                                   data-key="labelRoom">Room</label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
+                                         stroke-width="2">
+                                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                        <polyline points="9 22 9 12 15 12 15 22"/>
+                                    </svg>
+                                </span>
+                                <select class="form-control" id="eventRooms" required
+                                        style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee;
+                                               font-size: 13px; background: white;"
+                                        onfocus="this.style.borderColor='#4D44B5'"
+                                        onblur="this.style.borderColor='#eee'">
+                                    <option value="" selected disabled>Select a Room</option>
+                                </select>
+                            </div>
+                            <div id="eventRoomError" class="alert alert-danger d-none mt-2" role="alert"></div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="eventSubject" class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;"
+                                   data-key="labelSubject">Teacher & Subject</label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
+                                         stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="12" cy="7" r="4"/>
+                                    </svg>
+                                </span>
+                                <select class="form-control" id="eventSubject" required
+                                        style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee;
+                                               font-size: 13px; background: white;"
+                                        onfocus="this.style.borderColor='#4D44B5'"
+                                        onblur="this.style.borderColor='#eee'">
+                                    <option value="" selected disabled>Select a Subject and Teacher</option>
+                                </select>
+                            </div>
+                            <div id="eventSubjectError" class="alert alert-danger d-none mt-2" role="alert"></div>
+                        </div>
                     </div>
-                    <div class="mb-3" id="startDateContainer">
-                        <label for="eventStartDate" class="form-label" data-key="labelStartDate">Start Date</label>
-                        <input type="date" class="form-control" id="eventStartDate" required>
-                        <div id="eventStartDateError" class="alert alert-danger d-none mt-2" role="alert"></div>
+
+                    <!-- Row 4: Completion Tag + Duplicate -->
+                    <div class="row mb-3">
+                        <div class="col-12 col-md-6 mb-3 mb-md-0">
+                            <label for="eventCompletionTagCalander" class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;"
+                                   data-key="labelCompletion">Completion Tag</label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 14px; pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
+                                         stroke-width="2">
+                                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                                        <line x1="7" y1="7" x2="7.01" y2="7"/>
+                                    </svg>
+                                </span>
+                                <select class="form-control" id="eventCompletionTagCalander" multiple
+                                        style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee;
+                                               font-size: 13px; background: white; min-height: 80px;"
+                                        onfocus="this.style.borderColor='#4D44B5'"
+                                        onblur="this.style.borderColor='#eee'">
+                                    <option value="1">Bronze</option>
+                                    <option value="2">Silver</option>
+                                    <option value="3">Gold</option>
+                                    <option value="4">Platinum</option>
+                                    <option value="5">Diamond</option>
+                                    <option value="6">Master</option>
+                                    <option value="7">Grand Master</option>
+                                    <option value="8">Legendary</option>
+                                    <option value="10">fonction 1</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="eventDuplicate" class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;"
+                                   data-key="labelDuplicate">Duplicate</label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
+                                         stroke-width="2">
+                                        <rect x="9" y="9" width="13" height="13" rx="2"/>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                    </svg>
+                                </span>
+                                <select class="form-control" id="eventDuplicate"
+                                        style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee;
+                                               font-size: 13px; background: white;"
+                                        onfocus="this.style.borderColor='#4D44B5'"
+                                        onblur="this.style.borderColor='#eee'">
+                                    <option value="" selected disabled>Select an Option</option>
+                                    <option value="none">Not Duplicate</option>
+                                    <option value="daily">Per Day</option>
+                                    <option value="weekly">Per Week</option>
+                                    <option value="biweekly">Every 2 Weeks</option>
+                                </select>
+                            </div>
+                            <div id="eventDuplicateError" class="alert alert-danger d-none mt-2" role="alert"></div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="eventRooms" class="form-label" data-key="labelRoom">Room</label>
-                        <select class="form-control" id="eventRooms" required>
-                            <option value="" selected disabled>Select a Room</option>
-                        </select>
-                        <div id="eventRoomError" class="alert alert-danger d-none mt-2" role="alert"></div>
+
+                    <!-- Row 5: Start Time + End Time (hidden by default) -->
+                    <div class="row mb-3">
+                        <div class="col-12 col-md-6 mb-3 mb-md-0 d-none" id="startTimeFields">
+                            <label for="eventStartTime" class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;"
+                                   data-key="labelStartTime">Start Time</label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
+                                         stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="M12 6v6l4 2"/>
+                                    </svg>
+                                </span>
+                                <input type="time" class="form-control" id="eventStartTime"
+                                       style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee;
+                                              font-size: 13px; background: white;"
+                                       onfocus="this.style.borderColor='#4D44B5'"
+                                       onblur="this.style.borderColor='#eee'">
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 d-none" id="endTimeFields">
+                            <label for="eventEndTime" class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;"
+                                   data-key="labelEndTime">End Time</label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
+                                         stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="M12 6v6l4 2"/>
+                                    </svg>
+                                </span>
+                                <input type="time" class="form-control" id="eventEndTime"
+                                       style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee;
+                                              font-size: 13px; background: white;"
+                                       onfocus="this.style.borderColor='#4D44B5'"
+                                       onblur="this.style.borderColor='#eee'">
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="eventSubject" class="form-label" data-key="labelSubject">Teacher And Subject</label>
-                        <select class="form-control" id="eventSubject" required>
-                            <option value="" selected disabled>Select a Subject and Teacher</option>
-                        </select>
-                        <div id="eventSubjectError" class="alert alert-danger d-none mt-2" role="alert"></div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="eventCompletionTagCalander" class="form-label" data-key="labelCompletion">Completion
-                            Tag</label>
-                        <select class="form-control" id="eventCompletionTagCalander" multiple>
-                            <option value="1">Bronze</option>
-                            <option value="2">Silver</option>
-                            <option value="3">Gold</option>
-                            <option value="4">Platinum</option>
-                            <option value="5">Diamond</option>
-                            <option value="6">Master</option>
-                            <option value="7">Grand Master</option>
-                            <option value="8">Legendary</option>
-                            <option value="10">fonction 1</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="eventDuplicate" class="form-label" data-key="labelDuplicate">Duplicate</label>
-                        <select class="form-control" id="eventDuplicate">
-                            <option value="" selected disabled>Select an Option</option>
-                            <option value="none">Not Duplicate</option>
-                            <option value="daily">Per Day</option>
-                            <option value="weekly">Per Week</option>
-                            <option value="biweekly">Every 2 Weeks</option>
-                        </select>
-                        <div id="eventDuplicateError" class="alert alert-danger d-none mt-2" role="alert"></div>
-                    </div>
-                    <div class="mb-3 d-none" id="startTimeFields">
-                        <label for="eventStartTime" class="form-label" data-key="labelStartTime">Start Time</label>
-                        <input type="time" class="form-control" id="eventStartTime">
-                    </div>
-                    <div class="mb-3 d-none" id="endTimeFields">
-                        <label for="eventEndTime" class="form-label" data-key="labelEndTime">End Time</label>
-                        <input type="time" class="form-control" id="eventEndTime">
-                    </div>
+
+                    <!-- End Date (hidden by default) -->
                     <div class="mb-3 d-none" id="eventEndFields">
-                        <label for="eventEndDate" class="form-label" data-key="labelEndDate">End Date (for recurring
-                            events)</label>
-                        <input type="date" class="form-control" id="eventEndDate">
+                        <label for="eventEndDate" class="form-label"
+                               style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;"
+                               data-key="labelEndDate">End Date (for recurring events)</label>
+                        <div style="position: relative;">
+                            <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
+                                     stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2"/>
+                                    <path d="M16 2v4M8 2v4M3 10h18"/>
+                                </svg>
+                            </span>
+                            <input type="date" class="form-control" id="eventEndDate"
+                                   style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee;
+                                          font-size: 13px; background: white;"
+                                   onfocus="this.style.borderColor='#4D44B5'"
+                                   onblur="this.style.borderColor='#eee'">
+                        </div>
                     </div>
+
+                    <!-- Description -->
                     <div class="mb-3">
-                        <label for="eventDescription" class="form-label" data-key="labelDescription">Description</label>
-                        <textarea class="form-control" id="eventDescription" name="eventDescription" rows="3"
-                                  placeholder="Enter event description"></textarea>
+                        <label for="eventDescription" class="form-label"
+                               style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;"
+                               data-key="labelDescription">Description</label>
+                        <div style="position: relative;">
+                            <span style="position: absolute; left: 11px; top: 13px; pointer-events: none;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
+                                     stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <line x1="16" y1="13" x2="8" y2="13"/>
+                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                    <polyline points="10 9 9 9 8 9"/>
+                                </svg>
+                            </span>
+                            <textarea class="form-control" id="eventDescription" name="eventDescription" rows="3"
+                                      placeholder="Enter event description"
+                                      style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee;
+                                             font-size: 13px; background: white; resize: vertical;"
+                                      onfocus="this.style.borderColor='#4D44B5'"
+                                      onblur="this.style.borderColor='#eee'"></textarea>
+                        </div>
                     </div>
+
+                    <!-- Hidden fields — untouched -->
                     <input type="hidden" id="eventGroupId" value="75">
                     <input type="hidden" id="eventGroupCapacity" value="25">
                     <input type="hidden" id="eventSessionId" value="12">
                     <input type="hidden" id="eventAccountId" value="3">
                     <input type="hidden" id="eventLocalId" value="8">
+
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-key="btnCancel">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveEventButton" data-key="btnSave">Save</button>
-                <button type="button" class="btn btn-danger" id="saveAndDisconnectButton" data-key="btnSaveDisconnect">
-                    Save & Disconnect
+
+            <!-- ── Footer ── -->
+            <div class="modal-footer" style="border: none; padding: 16px 24px; background: #f8f9fc; gap: 10px;">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-key="btnCancel"
+                        style="border-radius: 10px; padding: 10px 20px; font-size: 13px;">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-primary" id="saveEventButton" data-key="btnSave"
+                        style="border-radius: 10px; background: #4D44B5; border-color: #4D44B5;
+                               padding: 10px 24px; font-size: 13px; font-weight: 600;">
+                    💾 Save
+                </button>
+                <button type="button" class="btn btn-danger" id="saveAndDisconnectButton" data-key="btnSaveDisconnect"
+                        style="border-radius: 10px; padding: 10px 24px; font-size: 13px; font-weight: 600;">
+                    🔒 Save & Disconnect
                 </button>
             </div>
+
         </div>
     </div>
 </div>
@@ -570,6 +818,354 @@
 
 
 <!-- ══════════════════════════════════════════
+     MODAL: CREATE SPECIAL GROUP
+══════════════════════════════════════════ -->
+<div class="modal fade" id="specialGroupModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content"
+             style="border-radius: 16px; overflow: hidden; border: none; box-shadow: 0 20px 60px rgba(0,0,0,0.15);">
+
+            <!-- ── Purple Header Banner ── -->
+            <div style="background: #4D44B5; padding: 24px; text-align: center; position: relative;">
+                <button type="button" class="btn-close btn-close-white" id="specialGroupCloseBtn"
+                        style="position: absolute; top: 14px; right: 16px;"></button>
+                <div style="width: 52px; height: 52px; background: rgba(255,255,255,0.2); border-radius: 50%;
+                            display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <h4 style="color: white; font-weight: 700; margin: 0; font-size: 18px;">Create Special Group</h4>
+                <p style="color: rgba(255,255,255,0.7); margin: 4px 0 0; font-size: 12px;">
+                    Temporary group for specefic session only
+                </p>
+            </div>
+
+            <!-- ── Modal Body ── -->
+            <div class="modal-body" style="padding: 24px; background: #f8f9fc;">
+                <form id="specialGroupForm">
+
+                    <!-- Row 1: Group Name + Capacity -->
+                    <div class="row mb-3">
+                        <div class="col-12 col-md-6 mb-3 mb-md-0">
+                            <label class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">
+                                Group Name <span style="color: #e74c3c;">*</span>
+                            </label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5" stroke-width="2">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="9" cy="7" r="4"/>
+                                    </svg>
+                                </span>
+                                <input type="text" class="form-control" id="sg-name"
+                                       placeholder="e.g. Special Session — March 2025"
+                                       style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white;"
+                                       onfocus="this.style.borderColor='#4D44B5'"
+                                       onblur="this.style.borderColor='#eee'">
+                            </div>
+                            <div id="sg-name-error" class="alert alert-danger d-none mt-2" role="alert"></div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">
+                                Capacity (max students)
+                            </label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5" stroke-width="2">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="9" cy="7" r="4"/>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                    </svg>
+                                </span>
+                                <input type="number" class="form-control" id="sg-capacity" min="1"
+                                       placeholder="e.g. 30"
+                                       style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white;"
+                                       onfocus="this.style.borderColor='#4D44B5'"
+                                       onblur="this.style.borderColor='#eee'">
+                            </div>
+                            <div id="sg-capacity-error" class="alert alert-danger d-none mt-2" role="alert"></div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Session + Access Type -->
+                    <div class="row mb-3">
+                        <div class="col-12 col-md-6 mb-3 mb-md-0">
+                            <label class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">
+                                Session <span style="color: #e74c3c;">*</span>
+                            </label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2"/>
+                                        <path d="M16 2v4M8 2v4M3 10h18"/>
+                                    </svg>
+                                </span>
+                                <select class="form-control" id="sg-session"
+                                        style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white;"
+                                        onfocus="this.style.borderColor='#4D44B5'"
+                                        onblur="this.style.borderColor='#eee'">
+                                    <option value="" selected disabled>Select a Session</option>
+                                    <option>session 1</option>
+                                </select>
+                            </div>
+                            <div id="sg-session-error" class="alert alert-danger d-none mt-2" role="alert"></div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">
+                                Access Type <span style="color: #e74c3c;">*</span>
+                            </label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5" stroke-width="2">
+                                        <rect x="3" y="11" width="18" height="11" rx="2"/>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                    </svg>
+                                </span>
+                                <select class="form-control" id="sg-access-type"
+                                        style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white;"
+                                        onfocus="this.style.borderColor='#4D44B5'"
+                                        onblur="this.style.borderColor='#eee'">
+                                    <option value="" selected disabled>Select Access Type</option>
+                                    <option value="request">Request to Join</option>
+                                    <option value="direct">Directly Join</option>
+                                </select>
+                            </div>
+                            <div id="sg-access-error" class="alert alert-danger d-none mt-2" role="alert"></div>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Type + Start Date -->
+                    <div class="row mb-3">
+                        <div class="col-12 col-md-6 mb-3 mb-md-0">
+                            <label class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">
+                                Type <span style="color: #e74c3c;">*</span>
+                            </label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="M12 8v4M12 16h.01"/>
+                                    </svg>
+                                </span>
+                                <select class="form-control" id="sg-type"
+                                        style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white;"
+                                        onfocus="this.style.borderColor='#4D44B5'"
+                                        onblur="this.style.borderColor='#eee'">
+                                    <option value="" selected disabled>Select Type</option>
+                                    <option value="P">Presence (P)</option>
+                                    <option value="O">Online (O)</option>
+                                </select>
+                            </div>
+                            <div id="sg-type-error" class="alert alert-danger d-none mt-2" role="alert"></div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">
+                                Start Date
+                            </label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2"/>
+                                        <path d="M16 2v4M8 2v4M3 10h18"/>
+                                    </svg>
+                                </span>
+                                <input type="date" class="form-control" id="sg-end-date"
+                                       style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white;"
+                                       onfocus="this.style.borderColor='#4D44B5'"
+                                       onblur="this.style.borderColor='#eee'">
+                            </div>
+                            <div id="sg-startdate-error" class="alert alert-danger d-none mt-2" role="alert"></div>
+                            <div id="sg-date-error" class="alert alert-danger d-none mt-2" role="alert"></div>
+                        </div>
+                    </div>
+
+                    <!-- Row 4: Start Time + End Time -->
+                    <div class="row mb-3">
+                        <div class="col-12 col-md-6 mb-3 mb-md-0">
+                            <label class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">
+                                Start Time
+                            </label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
+                                         stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="M12 6v6l4 2"/>
+                                    </svg>
+                                </span>
+                                <input type="time" class="form-control" id="sg-start-time"
+                                       style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white;"
+                                       onfocus="this.style.borderColor='#4D44B5'"
+                                       onblur="this.style.borderColor='#eee'">
+
+                            </div>
+                            <div id="sg-starttime-error" class="alert alert-danger d-none mt-2" role="alert"></div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">
+                                End Time
+                            </label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
+                                         stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="M12 6v6l4 2"/>
+                                    </svg>
+                                </span>
+                                <input type="time" class="form-control" id="sg-end-time"
+                                       style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white;"
+                                       onfocus="this.style.borderColor='#4D44B5'"
+                                       onblur="this.style.borderColor='#eee'">
+
+                            </div>
+                            <div id="sg-endtime-error" class="alert alert-danger d-none mt-2" role="alert"></div>
+                        </div>
+                    </div>
+
+                    <!-- Row 5: Room + Teacher -->
+                    <div class="row mb-3">
+                        <div class="col-12 col-md-6 mb-3 mb-md-0">
+                            <label class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">
+                                Room <span style="color: #e74c3c;">*</span>
+                            </label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
+                                         stroke-width="2">
+                                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                        <polyline points="9 22 9 12 15 12 15 22"/>
+                                    </svg>
+                                </span>
+                                <select class="form-control" id="sg-room"
+                                        style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white;"
+                                        onfocus="this.style.borderColor='#4D44B5'"
+                                        onblur="this.style.borderColor='#eee'">
+                                    <option value="" selected disabled>Select a Room</option>
+                                    <option value="room1">Room 1</option>
+                                </select>
+                            </div>
+                            <div id="sg-room-error" class="alert alert-danger d-none mt-2" role="alert"></div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label"
+                                   style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">
+                                Teacher & Subject <span style="color: #e74c3c;">*</span>
+                            </label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
+                                         stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="12" cy="7" r="4"/>
+                                    </svg>
+                                </span>
+                                <select class="form-control" id="sg-subject"
+                                        style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white;"
+                                        onfocus="this.style.borderColor='#4D44B5'"
+                                        onblur="this.style.borderColor='#eee'">
+                                    <option value="" selected disabled>Select a Subject and Teacher</option>
+                                    <option value="Teeacher">Teacher Subject 1</option>
+                                </select>
+                            </div>
+                            <div id="sg-subject-error" class="alert alert-danger d-none mt-2" role="alert"></div>
+                        </div>
+                    </div>
+
+                    <!-- Row 6: Completion Tag -->
+                    <div class="mb-3">
+                        <label class="form-label"
+                               style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Completion Tag
+                        </label>
+                        <div style="position: relative;">
+                            <span style="position: absolute; left: 11px; top: 13px; pointer-events: none;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
+                                     stroke-width="2">
+                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                                    <line x1="7" y1="7" x2="7.01" y2="7"/>
+                                </svg>
+                            </span>
+                            <select class="form-control" id="sg-completion-tag" multiple
+                                    style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee;
+                                           font-size: 13px; background: white; min-height: 80px;"
+                                    onfocus="this.style.borderColor='#4D44B5'"
+                                    onblur="this.style.borderColor='#eee'">
+                                <option value="1">Bronze</option>
+                                <option value="2">Silver</option>
+                                <option value="3">Gold</option>
+                                <option value="4">Platinum</option>
+                                <option value="5">Diamond</option>
+                                <option value="6">Master</option>
+                                <option value="7">Grand Master</option>
+                                <option value="8">Legendary</option>
+                                <option value="10">fonction 1</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <!-- Description -->
+                    <div class="mb-1">
+                        <label class="form-label"
+                               style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Description / Notes
+                        </label>
+                        <div style="position: relative;">
+                            <span style="position: absolute; left: 11px; top: 13px; pointer-events: none;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
+                                     stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <line x1="16" y1="13" x2="8" y2="13"/>
+                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                </svg>
+                            </span>
+                            <textarea class="form-control" id="sg-description" rows="3"
+                                      placeholder="Any notes about this special group..."
+                                      style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee;
+                                             font-size: 13px; background: white; resize: vertical;"
+                                      onfocus="this.style.borderColor='#4D44B5'"
+                                      onblur="this.style.borderColor='#eee'"></textarea>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- ── Footer ── -->
+            <div class="modal-footer" style="border: none; padding: 16px 24px; background: #f8f9fc; gap: 10px;">
+                <button type="button" class="btn btn-secondary" id="specialGroupBackBtn"
+                        style="border-radius: 10px; padding: 10px 20px; font-size: 13px;">
+                    ← Back to Schedule
+                </button>
+                <button type="button" class="btn btn-primary" id="specialGroupSaveBtn"
+                        style="border-radius: 10px; background: #4D44B5; border-color: #4D44B5;
+                               padding: 10px 28px; font-size: 13px; font-weight: 600;">
+                    ✅ Create Group & Continue
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
      FULLSCREEN QR OVERLAY (calendar page only)
 ══════════════════════════════════════════ -->
 <div id="qr-fullscreen-overlay" style="
@@ -724,510 +1320,7 @@
 <!-- ══════════════════════════════════════════
      PAGE SCRIPTS
 ══════════════════════════════════════════ -->
-<script>
-
-    /* ─────────────────────────────────────────
-       TABLET & ACADEMIE INITIALISATION
-    ───────────────────────────────────────── */
-
-    const tabletId = "{{ tablet_id }}";
-
-    // Resolve tablet ID from URL path
-    const urlParts = window.location.pathname.split('/');
-    const tablet_id = urlParts[urlParts.length - 1];
-
-    // Load academie display name into the page title
-    fetch(`/get-data-account-tablet/${tablet_id}`)
-        .then(response => response.json())
-        .then(result => {
-            if (result.status === "ok" && result.data) {
-                document.getElementById('academie-title').textContent = result.data.name + " - Calendar";
-            }
-        })
-        .catch(error => console.error('Error fetching academie name:', error));
-
-    // Load academie logo image
-    const img = document.getElementById('academie-logo');
-    img.src = `/api/get-academie-image/${tablet_id}`;
-    img.onload  = () => img.style.display = 'block';
-    img.onerror = () => img.style.display = 'none';
-
-
-    /* ─────────────────────────────────────────
-       SESSION POLLING — redirect when active
-    ───────────────────────────────────────── */
-
-    function checkForSession() {
-        fetch(`/tablet/${encodeURIComponent(tabletId)}/check_session`)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Checking for session:', data.status);
-                if (data.status === 'active') {
-                    window.location.href = `/tablet/${encodeURIComponent(tabletId)}`;
-                }
-            })
-            .catch(err => console.error('Error checking session:', err));
-    }
-
-    // Poll immediately then every 10 seconds
-    checkForSession();
-    setInterval(checkForSession, 10000);
-
-
-    /* ─────────────────────────────────────────
-       STATIC QR CODES (Android + iOS)
-    ───────────────────────────────────────── */
-
-
-
-
-    /* ─────────────────────────────────────────
-       SCHEDULE MODAL — duplicate field visibility
-    ───────────────────────────────────────── */
-
-    document.getElementById('eventDuplicate').addEventListener('change', function () {
-        const startTimeFields = document.getElementById('startTimeFields');
-        const endTimeFields   = document.getElementById('endTimeFields');
-        const eventEndFields  = document.getElementById('eventEndFields');
-        const value = this.value;
-
-        if (value === 'none') {
-            // Single event: show time fields, hide end date
-            startTimeFields.classList.remove('d-none');
-            endTimeFields.classList.remove('d-none');
-            eventEndFields.classList.add('d-none');
-        } else if (['daily', 'weekly', 'biweekly'].includes(value)) {
-            // Recurring event: show all fields
-            startTimeFields.classList.remove('d-none');
-            endTimeFields.classList.remove('d-none');
-            eventEndFields.classList.remove('d-none');
-        } else {
-            // No selection: hide everything
-            startTimeFields.classList.add('d-none');
-            endTimeFields.classList.add('d-none');
-            eventEndFields.classList.add('d-none');
-        }
-    });
-
-
-    /* ─────────────────────────────────────────
-       AUTH MODAL — open / tab switching
-    ───────────────────────────────────────── */
-
-    let isAuthenticated = false;
-    let inactivityTimer = null;
-    let countdownInterval = null; // ← add this line
-    const SESSION_DURATION = 5 * 60 * 1000; // 5 minutes
-
-    function resetInactivityTimer() {
-        if (!isAuthenticated) return; // ← add this guard
-
-        clearTimeout(inactivityTimer);
-        clearInterval(countdownInterval);
-
-        let secondsLeft = SESSION_DURATION / 1000;
-        countdownInterval = setInterval(() => {
-            secondsLeft--;
-            const mins = Math.floor(secondsLeft / 60);
-            const secs = secondsLeft % 60;
-            console.log(`⏳ Session expires in: ${mins}:${secs.toString().padStart(2, '0')}`);
-
-            if (secondsLeft <= 0) {
-                clearInterval(countdownInterval);
-            }
-        }, 1000);
-
-        inactivityTimer = setTimeout(() => {
-            isAuthenticated = false;
-            clearInterval(countdownInterval);
-            console.log('🔒 Session expired — teacher disconnected');
-        }, SESSION_DURATION);
-    }
-
-    // Reset timer on any interaction
-    ['touchstart', 'click', 'mousemove', 'keydown'].forEach(evt => {
-        document.addEventListener(evt, () => {
-            if (isAuthenticated) resetInactivityTimer();
-        });
-    });
-
-
-
-
-    function openAuthModal() {
-        if (isAuthenticated) {
-            // Already logged in → skip auth, open schedule directly
-            new bootstrap.Modal(document.getElementById('eventModal')).show();
-            return;
-        }
-        // Not logged in → show auth modal
-        document.getElementById('auth-username').value = '';
-        document.getElementById('auth-password').value = '';
-        document.getElementById('auth-error').style.display = 'none';
-        switchAuthTab('password');
-        new bootstrap.Modal(document.getElementById('authModal')).show();
-    }
-
-    function switchAuthTab(tab) {
-        const passwordTab = document.getElementById('auth-password-tab');
-        const qrTab       = document.getElementById('auth-qr-tab');
-        const tabPassword = document.getElementById('tab-password');
-        const tabQr       = document.getElementById('tab-qr');
-
-        if (tab === 'password') {
-            passwordTab.style.display = 'block';
-            qrTab.style.display       = 'none';
-            tabPassword.style.color        = '#4D44B5';
-            tabPassword.style.borderBottom = '3px solid #4D44B5';
-            tabQr.style.color        = '#aaa';
-            tabQr.style.borderBottom = '3px solid transparent';
-            stopCamera();
-        } else {
-            passwordTab.style.display = 'none';
-            qrTab.style.display       = 'block';
-            tabPassword.style.color        = '#aaa';
-            tabPassword.style.borderBottom = '3px solid transparent';
-            tabQr.style.color        = '#4D44B5';
-            tabQr.style.borderBottom = '3px solid #4D44B5';
-            startCamera();
-        }
-    }
-
-    // Close camera when auth modal is dismissed
-    document.getElementById('authModal')?.addEventListener('hidden.bs.modal', function () {
-        stopCamera();
-    });
-
-
-
-
-    /* ─────────────────────────────────────────
-       AUTH — username/password submission
-    ───────────────────────────────────────── */
-
-    function submitAuth() {
-        const username  = document.getElementById('auth-username').value.trim();
-        const password  = document.getElementById('auth-password').value.trim();
-        const authError = document.getElementById('auth-error');
-
-        if (!username || !password) {
-            authError.style.display = 'block';
-            authError.textContent   = '❌ Please enter username and password';
-            return;
-        }
-
-        authError.style.display = 'none';
-
-        const btn = event.target;
-        btn.textContent = 'Verifying...';
-        btn.disabled    = true;
-
-        fetch('/api/teacher-authentificate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-        })
-        .then(r => r.json().then(data => ({ status: r.status, body: data })))
-        .then(({ status, body }) => {
-            btn.textContent = 'Login & Continue';
-            btn.disabled    = false;
-
-            if (status === 200) {
-                onAuthSuccess();
-            } else {
-                authError.style.display = 'block';
-                authError.textContent   = `❌ ${body.Message || 'Invalid username or password'}`;
-            }
-        })
-        .catch(err => {
-            btn.textContent = 'Login & Continue';
-            btn.disabled    = false;
-            authError.style.display = 'block';
-            authError.textContent   = '❌ Network error, please try again';
-            console.error('Auth error:', err);
-        });
-    }
-
-    // Called on successful authentication
-    function onAuthSuccess() {
-        bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
-        stopCamera();
-
-        isAuthenticated = true;
-        resetInactivityTimer(); // start the 5-min countdown
-
-        setTimeout(() => {
-            Swal.fire({
-                icon: 'success',
-                title: 'Authentication Successful',
-                html: `
-                    ✅ Welcome! You can now add a schedule.<br><br>
-                    <small style="color: #888;">⏳ You will be automatically disconnected after <strong>5 minutes</strong> of inactivity.</small>
-                `,
-                confirmButtonText: 'Continue',
-                confirmButtonColor: '#4D44B5',
-                timer: 6000,
-                timerProgressBar: true,
-            }).then(() => {
-                new bootstrap.Modal(document.getElementById('eventModal')).show();
-            });
-        }, 300);
-    }
-
-    function disconnectTeacher() {
-        isAuthenticated = false;
-        clearTimeout(inactivityTimer);
-        clearInterval(countdownInterval);
-        inactivityTimer = null;
-        countdownInterval = null;
-        console.log('🔒 Teacher manually disconnected');
-    }
-    document.getElementById('saveAndDisconnectButton').addEventListener('click', function () {
-        // Trigger the same save logic as the normal Save button
-        document.getElementById('saveEventButton').click();
-
-        // Then disconnect after a short delay to let save complete
-        setTimeout(() => {
-            bootstrap.Modal.getInstance(document.getElementById('eventModal'))?.hide();
-            disconnectTeacher();
-            Swal.fire({
-                icon: 'info',
-                title: 'Disconnected',
-                text: '🔒 You have been disconnected successfully.',
-                confirmButtonColor: '#4D44B5',
-                timer: 3000,
-                timerProgressBar: true,
-            });
-        }, 300);
-    });
-
-
-    /* ─────────────────────────────────────────
-       CAMERA — QR code scanning
-    ───────────────────────────────────────── */
-
-    let cameraStream   = null;
-    let qrScanInterval = null;
-
-    function startCamera() {
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
-            .then(stream => {
-                cameraStream = stream;
-                const video = document.getElementById('auth-camera');
-                video.srcObject = stream;
-                document.getElementById('qr-scan-status').textContent = '🔍 Scanning for QR code...';
-
-                // Scan a frame every 500ms
-                qrScanInterval = setInterval(() => scanQRFrame(), 500);
-            })
-            .catch(err => {
-                document.getElementById('qr-scan-status').textContent = '❌ Camera not available';
-                console.error('Camera error:', err);
-            });
-    }
-
-    function stopCamera() {
-        if (cameraStream) {
-            cameraStream.getTracks().forEach(track => track.stop());
-            cameraStream = null;
-        }
-        if (qrScanInterval) {
-            clearInterval(qrScanInterval);
-            qrScanInterval = null;
-        }
-    }
-
-    function scanQRFrame() {
-        const video  = document.getElementById('auth-camera');
-        const canvas = document.getElementById('auth-canvas');
-        if (!video || video.readyState !== video.HAVE_ENOUGH_DATA) return;
-
-        canvas.width  = video.videoWidth;
-        canvas.height = video.videoHeight;
-
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-        // QR decode logic — requires jsQR library
-        // const code = jsQR(imageData.data, imageData.width, imageData.height);
-        // if (code) { verifyQRCode(code.data); }
-    }
-
-
-    /* ─────────────────────────────────────────
-       QR FULLSCREEN OVERLAY
-       — shown after 10s inactivity, hidden on touch
-    ───────────────────────────────────────── */
-
-    let qrOverlayTimer     = null;
-    let qrOverlayGenerated = false;
-    const QR_IDLE_SECONDS  = 10;
-
-    function generateOverlayQRCodes() {
-        if (qrOverlayGenerated) return;
-
-        new QRCode(document.getElementById("qr-overlay-ios"), {
-            text: "https://apps.apple.com/ch/app/unistudious/id6756975616",
-            width: 280, height: 280,
-            colorDark: "#2d2680", colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.H
-        });
-
-        new QRCode(document.getElementById("qr-overlay-android"), {
-            text: "https://play.google.com/store/apps/details?id=com.unistudious.projet1v2&hl=fr",
-            width: 280, height: 280,
-            colorDark: "#1a7a40", colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.H
-        });
-
-        qrOverlayGenerated = true;
-    }
-
-    function showQROverlay() {
-        generateOverlayQRCodes();
-        const overlay = document.getElementById('qr-fullscreen-overlay');
-        overlay.style.display = 'flex';
-    }
-
-    function hideQROverlay() {
-        document.getElementById('qr-fullscreen-overlay').style.display = 'none';
-        resetQROverlayTimer();
-    }
-
-    function resetQROverlayTimer() {
-        clearTimeout(qrOverlayTimer);
-        const anyModalOpen = document.querySelector('.modal.show');
-        if (!anyModalOpen) {
-            qrOverlayTimer = setTimeout(showQROverlay, QR_IDLE_SECONDS * 1000);
-        }
-    }
-
-    // Hide on any user interaction, restart idle timer otherwise
-    ['touchstart', 'mousemove', 'keydown', 'click'].forEach(evt => {
-        document.addEventListener(evt, () => {
-            const overlay = document.getElementById('qr-fullscreen-overlay');
-            if (overlay.style.display === 'flex') {
-                hideQROverlay();
-            } else {
-                resetQROverlayTimer();
-            }
-        });
-    });
-
-    // Override checkForSession to hide overlay before redirect
-    function checkForSession() {
-        fetch(`/tablet/${encodeURIComponent(tabletId)}/check_session`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'active') {
-                    document.getElementById('qr-fullscreen-overlay').style.display = 'none';
-                    window.location.href = `/tablet/${encodeURIComponent(tabletId)}`;
-                }
-            })
-            .catch(err => console.error('Error checking session:', err));
-    }
-
-    // Start idle timer on page load
-    resetQROverlayTimer();
-
-    // ── Pause QR overlay when ANY modal is open ──
-    document.querySelectorAll('.modal').forEach(function(modal) {
-        modal.addEventListener('show.bs.modal', function () {
-            clearTimeout(qrOverlayTimer);
-            document.getElementById('qr-fullscreen-overlay').style.display = 'none';
-        });
-
-        modal.addEventListener('hidden.bs.modal', function () {
-            const anyOpen = document.querySelector('.modal.show');
-            if (!anyOpen) {
-                resetQROverlayTimer();
-            }
-        });
-    });
-
-    const translations = {
-      en: {
-        subtitle: "Schedule & Calendar System",
-        addSchedule: "+ Add Schedule",
-        modalTitle: "Add New Schedule",
-        labelSession: "Session",
-        labelGroup: "Group",
-        labelType: "Type",
-        labelStartDate: "Start Date",
-        labelRoom: "Room",
-        labelSubject: "Teacher And Subject",
-        labelCompletion: "Completion Tag",
-        labelDuplicate: "Duplicate",
-        labelStartTime: "Start Time",
-        labelEndTime: "End Time",
-        labelEndDate: "End Date (for recurring events)",
-        labelDescription: "Description",
-        btnCancel: "Cancel",
-        btnSave: "Save",
-        btnClose: "Close",
-        authTitle: "Teacher Authentication",
-        authSubtitle: "Please verify your identity to continue",
-        tabPassword: "🔑 Username & Password",
-        tabQr: "📷 Scan QR Code",
-        labelUsername: "Username",
-        labelPassword: "Password",
-        btnLogin: "Login & Continue",
-        btnBack: "← Back to Login",
-      },
-      fr: {
-        subtitle: "Système de Planning & Calendrier",
-        addSchedule: "+ Ajouter un Planning",
-        modalTitle: "Ajouter un Nouveau Planning",
-        labelSession: "Session",
-        labelGroup: "Groupe",
-        labelType: "Type",
-        labelStartDate: "Date de début",
-        labelRoom: "Salle",
-        labelSubject: "Enseignant et Matière",
-        labelCompletion: "Tag de Complétion",
-        labelDuplicate: "Dupliquer",
-        labelStartTime: "Heure de début",
-        labelEndTime: "Heure de fin",
-        labelEndDate: "Date de fin (événements récurrents)",
-        labelDescription: "Description",
-        btnCancel: "Annuler",
-        btnSave: "Enregistrer",
-        btnClose: "Fermer",
-        authTitle: "Authentification Enseignant",
-        authSubtitle: "Veuillez vérifier votre identité pour continuer",
-        tabPassword: "🔑 Nom d'utilisateur & Mot de passe",
-        tabQr: "📷 Scanner le QR Code",
-        labelUsername: "Nom d'utilisateur",
-        labelPassword: "Mot de passe",
-        btnLogin: "Se connecter & Continuer",
-        btnBack: "← Retour à la connexion",
-      }
-    };
-
-    function setLang(lang) {
-      localStorage.setItem('lang', lang);
-
-      document.querySelectorAll('[data-key]').forEach(el => {
-        const key = el.getAttribute('data-key');
-        if (translations[lang][key]) el.textContent = translations[lang][key];
-      });
-
-      // Update button styles
-      document.getElementById('btn-en').className =
-        lang === 'en' ? 'btn btn-sm btn-primary ms-2' : 'btn btn-sm btn-outline-secondary ms-2';
-      document.getElementById('btn-fr').className =
-        lang === 'fr' ? 'btn btn-sm btn-primary ms-2' : 'btn btn-sm btn-outline-secondary ms-2';
-
-      document.documentElement.lang = lang;
-      window.currentLang = lang;
-    }
-
-    // Load saved language on page start
-    const savedLang = localStorage.getItem('lang') || 'en';
-    setLang(savedLang);
-</script>
-<!-- This Script Will reload the page automaticlly -->
+<script src="/static/js/page-no-session.js"></script>
 
 
 </body>

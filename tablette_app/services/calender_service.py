@@ -85,6 +85,20 @@ def fetch_teacher(session_id):
 		return None
 
 
+def fetch_all_teacher():
+	try:
+		url = f"{base_url}/get_all_teachers"
+		response = requests.get(url,verify=False)
+		response.raise_for_status()
+		if response.status_code == 200:
+			return response.json()
+		else:
+			return None
+
+	except Exception as e:
+		print(f"Error: {e} coming from fetch_all_teacher")
+		return None
+
 def request_calander(calander_data):
 	try:
 		session_id = calander_data['session_id']
