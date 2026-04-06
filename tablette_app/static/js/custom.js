@@ -1201,6 +1201,9 @@ function _validateFormData(formData) {
         [!formData.subject_id || !formData.user_id, 'Please select a teacher and subject'],
         [!formData.duplicate,               'Please select duplicate option'],
         [!formData.start_date,              'Please select a start date'],
+        [!formData.end_time,                        'Please select an end time'],
+        [formData.start_time && formData.end_time && formData.start_time >= formData.end_time,
+         '❌ End time must be after start time'],
     ];
     for (const [fail, text] of checks) {
         if (fail) return text;

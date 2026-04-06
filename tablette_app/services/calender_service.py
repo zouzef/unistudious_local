@@ -136,3 +136,21 @@ def create_calander(data):
 	except Exception as e:
 		print(f"Error in create_calander: {e}")
 		return 500
+
+
+def create_special_group(data):
+    try:
+        url = f"{base_url}/create_calender_special_group"
+        response = requests.post(url, json=data, verify=False)
+        resp_json = response.json()
+        return response.status_code, resp_json
+
+    except requests.exceptions.ConnectionError:
+        print("Error in create_calander: Server unreachable")
+        return 503, {"Message": "Server unreachable"}
+    except requests.exceptions.Timeout:
+        print("Error in create_calander: Request timed out")
+        return 504, {"Message": "Request timed out"}
+    except Exception as e:
+        print(f"Error in create_calander: {e}")
+        return 500, {"Message": str(e)}

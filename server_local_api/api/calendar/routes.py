@@ -655,21 +655,6 @@ def create_calander():
             "error": str(e)
         }), 500
 
-@calendar_bp.route('/create_calender_special_group',methods=['POST'])
-def create_calander_special_group():
-    try:
-        data = request.get_json()
-        print(data)
-
-    except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({
-            "Message":f"Error: {e} coming from server"
-        }),500
-
-
-
-
 
 # =======================================
 # ENDPOINT 9: Create subject_account api
@@ -1151,6 +1136,7 @@ def get_notification(account_id):
         }),500
 
 
+
 # =======================================
 # ENDPOINT 14: GET CALANDER_REQUQST
 # =======================================
@@ -1255,10 +1241,10 @@ def get_calander_req(account_id):
         }),500
 
 
+
 # =======================================
 # ENDPOINT 15: APPROVE CALANDER_REQUEST
 # =======================================
-
 def check_calander_request_id(calander_id):
     try:
         query = """
@@ -1271,7 +1257,6 @@ def check_calander_request_id(calander_id):
         return result[0]['nbr']>0
     except Exception:
         return False
-
 
 @calendar_bp.route('/approve_calander_request/<int:request_id>', methods=['POST'])
 def approve_calander_request(request_id):
@@ -1426,11 +1411,9 @@ def approve_calander_request(request_id):
     except Exception as e:
         return jsonify({"Message": f"Error: {e} coming from the server!!"}), 500
 
-
 # =======================================
 # ENDPOINT 16: REJECT CALANDER_REQUEST
 # =======================================
-
 @calendar_bp.route('/reject_calander_request/<int:request_id>',methods=['POST'])
 def reject_calander_request(request_id):
     try:
@@ -1482,4 +1465,264 @@ def delete_calander_request(request_id):
         print(f"Error: {e} in deleting calander_reqeust")
         return jsonify({
             "Message":f"Error: {e} in deleting calander_request"
+        }),500
+
+
+# =======================================
+# ENDPOINT 18: CREATE SPECEIAL GROUP
+# =======================================
+
+def create_special_group(data):
+    try:
+
+        query = """
+            INSERT INTO relation_group_local_session 
+            (
+                session_id,
+                local_id,
+                account_id,
+                name,
+                capacity,
+                special_group,
+                access_type,
+                slc_use,
+                created_at,
+                timestamp,
+                enabled,
+                status
+            )
+            VALUES(
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                NOW(),
+                NOW(),
+                1,
+                1
+            )
+        """
+        values = (
+            data['session_id'],
+            data['local_id'],
+            data['account_id'],
+            data['name'],
+            data['capacity'],
+            data['is_special'],
+            data['access_type'],
+            1
+        )
+        result = Database.execute_query(query,values,fetch=False)
+
+
+        if result :
+            return True,result
+        else:
+            return False
+
+    except Exception as e:
+        print(f"Error:{e} coming from create_special_group")
+
+def create_calander_special(data):
+    try:
+        query = """
+            INSERT INTO relation_calander_group_session(
+                session_id,
+                account_id,
+                local_id,
+                group_session_id,
+                room_id,
+                teacher_id,
+                subject_id,
+                color,
+                status,
+                description,
+                start_time,
+                end_time,
+                ref,
+                date,
+                refresh,
+                title,
+                enabled,
+                created_at,
+                timestamp,
+                type,
+                slc_use
+            )
+            VALUES(
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                %s,
+                1,
+                %s,
+                %s,
+                %s,
+                %s,
+                NULL,
+                0,
+                %s,
+                1,
+                NOW(),
+                NOW(),
+                %s,
+                1);
+        """
+        values = (
+            data['session_id'],
+            data['account_id'],
+            data['local_id'],
+            data['group_session_id'],
+            data['room_id'],
+            data['teacher_id'],
+            data['subject_id'],
+            data['color'],
+            data['description'],
+            data['start_time'],
+            data['end_time'],
+            data['ref'],
+            data['title'],
+            data['type']
+        )
+        result = Database.execute_query(query,values,fetch=False)
+        if result:
+            return True,result
+        else:
+            return False,None
+
+
+
+    except Exception as e:
+        return False,None
+
+
+@calendar_bp.route('/create_calender_special_group',methods=['POST'])
+def create_calander_special_group():
+    try:
+        data = request.get_json() or {}
+        if not data :
+            return jsonify({
+                "Message":"No data from the request"
+            }),400
+
+        # Required fields
+        required_keys = [
+            'name', 'teacher_id', 'subject_id', 'capacity',
+            'session_id', 'access_type', 'type', 'room_id',
+            'start_date', 'start_time', 'end_time',
+            'description', 'is_special', 'completion_tags'
+        ]
+
+        nullable_keys = ['end_date']
+
+        # Check for missing fields
+        missing_fields = [key for key in required_keys + nullable_keys if key not in data]
+
+
+        if missing_fields:
+            return jsonify({
+                "Message":"Missing required fields",
+                "Missing_fields": missing_fields
+            }),400
+
+        # Check for empty values
+        empty_fields = []
+        for key in required_keys:
+            value = data[key]
+            if value is None:
+               empty_fields.append(key)
+            elif isinstance(value,str) and value.strip() == "":
+                empty_fields.append(key)
+
+        if empty_fields:
+            return jsonify({
+                "Message":"Fields cannot be empty",
+                "empty_fields": empty_fields
+            }), 400
+
+        # Extract values
+
+        name = data['name']
+        teacher_id= data['teacher_id']
+        subject_id = data['subject_id']
+        capacity = data['capacity']
+        session_id = data['session_id']
+        access_type = data['access_type']
+        type = data['type']
+        room_id = data['room_id']
+        start_date = data['start_date']
+        start_time = data['start_time']
+        end_time = data['end_time']
+        description = data['description']
+        is_special = data['is_special']
+        completion_tags = data['completion_tags']
+        local_id = data['local_id']
+        account_id = data['account_id']
+
+        if isRoomReserved(room_id, start_date, start_time, end_time):
+            return jsonify({
+                "Message": "Room already reserved!",
+                "Error": "Room-Conflict",
+            }), 402
+
+
+        if isSubjectTeacherConflit(teacher_id, start_date, start_time, end_time):
+            return jsonify({
+                "Message": "Teacher not available in this time",
+                "Error": "Teacher-Conflict"
+            }), 402
+
+        payload1 = {
+            'session_id': session_id,
+            'local_id': local_id,
+            'account_id': account_id,
+            'name': name,
+            'capacity': capacity,
+            'is_special': is_special,
+            'access_type': access_type
+        }
+        reponse,group_id = create_special_group(payload1)
+        print("ID new Goup: ",group_id)
+        start_datetime = f"{start_date} {start_time}:00"  # → "2026-04-06 10:10:00"
+        end_datetime = f"{start_date} {end_time}:00"  # → "2026-04-06 10:20:00"
+
+        payload2={
+            'session_id': session_id,
+            'account_id': account_id,
+            'local_id':local_id,
+            'group_session_id': group_id,
+            'room_id': room_id,
+            'teacher_id':teacher_id,
+            'subject_id':subject_id,
+            'color':generate_random_color(),
+            'description':description,
+            'start_time':start_datetime,
+            'end_time':end_datetime,
+            'ref':generate_unique_ref(group_id,session_id,local_id,account_id),
+            'title':name,
+            'type':type,
+        }
+        resp,id = create_calander_special(payload2)
+        if resp == False:
+            return jsonify({
+                "Message":"Error in creating calender"
+            })
+        else:
+            return jsonify({
+                "Message": "calender created with success for special group"
+            }), 200
+
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({
+            "Message":f"Error: {e} coming from server"
         }),500

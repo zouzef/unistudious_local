@@ -9,7 +9,8 @@ from services.calender_service import (
 	request_calander,
 	create_calander,
 	fetch_all_teacher,
-	fetch_calander_request
+	fetch_calander_request,
+	create_special_group
 
 )
 
@@ -93,6 +94,7 @@ def get_all_teacher():
 		return jsonify({
 			"Message":"Error coming from get_all_teacher"
 		}),500
+
 
 @calendar_bp.route('/create-calander_request/<int:session_id>', methods=['POST'])
 def create_calander_request(session_id):
@@ -269,3 +271,17 @@ def get_calander_request(room_id):
           "Message": f"Error: {str(e)} coming from get_calander",
           "data": []
        }), 500
+
+
+@calendar_bp.route('/api/create-special-group', methods=['POST'])
+def create_special_group_api():
+    try:
+        data = request.get_json()
+        status_code, resp_json = create_special_group(data)
+        return jsonify(resp_json), status_code
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {str(e)} coming from create_special_group",
+            "Data": []
+        }), 500

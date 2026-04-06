@@ -96,10 +96,18 @@ function resetInactivityTimer() {
 
     inactivityTimer = setTimeout(() => {
         isAuthenticated = false;
+        sessionStorage.removeItem('isAuthenticated');  // ← clear on expiry
         clearInterval(countdownInterval);
         console.log('🔒 Session expired — teacher disconnected');
     }, SESSION_DURATION);
 }
+
+// ✅ restore auth state here, AFTER the function is defined
+if (sessionStorage.getItem('isAuthenticated') === 'true') {
+    isAuthenticated = true;
+    resetInactivityTimer();
+}
+
 
 ['touchstart', 'click', 'mousemove', 'keydown'].forEach(evt => {
     document.addEventListener(evt, () => {
@@ -192,6 +200,7 @@ function onAuthSuccess() {
     bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
     stopCamera();
     isAuthenticated = true;
+    sessionStorage.setItem('isAuthenticated', 'true');  // ← add this
     resetInactivityTimer();
 
     setTimeout(() => {
@@ -212,6 +221,7 @@ function onAuthSuccess() {
 
 function disconnectTeacher() {
     isAuthenticated = false;
+    sessionStorage.removeItem('isAuthenticated');  // ← add this
     clearTimeout(inactivityTimer);
     clearInterval(countdownInterval);
     inactivityTimer   = null;
@@ -645,6 +655,8 @@ document.getElementById('specialGroupCloseBtn').addEventListener('click', () => 
     document.getElementById(id).addEventListener('input',  generateDescription);
 });
 
+
+// send the data via the api
 document.getElementById('specialGroupSaveBtn').addEventListener('click', function () {
     let valid = true;
 
@@ -673,32 +685,90 @@ document.getElementById('specialGroupSaveBtn').addEventListener('click', functio
         }
     });
 
+
     if (!valid) return;
 
+    // ✅ Check start_time is before end_time
+    const startTime = document.getElementById('sg-start-time').value;
+    const endTime   = document.getElementById('sg-end-time').value;
+
+    if (startTime && endTime && startTime >= endTime) {
+        const err = document.getElementById('sg-endtime-error');
+        err.textContent = '❌ End time must be after start time';
+        err.classList.remove('d-none');
+        return;  // ← stop here, don't send
+    }
+
+
     const payload = {
-    name:           document.getElementById('sg-name').value.trim(),
-    teacher_id:     document.getElementById('sg-subject').value,   // ← rename to teacher_id
-    subject_id:     document.getElementById('sg-subject2').value,  // ← rename to subject_id
-    capacity:       parseInt(document.getElementById('sg-capacity').value) || 0,
-    session_id:     document.getElementById('sg-session').value,
-    access_type:    document.getElementById('sg-access-type').value,
-    type:           document.getElementById('sg-type').value,
-    room_id:        document.getElementById('sg-room').value,
-    start_date:     document.getElementById('sg-end-date').value || null,
-    start_time:     document.getElementById('sg-start-time').value,
-    end_time:       document.getElementById('sg-end-time').value,
-    end_date:       null,
-    description:    document.getElementById('sg-description').value.trim(),
-    is_special:     true,
-    completion_tags: Array.from(document.getElementById('sg-completion-tag').selectedOptions).map(o => o.value),
-};
+        name:            document.getElementById('sg-name').value.trim(),
+        teacher_id:      document.getElementById('sg-subject').value,
+        subject_id:      document.getElementById('sg-subject2').value,
+        capacity:        parseInt(document.getElementById('sg-capacity').value) || 0,
+        session_id:      document.getElementById('sg-session').value,
+        access_type:     document.getElementById('sg-access-type').value,
+        type:            document.getElementById('sg-type').value,
+        room_id:         document.getElementById('sg-room').value,
+        start_date:      document.getElementById('sg-end-date').value || null,
+        start_time:      document.getElementById('sg-start-time').value,
+        end_time:        document.getElementById('sg-end-time').value,
+        end_date:        null,
+        description:     document.getElementById('sg-description').value.trim(),
+        is_special:      true,
+        completion_tags: Array.from(document.getElementById('sg-completion-tag').selectedOptions).map(o => o.value),
+        account_id:      document.getElementById('eventAccountId').value,
+        local_id:        document.getElementById('eventLocalId')?.value || document.getElementById('local_id')?.value,
+    };
 
     // ✅ TEMP: show all data in alert before sending
+
     Swal.fire({
         icon: 'info',
         title: '📋 Data to be sent',
         html: `<pre style="text-align:left; font-size:12px; max-height:400px; overflow-y:auto;">${JSON.stringify(payload, null, 2)}</pre>`,
         confirmButtonColor: '#4D44B5',
         confirmButtonText: 'Looks good!',
+    }).then(() => {
+        fetch('/api/create-special-group', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(res => {
+            const status = res.status;
+            return res.json().then(data => ({ status, data }));
+        })
+        .then(({ status, data }) => {
+    if (status === 200) {
+        Swal.fire({
+            icon: 'success',
+            title: '✅ Group Created!',
+            confirmButtonColor: '#4D44B5',
+            timer: 2000,
+            timerProgressBar: true,
+        }).then(() => {
+            bootstrap.Modal.getInstance(document.getElementById('specialGroupModal'))?.hide();
+            setTimeout(() => {
+                window.location.reload();
+            }, 300);
+        });
+    } else {   // ← } correctly closes if before else
+        Swal.fire({
+            icon: 'error',
+            title: '❌ Error',
+            text: data.Message,
+            confirmButtonColor: '#4D44B5',
+        });
+    }
+})
+        .catch(err => {
+            Swal.fire({
+                icon: 'error',
+                title: '❌ Network Error',
+                text: err.message,
+                confirmButtonColor: '#4D44B5',
+            });
+        });
     });
+
 });
