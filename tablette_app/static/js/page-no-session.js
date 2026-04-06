@@ -495,7 +495,7 @@ async function loadSpecialGroupDropdowns() {
             const result   = await response.json();
             const sessions = result.data || result;
             if (Array.isArray(sessions) && sessions.length > 0) {
-                sessions.forEach(s => _addOption(sessionSelect, s.id, s.formation));
+                sessions.forEach(s => _addOption(sessionSelect, s.id, s.name));
             } else {
                 _addOption(sessionSelect, '', 'No sessions available', true);
             }
@@ -537,56 +537,60 @@ async function loadSpecialGroupDropdowns() {
 
     try { $(roomSelect).selectpicker('refresh'); } catch(e) {}
 
-    // --- TEACHER LOADING — remove old listener first, then attach fresh one ---
+    // --- TEACHER LOADING (from get-all-teacher) ---
     if (!subjectSelect) return console.error('Subject select not found');
+    subjectSelect.innerHTML = '<option value="" selected disabled>Select a Teacher</option>';
 
-    subjectSelect.innerHTML = '<option value="" selected disabled>Select a Subject and Teacher</option>';
-    try { $(subjectSelect).selectpicker('refresh'); } catch(e) {}
-
-    // ✅ Remove old handler if exists, then attach new one
-    if (sessionSelect._teacherLoadHandler) {
-        sessionSelect.removeEventListener('change', sessionSelect._teacherLoadHandler);
+    try {
+        const teacherResponse = await fetch(`/api/get-all-teacher`, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        if (teacherResponse.ok) {
+            const teachers = await teacherResponse.json();
+            const teacherList = teachers.Data || [];  // ← capital D
+            if (Array.isArray(teacherList) && teacherList.length > 0) {
+                teacherList.forEach(teacher => {
+                    _addOption(subjectSelect, teacher.id, teacher.username);
+                });
+            } else {
+                _addOption(subjectSelect, '', 'No teachers available', true);
+            }
+        } else {
+            _addOption(subjectSelect, '', 'Error loading teachers', true);
+        }
+    } catch(e) {
+        _addOption(subjectSelect, '', 'Connection error', true);
     }
 
-    sessionSelect._teacherLoadHandler = async function () {
-        const sessionId = this.value;
-        if (!sessionId) return;
+    try { $(subjectSelect).selectpicker('refresh'); } catch(e) {}
 
-        subjectSelect.innerHTML = '<option value="" selected disabled>Loading teachers...</option>';
-        try { $(subjectSelect).selectpicker('refresh'); } catch(e) {}
+    // --- SUBJECT LOADING ---
+    const subject2Select = document.getElementById('sg-subject2');
+    if (!subject2Select) return console.error('Subject2 select not found');
+    subject2Select.innerHTML = '<option value="" selected disabled>Select a Subject</option>';
 
-        try {
-            const response = await fetch(`/get-teacher/${sessionId}`, {
-                headers: { 'Content-Type': 'application/json' }
-            });
-            if (response.ok) {
-                const result   = await response.json();
-                const teachers = result.data || result;
-                subjectSelect.innerHTML = '<option value="" selected disabled>Select a Subject and Teacher</option>';
-
-                if (Array.isArray(teachers) && teachers.length > 0) {
-                    teachers.forEach(t => {
-                        const opt = document.createElement('option');
-                        opt.value = t.id;
-                        opt.setAttribute('data-subject', t.subject_id);
-                        opt.setAttribute('data-user',    t.user_id);
-                        opt.textContent = `Subject : ${t.subject_name} - Teacher : ${t.full_name}`;
-                        subjectSelect.appendChild(opt);
-                    });
-                } else {
-                    _addOption(subjectSelect, '', 'No teachers available', true);
-                }
+    try {
+        const subjectResponse = await fetch(`/api/get-subjects`, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        if (subjectResponse.ok) {
+            const result = await subjectResponse.json();
+            const subjects = result.data || result;
+            if (Array.isArray(subjects) && subjects.length > 0) {
+                subjects.forEach(subject => {
+                    _addOption(subject2Select, subject.subject_config_id, subject.subject_identifier);
+                });
             } else {
-                _addOption(subjectSelect, '', 'Error loading teachers', true);
+                _addOption(subject2Select, '', 'No subjects available', true);
             }
-        } catch {
-            _addOption(subjectSelect, '', 'Connection error', true);
+        } else {
+            _addOption(subject2Select, '', 'Error loading subjects', true);
         }
+    } catch(e) {
+        _addOption(subject2Select, '', 'Connection error', true);
+    }
 
-        try { $(subjectSelect).selectpicker('refresh'); } catch(e) {}
-    };
-
-    sessionSelect.addEventListener('change', sessionSelect._teacherLoadHandler);
+    try { $(subject2Select).selectpicker('refresh'); } catch(e) {}
 }
 
 // Helper function to escape HTML
@@ -672,53 +676,29 @@ document.getElementById('specialGroupSaveBtn').addEventListener('click', functio
     if (!valid) return;
 
     const payload = {
-        name:        document.getElementById('sg-name').value.trim(),
-        subject_id:  document.getElementById('sg-subject').value,
-        capacity:    parseInt(document.getElementById('sg-capacity').value) || null,
-        start_date:  document.getElementById('sg-end-date').value || null,
-        end_date:    null,
-        description: document.getElementById('sg-description').value.trim(),
-        is_special:  true,
-    };
+    name:           document.getElementById('sg-name').value.trim(),
+    teacher_id:     document.getElementById('sg-subject').value,   // ← rename to teacher_id
+    subject_id:     document.getElementById('sg-subject2').value,  // ← rename to subject_id
+    capacity:       parseInt(document.getElementById('sg-capacity').value) || 0,
+    session_id:     document.getElementById('sg-session').value,
+    access_type:    document.getElementById('sg-access-type').value,
+    type:           document.getElementById('sg-type').value,
+    room_id:        document.getElementById('sg-room').value,
+    start_date:     document.getElementById('sg-end-date').value || null,
+    start_time:     document.getElementById('sg-start-time').value,
+    end_time:       document.getElementById('sg-end-time').value,
+    end_date:       null,
+    description:    document.getElementById('sg-description').value.trim(),
+    is_special:     true,
+    completion_tags: Array.from(document.getElementById('sg-completion-tag').selectedOptions).map(o => o.value),
+};
 
-    const btn = this;
-    btn.textContent = 'Saving...';
-    btn.disabled    = true;
-
-    fetch('/api/create-special-group', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload),
-    })
-    .then(r => r.json())
-    .then(data => {
-        btn.textContent = '✅ Create Group & Continue';
-        btn.disabled    = false;
-
-        if (data.status === 'ok' || data.id) {
-            const groupSelect = document.getElementById('group_id');
-            const newOption   = new Option(`⭐ ${payload.name} (Special)`, data.id || data.group_id, true, true);
-            newOption.style.color = '#4D44B5';
-            groupSelect.appendChild(newOption);
-
-            bootstrap.Modal.getInstance(document.getElementById('specialGroupModal'))?.hide();
-            setTimeout(() => {
-                new bootstrap.Modal(document.getElementById('eventModal')).show();
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Special Group Created!',
-                    html:  `<b>${payload.name}</b> has been created and selected.`,
-                    confirmButtonColor: '#4D44B5',
-                    timer: 3000, timerProgressBar: true,
-                });
-            }, 300);
-        } else {
-            Swal.fire({ icon: 'error', title: 'Error', text: data.message || 'Failed to create special group.', confirmButtonColor: '#4D44B5' });
-        }
-    })
-    .catch(() => {
-        btn.textContent = '✅ Create Group & Continue';
-        btn.disabled    = false;
-        Swal.fire({ icon: 'error', title: 'Network Error', text: 'Could not reach the server. Please try again.', confirmButtonColor: '#4D44B5' });
+    // ✅ TEMP: show all data in alert before sending
+    Swal.fire({
+        icon: 'info',
+        title: '📋 Data to be sent',
+        html: `<pre style="text-align:left; font-size:12px; max-height:400px; overflow-y:auto;">${JSON.stringify(payload, null, 2)}</pre>`,
+        confirmButtonColor: '#4D44B5',
+        confirmButtonText: 'Looks good!',
     });
 });

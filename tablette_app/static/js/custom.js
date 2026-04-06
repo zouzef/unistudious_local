@@ -822,6 +822,8 @@ async function loadGroups(accountId, sessionId) {
 
     _destroySelectpicker(groupSelect);
     groupSelect.innerHTML = '<option value="" selected disabled>Select a Group</option>';
+    groupSelect.disabled = false;
+    groupSelect.style.background = 'white';
 
     try {
         const response = await fetch(`/get-group-session/${accountId}/${sessionId}`, {
@@ -854,6 +856,8 @@ function clearGroups() {
     if (!groupSelect) return;
     _destroySelectpicker(groupSelect);
     groupSelect.innerHTML = '<option value="" selected disabled>Select a Group</option>';
+    groupSelect.disabled = true;
+    groupSelect.style.background = '#f5f5f5';
     $(groupSelect).selectpicker('refresh');
 }
 
@@ -896,7 +900,8 @@ async function loadTeachers(sessionId, groupId) {
 
     _destroySelectpicker(teacherSelect);
     teacherSelect.innerHTML = '<option value="" selected disabled>Select a Subject and Teacher</option>';
-
+    teacherSelect.disabled = false;
+    teacherSelect.style.background = 'white';
     if (!sessionId || !groupId) {
         _addOption(teacherSelect, '', 'Please select a session and group first', true);
         $(teacherSelect).selectpicker('refresh');
@@ -941,6 +946,8 @@ function clearTeachers() {
     if (!teacherSelect) return;
     _destroySelectpicker(teacherSelect);
     teacherSelect.innerHTML = '<option value="" selected disabled>Select a Subject and Teacher</option>';
+    teacherSelect.disabled = true;
+    teacherSelect.style.background = '#f5f5f5';
     $(teacherSelect).selectpicker('refresh');
 }
 
@@ -1274,30 +1281,48 @@ function _addOption(select, value, text, disabled = false) {
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    // Modal open → load sessions, rooms, clear dependent selects
-    document.getElementById('eventModal')?.addEventListener('shown.bs.modal', function () {
-        const accountId = document.getElementById('eventAccountId').value;
-        const localId   = document.getElementById('eventLocalId').value;
-        if (accountId) loadSessions(accountId);
-        if (localId)   loadRooms(localId);
-        clearGroups();
-        clearTeachers();
-    });
+        // Modal open → load sessions, rooms, clear dependent selects
+        document.getElementById('eventModal')?.addEventListener('shown.bs.modal', function () {
+            const accountId = document.getElementById('eventAccountId').value;
+            const localId   = document.getElementById('eventLocalId').value;
+            if (accountId) loadSessions(accountId);
+            if (localId)   loadRooms(localId);
+            clearGroups();
+            clearTeachers();
+            document.getElementById('group-hint').style.display = 'block';    // ← add this
+            document.getElementById('teacher-hint').style.display = 'block';  // ← add this
+        });
 
     // Session change → load groups, clear teachers
     $('#session').on('change', function () {
-        const sessionId = $(this).val();
+        const sessionId = this.value;  // ← use this.value instead of $(this).val()
         const accountId = document.getElementById('eventAccountId').value;
-        if (sessionId && accountId) { loadGroups(accountId, sessionId); clearTeachers(); }
-        else { clearGroups(); clearTeachers(); }
+        const groupHint = document.getElementById('group-hint');
+
+        if (sessionId && accountId) {
+            loadGroups(accountId, sessionId);
+            clearTeachers();
+            if (groupHint) groupHint.style.display = 'none';
+        } else {
+            clearGroups();
+            clearTeachers();
+            if (groupHint) groupHint.style.display = 'block';
+        }
     });
 
     // Group change → load teachers
     $('#group_id').on('change', function () {
-        const groupId   = $(this).val();
+        const groupId   = this.value;  // ← use this.value
         const sessionId = document.getElementById('session').value;
-        if (groupId && sessionId) loadTeachers(sessionId, groupId);
-        else clearTeachers();
+        const teacherHint = document.getElementById('teacher-hint');
+
+        if (groupId && sessionId) {
+            loadTeachers(sessionId, groupId);
+            if (teacherHint) teacherHint.style.display = 'none';
+        } else {
+            clearTeachers();
+            if (teacherHint) teacherHint.style.display = 'block';
+        }
     });
 
     // Save button

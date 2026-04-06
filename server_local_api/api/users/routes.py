@@ -219,10 +219,10 @@ def get_teacher_session(session_id):
 def get_all_teachers():
 	try:
 		query = """
-		    SELECT *
+		    SELECT u.username, u.id	
 		    FROM user u
 		    WHERE u.enabled = 1 AND
-		    (JSON_CONTAINS(u.roles, '"ROLE_TEACHER"') OR JSON_CONTAINS(u.roles, '"ROLE_ADMIN"')) AND
+		    (JSON_CONTAINS(u.roles, '"ROLE_TEACHER"') OR JSON_CONTAINS(u.roles, '"ROLE_ADMIN"'))
 		    
 		"""
 		result = Database.execute_query(query,fetch=True)

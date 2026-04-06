@@ -53,6 +53,10 @@ def create_app():
     from api.virtual_user.routes import Vusers_bp
     app.register_blueprint(Vusers_bp)
 
+    # Subjects
+    from api.subject.routes import subject_bp
+    app.register_blueprint(subject_bp)
+
     # ========================================
     # HOME ROUTE
     # ========================================

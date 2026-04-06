@@ -428,8 +428,6 @@ def get_name_group(id):
         print(f"❌ Error getting group name: {e}")
         return None
 
-
-
 # Create calendar api
 @calendar_bp.route('/create_calender',methods=['POST'])
 def create_calander():
@@ -656,6 +654,21 @@ def create_calander():
             "Message": "Internal Server Error",
             "error": str(e)
         }), 500
+
+@calendar_bp.route('/create_calender_special_group',methods=['POST'])
+def create_calander_special_group():
+    try:
+        data = request.get_json()
+        print(data)
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({
+            "Message":f"Error: {e} coming from server"
+        }),500
+
+
+
 
 
 # =======================================

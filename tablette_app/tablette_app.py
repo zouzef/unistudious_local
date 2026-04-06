@@ -13,7 +13,7 @@ from routes.tablet_routes import tablet_bp
 from routes.attendance_routes import attendance_bp
 from routes.student_routes import student_bp
 from routes.calender_routes import calendar_bp
-
+from routes.subject_routes import subject_bp
 # Import websocket handlers
 from websockets.events import register_socketio_events, start_background_tasks
 
@@ -35,7 +35,7 @@ app.register_blueprint(tablet_bp)
 app.register_blueprint(attendance_bp)
 app.register_blueprint(student_bp)
 app.register_blueprint(calendar_bp)
-
+app.register_blueprint(subject_bp)
 # ============= Register WebSocket Events =============
 register_socketio_events(socketio)
 
