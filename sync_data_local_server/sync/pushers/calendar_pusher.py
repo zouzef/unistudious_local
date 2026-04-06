@@ -7,7 +7,43 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 
 from core.auth import get_token
 
-# API unistudious ADD calander
+
+# API unistudious ADD special group calander
+def _send_calendar_special_group(settings,payload):
+	"""Send calendar data to remote API."""
+	try:
+		token = get_token()
+		headers = {"Authorization": f"Bearer {token}"}
+		url = f"{settings.api_base_url}/slc/create-special-group-calendar"
+
+		print(f"📡 Sending to remote: {url}")
+		print(f"📦 Payload: {payload}")
+
+		response = requests.post(url,data=payload,headers=headers,timeout=10)
+
+		if response.status_code == 200:
+			try:
+				response_data = response.json()
+			except Exception as e:
+				print(f"❌ Invalid JSON response: {response.text}")
+				return False, None
+
+			# 7ata hedi ygidha hethi
+
+			calander_remote_id = response_data.get('calendarId')  # ✅ Get calendarId from response
+			group_remote_id = response_data.get('specialgoup')
+
+
+	except requests.exceptions.Timeout:
+		print(f"❌ Request timeout (10s)")
+		return False, None
+	except Exception as e:
+		print(f"❌ Remote API error: {str(e)}")  # ✅ Now shows actual error
+		return False, None
+
+
+
+# API unistudious ADD normal group calander
 def _send_calendar(settings, payload):
 	"""Send calendar data to remote API."""
 	try:

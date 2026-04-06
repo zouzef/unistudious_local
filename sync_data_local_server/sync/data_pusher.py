@@ -4,7 +4,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from sync.pushers.attendance_pusher import push_add, push_update,send_new_attendance
-from sync.pushers.calendar_pusher import _send_calendar, _send_update_calander, _send_delete_calander
+from sync.pushers.calendar_pusher import _send_calendar, _send_update_calander, _send_delete_calander,_send_calendar_special_group
 
 class DataPusher:
 
@@ -45,6 +45,19 @@ class DataPusher:
             # Parse the new_data JSON field
             new_data = json.loads(row.get('new_data', '{}'))
 
+            # Extract group_id
+            group_id = new_data.get('group_id')
+
+            # Check if the group is special
+            cursor_check = db.connection.cursor(dictionary=True)
+            cursor_check.execute("SELECT is_special FROM relation_group_local_session WHERE id = %s", (group_id,))
+            group = cursor_check.fetchone()
+            cursor_check.close()
+
+            is_special = group.get('is_special',False) if group else False
+
+
+
             # Extract date and time parts
             start_datetime = new_data.get('start_time', '')
             end_datetime = new_data.get('end_time', '')
@@ -78,8 +91,13 @@ class DataPusher:
                 payload['subjectId'] = new_data.get('subject_id')
 
             print(f"📦 Calendar payload: {payload}")
-            success, remote_id = _send_calendar(self.settings, payload)
-            print(remote_id)
+
+            if is_special:
+                print(f"⭐ Group {group_id} is SPECIAL — using special API")
+                success, remote_id = _send_calendar_special_group(self.settings, payload)
+            else:
+                print(f"👥 Group {group_id} is NORMAL — using standard API")
+                success, remote_id = _send_calendar(self.settings, payload)
 
             # ✅ ADD THIS BLOCK:
             if success and remote_id:
