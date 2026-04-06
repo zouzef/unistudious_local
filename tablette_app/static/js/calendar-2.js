@@ -65,11 +65,12 @@
                       sessionId: item.session_id,
                       groupSessionId: item.group_session_id,
                       teacherId: item.teacher_id,
+                      teacherName: item.username,
                       subjectId: item.subject_id,
                       roomId: item.room_id,
                       status: item.status,
                       enabled: item.enabled,
-                      type: item.type
+                      type: item.type,
                     }
                   }));
                   console.log('Transformed events:', events);
@@ -104,9 +105,11 @@
 
             const formatTime = (date) => {
                 if (!date) return '';
-                const hours = String(date.getHours()).padStart(2, '0');
+                const hours = date.getHours();
                 const minutes = String(date.getMinutes()).padStart(2, '0');
-                return `${hours}:${minutes}`;
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                const formattedHours = hours % 12 || 12; // convert 0 to 12
+                return `${formattedHours}:${minutes} ${ampm}`;
             };
 
             // Type badge colors
@@ -131,12 +134,12 @@
             typeBadge.textContent = typeLabel;
             typeBadge.style.background = typeColor;
 
-            // Extract teacher name from description
-            const desc = event.extendedProps.description || '';
-            const teacherMatch = desc.match(/Teacher\s+"(.+?)"/i);
-            document.getElementById('modal-teacher').textContent = teacherMatch ? teacherMatch[1] : '-';
+            // Teacher name from API
+            document.getElementById('modal-teacher').textContent =
+                event.extendedProps.teacherName || '-';
 
             // Description
+            const desc = event.extendedProps.description || '';
             if (desc) {
                 document.getElementById('modal-description').textContent = desc;
                 document.getElementById('modal-description-container').style.display = 'block';

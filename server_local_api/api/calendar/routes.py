@@ -729,17 +729,17 @@ def get_calendar_room(room_id):
             return jsonify({"Message": "Room not found"}), 404
 
         query = """
-            SELECT r.*
+            SELECT r.*,u.username
              FROM
-              relation_calander_group_session r,session s 
+              relation_calander_group_session r,session s ,user u
               WHERE r.room_id = %s 
               AND r.enabled = 1 
               AND r.session_id = s.id 
+              AND r.teacher_id = u.id AND u.enabled =1
               AND s.enabled = 1
         """
         values = (room_id,)
         result = Database.execute_query(query, values)
-
         if result and len(result) > 0:
             # Convert datetime objects to ISO format strings
             for item in result:
