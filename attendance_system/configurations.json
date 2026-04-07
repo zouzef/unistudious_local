@@ -1,6 +1,6 @@
 {
   "slc_config": {
-    "BASE_URL": "https://192.168.1.23:5004/scl",
+    "BASE_URL": "https://192.168.1.36:5004/scl",
     "MAC": "f4:4d:30:ee:c9:1d",
     "PASSWORD": "Khalilacademie123"
   },

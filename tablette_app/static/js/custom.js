@@ -1196,12 +1196,13 @@ function _validateFormData(formData) {
     const checks = [
         [!formData.session_id,              'Please select a session'],
         [!formData.group_id,                'Please select a group'],
-        [!formData.type,                    'Please select a type'],
-        [!formData.room_id,                 'Please select a room'],
         [!formData.subject_id || !formData.user_id, 'Please select a teacher and subject'],
-        [!formData.duplicate,               'Please select duplicate option'],
         [!formData.start_date,              'Please select a start date'],
-        [!formData.end_time,                        'Please select an end time'],
+        [!formData.room_id,                 'Please select a room'],
+        [!formData.type,                    'Please select a type'],
+        [!formData.duplicate,               'Please select duplicate option'],
+        [!formData.start_time,  'Please select a start time'],
+        [!formData.end_time,    'Please select an end time'],
         [formData.start_time && formData.end_time && formData.start_time >= formData.end_time,
          '❌ End time must be after start time'],
     ];

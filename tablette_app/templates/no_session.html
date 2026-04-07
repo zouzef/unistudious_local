@@ -555,27 +555,32 @@
             </div>
 
             <!-- ── Footer ── -->
-            <div class="modal-footer" style="border: none; padding: 16px 24px; background: #f8f9fc; gap: 10px;">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-key="btnCancel"
-                        style="border-radius: 10px; padding: 10px 20px; font-size: 13px;">
-                    Cancel
-                </button>
-                <button type="button" class="btn btn-primary" id="saveEventButton" data-key="btnSave"
-                        style="border-radius: 10px; background: #4D44B5; border-color: #4D44B5;
-                               padding: 10px 24px; font-size: 13px; font-weight: 600;">
-                    💾 Save
-                </button>
-                <!-- Create Special Group Button -->
-                <button type="button" class="btn btn-info" onclick="openSpecialGroupModal()"
-                        style="border-radius: 10px; padding: 10px 20px; font-size: 13px;"
-                >
-                    ＋ Create Special Group
-                </button>
-                <button type="button" class="btn btn-danger" id="saveAndDisconnectButton" data-key="btnSaveDisconnect"
-                        style="border-radius: 10px; padding: 10px 24px; font-size: 13px; font-weight: 600;">
-                    🔒 Save & Disconnect
-                </button>
-            </div>
+            <div class="modal-footer" style="border: none; padding: 16px 24px; background: #f8f9fc; display: flex; justify-content: space-between; align-items: center;">
+
+    <!-- Left side: Cancel, Save, Save & Disconnect -->
+    <div style="display: flex; gap: 10px;">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-key="btnCancel"
+                style="border-radius: 10px; padding: 10px 20px; font-size: 13px;">
+            Cancel
+        </button>
+        <button type="button" class="btn btn-primary" id="saveEventButton" data-key="btnSave"
+                style="border-radius: 10px; background: #4D44B5; border-color: #4D44B5;
+                       padding: 10px 24px; font-size: 13px; font-weight: 600;">
+            💾 Save
+        </button>
+        <button type="button" class="btn btn-danger" id="saveAndDisconnectButton" data-key="btnSaveDisconnect"
+                style="border-radius: 10px; padding: 10px 24px; font-size: 13px; font-weight: 600;">
+            🔒 Save & Disconnect
+        </button>
+    </div>
+
+    <!-- Right side: Create Special Group -->
+    <button type="button" class="btn btn-info" onclick="openSpecialGroupModal()"
+            style="border-radius: 10px; padding: 10px 20px; font-size: 13px;">
+        ＋ Create Special Group
+    </button>
+
+</div>
 
         </div>
     </div>
