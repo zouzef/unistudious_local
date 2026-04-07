@@ -71,6 +71,14 @@ def insert_groups(db, group_data):
                 select_query = "SELECT * FROM relation_group_local_session WHERE id = %s"
                 existing_records = db.fetch_query(select_query, (group_id,))
 
+                prod_id_check = db.fetch_query(
+                    "SELECT id FROM relation_group_local_session WHERE id_prod = %s", (group_id,)
+                )
+                if prod_id_check:
+                    print(f"      ⏭️  prod_id {group_id} already exists - skipped")
+                    result["skipped"] += 1
+                    continue
+
                 print(f"   [{i}/{len(created_groups)}] Group ID {group_id}...")
 
                 if existing_records:
@@ -142,8 +150,8 @@ def insert_groups(db, group_data):
                     insert_query = """
                         INSERT INTO relation_group_local_session (
                             id, session_id, local_id, account_id, name, capacity, status, enabled,
-                            special_group, access_type, releaseToken, useToken, timestamp, created_at, updated_at
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                            special_group, access_type, releaseToken, useToken, timestamp, created_at, updated_at, id_prod
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """
 
                     db.execute_query(insert_query, (
@@ -161,7 +169,8 @@ def insert_groups(db, group_data):
                         new_data["useToken"],
                         new_data["timestamp"],
                         new_data["created_at"],
-                        new_data["updated_at"]
+                        new_data["updated_at"],
+                        group_id
                     ))
 
                     result["inserted"] += 1
@@ -241,6 +250,8 @@ def update_groups(db, group_data):
                 select_query = "SELECT * FROM relation_group_local_session WHERE id = %s"
                 existing_records = db.fetch_query(select_query, (group_id,))
 
+
+
                 print(f"   [{i}/{len(updated_groups)}] Group ID {group_id}...")
 
                 if existing_records:
@@ -310,8 +321,8 @@ def update_groups(db, group_data):
                     insert_query = """
                         INSERT INTO relation_group_local_session (
                             id, session_id, local_id, account_id, name, capacity, status, enabled,
-                            special_group, access_type, releaseToken, useToken, timestamp, created_at, updated_at
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                            special_group, access_type, releaseToken, useToken, timestamp, created_at, updated_at, prod_id
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """
 
                     # For records in 'updated' that don't exist, use updated_at as created_at
@@ -330,7 +341,8 @@ def update_groups(db, group_data):
                         new_data["useToken"],
                         new_data["timestamp"],
                         new_data["updated_at"],  # Use updated_at as created_at
-                        new_data["updated_at"]
+                        new_data["updated_at"],
+                        group_id
                     ))
 
                     result["inserted"] += 1

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 26, 2026 at 03:01 PM
+-- Generation Time: Apr 07, 2026 at 05:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -1019,8 +1019,8 @@ INSERT INTO `attendance` (`id`, `user_id`, `session_id`, `account_id`, `group_se
 (9352, 353, 12, 3, 76, 1924, NULL, 0, '2026-03-09 13:35:30', NULL, 1, 1, '2026-03-09 12:33:01', '2026-03-09 12:33:01', NULL, 0, NULL, 0, 0, 9352),
 (9353, 3, 12, 3, 76, 1924, NULL, 0, '2026-03-09 13:35:30', NULL, 1, 1, '2026-03-09 12:33:01', '2026-03-09 12:33:01', NULL, 0, NULL, 0, 0, 9353),
 (9354, 11, 12, 3, 76, 1924, NULL, 1, '2026-03-09 13:35:30', NULL, 1, 1, '2026-03-09 12:34:50', '2026-03-09 12:34:50', NULL, 1, 'f4:4d:30:ee:c9:1d', 0, 0, 9354),
-(9355, 750, 25, 3, 153, 1925, NULL, 1, '2026-03-09 15:46:30', NULL, 1, 1, '2026-03-09 14:47:17', '2026-03-09 14:47:22', '2026-03-09 14:47:22', 0, NULL, 0, 0, 9355),
-(9356, 3, 25, 3, 153, 1925, NULL, 1, '2026-03-09 15:46:30', NULL, 1, 1, '2026-03-09 14:47:17', '2026-03-09 14:47:21', '2026-03-09 14:47:21', 0, NULL, 0, 0, 9356),
+(9355, 750, 25, 3, 153, 1925, NULL, 0, '2026-03-09 15:46:30', NULL, 1, 1, '2026-03-09 14:47:17', '2026-03-31 10:59:51', '2026-03-31 10:59:51', 0, NULL, 0, 0, 9355),
+(9356, 3, 25, 3, 153, 1925, NULL, 0, '2026-03-09 15:46:30', NULL, 1, 1, '2026-03-09 14:47:17', '2026-03-31 10:59:53', '2026-03-31 10:59:53', 0, NULL, 0, 0, 9356),
 (9357, 822, 25, 3, 152, 1913, NULL, 0, '2026-03-11 15:00:30', NULL, 1, 1, '2026-03-09 21:06:02', '2026-03-09 21:06:02', NULL, 0, NULL, 0, 0, 9357),
 (9358, 10, 12, 3, 76, 1927, NULL, 1, '2026-03-10 06:06:30', NULL, 1, 1, '2026-03-10 05:06:18', '2026-03-10 05:06:18', NULL, 1, 'f4:4d:30:ee:c9:1d', 0, 0, 9358),
 (9359, 11, 12, 3, 144, 1928, NULL, 1, '2026-03-10 07:53:30', NULL, 1, 1, '2026-03-10 06:54:58', '2026-03-10 06:54:58', NULL, 1, 'f4:4d:30:ee:c9:1d', 0, 0, 9359),
@@ -1040,7 +1040,21 @@ INSERT INTO `attendance` (`id`, `user_id`, `session_id`, `account_id`, `group_se
 (9373, 3, 12, 3, 74, 1943, NULL, 0, '2026-03-24 19:20:30', NULL, 1, 1, '2026-03-24 18:19:01', '2026-03-24 18:19:01', NULL, 0, NULL, 0, 0, 9373),
 (9374, 3, 12, 3, 76, 1944, NULL, 0, '2026-03-24 20:17:30', '14', 1, 1, '2026-03-24 19:13:02', '2026-03-24 19:23:04', '2026-03-24 19:23:04', 1, 'f4:4d:30:ee:c9:1d', 0, 0, 9374),
 (9375, 3, 12, 3, 76, 1945, NULL, 1, '2026-03-24 20:30:30', NULL, 1, 1, '2026-03-24 19:27:02', '2026-03-24 19:31:13', '2026-03-24 19:31:13', 1, 'f4:4d:30:ee:c9:1d', 0, 0, 9375),
-(9379, 3, 12, 3, 76, 1960, NULL, 0, '2026-03-26 14:25:00', NULL, 1, 1, '2026-03-26 14:23:13', '2026-03-26 14:23:13', NULL, NULL, NULL, 0, 1, NULL);
+(9376, 3, 12, 3, 76, 1947, NULL, 0, '2026-03-26 14:25:30', NULL, 1, 1, '2026-03-26 13:25:01', '2026-03-26 13:25:01', NULL, 0, NULL, 0, 0, 9376),
+(9377, 661, 25, 3, 156, 1948, NULL, 0, '2026-03-28 08:00:30', NULL, 1, 1, '2026-03-27 22:21:01', '2026-03-27 22:21:01', NULL, 0, NULL, 0, 0, 9377),
+(9378, 3, 12, 3, 74, 1949, NULL, 0, '2026-03-29 20:10:30', NULL, 1, 1, '2026-03-29 19:07:01', '2026-03-29 19:07:01', NULL, 0, NULL, 0, 0, 9378),
+(9379, 3, 12, 3, 73, 1950, NULL, 0, '2026-03-29 23:29:30', NULL, 1, 1, '2026-03-29 22:28:02', '2026-03-29 22:28:02', NULL, 0, NULL, 0, 0, 9379),
+(9380, 3, 12, 3, 73, 1951, NULL, 1, '2026-03-30 09:59:30', NULL, 1, 1, '2026-03-30 08:58:00', '2026-03-30 08:58:00', NULL, 1, 'f4:4d:30:ee:c9:1d', 0, 0, 9380),
+(9381, 3, 12, 3, 74, 1953, NULL, 1, '2026-03-30 12:33:30', NULL, 1, 1, '2026-03-30 11:32:19', '2026-03-30 11:32:19', NULL, 1, 'f4:4d:30:ee:c9:1d', 0, 0, 9381),
+(9382, 3, 12, 3, 73, 1954, NULL, 1, '2026-03-30 12:54:30', NULL, 1, 1, '2026-03-30 11:51:28', '2026-03-30 11:51:28', NULL, 1, 'f4:4d:30:ee:c9:1d', 0, 0, 9382),
+(9383, 416, 25, 3, 153, 1925, NULL, 1, '2026-03-09 15:46:30', NULL, 1, 1, '2026-03-31 11:00:06', '2026-03-31 11:00:06', NULL, 0, NULL, 0, 0, 9383),
+(9384, 832, 25, 3, 153, 1925, NULL, 0, '2026-03-09 15:46:30', NULL, 1, 1, '2026-03-31 11:00:21', '2026-03-31 11:00:21', NULL, 0, NULL, 0, 0, 9384),
+(9385, 3, 12, 3, 74, 1957, NULL, 1, '2026-04-01 15:32:30', NULL, 1, 1, '2026-04-01 14:29:17', '2026-04-01 14:29:17', NULL, 1, 'f4:4d:30:ee:c9:1d', 0, 0, 9385),
+(9386, 750, 25, 3, 153, 1958, NULL, 1, '2026-04-03 08:00:30', NULL, 1, 1, '2026-04-03 03:31:35', '2026-04-03 03:31:35', NULL, 1, 'f4:4d:30:ee:c9:1d', 0, 0, 9386),
+(9387, 3, 25, 3, 153, 1958, NULL, 1, '2026-04-03 08:00:30', NULL, 1, 1, '2026-04-03 03:31:35', '2026-04-03 03:31:35', NULL, 1, 'f4:4d:30:ee:c9:1d', 0, 0, 9387),
+(9388, 416, 25, 3, 153, 1958, NULL, 1, '2026-04-03 08:00:30', NULL, 1, 1, '2026-04-03 03:31:35', '2026-04-03 03:31:35', NULL, 1, 'f4:4d:30:ee:c9:1d', 0, 0, 9388),
+(9389, 3, 12, 3, 73, 1963, NULL, 1, '2026-04-07 10:10:30', NULL, 1, 1, '2026-04-07 15:15:43', '2026-04-07 15:15:43', NULL, 1, 'f4:4d:30:ee:c9:1d', 0, 0, 9389),
+(9390, 3, 12, 3, 73, 1987, NULL, 0, '2026-04-07 10:10:00', NULL, 1, 1, '2026-04-07 16:15:29', '2026-04-07 16:15:29', NULL, NULL, NULL, 0, 1, 9389);
 
 --
 -- Triggers `attendance`
@@ -1123,7 +1137,7 @@ CREATE TABLE `attendance_audit` (
 --
 
 INSERT INTO `attendance_audit` (`audit_id`, `action_type`, `old_data`, `new_data`, `changed_at`, `is_synced`, `id_attendance`, `id_calander`) VALUES
-(189481, 'INSERT_attendance', NULL, '{\"user_id\": 3, \"session_id\": \"12\", \"account_id\": \"3\", \"group_session_id\": \"76\", \"calander_id\": 1960, \"is_present\": 0, \"day\": \"2026-03-26 14:25\", \"note\": null, \"is_editable\": 1, \"enabled\": 1}', '2026-03-26 13:23:13', 0, 9379, 1960);
+(189492, 'INSERT_attendance', NULL, '{\"user_id\": 3, \"session_id\": \"12\", \"account_id\": \"3\", \"group_session_id\": \"73\", \"calander_id\": 1987, \"is_present\": 0, \"day\": \"2026-04-07 10:10\", \"note\": null, \"is_editable\": 1, \"enabled\": 1}', '2026-04-07 15:15:29', 0, 9390, 1987);
 
 -- --------------------------------------------------------
 
@@ -1265,7 +1279,7 @@ CREATE TABLE `local` (
 --
 
 INSERT INTO `local` (`id`, `account_id`, `name`, `address`, `status`, `gps`, `enabled`, `created_at`, `timestamp`, `updated_at`, `default_local`) VALUES
-(8, 3, 'local hammam lif', '123 rue de la république hammam lif', 1, '36.72615622619158, 10.337944969986436', 1, '2025-07-05 21:45:39', '2026-03-26 13:57:05', '2025-09-18 11:44:40', 0);
+(8, 3, 'local hammam lif', '123 rue de la république hammam lif', 1, '36.72615622619158, 10.337944969986436', 1, '2025-07-05 21:45:39', '2026-04-07 10:04:22', '2025-09-18 11:44:40', 0);
 
 -- --------------------------------------------------------
 
@@ -1349,8 +1363,7 @@ CREATE TABLE `relation_calander_group_audit` (
 --
 
 INSERT INTO `relation_calander_group_audit` (`audit_id`, `action_type`, `old_data`, `new_data`, `changed_at`, `is_synced`, `id_calander`) VALUES
-(32, 'INSERT', NULL, '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 76, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-26 14:25:00\", \"end_time\": \"2026-03-26 14:30:00\", \"title\": \"group super admin test\", \"type\": \"P\", \"color\": \"#634305\", \"status\": 1, \"description\": \"Group \\\"group super admin test\\\" has learning from 2026-03-26 14:25 to 2026-03-26 14:30 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-761283-641\"}', '2026-03-26 13:23:13', 1, 1960),
-(33, 'UPDATE', '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 76, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-26 14:25:00\", \"end_time\": \"2026-03-26 14:30:00\", \"title\": \"group super admin test\", \"type\": \"P\", \"color\": \"#634305\", \"status\": 1, \"description\": \"Group \\\"group super admin test\\\" has learning from 2026-03-26 14:25 to 2026-03-26 14:30 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-761283-641\"}', '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 76, \"room_id\": 8, \"teacher_id\": 374, \"subject_id\": 1, \"start_time\": \"2026-03-26 14:25:00\", \"end_time\": \"2026-03-26 14:30:00\", \"title\": \"group super admin test\", \"type\": \"P\", \"color\": \"#634305\", \"status\": 1, \"description\": \"Group \\\"group super admin test\\\" has learning from 2026-03-26 14:25 to 2026-03-26 14:30 on Subject \\\"Math\\\" with Teacher \\\"youssef kasmi\\\"\", \"ref\": \"group-761283-641\"}', '2026-03-26 13:24:10', 0, 1960);
+(62, 'INSERT', NULL, '{\"session_id\": 12, \"account_id\": 3, \"local_id\": 8, \"group_id\": 73, \"room_id\": 7, \"teacher_id\": 4, \"subject_id\": 1, \"start_time\": \"2026-04-07 10:10:00\", \"end_time\": \"2026-04-07 10:20:00\", \"title\": \"GROUP TEST\", \"type\": \"P\", \"color\": \"#B095BF\", \"status\": 1, \"description\": \"Group \\\"GROUP TEST\\\" has learning from 2026-04-07 10:10 to 2026-04-07 10:20 on Subject \\\"Math\\\" with Teacher \\\"Mkaissi khalil\\\"\", \"ref\": \"group-731283-377\"}', '2026-04-07 15:15:29', 1, 1987);
 
 -- --------------------------------------------------------
 
@@ -2668,7 +2681,7 @@ INSERT INTO `relation_calander_group_session` (`id`, `session_id`, `account_id`,
 (1922, 12, 3, 23, 76, 8, 374, 3, '#4A5EB9', 1, 'Group \"group super admin test\" has learning from 2026-03-09T13:10:30 to 2026-03-09T13:20:00 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-09 13:10:30', '2026-03-09 13:20:00', 'group-7612233-547', NULL, 0, 'group super admin test', 1, '2026-03-09 12:05:58', '2026-03-09 12:05:58', NULL, 'P', 0, 0, 0, NULL, 0, 1922),
 (1923, 12, 3, 23, 76, 8, 374, 3, '#8248A6', 1, 'Group \"group super admin test\" has learning from 2026-03-09T13:00:30 to 2026-03-09T13:07:00 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-09 13:00:30', '2026-03-09 13:07:00', 'group-7612233-922', NULL, 0, 'group super admin test', 1, '2026-03-09 12:26:52', '2026-03-09 12:26:52', NULL, 'P', 0, 0, 0, NULL, 0, 1923),
 (1924, 12, 3, 23, 76, 8, 374, 3, '#99E30C', 1, 'Group \"group super admin test\" has learning from 2026-03-09T13:35:30 to 2026-03-09T13:45:00 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-09 13:35:30', '2026-03-09 13:45:00', 'group-7612233-583', NULL, 0, 'group super admin test', 1, '2026-03-09 12:32:15', '2026-03-09 12:32:15', NULL, 'P', 0, 0, 0, NULL, 0, 1924),
-(1925, 25, 3, 23, 153, 7, 4, 3, '#AEDC9B', 1, 'Group \"group test\" has learning from 2026-03-09T15:46:30 to 2026-03-09T15:50:00 on Subject \"Math\" with Teacher \"Mkaissi khalil\"', '2026-03-09 15:46:30', '2026-03-09 15:50:00', 'group-15325233-398', NULL, 1, 'group test', 1, '2026-03-09 14:47:04', '2026-03-09 14:47:17', '2026-03-09 14:47:17', 'P', 1, 1, 0, NULL, 0, 1925),
+(1925, 25, 3, 23, 153, 7, 4, 3, '#AEDC9B', 1, 'Group \"group test\" has learning from 2026-03-09T15:46:30 to 2026-03-09T15:50:00 on Subject \"Math\" with Teacher \"Mkaissi khalil\"', '2026-03-09 15:46:30', '2026-03-09 15:50:00', 'group-15325233-398', NULL, 1, 'group test', 1, '2026-03-09 14:47:04', '2026-03-31 11:00:21', '2026-03-31 11:00:21', 'P', 1, 1, 0, NULL, 0, 1925),
 (1926, 25, 3, 23, 154, 7, 4, 3, '#928378', 1, 'Ggy', '2026-03-09 22:20:30', '2026-03-09 22:55:00', 'group-15425233-722', NULL, 0, 'Test en ligne', 1, '2026-03-09 21:15:36', '2026-03-09 21:17:35', '2026-03-09 21:17:35', 'O', 1, 1, 0, NULL, 0, 1926),
 (1927, 12, 3, 23, 76, 8, 374, 3, '#5B8E57', 1, 'Group \"group super admin test\" has learning from 2026-03-10T06:06:30 to 2026-03-10T06:12:00 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-10 06:06:30', '2026-03-10 06:12:00', 'group-7612233-796', NULL, 0, 'group super admin test', 1, '2026-03-10 05:02:27', '2026-03-10 05:02:27', NULL, 'P', 0, 0, 0, NULL, 0, 1927),
 (1928, 12, 3, 23, 144, 8, 374, 3, '#F42BCC', 1, 'Group \"dsfdf\" has learning from 2026-03-10T07:53:30 to 2026-03-10T07:59:00 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-10 07:53:30', '2026-03-10 07:59:00', 'group-14412233-824', NULL, 0, 'dsfdf', 1, '2026-03-10 06:49:05', '2026-03-10 06:49:05', NULL, 'P', 0, 0, 0, NULL, 0, 1928),
@@ -2690,8 +2703,25 @@ INSERT INTO `relation_calander_group_session` (`id`, `session_id`, `account_id`,
 (1944, 12, 3, 23, 76, 8, 374, 3, '#8049BB', 1, 'Group \"group super admin test\" has learning from 2026-03-24T20:17:30 to 2026-03-24T20:24:00 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-24 20:17:30', '2026-03-24 20:24:00', 'group-7612233-938', NULL, 0, 'group super admin test', 1, '2026-03-24 19:12:13', '2026-03-24 19:12:13', NULL, 'P', 0, 0, 0, NULL, 0, 1944),
 (1945, 12, 3, 23, 76, 8, 374, 3, '#F806DB', 1, 'Group \"group super admin test\" has learning from 2026-03-24T20:30:30 to 2026-03-24T20:40:00 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-24 20:30:30', '2026-03-24 20:40:00', 'group-7612233-855', NULL, 0, 'group super admin test', 1, '2026-03-24 19:26:02', '2026-03-24 19:26:02', NULL, 'P', 0, 0, 0, NULL, 0, 1945),
 (1946, 12, 3, 23, 75, 8, 375, 3, '#EC230D', 1, 'Group \"GROUP TEST 33\" has learning from 2026-03-26 14:13 to 2026-03-26 14:17 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-26 14:13:30', '2026-03-26 14:17:00', 'group-7512233-685', NULL, 0, 'GROUP TEST 33', 1, '2026-03-26 13:11:14', '2026-03-26 13:11:14', NULL, 'P', 0, 0, 0, NULL, 0, 1946),
-(1959, 12, 3, 8, 75, 8, 374, 1, '#32909E', 1, 'Group \"GROUP TEST 33\" has learning from 2026-03-26 14:13 to 2026-03-26 14:17 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-26 14:13:00', '2026-03-26 14:17:00', 'group-751283-576', NULL, 0, 'GROUP TEST 33', 1, '2026-03-26 14:10:18', '2026-03-26 14:10:18', NULL, 'P', 0, 0, NULL, NULL, 1, NULL),
-(1960, 12, 3, 8, 76, 8, 374, 1, '#634305', 1, 'Group \"group super admin test\" has learning from 2026-03-26 14:25 to 2026-03-26 14:30 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-26 14:25:00', '2026-03-26 14:30:00', 'group-761283-641', NULL, 0, 'group super admin test', 1, '2026-03-26 14:23:13', '2026-03-26 14:23:13', NULL, 'P', 0, 0, NULL, NULL, 1, 1947);
+(1947, 12, 3, 23, 76, 8, 374, 3, '#356641', 1, 'Group \"group super admin test\" has learning from 2026-03-26 14:25 to 2026-03-26 14:30 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-26 14:25:30', '2026-03-26 14:30:00', 'group-7612233-737', NULL, 0, 'group super admin test', 1, '2026-03-26 13:24:10', '2026-03-26 13:24:10', NULL, 'P', 0, 0, 0, NULL, 0, 1947),
+(1948, 25, 3, 23, 156, 7, 4, 3, '#C0457D', 1, 'Group \"Rev samedi\" has learning from 2026-03-28T08:00:30 to 2026-03-28T10:00:00 on Subject \"Math\" with Teacher \"Mkaissi khalil\"', '2026-03-28 08:00:30', '2026-03-28 10:00:00', 'group-15625233-877', NULL, 0, 'Rev samedi', 1, '2026-03-27 22:18:21', '2026-03-27 22:18:21', NULL, 'P', 0, 0, 0, NULL, 0, 1948),
+(1949, 12, 3, 23, 74, 8, 4, 3, '#D11B51', 1, 'Group \"GROUP TEST 28\" has learning from 2026-03-29 20:10 to 2026-03-29 20:13 on Subject \"Math\" with Teacher \"Mkaissi khalil\"', '2026-03-29 20:10:30', '2026-03-29 20:13:00', 'group-7412233-859', NULL, 0, 'GROUP TEST 28', 1, '2026-03-29 19:06:42', '2026-03-29 19:06:42', NULL, 'P', 0, 0, 0, NULL, 0, 1949),
+(1950, 12, 3, 23, 73, 8, 4, 3, '#81BEF1', 1, 'Group \"GROUP TEST\" has learning from 2026-03-29 23:29 to 2026-03-29 23:34 on Subject \"Math\" with Teacher \"Mkaissi khalil\"', '2026-03-29 23:29:30', '2026-03-29 23:34:00', 'group-7312233-844', NULL, 0, 'GROUP TEST', 1, '2026-03-29 22:27:38', '2026-03-29 22:27:38', NULL, 'P', 0, 0, 0, NULL, 0, 1950),
+(1951, 12, 3, 23, 73, 8, 4, 3, '#2AA3F1', 1, 'Group \"GROUP TEST\" has learning from 2026-03-30 09:59 to 2026-03-30 10:05 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-30 09:59:30', '2026-03-30 10:05:00', 'group-7312233-325', NULL, 0, 'GROUP TEST', 1, '2026-03-30 08:58:00', '2026-03-30 08:58:00', NULL, 'P', 0, 0, 0, NULL, 0, 1951),
+(1952, 12, 3, 23, 75, 8, 375, 3, '#CF1FE6', 1, 'Group \"GROUP TEST 33\" has learning from 2026-03-30 22:25 to 2026-03-30 22:35 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-30 22:25:30', '2026-03-30 22:35:00', 'group-7512233-787', NULL, 0, 'GROUP TEST 33', 1, '2026-03-30 09:24:16', '2026-03-30 09:24:16', NULL, 'P', 0, 0, 0, NULL, 0, 1952),
+(1953, 12, 3, 23, 74, 8, 4, 3, '#3F8F58', 1, 'Group \"GROUP TEST 28\" has learning from 2026-03-30 12:33 to 2026-03-30 12:40 on Subject \"Math\" with Teacher \"Mkaissi khalil\"', '2026-03-30 12:33:30', '2026-03-30 12:40:00', 'group-7412233-389', NULL, 0, 'GROUP TEST 28', 1, '2026-03-30 11:32:19', '2026-03-30 11:32:19', NULL, 'P', 0, 0, 0, NULL, 0, 1953),
+(1954, 12, 3, 23, 73, 8, 4, 3, '#7A0655', 1, 'Group \"GROUP TEST\" has learning from 2026-03-30 12:54 to 2026-03-30 12:59 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-30 12:54:30', '2026-03-30 12:59:00', 'group-7312233-825', NULL, 0, 'GROUP TEST', 1, '2026-03-30 11:51:27', '2026-03-30 11:51:27', NULL, 'P', 0, 0, 0, NULL, 0, 1954),
+(1955, 25, 3, 23, 162, 9, 374, 3, '#C22FE0', 1, 'Group \"group1 test\" has learning from 2026-03-16T12:06:30 to 2026-03-16T12:09:00 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-03-16 12:06:30', '2026-03-16 12:09:00', 'group-16225233-953', NULL, 0, 'group1 test11', 0, '2026-03-31 11:06:36', '2026-03-31 11:09:08', '2026-03-31 11:09:08', 'P', 0, 0, 0, NULL, 0, 1955),
+(1956, 25, 3, 23, 163, 9, 692, 74, '#F0708A', 1, 'Group \"test special group direct join\" has learning from 2026-03-31T12:06:30 to 2026-03-31T12:09:00 on Subject \"Programming\" with Teacher \"sami tester\"', '2026-03-31 12:06:30', '2026-03-31 12:09:00', 'group-16325233-573', NULL, 0, 'test special group direct join', 0, '2026-03-31 11:07:19', '2026-03-31 11:08:39', '2026-03-31 11:08:39', 'P', 0, 0, 0, NULL, 0, 1956),
+(1957, 12, 3, 23, 74, 7, 4, 3, '#8BA93B', 1, 'Group \"GROUP TEST 28\" has learning from 2026-04-01 15:32 to 2026-04-01 15:40 on Subject \"Math\" with Teacher \"Mkaissi khalil\"', '2026-04-01 15:32:30', '2026-04-01 15:40:00', 'group-7412233-283', NULL, 0, 'GROUP TEST 28', 1, '2026-04-01 14:29:16', '2026-04-01 14:29:16', NULL, 'P', 0, 0, 0, NULL, 0, 1957),
+(1958, 25, 3, 23, 153, 7, 4, 3, '#933DF4', 1, 'Group \"group test\" has learning from 2026-04-03 08:00 to 2026-04-03 10:00 on Subject \"Math\" with Teacher \"Mkaissi khalil\"', '2026-04-03 08:00:30', '2026-04-03 10:00:00', 'group-15325233-572', NULL, 0, 'group test', 1, '2026-04-03 03:31:34', '2026-04-03 03:31:34', NULL, 'P', 0, 0, 0, NULL, 0, 1958),
+(1959, 12, 3, 23, 165, 1, 374, 3, '#14383A', 1, 'dddd', '2026-04-07 10:01:30', '2026-04-07 11:00:00', 'group-16512233-696', NULL, 0, 'test super group api prod', 1, '2026-04-07 08:45:39', '2026-04-07 08:45:39', NULL, 'P', 0, 0, 0, NULL, 0, 1959),
+(1960, 12, 3, 23, 166, 8, 374, 3, '#09801D', 1, 'Group \"group test tttt\" has learning from 2026-04-07T09:00:30 to 2026-04-07T09:10:00 on Subject \"Math\" with Teacher \"youssef kasmi\"', '2026-04-07 09:00:30', '2026-04-07 09:10:00', 'group-16612233-492', NULL, 0, 'group test tttt', 1, '2026-04-07 08:54:18', '2026-04-07 08:54:18', NULL, 'P', 0, 0, 0, NULL, 0, 1960),
+(1961, 12, 3, 23, 167, 7, 4, 3, '#B8D702', 1, 'Group \"special test\" has learning from 2026-04-07 10:30 to 2026-04-07 10:40 on Subject \"Mkhalil\"', '2026-04-07 10:30:30', '2026-04-07 10:40:00', 'group-16712233-543', NULL, 0, 'special test', 1, '2026-04-07 09:34:54', '2026-04-07 09:34:54', NULL, 'P', 0, 0, 0, NULL, 0, 1961),
+(1982, 12, 3, 8, 186, 7, 4, 1, '#DA62F0', 1, 'Group \"special test\" has learning from 2026-04-07 10:30 to 2026-04-07 10:40 on Subject \"Mkhalil\"', '2026-04-07 10:30:00', '2026-04-07 10:40:00', 'group-1861283-724', NULL, 0, 'special test', 1, '2026-04-07 10:24:27', '2026-04-07 10:24:27', NULL, 'P', 0, 0, NULL, NULL, 1, NULL),
+(1983, 12, 3, 8, 187, 7, 4, 1, '#D0410F', 1, 'Group \"group test 2\" has learning from 2026-04-07 12:00 to 2026-04-07 12:10 on Subject \"Mkhalil\"', '2026-04-07 12:00:00', '2026-04-07 12:10:00', 'group-1871283-822', NULL, 0, 'group test 2', 1, '2026-04-07 11:46:13', '2026-04-07 11:46:13', NULL, 'P', 0, 0, NULL, NULL, 1, 1962),
+(1986, 12, 3, 8, 190, 7, 4, 1, '#876740', 1, 'Group \"group special yousse test\" has learning from 2026-04-07 15:15 to 2026-04-07 15:18 on Subject \"Mkhalil\"', '2026-04-07 15:15:00', '2026-04-07 15:18:00', 'group-1901283-750', NULL, 0, 'group special yousse test', 1, '2026-04-07 12:43:06', '2026-04-07 12:43:06', NULL, 'P', 0, 0, NULL, NULL, 1, NULL),
+(1987, 12, 3, 8, 73, 7, 4, 1, '#B095BF', 1, 'Group \"GROUP TEST\" has learning from 2026-04-07 10:10 to 2026-04-07 10:20 on Subject \"Math\" with Teacher \"Mkaissi khalil\"', '2026-04-07 10:10:00', '2026-04-07 10:20:00', 'group-731283-377', NULL, 0, 'GROUP TEST', 1, '2026-04-07 16:15:29', '2026-04-07 16:15:29', NULL, 'P', 0, 0, NULL, NULL, 1, 1963);
 
 --
 -- Triggers `relation_calander_group_session`
@@ -2710,61 +2740,6 @@ CREATE TRIGGER `trg_calander_after_insert` AFTER INSERT ON `relation_calander_gr
         VALUES (
             'INSERT',
             NULL,
-            JSON_OBJECT(
-                'session_id',   NEW.session_id,
-                'account_id',   NEW.account_id,
-                'local_id',     NEW.local_id,
-                'group_id',     NEW.group_session_id,
-                'room_id',      NEW.room_id,
-                'teacher_id',   NEW.teacher_id,
-                'subject_id',   NEW.subject_id,
-                'start_time',   NEW.start_time,
-                'end_time',     NEW.end_time,
-                'title',        NEW.title,
-                'type',         NEW.type,
-                'color',        NEW.color,
-                'status',       NEW.status,
-                'description',  NEW.description,
-                'ref',          NEW.ref
-            ),
-            CURRENT_TIMESTAMP,
-            0,
-            NEW.id
-        );
-    END IF;
-END
-$$
-DELIMITER ;
-DELIMITER $$
-CREATE TRIGGER `trg_calander_after_update` AFTER UPDATE ON `relation_calander_group_session` FOR EACH ROW BEGIN
-    IF NEW.slc_use = 1 THEN
-        INSERT INTO relation_calander_group_audit (
-            action_type,
-            old_data,
-            new_data,
-            changed_at,
-            is_synced,
-            id_calander
-        )
-        VALUES (
-            'UPDATE',
-            JSON_OBJECT(
-                'session_id',   OLD.session_id,
-                'account_id',   OLD.account_id,
-                'local_id',     OLD.local_id,
-                'group_id',     OLD.group_session_id,
-                'room_id',      OLD.room_id,
-                'teacher_id',   OLD.teacher_id,
-                'subject_id',   OLD.subject_id,
-                'start_time',   OLD.start_time,
-                'end_time',     OLD.end_time,
-                'title',        OLD.title,
-                'type',         OLD.type,
-                'color',        OLD.color,
-                'status',       OLD.status,
-                'description',  OLD.description,
-                'ref',          OLD.ref
-            ),
             JSON_OBJECT(
                 'session_id',   NEW.session_id,
                 'account_id',   NEW.account_id,
@@ -2813,100 +2788,126 @@ CREATE TABLE `relation_group_local_session` (
   `access_type` tinyint(1) DEFAULT NULL,
   `releaseToken` tinyint(1) DEFAULT NULL,
   `useToken` varchar(255) DEFAULT NULL,
-  `slc_use` int(11) DEFAULT 0
+  `slc_use` int(11) DEFAULT 0,
+  `id_prod` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `relation_group_local_session`
 --
 
-INSERT INTO `relation_group_local_session` (`id`, `session_id`, `local_id`, `account_id`, `name`, `capacity`, `status`, `enabled`, `created_at`, `timestamp`, `updated_at`, `special_group`, `access_type`, `releaseToken`, `useToken`, `slc_use`) VALUES
-(64, 10, 8, 3, 'groupe 1', '20', 1, 1, '2025-07-08 10:29:15', '2025-07-08 10:29:15', NULL, 1, 1, 0, NULL, 0),
-(65, 10, 8, 3, 'groupe 2', '50', 1, 1, '2025-07-08 10:36:12', '2025-07-08 10:36:12', NULL, NULL, NULL, 0, NULL, 0),
-(66, 11, 8, 3, 'group AA', '20', 1, 1, '2025-07-08 11:05:21', '2025-07-08 11:05:21', NULL, NULL, NULL, 0, NULL, 0),
-(67, 11, 8, 3, 'groupe BB', '20', 1, 1, '2025-07-08 11:05:46', '2025-07-08 11:05:46', NULL, NULL, NULL, 0, NULL, 0),
-(68, 11, 8, 3, 'Groupe CC', '20', 1, 1, '2025-07-08 11:15:06', '2025-07-08 11:15:06', NULL, NULL, NULL, 0, NULL, 0),
-(69, 11, 8, 3, 'groupe DD', '20', 1, 1, '2025-07-08 11:21:03', '2025-07-08 11:21:03', NULL, NULL, NULL, 0, NULL, 0),
-(70, 11, 8, 3, 'Groub FFF', '20', 1, 1, '2025-07-09 15:58:10', '2025-07-09 15:58:10', NULL, NULL, NULL, 0, NULL, 0),
-(71, 9, 8, 3, 'Groupe Révision 1', '20', 1, 0, '2025-07-10 05:08:43', '2025-07-20 19:13:29', '2025-07-20 19:13:29', NULL, NULL, 0, NULL, 0),
-(72, 9, 8, 3, 'Groupe 2A', '20', 1, 0, '2025-07-10 05:09:13', '2025-08-02 05:16:34', '2025-08-02 05:16:34', NULL, NULL, 0, NULL, 0),
-(73, 12, 8, 3, 'GROUP TEST', '3', 1, 1, '2025-07-10 10:15:49', '2025-07-22 11:42:40', '2025-07-22 11:42:40', NULL, NULL, 0, NULL, 0),
-(74, 12, 8, 3, 'GROUP TEST 28', '20', 1, 1, '2025-07-10 11:32:53', '2025-09-18 08:49:16', '2025-09-18 08:49:16', NULL, NULL, 0, NULL, 0),
-(75, 12, 8, 3, 'GROUP TEST 33', '25', 1, 1, '2025-07-10 12:15:36', '2025-09-18 08:56:36', '2025-09-18 08:56:36', NULL, NULL, 0, NULL, 0),
-(76, 12, 8, 3, 'group super admin test', '20', 1, 1, '2025-07-15 08:25:07', '2025-07-15 13:28:57', '2025-07-15 13:28:57', NULL, NULL, 0, NULL, 0),
-(77, 9, 8, 3, 'Groupe 3A', '20', 1, 0, '2025-07-16 09:48:35', '2025-08-02 05:16:29', '2025-08-02 05:16:29', NULL, NULL, 0, NULL, 0),
-(78, 9, 8, 3, 'Groupe 1A', '20', 1, 0, '2025-07-16 10:04:09', '2025-08-02 05:16:23', '2025-08-02 05:16:23', NULL, NULL, 0, NULL, 0),
-(79, 12, 8, 3, 'test special group direct join', '60', 1, 1, '2025-07-16 11:29:29', '2025-07-16 11:29:29', NULL, 1, 0, 0, NULL, 0),
-(80, 12, 8, 3, 'test Special group request join', '60', 1, 1, '2025-07-16 11:30:02', '2025-07-16 11:30:02', NULL, 1, 1, 0, NULL, 0),
-(81, 12, 8, 3, 'test Special group request join', '20', 1, 1, '2025-07-16 11:30:59', '2025-07-16 11:30:59', NULL, 1, 1, 0, NULL, 0),
-(82, 12, 8, 3, 'test Special group request join', '20', 1, 1, '2025-07-16 11:31:27', '2025-07-16 11:31:27', NULL, 1, 1, 0, NULL, 0),
-(83, 12, 8, 3, 'test Special group request join', '14', 1, 1, '2025-07-16 11:31:57', '2025-07-16 11:31:57', NULL, 1, 1, 0, NULL, 0),
-(84, 12, 8, 3, 'test special group direct join', '20', 1, 1, '2025-07-17 12:58:07', '2025-07-17 12:58:07', NULL, 1, 0, 0, NULL, 0),
-(85, 12, 8, 3, 'test special group direct join', '20', 1, 1, '2025-07-17 13:01:09', '2025-07-17 13:01:09', NULL, 1, 0, 0, NULL, 0),
-(86, 12, 8, 3, 'special', '20', 1, 1, '2025-07-22 13:54:09', '2025-07-22 13:54:09', NULL, 1, 0, 0, NULL, 0),
-(87, 12, 8, 3, 'special', '20', 1, 1, '2025-07-22 13:59:21', '2025-07-22 13:59:21', NULL, 1, 1, 0, NULL, 0),
-(88, 12, 8, 3, 'special', '20', 1, 1, '2025-07-22 13:59:26', '2025-07-22 13:59:26', NULL, 1, 1, 0, NULL, 0),
-(89, 12, 8, 3, 'special', '20', 1, 1, '2025-07-22 13:59:28', '2025-07-22 13:59:28', NULL, 1, 1, 0, NULL, 0),
-(90, 12, 8, 3, 'special', '20', 1, 1, '2025-07-22 13:59:43', '2025-07-22 13:59:43', NULL, 1, 1, 0, NULL, 0),
-(91, 12, 8, 3, 'special', '20', 1, 1, '2025-07-22 13:59:58', '2025-07-22 13:59:58', NULL, 1, 1, 0, NULL, 0),
-(92, 12, 8, 3, 'special', '20', 1, 1, '2025-07-22 14:00:32', '2025-07-22 14:00:32', NULL, 1, 1, 0, NULL, 0),
-(93, 12, 8, 3, 'test special group direct join', '20', 1, 1, '2025-07-23 12:30:13', '2025-07-23 12:30:13', NULL, 1, 0, 0, NULL, 0),
-(94, 12, 8, 3, 'test special group direct join', '20', 1, 1, '2025-07-23 12:31:08', '2025-07-23 12:31:08', NULL, 1, 0, 0, NULL, 0),
-(95, 9, 8, 3, 'test special group direct join', '20', 1, 1, '2025-07-23 12:33:04', '2025-07-23 12:33:04', NULL, 1, 0, 0, NULL, 0),
-(96, 9, 8, 3, 'test special group direct join', '20', 1, 1, '2025-07-23 14:07:41', '2025-07-23 14:07:41', NULL, 1, 0, 0, NULL, 0),
-(97, 9, 8, 3, 'test special group direct join', '20', 1, 1, '2025-07-23 14:13:52', '2025-07-23 14:13:52', NULL, 1, 0, 0, NULL, 0),
-(98, 9, 8, 3, 'test Special group request join', '20', 1, 1, '2025-07-23 14:15:21', '2025-07-23 14:15:21', NULL, 1, 1, 0, NULL, 0),
-(99, 9, 8, 3, 'Groupe VL8h', '20', 1, 1, '2025-08-02 05:17:19', '2025-08-02 05:17:19', NULL, NULL, NULL, 0, NULL, 0),
-(100, 9, 8, 3, 'Groupe VL10h', '20', 1, 1, '2025-08-02 05:17:42', '2025-08-02 05:17:42', NULL, NULL, NULL, 0, NULL, 0),
-(101, 9, 8, 3, 'Groupe VL16h', '20', 1, 1, '2025-08-02 05:18:42', '2025-08-02 05:18:42', NULL, NULL, NULL, 0, NULL, 0),
-(102, 9, 8, 3, 'Groupe VL18h', '20', 1, 1, '2025-08-02 05:19:09', '2025-08-02 05:19:09', NULL, NULL, NULL, 0, NULL, 0),
-(103, 9, 8, 3, 'Groupe SM8h', '20', 1, 1, '2025-08-02 05:20:18', '2025-08-02 05:20:18', NULL, NULL, NULL, 0, NULL, 0),
-(104, 9, 8, 3, 'Groupe SM10h', '20', 1, 1, '2025-08-02 05:20:46', '2025-08-02 05:20:46', NULL, NULL, NULL, 0, NULL, 0),
-(105, 9, 8, 3, 'GroupeCours Samedi 16h', '20', 1, 1, '2025-08-02 05:21:12', '2025-08-18 06:00:49', '2025-08-18 06:00:49', NULL, NULL, 0, NULL, 0),
-(106, 9, 8, 3, 'Groupe SM18h', '20', 1, 1, '2025-08-02 05:25:00', '2025-08-02 05:25:00', NULL, NULL, NULL, 0, NULL, 0),
-(107, 9, 8, 3, 'Grpupe DM14h', '20', 1, 1, '2025-08-02 05:26:11', '2025-08-02 05:26:11', NULL, NULL, NULL, 0, NULL, 0),
-(108, 9, 8, 3, 'Groupe DM16h', '20', 1, 1, '2025-08-02 05:26:40', '2025-08-02 05:26:40', NULL, NULL, NULL, 0, NULL, 0),
-(109, 9, 8, 3, 'Groupe VL14h', '20', 1, 1, '2025-08-07 16:55:32', '2025-08-07 16:55:32', NULL, NULL, NULL, 0, NULL, 0),
-(110, 9, 8, 3, 'Groupe DM8h', '20', 1, 1, '2025-08-07 16:57:14', '2025-08-07 16:57:14', NULL, NULL, NULL, 0, NULL, 0),
-(111, 9, 8, 3, 'Groupe DM10h', '20', 1, 1, '2025-08-07 17:01:18', '2025-08-07 17:01:18', NULL, NULL, NULL, 0, NULL, 0),
-(112, 9, 8, 3, 'Groupe Cours Dimanche 18h', '20', 1, 1, '2025-08-18 05:59:55', '2025-08-18 05:59:55', NULL, NULL, NULL, 0, NULL, 0),
-(113, 9, 8, 3, 'Groupe Lundi 8h', '20', 1, 1, '2025-08-18 06:59:53', '2026-01-05 00:57:32', '2026-01-05 00:57:32', NULL, NULL, 0, NULL, 0),
-(114, 9, 8, 3, 'Groupe Lundi 10h', '20', 1, 1, '2025-08-18 07:00:23', '2026-01-05 00:57:56', '2026-01-05 00:57:56', NULL, NULL, 0, NULL, 0),
-(115, 9, 8, 3, 'Groupe Exercixe Lundi 14h', '20', 1, 1, '2025-08-18 07:00:50', '2025-08-18 07:00:50', NULL, NULL, NULL, 0, NULL, 0),
-(116, 9, 8, 3, 'Groupe Exercices Lundi 16h', '20', 1, 1, '2025-08-18 07:01:13', '2025-08-18 07:01:13', NULL, NULL, NULL, 0, NULL, 0),
-(117, 9, 8, 3, 'Groupe Lundi 18h', '20', 1, 1, '2025-08-18 07:01:47', '2026-01-05 00:57:14', '2026-01-05 00:57:14', NULL, NULL, 0, NULL, 0),
-(118, 9, 8, 3, 'Groupe SM14h', '20', 1, 1, '2025-08-22 06:47:42', '2025-08-22 06:47:42', NULL, NULL, NULL, 0, NULL, 0),
-(119, 9, 8, 3, 'Groupe DM14h', '20', 1, 1, '2025-08-22 06:54:10', '2025-08-22 06:54:10', NULL, NULL, NULL, 0, NULL, 0),
-(120, 9, 8, 3, 'Groupe SM12h', '20', 1, 1, '2025-09-11 22:12:32', '2025-09-11 22:12:32', NULL, NULL, NULL, 0, NULL, 0),
-(121, 9, 8, 3, 'Groupe SM20h', '20', 1, 1, '2025-09-11 22:34:48', '2025-09-11 22:34:48', NULL, NULL, NULL, 0, NULL, 0),
-(122, 9, 8, 3, 'Groupe DM12', '20', 1, 1, '2025-09-11 22:39:49', '2025-09-11 22:39:49', NULL, NULL, NULL, 0, NULL, 0),
-(123, 9, 8, 3, 'Groupe Cours Samedi 20h', '20', 1, 1, '2025-09-18 22:54:59', '2025-09-18 22:54:59', NULL, NULL, NULL, 0, NULL, 0),
-(124, 9, 8, 3, 'Groupe Cours Dimanche 20h', '20', 1, 1, '2025-09-20 10:21:49', '2025-09-20 10:21:49', NULL, NULL, NULL, 0, NULL, 0),
-(125, 9, 8, 3, 'fonction 7', '30', 1, 1, '2025-11-25 22:02:27', '2025-11-25 22:02:27', NULL, 1, 0, 0, NULL, 0),
-(126, 9, 8, 3, 'fonction 7', '30', 1, 1, '2025-11-25 22:02:40', '2025-11-25 22:02:40', NULL, 1, 0, 0, NULL, 0),
-(127, 9, 8, 3, 'fonction 7', '30', 1, 1, '2025-11-25 22:02:50', '2025-11-25 22:02:50', NULL, 1, 0, 0, NULL, 0),
-(132, 12, 8, 3, 'test special group direct join', '20', 1, 1, '2025-12-11 12:39:08', '2025-12-11 12:39:08', NULL, 1, 1, 0, NULL, 0),
-(135, 9, 8, 3, 'Groupe Mer8h', '30', 1, 1, '2025-12-31 06:13:33', '2025-12-31 06:13:33', NULL, NULL, NULL, 0, NULL, 0),
-(136, 9, 8, 3, 'Groupe Mer10h', '30', 1, 1, '2025-12-31 06:13:52', '2025-12-31 06:13:52', NULL, NULL, NULL, 0, NULL, 0),
-(137, 9, 8, 3, 'Groupe Mer12h', '30', 1, 1, '2025-12-31 06:14:38', '2025-12-31 06:14:38', NULL, NULL, NULL, 0, NULL, 0),
-(138, 9, 8, 3, 'Groupe Mer14h', '30', 1, 1, '2025-12-31 06:14:56', '2025-12-31 06:14:56', NULL, NULL, NULL, 0, NULL, 0),
-(139, 9, 8, 3, 'Groupe Mer16h', '30', 1, 1, '2025-12-31 06:16:12', '2025-12-31 06:16:12', NULL, NULL, NULL, 0, NULL, 0),
-(140, 9, 8, 3, 'Groupe Mer18h', '30', 1, 1, '2025-12-31 06:16:26', '2025-12-31 06:16:26', NULL, NULL, NULL, 0, NULL, 0),
-(141, 9, 8, 3, 'Groupe Mer20h', '30', 1, 1, '2025-12-31 06:16:42', '2025-12-31 06:16:42', NULL, NULL, NULL, 0, NULL, 0),
-(142, 9, 8, 3, 'Groupe Jeudi 12h', '30', 1, 1, '2026-01-01 10:40:10', '2026-01-01 10:40:10', NULL, NULL, NULL, 0, NULL, 0),
-(143, 9, 8, 3, 'Groupr Vl20h', '20', 1, 1, '2026-01-02 03:19:36', '2026-01-02 03:19:36', NULL, NULL, NULL, 0, NULL, 0),
-(144, 12, 8, 3, 'dsfdf', '20', 1, 1, '2026-01-21 14:04:54', '2026-01-21 14:04:54', NULL, NULL, NULL, 0, NULL, 0),
-(145, 9, 8, 3, 'special', '20', 1, 1, '2026-02-16 21:18:06', '2026-02-16 21:18:06', NULL, 1, 0, 0, NULL, 0),
-(146, 9, 8, 3, 'special', '20', 1, 1, '2026-02-16 21:18:19', '2026-02-16 21:18:19', NULL, 1, 0, 0, NULL, 0),
-(147, 9, 8, 3, 'special', '20', 1, 1, '2026-02-16 21:18:28', '2026-02-16 21:18:28', NULL, 1, 0, 0, NULL, 0),
-(148, 9, 8, 3, 'special', '20', 1, 1, '2026-02-16 21:18:38', '2026-02-16 21:18:38', NULL, 1, 0, 0, NULL, 0),
-(149, 9, 8, 3, 'special', '20', 1, 1, '2026-02-16 21:18:47', '2026-02-16 21:18:47', NULL, 1, 0, 0, NULL, 0),
-(150, 25, 8, 3, 'wa9t test', '20', 1, 1, '2026-03-08 00:13:36', '2026-03-08 00:13:36', NULL, 1, 0, 0, NULL, 0),
-(151, 25, 8, 3, 'correction', '20', 1, 1, '2026-03-08 00:44:51', '2026-03-08 00:44:51', NULL, 1, 0, 0, NULL, 0),
-(152, 25, 8, 3, 'proba 1', '20', 1, 1, '2026-03-08 13:32:31', '2026-03-08 13:32:31', NULL, 1, 0, 0, NULL, 0),
-(153, 25, 8, 3, 'group test', '10', 1, 1, '2026-03-09 14:46:03', '2026-03-09 14:46:03', NULL, NULL, NULL, 0, NULL, 0),
-(154, 25, 8, 3, 'Test en ligne', '20', 1, 1, '2026-03-09 21:15:36', '2026-03-09 21:15:36', NULL, 1, 0, 0, NULL, 0),
-(155, 12, 8, 3, 'test mobile', '1', 1, 1, '2026-03-12 09:13:21', '2026-03-12 09:13:21', NULL, NULL, NULL, 0, NULL, 0);
+INSERT INTO `relation_group_local_session` (`id`, `session_id`, `local_id`, `account_id`, `name`, `capacity`, `status`, `enabled`, `created_at`, `timestamp`, `updated_at`, `special_group`, `access_type`, `releaseToken`, `useToken`, `slc_use`, `id_prod`) VALUES
+(64, 10, 8, 3, 'groupe 1', '20', 1, 1, '2025-07-08 10:29:15', '2025-07-08 10:29:15', NULL, 1, 1, 0, NULL, 0, 64),
+(65, 10, 8, 3, 'groupe 2', '50', 1, 1, '2025-07-08 10:36:12', '2025-07-08 10:36:12', NULL, NULL, NULL, 0, NULL, 0, 65),
+(66, 11, 8, 3, 'group AA', '20', 1, 1, '2025-07-08 11:05:21', '2025-07-08 11:05:21', NULL, NULL, NULL, 0, NULL, 0, 66),
+(67, 11, 8, 3, 'groupe BB', '20', 1, 1, '2025-07-08 11:05:46', '2025-07-08 11:05:46', NULL, NULL, NULL, 0, NULL, 0, 67),
+(68, 11, 8, 3, 'Groupe CC', '20', 1, 1, '2025-07-08 11:15:06', '2025-07-08 11:15:06', NULL, NULL, NULL, 0, NULL, 0, 68),
+(69, 11, 8, 3, 'groupe DD', '20', 1, 1, '2025-07-08 11:21:03', '2025-07-08 11:21:03', NULL, NULL, NULL, 0, NULL, 0, 69),
+(70, 11, 8, 3, 'Groub FFF', '20', 1, 1, '2025-07-09 15:58:10', '2025-07-09 15:58:10', NULL, NULL, NULL, 0, NULL, 0, 70),
+(71, 9, 8, 3, 'Groupe Révision 1', '20', 1, 0, '2025-07-10 05:08:43', '2025-07-20 19:13:29', '2025-07-20 19:13:29', NULL, NULL, 0, NULL, 0, 71),
+(72, 9, 8, 3, 'Groupe 2A', '20', 1, 0, '2025-07-10 05:09:13', '2025-08-02 05:16:34', '2025-08-02 05:16:34', NULL, NULL, 0, NULL, 0, 72),
+(73, 12, 8, 3, 'GROUP TEST', '3', 1, 1, '2025-07-10 10:15:49', '2025-07-22 11:42:40', '2025-07-22 11:42:40', NULL, NULL, 0, NULL, 0, 73),
+(74, 12, 8, 3, 'GROUP TEST 28', '20', 1, 1, '2025-07-10 11:32:53', '2025-09-18 08:49:16', '2025-09-18 08:49:16', NULL, NULL, 0, NULL, 0, 74),
+(75, 12, 8, 3, 'GROUP TEST 33', '25', 1, 1, '2025-07-10 12:15:36', '2025-09-18 08:56:36', '2025-09-18 08:56:36', NULL, NULL, 0, NULL, 0, 75),
+(76, 12, 8, 3, 'group super admin test', '20', 1, 1, '2025-07-15 08:25:07', '2025-07-15 13:28:57', '2025-07-15 13:28:57', NULL, NULL, 0, NULL, 0, 76),
+(77, 9, 8, 3, 'Groupe 3A', '20', 1, 0, '2025-07-16 09:48:35', '2025-08-02 05:16:29', '2025-08-02 05:16:29', NULL, NULL, 0, NULL, 0, 77),
+(78, 9, 8, 3, 'Groupe 1A', '20', 1, 0, '2025-07-16 10:04:09', '2025-08-02 05:16:23', '2025-08-02 05:16:23', NULL, NULL, 0, NULL, 0, 78),
+(79, 12, 8, 3, 'test special group direct join', '60', 1, 1, '2025-07-16 11:29:29', '2025-07-16 11:29:29', NULL, 1, 0, 0, NULL, 0, 79),
+(80, 12, 8, 3, 'test Special group request join', '60', 1, 1, '2025-07-16 11:30:02', '2025-07-16 11:30:02', NULL, 1, 1, 0, NULL, 0, 80),
+(81, 12, 8, 3, 'test Special group request join', '20', 1, 1, '2025-07-16 11:30:59', '2025-07-16 11:30:59', NULL, 1, 1, 0, NULL, 0, 81),
+(82, 12, 8, 3, 'test Special group request join', '20', 1, 1, '2025-07-16 11:31:27', '2025-07-16 11:31:27', NULL, 1, 1, 0, NULL, 0, 82),
+(83, 12, 8, 3, 'test Special group request join', '14', 1, 1, '2025-07-16 11:31:57', '2025-07-16 11:31:57', NULL, 1, 1, 0, NULL, 0, 83),
+(84, 12, 8, 3, 'test special group direct join', '20', 1, 1, '2025-07-17 12:58:07', '2025-07-17 12:58:07', NULL, 1, 0, 0, NULL, 0, 84),
+(85, 12, 8, 3, 'test special group direct join', '20', 1, 1, '2025-07-17 13:01:09', '2025-07-17 13:01:09', NULL, 1, 0, 0, NULL, 0, 85),
+(86, 12, 8, 3, 'special', '20', 1, 1, '2025-07-22 13:54:09', '2025-07-22 13:54:09', NULL, 1, 0, 0, NULL, 0, 86),
+(87, 12, 8, 3, 'special', '20', 1, 1, '2025-07-22 13:59:21', '2025-07-22 13:59:21', NULL, 1, 1, 0, NULL, 0, 87),
+(88, 12, 8, 3, 'special', '20', 1, 1, '2025-07-22 13:59:26', '2025-07-22 13:59:26', NULL, 1, 1, 0, NULL, 0, 88),
+(89, 12, 8, 3, 'special', '20', 1, 1, '2025-07-22 13:59:28', '2025-07-22 13:59:28', NULL, 1, 1, 0, NULL, 0, 89),
+(90, 12, 8, 3, 'special', '20', 1, 1, '2025-07-22 13:59:43', '2025-07-22 13:59:43', NULL, 1, 1, 0, NULL, 0, 90),
+(91, 12, 8, 3, 'special', '20', 1, 1, '2025-07-22 13:59:58', '2025-07-22 13:59:58', NULL, 1, 1, 0, NULL, 0, 91),
+(92, 12, 8, 3, 'special', '20', 1, 1, '2025-07-22 14:00:32', '2025-07-22 14:00:32', NULL, 1, 1, 0, NULL, 0, 92),
+(93, 12, 8, 3, 'test special group direct join', '20', 1, 1, '2025-07-23 12:30:13', '2025-07-23 12:30:13', NULL, 1, 0, 0, NULL, 0, 93),
+(94, 12, 8, 3, 'test special group direct join', '20', 1, 1, '2025-07-23 12:31:08', '2025-07-23 12:31:08', NULL, 1, 0, 0, NULL, 0, 94),
+(95, 9, 8, 3, 'test special group direct join', '20', 1, 1, '2025-07-23 12:33:04', '2025-07-23 12:33:04', NULL, 1, 0, 0, NULL, 0, 95),
+(96, 9, 8, 3, 'test special group direct join', '20', 1, 1, '2025-07-23 14:07:41', '2025-07-23 14:07:41', NULL, 1, 0, 0, NULL, 0, 96),
+(97, 9, 8, 3, 'test special group direct join', '20', 1, 1, '2025-07-23 14:13:52', '2025-07-23 14:13:52', NULL, 1, 0, 0, NULL, 0, 97),
+(98, 9, 8, 3, 'test Special group request join', '20', 1, 1, '2025-07-23 14:15:21', '2025-07-23 14:15:21', NULL, 1, 1, 0, NULL, 0, 98),
+(99, 9, 8, 3, 'Groupe VL8h', '20', 1, 1, '2025-08-02 05:17:19', '2025-08-02 05:17:19', NULL, NULL, NULL, 0, NULL, 0, 99),
+(100, 9, 8, 3, 'Groupe VL10h', '20', 1, 1, '2025-08-02 05:17:42', '2025-08-02 05:17:42', NULL, NULL, NULL, 0, NULL, 0, 100),
+(101, 9, 8, 3, 'Groupe VL16h', '20', 1, 1, '2025-08-02 05:18:42', '2025-08-02 05:18:42', NULL, NULL, NULL, 0, NULL, 0, 101),
+(102, 9, 8, 3, 'Groupe VL18h', '20', 1, 1, '2025-08-02 05:19:09', '2025-08-02 05:19:09', NULL, NULL, NULL, 0, NULL, 0, 102),
+(103, 9, 8, 3, 'Groupe SM8h', '20', 1, 1, '2025-08-02 05:20:18', '2025-08-02 05:20:18', NULL, NULL, NULL, 0, NULL, 0, 103),
+(104, 9, 8, 3, 'Groupe SM10h', '20', 1, 1, '2025-08-02 05:20:46', '2025-08-02 05:20:46', NULL, NULL, NULL, 0, NULL, 0, 104),
+(105, 9, 8, 3, 'GroupeCours Samedi 16h', '20', 1, 1, '2025-08-02 05:21:12', '2025-08-18 06:00:49', '2025-08-18 06:00:49', NULL, NULL, 0, NULL, 0, 105),
+(106, 9, 8, 3, 'Groupe SM18h', '20', 1, 1, '2025-08-02 05:25:00', '2025-08-02 05:25:00', NULL, NULL, NULL, 0, NULL, 0, 106),
+(107, 9, 8, 3, 'Grpupe DM14h', '20', 1, 1, '2025-08-02 05:26:11', '2025-08-02 05:26:11', NULL, NULL, NULL, 0, NULL, 0, 107),
+(108, 9, 8, 3, 'Groupe DM16h', '20', 1, 1, '2025-08-02 05:26:40', '2025-08-02 05:26:40', NULL, NULL, NULL, 0, NULL, 0, 108),
+(109, 9, 8, 3, 'Groupe VL14h', '20', 1, 1, '2025-08-07 16:55:32', '2025-08-07 16:55:32', NULL, NULL, NULL, 0, NULL, 0, 109),
+(110, 9, 8, 3, 'Groupe DM8h', '20', 1, 1, '2025-08-07 16:57:14', '2025-08-07 16:57:14', NULL, NULL, NULL, 0, NULL, 0, 110),
+(111, 9, 8, 3, 'Groupe DM10h', '20', 1, 1, '2025-08-07 17:01:18', '2025-08-07 17:01:18', NULL, NULL, NULL, 0, NULL, 0, 111),
+(112, 9, 8, 3, 'Groupe Cours Dimanche 18h', '20', 1, 1, '2025-08-18 05:59:55', '2025-08-18 05:59:55', NULL, NULL, NULL, 0, NULL, 0, 112),
+(113, 9, 8, 3, 'Groupe Lundi 8h', '20', 1, 1, '2025-08-18 06:59:53', '2026-01-05 00:57:32', '2026-01-05 00:57:32', NULL, NULL, 0, NULL, 0, 113),
+(114, 9, 8, 3, 'Groupe Lundi 10h', '20', 1, 1, '2025-08-18 07:00:23', '2026-01-05 00:57:56', '2026-01-05 00:57:56', NULL, NULL, 0, NULL, 0, 114),
+(115, 9, 8, 3, 'Groupe Exercixe Lundi 14h', '20', 1, 1, '2025-08-18 07:00:50', '2025-08-18 07:00:50', NULL, NULL, NULL, 0, NULL, 0, 115),
+(116, 9, 8, 3, 'Groupe Exercices Lundi 16h', '20', 1, 1, '2025-08-18 07:01:13', '2025-08-18 07:01:13', NULL, NULL, NULL, 0, NULL, 0, 116),
+(117, 9, 8, 3, 'Groupe Lundi 18h', '20', 1, 1, '2025-08-18 07:01:47', '2026-01-05 00:57:14', '2026-01-05 00:57:14', NULL, NULL, 0, NULL, 0, 117),
+(118, 9, 8, 3, 'Groupe SM14h', '20', 1, 1, '2025-08-22 06:47:42', '2025-08-22 06:47:42', NULL, NULL, NULL, 0, NULL, 0, 118),
+(119, 9, 8, 3, 'Groupe DM14h', '20', 1, 1, '2025-08-22 06:54:10', '2025-08-22 06:54:10', NULL, NULL, NULL, 0, NULL, 0, 119),
+(120, 9, 8, 3, 'Groupe SM12h', '20', 1, 1, '2025-09-11 22:12:32', '2025-09-11 22:12:32', NULL, NULL, NULL, 0, NULL, 0, 120),
+(121, 9, 8, 3, 'Groupe SM20h', '20', 1, 1, '2025-09-11 22:34:48', '2025-09-11 22:34:48', NULL, NULL, NULL, 0, NULL, 0, 121),
+(122, 9, 8, 3, 'Groupe DM12', '20', 1, 1, '2025-09-11 22:39:49', '2025-09-11 22:39:49', NULL, NULL, NULL, 0, NULL, 0, 122),
+(123, 9, 8, 3, 'Groupe Cours Samedi 20h', '20', 1, 1, '2025-09-18 22:54:59', '2025-09-18 22:54:59', NULL, NULL, NULL, 0, NULL, 0, 123),
+(124, 9, 8, 3, 'Groupe Cours Dimanche 20h', '20', 1, 1, '2025-09-20 10:21:49', '2025-09-20 10:21:49', NULL, NULL, NULL, 0, NULL, 0, 124),
+(125, 9, 8, 3, 'fonction 7', '30', 1, 1, '2025-11-25 22:02:27', '2025-11-25 22:02:27', NULL, 1, 0, 0, NULL, 0, 125),
+(126, 9, 8, 3, 'fonction 7', '30', 1, 1, '2025-11-25 22:02:40', '2025-11-25 22:02:40', NULL, 1, 0, 0, NULL, 0, 126),
+(127, 9, 8, 3, 'fonction 7', '30', 1, 1, '2025-11-25 22:02:50', '2025-11-25 22:02:50', NULL, 1, 0, 0, NULL, 0, 127),
+(132, 12, 8, 3, 'test special group direct join', '20', 1, 1, '2025-12-11 12:39:08', '2025-12-11 12:39:08', NULL, 1, 1, 0, NULL, 0, 132),
+(135, 9, 8, 3, 'Groupe Mer8h', '30', 1, 1, '2025-12-31 06:13:33', '2025-12-31 06:13:33', NULL, NULL, NULL, 0, NULL, 0, 135),
+(136, 9, 8, 3, 'Groupe Mer10h', '30', 1, 1, '2025-12-31 06:13:52', '2025-12-31 06:13:52', NULL, NULL, NULL, 0, NULL, 0, 136),
+(137, 9, 8, 3, 'Groupe Mer12h', '30', 1, 1, '2025-12-31 06:14:38', '2025-12-31 06:14:38', NULL, NULL, NULL, 0, NULL, 0, 137),
+(138, 9, 8, 3, 'Groupe Mer14h', '30', 1, 1, '2025-12-31 06:14:56', '2025-12-31 06:14:56', NULL, NULL, NULL, 0, NULL, 0, 138),
+(139, 9, 8, 3, 'Groupe Mer16h', '30', 1, 1, '2025-12-31 06:16:12', '2025-12-31 06:16:12', NULL, NULL, NULL, 0, NULL, 0, 139),
+(140, 9, 8, 3, 'Groupe Mer18h', '30', 1, 1, '2025-12-31 06:16:26', '2025-12-31 06:16:26', NULL, NULL, NULL, 0, NULL, 0, 140),
+(141, 9, 8, 3, 'Groupe Mer20h', '30', 1, 1, '2025-12-31 06:16:42', '2025-12-31 06:16:42', NULL, NULL, NULL, 0, NULL, 0, 141),
+(142, 9, 8, 3, 'Groupe Jeudi 12h', '30', 1, 1, '2026-01-01 10:40:10', '2026-01-01 10:40:10', NULL, NULL, NULL, 0, NULL, 0, 142),
+(143, 9, 8, 3, 'Groupr Vl20h', '20', 1, 1, '2026-01-02 03:19:36', '2026-01-02 03:19:36', NULL, NULL, NULL, 0, NULL, 0, 143),
+(144, 12, 8, 3, 'dsfdf', '20', 1, 1, '2026-01-21 14:04:54', '2026-01-21 14:04:54', NULL, NULL, NULL, 0, NULL, 0, 144),
+(145, 9, 8, 3, 'special', '20', 1, 1, '2026-02-16 21:18:06', '2026-02-16 21:18:06', NULL, 1, 0, 0, NULL, 0, 145),
+(146, 9, 8, 3, 'special', '20', 1, 1, '2026-02-16 21:18:19', '2026-02-16 21:18:19', NULL, 1, 0, 0, NULL, 0, 146),
+(147, 9, 8, 3, 'special', '20', 1, 1, '2026-02-16 21:18:28', '2026-02-16 21:18:28', NULL, 1, 0, 0, NULL, 0, 147),
+(148, 9, 8, 3, 'special', '20', 1, 1, '2026-02-16 21:18:38', '2026-02-16 21:18:38', NULL, 1, 0, 0, NULL, 0, 148),
+(149, 9, 8, 3, 'special', '20', 1, 1, '2026-02-16 21:18:47', '2026-02-16 21:18:47', NULL, 1, 0, 0, NULL, 0, 149),
+(150, 25, 8, 3, 'wa9t test', '20', 1, 1, '2026-03-08 00:13:36', '2026-03-08 00:13:36', NULL, 1, 0, 0, NULL, 0, 150),
+(151, 25, 8, 3, 'correction', '20', 1, 1, '2026-03-08 00:44:51', '2026-03-08 00:44:51', NULL, 1, 0, 0, NULL, 0, 151),
+(152, 25, 8, 3, 'proba 1', '20', 1, 1, '2026-03-08 13:32:31', '2026-03-08 13:32:31', NULL, 1, 0, 0, NULL, 0, 152),
+(153, 25, 8, 3, 'group test', '10', 1, 1, '2026-03-09 14:46:03', '2026-03-09 14:46:03', NULL, NULL, NULL, 0, NULL, 0, 153),
+(154, 25, 8, 3, 'Test en ligne', '20', 1, 1, '2026-03-09 21:15:36', '2026-03-09 21:15:36', NULL, 1, 0, 0, NULL, 0, 154),
+(155, 12, 8, 3, 'test mobile', '1', 1, 1, '2026-03-12 09:13:21', '2026-03-12 09:13:21', NULL, NULL, NULL, 0, NULL, 0, 155),
+(156, 25, 8, 3, 'Rev samedi', '20', 1, 1, '2026-03-27 22:18:21', '2026-03-27 22:18:21', NULL, 1, 0, 0, NULL, 0, 156),
+(157, 25, 8, 3, 'Rev samedi', '20', 1, 1, '2026-03-27 22:18:41', '2026-03-27 22:18:41', NULL, 1, 0, 0, NULL, 0, 157),
+(158, 25, 8, 3, 'Rev samedi', '20', 1, 1, '2026-03-27 22:18:59', '2026-03-27 22:18:59', NULL, 1, 0, 0, NULL, 0, 158),
+(159, 25, 8, 3, 'Rev samedi', '20', 1, 1, '2026-03-27 22:19:16', '2026-03-27 22:19:16', NULL, 1, 0, 0, NULL, 0, 159),
+(160, 25, 8, 3, 'Rev samedi', '20', 1, 1, '2026-03-27 22:19:33', '2026-03-27 22:19:33', NULL, 1, 0, 0, NULL, 0, 160),
+(161, 25, 8, 3, 'Rev samedi', '20', 1, 1, '2026-03-27 22:19:50', '2026-03-27 22:19:50', NULL, 1, 0, 0, NULL, 0, 161),
+(162, 25, 8, 3, 'group1 test', '10', 1, 1, '2026-03-31 11:05:36', '2026-03-31 11:05:36', NULL, NULL, NULL, 0, NULL, 0, 162),
+(163, 25, 8, 3, 'test special group direct join', '10', 1, 1, '2026-03-31 11:07:19', '2026-03-31 11:07:19', NULL, 1, 1, 0, NULL, 0, 163),
+(164, 25, 8, 3, 'test special group direct join', '10', 1, 1, '2026-03-31 11:07:42', '2026-03-31 11:07:42', NULL, 1, 1, 0, NULL, 0, 164),
+(165, 12, 8, 3, 'test super group api prod', '10', 1, 1, '2026-04-07 08:45:39', '2026-04-07 08:45:39', NULL, 1, 0, 0, NULL, 0, 165),
+(166, 12, 8, 3, 'group test tttt', '10', 1, 1, '2026-04-07 08:54:18', '2026-04-07 08:54:18', NULL, 1, 1, 0, NULL, 0, 166),
+(167, 12, 8, 3, 'special test', '10', 1, 1, '2026-04-07 09:34:54', '2026-04-07 09:34:54', NULL, 1, 1, 0, NULL, 0, 167),
+(168, 12, 8, 3, 'special test', '10', 1, 1, '2026-04-07 09:42:22', '2026-04-07 09:42:22', NULL, 1, 1, 0, NULL, 0, 168),
+(169, 12, 8, 3, 'special test', '10', 1, 1, '2026-04-07 10:16:18', '2026-04-07 10:16:18', NULL, 1, 1, 0, NULL, 0, 169),
+(170, 12, 8, 3, 'special test', '10', 1, 1, '2026-04-07 10:19:03', '2026-04-07 10:19:03', NULL, 1, 1, 0, NULL, 0, 170),
+(171, 12, 8, 3, 'special test', '10', 1, 1, '2026-04-07 10:19:38', '2026-04-07 10:19:38', NULL, 1, 1, 0, NULL, 0, 171),
+(172, 12, 8, 3, 'special test', '10', 1, 1, '2026-04-07 10:19:57', '2026-04-07 10:19:57', NULL, 1, 1, 0, NULL, 0, 172),
+(173, 12, 8, 3, 'special test', '10', 1, 1, '2026-04-07 10:32:08', '2026-04-07 10:32:08', NULL, 1, 1, 0, NULL, 0, 173),
+(174, 12, 8, 3, 'special test', '10', 1, 1, '2026-04-07 10:33:28', '2026-04-07 10:33:28', NULL, 1, 1, 0, NULL, 0, 174),
+(175, 12, 8, 3, 'special test', '10', 1, 1, '2026-04-07 10:38:08', '2026-04-07 10:38:08', NULL, 1, 1, 0, NULL, 0, 175),
+(176, 12, 8, 3, 'special test', '10', 1, 1, '2026-04-07 10:40:09', '2026-04-07 10:40:09', NULL, 1, 1, 0, NULL, 0, 176),
+(177, 12, 8, 3, 'special test', '10', 1, 1, '2026-04-07 10:42:11', '2026-04-07 10:42:11', NULL, 1, 1, 0, NULL, 0, 177),
+(178, 12, 8, 3, 'special test', '10', 1, 1, '2026-04-07 10:42:37', '2026-04-07 10:42:37', NULL, 1, 1, 0, NULL, 0, 178),
+(179, 12, 8, 3, 'special test', '10', 1, 1, '2026-04-07 10:42:58', '2026-04-07 10:42:58', NULL, 1, 1, 0, NULL, 0, 179),
+(180, 12, 8, 3, 'group test 2', '10', 1, 1, '2026-04-07 10:46:21', '2026-04-07 10:46:21', NULL, 1, 1, 0, NULL, 0, 180);
 
 -- --------------------------------------------------------
 
@@ -2940,122 +2941,150 @@ CREATE TABLE `relation_teacher_to_subject_group` (
   `updated_at` datetime DEFAULT NULL,
   `releaseToken` tinyint(1) DEFAULT NULL,
   `useToken` varchar(255) DEFAULT NULL,
-  `slc_use` int(11) DEFAULT 0
+  `slc_use` int(11) DEFAULT 0,
+  `id_prod` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `relation_teacher_to_subject_group`
 --
 
-INSERT INTO `relation_teacher_to_subject_group` (`id`, `relation_group_local_session_id`, `subject_id`, `user_id`, `enabled`, `created_at`, `timestamp`, `updated_at`, `releaseToken`, `useToken`, `slc_use`) VALUES
-(785, 8, 1, 4, 1, '2024-09-14 19:37:08', '2024-09-14 19:37:08', NULL, 0, NULL, 0),
-(786, 18, 1, 4, 1, '2024-09-23 11:43:22', '2024-09-23 11:43:22', NULL, 0, NULL, 0),
-(787, 40, 1, 4, 1, '2024-10-25 10:00:39', '2024-10-25 10:00:39', NULL, 0, NULL, 0),
-(788, 41, 1, 4, 1, '2024-10-25 10:01:17', '2024-10-25 10:01:17', NULL, 0, NULL, 0),
-(789, 42, 1, 4, 1, '2024-10-25 10:01:36', '2024-10-25 10:01:36', NULL, 0, NULL, 0),
-(790, 43, 1, 4, 1, '2024-10-25 10:01:53', '2024-10-25 10:01:53', NULL, 0, NULL, 0),
-(791, 44, 1, 4, 1, '2024-10-25 10:02:09', '2024-10-25 10:02:09', NULL, 0, NULL, 0),
-(792, 45, 1, 4, 1, '2024-10-25 10:02:25', '2024-10-25 10:02:25', NULL, 0, NULL, 0),
-(793, 46, 1, 4, 1, '2024-10-25 10:02:47', '2024-10-25 10:02:47', NULL, 0, NULL, 0),
-(794, 47, 1, 4, 1, '2024-10-27 05:47:36', '2024-10-27 05:47:36', NULL, 0, NULL, 0),
-(795, 48, 1, 4, 1, '2024-10-27 05:47:52', '2024-10-27 05:47:52', NULL, 0, NULL, 0),
-(796, 49, 1, 4, 1, '2024-10-27 05:48:07', '2024-10-27 05:48:07', NULL, 0, NULL, 0),
-(797, 50, 1, 4, 1, '2024-10-27 05:48:27', '2024-10-27 05:48:27', NULL, 0, NULL, 0),
-(798, 51, 1, 4, 1, '2024-10-27 05:48:45', '2024-10-27 05:48:45', NULL, 0, NULL, 0),
-(799, 52, 1, 4, 1, '2024-10-27 05:49:05', '2024-10-27 05:49:05', NULL, 0, NULL, 0),
-(800, 55, 1, 136, 1, '2025-03-13 14:55:26', '2025-03-13 14:55:26', NULL, 0, NULL, 0),
-(801, 56, 2, 4, 1, '2025-03-28 08:50:43', '2025-03-28 08:50:43', NULL, 0, NULL, 0),
-(802, 57, 1, 136, 1, '2025-03-28 08:57:52', '2025-03-28 08:57:52', NULL, 0, NULL, 0),
-(803, 58, 1, 4, 1, '2025-03-28 09:08:34', '2025-03-28 09:08:34', NULL, 0, NULL, 0),
-(804, 59, 1, 4, 1, '2025-03-28 09:11:18', '2025-03-28 09:11:18', NULL, 0, NULL, 0),
-(805, 60, 1, 136, 1, '2025-04-07 12:27:06', '2025-04-07 12:27:06', NULL, 0, NULL, 0),
-(806, 61, 1, 4, 1, '2025-05-14 11:17:45', '2025-05-14 11:17:45', NULL, 0, NULL, 0),
-(807, 62, 1, 4, 1, '2025-05-21 11:14:40', '2025-05-21 11:14:40', NULL, 0, NULL, 0),
-(808, 63, 1, 4, 1, '2025-06-30 14:23:49', '2025-06-30 14:23:49', NULL, 0, NULL, 0),
-(809, 64, 1, 4, 1, '2025-07-08 10:29:15', '2025-07-08 10:29:15', NULL, 0, NULL, 0),
-(810, 65, 1, 4, 1, '2025-07-08 10:36:12', '2025-07-08 10:36:12', NULL, 0, NULL, 0),
-(811, 68, 1, 4, 1, '2025-07-08 11:15:06', '2025-07-08 11:15:06', NULL, 0, NULL, 0),
-(812, 70, 1, 4, 1, '2025-07-09 15:58:10', '2025-07-09 15:58:10', NULL, 0, NULL, 0),
-(813, 70, 1, 374, 1, '2025-07-10 09:19:03', '2025-07-10 09:19:03', NULL, 0, NULL, 0),
-(814, 73, 1, 4, 1, '2025-07-10 10:15:49', '2025-07-10 10:15:49', NULL, 0, NULL, 0),
-(815, 73, 1, 374, 1, '2025-07-10 10:18:47', '2025-07-10 10:18:47', NULL, 0, NULL, 0),
-(816, 74, 1, 4, 1, '2025-07-10 11:32:53', '2025-07-10 11:32:53', NULL, 0, NULL, 0),
-(817, 75, 1, 375, 1, '2025-07-10 12:16:59', '2025-07-10 12:16:59', NULL, 0, NULL, 0),
-(818, 75, 1, 374, 1, '2025-07-11 09:33:37', '2025-07-11 09:33:37', NULL, 0, NULL, 0),
-(819, 73, 1, 375, 1, '2025-07-11 09:33:57', '2025-07-11 09:33:57', NULL, 0, NULL, 0),
-(820, 76, 1, 374, 1, '2025-07-15 08:25:07', '2025-07-15 08:25:07', NULL, 0, NULL, 0),
-(821, 79, 1, 4, 1, '2025-07-16 11:29:29', '2025-07-16 11:29:29', NULL, 0, NULL, 0),
-(822, 80, 1, 4, 1, '2025-07-16 11:30:02', '2025-07-16 11:30:02', NULL, 0, NULL, 0),
-(823, 81, 1, 4, 1, '2025-07-16 11:30:59', '2025-07-16 11:30:59', NULL, 0, NULL, 0),
-(824, 82, 4, 4, 1, '2025-07-16 11:31:27', '2025-07-16 11:31:27', NULL, 0, NULL, 0),
-(825, 83, 4, 4, 1, '2025-07-16 11:31:57', '2025-07-16 11:31:57', NULL, 0, NULL, 0),
-(826, 84, 1, 4, 1, '2025-07-17 12:58:07', '2025-07-17 12:58:07', NULL, 0, NULL, 0),
-(827, 85, 4, 4, 1, '2025-07-17 13:01:09', '2025-07-17 13:01:09', NULL, 0, NULL, 0),
-(828, 76, 1, 4, 1, '2025-07-22 09:40:09', '2025-07-22 09:40:09', NULL, 0, NULL, 0),
-(829, 86, 1, 4, 1, '2025-07-22 13:54:09', '2025-07-22 13:54:09', NULL, 0, NULL, 0),
-(830, 87, 1, 4, 1, '2025-07-22 13:59:21', '2025-07-22 13:59:21', NULL, 0, NULL, 0),
-(831, 88, 1, 4, 1, '2025-07-22 13:59:26', '2025-07-22 13:59:26', NULL, 0, NULL, 0),
-(832, 89, 1, 4, 1, '2025-07-22 13:59:28', '2025-07-22 13:59:28', NULL, 0, NULL, 0),
-(833, 90, 1, 4, 1, '2025-07-22 13:59:43', '2025-07-22 13:59:43', NULL, 0, NULL, 0),
-(834, 91, 1, 4, 1, '2025-07-22 13:59:58', '2025-07-22 13:59:58', NULL, 0, NULL, 0),
-(835, 92, 1, 4, 1, '2025-07-22 14:00:32', '2025-07-22 14:00:32', NULL, 0, NULL, 0),
-(836, 93, 1, 4, 1, '2025-07-23 12:30:13', '2025-07-23 12:30:13', NULL, 0, NULL, 0),
-(837, 94, 2, 4, 1, '2025-07-23 12:31:08', '2025-07-23 12:31:08', NULL, 0, NULL, 0),
-(838, 95, 1, 4, 1, '2025-07-23 12:33:04', '2025-07-23 12:33:04', NULL, 0, NULL, 0),
-(839, 96, 2, 4, 1, '2025-07-23 14:07:41', '2025-07-23 14:07:41', NULL, 0, NULL, 0),
-(840, 97, 1, 4, 1, '2025-07-23 14:13:52', '2025-07-23 14:13:52', NULL, 0, NULL, 0),
-(841, 98, 1, 4, 1, '2025-07-23 14:15:21', '2025-07-23 14:15:21', NULL, 0, NULL, 0),
-(842, 99, 1, 4, 1, '2025-08-02 05:17:19', '2025-08-02 05:17:19', NULL, 0, NULL, 0),
-(843, 100, 1, 4, 1, '2025-08-02 05:18:01', '2025-08-02 05:18:01', NULL, 0, NULL, 0),
-(844, 101, 1, 4, 1, '2025-08-02 05:18:42', '2025-08-02 05:18:42', NULL, 0, NULL, 0),
-(845, 102, 1, 4, 1, '2025-08-02 05:19:09', '2025-08-02 05:19:09', NULL, 0, NULL, 0),
-(846, 103, 1, 4, 1, '2025-08-02 05:20:18', '2025-08-02 05:20:18', NULL, 0, NULL, 0),
-(847, 104, 1, 4, 1, '2025-08-02 05:20:46', '2025-08-02 05:20:46', NULL, 0, NULL, 0),
-(848, 105, 1, 4, 1, '2025-08-02 05:21:12', '2025-08-02 05:21:12', NULL, 0, NULL, 0),
-(849, 106, 1, 4, 1, '2025-08-02 05:25:00', '2025-08-02 05:25:00', NULL, 0, NULL, 0),
-(850, 107, 1, 4, 1, '2025-08-02 05:26:11', '2025-08-02 05:26:11', NULL, 0, NULL, 0),
-(851, 108, 1, 4, 1, '2025-08-02 05:26:40', '2025-08-02 05:26:40', NULL, 0, NULL, 0),
-(852, 109, 1, 4, 1, '2025-08-07 16:55:32', '2025-08-07 16:55:32', NULL, 0, NULL, 0),
-(853, 110, 1, 4, 1, '2025-08-07 16:57:14', '2025-08-07 16:57:14', NULL, 0, NULL, 0),
-(854, 111, 1, 4, 1, '2025-08-07 17:01:18', '2025-08-07 17:01:18', NULL, 0, NULL, 0),
-(855, 112, 1, 4, 1, '2025-08-18 05:59:55', '2025-08-18 05:59:55', NULL, 0, NULL, 0),
-(856, 113, 1, 4, 1, '2025-08-18 06:59:53', '2025-08-18 06:59:53', NULL, 0, NULL, 0),
-(857, 114, 1, 4, 1, '2025-08-18 07:00:23', '2025-08-18 07:00:23', NULL, 0, NULL, 0),
-(858, 115, 1, 4, 1, '2025-08-18 07:00:50', '2025-08-18 07:00:50', NULL, 0, NULL, 0),
-(859, 116, 1, 4, 1, '2025-08-18 07:01:13', '2025-08-18 07:01:13', NULL, 0, NULL, 0),
-(860, 117, 1, 4, 1, '2025-08-18 07:01:47', '2025-08-18 07:01:47', NULL, 0, NULL, 0),
-(861, 118, 1, 4, 1, '2025-08-22 06:47:42', '2025-08-22 06:47:42', NULL, 0, NULL, 0),
-(862, 119, 1, 4, 1, '2025-08-22 06:54:10', '2025-08-22 06:54:10', NULL, 0, NULL, 0),
-(863, 120, 1, 4, 1, '2025-09-11 22:12:32', '2025-09-11 22:12:32', NULL, 0, NULL, 0),
-(864, 121, 1, 4, 1, '2025-09-11 22:34:48', '2025-09-11 22:34:48', NULL, 0, NULL, 0),
-(865, 122, 1, 4, 1, '2025-09-11 22:39:49', '2025-09-11 22:39:49', NULL, 0, NULL, 0),
-(866, 123, 1, 4, 1, '2025-09-18 22:54:59', '2025-09-18 22:54:59', NULL, 0, NULL, 0),
-(867, 124, 1, 4, 1, '2025-09-20 10:21:49', '2025-09-20 10:21:49', NULL, 0, NULL, 0),
-(868, 125, 1, 4, 1, '2025-11-25 22:02:27', '2025-11-25 22:02:27', NULL, 0, NULL, 0),
-(869, 126, 1, 4, 1, '2025-11-25 22:02:40', '2025-11-25 22:02:40', NULL, 0, NULL, 0),
-(870, 127, 1, 4, 1, '2025-11-25 22:02:50', '2025-11-25 22:02:50', NULL, 0, NULL, 0),
-(871, 132, 4, 375, 1, '2025-12-11 12:39:08', '2025-12-11 12:39:08', NULL, 0, NULL, 0),
-(872, 135, 1, 4, 1, '2025-12-31 06:13:33', '2025-12-31 06:13:33', NULL, 0, NULL, 0),
-(873, 136, 1, 4, 1, '2025-12-31 06:13:52', '2025-12-31 06:13:52', NULL, 0, NULL, 0),
-(874, 137, 1, 4, 1, '2025-12-31 06:14:38', '2025-12-31 06:14:38', NULL, 0, NULL, 0),
-(875, 138, 1, 4, 1, '2025-12-31 06:14:56', '2025-12-31 06:14:56', NULL, 0, NULL, 0),
-(876, 139, 1, 4, 1, '2025-12-31 06:16:12', '2025-12-31 06:16:12', NULL, 0, NULL, 0),
-(877, 140, 1, 4, 1, '2025-12-31 06:16:26', '2025-12-31 06:16:26', NULL, 0, NULL, 0),
-(878, 141, 1, 4, 1, '2025-12-31 06:16:42', '2025-12-31 06:16:42', NULL, 0, NULL, 0),
-(879, 142, 1, 4, 1, '2026-01-01 10:40:10', '2026-01-01 10:40:10', NULL, 0, NULL, 0),
-(880, 143, 1, 4, 1, '2026-01-02 03:19:36', '2026-01-02 03:19:36', NULL, 0, NULL, 0),
-(881, 144, 1, 374, 1, '2026-01-21 14:04:54', '2026-01-21 14:04:54', NULL, 0, NULL, 0),
-(882, 145, 1, 4, 1, '2026-02-16 21:18:06', '2026-02-16 21:18:06', NULL, 0, NULL, 0),
-(883, 146, 1, 4, 1, '2026-02-16 21:18:19', '2026-02-16 21:18:19', NULL, 0, NULL, 0),
-(884, 147, 1, 4, 1, '2026-02-16 21:18:28', '2026-02-16 21:18:28', NULL, 0, NULL, 0),
-(885, 148, 1, 4, 1, '2026-02-16 21:18:38', '2026-02-16 21:18:38', NULL, 0, NULL, 0),
-(886, 149, 1, 4, 1, '2026-02-16 21:18:47', '2026-02-16 21:18:47', NULL, 0, NULL, 0),
-(887, 150, 1, 4, 1, '2026-03-08 00:13:36', '2026-03-08 00:13:36', NULL, 0, NULL, 0),
-(888, 151, 1, 4, 1, '2026-03-08 00:44:51', '2026-03-08 00:44:51', NULL, 0, NULL, 0),
-(889, 152, 1, 4, 1, '2026-03-08 13:32:31', '2026-03-08 13:32:31', NULL, 0, NULL, 0),
-(890, 153, 1, 4, 1, '2026-03-09 14:46:03', '2026-03-09 14:46:03', NULL, 0, NULL, 0),
-(891, 154, 1, 4, 1, '2026-03-09 21:15:36', '2026-03-09 21:15:36', NULL, 0, NULL, 0),
-(892, 155, 1, 4, 1, '2026-03-12 09:13:21', '2026-03-12 09:13:21', NULL, 0, NULL, 0);
+INSERT INTO `relation_teacher_to_subject_group` (`id`, `relation_group_local_session_id`, `subject_id`, `user_id`, `enabled`, `created_at`, `timestamp`, `updated_at`, `releaseToken`, `useToken`, `slc_use`, `id_prod`) VALUES
+(1131, 8, 1, 4, 1, '2024-09-14 19:37:08', '2024-09-14 19:37:08', NULL, 0, NULL, 0, NULL),
+(1132, 18, 1, 4, 1, '2024-09-23 11:43:22', '2024-09-23 11:43:22', NULL, 0, NULL, 0, NULL),
+(1133, 40, 1, 4, 1, '2024-10-25 10:00:39', '2024-10-25 10:00:39', NULL, 0, NULL, 0, NULL),
+(1134, 41, 1, 4, 1, '2024-10-25 10:01:17', '2024-10-25 10:01:17', NULL, 0, NULL, 0, NULL),
+(1135, 42, 1, 4, 1, '2024-10-25 10:01:36', '2024-10-25 10:01:36', NULL, 0, NULL, 0, NULL),
+(1136, 43, 1, 4, 1, '2024-10-25 10:01:53', '2024-10-25 10:01:53', NULL, 0, NULL, 0, NULL),
+(1137, 44, 1, 4, 1, '2024-10-25 10:02:09', '2024-10-25 10:02:09', NULL, 0, NULL, 0, NULL),
+(1138, 45, 1, 4, 1, '2024-10-25 10:02:25', '2024-10-25 10:02:25', NULL, 0, NULL, 0, NULL),
+(1139, 46, 1, 4, 1, '2024-10-25 10:02:47', '2024-10-25 10:02:47', NULL, 0, NULL, 0, NULL),
+(1140, 47, 1, 4, 1, '2024-10-27 05:47:36', '2024-10-27 05:47:36', NULL, 0, NULL, 0, NULL),
+(1141, 48, 1, 4, 1, '2024-10-27 05:47:52', '2024-10-27 05:47:52', NULL, 0, NULL, 0, NULL),
+(1142, 49, 1, 4, 1, '2024-10-27 05:48:07', '2024-10-27 05:48:07', NULL, 0, NULL, 0, NULL),
+(1143, 50, 1, 4, 1, '2024-10-27 05:48:27', '2024-10-27 05:48:27', NULL, 0, NULL, 0, NULL),
+(1144, 51, 1, 4, 1, '2024-10-27 05:48:45', '2024-10-27 05:48:45', NULL, 0, NULL, 0, NULL),
+(1145, 52, 1, 4, 1, '2024-10-27 05:49:05', '2024-10-27 05:49:05', NULL, 0, NULL, 0, NULL),
+(1146, 55, 1, 136, 1, '2025-03-13 14:55:26', '2025-03-13 14:55:26', NULL, 0, NULL, 0, NULL),
+(1147, 56, 2, 4, 1, '2025-03-28 08:50:43', '2025-03-28 08:50:43', NULL, 0, NULL, 0, NULL),
+(1148, 57, 1, 136, 1, '2025-03-28 08:57:52', '2025-03-28 08:57:52', NULL, 0, NULL, 0, NULL),
+(1149, 58, 1, 4, 1, '2025-03-28 09:08:34', '2025-03-28 09:08:34', NULL, 0, NULL, 0, NULL),
+(1150, 59, 1, 4, 1, '2025-03-28 09:11:18', '2025-03-28 09:11:18', NULL, 0, NULL, 0, NULL),
+(1151, 60, 1, 136, 1, '2025-04-07 12:27:06', '2025-04-07 12:27:06', NULL, 0, NULL, 0, NULL),
+(1152, 61, 1, 4, 1, '2025-05-14 11:17:45', '2025-05-14 11:17:45', NULL, 0, NULL, 0, NULL),
+(1153, 62, 1, 4, 1, '2025-05-21 11:14:40', '2025-05-21 11:14:40', NULL, 0, NULL, 0, NULL),
+(1154, 63, 1, 4, 1, '2025-06-30 14:23:49', '2025-06-30 14:23:49', NULL, 0, NULL, 0, NULL),
+(1155, 64, 1, 4, 1, '2025-07-08 10:29:15', '2025-07-08 10:29:15', NULL, 0, NULL, 0, NULL),
+(1156, 65, 1, 4, 1, '2025-07-08 10:36:12', '2025-07-08 10:36:12', NULL, 0, NULL, 0, NULL),
+(1157, 68, 1, 4, 1, '2025-07-08 11:15:06', '2025-07-08 11:15:06', NULL, 0, NULL, 0, NULL),
+(1158, 70, 1, 4, 1, '2025-07-09 15:58:10', '2025-07-09 15:58:10', NULL, 0, NULL, 0, NULL),
+(1159, 70, 1, 374, 1, '2025-07-10 09:19:03', '2025-07-10 09:19:03', NULL, 0, NULL, 0, NULL),
+(1160, 73, 1, 4, 1, '2025-07-10 10:15:49', '2025-07-10 10:15:49', NULL, 0, NULL, 0, NULL),
+(1161, 73, 1, 374, 1, '2025-07-10 10:18:47', '2025-07-10 10:18:47', NULL, 0, NULL, 0, NULL),
+(1162, 74, 1, 4, 1, '2025-07-10 11:32:53', '2025-07-10 11:32:53', NULL, 0, NULL, 0, NULL),
+(1163, 75, 1, 375, 1, '2025-07-10 12:16:59', '2025-07-10 12:16:59', NULL, 0, NULL, 0, NULL),
+(1164, 75, 1, 374, 1, '2025-07-11 09:33:37', '2025-07-11 09:33:37', NULL, 0, NULL, 0, NULL),
+(1165, 73, 1, 375, 1, '2025-07-11 09:33:57', '2025-07-11 09:33:57', NULL, 0, NULL, 0, NULL),
+(1166, 76, 1, 374, 1, '2025-07-15 08:25:07', '2025-07-15 08:25:07', NULL, 0, NULL, 0, NULL),
+(1167, 79, 1, 4, 1, '2025-07-16 11:29:29', '2025-07-16 11:29:29', NULL, 0, NULL, 0, NULL),
+(1168, 80, 1, 4, 1, '2025-07-16 11:30:02', '2025-07-16 11:30:02', NULL, 0, NULL, 0, NULL),
+(1169, 81, 1, 4, 1, '2025-07-16 11:30:59', '2025-07-16 11:30:59', NULL, 0, NULL, 0, NULL),
+(1170, 82, 4, 4, 1, '2025-07-16 11:31:27', '2025-07-16 11:31:27', NULL, 0, NULL, 0, NULL),
+(1171, 83, 4, 4, 1, '2025-07-16 11:31:57', '2025-07-16 11:31:57', NULL, 0, NULL, 0, NULL),
+(1172, 84, 1, 4, 1, '2025-07-17 12:58:07', '2025-07-17 12:58:07', NULL, 0, NULL, 0, NULL),
+(1173, 85, 4, 4, 1, '2025-07-17 13:01:09', '2025-07-17 13:01:09', NULL, 0, NULL, 0, NULL),
+(1174, 76, 1, 4, 1, '2025-07-22 09:40:09', '2025-07-22 09:40:09', NULL, 0, NULL, 0, NULL),
+(1175, 86, 1, 4, 1, '2025-07-22 13:54:09', '2025-07-22 13:54:09', NULL, 0, NULL, 0, NULL),
+(1176, 87, 1, 4, 1, '2025-07-22 13:59:21', '2025-07-22 13:59:21', NULL, 0, NULL, 0, NULL),
+(1177, 88, 1, 4, 1, '2025-07-22 13:59:26', '2025-07-22 13:59:26', NULL, 0, NULL, 0, NULL),
+(1178, 89, 1, 4, 1, '2025-07-22 13:59:28', '2025-07-22 13:59:28', NULL, 0, NULL, 0, NULL),
+(1179, 90, 1, 4, 1, '2025-07-22 13:59:43', '2025-07-22 13:59:43', NULL, 0, NULL, 0, NULL),
+(1180, 91, 1, 4, 1, '2025-07-22 13:59:58', '2025-07-22 13:59:58', NULL, 0, NULL, 0, NULL),
+(1181, 92, 1, 4, 1, '2025-07-22 14:00:32', '2025-07-22 14:00:32', NULL, 0, NULL, 0, NULL),
+(1182, 93, 1, 4, 1, '2025-07-23 12:30:13', '2025-07-23 12:30:13', NULL, 0, NULL, 0, NULL),
+(1183, 94, 2, 4, 1, '2025-07-23 12:31:08', '2025-07-23 12:31:08', NULL, 0, NULL, 0, NULL),
+(1184, 95, 1, 4, 1, '2025-07-23 12:33:04', '2025-07-23 12:33:04', NULL, 0, NULL, 0, NULL),
+(1185, 96, 2, 4, 1, '2025-07-23 14:07:41', '2025-07-23 14:07:41', NULL, 0, NULL, 0, NULL),
+(1186, 97, 1, 4, 1, '2025-07-23 14:13:52', '2025-07-23 14:13:52', NULL, 0, NULL, 0, NULL),
+(1187, 98, 1, 4, 1, '2025-07-23 14:15:21', '2025-07-23 14:15:21', NULL, 0, NULL, 0, NULL),
+(1188, 99, 1, 4, 1, '2025-08-02 05:17:19', '2025-08-02 05:17:19', NULL, 0, NULL, 0, NULL),
+(1189, 100, 1, 4, 1, '2025-08-02 05:18:01', '2025-08-02 05:18:01', NULL, 0, NULL, 0, NULL),
+(1190, 101, 1, 4, 1, '2025-08-02 05:18:42', '2025-08-02 05:18:42', NULL, 0, NULL, 0, NULL),
+(1191, 102, 1, 4, 1, '2025-08-02 05:19:09', '2025-08-02 05:19:09', NULL, 0, NULL, 0, NULL),
+(1192, 103, 1, 4, 1, '2025-08-02 05:20:18', '2025-08-02 05:20:18', NULL, 0, NULL, 0, NULL),
+(1193, 104, 1, 4, 1, '2025-08-02 05:20:46', '2025-08-02 05:20:46', NULL, 0, NULL, 0, NULL),
+(1194, 105, 1, 4, 1, '2025-08-02 05:21:12', '2025-08-02 05:21:12', NULL, 0, NULL, 0, NULL),
+(1195, 106, 1, 4, 1, '2025-08-02 05:25:00', '2025-08-02 05:25:00', NULL, 0, NULL, 0, NULL),
+(1196, 107, 1, 4, 1, '2025-08-02 05:26:11', '2025-08-02 05:26:11', NULL, 0, NULL, 0, NULL),
+(1197, 108, 1, 4, 1, '2025-08-02 05:26:40', '2025-08-02 05:26:40', NULL, 0, NULL, 0, NULL),
+(1198, 109, 1, 4, 1, '2025-08-07 16:55:32', '2025-08-07 16:55:32', NULL, 0, NULL, 0, NULL),
+(1199, 110, 1, 4, 1, '2025-08-07 16:57:14', '2025-08-07 16:57:14', NULL, 0, NULL, 0, NULL),
+(1200, 111, 1, 4, 1, '2025-08-07 17:01:18', '2025-08-07 17:01:18', NULL, 0, NULL, 0, NULL),
+(1201, 112, 1, 4, 1, '2025-08-18 05:59:55', '2025-08-18 05:59:55', NULL, 0, NULL, 0, NULL),
+(1202, 113, 1, 4, 1, '2025-08-18 06:59:53', '2025-08-18 06:59:53', NULL, 0, NULL, 0, NULL),
+(1203, 114, 1, 4, 1, '2025-08-18 07:00:23', '2025-08-18 07:00:23', NULL, 0, NULL, 0, NULL),
+(1204, 115, 1, 4, 1, '2025-08-18 07:00:50', '2025-08-18 07:00:50', NULL, 0, NULL, 0, NULL),
+(1205, 116, 1, 4, 1, '2025-08-18 07:01:13', '2025-08-18 07:01:13', NULL, 0, NULL, 0, NULL),
+(1206, 117, 1, 4, 1, '2025-08-18 07:01:47', '2025-08-18 07:01:47', NULL, 0, NULL, 0, NULL),
+(1207, 118, 1, 4, 1, '2025-08-22 06:47:42', '2025-08-22 06:47:42', NULL, 0, NULL, 0, NULL),
+(1208, 119, 1, 4, 1, '2025-08-22 06:54:10', '2025-08-22 06:54:10', NULL, 0, NULL, 0, NULL),
+(1209, 120, 1, 4, 1, '2025-09-11 22:12:32', '2025-09-11 22:12:32', NULL, 0, NULL, 0, NULL),
+(1210, 121, 1, 4, 1, '2025-09-11 22:34:48', '2025-09-11 22:34:48', NULL, 0, NULL, 0, NULL),
+(1211, 122, 1, 4, 1, '2025-09-11 22:39:49', '2025-09-11 22:39:49', NULL, 0, NULL, 0, NULL),
+(1212, 123, 1, 4, 1, '2025-09-18 22:54:59', '2025-09-18 22:54:59', NULL, 0, NULL, 0, NULL),
+(1213, 124, 1, 4, 1, '2025-09-20 10:21:49', '2025-09-20 10:21:49', NULL, 0, NULL, 0, NULL),
+(1214, 125, 1, 4, 1, '2025-11-25 22:02:27', '2025-11-25 22:02:27', NULL, 0, NULL, 0, NULL),
+(1215, 126, 1, 4, 1, '2025-11-25 22:02:40', '2025-11-25 22:02:40', NULL, 0, NULL, 0, NULL),
+(1216, 127, 1, 4, 1, '2025-11-25 22:02:50', '2025-11-25 22:02:50', NULL, 0, NULL, 0, NULL),
+(1217, 132, 4, 375, 1, '2025-12-11 12:39:08', '2025-12-11 12:39:08', NULL, 0, NULL, 0, NULL),
+(1218, 135, 1, 4, 1, '2025-12-31 06:13:33', '2025-12-31 06:13:33', NULL, 0, NULL, 0, NULL),
+(1219, 136, 1, 4, 1, '2025-12-31 06:13:52', '2025-12-31 06:13:52', NULL, 0, NULL, 0, NULL),
+(1220, 137, 1, 4, 1, '2025-12-31 06:14:38', '2025-12-31 06:14:38', NULL, 0, NULL, 0, NULL),
+(1221, 138, 1, 4, 1, '2025-12-31 06:14:56', '2025-12-31 06:14:56', NULL, 0, NULL, 0, NULL),
+(1222, 139, 1, 4, 1, '2025-12-31 06:16:12', '2025-12-31 06:16:12', NULL, 0, NULL, 0, NULL),
+(1223, 140, 1, 4, 1, '2025-12-31 06:16:26', '2025-12-31 06:16:26', NULL, 0, NULL, 0, NULL),
+(1224, 141, 1, 4, 1, '2025-12-31 06:16:42', '2025-12-31 06:16:42', NULL, 0, NULL, 0, NULL),
+(1225, 142, 1, 4, 1, '2026-01-01 10:40:10', '2026-01-01 10:40:10', NULL, 0, NULL, 0, NULL),
+(1226, 143, 1, 4, 1, '2026-01-02 03:19:36', '2026-01-02 03:19:36', NULL, 0, NULL, 0, NULL),
+(1227, 144, 1, 374, 1, '2026-01-21 14:04:54', '2026-01-21 14:04:54', NULL, 0, NULL, 0, NULL),
+(1228, 145, 1, 4, 1, '2026-02-16 21:18:06', '2026-02-16 21:18:06', NULL, 0, NULL, 0, NULL),
+(1229, 146, 1, 4, 1, '2026-02-16 21:18:19', '2026-02-16 21:18:19', NULL, 0, NULL, 0, NULL),
+(1230, 147, 1, 4, 1, '2026-02-16 21:18:28', '2026-02-16 21:18:28', NULL, 0, NULL, 0, NULL),
+(1231, 148, 1, 4, 1, '2026-02-16 21:18:38', '2026-02-16 21:18:38', NULL, 0, NULL, 0, NULL),
+(1232, 149, 1, 4, 1, '2026-02-16 21:18:47', '2026-02-16 21:18:47', NULL, 0, NULL, 0, NULL),
+(1233, 150, 1, 4, 1, '2026-03-08 00:13:36', '2026-03-08 00:13:36', NULL, 0, NULL, 0, NULL),
+(1234, 151, 1, 4, 1, '2026-03-08 00:44:51', '2026-03-08 00:44:51', NULL, 0, NULL, 0, NULL),
+(1235, 152, 1, 4, 1, '2026-03-08 13:32:31', '2026-03-08 13:32:31', NULL, 0, NULL, 0, NULL),
+(1236, 153, 1, 4, 1, '2026-03-09 14:46:03', '2026-03-09 14:46:03', NULL, 0, NULL, 0, NULL),
+(1237, 154, 1, 4, 1, '2026-03-09 21:15:36', '2026-03-09 21:15:36', NULL, 0, NULL, 0, NULL),
+(1238, 155, 1, 4, 1, '2026-03-12 09:13:21', '2026-03-12 09:13:21', NULL, 0, NULL, 0, NULL),
+(1239, 156, 1, 4, 1, '2026-03-27 22:18:21', '2026-03-27 22:18:21', NULL, 0, NULL, 0, NULL),
+(1240, 157, 1, 4, 1, '2026-03-27 22:18:41', '2026-03-27 22:18:41', NULL, 0, NULL, 0, NULL),
+(1241, 158, 1, 4, 1, '2026-03-27 22:18:59', '2026-03-27 22:18:59', NULL, 0, NULL, 0, NULL),
+(1242, 159, 1, 4, 1, '2026-03-27 22:19:16', '2026-03-27 22:19:16', NULL, 0, NULL, 0, NULL),
+(1243, 160, 1, 4, 1, '2026-03-27 22:19:33', '2026-03-27 22:19:33', NULL, 0, NULL, 0, NULL),
+(1244, 161, 1, 4, 1, '2026-03-27 22:19:50', '2026-03-27 22:19:50', NULL, 0, NULL, 0, NULL),
+(1245, 153, 1, 374, 1, '2026-03-31 11:05:15', '2026-03-31 11:05:15', NULL, 0, NULL, 0, NULL),
+(1246, 162, 1, 374, 1, '2026-03-31 11:05:36', '2026-03-31 11:05:36', NULL, 0, NULL, 0, NULL),
+(1247, 163, 4, 692, 1, '2026-03-31 11:07:19', '2026-03-31 11:07:19', NULL, 0, NULL, 0, NULL),
+(1248, 164, 4, 692, 1, '2026-03-31 11:07:42', '2026-03-31 11:07:42', NULL, 0, NULL, 0, NULL),
+(1249, 165, 1, 374, 1, '2026-04-07 08:45:39', '2026-04-07 08:45:39', NULL, 0, NULL, 0, NULL),
+(1250, 166, 1, 374, 1, '2026-04-07 08:54:18', '2026-04-07 08:54:18', NULL, 0, NULL, 0, NULL),
+(1251, 167, 1, 4, 1, '2026-04-07 09:34:54', '2026-04-07 09:34:54', NULL, 0, NULL, 0, NULL),
+(1252, 168, 1, 4, 1, '2026-04-07 09:42:22', '2026-04-07 09:42:22', NULL, 0, NULL, 0, NULL),
+(1253, 169, 1, 4, 1, '2026-04-07 10:16:18', '2026-04-07 10:16:18', NULL, 0, NULL, 0, NULL),
+(1254, 170, 1, 4, 1, '2026-04-07 10:19:03', '2026-04-07 10:19:03', NULL, 0, NULL, 0, NULL),
+(1255, 171, 1, 4, 1, '2026-04-07 10:19:38', '2026-04-07 10:19:38', NULL, 0, NULL, 0, NULL),
+(1256, 172, 1, 4, 1, '2026-04-07 10:19:57', '2026-04-07 10:19:57', NULL, 0, NULL, 0, NULL),
+(1257, 173, 1, 4, 1, '2026-04-07 10:32:08', '2026-04-07 10:32:08', NULL, 0, NULL, 0, NULL),
+(1258, 174, 1, 4, 1, '2026-04-07 10:33:28', '2026-04-07 10:33:28', NULL, 0, NULL, 0, NULL),
+(1259, 175, 1, 4, 1, '2026-04-07 10:38:08', '2026-04-07 10:38:08', NULL, 0, NULL, 0, NULL),
+(1260, 176, 1, 4, 1, '2026-04-07 10:40:09', '2026-04-07 10:40:09', NULL, 0, NULL, 0, NULL),
+(1261, 177, 1, 4, 1, '2026-04-07 10:42:11', '2026-04-07 10:42:11', NULL, 0, NULL, 0, NULL),
+(1262, 178, 1, 4, 1, '2026-04-07 10:42:37', '2026-04-07 10:42:37', NULL, 0, NULL, 0, NULL),
+(1263, 179, 1, 4, 1, '2026-04-07 10:42:58', '2026-04-07 10:42:58', NULL, 0, NULL, 0, NULL),
+(1264, 180, 1, 4, 1, '2026-04-07 10:46:21', '2026-04-07 10:46:21', NULL, 0, NULL, 0, NULL),
+(1265, 190, 1, 4, 1, '2026-04-07 12:43:06', '2026-04-07 12:43:06', NULL, NULL, NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -3546,7 +3575,7 @@ INSERT INTO `relation_user_session` (`id`, `user_id`, `session_id`, `relation_gr
 (2184, 750, 9, NULL, '53ad8fb5-44ed-4732-ba6b-43ab046308fe', 0, '2026-02-17 08:34:30', '2026-03-07 23:53:24', '2026-03-07 23:53:24', 0, NULL, 0),
 (2185, 750, 9, NULL, '53ad8fb5-44ed-4732-ba6b-43ab046308fe', 0, '2026-02-17 08:34:30', '2026-03-07 23:53:24', '2026-03-07 23:53:24', 0, NULL, 0),
 (2189, 750, 25, 153, '2e7974e4-24e7-4ad5-83b3-a8d360ccd0ea', 1, '2026-03-07 23:52:25', '2026-03-09 14:46:07', '2026-03-09 14:46:07', 0, NULL, 0),
-(2190, 750, 25, NULL, '2e7974e4-24e7-4ad5-83b3-a8d360ccd0ea', 1, '2026-03-07 23:52:25', '2026-03-09 21:25:02', '2026-03-09 21:25:02', 0, NULL, 0),
+(2190, 750, 25, 162, '2e7974e4-24e7-4ad5-83b3-a8d360ccd0ea', 1, '2026-03-07 23:52:25', '2026-03-31 11:05:45', '2026-03-31 11:05:45', 0, NULL, 0),
 (2191, 750, 25, NULL, '2e7974e4-24e7-4ad5-83b3-a8d360ccd0ea', 1, '2026-03-07 23:52:25', '2026-03-07 23:52:25', NULL, 0, NULL, 0),
 (2192, 44, 25, NULL, 'b3eabde7-b3b3-4025-86c8-df9a5823893c', 1, '2026-03-08 13:22:31', '2026-03-09 20:55:01', '2026-03-09 20:55:01', 0, NULL, 0),
 (2193, 44, 25, NULL, 'b3eabde7-b3b3-4025-86c8-df9a5823893c', 1, '2026-03-08 13:22:31', '2026-03-08 13:22:31', NULL, 0, NULL, 0),
@@ -3555,7 +3584,7 @@ INSERT INTO `relation_user_session` (`id`, `user_id`, `session_id`, `relation_gr
 (2196, 369, 25, NULL, 'f0c20b18-e33e-474d-9837-4636353f77e0', 1, '2026-03-08 22:08:06', '2026-03-08 22:08:06', NULL, 0, NULL, 0),
 (2197, 369, 25, NULL, 'f0c20b18-e33e-474d-9837-4636353f77e0', 1, '2026-03-08 22:08:06', '2026-03-08 22:08:06', NULL, 0, NULL, 0),
 (2198, 3, 25, 153, '9d79dcfa-e1ec-4c36-a659-cc6b3e4e5a9e', 1, '2026-03-09 10:27:56', '2026-03-09 14:46:10', '2026-03-09 14:46:10', 0, NULL, 0),
-(2199, 3, 25, NULL, '9d79dcfa-e1ec-4c36-a659-cc6b3e4e5a9e', 1, '2026-03-09 10:27:56', '2026-03-09 11:17:34', '2026-03-09 11:17:34', 0, NULL, 0),
+(2199, 3, 25, 162, '9d79dcfa-e1ec-4c36-a659-cc6b3e4e5a9e', 1, '2026-03-09 10:27:56', '2026-03-31 11:05:44', '2026-03-31 11:05:44', 0, NULL, 0),
 (2200, 3, 25, NULL, '9d79dcfa-e1ec-4c36-a659-cc6b3e4e5a9e', 1, '2026-03-09 10:27:56', '2026-03-09 10:27:56', NULL, 0, NULL, 0),
 (2201, 3, 12, NULL, 'f6ece60a-b1d1-4eea-aebd-ef2aa082c261', 0, '2026-03-09 14:58:53', '2026-03-09 15:23:59', '2026-03-09 15:23:59', 0, NULL, 0),
 (2202, 3, 12, NULL, 'f6ece60a-b1d1-4eea-aebd-ef2aa082c261', 0, '2026-03-09 14:58:53', '2026-03-09 15:23:59', '2026-03-09 15:23:59', 0, NULL, 0),
@@ -3565,7 +3594,7 @@ INSERT INTO `relation_user_session` (`id`, `user_id`, `session_id`, `relation_gr
 (2206, 3, 12, NULL, '5f066808-3b03-4229-9fa0-8b7468f320e2', 0, '2026-03-09 15:25:30', '2026-03-12 10:12:16', '2026-03-12 10:12:16', 0, NULL, 0),
 (2207, 3, 12, NULL, '5f066808-3b03-4229-9fa0-8b7468f320e2', 0, '2026-03-09 15:25:30', '2026-03-12 10:12:16', '2026-03-12 10:12:16', 0, NULL, 0),
 (2208, 3, 12, NULL, '5f066808-3b03-4229-9fa0-8b7468f320e2', 0, '2026-03-09 15:25:30', '2026-03-12 10:12:16', '2026-03-12 10:12:16', 0, NULL, 0),
-(2209, 416, 25, NULL, '2bd592ad-6337-4e1f-9088-8f20b75c1592', 1, '2026-03-09 20:57:06', '2026-03-09 20:57:06', NULL, 0, NULL, 0),
+(2209, 416, 25, 153, '2bd592ad-6337-4e1f-9088-8f20b75c1592', 1, '2026-03-09 20:57:06', '2026-03-31 11:00:06', '2026-03-31 11:00:06', 0, NULL, 0),
 (2210, 416, 25, NULL, '2bd592ad-6337-4e1f-9088-8f20b75c1592', 1, '2026-03-09 20:57:06', '2026-03-09 20:57:06', NULL, 0, NULL, 0),
 (2211, 416, 25, NULL, '2bd592ad-6337-4e1f-9088-8f20b75c1592', 1, '2026-03-09 20:57:06', '2026-03-09 20:57:06', NULL, 0, NULL, 0),
 (2212, 822, 25, NULL, '9623c561-8f0c-47c4-879f-845a879b3d2e', 1, '2026-03-09 21:04:23', '2026-03-09 21:06:02', '2026-03-09 21:06:02', 0, NULL, 0),
@@ -3602,7 +3631,7 @@ INSERT INTO `relation_user_session` (`id`, `user_id`, `session_id`, `relation_gr
 (2243, 832, 25, NULL, 'b1e284c4-71b0-4e1e-a5bf-1242163a7926', 0, '2026-03-17 12:29:45', '2026-03-17 13:16:50', '2026-03-17 13:16:50', 0, NULL, 0),
 (2244, 832, 25, NULL, 'b1e284c4-71b0-4e1e-a5bf-1242163a7926', 0, '2026-03-17 12:29:45', '2026-03-17 13:16:50', '2026-03-17 13:16:50', 0, NULL, 0),
 (2245, 832, 25, NULL, 'b1e284c4-71b0-4e1e-a5bf-1242163a7926', 0, '2026-03-17 12:29:45', '2026-03-17 13:16:50', '2026-03-17 13:16:50', 0, NULL, 0),
-(2246, 832, 25, 153, '51d8c1d8-7e2c-45f7-a5de-53b728380b9f', 1, '2026-03-17 13:23:28', '2026-03-17 13:24:26', '2026-03-17 13:24:26', 0, NULL, 0),
+(2246, 832, 25, NULL, '51d8c1d8-7e2c-45f7-a5de-53b728380b9f', 1, '2026-03-17 13:23:28', '2026-03-31 11:05:02', '2026-03-31 11:05:02', 0, NULL, 0),
 (2247, 832, 25, NULL, '51d8c1d8-7e2c-45f7-a5de-53b728380b9f', 1, '2026-03-17 13:23:28', '2026-03-17 13:23:28', NULL, 0, NULL, 0),
 (2248, 832, 25, NULL, '51d8c1d8-7e2c-45f7-a5de-53b728380b9f', 1, '2026-03-17 13:23:28', '2026-03-17 13:23:28', NULL, 0, NULL, 0),
 (2249, 832, 12, NULL, '08594026-db4a-4977-82a6-b2271d9e8a60', 0, '2026-03-17 13:41:30', '2026-03-17 13:44:41', '2026-03-17 13:44:41', 0, NULL, 0),
@@ -3806,7 +3835,122 @@ INSERT INTO `relation_user_session` (`id`, `user_id`, `session_id`, `relation_gr
 (2447, 898, 25, NULL, 'd3572b7a-3070-4aca-be21-5adaada6abe2', 1, '2026-03-24 20:40:15', '2026-03-24 20:40:15', NULL, 0, NULL, 0),
 (2448, 886, 25, NULL, 'd0a065d1-30b1-4247-99f5-ae751bbe90ad', 1, '2026-03-25 00:01:13', '2026-03-25 00:01:13', NULL, 0, NULL, 0),
 (2449, 886, 25, NULL, 'd0a065d1-30b1-4247-99f5-ae751bbe90ad', 1, '2026-03-25 00:01:13', '2026-03-25 00:01:13', NULL, 0, NULL, 0),
-(2450, 886, 25, NULL, 'd0a065d1-30b1-4247-99f5-ae751bbe90ad', 1, '2026-03-25 00:01:13', '2026-03-25 00:01:13', NULL, 0, NULL, 0);
+(2450, 886, 25, NULL, 'd0a065d1-30b1-4247-99f5-ae751bbe90ad', 1, '2026-03-25 00:01:13', '2026-03-25 00:01:13', NULL, 0, NULL, 0),
+(2451, 892, 25, NULL, 'b3ad8538-0679-4b63-b891-807d65a56eaf', 1, '2026-03-26 18:17:08', '2026-03-26 18:17:08', NULL, 0, NULL, 0),
+(2452, 892, 25, NULL, 'b3ad8538-0679-4b63-b891-807d65a56eaf', 1, '2026-03-26 18:17:08', '2026-03-26 18:17:08', NULL, 0, NULL, 0),
+(2453, 892, 25, NULL, 'b3ad8538-0679-4b63-b891-807d65a56eaf', 1, '2026-03-26 18:17:08', '2026-03-26 18:17:08', NULL, 0, NULL, 0),
+(2454, 522, 25, NULL, 'd0f9bf31-ce61-4e2f-bfca-a93e9cd36e56', 1, '2026-03-26 18:17:11', '2026-03-26 18:17:11', NULL, 0, NULL, 0),
+(2455, 522, 25, NULL, 'd0f9bf31-ce61-4e2f-bfca-a93e9cd36e56', 1, '2026-03-26 18:17:11', '2026-03-26 18:17:11', NULL, 0, NULL, 0),
+(2456, 522, 25, NULL, 'd0f9bf31-ce61-4e2f-bfca-a93e9cd36e56', 1, '2026-03-26 18:17:11', '2026-03-26 18:17:11', NULL, 0, NULL, 0),
+(2457, 851, 25, NULL, '00205a3d-16a1-4861-ad6f-4663d2486ebf', 1, '2026-03-26 18:17:14', '2026-03-26 18:17:14', NULL, 0, NULL, 0),
+(2458, 851, 25, NULL, '00205a3d-16a1-4861-ad6f-4663d2486ebf', 1, '2026-03-26 18:17:14', '2026-03-26 18:17:14', NULL, 0, NULL, 0),
+(2459, 851, 25, NULL, '00205a3d-16a1-4861-ad6f-4663d2486ebf', 1, '2026-03-26 18:17:14', '2026-03-26 18:17:14', NULL, 0, NULL, 0),
+(2460, 421, 25, NULL, '0c686a02-e47b-4e0c-90a2-12c72f52d07b', 1, '2026-03-26 18:17:18', '2026-03-26 18:17:18', NULL, 0, NULL, 0),
+(2461, 421, 25, NULL, '0c686a02-e47b-4e0c-90a2-12c72f52d07b', 1, '2026-03-26 18:17:18', '2026-03-26 18:17:18', NULL, 0, NULL, 0),
+(2462, 421, 25, NULL, '0c686a02-e47b-4e0c-90a2-12c72f52d07b', 1, '2026-03-26 18:17:18', '2026-03-26 18:17:18', NULL, 0, NULL, 0),
+(2463, 905, 25, NULL, '89ba1cc7-5513-4de1-8d9f-d7ee936a003f', 1, '2026-03-26 18:17:22', '2026-03-26 18:17:22', NULL, 0, NULL, 0),
+(2464, 905, 25, NULL, '89ba1cc7-5513-4de1-8d9f-d7ee936a003f', 1, '2026-03-26 18:17:22', '2026-03-26 18:17:22', NULL, 0, NULL, 0),
+(2465, 905, 25, NULL, '89ba1cc7-5513-4de1-8d9f-d7ee936a003f', 1, '2026-03-26 18:17:22', '2026-03-26 18:17:22', NULL, 0, NULL, 0),
+(2466, 904, 25, NULL, '5872f205-53c0-4e57-8ef7-68547816a50b', 1, '2026-03-26 18:17:24', '2026-03-26 18:17:24', NULL, 0, NULL, 0),
+(2467, 904, 25, NULL, '5872f205-53c0-4e57-8ef7-68547816a50b', 1, '2026-03-26 18:17:24', '2026-03-26 18:17:24', NULL, 0, NULL, 0),
+(2468, 904, 25, NULL, '5872f205-53c0-4e57-8ef7-68547816a50b', 1, '2026-03-26 18:17:24', '2026-03-26 18:17:24', NULL, 0, NULL, 0),
+(2469, 356, 25, NULL, 'b8c9dff0-cdc6-4bdc-bf5f-ef6869c5d427', 1, '2026-03-26 18:17:27', '2026-03-26 18:17:27', NULL, 0, NULL, 0),
+(2470, 356, 25, NULL, 'b8c9dff0-cdc6-4bdc-bf5f-ef6869c5d427', 1, '2026-03-26 18:17:27', '2026-03-26 18:17:27', NULL, 0, NULL, 0),
+(2471, 356, 25, NULL, 'b8c9dff0-cdc6-4bdc-bf5f-ef6869c5d427', 1, '2026-03-26 18:17:27', '2026-03-26 18:17:27', NULL, 0, NULL, 0),
+(2472, 903, 25, NULL, '6ce33bf7-a010-44d3-8ddb-0c9abb7a5d0c', 1, '2026-03-26 18:17:29', '2026-03-27 23:52:40', '2026-03-27 23:52:40', 0, NULL, 0),
+(2473, 903, 25, NULL, '6ce33bf7-a010-44d3-8ddb-0c9abb7a5d0c', 1, '2026-03-26 18:17:29', '2026-03-26 18:17:29', NULL, 0, NULL, 0),
+(2474, 903, 25, NULL, '6ce33bf7-a010-44d3-8ddb-0c9abb7a5d0c', 1, '2026-03-26 18:17:29', '2026-03-26 18:17:29', NULL, 0, NULL, 0),
+(2475, 906, 25, NULL, 'bac2a2b1-9d19-44f3-9aef-007f20b5b60e', 1, '2026-03-27 10:51:43', '2026-03-27 10:51:43', NULL, 0, NULL, 0),
+(2476, 906, 25, NULL, 'bac2a2b1-9d19-44f3-9aef-007f20b5b60e', 1, '2026-03-27 10:51:43', '2026-03-27 10:51:43', NULL, 0, NULL, 0),
+(2477, 906, 25, NULL, 'bac2a2b1-9d19-44f3-9aef-007f20b5b60e', 1, '2026-03-27 10:51:43', '2026-03-27 10:51:43', NULL, 0, NULL, 0),
+(2478, 907, 25, NULL, '0be05886-39be-46a0-9f37-07be218669aa', 1, '2026-03-27 10:51:45', '2026-03-27 10:51:45', NULL, 0, NULL, 0),
+(2479, 907, 25, NULL, '0be05886-39be-46a0-9f37-07be218669aa', 1, '2026-03-27 10:51:45', '2026-03-27 10:51:45', NULL, 0, NULL, 0),
+(2480, 907, 25, NULL, '0be05886-39be-46a0-9f37-07be218669aa', 1, '2026-03-27 10:51:45', '2026-03-27 10:51:45', NULL, 0, NULL, 0),
+(2481, 357, 25, NULL, 'df11684c-8e14-43e2-894e-c495b6350d37', 1, '2026-03-27 10:51:47', '2026-03-27 10:51:47', NULL, 0, NULL, 0),
+(2482, 357, 25, NULL, 'df11684c-8e14-43e2-894e-c495b6350d37', 1, '2026-03-27 10:51:47', '2026-03-27 10:51:47', NULL, 0, NULL, 0),
+(2483, 357, 25, NULL, 'df11684c-8e14-43e2-894e-c495b6350d37', 1, '2026-03-27 10:51:47', '2026-03-27 10:51:47', NULL, 0, NULL, 0),
+(2484, 887, 25, NULL, '7f63bf7a-9407-4d77-bb47-ec3e71768a07', 1, '2026-03-27 10:51:50', '2026-03-27 10:51:50', NULL, 0, NULL, 0),
+(2485, 887, 25, NULL, '7f63bf7a-9407-4d77-bb47-ec3e71768a07', 1, '2026-03-27 10:51:50', '2026-03-27 10:51:50', NULL, 0, NULL, 0),
+(2486, 887, 25, NULL, '7f63bf7a-9407-4d77-bb47-ec3e71768a07', 1, '2026-03-27 10:51:50', '2026-03-27 10:51:50', NULL, 0, NULL, 0),
+(2487, 621, 25, NULL, 'd2f0ba90-2185-49ca-923b-0a31a1a97084', 1, '2026-03-27 10:51:52', '2026-03-27 10:51:52', NULL, 0, NULL, 0),
+(2488, 621, 25, NULL, 'd2f0ba90-2185-49ca-923b-0a31a1a97084', 1, '2026-03-27 10:51:52', '2026-03-27 10:51:52', NULL, 0, NULL, 0),
+(2489, 621, 25, NULL, 'd2f0ba90-2185-49ca-923b-0a31a1a97084', 1, '2026-03-27 10:51:52', '2026-03-27 10:51:52', NULL, 0, NULL, 0),
+(2490, 437, 25, NULL, '8de42564-9c0d-45c5-a6a5-c6304266f7ce', 1, '2026-03-27 13:55:00', '2026-03-27 13:55:00', NULL, 0, NULL, 0),
+(2491, 437, 25, NULL, '8de42564-9c0d-45c5-a6a5-c6304266f7ce', 1, '2026-03-27 13:55:00', '2026-03-27 13:55:00', NULL, 0, NULL, 0),
+(2492, 437, 25, NULL, '8de42564-9c0d-45c5-a6a5-c6304266f7ce', 1, '2026-03-27 13:55:00', '2026-03-27 13:55:00', NULL, 0, NULL, 0),
+(2493, 639, 25, NULL, 'e61f67ee-21da-436f-b089-96292ad940cf', 1, '2026-03-27 13:55:03', '2026-03-27 13:55:03', NULL, 0, NULL, 0),
+(2494, 639, 25, NULL, 'e61f67ee-21da-436f-b089-96292ad940cf', 1, '2026-03-27 13:55:03', '2026-03-27 13:55:03', NULL, 0, NULL, 0),
+(2495, 639, 25, NULL, 'e61f67ee-21da-436f-b089-96292ad940cf', 1, '2026-03-27 13:55:03', '2026-03-27 13:55:03', NULL, 0, NULL, 0),
+(2496, 414, 25, NULL, '62abea94-2f6c-4fbb-b37f-9edb64a0ae51', 1, '2026-03-27 21:53:15', '2026-03-27 21:53:15', NULL, 0, NULL, 0),
+(2497, 414, 25, NULL, '62abea94-2f6c-4fbb-b37f-9edb64a0ae51', 1, '2026-03-27 21:53:15', '2026-03-27 21:53:15', NULL, 0, NULL, 0),
+(2498, 414, 25, NULL, '62abea94-2f6c-4fbb-b37f-9edb64a0ae51', 1, '2026-03-27 21:53:15', '2026-03-27 21:53:15', NULL, 0, NULL, 0),
+(2499, 909, 25, NULL, 'a0560f1c-6281-43b9-b7ec-efb52ea014ce', 1, '2026-03-27 21:53:19', '2026-03-27 21:53:19', NULL, 0, NULL, 0),
+(2500, 909, 25, NULL, 'a0560f1c-6281-43b9-b7ec-efb52ea014ce', 1, '2026-03-27 21:53:19', '2026-03-27 21:53:19', NULL, 0, NULL, 0),
+(2501, 909, 25, NULL, 'a0560f1c-6281-43b9-b7ec-efb52ea014ce', 1, '2026-03-27 21:53:19', '2026-03-27 21:53:19', NULL, 0, NULL, 0),
+(2502, 878, 25, NULL, '1dcc7ca1-3af6-4cab-a2f1-989223631b98', 1, '2026-03-27 21:53:20', '2026-03-27 21:53:20', NULL, 0, NULL, 0),
+(2503, 878, 25, NULL, '1dcc7ca1-3af6-4cab-a2f1-989223631b98', 1, '2026-03-27 21:53:20', '2026-03-27 21:53:20', NULL, 0, NULL, 0),
+(2504, 878, 25, NULL, '1dcc7ca1-3af6-4cab-a2f1-989223631b98', 1, '2026-03-27 21:53:20', '2026-03-27 21:53:20', NULL, 0, NULL, 0),
+(2505, 661, 25, NULL, '56446d14-4306-4cc1-a41d-c7b818152772', 1, '2026-03-27 21:59:31', '2026-03-27 22:21:01', '2026-03-27 22:21:01', 0, NULL, 0),
+(2506, 661, 25, NULL, '56446d14-4306-4cc1-a41d-c7b818152772', 1, '2026-03-27 21:59:31', '2026-03-27 21:59:31', NULL, 0, NULL, 0),
+(2507, 661, 25, NULL, '56446d14-4306-4cc1-a41d-c7b818152772', 1, '2026-03-27 21:59:31', '2026-03-27 21:59:31', NULL, 0, NULL, 0),
+(2508, 893, 25, NULL, 'b85c678d-5b22-4674-b253-3fa6cab0dc20', 1, '2026-03-29 17:14:30', '2026-03-29 17:14:30', NULL, 0, NULL, 0),
+(2509, 893, 25, NULL, 'b85c678d-5b22-4674-b253-3fa6cab0dc20', 1, '2026-03-29 17:14:30', '2026-03-29 17:14:30', NULL, 0, NULL, 0),
+(2510, 893, 25, NULL, 'b85c678d-5b22-4674-b253-3fa6cab0dc20', 1, '2026-03-29 17:14:30', '2026-03-29 17:14:30', NULL, 0, NULL, 0);
+INSERT INTO `relation_user_session` (`id`, `user_id`, `session_id`, `relation_group_local_session_id`, `ref`, `enabled`, `created_at`, `timestamp`, `updated_at`, `releaseToken`, `useToken`, `slc_use`) VALUES
+(2511, 744, 25, NULL, 'c2d287d7-eb3c-478d-8198-8d8e17633dbd', 1, '2026-03-29 17:14:32', '2026-03-29 17:14:32', NULL, 0, NULL, 0),
+(2512, 744, 25, NULL, 'c2d287d7-eb3c-478d-8198-8d8e17633dbd', 1, '2026-03-29 17:14:32', '2026-03-29 17:14:32', NULL, 0, NULL, 0),
+(2513, 744, 25, NULL, 'c2d287d7-eb3c-478d-8198-8d8e17633dbd', 1, '2026-03-29 17:14:32', '2026-03-29 17:14:32', NULL, 0, NULL, 0),
+(2514, 671, 25, NULL, 'ef838ed8-9435-49ad-83f4-ab227d95f290', 1, '2026-03-29 17:14:34', '2026-03-29 17:14:34', NULL, 0, NULL, 0),
+(2515, 671, 25, NULL, 'ef838ed8-9435-49ad-83f4-ab227d95f290', 1, '2026-03-29 17:14:34', '2026-03-29 17:14:34', NULL, 0, NULL, 0),
+(2516, 671, 25, NULL, 'ef838ed8-9435-49ad-83f4-ab227d95f290', 1, '2026-03-29 17:14:34', '2026-03-29 17:14:34', NULL, 0, NULL, 0),
+(2517, 743, 25, NULL, '493a5a50-aaf0-4aa0-b614-41b3174eda57', 1, '2026-03-29 17:14:40', '2026-03-29 17:14:40', NULL, 0, NULL, 0),
+(2518, 743, 25, NULL, '493a5a50-aaf0-4aa0-b614-41b3174eda57', 1, '2026-03-29 17:14:40', '2026-03-29 17:14:40', NULL, 0, NULL, 0),
+(2519, 743, 25, NULL, '493a5a50-aaf0-4aa0-b614-41b3174eda57', 1, '2026-03-29 17:14:40', '2026-03-29 17:14:40', NULL, 0, NULL, 0),
+(2520, 419, 25, NULL, '002da3e4-24c7-4077-aea9-2f559d2efc00', 1, '2026-03-31 10:57:25', '2026-03-31 10:57:25', NULL, 0, NULL, 0),
+(2521, 419, 25, NULL, '002da3e4-24c7-4077-aea9-2f559d2efc00', 1, '2026-03-31 10:57:25', '2026-03-31 10:57:25', NULL, 0, NULL, 0),
+(2522, 419, 25, NULL, '002da3e4-24c7-4077-aea9-2f559d2efc00', 1, '2026-03-31 10:57:25', '2026-03-31 10:57:25', NULL, 0, NULL, 0),
+(2523, 908, 25, NULL, '27547157-d3d8-4881-8e23-2793cdea61ac', 1, '2026-03-31 10:57:31', '2026-03-31 10:57:31', NULL, 0, NULL, 0),
+(2524, 908, 25, NULL, '27547157-d3d8-4881-8e23-2793cdea61ac', 1, '2026-03-31 10:57:31', '2026-03-31 10:57:31', NULL, 0, NULL, 0),
+(2525, 908, 25, NULL, '27547157-d3d8-4881-8e23-2793cdea61ac', 1, '2026-03-31 10:57:31', '2026-03-31 10:57:31', NULL, 0, NULL, 0),
+(2526, 913, 25, NULL, '8e7400c8-c17e-4b57-b520-3dc4cf72933f', 1, '2026-03-31 10:57:35', '2026-03-31 10:57:35', NULL, 0, NULL, 0),
+(2527, 913, 25, NULL, '8e7400c8-c17e-4b57-b520-3dc4cf72933f', 1, '2026-03-31 10:57:35', '2026-03-31 10:57:35', NULL, 0, NULL, 0),
+(2528, 913, 25, NULL, '8e7400c8-c17e-4b57-b520-3dc4cf72933f', 1, '2026-03-31 10:57:35', '2026-03-31 10:57:35', NULL, 0, NULL, 0),
+(2529, 387, 25, NULL, '4caed3d6-e7f6-4ca9-b8b0-75f1914121d7', 1, '2026-03-31 10:57:40', '2026-03-31 10:57:40', NULL, 0, NULL, 0),
+(2530, 387, 25, NULL, '4caed3d6-e7f6-4ca9-b8b0-75f1914121d7', 1, '2026-03-31 10:57:40', '2026-03-31 10:57:40', NULL, 0, NULL, 0),
+(2531, 387, 25, NULL, '4caed3d6-e7f6-4ca9-b8b0-75f1914121d7', 1, '2026-03-31 10:57:40', '2026-03-31 10:57:40', NULL, 0, NULL, 0),
+(2532, 447, 25, NULL, 'f868656d-6f9f-4ff5-93ef-5f777fedb6f4', 1, '2026-03-31 10:57:44', '2026-03-31 10:57:44', NULL, 0, NULL, 0),
+(2533, 447, 25, NULL, 'f868656d-6f9f-4ff5-93ef-5f777fedb6f4', 1, '2026-03-31 10:57:44', '2026-03-31 10:57:44', NULL, 0, NULL, 0),
+(2534, 447, 25, NULL, 'f868656d-6f9f-4ff5-93ef-5f777fedb6f4', 1, '2026-03-31 10:57:44', '2026-03-31 10:57:44', NULL, 0, NULL, 0),
+(2535, 365, 25, NULL, '1de40264-a86e-423b-8f76-bf5c6031ed4e', 1, '2026-04-03 04:02:14', '2026-04-03 04:02:14', NULL, 0, NULL, 0),
+(2536, 365, 25, NULL, '1de40264-a86e-423b-8f76-bf5c6031ed4e', 1, '2026-04-03 04:02:14', '2026-04-03 04:02:14', NULL, 0, NULL, 0),
+(2537, 365, 25, NULL, '1de40264-a86e-423b-8f76-bf5c6031ed4e', 1, '2026-04-03 04:02:14', '2026-04-03 04:02:14', NULL, 0, NULL, 0),
+(2538, 418, 25, NULL, '60405ee5-e9df-4f01-b7f7-df828714a434', 1, '2026-04-03 04:02:16', '2026-04-03 04:02:16', NULL, 0, NULL, 0),
+(2539, 418, 25, NULL, '60405ee5-e9df-4f01-b7f7-df828714a434', 1, '2026-04-03 04:02:16', '2026-04-03 04:02:16', NULL, 0, NULL, 0),
+(2540, 418, 25, NULL, '60405ee5-e9df-4f01-b7f7-df828714a434', 1, '2026-04-03 04:02:16', '2026-04-03 04:02:16', NULL, 0, NULL, 0),
+(2541, 428, 25, NULL, '700e42b0-4ae3-4160-870e-b01be3aafff1', 1, '2026-04-03 04:02:18', '2026-04-03 04:02:18', NULL, 0, NULL, 0),
+(2542, 428, 25, NULL, '700e42b0-4ae3-4160-870e-b01be3aafff1', 1, '2026-04-03 04:02:18', '2026-04-03 04:02:18', NULL, 0, NULL, 0),
+(2543, 428, 25, NULL, '700e42b0-4ae3-4160-870e-b01be3aafff1', 1, '2026-04-03 04:02:18', '2026-04-03 04:02:18', NULL, 0, NULL, 0),
+(2544, 919, 25, NULL, '9b5dda37-e244-4d6b-b0f5-b7827cab4cc9', 1, '2026-04-03 04:02:21', '2026-04-03 04:02:21', NULL, 0, NULL, 0),
+(2545, 919, 25, NULL, '9b5dda37-e244-4d6b-b0f5-b7827cab4cc9', 1, '2026-04-03 04:02:21', '2026-04-03 04:02:21', NULL, 0, NULL, 0),
+(2546, 919, 25, NULL, '9b5dda37-e244-4d6b-b0f5-b7827cab4cc9', 1, '2026-04-03 04:02:21', '2026-04-03 04:02:21', NULL, 0, NULL, 0),
+(2547, 912, 25, NULL, '9e808a60-9458-496f-8c3d-a76a3709c583', 1, '2026-04-03 04:02:23', '2026-04-03 04:02:23', NULL, 0, NULL, 0),
+(2548, 912, 25, NULL, '9e808a60-9458-496f-8c3d-a76a3709c583', 1, '2026-04-03 04:02:23', '2026-04-03 04:02:23', NULL, 0, NULL, 0),
+(2549, 912, 25, NULL, '9e808a60-9458-496f-8c3d-a76a3709c583', 1, '2026-04-03 04:02:23', '2026-04-03 04:02:23', NULL, 0, NULL, 0),
+(2550, 926, 25, NULL, 'b2ae63f0-3650-41c6-90a5-13c7488d668e', 1, '2026-04-03 16:55:52', '2026-04-03 16:55:52', NULL, 0, NULL, 0),
+(2551, 926, 25, NULL, 'b2ae63f0-3650-41c6-90a5-13c7488d668e', 1, '2026-04-03 16:55:52', '2026-04-03 16:55:52', NULL, 0, NULL, 0),
+(2552, 926, 25, NULL, 'b2ae63f0-3650-41c6-90a5-13c7488d668e', 1, '2026-04-03 16:55:52', '2026-04-03 16:55:52', NULL, 0, NULL, 0),
+(2553, 925, 25, NULL, '806e542b-a63b-468b-a443-3e6b4bea2816', 1, '2026-04-03 16:56:05', '2026-04-03 16:56:05', NULL, 0, NULL, 0),
+(2554, 925, 25, NULL, '806e542b-a63b-468b-a443-3e6b4bea2816', 1, '2026-04-03 16:56:05', '2026-04-03 16:56:05', NULL, 0, NULL, 0),
+(2555, 925, 25, NULL, '806e542b-a63b-468b-a443-3e6b4bea2816', 1, '2026-04-03 16:56:05', '2026-04-03 16:56:05', NULL, 0, NULL, 0),
+(2556, 927, 25, NULL, 'b3230395-69c4-46bb-9bf3-2e3fbfdce63f', 1, '2026-04-03 19:38:28', '2026-04-03 19:38:28', NULL, 0, NULL, 0),
+(2557, 927, 25, NULL, 'b3230395-69c4-46bb-9bf3-2e3fbfdce63f', 1, '2026-04-03 19:38:28', '2026-04-03 19:38:28', NULL, 0, NULL, 0),
+(2558, 927, 25, NULL, 'b3230395-69c4-46bb-9bf3-2e3fbfdce63f', 1, '2026-04-03 19:38:28', '2026-04-03 19:38:28', NULL, 0, NULL, 0),
+(2559, 578, 25, NULL, 'b01fa99c-0ffa-4953-bf54-5d3cecb90af6', 1, '2026-04-03 19:38:34', '2026-04-03 19:38:34', NULL, 0, NULL, 0),
+(2560, 578, 25, NULL, 'b01fa99c-0ffa-4953-bf54-5d3cecb90af6', 1, '2026-04-03 19:38:34', '2026-04-03 19:38:34', NULL, 0, NULL, 0),
+(2561, 578, 25, NULL, 'b01fa99c-0ffa-4953-bf54-5d3cecb90af6', 1, '2026-04-03 19:38:34', '2026-04-03 19:38:34', NULL, 0, NULL, 0),
+(2562, 922, 25, NULL, '1d1f97c8-17c2-4b9c-8e29-1a9154ff4378', 1, '2026-04-04 11:13:32', '2026-04-04 11:13:32', NULL, 0, NULL, 0),
+(2563, 922, 25, NULL, '1d1f97c8-17c2-4b9c-8e29-1a9154ff4378', 1, '2026-04-04 11:13:32', '2026-04-04 11:13:32', NULL, 0, NULL, 0),
+(2564, 922, 25, NULL, '1d1f97c8-17c2-4b9c-8e29-1a9154ff4378', 1, '2026-04-04 11:13:32', '2026-04-04 11:13:32', NULL, 0, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -3846,10 +3990,10 @@ CREATE TABLE `room` (
 --
 
 INSERT INTO `room` (`id`, `local_id`, `name`, `capacity`, `enabled`, `created_at`, `timestamp`, `updated_at`, `slc_use`) VALUES
-(7, 8, 'class khalil', '25', 1, '2025-07-05 21:45:39', '2026-03-26 13:57:05', NULL, 0),
-(8, 8, 'class haythm', '20', 1, '2025-07-08 11:04:14', '2026-03-26 13:57:05', NULL, 0),
-(9, 8, 'classe test', '50', 1, '2025-07-10 10:17:34', '2026-03-26 13:57:05', NULL, 0),
-(10, 8, 'classe kasmi', '25', 1, '2025-09-18 11:52:32', '2026-03-26 13:57:05', NULL, 0);
+(7, 8, 'class khalil', '25', 1, '2025-07-05 21:45:39', '2026-04-07 10:04:22', NULL, 0),
+(8, 8, 'class haythm', '20', 1, '2025-07-08 11:04:14', '2026-04-07 10:04:22', NULL, 0),
+(9, 8, 'classe test', '50', 1, '2025-07-10 10:17:34', '2026-04-07 10:04:22', NULL, 0),
+(10, 8, 'classe kasmi', '25', 1, '2025-09-18 11:52:32', '2026-04-07 10:04:22', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -4029,13 +4173,6 @@ CREATE TABLE `special_table` (
   `pass` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `special_table`
---
-
-INSERT INTO `special_table` (`id_slc`, `mac_slc`, `pass`) VALUES
-(2, 'f4:4d:30:ee:c9:1d', '4156ac789eaa0dc23d5cfb570a23f950ea9bcc63877b3a78a6a86604892d2d01');
-
 -- --------------------------------------------------------
 
 --
@@ -4207,7 +4344,8 @@ INSERT INTO `subject_config` (`id`, `name`, `description`, `status`, `enabled`, 
 (180, 'Entrepreneurship', NULL, 1, 1, '2025-01-07 14:44:29', '2025-01-07 14:44:29', NULL, 0, NULL),
 (181, 'Ethical Hacking', NULL, 1, 1, '2025-01-07 14:44:29', '2025-01-07 14:44:29', NULL, 0, NULL),
 (182, 'Game Development', NULL, 1, 1, '2025-01-07 14:44:29', '2025-01-07 14:44:29', NULL, 0, NULL),
-(183, 'Animation', NULL, 1, 1, '2025-01-07 14:44:42', '2025-01-07 14:44:42', NULL, 0, NULL);
+(183, 'Animation', NULL, 1, 1, '2025-01-07 14:44:42', '2025-01-07 14:44:42', NULL, 0, NULL),
+(184, '99', NULL, 0, 0, '2026-03-31 10:54:04', '2026-03-31 10:54:33', '2026-03-31 10:54:33', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -4444,7 +4582,7 @@ INSERT INTO `user` (`id`, `account_id`, `username`, `email`, `full_name`, `roles
 (389, NULL, 'shili firas', 'shili.firas12345@gmail.com', 'shili firas', '[\"ROLE_USER\"]', 'profile_pic_68777c348be879.06912541.jpg', NULL, 1, 0, '$2y$13$bgAXHt7Oc9EKqdafL.IzG.JLz8Kjet/Wp8siyrd5k2Iqxrs7Oz4ba', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-02-12 13:50:59', '2026-02-12 13:50:59', NULL, 'cc3126bc-85de-4a0e-83a4-54dd5a12a964', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (386, NULL, 'abessi israa', 'israatlili001@gmail.com', 'Abessi Israa', '[\"ROLE_USER\"]', 'profile_pic_687698c3402fb5.75876170.jpg', NULL, 1, 0, '$2y$13$JbbyHvscE7JPwm9eM5W0CeJL.mIZo7n5zJQU5SAXfldS.FHhoYGPC', NULL, NULL, '24059419', '', '', NULL, NULL, 1, '2026-02-12 13:51:00', '2026-02-12 13:51:00', NULL, '286807f1-7ec2-4734-b2ea-590dd28cefe0', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (413, NULL, 'Nour Chrouda', 'chroudanour5@gmail.com', 'Nour Chrouda', '[\"ROLE_USER\"]', 'profile_pic_688dd696b13b42.02261869.jpg', NULL, 1, 0, '$2y$13$H11/aXwGLAQF/poT5Y5sW.ibHeA2bxdYWvPdxw7.8YAdstI1ve0Du', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-02-12 13:51:01', '2026-02-12 13:51:01', NULL, '81efdb2f-66a6-4ec3-8022-5e8c9ad9077b', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
-(416, NULL, 'Firrrrrr', 'tagzfur@gmail.com', 'Med Firas Kasmi', '[\"ROLE_USER\"]', 'default-pfp-68909d8756202985559806.jpg', NULL, 1, 0, '$2y$13$pTSCgbenGsfMrdTqYB1KIOXoYy48Fr67sR0KX4rdWU6aJZe8xn15i', NULL, NULL, NULL, NULL, 'M', NULL, NULL, 1, '2026-02-12 13:51:01', '2026-02-12 13:51:01', NULL, '620cf361-08ed-4649-83fd-ce80a74dff22', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, '1/face_recognition/416', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(416, NULL, 'Firrrrrr', 'tagzfur@gmail.com', 'Med Firas Kasmi', '[\"ROLE_USER\"]', 'default-pfp-68909d8756202985559806.jpg', NULL, 1, 0, '$2y$13$pTSCgbenGsfMrdTqYB1KIOXoYy48Fr67sR0KX4rdWU6aJZe8xn15i', NULL, NULL, NULL, NULL, 'M', NULL, NULL, 1, '2026-02-12 13:51:01', '2026-03-31 11:00:06', '2026-03-31 11:00:06', '620cf361-08ed-4649-83fd-ce80a74dff22', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, '1/face_recognition/416', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (418, NULL, 'Ghrayri Youssef', 'ghrayriyoussef35@gmail.com', 'Ghrayri Youssef', '[\"ROLE_USER\"]', 'profile_pic_688df65b33c0d1.65995776.jpg', NULL, 1, 0, '$2y$13$YFoAo24PZISr/MmmXe1EGeet/xxzQZYzGKr5bhEMdSlHGhzCVuTQC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-02-12 13:51:02', '2026-02-12 13:51:02', NULL, '28d40db2-5498-4ccd-b984-94f5a0eb7dc8', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (414, NULL, 'israa allagui', 'allaguiisraa4@gmail.com', 'israa allagui', '[\"ROLE_USER\"]', 'profile_pic_688ddcc1a2c1b9.35832998.jpg', NULL, 1, 0, '$2y$13$5IoZOdGFYjbX3fo5tJF06Ob0at9j.yHniMrkYZw4Igb/0URA/YSKC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-02-12 13:51:02', '2026-02-12 13:51:02', NULL, '2382b54b-3566-4be9-aa3a-5d9f4b414253', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (421, NULL, 'Belkhir Eya', 'belkhireya4@gmail.com', 'Belkhir Eya', '[\"ROLE_USER\"]', 'profile_pic_688e29883dde02.22881249.jpg', NULL, 1, 0, '$2y$13$mbsrbkgBqgQrGEMA6NiwgerSswsSaV/tXA.mqjef9BAzS5aTWHQoG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-02-12 13:51:03', '2026-02-12 13:51:03', NULL, '549980c7-32b9-4de7-96dc-deee12548113', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
@@ -4537,11 +4675,11 @@ INSERT INTO `user` (`id`, `account_id`, `username`, `email`, `full_name`, `roles
 (844, NULL, '110922164799630849625', 'sarrakalafate78@gmail.com', 'Kalafate Sarra', '[\"ROLE_USER\"]', 'profile_69beb343c58108.09840203.jpg', NULL, 1, 0, '$2y$13$bWxfLqGV8ymYBMBCW7hQkuhxaJOcoDq8dNn2JdDPHEzbT3lfXg6ci', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-21 15:16:24', '2026-03-21 15:16:24', NULL, 'f0971c1d-7ae3-4c21-bba3-6942b28e76d5', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (845, NULL, 'ch', 'mouhammed0036@gmail.com', 'abderahmen chelly', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$F1dylVxSDDxKGO20qG5Bc.b9OM6467vMlr3VBCo2mgqQI7GXb6qXq', NULL, NULL, '28439537', NULL, NULL, NULL, NULL, 1, '2026-03-21 15:42:20', '2026-03-21 15:42:20', NULL, 'c3b52adf-f92b-463c-b7a1-94040c3a1fdc', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (21, NULL, 'yassine', 'yessinebenrejeb30@gmail.com', 'yassine ben rejeb', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$4sSLj1LsaTnqRSBIaAC5MuKolxj2XtC82HGw65JDIAlMo3/EXP5vy', NULL, NULL, '20000452', '79 avenu 7bib borguiba', 'M', NULL, NULL, 1, '2026-03-21 15:42:23', '2026-03-21 15:42:23', NULL, 'a854a7df-84c5-407d-8d40-f30fcb0f7304', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
-(846, NULL, '000078.27c4f109085e49b7834ebb0ca9695876.1526', 'x2trybrhbn@privaterelay.appleid.com', '', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$KL20QVp753iM88DBzRQ9hug5vfooWWqb0eZUO8Af/5jGD7YLf/uxu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-21 23:26:13', '2026-03-21 23:26:13', NULL, '08eb4d81-f5ce-4111-b913-1b486946eb39', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(846, NULL, '000078.27c4f109085e49b7834ebb0ca9695876.1526', 'x2trybrhbn@privaterelay.appleid.com', 'emna', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$KL20QVp753iM88DBzRQ9hug5vfooWWqb0eZUO8Af/5jGD7YLf/uxu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-21 23:26:13', '2026-03-21 23:26:13', NULL, '08eb4d81-f5ce-4111-b913-1b486946eb39', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (848, NULL, 'Sarah_', 'sarrahemdeni@gmail.com', 'Sarrabenhemdeni', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$doHpXQOI60EZiS/2lGsYROpKs4ALh8WsmH757vsPmiLJAcixwJ632', NULL, NULL, '55539208', NULL, NULL, NULL, NULL, 1, '2026-03-21 23:26:21', '2026-03-21 23:26:21', NULL, '75fa467a-1644-4586-a7ad-2bc9de9e4d88', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
-(852, NULL, '001360.9752197fa2c644b2a9cd088807953675.2206', 'dybcdtzgxm@privaterelay.appleid.com', '', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$.S2noojU9zbAX2XC82i6b.xkkCpK.b3uVEntgF3KYdyHrPNUmsGb2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-21 23:26:26', '2026-03-21 23:26:26', NULL, '49ec8740-d4d3-4a64-9a74-6622b51fdcad', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(852, NULL, '001360.9752197fa2c644b2a9cd088807953675.2206', 'dybcdtzgxm@privaterelay.appleid.com', 'ahmed sehli', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$.S2noojU9zbAX2XC82i6b.xkkCpK.b3uVEntgF3KYdyHrPNUmsGb2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-21 23:26:26', '2026-03-21 23:26:26', NULL, '49ec8740-d4d3-4a64-9a74-6622b51fdcad', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (849, NULL, 'Yomna', 'yomnamerghni17@gmail.com', 'Yomna merghni', '[\"ROLE_USER\"]', 'image-picker-368c6e0c-9049-4859-92a3-1e49532b0c0b-633-0000001285a4a8a6-69bf0d031ada5297892477.jpg', NULL, 1, 0, '$2y$13$ky2vkmk6lt2EhV/NUvKJCOi37whf4.OYCsq3qz6MjV0vNx2UOJvqu', NULL, NULL, '96681444', '', 'F', NULL, NULL, 1, '2026-03-21 23:26:28', '2026-03-21 23:26:28', NULL, 'c0ed1fcf-2c9e-45be-a07c-4e851e5503b4', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
-(853, NULL, '001187.7decfb3e0dff4345921ec9a55e7b051c.2208', 'hxs8dw64gd@privaterelay.appleid.com', '', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$SoKPaVGLOUk/faO/mIvnju5kncQf4NSdBbGeDt..DBwvpuLdCQyQe', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-21 23:26:35', '2026-03-21 23:26:35', NULL, '0e3260aa-7007-441d-bcd5-82649f7505d0', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(853, NULL, '001187.7decfb3e0dff4345921ec9a55e7b051c.2208', 'hxs8dw64gd@privaterelay.appleid.com', 'yassin marzouki', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$SoKPaVGLOUk/faO/mIvnju5kncQf4NSdBbGeDt..DBwvpuLdCQyQe', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-21 23:26:35', '2026-03-21 23:26:35', NULL, '0e3260aa-7007-441d-bcd5-82649f7505d0', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (478, NULL, 'Hich Em', 'hichembhhh@gmail.com', 'Hich Em', '[\"ROLE_USER\"]', 'profile_pic_6893ef72258006.09732384.jpg', NULL, 1, 0, '$2y$13$db0Qdh7p/2jpkCEF7UYR5.2aDi/qoslCHcmAPqJllh0/ZujsveQey', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-21 23:56:04', '2026-03-21 23:56:04', NULL, 'b2f085ec-a6ce-4204-806f-86dc3fab1ee5', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (552, NULL, '106317951897122141609', 'waelharzi37@gmail.com', 'Harzi Wael', '[\"ROLE_USER\"]', 'profile_pic_68adb694359f10.88546088.jpg', NULL, 1, 0, '$2y$13$9SKoLc7u048GiELx0Iz5kuhqCkLJpf3ItEFHTXpXVDYTItJPsBCBG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-21 23:56:07', '2026-03-21 23:56:07', NULL, 'd8d5caff-07c5-4134-a455-6c451a2f7c49', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (855, NULL, 'tasnim', 'tasnimhammadi29@gmail.com', 'hamadi tasnim', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$1dzazJQ7DU3ZVzuuwbPAn.Fjyt5YT9ySzfGJwXKBhed00sMHO6vA6', NULL, NULL, '27774202', NULL, NULL, NULL, NULL, 1, '2026-03-22 15:12:51', '2026-03-22 15:12:51', NULL, '18ae5b0e-bb31-4818-9257-16f88a56bc42', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
@@ -4560,7 +4698,7 @@ INSERT INTO `user` (`id`, `account_id`, `username`, `email`, `full_name`, `roles
 (873, NULL, '105676319572742612727', 'dracarys64rcj@gmail.com', 'Marwa Amri', '[\"ROLE_USER\"]', 'profile_69c0152d4c3433.54563498.jpg', NULL, 1, 0, '$2y$13$rOwDJ7r6K6QhyiElr3aqS.IfRPfEfgOep.jpYji0ETzokFiosDzia', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-22 16:34:31', '2026-03-22 16:34:31', NULL, 'd5485928-8f59-4147-9374-8b41985ebb31', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (877, NULL, 'tojjj', 'tojt901@gmail.com', 'tojjj', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$ECNC5S50KdiX0SgKRFPyjeGLsfNufavUT7RhTex8AArz0ZR.4yeNm', NULL, NULL, '94811155', NULL, NULL, NULL, NULL, 1, '2026-03-22 20:00:31', '2026-03-22 20:00:31', NULL, 'c592c081-2d89-4769-ba40-629748bf0d33', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (875, NULL, '109756870703959362221', 'khouloudzardazi3@gmail.com', 'Khouloud Zardazi', '[\"ROLE_USER\"]', 'profile_69c028a431f644.82873536.jpg', NULL, 1, 0, '$2y$13$ZuvML1eEeODjwQlKnXE8COiSuA5dgOv.antB9xfy11H6x50ifordu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-22 20:17:21', '2026-03-22 20:17:21', NULL, 'b1d58d05-ada9-41b3-8886-1fe707b6ae09', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
-(880, NULL, '001367.8b8b8594e5c14931a20a7448210abf68.2108', 'y99g7sbj9j@privaterelay.appleid.com', '', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$J6.rRfVzYDVvloJvPS0z.OyCvZFMBR.AJDJTYMDzSOx2Jp7Bga4EC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-23 07:25:39', '2026-03-23 07:25:39', NULL, 'c069824a-3526-49da-8e9f-dec466fbc484', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(880, NULL, '001367.8b8b8594e5c14931a20a7448210abf68.2108', 'y99g7sbj9j@privaterelay.appleid.com', 'khawla', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$J6.rRfVzYDVvloJvPS0z.OyCvZFMBR.AJDJTYMDzSOx2Jp7Bga4EC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-23 07:25:39', '2026-03-23 07:25:39', NULL, 'c069824a-3526-49da-8e9f-dec466fbc484', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (876, NULL, '100050819309424586376', 'youssefbahlous73@gmail.com', 'Youssef Bahlous', '[\"ROLE_USER\"]', 'profile_69c02a2a86b2d1.28770314.jpg', NULL, 1, 0, '$2y$13$kG6LC83TLxushmyuHmMaTenvzMiK0qMSJyAH65XNXScyxKOOELUmy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-23 07:25:42', '2026-03-23 07:25:42', NULL, 'a578526e-5bf7-48da-90a2-95d900128242', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (861, NULL, '106351383877750133441', 'bouchouchaomar5@gmail.com', 'omar bouchoucha', '[\"ROLE_USER\"]', 'profile_69bfc33c8a09e7.32079327.jpg', NULL, 1, 0, '$2y$13$Vgpb7x7OqlEi2BvC7KUAXOzFSVeyBEr2Q7J2p/bgwzgN.3xizNwhW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-23 07:25:44', '2026-03-23 07:25:44', NULL, '65aab675-f11e-4ad6-b278-7f4a6d09ac5f', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (850, NULL, 'Alaayari', 'alaayary.io@gmail.com', 'Alaayari', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$R4XaoesxAEZvVrucd.Kqre/FV/eRZJTVywC5DSnLVrY7I7av0C/s6', NULL, NULL, '93436686', NULL, NULL, NULL, NULL, 1, '2026-03-23 07:25:47', '2026-03-23 07:25:47', NULL, 'ff13849d-8fec-4ecd-9e5f-e83e34e80a09', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
@@ -4576,8 +4714,38 @@ INSERT INTO `user` (`id`, `account_id`, `username`, `email`, `full_name`, `roles
 (895, NULL, 'mariemm', 'mariemboufaied26@gmail.com', 'Mariem Boufaied', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$O/1NSmD9sISBL2lPvGXxR.Le5PkGcd/rfHKDrzOAkoGck340jE1JO', NULL, NULL, '24266667', NULL, NULL, NULL, NULL, 1, '2026-03-24 16:55:39', '2026-03-24 16:55:39', NULL, 'c68c2f31-27e7-442c-a1eb-109d4bfc3075', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (898, NULL, '118313449761302247621', 'hibazemni8@gmail.com', 'Hiba Zemni', '[\"ROLE_USER\"]', 'profile_69c2f2ab1acfc9.02911823.jpg', NULL, 1, 0, '$2y$13$Ze7AkUWsUD8VAWBJ.i0NEeo3uFW51jbSgJB6T2i.DZs6Kotk5jY5C', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-24 20:40:15', '2026-03-24 20:40:15', NULL, 'f79f0633-19f2-49a5-8a82-173f7273b3df', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (886, NULL, '104573329018831675483', 'jaouanitasnime@gmail.com', 'Tasnim Ja', '[\"ROLE_USER\"]', 'profile_69c142f077fbc6.12513256.jpg', NULL, 1, 0, '$2y$13$Gdt0QHq9n5F9RxGqJ9XOz.aFvTEqu2VTdsxJHjmOOOaonLkeJ6MdG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-25 00:01:13', '2026-03-25 00:01:13', NULL, 'e9344f19-7f7e-4a74-88f4-a9fe691a8acf', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
-(4, NULL, 'Mkhalil', 'khalilmkaissi@gmail.com', 'Mkaissi khalil', '[\"ROLE_ADMIN\"]', 'screenshot-20240923-103656-66f1370c631e5378195630.jpg', NULL, 1, 0, '$2y$13$lrlVhGFgstKwmIvpRmUf6uGB/w4Br6oIv/.cPagPchxXBRihgZrp.', NULL, NULL, '28037571', 'Hammam lif', 'M', NULL, NULL, 1, '2024-08-30 20:36:42', '2026-03-24 09:23:37', '2026-03-24 09:23:37', 'a94b5a76-4843-4a34-a9a8-2b604713850c', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(892, NULL, '117188144170090922865', 'yassine.hkiri.22@gmail.com', 'yassine hkiri', '[\"ROLE_USER\"]', 'profile_69c1b8bc155c57.11534028.jpg', NULL, 1, 0, '$2y$13$8tzCqpqc5hLlV21ledutVeNgrTDsjVwHJ6430quiWW0N4bc15a9rq', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-26 18:17:08', '2026-03-26 18:17:08', NULL, 'ed5be4f3-5716-4118-b255-86ce08190baa', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(851, NULL, 'hajer jemaa', 'jemaahajer0@gmail.com', 'hajer jemaa', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$TFjtDiMS6jZUIwucvDqAVe2tjXbPeiPiZY9fxNjqpwsoRtUIKHWEK', NULL, NULL, '22726095', NULL, NULL, NULL, NULL, 1, '2026-03-26 18:17:14', '2026-03-26 18:17:14', NULL, '4cba48a4-8396-4a0c-a25a-4cea91ae110d', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(905, NULL, 'aziz bo3', 'medazizbouabidi1@gmail.com', 'med aziz bouabidi', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$yOxkYXU3aW3y35sHQMUYlOGy9z7LMXq7nl3/i9xy0bwTyy1pfg33i', NULL, NULL, '28024987', NULL, NULL, NULL, NULL, 1, '2026-03-26 18:17:22', '2026-03-26 18:17:22', NULL, '2cafe0aa-a6c9-461d-b827-bfe514897be2', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(904, NULL, '110296837240304993747', 'rayendhifi934@gmail.com', 'dhifi rayen', '[\"ROLE_USER\"]', 'profile_pic_69c564b95e4763.87536615.jpg', NULL, 1, 0, '$2y$13$Ecqcnh/d9xQG0a93sfhODu8N1OsrzAUIn/DLxFhkRQRHgx57hSAlW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-26 18:17:24', '2026-03-26 18:17:24', NULL, '04993cfe-6705-4968-b5dc-50b149db1f4a', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(903, NULL, '001794.abc73acb5f9b4dc4bc2d07aa5a8f1c6b.1235', 'dp6nq97hrt@privaterelay.appleid.com', 'abderrahmen chibani', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$pAHfFMUDGh2H1R9n7EMoIuZHM2EchZFQ8IGbUOILKpE9Bpb.RJwMi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-26 18:17:29', '2026-03-27 23:52:40', '2026-03-27 23:52:40', '8a103791-2473-4d66-bae2-fab6730b959a', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(906, NULL, '104085644499310475590', 'essouriferdaoues34@gmail.com', 'Ferdaoues Essouri', '[\"ROLE_USER\"]', 'profile_69c580f1c31da6.73066676.jpg', NULL, 1, 0, '$2y$13$qTasesQvzaD52PBT32g.AutgaiN1ryT2R1DWaRw1FC92V/0n80vwy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-27 10:51:43', '2026-03-27 10:51:43', NULL, '1caf2417-d249-452d-81ff-31932d1aa86d', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(907, NULL, '102514922391258255049', 'hibanefzi77@gmail.com', 'Hiba Nefzi', '[\"ROLE_USER\"]', 'profile_69c58d30359fd8.05217534.jpg', NULL, 1, 0, '$2y$13$OqvzDe.91.tLd1TvWem2Y.u0gBE.G5oTJfiXelB7TMZ6uPY7wEwQi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-27 10:51:45', '2026-03-27 10:51:45', NULL, 'f342a6da-2c94-4b62-a9b3-f40850624b22', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(357, NULL, 'Ines Chekir', 'ineschekir73@gmail.com', 'Ines Chekir', '[\"ROLE_USER\"]', 'profile_pic_68692439ebd436.57640220.jpg', NULL, 1, 0, '$2y$13$J4/gWEsgy2B9yoNIPP99duMs7gTwlRDfCjj/39XzAraMkKp0HJnwK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-27 10:51:47', '2026-03-27 10:51:47', NULL, '29a549a9-721d-455d-8f19-4cae074a313f', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(887, NULL, 'lindouch', 'lyndasta8@gmail.com', 'linda sta', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$hRPXfLTmZNLMHnYWcfW3lOjFxemMUn/OV48b5ekfr8uO6ZvA5UFBS', NULL, NULL, '25553715', NULL, NULL, NULL, NULL, 1, '2026-03-27 10:51:50', '2026-03-27 10:51:50', NULL, 'f7371c86-16a9-431a-920f-8d58d2f33717', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(621, NULL, '108363992656686229233', 'seddikyoussef08@gmail.com', 'seddik youssef', '[\"ROLE_USER\"]', 'profile_pic_68d335ae7e7597.90784685.jpg', NULL, 1, 0, '$2y$13$8vgOE.ggv4tqPBpRPGLug.Kxt9TsQtOH5Mm.UKzq4lTRwelfmQsLq', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-27 10:51:52', '2026-03-27 10:51:52', NULL, '34a95aeb-86f3-4ecc-8bda-8d0ebe8d2620', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(639, NULL, '103554291824477400786', 'aminabrvn935@gmail.com', 'Amina Brvn', '[\"ROLE_USER\"]', 'profile_pic_68e21fe441edb3.26474444.jpg', NULL, 1, 0, '$2y$13$asgHR50bnPPPGipy530PmeyAUlkeW7AzbV7glWWfY3Pd396G4Cftq', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-27 13:55:03', '2026-03-27 13:55:03', NULL, '45f5b46b-14df-431f-a864-aa93488b47a4', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(909, NULL, '001265.ff1cc28ee5a14b42a852b7ddf0e64144.1419', '278xp95zh6@privaterelay.appleid.com', 'houseem derbali', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$ipB/Otm/9iIXLulA6AwPROg1AI8kSKNh1u2kwjkOsxpHOQsk5Bdyu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-27 21:53:19', '2026-03-27 21:53:19', NULL, 'b7df39e9-21d9-459b-8833-bdd0bededfa5', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(878, NULL, 'Yasmin Ben marzouk', 'yasminbenmarzouk240@gmail.com', 'Yasmin ben marzouk', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$goZNJvzzQs3Brg7hfoK.neX8L3HweBK0MZio4DJA.jYomw.eFlLwq', NULL, NULL, '25554205', NULL, NULL, NULL, NULL, 1, '2026-03-27 21:53:20', '2026-03-27 21:53:20', NULL, '46a9eb83-a888-408c-92ce-7acd4b6881fe', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(661, NULL, '104209274703520785135', 'salehezahrouni@gmail.com', 'zahrouni salehe', '[\"ROLE_USER\"]', 'profile_pic_69069052e10e65.14861197.jpg', NULL, 1, 0, '$2y$13$CUlAGfrwSPm55ZMBFY1M..axX0gGNbjnjHYT.xTpXzRnyHq3S4pvi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-27 21:59:31', '2026-03-27 22:21:01', '2026-03-27 22:21:01', '28b0ea86-59e7-4fea-9f0c-b58f277979c6', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(893, NULL, 'Zeus', 'sedirimedaziz@gmail.com', 'Aziz Sediri', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$dT/NjPoO/jtWk0F.u.Heg.PQOsS9.jW1GwIOg8ZRb6bQ2p6ajEFT.', NULL, NULL, '25026007', '', 'M', NULL, NULL, 1, '2026-03-29 17:14:30', '2026-03-29 17:14:30', NULL, 'c2f1e806-5ae2-474d-87c1-fa8044cc9c27', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL);
+INSERT INTO `user` (`id`, `account_id`, `username`, `email`, `full_name`, `roles`, `img_link`, `reset_token`, `status`, `created_by`, `password`, `birth_date`, `birth_place`, `phone`, `address`, `grand`, `access_type`, `access_type_date`, `enabled`, `created_at`, `timestamp`, `updated_at`, `uuid`, `facebook_id`, `google_id`, `mastodon_access_token`, `general_notification`, `message_notification`, `calendar_notification`, `push_notification`, `sms_notification`, `login_notification`, `horsline`, `ref_slc`, `apple_id`, `open_source_user_name`, `rocket_chat_user_id`, `fcm_web`, `fcm_android`, `fcm_ios`, `releaseToken`, `useToken`, `slc_use`, `isvirtual`, `slc_edit`, `id_user`) VALUES
+(744, NULL, '118168269864699925105', 'rouaidkahlaoui@gmail.com', 'Rouaid Kahlaoui', '[\"ROLE_USER\"]', 'profile_pic_697864c55d1c67.32550555.jpg', NULL, 1, 0, '$2y$13$3twRgSRU4W11.zKvlFAEK.oBtjIlgxLq0yd1IApJLe0R4TvpmBm9G', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-29 17:14:32', '2026-03-29 17:14:32', NULL, '37238495-5acd-4bd5-aa90-dc306f7fbfc6', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(671, NULL, '106194826178035356001', 'aramnaouai46@gmail.com', 'Aram Naouai', '[\"ROLE_USER\"]', 'profile_pic_6914bca4780413.81716923.jpg', NULL, 1, 0, '$2y$13$nDDc634eu8z40J570LLBBeczRupN0USDguKl.v3cSPazKw1xbjk8O', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-29 17:14:34', '2026-03-29 17:14:34', NULL, '66bb444f-7232-4b04-9156-7cf8378fd9c3', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(743, NULL, 'safa Yazidi', 'sarayazidi573@gmail.com', 'safa Yazidi', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$3QIMI26iRomIBsHJohOgNeag0do.ei3k2vyzviKk1NvjivdExtT5O', NULL, NULL, '55184271', NULL, NULL, NULL, NULL, 1, '2026-03-29 17:14:40', '2026-03-29 17:14:40', NULL, 'aade6525-1544-43d8-99fb-3c0f156e2eea', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(908, NULL, '000040.49869ea1085e4b16a0e518073186dc17.0035', '4gmqryyzmf@privaterelay.appleid.com', 'roudaina', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$.RmezHObdjO.yHIiHtwoWue8/rGFjq1AredQYgvT2f8sqgOwY4CBa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-31 10:57:31', '2026-03-31 10:57:31', NULL, '9ed487c8-457e-4e29-86a5-faf51952bcbf', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(913, NULL, '000718.60aa41faf38d4e81825e9d8abbc08b56.1316', 'ycbygw6npd@privaterelay.appleid.com', 'Rahma Cherni', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$cZ3XAH9NC6eLGqaTNRoSZO5LX9AiCnnW1xTQ5dTmzk4EGmOt7Dk3q', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-03-31 10:57:35', '2026-03-31 10:57:35', NULL, '5591585e-5d02-4265-a53e-7ac27ebf6bc0', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(365, NULL, 'Si jawadi', 'yy0942345@gmail.com', 'Si jawadi', '[\"ROLE_USER\"]', 'profile_pic_686dbd375444f2.09295223.jpg', NULL, 1, 0, '$2y$13$tVcgiy5KadvNhKI85ynZeuVTAf64v.LHwmPAcjxIlvD9BP7If364a', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-04-03 04:02:14', '2026-04-03 04:02:14', NULL, '2beff0c5-8280-4a3f-82cf-ef84d95c4f91', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(919, NULL, '114871880217559823311', 'rouaidkahlaoui50@gmail.com', 'Rouaid Kahlaoui', '[\"ROLE_USER\"]', 'profile_69cd5d39473032.73764027.jpg', NULL, 1, 0, '$2y$13$.q1M0JJBW0if3LXj25Y5revhCGmyMdEqEkuJpYNLNlHderLym62fK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-04-03 04:02:21', '2026-04-03 04:02:21', NULL, 'c6e1d527-ee92-446c-8882-feeccb65dadd', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(912, NULL, '113145974775214486757', 'hibahibanefzi@gmail.com', 'Hiba Hiba', '[\"ROLE_USER\"]', 'profile_69c90e53860801.68999337.jpg', NULL, 1, 0, '$2y$13$TxJaiftilEdHBi5AAL0sYeMLszfo9XleARedmU19z0n4JLEVJVx4C', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-04-03 04:02:23', '2026-04-03 04:02:23', NULL, '55aeca37-718f-46c5-98cc-96a1f8f1c007', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(926, NULL, 'salah toukebri', 'toukebrisalah07@gmail.com', 'toukebri med salah', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$tG4QBi8oMSe4vV/ppyrKm.tT219oNInkaQ0.qmENGyv3uU/ozoM/a', NULL, NULL, '53074062', NULL, NULL, NULL, NULL, 1, '2026-04-03 16:55:52', '2026-04-03 16:55:52', NULL, 'ca39807c-45e6-481f-9d3b-63c7cb56f62c', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(925, NULL, 'meow', 'belazifarah2@gmail.com', 'Bakou rayeb', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$ht8RMMEtWCJ3d7LKpJtvV.x1gUBU6.2PUjN/AYcShCh7Avdei2jDK', NULL, NULL, '24321710', '', '', NULL, NULL, 1, '2026-04-03 16:56:05', '2026-04-03 16:56:05', NULL, '9e6a77eb-eac8-4f9e-bda5-ff00739b7ad2', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(927, NULL, '101575749970361592222', 'mihedbentaazayet@gmail.com', 'Bentaazayet Mihed', '[\"ROLE_USER\"]', 'profile_69cff2f7a34229.96318106.jpg', NULL, 1, 0, '$2y$13$UhthIth3VbhGKkFxy8mHwe8uZxHWc6Wi7vyGjTJtQ7pmx1ji6AH8W', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-04-03 19:38:28', '2026-04-03 19:38:28', NULL, '3533fa40-5349-4465-9d94-03758ae51998', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(578, NULL, 'Amira', 'amirabenhoun188@gmail.com', 'Amira', '[\"ROLE_USER\"]', NULL, NULL, 0, 0, '$2y$13$PIddZ1a9vsFx63hOER4wnOrVLCFHmcSMD4na3fbUs6.nIhf/YndJy', NULL, NULL, '99002114', NULL, NULL, NULL, NULL, 1, '2026-04-03 19:38:34', '2026-04-03 19:38:34', NULL, 'e4fb57f2-bb47-4f6b-8674-5a87b18f13e2', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(922, NULL, '001554.f718b1aacb074abda7ae71fe127bc256.1939', 'chroudanour@icloud.com', '', '[\"ROLE_USER\"]', NULL, NULL, 1, 0, '$2y$13$sWUvMELWrlKfhmfIyV0MXO6qGwEmK6AUnO1vw89I7rMlWyLdnYAs.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2026-04-04 11:13:32', '2026-04-04 11:13:32', NULL, '5a0cd059-724d-4723-99f3-a6d631014fba', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(4, NULL, 'Mkhalil', 'khalilmkaissi@gmail.com', 'Mkaissi khalil', '[\"ROLE_ADMIN\"]', 'screenshot-20240923-103656-66f1370c631e5378195630.jpg', NULL, 1, 0, '$2y$13$lrlVhGFgstKwmIvpRmUf6uGB/w4Br6oIv/.cPagPchxXBRihgZrp.', NULL, NULL, '28037571', 'Hammam lif', 'M', NULL, NULL, 1, '2024-08-30 20:36:42', '2026-04-04 07:31:19', '2026-04-04 07:31:19', 'a94b5a76-4843-4a34-a9a8-2b604713850c', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (136, NULL, 'MKAISSI HASSEN', 'hassenmkaissi@gmail.com', 'MKAISSI HASSEN', '[\"ROLE_MANAGER_CONFIG\", \"ROLE_MANAGER_FINANCE\", \"ROLE_MANAGER_HR\", \"ROLE_MANAGER_IT\", \"ROLE_MANAGER_MARKETING\", \"ROLE_CUSTOMER_MANAGER_SERVICE\", \"ROLE_MANAGER_ADMINISTRATIVE\"]', 'download-6824808a85d5e775146794.jpg', NULL, 1, 0, '$2y$13$11KGbYGEUdc5SiMgSS02eOIeJ6KUPbYvGFKW/uoBkCoOLNowP.rzK', NULL, NULL, '23994336', 'HAMMAM LIF', 'M', NULL, NULL, 1, '2024-10-01 13:09:56', '2026-01-14 09:09:50', '2026-01-14 09:09:50', '1085be62-5c45-4bf7-9d7a-795f1a6580f2', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
+(290, NULL, 'hedipfemouna', 'mouna.manou1444@gmail.com', 'hedi', '[\"ROLE_MANAGER_ADMINISTRATIVE\", \"ROLE_MANAGER_CONFIG\"]', NULL, NULL, 1, 0, '$2y$13$aCtiptEloYkA5t4QOlNGdOymdgICCgR40.wvTfvApu5kv8GmvO4Iu', NULL, NULL, '12345678', NULL, NULL, NULL, NULL, 1, '2025-02-17 14:05:47', '2026-03-31 11:19:31', '2026-03-31 11:19:31', 'b8cc1823-5c80-43eb-a539-c07018fe36a9', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (374, NULL, 'ykasmi', 'kasmi@gmail.com', 'youssef kasmi', '[\"ROLE_TEACHER\"]', NULL, NULL, 1, 0, '$2y$13$SNzMUNaOpSdDFndlhsC.4Ob4G989JM6V1oyjY0jTXePs0sywEwS9u', NULL, NULL, '14147123', NULL, 'M', NULL, NULL, 1, '2025-07-10 09:18:12', '2026-01-21 14:01:16', '2026-01-21 14:01:16', '361940f8-2df9-42c7-9ed3-5742e516b89a', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL),
 (692, NULL, 'sami', 'sami.tester@gmail.com', 'sami tester', '[\"ROLE_TEACHER\"]', 'logo-693a986c86462547649213.png', NULL, 1, 0, '$2y$13$eOqLXzInZ9RDfKy77lsBEudEYTvSjAz4HeuAWaDacpO4HxeZgRBtG', NULL, NULL, '12345678', NULL, 'M', NULL, NULL, 1, '2025-12-08 09:14:50', '2026-02-11 16:57:39', '2026-02-11 16:57:39', '20699bcf-83ab-46e8-80b2-9b63285fada1', NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, NULL);
 
@@ -5237,7 +5405,41 @@ INSERT INTO `virtual_user` (`id`, `account_id`, `user_id`, `created_by_id`, `nam
 (506, 3, 421, NULL, 'Belkhir Eya', NULL, 1, '2026-03-26 05:24:51', '2026-03-26 05:24:51', NULL, 'f878e372-a83c-485d-905d-dfcab687fc2c', NULL, 'belkhireya4@gmail.com', 1, 0, NULL, 0),
 (507, 3, 900, NULL, 'Rahma Cherni', NULL, 1, '2026-03-26 09:30:00', '2026-03-26 09:30:00', NULL, '695dfb36-9d6a-434e-802b-0d0a54153cbf', NULL, 'rahmacherni188@gmail.com', 1, 0, NULL, 0),
 (508, 3, 888, NULL, 'Lina Benhassen', NULL, 1, '2026-03-26 10:46:25', '2026-03-26 10:46:25', NULL, 'b5d1866b-55d2-418a-bdbe-ef326f730eb9', NULL, 'linabenhassen828@gmail.com', 1, 0, NULL, 0),
-(509, 3, 903, NULL, 'abderrahmen chibani', NULL, 1, '2026-03-26 12:37:16', '2026-03-26 12:37:16', NULL, '68d9a83e-8c5b-4cd0-96a5-ddf1795fbad0', NULL, 'dp6nq97hrt@privaterelay.appleid.com', 1, 0, NULL, 0);
+(509, 3, 903, NULL, 'abderrahmen chibani', NULL, 1, '2026-03-26 12:37:16', '2026-03-26 12:37:16', NULL, '68d9a83e-8c5b-4cd0-96a5-ddf1795fbad0', NULL, 'dp6nq97hrt@privaterelay.appleid.com', 1, 0, NULL, 0),
+(510, 3, 904, NULL, 'dhifi rayen', NULL, 1, '2026-03-26 16:57:36', '2026-03-26 16:57:36', NULL, 'ddba4ec4-7b2a-407d-bbd6-bba0f4a31f74', NULL, 'rayendhifi934@gmail.com', 1, 0, NULL, 0),
+(512, 3, 905, NULL, 'med aziz bouabidi', NULL, 1, '2026-03-26 18:16:03', '2026-03-26 18:16:03', NULL, '4c11eb8e-b725-499e-98b4-9ea7849ce8b5', '28024987', 'medazizbouabidi1@gmail.com', 1, 0, NULL, 0),
+(513, 3, 906, NULL, 'Ferdaoues Essouri', NULL, 1, '2026-03-26 18:56:39', '2026-03-26 18:56:39', NULL, '4b1e3842-b533-42eb-a0e3-98bc0c50d4f4', NULL, 'essouriferdaoues34@gmail.com', 1, 0, NULL, 0),
+(514, 3, 357, NULL, 'Ines Chekir', NULL, 1, '2026-03-26 19:02:45', '2026-03-26 19:02:45', NULL, '32d39dea-5272-4630-8804-114d16ec8b23', NULL, 'ineschekir73@gmail.com', 1, 0, NULL, 0);
+INSERT INTO `virtual_user` (`id`, `account_id`, `user_id`, `created_by_id`, `name`, `data`, `enabled`, `created_at`, `timestamp`, `updated_at`, `uuid`, `phone`, `email`, `status`, `release_token`, `use_token`, `slc_edit`) VALUES
+(515, 3, 671, NULL, 'Aram Naouai', NULL, 1, '2026-03-26 21:28:19', '2026-03-26 21:28:19', NULL, 'ab6e0a8b-68d8-40e0-b064-87b93ebb9f5f', NULL, 'aramnaouai46@gmail.com', 1, 0, NULL, 0),
+(516, 3, 907, NULL, 'Hiba Nefzi', NULL, 1, '2026-03-27 07:56:24', '2026-03-27 07:56:24', NULL, '85cb0c9e-75a1-4386-9bcc-d05bbf816315', NULL, 'hibanefzi77@gmail.com', 1, 0, NULL, 0),
+(517, 3, 887, NULL, 'linda sta', NULL, 1, '2026-03-27 09:10:10', '2026-03-27 09:10:10', NULL, '3bf38fe8-b61b-4d77-826b-25fabc46adb0', '25553715', 'lyndasta8@gmail.com', 1, 0, NULL, 0),
+(518, 3, 621, NULL, 'seddik youssef', NULL, 1, '2026-03-27 10:43:50', '2026-03-27 10:43:50', NULL, 'f55ea271-491b-48d9-ba46-ee0edf2b643f', NULL, 'seddikyoussef08@gmail.com', 1, 0, NULL, 0),
+(519, 3, 639, NULL, 'Amina Brvn', NULL, 1, '2026-03-27 12:17:37', '2026-03-27 12:17:37', NULL, 'e8eda565-2d0c-4f84-b957-d97d07aeca66', NULL, 'aminabrvn935@gmail.com', 1, 0, NULL, 0),
+(520, 3, 437, NULL, 'Ichrak Khorchani', NULL, 1, '2026-03-27 13:06:59', '2026-03-27 13:06:59', NULL, 'b0fbc97d-c059-4569-b75f-dab890e85ffa', NULL, 'ichrakkhorchani35@gmail.com', 1, 0, NULL, 0),
+(521, 3, 414, NULL, 'israa allagui', NULL, 1, '2026-03-27 14:11:59', '2026-03-27 14:11:59', NULL, '7b72d59e-c569-4ede-8948-35b10bb31547', NULL, 'allaguiisraa4@gmail.com', 1, 0, NULL, 0),
+(522, 3, 909, NULL, 'houseem derbali', NULL, 1, '2026-03-27 14:20:06', '2026-03-27 14:20:06', NULL, '77406372-61e5-44fc-9cd1-465c83cbc838', NULL, '278xp95zh6@privaterelay.appleid.com', 1, 0, NULL, 0),
+(523, 3, 661, NULL, 'zahrouni salehe', NULL, 1, '2026-03-27 21:58:50', '2026-03-27 21:58:50', NULL, '96448b18-db16-46b9-960d-a087e21fd423', NULL, 'salehezahrouni@gmail.com', 1, 0, NULL, 0),
+(524, 3, 743, NULL, 'safa Yazidi', NULL, 1, '2026-03-28 00:01:09', '2026-03-28 00:01:09', NULL, '8e2931a5-320b-4de5-a43c-b96d5adb37f5', '55184271', 'sarayazidi573@gmail.com', 1, 0, NULL, 0),
+(525, 3, 387, NULL, 'Asma Arouri', NULL, 1, '2026-03-28 10:12:15', '2026-03-28 10:12:15', NULL, '9c527a50-7b8d-4718-88b9-91ac290a3f8e', NULL, 'asma.3rouri@gmail.com', 1, 0, NULL, 0),
+(526, 3, 863, NULL, 'Farah', NULL, 1, '2026-03-28 14:54:40', '2026-03-28 14:54:40', NULL, 'a27e3bf3-aad5-402c-ad4d-143677a237b1', NULL, 'fafahjelmam@gmail.com', 1, 0, NULL, 0),
+(527, 3, 744, NULL, 'Rouaid Kahlaoui', NULL, 1, '2026-03-29 12:46:20', '2026-03-29 12:46:20', NULL, '352ccff3-0bd6-43fc-9510-18e79f9d4f63', NULL, 'rouaidkahlaoui@gmail.com', 1, 0, NULL, 0),
+(528, 3, 893, NULL, 'Aziz Sediri', NULL, 1, '2026-03-29 17:13:48', '2026-03-29 17:13:48', NULL, '617a549e-164c-4343-881b-f86bf3423232', '25026007', 'sedirimedaziz@gmail.com', 1, 0, NULL, 0),
+(529, 3, 419, NULL, 'yassmine cherif', NULL, 1, '2026-03-30 09:44:11', '2026-03-30 09:44:11', NULL, 'dddb7e5f-cac9-47cd-a791-e66b8633dd55', NULL, 'cherifyassmine4@gmail.com', 1, 0, NULL, 0),
+(530, 3, 913, NULL, 'Rahma Cherni', NULL, 1, '2026-03-30 13:17:53', '2026-03-30 13:17:53', NULL, 'd81d92a9-fdc3-47b4-bb63-1f11df3dff68', NULL, 'ycbygw6npd@privaterelay.appleid.com', 1, 0, NULL, 0),
+(531, 3, 908, NULL, 'roudaina', NULL, 1, '2026-03-30 17:32:23', '2026-03-30 17:32:23', NULL, '768e80ed-1ddf-4996-8d0a-a07145cfc6f5', NULL, '4gmqryyzmf@privaterelay.appleid.com', 1, 0, NULL, 0),
+(532, 3, 447, NULL, 'amen allah', NULL, 1, '2026-03-30 19:21:06', '2026-03-30 19:21:06', NULL, '67153602-7d04-4928-b247-382bc90438bf', NULL, 'midouyoussef0023@gmail.com', 1, 0, NULL, 0),
+(533, 3, 911, NULL, 'Select Freak', NULL, 1, '2026-03-30 21:32:42', '2026-03-30 21:32:42', NULL, 'a2ca54a8-9c2f-438e-8e4b-765481654d28', NULL, 'selectfreak@gmail.com', 1, 0, NULL, 0),
+(534, 3, 428, NULL, 'Maryem Tarhouni', NULL, 1, '2026-04-01 01:29:31', '2026-04-01 01:29:31', NULL, '8284585e-7a56-4da8-9e99-ff3d2b692c13', NULL, 'tarhounihedi21@gmail.com', 1, 0, NULL, 0),
+(535, 3, 919, NULL, 'Rouaid Kahlaoui', NULL, 1, '2026-04-01 18:00:57', '2026-04-01 18:00:57', NULL, 'f58f10d2-ecf1-426c-8c84-7b5d532b2e6a', NULL, 'rouaidkahlaoui50@gmail.com', 1, 0, NULL, 0),
+(536, 3, 912, NULL, 'Hiba Hiba', NULL, 1, '2026-04-01 19:15:59', '2026-04-01 19:15:59', NULL, '5f755932-d1b6-495f-be72-5b5b08182747', NULL, 'hibahibanefzi@gmail.com', 1, 0, NULL, 0),
+(538, 3, 926, NULL, 'toukebri med salah', NULL, 1, '2026-04-03 16:46:56', '2026-04-03 16:46:56', NULL, '9d4a5b06-7186-4679-a955-90656a162e9c', '53074062', 'toukebrisalah07@gmail.com', 1, 0, NULL, 0),
+(539, 3, 925, NULL, 'Bakou rayeb', NULL, 1, '2026-04-03 16:52:57', '2026-04-03 16:52:57', NULL, '4e2c5a1c-6410-4030-b683-00ed2fd82ca0', '24321710', 'belazifarah2@gmail.com', 1, 0, NULL, 0),
+(540, 3, 927, NULL, 'Bentaazayet Mihed', NULL, 1, '2026-04-03 17:06:43', '2026-04-03 17:06:43', NULL, '0ddbabde-a07b-439d-a914-aad75cfcf499', NULL, 'mihedbentaazayet@gmail.com', 1, 0, NULL, 0),
+(541, 3, 578, NULL, 'Amira', NULL, 1, '2026-04-03 19:31:41', '2026-04-03 19:31:41', NULL, 'ef868922-e660-47cd-b8fa-404c3c584170', '99002114', 'amirabenhoun188@gmail.com', 1, 0, NULL, 0),
+(542, 3, 922, NULL, '', NULL, 1, '2026-04-04 11:12:56', '2026-04-04 11:12:56', NULL, '98530fc4-ae95-429c-97a0-b1d827c9dfba', NULL, 'chroudanour@icloud.com', 1, 0, NULL, 0),
+(543, 3, 423, NULL, 'Fathi Hmidi', NULL, 1, '2026-04-04 21:42:29', '2026-04-04 21:42:29', NULL, 'df53d953-b604-4e26-9d0d-8efc1016954f', NULL, 'fathihmidi100@gmail.com', 1, 0, NULL, 0),
+(544, 3, 920, NULL, 'Tirelbar Ahmed', NULL, 1, '2026-04-05 10:47:49', '2026-04-05 10:47:49', NULL, '95a55b9b-1365-4945-8e93-7585908a70ad', NULL, 'tirelbarahmeddddddd@gmail.com', 1, 0, NULL, 0);
 
 --
 -- Triggers `virtual_user`
@@ -5624,13 +5826,13 @@ ALTER TABLE `association_audit`
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9380;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9391;
 
 --
 -- AUTO_INCREMENT for table `attendance_audit`
 --
 ALTER TABLE `attendance_audit`
-  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=189482;
+  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=189493;
 
 --
 -- AUTO_INCREMENT for table `calendar_request`
@@ -5684,19 +5886,19 @@ ALTER TABLE `relation_calander_audit`
 -- AUTO_INCREMENT for table `relation_calander_group_audit`
 --
 ALTER TABLE `relation_calander_group_audit`
-  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT for table `relation_calander_group_session`
 --
 ALTER TABLE `relation_calander_group_session`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1961;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1988;
 
 --
 -- AUTO_INCREMENT for table `relation_group_local_session`
 --
 ALTER TABLE `relation_group_local_session`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=191;
 
 --
 -- AUTO_INCREMENT for table `relation_group_local_session_audit`
@@ -5708,7 +5910,7 @@ ALTER TABLE `relation_group_local_session_audit`
 -- AUTO_INCREMENT for table `relation_teacher_to_subject_group`
 --
 ALTER TABLE `relation_teacher_to_subject_group`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=893;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1266;
 
 --
 -- AUTO_INCREMENT for table `relation_teacher_to_subject_group_audit`
@@ -5804,7 +6006,7 @@ ALTER TABLE `user_audit`
 -- AUTO_INCREMENT for table `virtual_user`
 --
 ALTER TABLE `virtual_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=510;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=545;
 
 --
 -- AUTO_INCREMENT for table `virtual_user_audit`

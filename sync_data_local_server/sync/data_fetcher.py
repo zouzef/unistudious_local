@@ -52,9 +52,6 @@ class DataFetcher:
             else:
                 print("📅 Fetching all data (full sync)")
 
-            # Make request using APIClient (handles token refresh automatically)
-            # Note: APIClient.post() sends as JSON, but the original code sends as form data
-            # We need to modify the request to send as form data
             data = self._post_with_form_data(self.whats_new_endpoint, payload)
 
             print("✅ Data fetched successfully")

@@ -37,84 +37,141 @@ class DataPusher:
             else:
                 print(f"❌ {table_name} audit #{audit_id} failed — will retry next cycle")
 
-    def push_calendar_add(self, row,db):
+    def push_calendar_add(self, row, db):
         """Handle calendar INSERT action"""
         try:
             import json
 
-            # Parse the new_data JSON field
             new_data = json.loads(row.get('new_data', '{}'))
-
-            # Extract group_id
             group_id = new_data.get('group_id')
+            local_calendar_id = row.get('id_calander')
 
-            # Check if the group is special
+            # ✅ Step 1: Check if group is special
             cursor_check = db.connection.cursor(dictionary=True)
-            cursor_check.execute("SELECT is_special FROM relation_group_local_session WHERE id = %s", (group_id,))
+            cursor_check.execute("SELECT special_group FROM relation_group_local_session WHERE id = %s", (group_id,))
             group = cursor_check.fetchone()
             cursor_check.close()
 
-            is_special = group.get('is_special',False) if group else False
-
-
-
-            # Extract date and time parts
+            is_special = group.get('special_group', False) if group else False
+            print('is_special resullt: ',is_special)
+            # ✅ Step 2: Extract date/time from new_data
             start_datetime = new_data.get('start_time', '')
             end_datetime = new_data.get('end_time', '')
+            start_time = start_datetime.split(' ')[1][:5] if start_datetime else None
+            end_time = end_datetime.split(' ')[1][:5] if end_datetime else None
 
-            # Extract time in HH:MM format (remove seconds if present)
-            start_time = start_datetime.split(' ')[1][:5] if start_datetime else None  # Gets HH:MM
-            end_time = end_datetime.split(' ')[1][:5] if end_datetime else None  # Gets HH:MM
-
-            # Map to camelCase field names that the API expects
+            # ✅ Step 3: Build base payload (shared between both APIs)
             payload = {
-                'groupId': new_data.get('group_id'),
                 'sessionId': new_data.get('session_id'),
                 'localId': new_data.get('local_id'),
                 'teacherId': new_data.get('teacher_id'),
-                'accountId': new_data.get('account_id'),  # ✅ Required
+                'accountId': new_data.get('account_id'),
                 'startDate': start_datetime.split(' ')[0] if start_datetime else None,
-                'endDate': '',  # ✅ Empty for one-time events
-                'startTime': start_time,  # ✅ HH:MM format
-                'endTime': end_time,  # ✅ HH:MM format
-                'eventType': 'none',  # ✅ One-time event (not recurring)
-                'typeSession': new_data.get('type'),  # ✅ P or O
+                'endDate': '',
+                'startTime': start_time,
+                'endTime': end_time,
+                'eventType': 'none',
+                'typeSession': new_data.get('type'),
                 'eventTitle': new_data.get('title'),
                 'description': new_data.get('description'),
-                'completionTag': [],  # ✅ Empty array for now
+                'completionTag': [],
             }
 
-            # Optional fields
             if new_data.get('room_id'):
                 payload['roomId'] = new_data.get('room_id')
             if new_data.get('subject_id'):
                 payload['subjectId'] = new_data.get('subject_id')
 
-            print(f"📦 Calendar payload: {payload}")
-
+            # ✅ Step 4: Route based on group type
             if is_special:
-                print(f"⭐ Group {group_id} is SPECIAL — using special API")
-                success, remote_id = _send_calendar_special_group(self.settings, payload)
+                print(f"⭐ Group {group_id} is SPECIAL — fetching extra fields from DB")
+
+                # Fetch capacity and accessType from the main calendar table
+                cursor_extra = db.connection.cursor(dictionary=True)
+                cursor_extra.execute("""
+                    SELECT capacity, access_type 
+                    FROM relation_group_local_session 
+                    WHERE id = %s
+                """, (group_id,))
+                extra = cursor_extra.fetchone()
+                cursor_extra.close()
+
+                if not extra:
+                    print(f"❌ Could not find calendar row #{local_calendar_id} for extra fields")
+                    return False
+
+                # Add special-group-only fields to payload
+                payload['endDate'] = payload['startDate']
+                payload['capacity'] = extra.get('capacity')
+                payload['accessType'] = extra.get('access_type')
+                payload['groupId'] = group_id  # needed by special API
+
+
+
+                result = _send_calendar_special_group(self.settings, payload)
+                print("\n \n \n \n",result)
+                if result is None:
+                    print("❌ _send_calendar_special_group returned None — check the pusher function")
+                    return False
+                success, remote_calendar_id, remote_group_id = result
+
+                if success and remote_calendar_id and remote_group_id:
+                    cursor_save = db.connection.cursor()
+
+                    # Save remote_calendar_id → relation_calander_group_session.id_prod
+                    cursor_save.execute("""
+                        UPDATE relation_calander_group_session 
+                        SET id_prod = %s 
+                        WHERE id = %s
+                    """, (remote_calendar_id, local_calendar_id))
+
+                    # Save remote_group_id → relation_group_local_session.id_prod
+                    cursor_save.execute("""
+                        UPDATE relation_group_local_session 
+                        SET id_prod = %s 
+                        WHERE id = %s
+                    """, (remote_group_id, group_id))
+
+                    db.connection.commit()
+                    cursor_save.close()
+
+                    print(
+                        f"✅ Saved remote_calendar_id={remote_calendar_id} → relation_calander_group_session #{local_calendar_id}")
+                    print(f"✅ Saved remote_group_id={remote_group_id} → relation_group_local_session #{group_id}")
+
+                elif not(success):
+                    print("Change the is_synced to 2")
+                    cursor_save = db.connection.cursor()
+
+                    # Save remote_calendar_id → relation_calander_group_session.id_prod
+                    cursor_save.execute("""
+                        UPDATE relation_calander_group_audit 
+                        SET is_synced = 2
+                        WHERE id_calander = %s
+                    """,(local_calendar_id,))
+
+                    db.connection.commit()
+                    cursor_save.close()
+
             else:
                 print(f"👥 Group {group_id} is NORMAL — using standard API")
-                success, remote_id = _send_calendar(self.settings, payload)
+                payload['groupId'] = new_data.get('group_id')
 
-            # ✅ ADD THIS BLOCK:
-            if success and remote_id:
-                local_calendar_id = row.get('id_calander')  # Get local calendar ID from audit
+                print(f"📦 Normal group payload: {payload}")
+                success, remote_calendar_id = _send_calendar(self.settings, payload)
 
-                cursor = db.connection.cursor()
-                cursor.execute("""
-                    UPDATE relation_calander_group_session 
-                    SET id_prod = %s 
-                    WHERE id = %s
-                """, (remote_id, local_calendar_id))
+                if success and remote_calendar_id:
+                    cursor_save = db.connection.cursor()
+                    cursor_save.execute("""
+                        UPDATE relation_calander_group_session 
+                        SET id_prod = %s 
+                        WHERE id = %s
+                    """, (remote_calendar_id, local_calendar_id))
+                    db.connection.commit()
+                    cursor_save.close()
 
-                # send_new_attendance(db,local_calendar_id,remote_id)
-                db.connection.commit()
-                cursor.close()
-
-                print(f"✅ Updated local calendar #{local_calendar_id} with remote id_prod: {remote_id}")
+                    print(
+                        f"✅ Saved remote_calendar_id={remote_calendar_id} → relation_calander_group_session #{local_calendar_id}")
 
             return success
 

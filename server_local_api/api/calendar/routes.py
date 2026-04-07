@@ -1519,6 +1519,7 @@ def create_special_group(data):
         result = Database.execute_query(query,values,fetch=False)
 
 
+
         if result :
             return True,result
         else:
@@ -1597,11 +1598,39 @@ def create_calander_special(data):
             return True,result
         else:
             return False,None
+    except Exception as e:
+        return False,None
 
-
+def create_relation_teacher_to_subject(data):
+    try:
+        query ="""
+            INSERT INTO relation_teacher_to_subject_group
+            (
+                relation_group_local_session_id,
+                subject_id,
+                user_id,
+                enabled,
+                created_at,
+                timestamp
+            )VALUES(
+                %s,
+                %s,
+                %s,
+                1,
+                NOW(),
+                NOW()
+            ); 
+        """
+        values=(data['group_session_id'],data['subject_id'],data['teacher_id'])
+        result = Database.execute_query(query, values, fetch=False)
+        if result:
+            return True,result
+        else:
+            return False,None
 
     except Exception as e:
         return False,None
+
 
 
 @calendar_bp.route('/create_calender_special_group',methods=['POST'])
@@ -1710,8 +1739,9 @@ def create_calander_special_group():
             'title':name,
             'type':type,
         }
-        resp,id = create_calander_special(payload2)
-        if resp == False:
+        resp_calander,id = create_calander_special(payload2)
+        resp_rel_teach,id = create_relation_teacher_to_subject(payload2)
+        if resp_calander == False or resp_rel_teach == False:
             return jsonify({
                 "Message":"Error in creating calender"
             })
