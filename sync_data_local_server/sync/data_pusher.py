@@ -113,7 +113,7 @@ class DataPusher:
                 if result is None:
                     print("❌ _send_calendar_special_group returned None — check the pusher function")
                     return False
-                success, remote_calendar_id, remote_group_id = result
+                success, remote_calendar_id, remote_group_id,relationTeacherSubject = result
 
                 if success and remote_calendar_id and remote_group_id:
                     cursor_save = db.connection.cursor()
@@ -131,6 +131,13 @@ class DataPusher:
                         SET id_prod = %s 
                         WHERE id = %s
                     """, (remote_group_id, group_id))
+
+                    # Save remote relation_teacher_to_subject_group
+                    cursor_save.execute("""
+                        UPDATE relation_teacher_to_subject_group 
+                        SET id_prod = %s 
+                        WHERE  relation_group_local_session_id = %s
+                    """,(relationTeacherSubject,group_id))
 
                     db.connection.commit()
                     cursor_save.close()

@@ -51,6 +51,7 @@ def insert_teacher_subject_relations(db, relation_data):
 
                 # Prepare new data
                 new_data = {
+                    "id": relation.get("id"),
                     "group_id": relation.get("groupId"),
                     "subject_id": relation.get("subjectId"),
                     "teacher_id": relation.get("teacherId"),
@@ -74,6 +75,13 @@ def insert_teacher_subject_relations(db, relation_data):
                     new_data["subject_id"],
                     new_data["teacher_id"]
                 ))
+                prod_id_check = db.fetch_query(
+                    "SELECT id FROM relation_teacher_to_subject_group WHERE id_prod = %s",(external_id,)
+                )
+                if prod_id_check:
+                    print(f"      ⏭️  prod_id {external_id} already exists - skipped")
+                    result["skipped"] += 1
+                    continue
 
                 print(f"   [{i}/{len(created_relations)}] External ID {external_id}...")
 
@@ -130,12 +138,13 @@ def insert_teacher_subject_relations(db, relation_data):
 
                     insert_query = """
                         INSERT INTO relation_teacher_to_subject_group (
-                            relation_group_local_session_id, subject_id, user_id,
-                            enabled, releaseToken, useToken, timestamp, created_at, updated_at, slc_use
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, 0)
+                            id,relation_group_local_session_id, subject_id, user_id,
+                            enabled, releaseToken, useToken, timestamp, created_at, updated_at, slc_use, id_prod
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 0, %s)
                     """
 
                     db.execute_query(insert_query, (
+                        external_id,
                         new_data["group_id"],
                         new_data["subject_id"],
                         new_data["teacher_id"],
@@ -144,7 +153,8 @@ def insert_teacher_subject_relations(db, relation_data):
                         new_data["use_token"],
                         new_data["timestamp"],
                         new_data["created_at"],
-                        new_data["updated_at"]
+                        new_data["updated_at"],
+                        external_id,  # ✅ id_prod
                     ))
 
                     result["inserted"] += 1
@@ -280,14 +290,15 @@ def update_teacher_subject_relations(db, relation_data):
                     print(f"      ⚠️  Relation not found in DB - inserting...")
 
                     insert_query = """
-                        INSERT INTO relation_teacher_to_subject_group (
-                            relation_group_local_session_id, subject_id, user_id,
-                            enabled, releaseToken, useToken, timestamp, created_at, updated_at, slc_use
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, 0)
+                            INSERT INTO relation_teacher_to_subject_group (
+                            id, relation_group_local_session_id, subject_id, user_id,
+                            enabled, releaseToken, useToken, timestamp, created_at, updated_at, slc_use, id_prod
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 0, %s)
                     """
 
                     # For records in 'updated' that don't exist, use updated_at as created_at
                     db.execute_query(insert_query, (
+                        external_id,  # id
                         new_data["group_id"],
                         new_data["subject_id"],
                         new_data["teacher_id"],
@@ -295,8 +306,9 @@ def update_teacher_subject_relations(db, relation_data):
                         new_data["release_token"],
                         new_data["use_token"],
                         new_data["timestamp"],
-                        new_data["updated_at"],  # Use updated_at as created_at
-                        new_data["updated_at"]
+                        new_data["updated_at"],
+                        new_data["updated_at"],
+                        external_id,  # id_prod
                     ))
 
                     result["inserted"] += 1
