@@ -3,6 +3,8 @@ import os
 import json
 import requests
 
+# from server_local_api.core.database import Database
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from core.auth import get_token
@@ -72,8 +74,6 @@ def _update_status_attendance(settings, attendance_id,is_present):
         return False
 
 
-
-
 def _find_calendar_id(db, user_id, session_id):
     try:
         conn = db.connection
@@ -109,11 +109,38 @@ def push_add(db, settings, audit_row):
             return False
 
         attendance_data = json.loads(new_data)
-        print(attendance_data)
+        calander_id = attendance_data.get("calendarId")
+        conn = db.connection
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("""
+            SELECT id_prod FROM relation_calander_group_session WHERE id = %s
+        """, (calander_id,))
+        row = cursor.fetchone()
 
 
-        return True
+        if not row or not row['id_prod']:
+            print(f"❌ No id_prod found for calander_id={calander_id} — skipping")
+            return False
 
+        id_prod = row['id_prod']
+        print(f"🔗 id_prod = {id_prod}")
+        attendance_data.pop('relationId', None)
+        payload = {
+            "userId":attendance_data.get("userId"),
+            "calendarId":id_prod,
+            "addToGroup":attendance_data.get("addToGroup"),
+            "selectedGroupId":attendance_data.get("selectedGroupId"),
+            "joinToGroup":attendance_data.get("joinToGroup"),
+        }
+
+
+        status,attendance_id_prod = _send_attendance_request(settings,payload)
+        if status and attendance_id_prod:
+            cursor.execute_query("""
+                UPDATE attendance set id_prod=%s
+            """,attendance_id_prod)
+            return True
+        cursor.close()
     except json.JSONDecodeError as e:
         print(f"❌ Error parsing new_data JSON: {e}")
         return False

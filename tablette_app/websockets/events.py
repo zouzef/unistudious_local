@@ -145,3 +145,16 @@ def start_background_tasks(socketio):
         print("✅ Background attendance checker started")
     except Exception as e:
         print(f"DEBUG: Exception in start_background_tasks: {e}")
+
+
+def notify_id_prod_available(sockectio, tablet_id, id_prod, slc_id):
+    """Emit id_prod to the tablet when it becomes availble. """
+    try:
+        sockectio.emit('id_prod_available', {
+            'id_prod': id_prod,
+            'slc_id': slc_id,
+            'tablet_id':tablet_id
+        },room=f'tablet_{tablet_id}')
+        print(f"✅ Emitted id_prod_available to tablet_{tablet_id}")
+    except Exception as e:
+        print(f"❌ Error emitting id_prod_available: {e}")

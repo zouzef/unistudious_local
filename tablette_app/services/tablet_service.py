@@ -120,3 +120,15 @@ def authentification_teacher(data):
 
     except Exception as e:
         return None
+
+
+def cronjob_calander(calander_id):
+    try:
+        url = f"{base_url}/cronjob_calander_special/{calander_id}"
+        response = requests.post(url, verify=False)
+        response.raise_for_status()
+        print(f"Cronjob called successfully for calendar_id: {calander_id}")
+        return response.json()
+    except Exception as e:
+        print(f"Error calling cronjob_calander: {e}")
+        return None

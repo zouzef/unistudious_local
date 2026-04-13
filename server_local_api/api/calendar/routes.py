@@ -1756,3 +1756,76 @@ def create_calander_special_group():
         return jsonify({
             "Message":f"Error: {e} coming from server"
         }),500
+
+
+# =======================================
+# ENDPOINT 19: cron job
+# =======================================
+
+
+def test_special_group(calander_id):
+    try:
+        query = """
+            SELECT group_session_id FROM relation_calander_group_session WHERE id = %s 
+        """
+        result = Database.execute_query(query, (calander_id,))
+        if result is None or len(result) == 0:
+            return False, None
+
+        group_id = result[0]['group_session_id']  # ✅ dict access
+
+        if not group_id or group_id == 0:
+            print("Invalid group_id:", group_id)
+            return False, None
+
+        query = """
+            SELECT special_group FROM relation_group_local_session WHERE id = %s
+        """
+        is_special = Database.execute_query(query, (group_id,))
+        print("test_special_group: ", is_special)
+
+        if is_special is None or len(is_special) == 0:
+            return False, None
+
+        if is_special[0]['special_group'] == 1:  # ✅ dict access
+            return True, group_id
+        return False, None
+
+    except Exception as e:
+        print(f"Error in test_special_group: {e}")
+        return False, None
+
+
+@calendar_bp.route('/cronjob_calander_special/<int:calander_id>', methods=['POST'])
+def cronjob_calander_special(calander_id):
+    try:
+        is_special, group_id = test_special_group(calander_id)
+        print("\n is_special: ",is_special)
+        print("\n group_id: ",group_id)
+        if is_special:  # ✅ boolean check, not function call
+            query = """
+                SELECT * FROM relation_user_session 
+                WHERE relation_group_local_session_id = %s
+            """
+            result = Database.execute_query(query, (group_id,))
+
+            if not result:
+                return jsonify({"Message": "No users found"}), 404
+
+            query = """
+                UPDATE relation_user_session 
+                SET relation_group_local_session_id = NULL , slc_use = 1
+                WHERE relation_group_local_session_id = %s
+            """
+            update_result = Database.execute_query(query, (group_id,),fetch=False)
+
+            if update_result:
+                return jsonify({"Message": "Success"}), 200
+            else:
+                return jsonify({"Message": "Update failed"}), 500
+
+        return jsonify({"Message": "Group is not special"}), 200
+
+    except Exception as e:
+        print(f"Error in cronjob_calander_special: {e}")
+        return jsonify({"Message": f"Error: {str(e)}"}), 500

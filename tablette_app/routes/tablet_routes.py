@@ -11,7 +11,8 @@ from services.tablet_service import (
     fetch_slc_info,
     fetch_user_profile_image,
     fech_academie_image,
-    authentification_teacher
+    authentification_teacher,
+    cronjob_calander
 )
 from services.attendance_service import (
     fetch_attendance,
@@ -116,7 +117,7 @@ def tablet_page(tablet_id):
         print(f"DEBUG: Exception in tablet_page: {e}")
         return jsonify({"status": "error", "message": str(e)}), 400
 
-
+_session_ended_logged = set()
 @tablet_bp.route('/tablet/<tablet_id>/check_session')
 def check_session(tablet_id):
     """Check if there's an active session for this tablet."""
@@ -151,8 +152,16 @@ def check_session(tablet_id):
         now = datetime.now()
 
         if session_start - timedelta(minutes=5) <= now <= session_end:
+            _session_ended_logged.discard(tablet_id)
             return jsonify({'status': 'active'})
 
+        # ✅ Print only once per session end
+        if tablet_id not in _session_ended_logged:
+            print("the session end")
+
+            _session_ended_logged.add(tablet_id)
+            calender_id = session_room.get("id")
+            cronjob_calander(calender_id)
         print("DEBUG: Session is not active")
         return jsonify({'status': 'no_session'})
 
