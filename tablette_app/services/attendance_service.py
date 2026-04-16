@@ -184,7 +184,7 @@ def delete_attendance(calendar_id, user_id):
         url = f"{base_url}{config['url']['delete_attendance_api']}/{calendar_id}/{user_id}"
         headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
 
-        response = requests.get(url, headers=headers, verify=False)
+        response = requests.delete(url, headers=headers, verify=False)
         response.raise_for_status()
 
         if response.status_code == 200:

@@ -2,6 +2,9 @@
 from flask import Blueprint, render_template, session, jsonify,Response,send_file,request
 from datetime import datetime, timedelta
 import os
+import requests as http_requests
+
+from utils.config import config as app_config
 
 from services.tablet_service import (
     fetch_all_tablets,
@@ -169,6 +172,23 @@ def check_session(tablet_id):
         print(f"DEBUG: Exception in check_session: {e}")
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
+
+@tablet_bp.route('/tablet/<tablet_id>/check-id-prod/<int:calendar_id>')
+def check_id_prod(tablet_id, calendar_id):
+    """Check if id_prod is available for a calendar session.
+    
+    Proxies the request to server_local_api's /get-id-prod/<calendar_id> endpoint.
+    Used by the frontend to poll for id_prod availability after page load.
+    """
+    try:
+        base_url = app_config["url"]["API_BASE_URL"]
+        url = f"{base_url}/get-id-prod/{calendar_id}"
+        response = http_requests.get(url, verify=False, timeout=5)
+        response.raise_for_status()
+        return jsonify(response.json()), 200
+    except Exception as e:
+        print(f"DEBUG: Exception in check_id_prod: {e}")
+        return jsonify({"id_prod": None, "error": str(e)}), 200
 
 @tablet_bp.route('/api/get-profile-image/<int:user_id>', methods=['GET'])
 def get_profile_img(user_id):

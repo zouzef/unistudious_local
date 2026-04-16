@@ -1829,3 +1829,25 @@ def cronjob_calander_special(calander_id):
     except Exception as e:
         print(f"Error in cronjob_calander_special: {e}")
         return jsonify({"Message": f"Error: {str(e)}"}), 500
+
+
+
+@calendar_bp.route('/get-id-prod/<int:calendar_id>', methods=['GET'])
+def get_calendar_id_prod(calendar_id):
+    try:
+        query = """
+            SELECT id_prod FROM relation_calander_group_session 
+            WHERE id = %s
+        """
+        result = Database.execute_query(query, (calendar_id,))
+        if result and result[0]['id_prod']:
+            return jsonify({
+                "id_prod": result[0]['id_prod']
+            }), 200
+        else:
+            return jsonify({
+                "id_prod": None
+            }), 200
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"error": str(e)}), 500

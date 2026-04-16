@@ -209,3 +209,88 @@ def check_internet_connection(url="https://www.google.com", timeout=5):
         print(f"❌ Error checking internet connection: {e}")
         return False
 
+
+def get_mac_address(db):
+    """
+    Get the mac address of this slc from the database
+    :param db:
+    :return:
+    """
+    try:
+        query = "SELECT username FROM slc LIMIT 1"
+        result = db.fetch_query(query)
+        if result and result[0].get('username'):
+            mac = result[0]['username']
+            print(f"✅ MAC address found: {mac}")
+            return mac
+        print("❌ No MAC address found in slc table")
+        return None
+    except Exception as e:
+        print(f"❌ Error getting MAC address from database: {e}")
+        return None
+
+
+def reset_attendance_token(settings, attendance_id):
+    """
+    Reset the token for an attendance record on the remote server
+    """
+    try:
+        from core.auth import get_token
+        import requests
+
+        token = get_token()
+        headers = {"Authorization": f"Bearer {token}"}
+        print("attendance_id from reset attendance_token: \n \n \n \n \n",attendance_id,"\n \n \n \n \n")
+        payload = {
+            "entityId": str(attendance_id),
+            "entityName": "Attendance"
+        }
+
+        url = f"{settings.api_base_url}/slc/reset-special-slc-token-detail-by-id"  # ← confirm this URL
+        response = requests.post(url, data=payload, headers=headers, timeout=10)
+        print("reset_attendance_function:",response)
+        if response.status_code == 200:
+            print(f"      🔄 Token reset successfully for attendance {attendance_id}")
+            return True
+        else:
+            print(f"      ⚠️  Token reset failed: {response.status_code}")
+            return False
+
+    except Exception as e:
+        print(f"      ❌ Error resetting token: {e}")
+        return False
+
+
+def get_all_calendar_ids(db):
+    """
+    Load all calendar id mappings into a dict
+    {id_prod: local_id }
+    :param db:
+    :return:
+    """
+    try:
+        result = db.fetch_query(
+            "SELECT id, id_prod FROM relation_calander_group_session WHERE id_prod IS NOT NULL "
+        )
+        mapping = {row['id_prod']: row['id'] for row in result}
+        print(f"      🔗 Loaded {len(mapping)} calendar mappings")
+        return mapping
+    except Exception as e:
+        print(f"      ❌ Error loading calendar mappings: {e}")
+        return {}
+
+def get_all_group_ids(db):
+    """
+    Load all group id mappings into a dict
+    { id_prod: local_id }
+    """
+    try:
+        result = db.fetch_query(
+            "SELECT id, id_prod FROM relation_group_local_session WHERE id_prod IS NOT NULL"
+        )
+        mapping = {row['id_prod']: row['id'] for row in result}
+        print(f"      🔗 Loaded {len(mapping)} group mappings")
+        return mapping
+    except Exception as e:
+        print(f"      ❌ Error loading group mappings: {e}")
+        return {}

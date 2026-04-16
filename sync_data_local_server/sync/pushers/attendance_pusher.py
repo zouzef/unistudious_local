@@ -25,7 +25,13 @@ def _send_attendance_request(settings, payload):
             response_data = response.json()
             print(f"✅ Remote API success: {response_data}")
             remote_id = response_data.get('attendance', {}).get('id')
-            return True, remote_id
+            return True,remote_id
+        elif response.status_code == 409:
+            response_data = response.json()
+            print(f"✅ User already Exist: {response_data}")
+            remote_id = response_data.get('attendance', {}).get('id')
+            print("\n \n \n Remote id: ",remote_id)
+            return True,remote_id
         else:
             print(f"❌ Remote API returned {response.status_code}: {response.text}")
             return False, None
@@ -70,6 +76,25 @@ def _update_status_attendance(settings, attendance_id,is_present):
             response_data = response.json()
             print(f"✅ Remote API success: {response_data}")
             return True
+        else:
+            return False
+    except Exception as e:
+        return False
+
+# API unistudious delete attendance
+def _delete_attendance(settings, attendance_id):
+    try:
+        token = get_token()
+        headers = {"Authorization": f"Bearer {token}"}
+        payload = {"attendanceId":str(attendance_id)}
+        url = f"{settings.api_base_url}/slc/attendance-delete-student/{attendance_id}"
+        response = requests.delete(url,data=payload,headers=headers,timeout=10)
+        if response.status_code == 200:
+            response_data = response.json()
+            print(f"✅ Remote API success: {response_data}")
+            return  True
+        else:
+            return False
     except Exception as e:
         return False
 
@@ -136,9 +161,9 @@ def push_add(db, settings, audit_row):
 
         status,attendance_id_prod = _send_attendance_request(settings,payload)
         if status and attendance_id_prod:
-            cursor.execute_query("""
-                UPDATE attendance set id_prod=%s
-            """,attendance_id_prod)
+            cursor.execute("""
+                UPDATE attendance set id_prod=%s where id =%s
+            """,(attendance_id_prod,id_attendance))
             return True
         cursor.close()
     except json.JSONDecodeError as e:
@@ -149,7 +174,6 @@ def push_add(db, settings, audit_row):
         import traceback
         traceback.print_exc()
         return False
-
 
 def push_update(db, settings, audit_row):
     print("🔄 UPDATE — pushing changes to remote...")
@@ -203,7 +227,6 @@ def push_update(db, settings, audit_row):
 
         if old_note != new_note:
             print(f"🎯 note changed: {old_note} → {new_note}")
-            print("\n \n \n ",new_note)
             result = _send_note_update(settings, id_prod, new_note)
             if not result:
                 print("❌ Failed to update note")
@@ -214,7 +237,18 @@ def push_update(db, settings, audit_row):
         # No changes detected
         if old_is_present == new_is_present and old_note == new_note:
             print("⏭️ No meaningful changes detected — skipping")
-            return True
+            success = True
+
+        old_enabled = old_relation.get('enabled')
+        new_enabled = new_relation.get('enabled')
+        if old_enabled != new_enabled:
+            print(f"🎯 enabled changed: {old_enabled} → {new_enabled}")
+            result = _delete_attendance(settings,id_prod)
+            if not result:
+                print("❌ Failed to update enabled")
+                success = False
+            else:
+                print("enabled updated successfully")
 
         return success
 
@@ -306,7 +340,8 @@ def send_new_attendance(db, settings, audit_row):
             db.connection.commit()
             cursor.close()
             print(f"✅ Updated local attendance #{id_attendance} with remote id_prod: {remote_id}")
-
+            return True
+        return False
 
 
     except Exception as e:

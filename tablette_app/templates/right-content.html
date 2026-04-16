@@ -345,11 +345,13 @@
     /* ── QR Code Setup ── */
     let idProd = {{ id_prod | tojson }};
     let slcId  = "{{ slc_id }}";
+    // tabletId is already declared in left-content.html
+    let qrCalendarId = {{ calendar_id | tojson }};
 
     /* ── Session Times Setup ── */
-    let sessionStartTime = "{{ session_start_time }}";    // NEW
-    let sessionEndTime = "{{ session_end_time }}";        // NEW
-    let sessionDuration = {{ session_duration }};         // NEW
+    let sessionStartTime = "{{ session_start_time }}";
+    let sessionEndTime = "{{ session_end_time }}";
+    let sessionDuration = {{ session_duration }};
 
     let sessionData = {
         startTime: sessionStartTime,
@@ -359,14 +361,119 @@
 
     let attendanceUrl = `https://www.unistudious.com/${slcId}/${idProd}`;
 
-    /* ── Small inline QR (sidebar card) ── */
+    /* ══════════════════════════════════════════════════════
+       DYNAMIC QR CODE UPDATE FUNCTION
+       ══════════════════════════════════════════════════════ */
+
+    let idProdPollingInterval = null;
+    let attendanceQrTimer     = null;
+    let attendanceQrGenerated = false;
+    const QR_IDLE_SECONDS     = 10;
+
+    /**
+     * Dynamically update both QR codes when id_prod becomes available.
+     * Called by either Socket.IO event or HTTP polling.
+     */
+    function updateQRCode(newIdProd) {
+        if (!newIdProd || idProd === newIdProd) return;
+
+        console.log(`✅ id_prod received: ${newIdProd}`);
+        idProd = newIdProd;
+        attendanceUrl = `https://www.unistudious.com/${slcId}/${idProd}`;
+
+        // Stop polling — we have what we need
+        if (idProdPollingInterval) {
+            clearInterval(idProdPollingInterval);
+            idProdPollingInterval = null;
+            console.log("🛑 Stopped id_prod polling");
+        }
+
+        // ── Update inline QR (sidebar card) ──
+        const qrcodeEl = document.getElementById("qrcode");
+        qrcodeEl.innerHTML = "";
+        new QRCode(qrcodeEl, {
+            text: attendanceUrl,
+            width: 200,
+            height: 200
+        });
+
+        // ── Update fullscreen overlay QR ──
+        const qrOverlayEl = document.getElementById("qr-overlay-attendance");
+        qrOverlayEl.innerHTML = "";
+        new QRCode(qrOverlayEl, {
+            text: attendanceUrl,
+            width: 400,
+            height: 400,
+            colorDark: "#2d2680",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+        attendanceQrGenerated = true;
+
+        // ── Set up the idle overlay timer ──
+        setupIdleOverlayTimer();
+    }
+
+    /**
+     * Set up the idle overlay timer (shows QR fullscreen after inactivity).
+     */
+    function setupIdleOverlayTimer() {
+        function showAttendanceOverlay() {
+            document.getElementById("attendance-qr-overlay").style.display = "flex";
+        }
+
+        function hideAttendanceOverlay() {
+            document.getElementById("attendance-qr-overlay").style.display = "none";
+            resetTimer();
+        }
+
+        function resetTimer() {
+            clearTimeout(attendanceQrTimer);
+            attendanceQrTimer = setTimeout(showAttendanceOverlay, QR_IDLE_SECONDS * 1000);
+        }
+
+        ['touchstart', 'mousemove', 'keydown', 'click'].forEach(evt => {
+            document.addEventListener(evt, () => {
+                const overlay = document.getElementById("attendance-qr-overlay");
+                if (overlay.style.display === "flex") {
+                    hideAttendanceOverlay();
+                } else {
+                    resetTimer();
+                }
+            }, { passive: true });
+        });
+
+        resetTimer();
+    }
+
+    /* ══════════════════════════════════════════════════════
+       INITIAL QR CODE RENDER (if id_prod is already available)
+       ══════════════════════════════════════════════════════ */
+
     if (idProd !== null && idProd !== undefined && idProd !== "") {
+        // id_prod is already available — render QR codes immediately
         new QRCode(document.getElementById("qrcode"), {
             text: attendanceUrl,
             width: 200,
             height: 200
         });
+
+        // Fullscreen overlay QR
+        new QRCode(document.getElementById("qr-overlay-attendance"), {
+            text: attendanceUrl,
+            width: 400,
+            height: 400,
+            colorDark: "#2d2680",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+        attendanceQrGenerated = true;
+
+        // Set up idle overlay
+        setupIdleOverlayTimer();
+
     } else {
+        // ── id_prod NOT available yet — show placeholders ──
         document.getElementById("qrcode").innerHTML = `
             <div style="
                 display: flex; flex-direction: column; align-items: center;
@@ -378,15 +485,89 @@
                     <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.56 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/>
                 </svg>
                 <p style="margin:0; font-size:11px; color:rgb(99,102,241); font-weight:500; line-height:1.4;">
-                    QR unavailable<br>Waiting for connection
+                    QR unavailable<br>Waiting for sync...
                 </p>
+                <div id="qr-loading-spinner" style="
+                    width: 20px; height: 20px; border: 2px solid rgba(99,102,241,0.2);
+                    border-top: 2px solid rgb(99,102,241); border-radius: 50%;
+                    animation: spin 1s linear infinite;
+                "></div>
             </div>
         `;
+
+        document.getElementById("qr-overlay-attendance").innerHTML = `
+            <div style="
+                display: flex; flex-direction: column; align-items: center;
+                justify-content: center; gap: 20px; text-align: center;
+                width: 400px; height: 400px;
+            ">
+                <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.5">
+                    <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.56 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/>
+                </svg>
+                <div>
+                    <p style="color:white; font-size:20px; font-weight:700; margin:0 0 8px;">QR code unavailable</p>
+                    <p style="color:rgba(255,255,255,0.6); font-size:14px; margin:0; line-height:1.6;">
+                        Waiting for sync...<br>QR will appear automatically.
+                    </p>
+                </div>
+            </div>
+        `;
+        document.getElementById("attendance-qr-overlay").addEventListener("click", () => {
+            document.getElementById("attendance-qr-overlay").style.display = "none";
+        });
+
+        /* ──────────────────────────────────────────────────
+           HTTP POLLING FALLBACK (every 10 seconds)
+           ────────────────────────────────────────────────── */
+        if (qrCalendarId) {
+            console.log(`🔄 Starting id_prod polling for calendar_id=${qrCalendarId}`);
+            idProdPollingInterval = setInterval(() => {
+                fetch(`/tablet/${encodeURIComponent(tabletId)}/check-id-prod/${qrCalendarId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.id_prod) {
+                            console.log(`📡 Polling: id_prod found → ${data.id_prod}`);
+                            updateQRCode(data.id_prod);
+                        } else {
+                            console.log("📡 Polling: id_prod not yet available");
+                        }
+                    })
+                    .catch(err => {
+                        console.error("📡 Polling error:", err);
+                    });
+            }, 10000); // Poll every 10 seconds
+        }
+
+        /* ──────────────────────────────────────────────────
+           SOCKET.IO LISTENER (secondary channel)
+           ────────────────────────────────────────────────── */
+        if (typeof io !== 'undefined') {
+            try {
+                const socket = io();
+                socket.on('connect', () => {
+                    console.log('🔌 Socket.IO connected for id_prod updates');
+                    socket.emit('join_tablet_room', { tablet_id: tabletId });
+                });
+
+                socket.on('id_prod_available', (data) => {
+                    console.log('📨 Socket.IO: id_prod_available event received', data);
+                    if (data.id_prod) {
+                        updateQRCode(data.id_prod);
+                    }
+                });
+
+                socket.on('disconnect', () => {
+                    console.log('🔌 Socket.IO disconnected');
+                });
+            } catch (e) {
+                console.warn('⚠️ Socket.IO connection failed:', e);
+            }
+        }
     }
 
-    /* ────────────────────────────────────────────────────
+    /* ══════════════════════════════════════════════════════
        DYNAMIC SESSION TIME MANAGEMENT
-       ──────────────────────────────────────────────────── */
+       ══════════════════════════════════════════════════════ */
 
     /**
      * Update session progress bar based on current time
@@ -405,9 +586,7 @@
         const totalMs = end - start;
 
         if (now < start) {
-            // ──────────────────────────────────────
             // Session hasn't started yet
-            // ──────────────────────────────────────
             document.getElementById('statusBadge').textContent = 'Not Started';
             document.getElementById('statusBadge').className = 'status-badge';
             document.getElementById('progressBar').style.width = '0%';
@@ -420,9 +599,7 @@
             document.getElementById('remaining').textContent = formatSeconds(Math.max(0, remainingSeconds));
 
         } else if (now > end) {
-            // ──────────────────────────────────────
             // Session has ended
-            // ──────────────────────────────────────
             document.getElementById('statusBadge').textContent = 'Completed';
             document.getElementById('statusBadge').className = 'status-badge completed';
             document.getElementById('progressBar').style.width = '100%';
@@ -431,9 +608,7 @@
             document.getElementById('remaining').textContent = '00:00:00';
 
         } else {
-            // ──────────────────────────────────────
             // Session is in progress
-            // ──────────────────────────────────────
             document.getElementById('statusBadge').textContent = 'In Progress';
             document.getElementById('statusBadge').className = 'status-badge active';
 
@@ -445,11 +620,11 @@
             document.getElementById('progressBar').style.width = progressPercent + '%';
             document.getElementById('progressBar').textContent = Math.round(progressPercent) + '%';
 
-            // ✅ DYNAMIC: Calculate elapsed time in seconds (counts up every second)
+            // DYNAMIC: Calculate elapsed time in seconds (counts up every second)
             const elapsedSeconds = Math.floor(elapsedMs / 1000);
             document.getElementById('elapsed').textContent = formatSeconds(elapsedSeconds);
 
-            // ✅ DYNAMIC: Calculate remaining time in seconds (counts down every second)
+            // DYNAMIC: Calculate remaining time in seconds (counts down every second)
             const remainingMs = totalMs - elapsedMs;
             const remainingSeconds = Math.floor(remainingMs / 1000);
             document.getElementById('remaining').textContent = formatSeconds(Math.max(0, remainingSeconds));
@@ -480,84 +655,18 @@
     document.getElementById('duration').textContent = formatSeconds(sessionData.duration);
     document.getElementById('remaining').textContent = formatSeconds(sessionData.duration);
 
-    // ✅ Update progress every 100ms for smooth real-time updates
-    // (instead of every 1000ms)
+    // Update progress every 100ms for smooth real-time updates
     setInterval(updateSessionProgress, 100);
 
     // Initial update
     updateSessionProgress();
 
-    /* ─────────────────────────────────────────
-       ATTENDANCE QR FULLSCREEN OVERLAY
-       ───────────────────────────────────────── */
-
-    if (idProd !== null && idProd !== undefined && idProd !== "") {
-
-        let attendanceQrTimer     = null;
-        let attendanceQrGenerated = false;
-        const QR_IDLE_SECONDS     = 10;
-
-        function generateAttendanceOverlayQR() {
-            if (attendanceQrGenerated) return;
-            new QRCode(document.getElementById("qr-overlay-attendance"), {
-                text: attendanceUrl,
-                width: 400,
-                height: 400,
-                colorDark: "#2d2680",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
-            attendanceQrGenerated = true;
-        }
-
-        function showAttendanceOverlay() {
-            generateAttendanceOverlayQR();
-            document.getElementById("attendance-qr-overlay").style.display = "flex";
-        }
-
-        function hideAttendanceOverlay() {
-            document.getElementById("attendance-qr-overlay").style.display = "none";
-            resetAttendanceOverlayTimer();
-        }
-
-        function resetAttendanceOverlayTimer() {
-            clearTimeout(attendanceQrTimer);
-            attendanceQrTimer = setTimeout(showAttendanceOverlay, QR_IDLE_SECONDS * 1000);
-        }
-
-        ['touchstart', 'mousemove', 'keydown', 'click'].forEach(evt => {
-            document.addEventListener(evt, () => {
-                const overlay = document.getElementById("attendance-qr-overlay");
-                if (overlay.style.display === "flex") {
-                    hideAttendanceOverlay();
-                } else {
-                    resetAttendanceOverlayTimer();
-                }
-            }, { passive: true });
-        });
-
-        resetAttendanceOverlayTimer();
-
-    } else {
-        document.getElementById("qr-overlay-attendance").innerHTML = `
-            <div style="
-                display: flex; flex-direction: column; align-items: center;
-                justify-content: center; gap: 20px; text-align: center;
-                width: 400px; height: 400px;
-            ">
-                <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.5">
-                    <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.56 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/>
-                </svg>
-                <div>
-                    <p style="color:white; font-size:20px; font-weight:700; margin:0 0 8px;">QR code unavailable</p>
-                    <p style="color:rgba(255,255,255,0.6); font-size:14px; margin:0; line-height:1.6;">
-                        Cannot generate QR code<br>due to a connection issue.<br>Please check your internet.
-                    </p>
-                </div>
-            </div>
-        `;
-        document.getElementById("attendance-qr-overlay").addEventListener("click", () => {
-            document.getElementById("attendance-qr-overlay").style.display = "none";
-        });
-    }
 </script>
+
+<style>
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+

@@ -136,15 +136,25 @@ def process_sync_data(db, data):
         print("\n Account_subject: ")
         process_account_subjects(db, normalize(data['accountSubject']))
 
-    if 'attendance' in data:
-        from sync.processors.attendance_processor import process_attendances
-        print("\n Attendance: ")
-        process_attendances(db, normalize(data['attendance']))
-
     if 'calendar' in data:
+        print("\n \n Calendar Data: ",data['calendar'])
         from sync.processors.calendar_processor import process_calendars
         print("\n Calendar: ")
         process_calendars(db, normalize(data['calendar']))
+
+    if 'group' in data:
+        print("\n \n Group Data: ",data['group'])
+        from sync.processors.group_local_session_processor import process_groups
+        print("\n Groups: ")
+        process_groups(db, normalize(data['group']))
+
+    if 'attendance' in data:
+        print("\n \n attendance_data:",data['attendance'])
+        from sync.processors.attendance_processor import process_attendances
+        print("\n Attendance: ")
+        process_attendances(db, normalize(data['attendance']),settings)
+
+
 
     if 'slcCamera' in data:
         from sync.processors.camera_processor import process_cameras
@@ -156,10 +166,7 @@ def process_sync_data(db, data):
         print("\n Formation: ")
         process_formations(db, normalize(data['formation']))
 
-    if 'group' in data:
-        from sync.processors.group_local_session_processor import process_groups
-        print("\n Groups: ")
-        process_groups(db, normalize(data['group']))
+
 
     if 'slcLocal' in data:
         from sync.processors.slc_local_processor import process_slc_local
@@ -167,11 +174,14 @@ def process_sync_data(db, data):
         process_slc_local(db, normalize(data['slcLocal']))
 
     if 'relationTeacherAndSubjectData' in data:
+        print("\n \n Relation Teacher And Subject Data: ",data['relationTeacherAndSubjectData'])
         from sync.processors.relation_teacher_subject_processor import process_teacher_subject_relations
         print("\n Teacher Subjects")
         process_teacher_subject_relations(db, normalize(data['relationTeacherAndSubjectData']))
 
     if 'relationUserSession' in data:
+        print("\n \n Relation User Session Data: ",data['relationUserSession'])
+
         from sync.processors.user_session_processor import process_user_session_relations
         print("\n Relation User Session: ")
         process_user_session_relations(db, normalize(data['relationUserSession']))
@@ -182,6 +192,7 @@ def process_sync_data(db, data):
         process_local_and_rooms(db, normalize(data['local_with_room']))
 
     if 'session' in data:
+        print("\n",data['session'])
         from sync.processors.session_processor import process_sessions
         print("\n Session")
         process_sessions(db, normalize(data['session']), token)

@@ -93,6 +93,20 @@ def register_socketio_events(socketio):
             print(f"DEBUG: Exception in handle_leaver_calendar_room: {e}")
             emit('status',{'message': f'Failed to leave calendar room {room_id}'})
 
+    @socketio.on('join_tablet_room')
+    def handle_join_tablet_room(data):
+        """Join a tablet-specific room to receive id_prod_available events."""
+        try:
+            tablet_id = data.get('tablet_id')
+            if tablet_id:
+                room_name = f'tablet_{tablet_id}'
+                join_room(room_name)
+                print(f'Client {request.sid} joined tablet room {room_name}')
+                emit('status', {'message': f'Joined {room_name}'})
+        except Exception as e:
+            print(f"DEBUG: Exception in handle_join_tablet_room: {e}")
+            emit('status', {'message': f'Failed to join tablet room'})
+
 
 def background_attendance_checker(socketio):
     """Background thread to check for attendance updates."""
@@ -145,6 +159,8 @@ def start_background_tasks(socketio):
         print("✅ Background attendance checker started")
     except Exception as e:
         print(f"DEBUG: Exception in start_background_tasks: {e}")
+
+
 
 
 def notify_id_prod_available(sockectio, tablet_id, id_prod, slc_id):
