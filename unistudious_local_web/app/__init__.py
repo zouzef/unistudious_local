@@ -16,7 +16,7 @@ def create_app():
 
     socketio.init_app(app)
 
-    from app.auth.routes    import auth_bp
+    from app.auth.routes import auth_bp
     from app.session.routes import session_bp
     from app.calendar.routes import calendar_bp
     from app.attendance.routes import attendance_bp

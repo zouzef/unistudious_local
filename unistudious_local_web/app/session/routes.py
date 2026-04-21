@@ -51,8 +51,10 @@ def create_session():
     """Create new session page"""
     if 'moderator_id' not in session:
         return redirect(url_for('auth.login_page'))
-
-    return render_template('index.html', page='create-session')
+    account_id = session.get('account_id', 3)
+    return render_template('index.html',
+                           account_id=account_id,
+                           page='create-session')
 
 
 @session_bp.route('/dashboard/show-session-config/<int:id_session>', methods=['GET'])
@@ -63,9 +65,16 @@ def show_session_config(id_session):
 
     account_id = session.get('account_id', 3)
 
+    from app.session.service import get_locals, get_all_sessions, get_moderator
+    from app.calendar.service import get_calendar_per_session
+
     return render_template('index.html',
                            id_session=id_session,
                            account_id=account_id,
+                           local_details=get_locals(account_id),
+                           sessions=get_all_sessions(account_id),
+                           data_modera=get_moderator(account_id),
+                           calendar_data=get_calendar_per_session(account_id, id_session),
                            page='session_config')
 
 
