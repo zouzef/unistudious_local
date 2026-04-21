@@ -1,0 +1,253 @@
+<div class="content-body">
+  <div class="container-fluid">
+      <div class="row">
+        <div class="card-header">
+          <h4 class="card-title">Add New Session</h4>
+        </div>
+        <form id="session-form" name="session" method="post" enctype="multipart/form-data">
+          <div class="col-xl-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0">Session Details</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-xl-3 col-sm-4">
+                    <div class="clearfix">
+                      <div class="card card-bx profile-card author-profile m-b30">
+                        <div class="card-body">
+                          <div class="p-5">
+                            <div class="author-profile">
+                              <div>
+                                <div class="author-media-formation">
+                                  <img id="imagePreview" src="/assets/admin/images/session-defult.png" alt="">
+                                </div>
+                                <div class="change-btn mt-5 mb-lg-0 mb-3">
+                                  <input type="file" id="session_logoFile" name="session[logoFile]" class="d-none" accept=".png, .jpg, .jpeg">
+                                  <label for="formation_logoFile_file" class="dlab-upload mb-0 btn btn-primary btn-sm">Choose File</label>
+                                  <a href="javascript:void(0);" class="btn btn-danger light remove-img ms-2 btn-sm" id="remove-img">Remove</a>
+                                </div>
+                                <hr class="mb-4 mt-4">
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="col-xl-9 col-sm-8">
+                    <div class="mb-3">
+                      <label class="form-label text-primary" for="name">Name <code class="highlighter-rouge">*</code></label>
+                      <input type="text" id="session_name" name="session[name]" required="required" class="form-control"><br>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-primary" for="formation">Formation <code class="highlighter-rouge">*</code></label>
+                      <div class="dropdown bootstrap-select js-example-data-array select2-hidden-accessible"><select id="session_formation" name="session[formation]" required="required" class="js-example-data-array select2-hidden-accessible" aria-label="Formation" data-select2-id="session_formation" tabindex="-1" aria-hidden="true"><option value="" selected="selected" data-select2-id="2">Choose the Formation...</option><option value="13" data-type="M">Étude math bac info (Mixed)</option><option value="18" data-type="Presence">Étude math bac eco (Unknown)</option></select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-1" aria-haspopup="listbox" aria-expanded="false" title="Choose the Formation..." data-id="session_formation"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Choose the Formation...</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-1" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="1" style="width: 216.717px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-session_formation-container"><span class="select2-selection__rendered" id="select2-session_formation-container" role="textbox" aria-readonly="true" title="Choose the Formation...">Choose the Formation...</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span><br>
+                    </div>
+                    <hr class="mb-4 mt-4">
+                    <div class="mb-3">
+                      <label class="form-label text-primary" for="capacity">Capacity <code class="highlighter-rouge">*</code></label>
+                      <input type="number" id="session_capacity" name="session[capacity]" required="required" class="form-control"><br>
+                    </div>
+                    <hr class="mb-4 mt-4">
+                    <div class="row">
+                      <div class="mb-3">
+                        <label class="form-label text-primary" for="price">Type Payment <code class="highlighter-rouge">*</code></label>
+                        <div class="dropdown bootstrap-select form-control"><select id="session_typePay" name="session[typePay]" required="required" class="form-control"><option value="" selected="selected">Choose the Type Payment...</option><option value="Session">Per Session</option><option value="Week">Per Week</option><option value="Month">Per Month</option><option value="Trimester">Per Trimester</option><option value="Semester">Per Semester</option><option value="Year">Per Year</option></select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-2" aria-haspopup="listbox" aria-expanded="false" title="Choose the Type Payment..." data-id="session_typePay"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Choose the Type Payment...</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-2" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div><br>
+                        <br>
+                      </div>
+                      <div id="numberSessionForPay" style="display: none">
+                        <div class="row">
+                          <div class="mb-3 col-md-6">
+                            <label class="form-label text-primary" for="numberSessionForPay">Number of sessions for payment <code class="highlighter-rouge">*</code></label>
+                            <input type="number" id="session_numberSessionForPay" name="session[numberSessionForPay]" class="form-control"><br>
+                          </div>
+                          <div class="mb-3 col-md-6">
+                            <label class="form-label text-primary" for="priceStudentAbsent">Price for a student who is absent</label>
+                            <input type="number" id="session_priceStudentAbsent" name="session[priceStudentAbsent]" class="form-control"><br>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label text-primary" for="price">Payment Methode <code class="highlighter-rouge">*</code></label>
+                        <div class="dropdown bootstrap-select form-control"><select id="session_paymentMethode" name="session[paymentMethode]" required="required" class="form-control"><option value="" selected="selected">Choose the Payment Methode...</option><option value="Advance">Advance</option><option value="Regular">Regular</option></select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-3" aria-haspopup="listbox" aria-expanded="false" title="Choose the Payment Methode..." data-id="session_paymentMethode"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Choose the Payment Methode...</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-3" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div><br>
+                      </div>
+                    </div>
+                    <div id="priceTotal" style="">
+                      <hr class="mb-4 mt-4">
+                      <div class="row">
+                        <div class="mb-3 col-md-12">
+                          <label class="form-label text-primary" for="price">Price Total</label>
+                          € <input type="text" id="session_price" name="session[price]" class="form-control"><br>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="priceMixed" style="display: none">
+                      <hr class="mb-4 mt-4">
+                      <div class="row">
+                        <div class="mb-3 col-md-6">
+                          <label class="form-label text-primary" for="pricePresence">Price Presence</label>
+                          <input type="number" id="session_pricePresence" name="session[pricePresence]" class="form-control"><br>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                          <label class="form-label text-primary" for="price">Price Online</label>
+                          <input type="number" id="session_priceOnline" name="session[priceOnline]" class="form-control"><br>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="currencySession" style="display: none">
+                      <div class="mb-3 col-md-12">
+                        <label class="form-label text-primary" for="currency-select">currency</label>
+                        <div class="dropdown bootstrap-select js-example-data-array select2-hidden-accessible"><select class="js-example-data-array select2-hidden-accessible" id="currency-select" data-select2-id="currency-select" tabindex="-1" aria-hidden="true">
+                          <option data-select2-id="4"></option>
+                        </select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-4" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="currency-select"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-4" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="3" style="width: auto;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-currency-select-container"><span class="select2-selection__rendered" id="select2-currency-select-container" role="textbox" aria-readonly="true"></span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                        <input type="hidden" id="session_currency" name="session[currency]" class="form-control"><br>
+                      </div>
+                    </div>
+                    <hr class="mb-4 mt-4">
+                    <div class="row">
+                      <div class="mb-3">
+                        <label class="form-label text-primary" for="price">Allow Registration After Session Start <code class="highlighter-rouge">*</code></label>
+                        <div class="dropdown bootstrap-select form-control"><select id="session_userRegisterAfterStart" name="session[userRegisterAfterStart]" required="required" class="form-control"><option value="">Can the user register after session start?</option><option value="1" selected="selected">Yes</option><option value="0">No</option></select><button type="button" tabindex="-1" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-5" aria-haspopup="listbox" aria-expanded="false" title="Yes" data-id="session_userRegisterAfterStart"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Yes</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-5" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div><br>
+                      </div>
+                    </div>
+                    <hr class="mb-4 mt-4">
+                    <div class="row">
+                      <div class="mb-3 col-md-6">
+                        <label class="form-label text-primary" for="startDate">Open Date <code class="highlighter-rouge">*</code></label>
+                        <input type="date" id="session_startDate" name="session[startDate]" required="required" class="form-control"><br>
+                      </div>
+                      <div class="mb-3 col-md-6">
+                        <label class="form-label text-primary" for="endDate">Close Date <code class="highlighter-rouge">*</code></label>
+                        <input type="date" id="session_endDate" name="session[endDate]" required="required" class="form-control"><br>
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <label for="season_select&quot;" class="form-label text-primary">Season</label>
+                      <div class="dropdown bootstrap-select form-control"><select id="season_select" name="season_select" class="form-control" data-live-search="true">
+                        <option value="">-- Select Season --</option>
+                      </select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-6" aria-haspopup="listbox" aria-expanded="false" title="-- Select Season --" data-id="season_select"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">-- Select Season --</div></div> </div></button><div class="dropdown-menu "><div class="bs-searchbox"><input type="search" class="form-control" autocomplete="off" role="combobox" aria-label="Search" aria-controls="bs-select-6" aria-autocomplete="list"></div><div class="inner show" role="listbox" id="bs-select-6" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+                    </div>
+                    <hr class="mb-4 mt-4">
+                    <div class="mb-3">
+                      <label for="gender&quot;" class="form-label text-primary">Local <span class="required">*</span></label>
+                      <input type="hidden" id="account-id" value="3">
+                      <div class="dropdown bootstrap-select show-tick form-control select2-hidden-accessible"><select id="multi-value-select" multiple="" class="form-control select2-hidden-accessible" data-select2-id="multi-value-select" tabindex="-1" aria-hidden="true">
+                        <option value="8">local hammam lif</option></select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-7" aria-haspopup="listbox" aria-expanded="false" title="Nothing selected" data-id="multi-value-select"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Nothing selected</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-7" tabindex="-1" aria-multiselectable="true"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="5" style="width: 654px;"><span class="selection"><span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1" aria-disabled="false"><ul class="select2-selection__rendered"><li class="select2-search select2-search--inline"><input class="select2-search__field" type="search" tabindex="0" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" role="searchbox" aria-autocomplete="list" placeholder="" style="width: 0.75em;"></li></ul></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                    </div>
+                    <hr class="mb-4 mt-4">
+                    <div class="row">
+                      <div class="mb-3 col-md-6">
+                        <label for="gender&quot;" class="form-label text-primary">Request change groups <span class="required">*</span></label>
+                        <div class="dropdown bootstrap-select form-control"><select id="session_requestChangeGroup" name="session[requestChangeGroup]" required="required" class="form-control"><option value="" selected="selected">User can change current group ?</option><option value="1">Yes</option><option value="0">No</option></select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-8" aria-haspopup="listbox" aria-expanded="false" title="User can change current group ?" data-id="session_requestChangeGroup"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">User can change current group ?</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-8" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div><br>
+                      </div>
+                      <div class="mb-3 col-md-6">
+                        <label class="form-label text-primary" for="maxGroupChange">Max Group <code class="highlighter-rouge">*</code></label>
+                        <input type="number" id="session_maxGroupChange" name="session[maxGroupChange]" class="form-control"><br>
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-primary" for="maxGroupChange">Allow Registration User Without Group </label>
+                      <div class="dropdown bootstrap-select form-control"><select id="session_specialGroup" name="session[specialGroup]" class="form-control"><option value="">Can the user registration without group?</option><option value="1">Yes</option><option value="0">No</option></select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-9" aria-haspopup="listbox" aria-expanded="false" title="Can the user registration without group?" data-id="session_specialGroup"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Can the user registration without group?</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-9" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div><br>
+                    </div>
+                    <hr class="mb-4 mt-4">
+                    <div class="mb-3">
+                      <label class="form-label text-primary" for="publicResource">Share Resource</label>
+                      <div class="dropdown bootstrap-select form-control"><select id="session_publicResource" name="session[publicResource]" class="form-control"><option value="">Do you want to share you resource from the file manager?</option><option value="1">Yes</option><option value="0">No</option></select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-10" aria-haspopup="listbox" aria-expanded="false" title="Do you want to share you resource from the file manager?" data-id="session_publicResource"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Do you want to share you resource from the file manager?</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-10" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div><br>
+                    </div>
+                    <div id="fileManagerContainer" class="mb-3" style="display: none;">
+                      <label class="form-label text-primary">Select Folder</label>
+                      <input type="text" id="selectedFolder" class="form-control" placeholder="No folder selected" readonly="">
+                      <button type="button" id="openFileManager" class="btn btn-primary mt-2">Choose Folder</button>
+                    </div>
+                    <div class="modal fade" id="fileManagerModal" tabindex="-1" aria-labelledby="fileManagerModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="fileManagerModalLabel">
+                              <i class="bi bi-folder2-open"></i> Select a Folder
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body" id="share-folder-modal">
+                            <ul id="fileManagerList" class="list-group"></ul>
+                          </div>
+                          <div class="modal-footer">
+                            <div>
+                              <button type="button" id="selectFoldersBtn" class="btn btn-success">Select</button>
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr class="mb-4 mt-4">
+                    <div class="mb-3">
+                      <label class="form-label text-primary" for="publicResource">Special session data</label>
+                      <div class="dropdown bootstrap-select form-control"><select id="session_extraSession" name="session[extraSession]" class="form-control"><option value="">Would you like to provide custom data for this user’s session registration?</option><option value="1">Yes</option><option value="0">No</option></select><button type="button" tabindex="-1" class="btn dropdown-toggle bs-placeholder btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-11" aria-haspopup="listbox" aria-expanded="false" title="Would you like to provide custom data for this user’s session registration?" data-id="session_extraSession"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Would you like to provide custom data for this user’s session registration?</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-11" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div><br>
+                    </div>
+                    <div class="mb-3" id="extraDataWrapper" style="display: none;">
+                      <label class="form-label text-primary">Extra Data for Students</label>
+                      <div class="input-group">
+                        <input type="text" class="form-control" id="extraDataJsonView" placeholder="No extra data added" readonly="">
+                        <button type="button" class="btn btn-primary" id="openExtraDataModal">Add / Edit Data</button>
+                      </div>
+                    </div>
+                    <div class="modal fade" id="extraDataModal" tabindex="-1" aria-labelledby="extraDataModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="extraDataModalLabel">Add Extra Information for the Session</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <div id="extraDataContainer">
+                              <div class="extra-data-row mb-3">
+                                <input type="text" class="form-control mb-2" placeholder="Field Name (e.g., Allergies, Notes)" name="extraDataName[]">
+                                <div class="dropdown bootstrap-select form-control mb-2 extraDataSessionSelect"><select class="form-control mb-2 extraDataSessionSelect" name="extraDataType[]">
+                                  <option value="string">Text</option>
+                                  <option value="integer">Number</option>
+                                  <option value="float">Decimal Number</option>
+                                  <option value="image">Photo</option>
+                                  <option value="file">File Upload</option>
+                                  <option value="date">Date</option>
+                                  <option value="Boolean">Yes / No</option>
+                                  <option value="Link">Link</option>
+                                </select><button type="button" tabindex="-1" class="btn dropdown-toggle btn-light" data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-12" aria-haspopup="listbox" aria-expanded="false" title="Text"><div class="filter-option"><div class="filter-option-inner"><div class="filter-option-inner-inner">Text</div></div> </div></button><div class="dropdown-menu "><div class="inner show" role="listbox" id="bs-select-12" tabindex="-1"><ul class="dropdown-menu inner show" role="presentation"></ul></div></div></div>
+                                <div class="form-check mb-2">
+                                  <input class="form-check-input" type="checkbox" name="extraDataRequired[]">
+                                  <label class="form-check-label">Required</label>
+                                </div>
+                                <input type="text" class="form-control mb-2" placeholder="Example value" name="extraDataExample[]">
+                                <input type="text" class="form-control mb-2" placeholder="Description (optional)" name="extraDataDescription[]">
+                                <button type="button" class="btn btn-danger btn-sm removeExtraData">Remove</button>
+                                <hr>
+                              </div>
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-sm" id="addExtraDataRow">Add Another Field</button>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" id="saveExtraData">Save Information</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <input type="hidden" name="extraDataJson" id="extraDataJson" value="">
+                    <hr class="mb-4 mt-4">
+                    <div class="mb-3">
+                      <label class="form-label text-primary" for="typeSession">Description </label>
+                      <textarea id="session_description" name="session[description]" class="form-control" rows="7" data-editor-desc-session="true"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+  </div>
+</div>
+
