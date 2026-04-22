@@ -139,7 +139,6 @@ def get_session_detail(account_id):
         }), 500
 
 
-
 #ENDPOINT 2: Get session image
 @sessions_bp.route('/get_session_image/<int:session_id>',methods=['GET'])
 def get_session_image(session_id):
@@ -200,4 +199,76 @@ def get_session_image(session_id):
             }),500
 
 
+#ENDPOINT 3: Create session
+@sessions_bp.route('/create-session', methods=['POST'])
+def create_session():
+    try:
+        data = request.get_json()
 
+        required_keys = [
+            'name',
+            'formation',
+            'capacity',
+            'typePay',
+            'paymentMethode',
+            'price',
+            'userRegisterAfterStart',
+            'startDate',
+            'endDate',
+            'requestChangeGroup',
+        ]
+
+        missing_keys = [key for key in required_keys if key not in data]
+        null_keys = [key for key in required_keys if key in data and data[key] is None]
+
+        if missing_keys:
+            print("Missing_keys")
+            return jsonify({"Message": f"Missing required keys: {missing_keys}"}), 404
+
+        if null_keys:
+            print("Null_keys")
+            return jsonify({"Message": f"These keys cannot be null: {null_keys}"}), 400
+
+        query ="""
+            INSERT INTO session 
+            (
+                account_id,
+                formation_id,
+                name,
+                description,
+                status,
+                img_link,
+                start_date,
+                end_date,
+                capacity,
+                price,
+                currency,
+                type_pay,
+                request_change_group,
+                max_group_change,
+                payment_methode,
+                number_session_for_pay,
+                price_student_absent,
+                user_register_after_start,
+                enabled,
+                created_at,
+                timestamp,
+                updated_at,
+                uuid,
+                price_presence,
+                price_online,
+                special_group,
+                passage,
+                season_id,
+                slc_use
+            )
+            VALUES(
+            
+            
+            );
+        
+        """
+        return jsonify({"Message": data})
+
+    except Exception as e:
+        return jsonify({"Message": f"Error {e} in creating session"}), 500

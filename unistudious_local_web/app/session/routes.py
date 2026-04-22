@@ -6,7 +6,8 @@ import base64
 from app.session.service import (
     get_all_sessions, get_moderator,
     get_locals, get_room, get_teacher,
-    get_session_image
+    get_session_image,
+    create_session_local
 )
 
 session_bp = Blueprint('session', __name__)
@@ -129,3 +130,18 @@ def api_get_session_img(session_id):
             'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
         )
         return send_file(io.BytesIO(transparent_png), mimetype='image/png')
+
+
+@session_bp.route('/api/create-session', methods=['POST'])
+def create_session_route():  # 👈 rename this
+    try:
+        session_data = request.get_json()
+        print(session_data)
+        status, code = create_session_local(session_data)  # this calls the service
+        if status and code == 200:
+            return jsonify({"Message": "Session created with success"}), 200
+        else:
+            return jsonify({"Message": "Error in creating session"}), 400
+    except Exception as e:
+        print(f"Error:{e}")
+        return jsonify({"Message": "Error coming from create_session"}), 500

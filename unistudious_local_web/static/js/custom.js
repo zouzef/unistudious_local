@@ -938,3 +938,18 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+document.getElementById('session_logoFile').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('imagePreview').src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+document.getElementById('remove-img').addEventListener('click', function() {
+    document.getElementById('imagePreview').src = '/static/assets/images/session-defult.png';
+    document.getElementById('session_logoFile').value = '';
+});

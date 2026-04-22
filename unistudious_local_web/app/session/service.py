@@ -76,3 +76,18 @@ def get_session_image(session_id: int):
     except Exception as e:
         print(f"[SESSION ERROR] get_session_image: {e}")
         return None, None
+
+
+def create_session_local(session_data):
+    url = f"{current_app.config['BASE_URL']}create-session"
+    try:
+        response = requests.post(url, json=session_data, verify=False, timeout=10)
+        response.raise_for_status()
+        if response.status_code == 200:
+            return True, 200
+        else:
+            return False, 400
+
+    except Exception as e:
+        print(f"Error in create_session service: {e}")
+        return False, 500
