@@ -22,11 +22,12 @@ def create_app():
     from app.attendance.routes import attendance_bp
     from app.groups.routes import groups_bp
     from app.user.routes import user_bp
-
+    from app.formation.routes import formation_bp
     app.register_blueprint(auth_bp)
     app.register_blueprint(session_bp)
     app.register_blueprint(calendar_bp)
     app.register_blueprint(attendance_bp)
     app.register_blueprint(groups_bp)
     app.register_blueprint(user_bp)
+    app.register_blueprint(formation_bp)
     return app

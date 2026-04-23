@@ -8,7 +8,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 from config import Config
 from core.database import Database
 from core.middleware import token_required
-
+import uuid
 # Create blueprint
 sessions_bp = Blueprint('sessions', __name__, url_prefix='/scl')
 
@@ -204,14 +204,15 @@ def get_session_image(session_id):
 def create_session():
     try:
         data = request.get_json()
-
+        new_uuid = str(uuid.uuid4())
         required_keys = [
+            'account_id',
             'name',
             'formation',
             'capacity',
             'typePay',
             'paymentMethode',
-            'price',
+
             'userRegisterAfterStart',
             'startDate',
             'endDate',
@@ -219,56 +220,60 @@ def create_session():
         ]
 
         missing_keys = [key for key in required_keys if key not in data]
-        null_keys = [key for key in required_keys if key in data and data[key] is None]
+        null_keys = [key for key in required_keys if key in data and (data[key] is None or data[key] == '')]
 
         if missing_keys:
-            print("Missing_keys")
-            return jsonify({"Message": f"Missing required keys: {missing_keys}"}), 404
+            return jsonify({"Message": f"Missing required keys: {missing_keys}"}), 400
 
         if null_keys:
-            print("Null_keys")
             return jsonify({"Message": f"These keys cannot be null: {null_keys}"}), 400
 
-        query ="""
+        query = """
             INSERT INTO session 
             (
-                account_id,
-                formation_id,
-                name,
-                description,
-                status,
-                img_link,
-                start_date,
-                end_date,
-                capacity,
-                price,
-                currency,
-                type_pay,
-                request_change_group,
-                max_group_change,
-                payment_methode,
-                number_session_for_pay,
-                price_student_absent,
-                user_register_after_start,
-                enabled,
-                created_at,
-                timestamp,
-                updated_at,
-                uuid,
-                price_presence,
-                price_online,
-                special_group,
-                passage,
-                season_id,
-                slc_use
+                account_id, name, formation_id, capacity,
+                type_pay, number_session_for_pay, price_student_absent,
+                payment_methode, price, price_presence, price_online,
+                currency, user_register_after_start, start_date, end_date,
+                request_change_group, max_group_change, special_group,
+                public_resource, description, img_link,uuid
             )
             VALUES(
-            
-            
+                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                'TND',
+                %s, %s, %s, %s, %s, %s, %s, %s, %s,%s
             );
-        
         """
-        return jsonify({"Message": data})
+
+        values = (
+            data.get('account_id'),
+            data.get('name'),
+            data.get('formation'),
+            data.get('capacity'),
+            data.get('typePay'),
+            data.get('numberSessionForPay') or None,
+            data.get('priceStudentAbsent') or None,
+            data.get('paymentMethode'),
+            data.get('price') or None,
+            data.get('pricePresence') or None,
+            data.get('priceOnline') or None,
+            data.get('userRegisterAfterStart'),
+            data.get('startDate'),
+            data.get('endDate'),
+            data.get('requestChangeGroup'),
+            data.get('maxGroupChange') or None,
+            data.get('specialGroup') or None,
+            data.get('publicResource') or None,
+            data.get('description'),
+            data.get('logoFile'),
+            new_uuid
+        )
+
+        result = Database.execute_query(query, values,fetch=False)      # ← execute the query
+        print("resultat:",result)
+
+        return jsonify({"Message": "Session created with success"}), 200
 
     except Exception as e:
+        print(f"Error: {e} coming from create session")
         return jsonify({"Message": f"Error {e} in creating session"}), 500

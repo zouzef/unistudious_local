@@ -57,6 +57,12 @@ def create_app():
     from api.subject.routes import subject_bp
     app.register_blueprint(subject_bp)
 
+
+    # Formations
+    from api.formation.routes import formation_bp
+    app.register_blueprint(formation_bp)
+
+
     # ========================================
     # HOME ROUTE
     # ========================================

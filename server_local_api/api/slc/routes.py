@@ -47,7 +47,6 @@ def get_all_rooms():
 @slc_bp.route('/get_local_detail/<int:account_id>', methods=['GET'])
 def get_local_detail(account_id):
     try:
-        print(account_id)
 
         query = """
             SELECT 

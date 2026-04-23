@@ -91,3 +91,4 @@ def create_session_local(session_data):
     except Exception as e:
         print(f"Error in create_session service: {e}")
         return False, 500
+

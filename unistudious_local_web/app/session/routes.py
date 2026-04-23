@@ -145,3 +145,15 @@ def create_session_route():  # 👈 rename this
     except Exception as e:
         print(f"Error:{e}")
         return jsonify({"Message": "Error coming from create_session"}), 500
+
+
+@session_bp.route('/api/get-local-info/<int:account_id>', methods=['GET'])  # ← GET not POST
+def get_local_info(account_id):
+    try:
+        local_data = get_locals(account_id)
+        if local_data:
+            return jsonify({"Data": local_data}), 200  # ← fixed
+        else:
+            return jsonify({"Message": "No local data"}), 400
+    except Exception as e:
+        return jsonify({"Message": f"Error coming from get_local_info: {e}"}), 500
