@@ -58,6 +58,18 @@ def create_session():
                            page='create-session')
 
 
+@session_bp.route('/dashboard/view-session/<int:session_id>', methods=['GET'])
+def view_session(session_id):
+    """Update session page"""
+    print(f"\n \n \n \n \n \n \n \n {session_id} \n \n")
+    if 'moderator_id' not in session:
+        return redirect(url_for('auth.login_page'))
+    account_id = session.get('account_id', 3)
+    return render_template('index.html',
+                           account_id=account_id,
+                           page='view_session')
+
+
 @session_bp.route('/dashboard/show-session-config/<int:id_session>', methods=['GET'])
 def show_session_config(id_session):
     """Session configuration page"""

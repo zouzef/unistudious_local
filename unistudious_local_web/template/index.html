@@ -143,6 +143,7 @@
 {% elif page == 'show_payment_session_detail' %}
 {% include 'components/show_payment_session_detail.html' %}
 
+
 {% elif page == 'show_payment_user_session' %}
 {% include 'components/show_payment_user.html'%}
 {% elif page == 'show_attendance_presence' %}
@@ -173,8 +174,10 @@
 {% elif page == 'platform_student'%}
 {% include 'components/platform_student.html'%}
         <!-- End Platform student part -->
+{% elif page == 'view_session'%}
+{% include 'components/view_session.html' %}
 
-
+        <!-- Edit session-->
 
 {% endif %}
 

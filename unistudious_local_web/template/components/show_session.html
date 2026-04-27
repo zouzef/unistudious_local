@@ -119,3 +119,26 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Handle all custom dropdowns on any page
+        document.addEventListener('click', function (e) {
+            const toggle = e.target.closest('[data-bs-toggle="dropdown"]');
+
+            if (toggle) {
+                e.preventDefault();
+                const menu = toggle.nextElementSibling;
+                // Close all others first
+                document.querySelectorAll('.dropdown-menu.show').forEach(function (m) {
+                    if (m !== menu) m.classList.remove('show');
+                });
+                menu.classList.toggle('show');
+            } else if (!e.target.closest('.custom-dropdown')) {
+                // Click outside — close all
+                document.querySelectorAll('.dropdown-menu.show').forEach(function (m) {
+                    m.classList.remove('show');
+                });
+            }
+        });
+    });
+</script>

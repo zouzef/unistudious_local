@@ -15,7 +15,7 @@ class Config:
     # ==========================================
     # EXTERNAL API
     # ==========================================
-    BASE_URL = "https://192.168.1.246:5004/scl/"
+    BASE_URL = "https://192.168.1.36:5004/scl/"
     REQUEST_TIMEOUT = 10
     VERIFY_SSL = False
 
@@ -31,7 +31,7 @@ class Config:
     # ==========================================
     # SERVER
     # ==========================================
-    HOST = '192.168.1.246'
+    HOST = '0.0.0.0'
     PORT = 5016
     CERTFILE = 'cert.pem'
     KEYFILE = 'key.pem'

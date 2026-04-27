@@ -1,0 +1,358 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="card-header">
+                <h4 class="card-title">Session Details</h4>
+            </div>
+            <form id="session-form" name="session" method="">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Session Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-3 col-sm-4">
+                                    <div class="clearfix">
+                                        <div class="card card-bx profile-card author-profile m-b30">
+                                            <div class="card-body">
+                                                <div class="p-5">
+                                                    <div class="author-profile">
+                                                        <div>
+                                                            <div class="author-media-formation">
+                                                                <img id="imagePreview"
+                                                                     src="/static/assets/images/session-defult.png"
+                                                                     alt="">
+                                                            </div>
+                                                            <div class="change-btn mt-5 mb-lg-0 mb-3">
+                                                                <input type="file" id="session_logoFile"
+                                                                       name="session[logoFile]" class="d-none"
+                                                                       accept=".png, .jpg, .jpeg">
+                                                                <label for="session_logoFile"
+                                                                       class="dlab-upload mb-0 btn btn-primary btn-sm">Choose
+                                                                    File</label>
+                                                                <a href="javascript:void(0);"
+                                                                   class="btn btn-danger light remove-img ms-2 btn-sm"
+                                                                   id="remove-img">Remove</a>
+                                                            </div>
+                                                            <hr class="mb-4 mt-4">
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="col-xl-9 col-sm-8">
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary" for="session_name">Name <code
+                                                class="highlighter-rouge">*</code></label>
+                                        <input type="text" id="session_name" name="" required="required"
+                                               class="form-control"><br>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary" for="session_status">
+                                            Status <code>*</code>
+                                        </label>
+                                        <select id="session_status" name="session[formation]" required
+                                                class="form-control no-selectpicker">
+                                            <option value="1" selected>Active</option>
+                                            <option value="0" data-type="M">Inactive</option>
+                                            </option>
+                                        </select>
+                                    </div>
+
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary" for="session_formation">
+                                            Formation <code>*</code>
+                                        </label>
+                                        <select id="session_formation" name="session[formation]" required
+                                                class="form-control no-selectpicker">
+                                            <option value="" selected>Choose the Formation...</option>
+                                            <option value="13" data-type="M">Étude math bac info (Mixed)</option>
+                                            <option value="18" data-type="Presence">Étude math bac eco (Unknown)
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <hr class="mb-4 mt-4">
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary" for="session_capacity">Capacity <code
+                                                class="highlighter-rouge">*</code></label>
+                                        <input type="number" id="session_capacity" name=""
+                                               required="required" class="form-control"><br>
+                                    </div>
+                                    <hr class="mb-4 mt-4">
+                                    <div class="row">
+                                        <div class="mb-3">
+                                            <label class="form-label text-primary" for="session_typePay">
+                                                Type Payment <code>*</code>
+                                            </label>
+                                            <select id="session_typePay" name="session[typePay]" required
+                                                    class="form-control no-selectpicker">
+                                                <option value="" selected>Choose the Type Payment...</option>
+                                                <option value="Session">Per Session</option>
+                                                <option value="Week">Per Week</option>
+                                                <option value="Month">Per Month</option>
+                                                <option value="Trimester">Per Trimester</option>
+                                                <option value="Semester">Per Semester</option>
+                                                <option value="Year">Per Year</option>
+                                            </select>
+                                        </div>
+                                        <div id="numberSessionForPay" style="display: none">
+                                            <br>
+                                            <div class="row">
+                                                <div class="mb-3 col-md-6">
+                                                    <label class="form-label text-primary"
+                                                           for="session_numberSessionForPay">
+                                                        Number of sessions for payment <code
+                                                            class="highlighter-rouge">*</code>
+                                                    </label>
+                                                    <input type="number" id="session_numberSessionForPay"
+                                                           name="session[numberSessionForPay]" class="form-control">
+                                                </div>
+                                                <div class="mb-3 col-md-6">
+                                                    <label class="form-label text-primary"
+                                                           for="session_priceStudentAbsent">
+                                                        Price for a student who is absent
+                                                    </label>
+                                                    <input type="number" id="session_priceStudentAbsent"
+                                                           name="session[priceStudentAbsent]" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <br>
+                                            <label class="form-label text-primary" for="session_paymentMethode">
+                                                Payment Methode <code>*</code>
+                                            </label>
+                                            <select id="session_paymentMethode" name="session[paymentMethode]" required
+                                                    class="form-control no-selectpicker">
+                                                <option value="" selected>Choose the Payment Methode...</option>
+                                                <option value="Advance">Advance</option>
+                                                <option value="Regular">Regular</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div id="priceTotal" style="">
+                                        <hr class="mb-4 mt-4">
+                                        <div class="row">
+                                            <div class="mb-3 col-md-12">
+                                                <label class="form-label text-primary" for="session_price">Price
+                                                    Total</label>
+                                                € <input type="text" id="session_price" name="session[price]"
+                                                         class="form-control"><br>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div id="priceMixed" style="display: none">
+                                        <hr class="mb-4 mt-4">
+                                        <div class="row">
+                                            <div class="mb-3 col-md-6">
+                                                <label class="form-label text-primary" for="session_pricePresence">Price
+                                                    Presence</label>
+                                                <input type="number" id="session_pricePresence"
+                                                       name="session[pricePresence]" class="form-control">
+                                            </div>
+                                            <div class="mb-3 col-md-6">
+                                                <label class="form-label text-primary" for="session_priceOnline">Price
+                                                    Online</label>
+                                                <input type="number" id="session_priceOnline"
+                                                       name="session[priceOnline]" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="currencySession" style="display: none">
+                                        <div class="mb-3 col-md-12">
+                                            <label class="form-label text-primary"
+                                                   for="currency-select">currency</label>
+                                            <div class="dropdown bootstrap-select js-example-data-array select2-hidden-accessible">
+                                                <select class="js-example-data-array select2-hidden-accessible"
+                                                        id="currency-select" data-select2-id="currency-select"
+                                                        tabindex="-1" aria-hidden="true">
+                                                    <option data-select2-id="4"></option>
+                                                </select>
+                                                <button type="button" tabindex="-1"
+                                                        class="btn dropdown-toggle bs-placeholder btn-light"
+                                                        data-bs-toggle="dropdown" role="combobox"
+                                                        aria-owns="bs-select-4" aria-haspopup="listbox"
+                                                        aria-expanded="false" title="Nothing selected"
+                                                        data-id="currency-select">
+                                                    <div class="filter-option">
+                                                        <div class="filter-option-inner">
+                                                            <div class="filter-option-inner-inner">Nothing selected
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </button>
+                                                <div class="dropdown-menu ">
+                                                    <div class="inner show" role="listbox" id="bs-select-4"
+                                                         tabindex="-1">
+                                                        <ul class="dropdown-menu inner show" role="presentation"></ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span class="select2 select2-container select2-container--default" dir="ltr"
+                                                  data-select2-id="3" style="width: auto;"><span class="selection"><span
+                                                    class="select2-selection select2-selection--single" role="combobox"
+                                                    aria-haspopup="true" aria-expanded="false" tabindex="0"
+                                                    aria-disabled="false"
+                                                    aria-labelledby="select2-currency-select-container"><span
+                                                    class="select2-selection__rendered"
+                                                    id="select2-currency-select-container" role="textbox"
+                                                    aria-readonly="true"></span><span class="select2-selection__arrow"
+                                                                                      role="presentation"><b
+                                                    role="presentation"></b></span></span></span><span
+                                                    class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                            <input type="hidden" id="session_currency" name="session[currency]"
+                                                   class="form-control"><br>
+                                        </div>
+                                    </div>
+                                    <hr class="mb-4 mt-4">
+                                    <div class="row">
+                                        <div class="mb-3">
+                                            <label class="form-label text-primary" for="session_userRegisterAfterStart">
+                                                Allow Registration After Session Start <code>*</code>
+                                            </label>
+                                            <select id="session_userRegisterAfterStart"
+                                                    name="session[userRegisterAfterStart]" required
+                                                    class="form-control no-selectpicker">
+                                                <option value="">Can the user register after session start?</option>
+                                                <option value="1" selected>Yes</option>
+                                                <option value="0">No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <hr class="mb-4 mt-4">
+                                    <div class="row">
+                                        <div class="mb-3 col-md-6">
+                                            <label class="form-label text-primary" for="session_startDate">Open Date
+                                                <code
+                                                        class="highlighter-rouge">*</code></label>
+                                            <input type="date" id="session_startDate" name="session[startDate]"
+                                                   required="required" class="form-control"><br>
+                                        </div>
+                                        <div class="mb-3 col-md-6">
+                                            <label class="form-label text-primary" for="session_endDate">Close Date
+                                                <code
+                                                        class="highlighter-rouge">*</code></label>
+                                            <input type="date" id="session_endDate" name="session[endDate]"
+                                                   required="required" class="form-control"><br>
+                                        </div>
+                                    </div>
+
+                                    <hr class="mb-4 mt-4">
+                                    <div class="mb-3">
+                                        <label for="multi-value-select" class="form-label text-primary">
+                                            Local <span class="required">*</span>
+                                        </label>
+                                        <input type="hidden" id="account-id" value="3">
+                                        <select id="multi-value-select" name="multi-value-select[]" multiple
+                                                class="form-control no-selectpicker" size="4">
+
+                                        </select>
+                                        <small class="text-muted">Hold Ctrl (or Cmd on Mac) to select multiple
+                                            options</small>
+                                    </div>
+                                    <hr class="mb-4 mt-4">
+                                    <div class="row">
+                                        <div class="mb-3 col-md-6">
+                                            <label for="session_requestChangeGroup" class="form-label text-primary">
+                                                Request change groups <span class="required">*</span>
+                                            </label>
+                                            <select id="session_requestChangeGroup" name="session[requestChangeGroup]"
+                                                    required class="form-control no-selectpicker">
+                                                <option value="" selected>User can change current group?</option>
+                                                <option value="1">Yes</option>
+                                                <option value="0">No</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3 col-md-6">
+                                            <label class="form-label text-primary" for="session_maxGroupChange">Max
+                                                Group <code
+                                                        class="highlighter-rouge">*</code></label>
+                                            <input type="number" id="session_maxGroupChange"
+                                                   name="session[maxGroupChange]" class="form-control"><br>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="session_specialGroup" class="form-label text-primary">
+                                            Allow Registration User Without Group
+                                        </label>
+                                        <select id="session_specialGroup" name="session[specialGroup]"
+                                                class="form-control no-selectpicker">
+                                            <option value="">Can the user registration without group?</option>
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
+                                    <hr class="mb-4 mt-4">
+
+                                    <div id="fileManagerContainer" class="mb-3" style="display: none;">
+                                        <label class="form-label text-primary">Select Folder</label>
+                                        <input type="text" id="selectedFolder" class="form-control"
+                                               placeholder="No folder selected" readonly="">
+                                        <button type="button" id="openFileManager" class="btn btn-primary mt-2">Choose
+                                            Folder
+                                        </button>
+                                    </div>
+                                    <div class="modal fade" id="fileManagerModal" tabindex="-1"
+                                         aria-labelledby="fileManagerModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="fileManagerModalLabel">
+                                                        <i class="bi bi-folder2-open"></i> Select a Folder
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body" id="share-folder-modal">
+                                                    <ul id="fileManagerList" class="list-group"></ul>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <div>
+                                                        <button type="button" id="selectFoldersBtn"
+                                                                class="btn btn-success">Select
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Close
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary"
+                                               for="session_description">Description </label>
+                                        <textarea id="session_description" name=""
+                                                  class="form-control" rows="7"
+                                                  data-editor-desc-session="true"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="float-end">
+                    <a href="/dashboard/show-session" class="btn btn-outline-danger me-3">Close</a>
+                    <button class="btn btn-primary" id="create_session">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<div class="footer out-footer style-2">
+    <div class="copyright">
+        <p>Copyright © Designed &amp; Developed by <a href="https://www.kernelsi.com/" target="_blank">KSI</a> 2026</p>
+    </div>
+</div>
+
+<script src="/static/js/dashboard/session.js"></script>
