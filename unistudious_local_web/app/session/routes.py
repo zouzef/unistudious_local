@@ -7,7 +7,8 @@ from app.session.service import (
     get_all_sessions, get_moderator,
     get_locals, get_room, get_teacher,
     get_session_image,
-    create_session_local
+    create_session_local,
+    get_session_info_service
 )
 
 session_bp = Blueprint('session', __name__)
@@ -159,7 +160,7 @@ def create_session_route():  # 👈 rename this
         return jsonify({"Message": "Error coming from create_session"}), 500
 
 
-@session_bp.route('/api/get-local-info/<int:account_id>', methods=['GET'])  # ← GET not POST
+@session_bp.route('/api/get-local-info/<int:account_id>', methods=['GET'])
 def get_local_info(account_id):
     try:
         local_data = get_locals(account_id)
@@ -169,3 +170,17 @@ def get_local_info(account_id):
             return jsonify({"Message": "No local data"}), 400
     except Exception as e:
         return jsonify({"Message": f"Error coming from get_local_info: {e}"}), 500
+
+
+@session_bp.route('/api/get-session-info/<int:session_id>', methods=['GET'])
+def get_session_info(session_id):
+    try:
+        result,session_info = get_session_info_service(session_id)
+        if result:
+            return jsonify(session_info), 200
+        print(session_info)
+    except Exception as e:
+        print(f"Error: {e} coming from server")
+        return jsonify({
+            "Message":"Error from server"
+        }),500

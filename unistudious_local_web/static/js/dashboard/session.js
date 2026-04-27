@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     const accountId = document.getElementById('account-id').value;
-    // Load formations
-    fetch(`/api/get-formation-info/${accountId}`)
+
+    // Load formations — wrapped in a Promise for use with Promise.all
+    const formationsLoaded = fetch(`/api/get-formation-info/${accountId}`)
         .then(response => response.json())
         .then(data => {
             const select = document.getElementById('session_formation');
@@ -28,14 +29,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 option.textContent = 'No formations available';
                 select.appendChild(option);
             }
+
+            return data;
         })
         .catch(error => {
             console.error('❌ Failed to load formations:', error);
             document.getElementById('session_formation').innerHTML = '<option disabled>Failed to load formations</option>';
         });
 
-    // Load locals
-    fetch(`/api/get-local-info/${accountId}`)
+    // Load locals — wrapped in a Promise for use with Promise.all
+    const localsLoaded = fetch(`/api/get-local-info/${accountId}`)
         .then(response => response.json())
         .then(data => {
             const select = document.getElementById('multi-value-select');
@@ -54,6 +57,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 option.textContent = 'No locals available';
                 select.appendChild(option);
             }
+
+            return data;
         })
         .catch(error => console.error('❌ Failed to load locals:', error));
 
@@ -150,5 +155,63 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-});
+    // FIX 1: Use isNaN check so this only fires on actual edit pages with a numeric ID in the URL
+    const lastPart = window.location.pathname.split('/').pop();
+    const sessionId = parseInt(lastPart);
 
+    if (!isNaN(sessionId) && sessionId > 0) {
+        // FIX 2: Use Promise.all to guarantee formations & locals are loaded before populating fields
+        Promise.all([
+            formationsLoaded,
+            localsLoaded,
+            fetch(`/api/get-session-info/${sessionId}`).then(r => r.json())
+        ])
+        .then(([_formations, _locals, sessionData]) => {
+            if (!sessionData || !sessionData.length) return;
+            const s = sessionData[0];
+
+            // Basic Info
+            document.getElementById('session_name').value     = s.name ?? '';
+            document.getElementById('session_status').value   = s.status ?? '';
+            document.getElementById('session_capacity').value = s.capacity ?? '';
+
+            // Description
+            document.getElementById('session_description').value = s.description ?? '';
+
+            // Formation — options are guaranteed loaded at this point
+            document.getElementById('session_formation').value = s.formation_id ?? '';
+            document.getElementById('session_formation').dispatchEvent(new Event('change'));
+
+            // Payment
+            document.getElementById('session_typePay').value       = s.type_pay ?? '';
+            document.getElementById('session_typePay').dispatchEvent(new Event('change'));
+            document.getElementById('session_paymentMethode').value = s.payment_methode ?? '';
+            document.getElementById('session_price').value          = s.price ?? '';
+            document.getElementById('session_pricePresence').value  = s.price_presence ?? '';
+            document.getElementById('session_priceOnline').value    = s.price_online ?? '';
+            document.getElementById('session_currency').value       = s.currency ?? '';
+            document.getElementById('session_numberSessionForPay').value = s.number_session_for_pay ?? '';
+            document.getElementById('session_priceStudentAbsent').value  = s.price_student_absent ?? '';
+
+            // Dates — convert "Thu, 10 Jul 2025 00:00:00 GMT" → "2025-07-10"
+            if (s.start_date)
+                document.getElementById('session_startDate').value = new Date(s.start_date).toISOString().split('T')[0];
+            if (s.end_date)
+                document.getElementById('session_endDate').value = new Date(s.end_date).toISOString().split('T')[0];
+
+            // Registration & Groups
+            document.getElementById('session_userRegisterAfterStart').value = s.user_register_after_start ?? '';
+            document.getElementById('session_requestChangeGroup').value     = s.request_change_group ?? '';
+            document.getElementById('session_maxGroupChange').value         = s.max_group_change ?? '';
+            document.getElementById('session_specialGroup').value           = s.special_group ?? '';
+
+            // Image preview
+            document.getElementById('imagePreview').src = `/api/get_session_img/${s.id}`;
+
+
+
+            console.log('✅ Session info loaded:', s);
+        })
+        .catch(error => console.error('❌ Failed to load session info:', error));
+    }
+});

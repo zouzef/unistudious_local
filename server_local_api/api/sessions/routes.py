@@ -277,3 +277,29 @@ def create_session():
     except Exception as e:
         print(f"Error: {e} coming from create session")
         return jsonify({"Message": f"Error {e} in creating session"}), 500
+
+
+#ENDPOINT 4: Get session info
+@sessions_bp.route('/get_session_info/<int:session_id>', methods=['GET'])
+def get_session_info(session_id):
+    try:
+        query = """
+            SELECT * 
+            FROM session s
+            WHERE s.id = %s AND s.enabled = 1
+        """
+        values = (session_id,)  # ✅ proper tuple
+        result = Database.execute_query(query, values, fetch=True)
+        if result:
+            return jsonify(
+                result
+            ), 200
+        else:
+            return jsonify({
+                "Message": "No data for this session"
+            }), 400
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e}"
+        }), 500

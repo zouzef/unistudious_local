@@ -92,3 +92,15 @@ def create_session_local(session_data):
         print(f"Error in create_session service: {e}")
         return False, 500
 
+def get_session_info_service(session_id):
+    url = f"{current_app.config['BASE_URL']}get_session_info/{session_id}"
+    try:
+        response=  requests.get(url, verify=False, timeout=10)
+        response.raise_for_status()
+        if response.status_code == 200:
+            return True,response.json()
+        else:
+            return False,None
+
+    except Exception as e:
+        return False,None
