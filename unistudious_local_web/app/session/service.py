@@ -92,6 +92,7 @@ def create_session_local(session_data):
         print(f"Error in create_session service: {e}")
         return False, 500
 
+
 def get_session_info_service(session_id):
     url = f"{current_app.config['BASE_URL']}get_session_info/{session_id}"
     try:
@@ -103,4 +104,70 @@ def get_session_info_service(session_id):
             return False,None
 
     except Exception as e:
+        return False,None
+
+
+def update_session_service(session_data, session_id):
+    url = f"{current_app.config['BASE_URL']}update_session/{session_id}"
+
+    # DEBUG — check the URL and data being sent
+    print(f"🔗 Calling URL: {url}")
+    print(f"📦 Data: {session_data}")
+
+    try:
+        response = requests.post(url, json=session_data, verify=False, timeout=10)
+
+        # DEBUG — check what came back
+        print(f"📡 Status: {response.status_code}")
+        print(f"📡 Response: {response.text}")
+
+        if response.status_code == 200:
+            return True, response.json()
+        else:
+            return False, response.json()
+
+    except Exception as e:
+        print(f"❌ Service error: {e}")
+        return False, None
+
+
+def delete_session_service(session_id):
+    url = f"{current_app.config['BASE_URL']}delete_session/{session_id}"
+    try:
+        response = requests.post(url,verify=False,timeout=10)
+        print(response.json())
+        if response.status_code == 200:
+            return True, {"nbrgroup": response.json()}
+        else:
+            return False,{"nbrgroup": response.json()}
+
+    except Exception as e:
+        return False,None
+
+
+def get_all_user_service(session_id):
+    url = f"{current_app.config['BASE_URL']}get_all_user_session/{session_id}"
+    try:
+        response = requests.get(url,verify=False,timeout=10)
+        if response.status_code == 200:
+            return True, {"nbruser": response.json()}
+        else:
+            return False,{"nbruser": response.json()}
+
+    except Exception as e:
+        print(f"Error: {e} in get_all_user_service")
+        return False,None
+
+
+def get_all_group_session_service(session_id):
+    url = f"{current_app.config['BASE_URL']}get_all_group_session/{session_id}"
+    try:
+        response = requests.get(url,verify=False,timeout=10)
+        if response.status_code == 200:
+            return True,response.json()
+        else:
+            return False,response.json()
+
+    except Exception as e:
+        print(f"Error: {e} in get nb group session")
         return False,None

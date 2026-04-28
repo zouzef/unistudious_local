@@ -43,7 +43,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="col-xl-9 col-sm-8">
                                     <div class="mb-3">
                                         <label class="form-label text-primary" for="session_name">Name <code
@@ -165,47 +164,12 @@
                                     <div id="currencySession" style="display: none">
                                         <div class="mb-3 col-md-12">
                                             <label class="form-label text-primary"
-                                                   for="currency-select">currency</label>
-                                            <div class="dropdown bootstrap-select js-example-data-array select2-hidden-accessible">
-                                                <select class="js-example-data-array select2-hidden-accessible"
-                                                        id="currency-select" data-select2-id="currency-select"
-                                                        tabindex="-1" aria-hidden="true">
-                                                    <option data-select2-id="4"></option>
-                                                </select>
-                                                <button type="button" tabindex="-1"
-                                                        class="btn dropdown-toggle bs-placeholder btn-light"
-                                                        data-bs-toggle="dropdown" role="combobox"
-                                                        aria-owns="bs-select-4" aria-haspopup="listbox"
-                                                        aria-expanded="false" title="Nothing selected"
-                                                        data-id="currency-select">
-                                                    <div class="filter-option">
-                                                        <div class="filter-option-inner">
-                                                            <div class="filter-option-inner-inner">Nothing selected
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </button>
-                                                <div class="dropdown-menu ">
-                                                    <div class="inner show" role="listbox" id="bs-select-4"
-                                                         tabindex="-1">
-                                                        <ul class="dropdown-menu inner show" role="presentation"></ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <span class="select2 select2-container select2-container--default" dir="ltr"
-                                                  data-select2-id="3" style="width: auto;"><span class="selection"><span
-                                                    class="select2-selection select2-selection--single" role="combobox"
-                                                    aria-haspopup="true" aria-expanded="false" tabindex="0"
-                                                    aria-disabled="false"
-                                                    aria-labelledby="select2-currency-select-container"><span
-                                                    class="select2-selection__rendered"
-                                                    id="select2-currency-select-container" role="textbox"
-                                                    aria-readonly="true"></span><span class="select2-selection__arrow"
-                                                                                      role="presentation"><b
-                                                    role="presentation"></b></span></span></span><span
-                                                    class="dropdown-wrapper" aria-hidden="true"></span></span>
-                                            <input type="hidden" id="session_currency" name="session[currency]"
-                                                   class="form-control"><br>
+                                                   for="session_currency">Currency</label>
+                                            <input type="text"
+                                                   id="session_currency"
+                                                   name="session[currency]"
+                                                   class="form-control"
+                                                   placeholder="e.g. TND, EUR, USD">
                                         </div>
                                     </div>
                                     <hr class="mb-4 mt-4">
@@ -335,7 +299,7 @@
                 </div>
                 <div class="float-end">
                     <a href="/dashboard/show-session" class="btn btn-outline-danger me-3">Close</a>
-                    <button class="btn btn-primary" id="create_session">Create</button>
+                    <button class="btn btn-primary" id="update_session">Update</button>
                 </div>
             </form>
         </div>

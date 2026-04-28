@@ -303,3 +303,146 @@ def get_session_info(session_id):
         return jsonify({
             "Message": f"Error: {e}"
         }), 500
+
+
+#ENDPOINT 5: Update session
+@sessions_bp.route('/update_session/<int:session_id>', methods=['POST'])
+def update_session(session_id):
+    try:
+        data = request.get_json(force=True)
+        if not data:
+            return jsonify({"Message": "No data received"}), 400
+
+        print(f"📋 Updating session {session_id} with: {data}")
+
+        query = """
+            UPDATE session
+            SET
+                name                      = %s,
+                formation_id              = %s,
+                capacity                  = %s,
+                type_pay                  = %s,
+                number_session_for_pay    = %s,
+                price_student_absent      = %s,
+                payment_methode           = %s,
+                price                     = %s,
+                price_presence            = %s,
+                price_online              = %s,
+                currency                  = %s,
+                user_register_after_start = %s,
+                start_date                = %s,
+                end_date                  = %s,
+                request_change_group      = %s,
+                max_group_change          = %s,
+                special_group             = %s,
+                public_resource           = %s,
+                description               = %s,
+                season_id                 = %s,
+                updated_at                = NOW()
+            WHERE id = %s AND enabled = 1
+        """
+
+        values = (
+            data.get('name'),
+            data.get('formation') or None,
+            data.get('capacity'),
+            data.get('typePay'),
+            data.get('numberSessionForPay') or None,
+            data.get('priceStudentAbsent') or None,
+            data.get('paymentMethode') or None,
+            data.get('price') or None,
+            data.get('pricePresence') or None,
+            data.get('priceOnline') or None,
+            data.get('currency') or None,
+            data.get('userRegisterAfterStart'),
+            data.get('startDate'),
+            data.get('endDate'),
+            data.get('requestChangeGroup') or None,
+            data.get('maxGroupChange') or None,
+            data.get('specialGroup') or None,
+            data.get('publicResource') or None,
+            data.get('description'),
+            data.get('season') or None,
+            session_id
+        )
+
+        Database.execute_query(query, values, fetch=False)
+
+        return jsonify({
+            "Message": "Session updated with success",
+            "session_id": session_id
+        }), 200
+
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
+
+
+#ENDPOINT 6: Delete session
+@sessions_bp.route('/delete_session/<int:session_id>', methods=['POST'])
+def delete_session(session_id):
+    try:
+        # First check if session exists and is enabled
+        check_query = "SELECT id FROM session WHERE id = %s AND enabled = 1"
+        exists = Database.execute_query(check_query, (session_id,), fetch=True)
+
+        if not exists:
+            return jsonify({
+                "Message": "Session not found"
+            }), 404
+
+        # Soft delete
+        query = """
+            UPDATE session 
+            SET enabled = 0 
+            WHERE id = %s
+        """
+        Database.execute_query(query, (session_id,), fetch=False)
+
+        return jsonify({
+            "Message": "Session Deleted successfully"
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} in deleting session"
+        }), 500
+
+
+#ENDPOINT 7: GET all_user_session
+@sessions_bp.route('/get_all_user_session/<int:session_id>',methods=['GET'])
+def get_all_user_sesssion(session_id):
+    try:
+        query = """
+            SELECT COUNT(DISTINCT user_id) as nbruser 
+            FROM relation_user_session 
+            WHERE session_id = %s AND enabled = 1;
+        """
+        values = (session_id,)
+        result = Database.execute_query(query,values,fetch=True)
+        return jsonify(result[0]['nbruser']), 200
+
+    except Exception as e:
+        print(f"Error: {e} in get_all_user_session")
+        return jsonify({"Message": f"Error: {e} in get_all_user_session"}), 500
+
+
+#ENDPOINT 8: GET all_group_session
+@sessions_bp.route('/get_all_group_session/<int:session_id>', methods=['GET'])
+def get_all_group_session(session_id):
+    try:
+        query = """
+            SELECT COUNT(DISTINCT id) as nbrgrp
+            FROM relation_group_local_session 
+            WHERE enabled = 1 AND session_id = %s 
+        """
+        values = (session_id,)
+        result = Database.execute_query(query, values, fetch=True)
+        if result:
+            return jsonify({"nbrgroup": result[0]['nbrgrp']}), 200
+        else:
+            return jsonify({"Message": "No group found for this session"}), 400
+    except Exception as e:
+        return jsonify({"Message": f"Error: {e} in getting all group_session"}), 500

@@ -74,7 +74,7 @@
                                 </svg>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" data-id="{{ session.id }}" id="delete-session">Delete</a>
+                                <a class="dropdown-item delete-session" data-id="{{ session.id }}">Delete</a>
                                 <a href="/dashboard/view-session/{{ session.id }}" class="dropdown-item">Edit</a>
                             </div>
                         </div>
@@ -119,6 +119,7 @@
         </div>
     </div>
 </div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Handle all custom dropdowns on any page
@@ -141,4 +142,64 @@
             }
         });
     });
+
+    // DELETE session
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.delete-session');
+        if (!btn) return;
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        const sessionId = btn.getAttribute('data-id');
+
+        Swal.fire({
+            title: 'Are you sure?',
+            html: `This Session will be deleted permanently.<br>You will not be able to undo this action.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/api/delete-session/${sessionId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.Message === 'Session Deleted successfully') {
+                        Swal.fire({
+                            title: 'Deleted!',
+                            text: 'The session has been deleted.',
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: data.Message,
+                            icon: 'error',
+                            confirmButtonColor: '#d33'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('❌ Error:', error);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Something went wrong, please try again.',
+                        icon: 'error',
+                        confirmButtonColor: '#d33'
+                    });
+                });
+            }
+        });
+    });
 </script>
+
+<!-- Then custom.js AFTER -->

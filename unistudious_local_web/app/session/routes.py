@@ -8,7 +8,11 @@ from app.session.service import (
     get_locals, get_room, get_teacher,
     get_session_image,
     create_session_local,
-    get_session_info_service
+    get_session_info_service,
+    update_session_service,
+    delete_session_service,
+    get_all_group_session_service,
+    get_all_user_service
 )
 
 session_bp = Blueprint('session', __name__)
@@ -91,6 +95,16 @@ def show_session_config(id_session):
                            calendar_data=get_calendar_per_session(account_id, id_session),
                            page='session_config')
 
+
+@session_bp.route('/dashboard/show-all-user-session/<int:id_session>', methods=['GET'])
+def show_user_session(id_session):
+
+    if 'moderator_id' not in session:
+        return redirect(url_for('auth.login_page'))
+    return render_template('index.html',
+                           id_session=id_session,
+                           account_id=session.get('account_id'),
+                           page='show_user_session')
 
 # ==========================================
 # API ROUTES
@@ -183,4 +197,82 @@ def get_session_info(session_id):
         print(f"Error: {e} coming from server")
         return jsonify({
             "Message":"Error from server"
+        }),500
+
+
+@session_bp.route('/api/update-session/<int:session_id>', methods=['POST'])
+def update_session(session_id):
+    try:
+        data_session = request.get_json(force=True)
+
+        if not data_session:
+            return jsonify({"Message": "No data received"}), 400
+
+        print(f"📋 Received data: {data_session}")
+
+        status, response = update_session_service(data_session, session_id)
+
+        if status:
+            return jsonify({
+                "Message": "Session updated with success",
+                "Response": response
+            }), 200
+        else:
+            return jsonify({
+                "Message": "Error in updating session",
+                "Response": response
+            }), 400
+
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500  # ← was missing status code
+
+
+@session_bp.route('/api/delete-session/<int:session_id>',methods=['POST'])
+def delete_session(session_id):
+    try:
+        status,response = delete_session_service(session_id)
+        if status:
+            return jsonify(
+                response
+            ),200
+        else:
+            return jsonify(
+                response
+            ),400
+    except Exception as e:
+        return jsonify({
+            "Message":f"Error:{e} in deleting session"
+        }),500
+
+
+@session_bp.route('/api/get-nbr-group-session/<int:session_id>',methods=['GET'])
+def get_nbr_group_session(session_id):
+    try:
+        status,response = get_all_group_session_service(session_id)
+        if status:
+            print(response)
+            return jsonify(response),200
+        else:
+            return jsonify(response),400
+
+    except Exception as e:
+        return jsonify({
+            "Message":f"Error:{e} in getting number group session"
+        }),500
+
+
+@session_bp.route('/api/get-nbr-user-session/<int:session_id>',methods=['GET'])
+def get_nbr_user_session(session_id):
+    try:
+        status,response = get_all_user_service(session_id)
+        if status:
+            return jsonify(response),200
+        else:
+            return jsonify(response),400
+    except Exception as e:
+        return jsonify({
+            "Message":f"Error: {e} in getting number user per session"
         }),500

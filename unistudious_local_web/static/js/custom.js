@@ -268,6 +268,7 @@ handlePreloader();
 	   });
    }
    var handleLightgallery = function(){
+       if (typeof $.fn.lightGallery === 'undefined') return;
 	   if(jQuery('#lightgallery ,#lightgallery-2').length > 0){
 		   $('#lightgallery ,#lightgallery-2').lightGallery({
 			   loop:true,
