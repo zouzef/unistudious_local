@@ -20,25 +20,108 @@
                 <div class="card-body p-0">
                     <div class="table-responsive basic-tbl">
                         <div id="example_wrapper" class="dataTables_wrapper no-footer">
-                            <div class="dataTables_length" id="example_length">
-                                <label>Show
-                                    <div class="dropdown bootstrap-select">
-                                        <select name="example_length" aria-controls="example"
-                                                class="form-control w-auto">
-                                            <option value="10">10</option>
-                                            <option value="25">25</option>
-                                            <option value="50">50</option>
-                                            <option value="100">100</option>
-                                        </select>
-                                    </div>
-                                    entries
-                                </label>
-                            </div>
-                            <div id="example_filter" class="dataTables_filter">
-                                <input type="search" class="form-control" placeholder="Search..." aria-controls="example">
-                            </div>
+                            <table id="example" class="display dataTable no-footer"
+                                   style="min-width: 845px; width: 1023px;">
+                                <thead>
+                                <tr>
+                                    <th class="sorting sorting_desc" style="width: 194.6px;">Name</th>
+                                    <th class="sorting" style="width: 252.6px;">Group</th>
+                                    <th class="sorting" style="width: 316.6px;">Completions Tag</th>
+                                    <th class="sorting" style="width: 93.6px;">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- dynamic data -->
+                                </tbody>
+                                <script>
+                                    // Add this script to load data dynamically
+                                    function loadUserSessionData(sessionId) {
+                                        fetch(`/api/get_user_session_info/${sessionId}`)
+                                            .then(response => response.json())
+                                            .then(result => {
+                                                const tbody = document.querySelector('#example tbody');
+                                                tbody.innerHTML = '';
 
+                                                if (!result.Data || result.Data.length === 0) {
+                                                    tbody.innerHTML = `
+                                                        <tr>
+                                                            <td colspan="4" class="text-center">No data available</td>
+                                                        </tr>`;
+                                                    return;
+                                                }
 
+                                                result.Data.forEach(user => {
+                                                    const row = `
+                                                    <tr data-user-id="${user.user_id}">
+                                                        <td class="virtual-user-name sorting_1">
+                                                            ${user.username}
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <a class="edit-group-action btn btn-sm btn-outline-success me-2"
+                                                                   data-toggle="modal"
+                                                                   data-target="#actionGroupModal"
+                                                                   data-user-id="${user.user_id}"
+                                                                   data-session-id="${user.session_id}">
+                                                                    <i class="fas fa-pencil-alt"></i> Edit
+                                                                </a>
+                                                                <div>
+                                                                    ${user.relation_group_local_session_id ?? 'N/A'}
+                                                                </div>
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <a class="edit-completion-tag-action btn btn-sm btn-outline-success me-2"
+                                                                   data-toggle="modal"
+                                                                   data-target="#actionCompletionTagModal"
+                                                                   data-user-id="${user.user_id}"
+                                                                   data-session-id="${user.session_id}">
+                                                                    <i class="fas fa-pencil-alt"></i> Edit
+                                                                </a>
+                                                                <div>N/A</div>
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="icon-box icon-box-sm bg-light me-2">
+                                                                    <a class="delete-relation-user-session"
+                                                                       data-user-id="${user.user_id}"
+                                                                       data-session-id="${user.session_id}">
+                                                                        <i class="material-icons" style="font-size:10px;color:red">delete</i>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="icon-box icon-box-sm bg-light">
+                                                                    <a class="edit-virtual-user-session"
+                                                                       data-toggle="modal"
+                                                                       data-target="#editVirtualUserSessionModal"
+                                                                       data-user-id="${user.user_id}"
+                                                                       data-session-id="${user.session_id}"
+                                                                       data-user-name="User #${user.user_id}"
+                                                                       data-user-phone=""
+                                                                       data-user-email=""
+                                                                       data-extra-data-json="null">
+                                                                        <i class="fas fa-pencil-alt" style="font-size:10px;color:green"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>`;
+                                                    tbody.innerHTML += row;
+                                                });
+                                            })
+                                            .catch(error => {
+                                                console.error('Error loading session data:', error);
+                                            });
+                                    }
+
+                                    // Call it with your session ID
+                                    loadUserSessionData(12);
+                                </script>
+                            </table>
                         </div>
                     </div>
                 </div>

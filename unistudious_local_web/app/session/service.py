@@ -171,3 +171,16 @@ def get_all_group_session_service(session_id):
     except Exception as e:
         print(f"Error: {e} in get nb group session")
         return False,None
+
+
+def get_user_info_session_service(session_id):
+    url= f"{current_app.config['BASE_URL']}get_user_session_info/{session_id}"
+    try:
+        response = requests.get(url,verify=False,timeout = 10)
+        if response.status_code == 200:
+            return True,response.json()
+        else:
+            return False,response.json()
+    except Exception as e:
+        print(f"Error:{e} coming from get_user_info_session")
+        return False,None

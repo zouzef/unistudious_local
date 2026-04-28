@@ -12,7 +12,9 @@ from app.session.service import (
     update_session_service,
     delete_session_service,
     get_all_group_session_service,
-    get_all_user_service
+    get_all_user_service,
+    get_user_info_session_service
+
 )
 
 session_bp = Blueprint('session', __name__)
@@ -275,4 +277,23 @@ def get_nbr_user_session(session_id):
     except Exception as e:
         return jsonify({
             "Message":f"Error: {e} in getting number user per session"
+        }),500
+
+
+@session_bp.route('/api/get_user_session_info/<int:session_id>')
+def get_user_session_info(session_id):
+    try:
+        status,user_data = get_user_info_session_service(session_id)
+        if status:
+            return jsonify(
+                user_data
+            ),200
+        else:
+            return jsonify({
+                "Message":"No user data for this session"
+            }),400
+
+    except Exception as e:
+        return jsonify({
+            "Message":f"Error: {e} coming from server "
         }),500

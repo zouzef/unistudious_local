@@ -446,3 +446,31 @@ def get_all_group_session(session_id):
             return jsonify({"Message": "No group found for this session"}), 400
     except Exception as e:
         return jsonify({"Message": f"Error: {e} in getting all group_session"}), 500
+
+
+#ENDPOINT 9: GET user_session_info
+@sessions_bp.route('/get_user_session_info/<int:session_id>',methods=['GET'])
+def get_user_session_info(session_id):
+    try:
+        query = """
+            SELECT DISTINCT rus.*,u.username
+            FROM relation_user_session rus,user u
+            WHERE rus.enabled = 1 AND rus.session_id = %s AND rus.user_id = u.id
+        
+        """
+        values = (session_id,)
+        result = Database.execute_query(query,values,fetch=True)
+        if result:
+            return jsonify({
+                "Data": result
+            }),200
+        else:
+            return jsonify({
+                "Message":"There is no data for this session"
+            }),400
+
+    except Exception as e:
+        print(f"Error: {e} coming from get user_session_info")
+        return jsonify({
+            "Message":f"Error: {e} coming from get_user_session_info"
+        }),500
