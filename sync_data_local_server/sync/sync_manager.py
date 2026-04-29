@@ -4,7 +4,7 @@ Coordinates data fetching, processing, and status management
 """
 import sys
 import os
-from datetime import datetime
+from datetime import datetime,timedelta
 import time
 
 # Add parent directory to path
@@ -61,7 +61,7 @@ def sync_data_once(settings):
             print("   No previous sync found - performing full sync")
 
         # Step 4: Store current time BEFORE fetching (important!)
-        sync_start_time = datetime.now()
+        sync_start_time = datetime.now() - timedelta(hours=1)
         print(f"   Current sync started at: {sync_start_time}")
 
         # Step 5: Fetch data from remote server
