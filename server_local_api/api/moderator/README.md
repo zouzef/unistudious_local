@@ -9,11 +9,13 @@ Manages moderator authentication and dashboard statistics.
 ## Endpoints
 
 ### 1. Authenticate Moderator
+
 **POST** `/scl/authentification-moderateur`
 
 Verify if a user has all required moderator roles.
 
 **Required Moderator Roles:**
+
 - `ROLE_MANAGER_ADMINISTRATIVE`
 - `ROLE_MANAGER_CONFIG`
 - `ROLE_MANAGER_FINANCE`
@@ -23,6 +25,7 @@ Verify if a user has all required moderator roles.
 - `ROLE_CUSTOMER_MANAGER_SERVICE`
 
 **Request Body (JSON):**
+
 ```json
 {
   "username": "admin_user"
@@ -30,11 +33,13 @@ Verify if a user has all required moderator roles.
 ```
 
 **Request Body (Form Data):**
+
 ```
 username=admin_user
 ```
 
 **Response (200) - Success:**
+
 ```json
 {
   "message": "success"
@@ -42,6 +47,7 @@ username=admin_user
 ```
 
 **Response (400) - Missing Username:**
+
 ```json
 {
   "message": "Username required"
@@ -49,6 +55,7 @@ username=admin_user
 ```
 
 **Response (404) - User Not Found:**
+
 ```json
 {
   "message": "User Not Found"
@@ -56,17 +63,16 @@ username=admin_user
 ```
 
 **Response (403) - Insufficient Permissions:**
+
 ```json
 {
   "message": "Insufficient permissions",
-  "missing_roles": [
-    "ROLE_MANAGER_FINANCE",
-    "ROLE_MANAGER_IT"
-  ]
+  "missing_roles": ["ROLE_MANAGER_FINANCE", "ROLE_MANAGER_IT"]
 }
 ```
 
 **Response (500) - Invalid Roles Format:**
+
 ```json
 {
   "error": "Invalid roles format"
@@ -76,16 +82,19 @@ username=admin_user
 ---
 
 ### 2. Get Moderator Dashboard Statistics
+
 **GET** `/scl/get_data_moderateur/<account_id>`
 
 Get statistics for the moderator dashboard including counts of users, teachers, groups, and sessions.
 
 **Parameters:**
+
 - `account_id` (int): Account ID
 
 **Authentication:** Required (token)
 
 **Response (200):**
+
 ```json
 {
   "success": true,
@@ -100,6 +109,7 @@ Get statistics for the moderator dashboard including counts of users, teachers, 
 ```
 
 **Field Descriptions:**
+
 - `nbuser`: Total number of users with `ROLE_USER` role
 - `nbteach`: Total number of teachers with `ROLE_TEACHER` role
 - `nbgroup`: Total number of active groups (`relation_group_local_session`)
@@ -107,6 +117,7 @@ Get statistics for the moderator dashboard including counts of users, teachers, 
 - `account_id`: The account ID requested
 
 **Response (500) - Error:**
+
 ```json
 {
   "success": false,

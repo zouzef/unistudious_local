@@ -11,11 +11,13 @@ Manages cameras and tablets used for attendance tracking.
 ## Camera Endpoints
 
 ### 1. Get All Cameras
+
 **GET** `/scl/get-all-camera`
 
 Get a list of all cameras in the system.
 
 **Response (200):**
+
 ```json
 [
   {
@@ -36,14 +38,17 @@ Get a list of all cameras in the system.
 ---
 
 ### 2. Get All Cameras by Room
+
 **GET** `/scl/get-all-camera-room/<room_id>`
 
 Get all cameras assigned to a specific room.
 
 **Parameters:**
+
 - `room_id` (int): Room ID
 
 **Response (200):**
+
 ```json
 [
   {
@@ -64,14 +69,17 @@ Get all cameras assigned to a specific room.
 ---
 
 ### 3. Get Camera by ID
+
 **GET** `/scl/view-camera/<camera_id>`
 
 Get detailed information about a specific camera.
 
 **Parameters:**
+
 - `camera_id` (int): Camera ID
 
 **Response (200):**
+
 ```json
 {
   "success": true,
@@ -91,6 +99,7 @@ Get detailed information about a specific camera.
 ```
 
 **Response (404):**
+
 ```json
 {
   "success": false,
@@ -103,11 +112,13 @@ Get detailed information about a specific camera.
 ## Tablet Endpoints
 
 ### 4. Get All Tablets
+
 **GET** `/scl/get-all-tablets`
 
 Get a list of all tablets in the system.
 
 **Response (200):**
+
 ```json
 [
   {
@@ -134,14 +145,17 @@ Get a list of all tablets in the system.
 ---
 
 ### 5. Get All Tablets by Room
+
 **GET** `/scl/get-all-tablet-room/<room_id>`
 
 Get all tablets assigned to a specific room.
 
 **Parameters:**
+
 - `room_id` (int): Room ID
 
 **Response (200):**
+
 ```json
 [
   {
@@ -159,14 +173,17 @@ Get all tablets assigned to a specific room.
 ---
 
 ### 6. Get Tablet by ID
+
 **GET** `/scl/view-tablet/<id_tablette>`
 
 Get detailed information about a specific tablet.
 
 **Parameters:**
+
 - `id_tablette` (int): Tablet ID
 
 **Response (200):**
+
 ```json
 [
   {
@@ -181,6 +198,7 @@ Get detailed information about a specific tablet.
 ```
 
 **Response (404):**
+
 ```json
 {
   "status": "error",
@@ -195,12 +213,15 @@ Get detailed information about a specific tablet.
 All endpoints may return:
 
 **Response (500):**
+
 ```json
 {
   "message": "Internal Server Error"
 }
 ```
+
 or
+
 ```json
 {
   "status": "error",

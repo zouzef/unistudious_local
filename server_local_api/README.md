@@ -20,6 +20,7 @@ A Flask-based REST API server for managing attendance, sessions, devices, and ph
 ## 🎯 Overview
 
 This server provides a comprehensive API for managing:
+
 - **Attendance tracking** with face recognition integration
 - **Session and calendar management**
 - **Device management** (tablets and cameras)
@@ -34,6 +35,7 @@ The server integrates with an external face detection system (`academie_attendan
 ## ✨ Features
 
 ### Core Features
+
 - 🔐 **JWT Authentication** - Secure token-based authentication for users and devices
 - 📊 **Attendance Management** - Mark, update, delete, and track attendance
 - 📅 **Calendar & Sessions** - Manage academic sessions and schedules
@@ -45,6 +47,7 @@ The server integrates with an external face detection system (`academie_attendan
 - 🔒 **SSL/HTTPS Support** - Secure communication
 
 ### Advanced Features
+
 - **Audit Trail** - Track all attendance modifications
 - **Group Assignment** - Automatic and manual group management
 - **Unknown Face Handling** - Identify and associate unknown faces
@@ -54,6 +57,7 @@ The server integrates with an external face detection system (`academie_attendan
 ---
 
 ## 📁 Project Structure
+
 ```
 server_local_api/
 │
@@ -123,12 +127,14 @@ server_local_api/
 - **SSL Certificates** (for HTTPS)
 
 ### Step 1: Clone Repository
+
 ```bash
 git clone <repository_url>
 cd server_local_api
 ```
 
 ### Step 2: Create Virtual Environment (Recommended)
+
 ```bash
 # Windows
 python -m venv venv
@@ -140,11 +146,13 @@ source venv/bin/activate
 ```
 
 ### Step 3: Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
 ### Dependencies Include:
+
 - `Flask==3.0.0` - Web framework
 - `PyJWT==2.8.0` - JWT authentication
 - `mysql-connector-python==8.2.0` - MySQL database driver
@@ -156,6 +164,7 @@ pip install -r requirements.txt
 ### Database Configuration
 
 Edit `config.py`:
+
 ```python
 class Config:
     # Database Configuration
@@ -166,15 +175,15 @@ class Config:
     DB_NAME = "testing"
     DB_CHARSET = "utf8mb4"
     DB_CONNECT_TIMEOUT = 10
-    
+
     # Security
     SECRET_KEY = "localhost123"  # Change in production!
-    
+
     # Server Configuration
     SERVER_HOST = '0.0.0.0'
     SERVER_PORT = 5004
     DEBUG = True
-    
+
     # SSL Configuration
     SSL_CERT = 'cert.pem'
     SSL_KEY = 'key.pem'
@@ -183,6 +192,7 @@ class Config:
 ### Database Setup
 
 1. Create database:
+
 ```sql
 CREATE DATABASE testing CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
@@ -195,11 +205,13 @@ CREATE DATABASE testing CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ## 🚀 Running the Server
 
 ### Development Mode
+
 ```bash
 python app.py
 ```
 
 The server will start on:
+
 ```
 https://0.0.0.0:5004
 ```
@@ -207,6 +219,7 @@ https://0.0.0.0:5004
 ### Production Mode
 
 For production, use a production WSGI server like **Gunicorn**:
+
 ```bash
 pip install gunicorn
 
@@ -230,21 +243,22 @@ All endpoints are prefixed with `/scl`.
 
 ### Quick Links
 
-| Module | Endpoints | Documentation |
-|--------|-----------|---------------|
-| **Authentication** | 2 endpoints | [auth/README.md](api/auth/README.md) |
-| **Attendance** | 14 endpoints | [attendance/README.md](api/attendance/README.md) |
-| **Calendar** | 7 endpoints | [calendar/README.md](api/calendar/README.md) |
-| **Devices** | 6 endpoints | [devices/README.md](api/devices/README.md) |
-| **Moderator** | 2 endpoints | [moderator/README.md](api/moderator/README.md) |
-| **Presence** | 6 endpoints | [presence/README.md](api/presence/README.md) |
-| **Sessions** | 1 endpoint | [sessions/README.md](api/sessions/README.md) |
-| **SLC (Infrastructure)** | 3 endpoints | [slc/README.md](api/slc/README.md) |
-| **Users** | 4 endpoints | [users/README.md](api/users/README.md) |
+| Module                   | Endpoints    | Documentation                                    |
+| ------------------------ | ------------ | ------------------------------------------------ |
+| **Authentication**       | 2 endpoints  | [auth/README.md](api/auth/README.md)             |
+| **Attendance**           | 14 endpoints | [attendance/README.md](api/attendance/README.md) |
+| **Calendar**             | 7 endpoints  | [calendar/README.md](api/calendar/README.md)     |
+| **Devices**              | 6 endpoints  | [devices/README.md](api/devices/README.md)       |
+| **Moderator**            | 2 endpoints  | [moderator/README.md](api/moderator/README.md)   |
+| **Presence**             | 6 endpoints  | [presence/README.md](api/presence/README.md)     |
+| **Sessions**             | 1 endpoint   | [sessions/README.md](api/sessions/README.md)     |
+| **SLC (Infrastructure)** | 3 endpoints  | [slc/README.md](api/slc/README.md)               |
+| **Users**                | 4 endpoints  | [users/README.md](api/users/README.md)           |
 
 ### Authentication Flow
 
 1. **Login:**
+
 ```bash
 POST /scl/login
 Body: {"username": "user", "password": "pass"}
@@ -252,6 +266,7 @@ Response: {"token": "eyJhbGc..."}
 ```
 
 2. **Use Token:**
+
 ```bash
 GET /scl/get-all-room
 Header: Authorization: Bearer eyJhbGc...
@@ -260,6 +275,7 @@ Header: Authorization: Bearer eyJhbGc...
 ### Example Requests
 
 **Get Today's Attendance:**
+
 ```bash
 curl -X GET https://localhost:5004/scl/get-attendance/1 \
   -H "Authorization: Bearer <token>" \
@@ -267,6 +283,7 @@ curl -X GET https://localhost:5004/scl/get-attendance/1 \
 ```
 
 **Mark Student Present:**
+
 ```bash
 curl -X POST https://localhost:5004/scl/attendance-save-user \
   -H "Authorization: Bearer <token>" \
@@ -287,6 +304,7 @@ curl -X POST https://localhost:5004/scl/attendance-save-user \
 - **Decorator Pattern** - JWT authentication middleware
 
 ### Database Architecture
+
 ```
 ┌─────────────┐
 │   Account   │
@@ -318,15 +336,18 @@ curl -X POST https://localhost:5004/scl/attendance-save-user \
 ## 🔐 Security
 
 ### Authentication
+
 - **JWT Tokens** - Stateless authentication
 - **Token Expiration** - Configurable (currently disabled for development)
 - **Role-based Access** - Moderator role verification
 
 ### SSL/TLS
+
 - HTTPS enforced with self-signed certificates (development)
 - Use valid certificates in production
 
 ### Best Practices
+
 - ✅ Password hashing (implement bcrypt/argon2)
 - ✅ SQL injection prevention (parameterized queries)
 - ✅ Input validation
@@ -338,15 +359,18 @@ curl -X POST https://localhost:5004/scl/attendance-save-user \
 ## 🛠️ Technologies
 
 ### Backend
+
 - **Flask 3.0.0** - Python web framework
 - **Python 3.13** - Programming language
 - **MySQL** - Relational database
 
 ### Authentication & Security
+
 - **PyJWT 2.8.0** - JSON Web Tokens
 - **SSL/TLS** - Encrypted communication
 
 ### External Integration
+
 - **academie_attendance_system** - Face detection system
   - Located at: `../academie_attendance_system/`
   - Dataset: `dataset/session_{id}/face_crops/`
@@ -398,11 +422,13 @@ curl -X POST https://localhost:5004/scl/attendance-save-user \
 ### Common Issues
 
 **1. SSL Certificate Error**
+
 ```
 Solution: Accept self-signed certificate or disable SSL verification in testing
 ```
 
 **2. Database Connection Failed**
+
 ```
 Check config.py database credentials
 Ensure MySQL is running
@@ -410,6 +436,7 @@ Verify database exists
 ```
 
 **3. Token is Invalid**
+
 ```
 Check SECRET_KEY matches between login and verification
 Ensure token is sent in Authorization header
@@ -417,12 +444,14 @@ Format: "Bearer <token>"
 ```
 
 **4. Module Not Found Error**
+
 ```
 Ensure all __init__.py files exist in api folders
 Clear __pycache__: rmdir /s /q __pycache__
 ```
 
 **5. Port Already in Use**
+
 ```
 Change SERVER_PORT in config.py
 Or kill process using port 5004
@@ -454,6 +483,7 @@ Or kill process using port 5004
 ## 🔄 Changelog
 
 ### Version 2.0.0 (2026-01-20)
+
 - ✅ Complete restructuring into modular architecture
 - ✅ Separated 40+ endpoints into 9 logical modules
 - ✅ Created centralized database management
@@ -463,6 +493,7 @@ Or kill process using port 5004
 - ✅ SSL/HTTPS support
 
 ### Version 1.0.0 (Previous)
+
 - Initial monolithic structure
 - Basic endpoints
 - Direct MySQL connections

@@ -13,9 +13,13 @@ Manages physical infrastructure including rooms, locals (buildings/locations), a
 ## Endpoints
 
 ### 1. Get All Rooms
+
 **GET** `/scl/get-all-room`
 
 Get a list of all rooms in the system.
 
 **Response (200):**
+
 ```json
+
+```

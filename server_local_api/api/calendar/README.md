@@ -7,11 +7,13 @@ Authentication required for all endpoints.
 ## Endpoints
 
 ### 1. Delete Calendar Interval
+
 **POST** `/scl/deleting_interval/<session_id>`
 
 Soft delete calendars within a time range.
 
 **Request Body:**
+
 ```json
 {
   "start_date": "2026-01-20 10:00:00",
@@ -20,6 +22,7 @@ Soft delete calendars within a time range.
 ```
 
 **Response (200):**
+
 ```json
 {
   "message": "success",
@@ -30,11 +33,13 @@ Soft delete calendars within a time range.
 ---
 
 ### 2. Get Calendar by ID
+
 **GET** `/scl/get_calander_id/<id_calender>`
 
 Get a specific calendar by ID.
 
 **Response (200):**
+
 ```json
 {
   "message": "Success",
@@ -50,11 +55,13 @@ Get a specific calendar by ID.
 ---
 
 ### 3. Get Group from Calendar
+
 **GET** `/scl/get-group-calender/<calendarId>`
 
 Get the group ID associated with a calendar.
 
 **Response (200):**
+
 ```json
 {
   "group_session_id": 5
@@ -64,11 +71,13 @@ Get the group ID associated with a calendar.
 ---
 
 ### 4. Get Next Session
+
 **GET** `/scl/get_next_session/<calendarId>`
 
 Get the next calendar session after the current one.
 
 **Response (200):**
+
 ```json
 {
   "data": {
@@ -81,11 +90,13 @@ Get the next calendar session after the current one.
 ---
 
 ### 5. Get All Today's Calendars
+
 **GET** `/scl/get-all-calender`
 
 Get all calendar sessions for today.
 
 **Response (200):**
+
 ```json
 {
   "data": [
@@ -104,11 +115,13 @@ Get all calendar sessions for today.
 ---
 
 ### 6. Get Account Data by Calendar
+
 **GET** `/scl/data_account/<id>`
 
 Get account information for a calendar.
 
 **Response (200):**
+
 ```json
 {
   "status": "ok",
@@ -119,11 +132,13 @@ Get account information for a calendar.
 ---
 
 ### 7. Get Calendar by Session and Account
+
 **GET** `/scl/get_calendar_session/<id_session>/<id_account>`
 
 Get calendars filtered by session and account.
 
 **Response (200):**
+
 ```json
 {
   "message": "Success",
@@ -131,15 +146,16 @@ Get calendars filtered by session and account.
 }
 ```
 
-
 ---
 
 ### 8. Create Calendar Entry
+
 **POST** `/scl/create_calender`
 
 Create a new calendar entry (session/class) with conflict validation.
 
 **Request Body:**
+
 ```json
 {
   "session_id": 1,
@@ -158,6 +174,7 @@ Create a new calendar entry (session/class) with conflict validation.
 ```
 
 **Required Fields:**
+
 - `session_id` (int): Session ID
 - `account_id` (int): Account ID
 - `local_id` (int): Local/building ID
@@ -172,6 +189,7 @@ Create a new calendar entry (session/class) with conflict validation.
 - `type` (string): Session type (e.g., "lecture", "lab", "seminar")
 
 **Process:**
+
 1. Validates all required fields are present and non-empty
 2. Checks for **room conflicts** - ensures room is not double-booked
 3. Checks for **group conflicts** - ensures group doesn't have overlapping sessions
@@ -183,18 +201,22 @@ Create a new calendar entry (session/class) with conflict validation.
 **Conflict Checks:**
 
 **Room Conflict:**
+
 - Same room on the same date with overlapping time slots
 - Status code: 402
 
 **Group Conflict:**
+
 - Same group on the same date with overlapping time slots
 - Status code: 402
 
 **Teacher Conflict:**
+
 - Same teacher on the same date with overlapping time slots
 - Status code: 402
 
 **Response (201) - Success:**
+
 ```json
 {
   "Message": "Calendar entry created successfully",
@@ -205,6 +227,7 @@ Create a new calendar entry (session/class) with conflict validation.
 ```
 
 **Response (400) - Missing Fields:**
+
 ```json
 {
   "Message": "Missing required fields",
@@ -213,6 +236,7 @@ Create a new calendar entry (session/class) with conflict validation.
 ```
 
 **Response (400) - Empty Fields:**
+
 ```json
 {
   "Message": "Fields cannot be empty",
@@ -221,6 +245,7 @@ Create a new calendar entry (session/class) with conflict validation.
 ```
 
 **Response (402) - Room Conflict:**
+
 ```json
 {
   "Message": "Room already reserved!",
@@ -229,6 +254,7 @@ Create a new calendar entry (session/class) with conflict validation.
 ```
 
 **Response (402) - Group Conflict:**
+
 ```json
 {
   "Message": "Group not available in this time",
@@ -237,6 +263,7 @@ Create a new calendar entry (session/class) with conflict validation.
 ```
 
 **Response (402) - Teacher Conflict:**
+
 ```json
 {
   "Message": "Teacher not available in this time",
@@ -245,6 +272,7 @@ Create a new calendar entry (session/class) with conflict validation.
 ```
 
 **Response (402) - Color Generation Failed:**
+
 ```json
 {
   "Message": "Could not find unique color",
@@ -253,6 +281,7 @@ Create a new calendar entry (session/class) with conflict validation.
 ```
 
 **Response (500) - Server Error:**
+
 ```json
 {
   "Message": "Internal Server Error",
@@ -261,6 +290,7 @@ Create a new calendar entry (session/class) with conflict validation.
 ```
 
 **Field Descriptions:**
+
 - `calander_id`: Newly created calendar entry ID
 - `ref`: Auto-generated reference string (format: `group-{group_id}{session_id}{local_id}{account_id}-{random_3_digits}`)
 - `color`: Randomly generated hex color for calendar display (ensured unique)
@@ -271,6 +301,7 @@ Create a new calendar entry (session/class) with conflict validation.
 - `slc_use`: Always set to 1
 
 **Auto-Generated Fields:**
+
 - `color`: Random hex color (#000000 - #FFFFFF), guaranteed unique
 - `ref`: Unique reference identifier
 - `created_at`: Current timestamp
@@ -282,17 +313,20 @@ Create a new calendar entry (session/class) with conflict validation.
 
 **Time Overlap Detection:**
 The system checks if a new session overlaps with existing sessions by verifying:
+
 - Same date (based on `start_time`)
 - New session starts before existing session ends (`start_time < existing.end_time`)
 - New session ends after existing session starts (`end_time > existing.start_time`)
 
 **Color Uniqueness:**
+
 - Generates random hex color
 - Checks if color is already in use
 - Retries up to 50 times
 - Fails if no unique color found after 50 attempts
 
 **Notes:**
+
 - All datetime fields must use format: `YYYY-MM-DD HH:MM:SS`
 - Conflict checks only apply to **enabled** calendar entries (`enabled = 1`)
 - Conflicts are checked for the **same day only** (not across different days)
@@ -302,6 +336,7 @@ The system checks if a new session overlaps with existing sessions by verifying:
 **Example Use Cases:**
 
 **Scenario 1: Create Morning Lecture**
+
 ```json
 {
   "session_id": 2,
@@ -320,6 +355,7 @@ The system checks if a new session overlaps with existing sessions by verifying:
 ```
 
 **Scenario 2: Create Afternoon Lab**
+
 ```json
 {
   "session_id": 3,
