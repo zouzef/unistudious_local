@@ -45,7 +45,7 @@ class DataFetcher:
 
             if since_date:
                 # Adjust date by subtracting 1 hour (as in original code)
-                adjusted_date = since_date - timedelta(hours=1)
+                adjusted_date = since_date
                 date_str = adjusted_date.strftime("%Y-%m-%d %H:%M")
                 payload['date'] = date_str
                 print(f"📅 Fetching changes since: {date_str}")

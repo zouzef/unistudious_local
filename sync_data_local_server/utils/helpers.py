@@ -4,7 +4,7 @@ Handles sync status file management
 """
 import json
 import os
-from datetime import datetime
+from datetime import datetime,timedelta
 
 
 # File path for sync status
@@ -155,7 +155,7 @@ def save_last_sync_time(sync_time):
         # Prepare sync data
         sync_data = {
             'last_sync_time': sync_time.isoformat(),
-            'updated_at': datetime.now().isoformat()
+            'updated_at': (datetime.now() - timedelta(hours=1)).isoformat()
         }
 
         # Write to file
