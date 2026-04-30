@@ -9,6 +9,7 @@ from config import Config
 from core.database import Database
 from core.middleware import token_required
 import uuid
+import json
 # Create blueprint
 sessions_bp = Blueprint('sessions', __name__, url_prefix='/scl')
 
@@ -212,7 +213,6 @@ def create_session():
             'capacity',
             'typePay',
             'paymentMethode',
-
             'userRegisterAfterStart',
             'startDate',
             'endDate',
@@ -236,12 +236,12 @@ def create_session():
                 payment_methode, price, price_presence, price_online,
                 currency, user_register_after_start, start_date, end_date,
                 request_change_group, max_group_change, special_group,
-                public_resource, description, img_link,uuid
+                public_resource, description, img_link, uuid
             )
             VALUES(
                 %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                 'TND',
-                %s, %s, %s, %s, %s, %s, %s, %s, %s,%s
+                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
             );
         """
 
@@ -269,8 +269,54 @@ def create_session():
             new_uuid
         )
 
-        result = Database.execute_query(query, values,fetch=False)      # ← execute the query
-        print("resultat:",result)
+        result = Database.execute_query(query, values, fetch=False)
+        print("resultat:", result)
+
+        # 1️⃣ Get the new session's ID (last inserted row)
+
+        # 2️⃣ Build new_data snapshot
+        new_data = {
+            "account_id": data.get('account_id'),
+            "name": data.get('name'),
+            "formation_id": data.get('formation'),
+            "capacity": data.get('capacity'),
+            "type_pay": data.get('typePay'),
+            "number_session_for_pay": data.get('numberSessionForPay') or None,
+            "price_student_absent": data.get('priceStudentAbsent') or None,
+            "payment_methode": data.get('paymentMethode'),
+            "price": data.get('price') or None,
+            "price_presence": data.get('pricePresence') or None,
+            "price_online": data.get('priceOnline') or None,
+            "currency": "TND",
+            "user_register_after_start": data.get('userRegisterAfterStart'),
+            "start_date": data.get('startDate'),
+            "end_date": data.get('endDate'),
+            "request_change_group": data.get('requestChangeGroup'),
+            "max_group_change": data.get('maxGroupChange') or None,
+            "special_group": data.get('specialGroup') or None,
+            "public_resource": data.get('publicResource') or None,
+            "description": data.get('description'),
+            "img_link": data.get('logoFile'),
+            "uuid": new_uuid,
+        }
+
+        # 3️⃣ Insert audit record — old_data is NULL since this is a fresh insert
+        audit_query = """
+            INSERT INTO session_audit
+                (action_type, old_data, new_data, changed_at, is_synced, id_session)
+            VALUES
+                (%s, %s, %s, NOW(), %s, %s)
+        """
+
+        audit_values = (
+            'INSERT',
+            None,                                   # ← no old_data for a new record
+            json.dumps(new_data, default=str),
+            0,                                      # is_synced = false by default
+            result                          # id_prod = the newly created session
+        )
+
+        Database.execute_query(audit_query, audit_values, fetch=False)
 
         return jsonify({"Message": "Session created with success"}), 200
 
@@ -305,7 +351,6 @@ def get_session_info(session_id):
         }), 500
 
 
-#ENDPOINT 5: Update session
 @sessions_bp.route('/update_session/<int:session_id>', methods=['POST'])
 def update_session(session_id):
     try:
@@ -315,7 +360,17 @@ def update_session(session_id):
 
         print(f"📋 Updating session {session_id} with: {data}")
 
-        query = """
+        # 1️⃣ Fetch old data before updating
+        fetch_query = "SELECT * FROM session WHERE id = %s AND enabled = 1"
+        old_records = Database.execute_query(fetch_query, (session_id,), fetch=True)
+
+        if not old_records:
+            return jsonify({"Message": "Session not found"}), 404
+
+        old_data = old_records[0]  # assuming it returns a list of dicts
+
+        # 2️⃣ Update the session
+        update_query = """
             UPDATE session
             SET
                 name                      = %s,
@@ -366,7 +421,49 @@ def update_session(session_id):
             session_id
         )
 
-        Database.execute_query(query, values, fetch=False)
+        Database.execute_query(update_query, values, fetch=False)
+
+        # 3️⃣ Build new_data snapshot from the incoming request
+        new_data = {
+            "name": data.get('name'),
+            "formation_id": data.get('formation') or None,
+            "capacity": data.get('capacity'),
+            "type_pay": data.get('typePay'),
+            "number_session_for_pay": data.get('numberSessionForPay') or None,
+            "price_student_absent": data.get('priceStudentAbsent') or None,
+            "payment_methode": data.get('paymentMethode') or None,
+            "price": data.get('price') or None,
+            "price_presence": data.get('pricePresence') or None,
+            "price_online": data.get('priceOnline') or None,
+            "currency": data.get('currency') or None,
+            "user_register_after_start": data.get('userRegisterAfterStart'),
+            "start_date": data.get('startDate'),
+            "end_date": data.get('endDate'),
+            "request_change_group": data.get('requestChangeGroup') or None,
+            "max_group_change": data.get('maxGroupChange') or None,
+            "special_group": data.get('specialGroup') or None,
+            "public_resource": data.get('publicResource') or None,
+            "description": data.get('description'),
+            "season_id": data.get('season') or None,
+        }
+
+        # 4️⃣ Insert audit record
+        audit_query = """
+            INSERT INTO session_audit
+                (action_type, old_data, new_data, changed_at, is_synced, id_session)
+            VALUES
+                (%s, %s, %s, NOW(), %s, %s)
+        """
+
+        audit_values = (
+            'UPDATE',
+            json.dumps(old_data, default=str),   # serialize to JSON string
+            json.dumps(new_data, default=str),
+            0,           # is_synced = false by default
+            session_id   # id_prod = the session being modified
+        )
+
+        Database.execute_query(audit_query, audit_values, fetch=False)
 
         return jsonify({
             "Message": "Session updated with success",
@@ -453,10 +550,13 @@ def get_all_group_session(session_id):
 def get_user_session_info(session_id):
     try:
         query = """
-            SELECT DISTINCT rus.*,u.username
-            FROM relation_user_session rus,user u
-            WHERE rus.enabled = 1 AND rus.session_id = %s AND rus.user_id = u.id
-        
+            SELECT rus.*, u.username
+            FROM relation_user_session rus
+            JOIN user u ON rus.user_id = u.id
+            WHERE rus.enabled = 1 
+            AND rus.session_id = %s
+            GROUP BY rus.user_id
+            ORDER BY u.username ASC
         """
         values = (session_id,)
         result = Database.execute_query(query,values,fetch=True)

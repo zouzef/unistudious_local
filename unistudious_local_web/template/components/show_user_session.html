@@ -19,113 +19,188 @@
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive basic-tbl">
-                        <div id="example_wrapper" class="dataTables_wrapper no-footer">
-                            <table id="example" class="display dataTable no-footer"
-                                   style="min-width: 845px; width: 1023px;">
-                                <thead>
+                        <table id="example" class="display dataTable no-footer"
+                               style="min-width: 845px; width: 1023px;">
+                            <thead>
                                 <tr>
-                                    <th class="sorting sorting_desc" style="width: 194.6px;">Name</th>
-                                    <th class="sorting" style="width: 252.6px;">Group</th>
-                                    <th class="sorting" style="width: 316.6px;">Completions Tag</th>
-                                    <th class="sorting" style="width: 93.6px;">Action</th>
+                                    <th>Name</th>
+                                    <th>Group</th>
+                                    <th>Completions Tag</th>
+                                    <th>Action</th>
                                 </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- dynamic data -->
-                                </tbody>
-                                <script>
-                                    // Add this script to load data dynamically
-                                    function loadUserSessionData(sessionId) {
-                                        fetch(`/api/get_user_session_info/${sessionId}`)
-                                            .then(response => response.json())
-                                            .then(result => {
-                                                const tbody = document.querySelector('#example tbody');
-                                                tbody.innerHTML = '';
-
-                                                if (!result.Data || result.Data.length === 0) {
-                                                    tbody.innerHTML = `
-                                                        <tr>
-                                                            <td colspan="4" class="text-center">No data available</td>
-                                                        </tr>`;
-                                                    return;
-                                                }
-
-                                                result.Data.forEach(user => {
-                                                    const row = `
-                                                    <tr data-user-id="${user.user_id}">
-                                                        <td class="virtual-user-name sorting_1">
-                                                            ${user.username}
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <a class="edit-group-action btn btn-sm btn-outline-success me-2"
-                                                                   data-toggle="modal"
-                                                                   data-target="#actionGroupModal"
-                                                                   data-user-id="${user.user_id}"
-                                                                   data-session-id="${user.session_id}">
-                                                                    <i class="fas fa-pencil-alt"></i> Edit
-                                                                </a>
-                                                                <div>
-                                                                    ${user.relation_group_local_session_id ?? 'N/A'}
-                                                                </div>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <a class="edit-completion-tag-action btn btn-sm btn-outline-success me-2"
-                                                                   data-toggle="modal"
-                                                                   data-target="#actionCompletionTagModal"
-                                                                   data-user-id="${user.user_id}"
-                                                                   data-session-id="${user.session_id}">
-                                                                    <i class="fas fa-pencil-alt"></i> Edit
-                                                                </a>
-                                                                <div>N/A</div>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="icon-box icon-box-sm bg-light me-2">
-                                                                    <a class="delete-relation-user-session"
-                                                                       data-user-id="${user.user_id}"
-                                                                       data-session-id="${user.session_id}">
-                                                                        <i class="material-icons" style="font-size:10px;color:red">delete</i>
-                                                                    </a>
-                                                                </div>
-                                                                <div class="icon-box icon-box-sm bg-light">
-                                                                    <a class="edit-virtual-user-session"
-                                                                       data-toggle="modal"
-                                                                       data-target="#editVirtualUserSessionModal"
-                                                                       data-user-id="${user.user_id}"
-                                                                       data-session-id="${user.session_id}"
-                                                                       data-user-name="User #${user.user_id}"
-                                                                       data-user-phone=""
-                                                                       data-user-email=""
-                                                                       data-extra-data-json="null">
-                                                                        <i class="fas fa-pencil-alt" style="font-size:10px;color:green"></i>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>`;
-                                                    tbody.innerHTML += row;
-                                                });
-                                            })
-                                            .catch(error => {
-                                                console.error('Error loading session data:', error);
-                                            });
-                                    }
-
-                                    // Call it with your session ID
-                                    loadUserSessionData(12);
-                                </script>
-                            </table>
-                        </div>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="actionGroupModal" tabindex="-1" aria-labelledby="actionGroupModalLabel" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="actionGroupModalLabel">Edit Groups</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="actionSelect">Choose an Action</label>
+                    <select class="form-control" id="actionSelect">
+                        <option value="" disabled selected>Please Select One Action</option>
+                        <option value="join">Join New Group</option>
+                        <option value="change">Change Group</option>
+                        <option value="remove">Remove from Group</option>
+                    </select>
+                </div>
+                <div class="form-group mt-3" id="dynamicGroupSelect" style="display: none;">
+                    <label for="groupUserSelect">Select a Group to Join</label>
+                    <select class="form-control" id="groupUserSelect">
+                        <option value="" disabled selected>Loading groups...</option>
+                    </select>
+                </div>
+                <div class="form-group mt-3" id="currentGroupContainer" style="display: none;">
+                    <label for="currentGroupSelect">Current Group</label>
+                    <select class="form-control" id="currentGroupSelect">
+                        <option value="">Select Current Group</option>
+                    </select>
+                </div>
+                <div class="form-group mt-3" id="preferredGroupWrapper" style="display: none;">
+                    <label for="preferredGroupSelect">Select Preferred Group</label>
+                    <select class="form-control" id="preferredGroupSelect">
+                        <option value="">Please select a preferred group</option>
+                    </select>
+                </div>
+                <div class="form-group mt-3" id="currentGroupRemoveWrapper" style="display: none;">
+                    <label for="currentGroupRemoveSelect">Select Group to Remove</label>
+                    <select class="form-control" id="currentGroupRemoveSelect">
+                        <option value="">Please select a group to remove</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmActionButton">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ✅ JQUERY FIRST -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- ✅ DATATABLES SECOND -->
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+<!-- ✅ SAVE OUR JQUERY BEFORE ANYTHING OVERWRITES IT -->
+<script>
+// Save our jQuery with DataTables attached
+var dt$ = jQuery.noConflict(true);
+console.log('✅ Saved jQuery with DataTables:', typeof dt$.fn.DataTable);
+</script>
+
+<script>
+// Use our saved jQuery (dt$) instead of $
+(function($) {
+    $(document).ready(function() {
+        console.log('✅ Ready! DataTable available:', typeof $.fn.DataTable);
+
+        const SESSION_ID = {{ id_session }};
+        let dataTable = null;
+
+        function loadUserSessionData(sessionId) {
+            fetch(`/api/get_user_session_info/${sessionId}`)
+                .then(response => response.json())
+                .then(result => {
+                    if (dataTable) {
+                        dataTable.destroy();
+                        dataTable = null;
+                    }
+
+                    const tbody = document.querySelector('#example tbody');
+                    tbody.innerHTML = '';
+
+                    if (!result.Data || result.Data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="4" class="text-center">No data available</td></tr>';
+                        dataTable = $('#example').DataTable({
+                            paging: true,
+                            pageLength: 10,
+                            searching: false,
+                            lengthChange: false,
+                            language: {
+                                emptyTable: "No data available",
+                                paginate: {
+                                    next: '<i class="fa-solid fa-angle-right"></i>',
+                                    previous: '<i class="fa-solid fa-angle-left"></i>'
+                                }
+                            }
+                        });
+                        return;
+                    }
+
+                    result.Data.forEach(function(user) {
+                        var row = document.createElement('tr');
+                        row.innerHTML = '<td>' + user.username + '</td>' +
+                            '<td><div class="d-flex align-items-center">' +
+                            '<a class="edit-group-action btn btn-sm btn-outline-success me-2" data-bs-toggle="modal" data-bs-target="#actionGroupModal" data-user-id="' + user.user_id + '" data-session-id="' + user.session_id + '" style="cursor:pointer">' +
+                            '<i class="fas fa-pencil-alt"></i> Edit</a>' +
+                            '<div>' + (user.relation_group_local_session_id || 'N/A') + '</div></div></td>' +
+                            '<td><div class="d-flex align-items-center">' +
+                            '<a class="edit-completion-tag-action btn btn-sm btn-outline-success me-2" data-bs-toggle="modal" data-bs-target="#actionCompletionTagModal" data-user-id="' + user.user_id + '" data-session-id="' + user.session_id + '" style="cursor:pointer">' +
+                            '<i class="fas fa-pencil-alt"></i> Edit</a><div>N/A</div></div></td>' +
+                            '<td><div class="d-flex align-items-center">' +
+                            '<div class="icon-box icon-box-sm bg-light me-2">' +
+                            '<a class="delete-relation-user-session" style="cursor:pointer" data-user-id="' + user.user_id + '" data-session-id="' + user.session_id + '">' +
+                            '<i class="material-icons" style="font-size:10px;color:red">delete</i></a></div>' +
+                            '<div class="icon-box icon-box-sm bg-light">' +
+                            '<a class="edit-virtual-user-session" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#editVirtualUserSessionModal" data-user-id="' + user.user_id + '" data-session-id="' + user.session_id + '">' +
+                            '<i class="fas fa-pencil-alt" style="font-size:10px;color:green"></i></a></div></div></td>';
+                        tbody.appendChild(row);
+                    });
+
+                    dataTable = $('#example').DataTable({
+                        createdRow: function(row) {
+                            $(row).addClass('selected');
+                        },
+                        searching: false,
+                        pageLength: 10,
+                        select: false,
+                        lengthChange: false,
+                        language: {
+                            paginate: {
+                                next: '<i class="fa-solid fa-angle-right"></i>',
+                                previous: '<i class="fa-solid fa-angle-left"></i>'
+                            }
+                        }
+                    });
+                    console.log('✅ Done!');
+                })
+                .catch(function(error) {
+                    console.error('Error:', error);
+                });
+        }
+
+        $('#actionSelect').on('change', function() {
+            var val = $(this).val();
+            $('#dynamicGroupSelect').toggle(val === 'join');
+            $('#currentGroupContainer').toggle(val === 'change');
+            $('#preferredGroupWrapper').toggle(val === 'change');
+            $('#currentGroupRemoveWrapper').toggle(val === 'remove');
+        });
+
+        $('#actionGroupModal').on('show.bs.modal', function(e) {
+            var trigger = e.relatedTarget;
+            if (!trigger) return;
+            $(this).data('userId', $(trigger).data('user-id'));
+            $(this).data('sessionId', $(trigger).data('session-id'));
+        });
+
+        if (SESSION_ID) {
+            loadUserSessionData(SESSION_ID);
+        }
+    });
+})(dt$); // ✅ Use our saved jQuery
+</script>
