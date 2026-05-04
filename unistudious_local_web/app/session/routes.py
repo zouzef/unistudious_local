@@ -13,7 +13,8 @@ from app.session.service import (
     delete_session_service,
     get_all_group_session_service,
     get_all_user_service,
-    get_user_info_session_service
+    get_user_info_session_service,
+    delete_user_session_service
 
 )
 
@@ -68,7 +69,6 @@ def create_session():
 @session_bp.route('/dashboard/view-session/<int:session_id>', methods=['GET'])
 def view_session(session_id):
     """Update session page"""
-    print(f"\n \n \n \n \n \n \n \n {session_id} \n \n")
     if 'moderator_id' not in session:
         return redirect(url_for('auth.login_page'))
     account_id = session.get('account_id', 3)
@@ -107,6 +107,7 @@ def show_user_session(id_session):
                            id_session=id_session,
                            account_id=session.get('account_id'),
                            page='show_user_session')
+
 
 # ==========================================
 # API ROUTES
@@ -296,4 +297,29 @@ def get_user_session_info(session_id):
     except Exception as e:
         return jsonify({
             "Message":f"Error: {e} coming from server "
+        }),500
+
+
+@session_bp.route('/api/delete_user_session/<int:user_id>/<int:session_id>', methods=['POST'])
+def delete_user_session(user_id, session_id):
+    try:
+        result,data= delete_user_session_service(session_id,user_id)
+        if result:
+            return jsonify({
+                "Message":"Relation_user_session deleted with success"
+            }),200
+        else:
+            if not(data):
+                return jsonify({
+                    "Message":"Error coming from server"
+                }),500
+            else:
+                return jsonify({
+                    "Message":data.get('Message')
+                }),400
+
+
+    except Exception as e:
+        return jsonify({
+            "Message":"Error coming from the server"
         }),500

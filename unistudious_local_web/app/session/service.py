@@ -184,3 +184,15 @@ def get_user_info_session_service(session_id):
     except Exception as e:
         print(f"Error:{e} coming from get_user_info_session")
         return False,None
+
+
+def delete_user_session_service(session_id,user_id):
+    url = f"{current_app.config['BASE_URL']}delete_relation_user_session/{user_id}/{session_id}"
+    try:
+        response = requests.post(url,verify=False,timeout=10)
+        if response.status_code == 200:
+            return True,response.json()
+        else:
+            return False,response.json()
+    except Exception as e:
+        return False,None

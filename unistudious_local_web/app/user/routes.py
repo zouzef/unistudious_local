@@ -9,7 +9,8 @@ from app.user.service import (
     update_user,
     delete_user,
     update_virtual_user,
-    delete_virtual_user
+    delete_virtual_user,
+    get_manager_info_service
 )
 
 user_bp = Blueprint('user', __name__)
@@ -40,6 +41,16 @@ def show_platform_student():
     account_id = session.get('account_id')
     return render_template('index.html',
                            page='platform_student',
+                           account_id=account_id)
+
+
+@user_bp.route('/dashboard/show-manager')
+def show_manager_user():
+    if 'moderator_id' not in session:
+        return redirect(url_for('auth.login_page'))
+    account_id = session.get('account_id')
+    return render_template('index.html',
+                           page='show_manager',
                            account_id=account_id)
 
 
@@ -116,3 +127,14 @@ def api_delete_virtual_user(user_id):
     if success:
         return jsonify({"Message": message}), 200
     return jsonify({"Message": message}), 404
+
+
+@user_bp.route('/api/get-manager-info',methods=['GET'])
+def get_manager_info():
+    try:
+        status,response = get_manager_info_service()
+
+    except Exception as e:
+        return jsonify({
+            "Message":"Error coming from server"
+        }),200

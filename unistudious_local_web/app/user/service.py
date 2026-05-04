@@ -81,3 +81,16 @@ def delete_virtual_user(user_id: int) -> tuple:
     except Exception as e:
         print(f"[USER ERROR] delete_virtual_user: {e}")
         return False, "Connection error"
+
+
+def get_manager_info_service():
+    url=f"{current_app.config['BASE_URL']}/get-manager-info"
+    try:
+        response=requests.get(url,verify=False)
+        if response.staus_code==200:
+            return True,response.json()
+        else:
+            return False,response.json()
+    except Exception as e:
+        print(e)
+        return False,None

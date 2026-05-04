@@ -553,7 +553,7 @@ def get_user_session_info(session_id):
             SELECT rus.*, u.username
             FROM relation_user_session rus
             JOIN user u ON rus.user_id = u.id
-            WHERE rus.enabled = 1 
+            WHERE rus.enabled = 1 AND u.enabled = 1
             AND rus.session_id = %s
             GROUP BY rus.user_id
             ORDER BY u.username ASC
@@ -573,4 +573,48 @@ def get_user_session_info(session_id):
         print(f"Error: {e} coming from get user_session_info")
         return jsonify({
             "Message":f"Error: {e} coming from get_user_session_info"
+        }),500
+
+
+#ENDPOINT 10: DELETE relatioon_user_session
+@sessions_bp.route('/delete_relation_user_session/<int:user_id>/<int:session_id>',methods=['POST'])
+def delete_relation_user_session(user_id,session_id):
+    try:
+
+        query = """
+                SELECT id
+                FROM relation_user_session 
+                WHERE session_id = %s AND user_id = %s AND enabled = 1
+        """
+
+
+        values = (session_id,user_id)
+        result = Database.execute_query(query,values,fetch=True)
+        if not(result):
+            return jsonify({
+                "Message":"Error: There is no Relation between user and session "
+            }),404
+
+        query = """
+            UPDATE relation_user_session
+            SET enabled = 0
+            WHERE user_id = %s AND session_id = %s AND enabled = 1
+        
+        """
+        values =(user_id,session_id)
+
+        result2 = Database.execute_query(query,values,fetch=False)
+        if result2:
+            return jsonify({
+                "Message":"Relation_user_session deleted with success"
+            }),200
+        else:
+            return jsonify({
+                "Message":"Error in deleting Relation_user_session"
+            }),400
+
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error coming from server: {e}"
         }),500

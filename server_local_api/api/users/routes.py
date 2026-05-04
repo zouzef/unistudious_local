@@ -8,6 +8,8 @@ import bcrypt
 import mysql.connector
 from flask import Blueprint, request,jsonify
 
+# from server_local_api.api.calendar.test import result
+
 # Add parent directories to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from config import Config
@@ -744,3 +746,32 @@ def authentification_teacher():
             "Message": "Error coming from server",
             "Error": str(e)
         }), 500
+
+
+# =============================================
+# ENDPOINT 11: GET Manager info
+# =============================================
+@users_bp.route('/get-manager-info',methods=['GET'])
+def get_manager_info():
+	try:
+		query = """
+			SELECT
+			 	username,roles,email,full_name,phone,address
+			 FROM user 
+			WHERE roles LIKE '%ROLE_MANAGER_ADMINISTRATIVE%';
+		"""
+		result= Database.execute_query(query,fetch=True)
+		if result:
+			return jsonify({
+				"Data": result
+			}), 200
+		else:
+			return jsonify({
+				"Message":"There is no role manager"
+			}),404
+
+	except Exception as e:
+		print(f"Error: {e} coming from server")
+		return jsonify({
+			"Message":f"Error: {e} coming from server"
+		}),500

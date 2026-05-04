@@ -176,10 +176,16 @@
 {% elif page == 'platform_student'%}
 {% include 'components/platform_student.html'%}
         <!-- End Platform student part -->
+
 {% elif page == 'view_session'%}
 {% include 'components/view_session.html' %}
 
         <!-- Edit session-->
+
+        <!-- BEGIN show manager part-->
+{% elif page == 'show_manager'%}
+{% include 'components/show_manager.html'%}
+        <!-- END show manager part-->
 {% endif %}
 
 </div>
