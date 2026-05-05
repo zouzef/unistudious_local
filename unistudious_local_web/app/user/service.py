@@ -31,9 +31,9 @@ def get_profile_image(user_id: int):
 #================================ BEGIN CRUD User  ====================
 def create_user_service(data: dict) -> tuple:
     """ Insert user data"""
-    url = f"{current_app.config['BASE_URL']}insert_user"
+    url = f"{current_app.config['BASE_URL']}create_user"
     try:
-        response = requests.post(url,data=data,verify=False,timeout=10)
+        response = requests.post(url,json=data,verify=False,timeout=10)
         if response.status_code == 200:
             return True,response.json()
         else:

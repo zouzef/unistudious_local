@@ -101,24 +101,43 @@
     </div>
 </div>
 <script>
-document.getElementById('manager-form').addEventListener('submit', function (e) {
+document.getElementById('manager-form').addEventListener('submit', async function (e) {
     e.preventDefault();
 
     // ── Collect form data ─────────────────────────────────────
     const formData = {
-        username:  document.getElementById('manager_username').value,
-        full_name: document.getElementById('manager_fullName').value,
-        email:     document.getElementById('manager_email').value,
-        phone:     document.getElementById('manager_phone').value,
-        address:   document.getElementById('manager_Address').value,
-        roles:     document.getElementById('roless').value,
-        password:  document.getElementById('manager_password_first').value,
+        username:         document.getElementById('manager_username').value,
+        full_name:        document.getElementById('manager_fullName').value,
+        email:            document.getElementById('manager_email').value,
+        phone:            document.getElementById('manager_phone').value,
+        address:          document.getElementById('manager_Address').value,
+        roles:            JSON.stringify([document.getElementById('roless').value]), // ✅ wrap in array
+        password:         document.getElementById('manager_password_first').value,
         password_confirm: document.getElementById('manager_password_second').value,
-        image:     document.getElementById('manager_imgFile').files[0]?.name || 'No image selected'
+        image:            document.getElementById('manager_imgFile').files[0]?.name || 'No image selected'
     };
 
-    // ── Display in console ────────────────────────────────────
-    console.log('📋 Form Data:', formData);
-    console.table(formData);
+    // ── Send to endpoint ──────────────────────────────────────
+    try {
+        const response = await fetch('/api/create-user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+        console.log('✅ Response:', result);
+
+        if (response.ok) {
+            alert('User created successfully!');
+        } else {
+            alert('Error: ' + result.Message);
+        }
+
+    } catch (error) {
+        console.error('❌ Request failed:', error);
+    }
 });
 </script>

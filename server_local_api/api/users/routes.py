@@ -33,9 +33,6 @@ users_bp = Blueprint('users', __name__, url_prefix='/scl')
 # @token_required
 def get_group(account_id, session_id):
 	try:
-		print("Account_id:", account_id)
-		print("Session_id:", session_id)
-
 		# Get groups with students in one query
 		query = """
                     SELECT 
@@ -818,3 +815,57 @@ def get_user_info(user_id):
 		return jsonify({
 			"Message":f"Error: {e} coming from server"
 		}),500
+
+
+# =============================================
+# ENDPOINT 13: CREATE user
+# =============================================
+@users_bp.route('/create_user', methods=['POST'])
+def create_user():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({
+                "Message": "There is no data to create user"
+            }), 400
+
+        valid_columns = {
+            "account_id", "username", "email", "full_name", "roles",
+            "img_link", "reset_token", "status", "created_by", "password",
+            "birth_date", "birth_place", "phone", "address", "grand",
+            "access_type", "access_type_date", "enabled", "updated_at",
+            "uuid", "facebook_id", "google_id", "mastodon_access_token",
+            "general_notification", "message_notification", "calendar_notification",
+            "push_notification", "sms_notification", "login_notification",
+            "horsline", "ref_slc", "apple_id", "open_source_user_name",
+            "rocket_chat_user_id", "fcm_web", "fcm_android", "fcm_ios",
+            "releaseToken", "useToken", "slc_use", "isvirtual", "slc_edit", "id_user"
+        }
+
+        filtered_data = {k: v for k, v in data.items() if k in valid_columns}
+
+        if not filtered_data:
+            return jsonify({
+                "Message": "No valid fields provided to create user"
+            }), 400
+
+        columns = ", ".join(filtered_data.keys())
+        placeholders = ", ".join(["%s"] * len(filtered_data))
+        values = list(filtered_data.values())
+
+        query = f"INSERT INTO user ({columns}) VALUES ({placeholders})"
+
+        result = Database.execute_query(query, values, fetch=False)
+        if result:
+            return jsonify({
+                "Message": "User created successfully"
+            }), 200
+
+        return jsonify({
+            "Message": "User not created"
+        }), 400
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500

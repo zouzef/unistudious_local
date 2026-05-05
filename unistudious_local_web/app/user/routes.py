@@ -58,25 +58,31 @@ def api_get_profile_image(user_id):
 
 
 #  ================================= BEGIN CRUD API USER =================================
-@user_bp.route('/api/create-user',methods=['POST'])
+@user_bp.route('/api/create-user', methods=['POST'])
 def create_user():
     try:
-        data = request.get_json
+        data = request.get_json()
         if not data:
             return jsonify({
-                "Message":"No data to create user"
-            }),400
+                "Message": "No data to create user"
+            }), 400
+
+        status, response = create_user_service(data)
+
+        if status:
+            return jsonify({
+                "Message": "User created with success"
+            }), 200
         else:
-            status,response= create_user_service(data)
-            if status:
-                return jsonify({
-                    "Message":"user created with success"
-                })
+            return jsonify({
+                "Message": "User not created",
+                "Details": response
+            }), 400
 
     except Exception as e:
         return jsonify({
-            "Message":f"Error: {e} coming from backend"
-        })
+            "Message": f"Error: {e} coming from backend"
+        }), 500
 
 
 @user_bp.route('/api/update-user/<int:user_id>', methods=['POST'])
