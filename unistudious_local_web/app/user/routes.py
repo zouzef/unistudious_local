@@ -1,4 +1,6 @@
 # app/user/routes.py
+from http.client import responses
+
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for, send_file, current_app
 import io
 import os
@@ -10,48 +12,12 @@ from app.user.service import (
     delete_user,
     update_virtual_user,
     delete_virtual_user,
-    get_manager_info_service
+    get_manager_info_service,
+    get_user_info_service,
+    create_user_service
 )
 
 user_bp = Blueprint('user', __name__)
-
-
-# ==========================================
-# PAGE ROUTES
-# ==========================================
-
-@user_bp.route('/dashboard/my-student')
-def show_my_student():
-    """Show my student page"""
-    if 'moderator_id' not in session:
-        return redirect(url_for('auth.login_page'))
-
-    account_id = session.get('account_id')
-    return render_template('index.html',
-                           page='my_student',
-                           account_id=account_id)
-
-
-@user_bp.route('/dashboard/platform_student')
-def show_platform_student():
-    """Show platform student page"""
-    if 'moderator_id' not in session:
-        return redirect(url_for('auth.login_page'))
-
-    account_id = session.get('account_id')
-    return render_template('index.html',
-                           page='platform_student',
-                           account_id=account_id)
-
-
-@user_bp.route('/dashboard/show-manager')
-def show_manager_user():
-    if 'moderator_id' not in session:
-        return redirect(url_for('auth.login_page'))
-    account_id = session.get('account_id')
-    return render_template('index.html',
-                           page='show_manager',
-                           account_id=account_id)
 
 
 # ==========================================
@@ -91,14 +57,40 @@ def api_get_profile_image(user_id):
         return send_file(io.BytesIO(transparent_png), mimetype='image/png')
 
 
+#  ================================= BEGIN CRUD API USER =================================
+@user_bp.route('/api/create-user',methods=['POST'])
+def create_user():
+    try:
+        data = request.get_json
+        if not data:
+            return jsonify({
+                "Message":"No data to create user"
+            }),400
+        else:
+            status,response= create_user_service(data)
+            if status:
+                return jsonify({
+                    "Message":"user created with success"
+                })
+
+    except Exception as e:
+        return jsonify({
+            "Message":f"Error: {e} coming from backend"
+        })
+
+
 @user_bp.route('/api/update-user/<int:user_id>', methods=['POST'])
 def api_update_user(user_id):
     """Update user"""
-    data = request.get_json()
-    success, message = update_user(user_id, data)
-    if success:
-        return jsonify({"Message": message}), 200
-    return jsonify({"Message": message}), 500
+    try:
+        data = request.get_json()
+        success, message = update_user(user_id, data)
+        if success:
+            return jsonify({"Message": message}), 200
+        else:
+            return jsonify({"Message":message}),400
+    except Exception as e:
+        return jsonify({"Message": e}), 500
 
 
 @user_bp.route('/api/delete-user/<int:user_id>', methods=['POST'])
@@ -109,6 +101,21 @@ def api_delete_user(user_id):
         return jsonify({"Message": message}), 200
     return jsonify({"Message": message}), 404
 
+
+@user_bp.route('/api/get-user-info/<int:user_id>', methods=['GET'])
+def api_get_user_info(user_id):
+    try:
+        status, data = get_user_info_service(user_id)
+        if status:
+            return jsonify({"Data": data}), 200  # ✅ data is already a list
+        else:
+            return jsonify({"Message": "Failed to fetch data"}), 400
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from backend"
+        }), 500
+#  ================================= END CRUD API USER =================================
 
 @user_bp.route('/api/update-virtuel-user/<int:user_id>', methods=['POST'])
 def api_update_virtual_user(user_id):
@@ -129,12 +136,15 @@ def api_delete_virtual_user(user_id):
     return jsonify({"Message": message}), 404
 
 
-@user_bp.route('/api/get-manager-info',methods=['GET'])
+@user_bp.route('/api/get-manager-info', methods=['GET'])
 def get_manager_info():
     try:
-        status,response = get_manager_info_service()
-
+        status, response = get_manager_info_service()
+        if status:
+            print(response)
+            return jsonify(response), 200  # ✅ pass response directly
+        else:
+            return jsonify({"Message": "Failed to fetch data"}), 400
     except Exception as e:
-        return jsonify({
-            "Message":"Error coming from server"
-        }),200
+        print(e)
+        return jsonify({"Message": "Error coming from server"}), 500

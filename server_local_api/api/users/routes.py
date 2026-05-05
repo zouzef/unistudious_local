@@ -538,47 +538,62 @@ def get_all_user(account_id):
 # =============================================
 # ENDPOINT 8: Update User
 # =============================================
-@users_bp.route('/update-user/<int:id>',methods=['POST'])
+@users_bp.route('/update-user/<int:id>', methods=['POST'])
 def update_user(id):
-	try:
-		query = """
-			SELECT COUNT(*) as nbr FROM user WHERE id = %s
-		"""
-		values = (id,)
-		result = Database.execute_query(query,values)
-		if result[0]['nbr']==0:
-			return jsonify({
-				"Message":"User not found"
-			}),404
+    try:
+        # Check user exists
+        result = Database.execute_query("SELECT COUNT(*) as nbr FROM user WHERE id = %s", (id,))
+        if result[0]['nbr'] == 0:
+            return jsonify({"Message": "User not found"}), 404
 
+        data = request.get_json()
 
+        # ── Map allowed fields: payload_key → database_column ────
+        allowed_fields = {
+            'name':        'username',
+            'email':       'email',
+            'phone':       'phone',
+            'status':      'status',
+            'full_name':   'full_name',
+            'address':     'address',
+            'birth_place': 'birth_place',
+            'birth_date':  'birth_date',
+            'grand':       'grand',
+            'roles':       'roles',
+        }
 
-		data = request.get_json()
-		name   = data.get('name')
-		email  = data.get('email')
-		phone  = data.get('phone')
-		status = data.get('status')
-		query = """
-		            UPDATE user
-		            SET
-		                username       = %s,
-		                email      = %s,
-		                phone      = %s,
-		                status     = %s,
-		                slc_edit   = 1,
-		                updated_at = NOW()
-		            WHERE id = %s
-		        """
-		values = (name, email, phone, status,id)
-		result = Database.execute_query(query,values,fetch=False)
-		return jsonify({
-			"Message":"user updated successfully"
-		})
-	except Exception as e:
-		return jsonify({
-			"Message":f"Error: {e} coming from update_user"
-		}),500
+        # ── Build SET clause only from fields present in request ─
+        set_clauses = []
+        values = []
 
+        for payload_key, db_column in allowed_fields.items():
+            if payload_key in data:
+                value = data[payload_key]
+
+                # ✅ Convert empty strings to None (NULL in MySQL)
+                if value == '' or value is None:
+                    value = None
+
+                set_clauses.append(f"{db_column} = %s")
+                values.append(value)
+
+        if not set_clauses:
+            return jsonify({"Message": "No fields to update"}), 400
+
+        # ── Always update these ───────────────────────────────────
+        set_clauses.append("slc_edit = 1")
+        set_clauses.append("updated_at = NOW()")
+
+        values.append(id)  # for WHERE id = %s
+
+        query = f"UPDATE user SET {', '.join(set_clauses)} WHERE id = %s"
+
+        Database.execute_query(query, tuple(values), fetch=False)
+
+        return jsonify({"Message": "user updated successfully"})
+
+    except Exception as e:
+        return jsonify({"Message": f"Error: {e} coming from update_user"}), 500
 
 # =============================================
 # ENDPOINT 9: Delete user
@@ -756,9 +771,9 @@ def get_manager_info():
 	try:
 		query = """
 			SELECT
-			 	username,roles,email,full_name,phone,address
+			 	id,username,roles,email,full_name,phone,address
 			 FROM user 
-			WHERE roles LIKE '%ROLE_MANAGER_ADMINISTRATIVE%';
+			WHERE roles LIKE '%ROLE_MANAGER_ADMINISTRATIVE%' AND enabled = 1;
 		"""
 		result= Database.execute_query(query,fetch=True)
 		if result:
@@ -772,6 +787,34 @@ def get_manager_info():
 
 	except Exception as e:
 		print(f"Error: {e} coming from server")
+		return jsonify({
+			"Message":f"Error: {e} coming from server"
+		}),500
+
+
+# =============================================
+# ENDPOINT 12: GET User info
+# =============================================
+@users_bp.route('/get_user_info/<int:user_id>',methods=['GET'])
+def get_user_info(user_id):
+	try:
+		query = """
+			SELECT
+			 	id, username,email,full_name, roles, img_link, status, phone,grand,birth_place,birth_date ,address 
+			FROM user 
+			WHERE id = %s AND enabled = 1 
+		"""
+		values = (user_id,)
+		result = Database.execute_query(query,values,fetch=True)
+		if result:
+			return jsonify({
+				"Data":result
+			}),200
+		else:
+			return jsonify({
+				"Message":"There is no id for this user"
+			}),400
+	except Exception as e:
 		return jsonify({
 			"Message":f"Error: {e} coming from server"
 		}),500

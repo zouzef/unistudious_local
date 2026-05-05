@@ -1,0 +1,246 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Manager Details {{ manager_id }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <form name="manager" method="post" id="manager-form" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-xl-6 col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Username <span class="required">*</span></label>
+                                        <input type="text" id="manager_username" name="manager[username]"
+                                               required class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Email <span
+                                                class="required">*</span></label>
+                                        <input type="email" id="manager_email" name="manager[email]"
+                                               required class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Place of Birth</label>
+                                        <input type="text" id="manager_birthPlace" name="manager[birthPlace]"
+                                               class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Date of Birth</label>
+                                        <input type="date" id="manager_birthDate" name="manager[birthDate]"
+                                               class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Address</label>
+                                        <textarea id="manager_Address" name="manager[Address]"
+                                                  class="form-control" rows="7"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-6 col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">First Name And Last Name <span
+                                                class="required">*</span></label>
+                                        <input type="text" id="manager_fullName" name="manager[fullName]"
+                                               required class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Phone</label>
+                                        <input type="tel" id="manager_phone" name="manager[phone]"
+                                               class="form-control" minlength="8" maxlength="16">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Gender</label>
+                                        <select id="manager_grand" name="manager[grand]"
+                                                class="form-control no-selectpicker">
+                                            <option value="">Select</option>
+                                            <option value="M">Male</option>
+                                            <option value="F">Female</option>
+                                            <option value="O">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Status <span
+                                                class="required">*</span></label>
+                                        <select id="manager_status" name="manager[status]"
+                                                class="form-control no-selectpicker">
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Roles <span
+                                                class="required">*</span></label>
+                                        <select id="manager_roles" name="manager[roles][]" required
+                                                class="form-control no-selectpicker" multiple>
+                                            <option value="ROLE_MANAGER_CONFIG">Support</option>
+                                            <option value="ROLE_MANAGER_FINANCE">Financial</option>
+                                            <option value="ROLE_MANAGER_HR">Human resources</option>
+                                            <option value="ROLE_MANAGER_IT">IT support and infrastructure</option>
+                                            <option value="ROLE_MANAGER_MARKETING">Marketing</option>
+                                            <option value="ROLE_CUSTOMER_MANAGER_SERVICE">Customer service</option>
+                                            <option value="ROLE_MANAGER_ADMINISTRATIVE">Administrative</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Photo</label>
+                                        <div class="avatar-upload">
+                                            <div class="avatar-preview">
+                                                <div id="imagePreview"></div>
+                                            </div>
+                                        </div>
+                                        <div class="change-btn mt-1">
+                                            <input type="file" id="manager_imgFile" name="manager[imgFile]"
+                                                   class="d-none" accept=".png, .jpg, .jpeg">
+                                            <label for="manager_imgFile"
+                                                   class="dlab-upload mb-0 btn btn-primary btn-sm">Choose File</label>
+                                            <a href="javascript:void(0);"
+                                               class="btn btn-danger light remove-img ms-2 btn-sm"
+                                               id="remove-img">Remove</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="float-end">
+                                <button class="btn btn-outline-primary me-3" type="submit">Edit</button>
+                                <a href="/dashboard/show-manager" class="btn btn-outline-danger">Close</a>
+                            </div>
+
+                            <input type="hidden" id="manager__token" name="manager[_token]" value="">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('click', function (e) {
+    const toggle = e.target.closest('[data-bs-toggle="dropdown"]');
+
+    if (toggle) {
+        if (toggle.tagName === 'SELECT') return;
+
+        e.preventDefault();
+        const menu = toggle.nextElementSibling;
+        document.querySelectorAll('.dropdown-menu.show').forEach(function (m) {
+            if (m !== menu) m.classList.remove('show');
+        });
+        menu.classList.toggle('show');
+    } else if (!e.target.closest('.dropdown')) {
+        document.querySelectorAll('.dropdown-menu.show').forEach(function (m) {
+            m.classList.remove('show');
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const managerId = {{ manager_id }};
+
+    // ── Load manager data and fill form ──────────────────────
+    fetch(`/api/get-user-info/${managerId}`)
+        .then(res => res.json())
+        .then(data => {
+            if (!data.Data || data.Data.length === 0) {
+                console.warn('No manager data found');
+                return;
+            }
+
+            const m = data.Data[0];
+
+            // ── Text inputs ───────────────────────────────────
+            document.getElementById('manager_username').value   = m.username    || '';
+            document.getElementById('manager_email').value      = m.email       || '';
+            document.getElementById('manager_fullName').value   = m.full_name   || '';
+            document.getElementById('manager_phone').value      = m.phone       || '';
+            document.getElementById('manager_birthPlace').value = m.birth_place || '';
+            document.getElementById('manager_birthDate').value  = m.birth_date  || '';
+            document.getElementById('manager_Address').value    = m.address     || '';
+
+            // ── Selects ───────────────────────────────────────
+            document.getElementById('manager_grand').value  = m.grand  || '';
+            document.getElementById('manager_status').value = m.status !== null ? m.status : 1;
+
+            // ── Roles (multiple select) ───────────────────────
+            const roles = JSON.parse(m.roles || '[]');
+            const rolesSelect = document.getElementById('manager_roles');
+            Array.from(rolesSelect.options).forEach(option => {
+                option.selected = roles.includes(option.value);
+            });
+
+            // ── Profile image ─────────────────────────────────
+            const preview = document.getElementById('imagePreview');
+            if (m.id) {
+                preview.style.backgroundImage = `url(/api/get_profile_img/${m.id})`;
+            }
+        })
+        .catch(err => {
+            console.error('❌ Failed to load manager info:', err);
+        });
+
+    // ── Submit form ───────────────────────────────────────────
+    document.getElementById('manager-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        // ── Collect selected roles ────────────────────────────
+        const rolesSelect = document.getElementById('manager_roles');
+        const selectedRoles = Array.from(rolesSelect.options)
+            .filter(option => option.selected)
+            .map(option => option.value);
+
+        // ── Build payload ─────────────────────────────────────
+        const payload = {
+            name:        document.getElementById('manager_username').value,
+            email:       document.getElementById('manager_email').value,
+            phone:       document.getElementById('manager_phone').value,
+            status:      parseInt(document.getElementById('manager_status').value),
+            full_name:   document.getElementById('manager_fullName').value,
+            address:     document.getElementById('manager_Address').value,
+            birth_place: document.getElementById('manager_birthPlace').value,
+            birth_date:  document.getElementById('manager_birthDate').value,
+            grand:       document.getElementById('manager_grand').value,
+            roles:       JSON.stringify(selectedRoles),
+        };
+
+        fetch(`/api/update-user/${managerId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(res => {
+            return res.json().then(data => ({ status: res.status, data }));
+        })
+        .then(({ status, data }) => {
+            if (status === 200) {  // ✅ check HTTP status not message string
+                Swal.fire({
+                    title: 'Success!',
+                    text: data.Message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6'
+                }).then(() => {
+                    window.location.href = '/dashboard/show-manager';
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: data.Message,
+                    icon: 'error',
+                    confirmButtonColor: '#d33'
+                });
+            }
+        })
+        .catch(err => {
+            console.error('❌ Error:', err);
+            Swal.fire({
+                title: 'Error!',
+                text: 'Something went wrong, please try again.',
+                icon: 'error',
+                confirmButtonColor: '#d33'
+            });
+        });
+    });
+});
+</script>

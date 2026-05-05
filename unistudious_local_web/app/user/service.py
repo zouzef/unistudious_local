@@ -27,6 +27,22 @@ def get_profile_image(user_id: int):
         return None, None
 
 
+
+#================================ BEGIN CRUD User  ====================
+def create_user_service(data: dict) -> tuple:
+    """ Insert user data"""
+    url = f"{current_app.config['BASE_URL']}insert_user"
+    try:
+        response = requests.post(url,data=data,verify=False,timeout=10)
+        if response.status_code == 200:
+            return True,response.json()
+        else:
+            return False,response.json()
+    except Exception as e:
+        print(f"Error: {e} coming from create_user_service")
+        return False,None
+
+
 def update_user(user_id: int, data: dict) -> tuple:
     """Update user data"""
     url = f"{current_app.config['BASE_URL']}update-user/{user_id}"
@@ -54,6 +70,20 @@ def delete_user(user_id: int) -> tuple:
         print(f"[USER ERROR] delete_user: {e}")
         return False, "Connection error"
 
+
+def get_user_info_service(user_id: int) -> tuple:
+    url = f"{current_app.config['BASE_URL']}get_user_info/{user_id}"
+    try:
+        response = requests.get(url, verify=False, timeout=10)
+        if response.status_code == 200:
+            return True, response.json().get('Data')  # ✅ capital D
+        else:
+            return False, response.json()
+
+    except Exception as e:
+        print(f"Error: {e} coming from get_user_info_service")
+        return False, None
+#================================ END CRUD User  ======================
 
 def update_virtual_user(user_id: int, data: dict) -> tuple:
     """Update virtual user data"""
@@ -84,13 +114,15 @@ def delete_virtual_user(user_id: int) -> tuple:
 
 
 def get_manager_info_service():
-    url=f"{current_app.config['BASE_URL']}/get-manager-info"
+    url=f"{current_app.config['BASE_URL']}get-manager-info"
     try:
         response=requests.get(url,verify=False)
-        if response.staus_code==200:
+        if response.status_code==200:
             return True,response.json()
         else:
             return False,response.json()
     except Exception as e:
         print(e)
         return False,None
+
+
