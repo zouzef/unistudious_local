@@ -113,7 +113,7 @@ def delete_virtual_user(user_id: int) -> tuple:
         return False, "Connection error"
 
 
-def get_manager_info_service():
+def get_manager_info_service() -> tuple:
     url=f"{current_app.config['BASE_URL']}get-manager-info"
     try:
         response=requests.get(url,verify=False)
@@ -125,4 +125,29 @@ def get_manager_info_service():
         print(e)
         return False,None
 
+
+def get_all_teacher_service() -> tuple:
+    url=f"{current_app.config['BASE_URL']}get_all_teachers"
+    try:
+        response = requests.get(url,verify=False,timeout=10)
+        if response.status_code == 200:
+            return True,response.json()
+        else:
+            return False,response.json()
+    except Exception as e:
+        print(f"Error: {e} coming from server")
+        return False,None
+
+
+def create_teacher_service(data:dict) -> tuple:
+    url = f"{current_app.config['BASE_URL']}create_teacher"
+    try:
+        response = requests.post(url,json=data,verify=False,timeout=10)
+        if response.status_code == 200:
+            return True,response.json()
+        else:
+            return False,response.json()
+    except Exception as e:
+        print(f"Error: {e} coming from create_teacher")
+        return False,None
 

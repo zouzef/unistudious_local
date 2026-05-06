@@ -16,5 +16,5 @@ if __name__ == "__main__":
         debug=True,
         ssl_context=(Config.CERTFILE, Config.KEYFILE),
         allow_unsafe_werkzeug=True,
-        use_reloader=False
+        use_reloader=True
     )

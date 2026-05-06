@@ -14,7 +14,9 @@ from app.user.service import (
     delete_virtual_user,
     get_manager_info_service,
     get_user_info_service,
-    create_user_service
+    create_user_service,
+    get_all_teacher_service,
+    create_teacher_service
 )
 
 user_bp = Blueprint('user', __name__)
@@ -154,3 +156,45 @@ def get_manager_info():
     except Exception as e:
         print(e)
         return jsonify({"Message": "Error coming from server"}), 500
+
+
+@user_bp.route('/api/get_teacher',methods=['GET'])
+def get_teacher():
+    try:
+        status,data = get_all_teacher_service()
+        if status:
+            return jsonify(data),200
+        else:
+            return jsonify(data),400
+
+    except Exception as e:
+        return jsonify({
+            "Message":f"Error: {e} coming from the backend"
+        }),500
+
+
+@user_bp.route('/api/create_teacher',methods=['POST'])
+def create_teacher():
+    try:
+        data = request.get_json()
+        if not(data):
+            return jsonify({
+                "Message":"There is no Data to create user"
+            })
+
+        status,response = create_teacher_service(data)
+        if status:
+            return jsonify({
+                "Message":"success",
+                "Response":response
+            }),200
+        else:
+            return jsonify({
+                "Message":f"Error",
+                "Response":response
+            })
+    except Exception as e:
+        print(f"Error: {e} coming from create_teacher")
+        return jsonify({
+            "Message":f"Error: {e} coming from backend"
+        })

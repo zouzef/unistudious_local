@@ -1,0 +1,211 @@
+<div class="content-body">
+    <div class="container-fluid">
+
+        <div class="page-title flex-wrap">
+            <form id="searchForm">
+                <div class="input-group search-area mb-3">
+                    <input type="text" id="searchInput" class="form-control"
+                           placeholder="Search here..." name="search_manager" value="">
+                    <span class="input-group-text">
+                        <a href="javascript:void(0)">
+                            <svg width="15" height="15" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.5605 15.4395L13.7527 11.6317C14.5395 10.446 15 9.02625 15 7.5C15 3.3645 11.6355 0 7.5 0C3.3645 0 0 3.3645 0 7.5C0 11.6355 3.3645 15 7.5 15C9.02625 15 10.446 14.5395 11.6317 13.7527L15.4395 17.5605C16.0245 18.1462 16.9755 18.1462 17.5605 17.5605C18.1462 16.9747 18.1462 16.0252 17.5605 15.4395V15.4395ZM2.25 7.5C2.25 4.605 4.605 2.25 7.5 2.25C10.395 2.25 12.75 4.605 12.75 7.5C12.75 10.395 10.395 12.75 7.5 12.75C4.605 12.75 2.25 10.395 2.25 7.5V7.5Z" fill="#01A3FF"/>
+                            </svg>
+                        </a>
+                    </span>
+                </div>
+            </form>
+
+            <div class="d-flex align-items-center gap-2">
+                <a class="btn btn-success" href="#">My Teachers</a>
+                <a class="btn btn-primary" href="/dashboard/create-teacher">New Teacher</a>
+            </div>
+        </div>
+
+        <div class="col-xl-12">
+            <div class="row" id="teachers-row">
+
+
+            </div>
+
+            <!-- ── Pagination ── -->
+            <div id="pagination-nav"></div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script>
+    const DEFAULT_AVATAR = "/static/assets/images/defult-admin.png";
+    const ITEMS_PER_PAGE = 8; // change this to however many cards per page you want
+    let allTeachers = [];
+    let currentPage = 1;
+
+    // ─── Build Teacher Card ───────────────────────────────────────────────────────
+    function buildTeacherCard(teacher) {
+        const avatar = teacher.img_link
+            ? `/api/get_profile_img/${teacher.id}`
+            : DEFAULT_AVATAR;
+
+        const profileBtn = teacher.img_link !== null
+            ? `<a href="/dashboard/show-profile/${teacher.id}" class="btn btn-primary btn-sm w-50 me-2">
+                   <i class="fa-solid fa-user me-2"></i>Profile
+               </a>`
+            : `<button type="button" class="btn btn-dark btn-sm w-50 me-2" disabled>
+                   <i class="fa-solid fa-user me-2"></i>Profile
+               </button>`;
+
+        return `
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+                <div class="card contact_list text-center">
+                    <div class="card-body">
+                        <div class="user-content">
+                            <div class="user-info">
+                                <div class="user-img">
+                                    <img src="${avatar}" alt="" class="avatar avatar-xl"
+                                         onerror="this.onerror=null; this.src='${DEFAULT_AVATAR}'">
+                                </div>
+                                <div class="user-details">
+                                    <h4 class="user-name mb-0">${teacher.full_name}</h4>
+                                    <p>Teacher</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>`;
+    }
+
+    // ─── Render Pagination ────────────────────────────────────────────────────────
+    function renderPagination(totalItems) {
+        const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+        const nav = document.getElementById("pagination-nav");
+
+        // Hide pagination entirely if only 1 page
+        if (totalPages <= 1) {
+            nav.innerHTML = "";
+            return;
+        }
+
+        let pagesHTML = "";
+
+        for (let i = 1; i <= totalPages; i++) {
+            pagesHTML += `
+                <li class="page-item ${i === currentPage ? "active" : ""}">
+                    <a class="page-link" onclick="goToPage(${i})">${i}</a>
+                </li>`;
+        }
+
+        nav.innerHTML = `
+            <ul class="pagination pagination-gutter pagination-primary no-bg">
+                <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
+                    <a class="page-link" onclick="goToPage(${currentPage - 1})">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                </li>
+                ${pagesHTML}
+                <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
+                    <a class="page-link" onclick="goToPage(${currentPage + 1})">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>`;
+    }
+
+    // ─── Go To Page ───────────────────────────────────────────────────────────────
+    function goToPage(page) {
+        const searchQuery = document.getElementById("searchInput")?.value.trim().toLowerCase() || "";
+        let filtered = allTeachers;
+
+        if (searchQuery.length >= 2) {
+            filtered = filtered.filter(t =>
+                (t.username || "").toLowerCase().includes(searchQuery) ||
+                (t.full_name || "").toLowerCase().includes(searchQuery)
+            );
+        }
+
+        const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+        if (page < 1 || page > totalPages) return;
+
+        currentPage = page;
+        renderTeachers();
+    }
+
+    // ─── Render Teachers ──────────────────────────────────────────────────────────
+    function renderTeachers() {
+        const container = document.getElementById("teachers-row");
+        const searchQuery = document.getElementById("searchInput")?.value.trim().toLowerCase() || "";
+
+        let filtered = allTeachers;
+
+        if (searchQuery.length >= 2) {
+            filtered = filtered.filter(t =>
+                (t.username || "").toLowerCase().includes(searchQuery) ||
+                (t.full_name || "").toLowerCase().includes(searchQuery)
+            );
+        }
+
+        // Reset to page 1 when search changes
+        if (currentPage > Math.ceil(filtered.length / ITEMS_PER_PAGE)) {
+            currentPage = 1;
+        }
+
+        // Slice for current page
+        const start = (currentPage - 1) * ITEMS_PER_PAGE;
+        const paginated = filtered.slice(start, start + ITEMS_PER_PAGE);
+
+        if (paginated.length === 0) {
+            container.innerHTML = `<p class="text-muted ms-3">No teachers found.</p>`;
+            renderPagination(0);
+            return;
+        }
+
+        container.innerHTML = paginated.map(buildTeacherCard).join("");
+        renderPagination(filtered.length);
+    }
+
+    // ─── Load Teachers ────────────────────────────────────────────────────────────
+    async function loadTeacherCards() {
+        const container = document.getElementById("teachers-row");
+        container.innerHTML = `<p class="text-muted ms-3">Loading...</p>`;
+
+        try {
+            const res = await fetch("/api/get_teacher");
+            const data = await res.json();
+
+            if (!res.ok) {
+                container.innerHTML = `<p class="text-danger">Failed to load teachers.</p>`;
+                return;
+            }
+
+            if (!data.Data || data.Data.length === 0) {
+                container.innerHTML = `<p class="text-muted ms-3">No teachers found.</p>`;
+                return;
+            }
+
+            allTeachers = data.Data;
+            renderTeachers();
+
+        } catch (err) {
+            console.error(err);
+            container.innerHTML = `<p class="text-danger">Error loading teachers.</p>`;
+        }
+    }
+
+
+
+    // ─── Init ─────────────────────────────────────────────────────────────────────
+    document.addEventListener("DOMContentLoaded", function () {
+        loadTeacherCards();
+
+        document.getElementById("searchInput").addEventListener("input", renderTeachers);
+
+        document.getElementById("searchForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+        });
+    });
+
+</script>

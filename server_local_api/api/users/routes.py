@@ -218,7 +218,7 @@ def get_teacher_session(session_id):
 def get_all_teachers():
 	try:
 		query = """
-		    SELECT u.username, u.id	
+		    SELECT u.username, u.id	, email, full_name, roles , img_link ,status
 		    FROM user u
 		    WHERE u.enabled = 1 AND
 		    (JSON_CONTAINS(u.roles, '"ROLE_TEACHER"') OR JSON_CONTAINS(u.roles, '"ROLE_ADMIN"'))
@@ -869,3 +869,19 @@ def create_user():
         return jsonify({
             "Message": f"Error: {e} coming from server"
         }), 500
+
+
+# =============================================
+# ENDPOINT 14: CREATE Teacher
+# =============================================
+@users_bp.route('/create_teacher',methods=['POST'])
+def create_teacher():
+	try:
+		print("this endpoint not created yet")
+		return jsonify({
+			"Message":"this endpoint not created yet ! "
+		}),200
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error:{e} coming from server"
+		})

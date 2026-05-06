@@ -15,6 +15,10 @@ const dropdownSVG = `
         <path d="M12.0012 0.359985C11.6543 0.359985 11.3109 0.428302 10.9904 0.561035C10.67 0.693767 10.3788 0.888317 10.1335 1.13358C9.88829 1.37883 9.69374 1.67 9.56101 1.99044C9.42828 2.31089 9.35996 2.65434 9.35996 3.00119C9.35996 3.34803 9.42828 3.69148 9.56101 4.01193C9.69374 4.33237 9.88829 4.62354 10.1335 4.8688C10.3788 5.11405 10.67 5.3086 10.9904 5.44134C11.3109 5.57407 11.6543 5.64239 12.0012 5.64239C12.7017 5.64223 13.3734 5.36381 13.8686 4.86837C14.3638 4.37294 14.6419 3.70108 14.6418 3.00059C14.6416 2.3001 14.3632 1.62836 13.8677 1.13315C13.3723 0.637942 12.7004 0.359826 12 0.359985H12.0012ZM3.60116 0.359985C3.25431 0.359985 2.91086 0.428302 2.59042 0.561035C2.26997 0.693767 1.97881 0.888317 1.73355 1.13358C1.48829 1.37883 1.29374 1.67 1.16101 1.99044C1.02828 2.31089 0.959961 2.65434 0.959961 3.00119C0.959961 3.34803 1.02828 3.69148 1.16101 4.01193C1.29374 4.33237 1.48829 4.62354 1.73355 4.8688C1.97881 5.11405 2.26997 5.3086 2.59042 5.44134C2.91086 5.57407 3.25431 5.64239 3.60116 5.64239C4.30165 5.64223 4.97339 5.36381 5.4686 4.86837C5.9638 4.37294 6.24192 3.70108 6.24176 3.00059C6.2416 2.3001 5.96318 1.62836 5.46775 1.13315C4.97231 0.637942 4.30045 0.359826 3.59996 0.359985H3.60116ZM20.4012 0.359985C20.0543 0.359985 19.7109 0.428302 19.3904 0.561035C19.07 0.693767 18.7788 0.888317 18.5336 1.13358C18.2883 1.37883 18.0937 1.67 17.961 1.99044C17.8283 2.31089 17.76 2.65434 17.76 3.00119C17.76 3.34803 17.8283 3.69148 17.961 4.01193C18.0937 4.33237 18.2883 4.62354 18.5336 4.8688C18.7788 5.11405 19.07 5.3086 19.3904 5.44134C19.7109 5.57407 20.0543 5.64239 20.4012 5.64239C21.1017 5.64223 21.7734 5.36381 22.2686 4.86837C22.7638 4.37294 23.0419 3.70108 23.0418 3.00059C23.0416 2.3001 22.7632 1.62836 22.2677 1.13315C21.7723 0.637942 21.1005 0.359826 20.4 0.359985H20.4012Z" fill="#A098AE"/>
     </svg>`;
 
+// ─── State ────────────────────────────────────────────────────────────────────
+let allManagers = [];   // holds full list from API
+let activeRole = "";    // currently selected role filter
+
 // ─── Build Card ───────────────────────────────────────────────────────────────
 function buildManagerCard(manager) {
     const roles = JSON.parse(manager.roles);
@@ -59,6 +63,36 @@ function buildManagerCard(manager) {
         </div>`;
 }
 
+// ─── Render filtered list ─────────────────────────────────────────────────────
+function renderManagers() {
+    const container = document.getElementById("managers-row");
+    const searchQuery = document.getElementById("searchInput")?.value.trim().toLowerCase() || "";
+
+    let filtered = allManagers;
+
+    // Filter by role
+    if (activeRole) {
+        filtered = filtered.filter(m => {
+            const roles = JSON.parse(m.roles || "[]");
+            return roles.includes(activeRole);
+        });
+    }
+
+    // Filter by username search
+    if (searchQuery) {
+        filtered = filtered.filter(m =>
+            (m.username || "").toLowerCase().includes(searchQuery)
+        );
+    }
+
+    if (filtered.length === 0) {
+        container.innerHTML = `<p class="text-muted ms-3">No managers found.</p>`;
+        return;
+    }
+
+    container.innerHTML = filtered.map(buildManagerCard).join("");
+}
+
 // ─── Load Cards ───────────────────────────────────────────────────────────────
 async function loadManagerCards() {
     const container = document.getElementById("managers-row");
@@ -67,14 +101,13 @@ async function loadManagerCards() {
         const res = await fetch("/api/get-manager-info");
         const data = await res.json();
 
-        console.log("API Response:", data);
-
         if (!res.ok) {
             container.innerHTML = `<p class="text-danger">Failed to load managers.</p>`;
             return;
         }
 
-        container.innerHTML = data.Data.map(buildManagerCard).join("");
+        allManagers = data.Data;  // store full list
+        renderManagers();         // render with current filters
 
     } catch (err) {
         console.error(err);
@@ -134,7 +167,7 @@ document.addEventListener('click', function (e) {
                         icon: 'success',
                         confirmButtonColor: '#3085d6'
                     }).then(() => {
-                        loadManagerCards(); // ✅ reload cards without full page refresh
+                        loadManagerCards();
                     });
                 } else {
                     Swal.fire({
@@ -159,4 +192,25 @@ document.addEventListener('click', function (e) {
 });
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
-document.addEventListener("DOMContentLoaded", loadManagerCards);
+document.addEventListener("DOMContentLoaded", function () {
+    loadManagerCards();
+
+    // Search input — live filter as you type
+    document.getElementById("searchInput").addEventListener("input", renderManagers);
+
+    // Prevent search form from doing a page reload on Enter
+    document.getElementById("searchForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+    });
+
+    // Role filter dropdown — read selected value and re-render
+    document.querySelector('select[name="role"]').addEventListener("change", function () {
+        activeRole = this.value;
+        renderManagers();
+    });
+
+    // Prevent role filter form from reloading the page
+    document.getElementById("filterForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+    });
+});

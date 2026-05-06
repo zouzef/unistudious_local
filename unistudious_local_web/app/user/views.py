@@ -4,15 +4,17 @@ user_views_bp = Blueprint('user_views',__name__)
 
 # Show the component my_student.html
 @user_views_bp.route('/dashboard/my-student')
-def show_my_student():
+def show_my_student_view():
     if 'moderator_id' not in session:
         return redirect(url_for('auth.login_page'))
     return render_template('index.html', page='my_student', account_id=session.get('account_id'))
 
 
+
+# ========================================= BEGIN Manager View ========================================
 # Show the component platform_student.html
 @user_views_bp.route('/dashboard/platform_student')
-def show_platform_student():
+def show_platform_student_view():
     if 'moderator_id' not in session:
         return redirect(url_for('auth.login_page'))
     return render_template('index.html', page='platform_student', account_id=session.get('account_id'))
@@ -20,7 +22,7 @@ def show_platform_student():
 
 # Show the component show_manager.html
 @user_views_bp.route('/dashboard/show-manager')
-def show_manager_users():
+def show_manager_users_view():
     if 'moderator_id' not in session:
         return redirect(url_for('auth.login_page'))
     return render_template('index.html',
@@ -31,7 +33,7 @@ def show_manager_users():
 
 # Show the component view_manager.html
 @user_views_bp.route('/dashboard/view-manager/<int:manager_id>')
-def show_manager_info(manager_id):
+def show_manager_info_view(manager_id):
 	if 'moderator_id' not in session:
 		return redirect(url_for('auth.login_page'))
 	return render_template('index.html',
@@ -44,10 +46,34 @@ def show_manager_info(manager_id):
 
 # Show the component add_manager
 @user_views_bp.route('/dashboard/create-manager')
-def create_manager():
+def create_manager_view():
 	if 'moderator_id' not in session:
 		return redirect(url_for('auth.login_page'))
 	return render_template('index.html',
 						   page='create_manager',
 						   account_id=session.get('account_id')
 						   )
+# ========================================= END Manager View ========================================
+
+
+# ========================================= BEGIN TEACHER View ========================================
+@user_views_bp.route('/dashboard/show-teacher')
+def show_teacher_view():
+	if 'moderator_id' not in session:
+		return redirect(url_for('auth.login_page'))
+	return render_template('index.html',
+						   page='show_teacher',
+						   account_id=session.get('account_id'))
+
+
+@user_views_bp.route('/dashboard/create-teacher')
+def create_teacher_view():
+	if 'moderator_id' not in session:
+		return redirect(url_for('auth.login_page'))
+	return render_template('index.html',
+						   page='create_teacher',
+						   account_id=session.get('account_id'))
+
+
+
+# ========================================= END TEACHER View ========================================

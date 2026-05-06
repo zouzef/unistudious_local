@@ -1,0 +1,270 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Create New Teacher</h5>
+                    </div>
+                    <div class="card-body">
+                        <form name="teacher" method="post" id="teacher-form" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-xl-6 col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Username <span class="required">*</span></label>
+                                        <input type="text" id="teacher_username" name="teacher[username]"
+                                               required class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Email <span
+                                                class="required">*</span></label>
+                                        <input type="email" id="teacher_email" name="teacher[email]"
+                                               required class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Address</label>
+                                        <textarea id="teacher_address" name="teacher[address]"
+                                                  class="form-control" rows="7"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-6 col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">First Name And Last Name <span
+                                                class="required">*</span></label>
+                                        <input type="text" id="teacher_fullName" name="teacher[fullName]"
+                                               required class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Phone</label>
+                                        <input type="tel" id="teacher_phone" name="teacher[phone]"
+                                               class="form-control" minlength="8" maxlength="16">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Access Permission</label>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <input type="checkbox" class="btn-check" value="ACCESS_BLOCK"
+                                                   id="perm_courses" name="teacher[access_permission][]">
+                                            <label class="btn btn-outline-primary btn-sm" for="perm_courses"
+                                                   title="Configuration Courses">
+                                                <i class="fa-solid fa-book me-1"></i> Courses
+                                            </label>
+
+                                            <input type="checkbox" class="btn-check" value="ACCESS_GROUP"
+                                                   id="perm_group" name="teacher[access_permission][]">
+                                            <label class="btn btn-outline-primary btn-sm" for="perm_group"
+                                                   title="Configuration Group">
+                                                <i class="fa-solid fa-users me-1"></i> Group
+                                            </label>
+
+                                            <input type="checkbox" class="btn-check" value="ACCESS_CALENDAR"
+                                                   id="perm_calendar" name="teacher[access_permission][]">
+                                            <label class="btn btn-outline-primary btn-sm" for="perm_calendar"
+                                                   title="Configuration Calendar">
+                                                <i class="fa-solid fa-calendar me-1"></i> Calendar
+                                            </label>
+
+                                            <input type="checkbox" class="btn-check" value="ACCESS_ATTENDANCE"
+                                                   id="perm_attendance" name="teacher[access_permission][]">
+                                            <label class="btn btn-outline-primary btn-sm" for="perm_attendance"
+                                                   title="Configuration Attendance">
+                                                <i class="fa-solid fa-clipboard-check me-1"></i> Attendance
+                                            </label>
+
+                                            <input type="checkbox" class="btn-check" value="ACCESS_STUDENT"
+                                                   id="perm_student" name="teacher[access_permission][]">
+                                            <label class="btn btn-outline-primary btn-sm" for="perm_student"
+                                                   title="Configuration Student">
+                                                <i class="fa-solid fa-user-graduate me-1"></i> Student
+                                            </label>
+
+                                            <input type="checkbox" class="btn-check" value="ACCESS_CLOUD"
+                                                   id="perm_cloud" name="teacher[access_permission][]">
+                                            <label class="btn btn-outline-primary btn-sm" for="perm_cloud"
+                                                   title="Configuration File Manager">
+                                                <i class="fa-solid fa-cloud me-1"></i> File Manager
+                                            </label>
+
+                                            <input type="checkbox" class="btn-check" value="ACCESS_MEET" id="perm_meet"
+                                                   name="teacher[access_permission][]">
+                                            <label class="btn btn-outline-primary btn-sm" for="perm_meet"
+                                                   title="Configuration Meet">
+                                                <i class="fa-solid fa-video me-1"></i> Meet
+                                            </label>
+
+                                            <input type="checkbox" class="btn-check" value="ACCESS_MESSAGE"
+                                                   id="perm_message" name="teacher[access_permission][]">
+                                            <label class="btn btn-outline-primary btn-sm" for="perm_message"
+                                                   title="Configuration Channel Message">
+                                                <i class="fa-solid fa-message me-1"></i> Messages
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Access Session</label>
+                                        <div class="border rounded p-2" style="max-height: 200px; overflow-y: auto;">
+                                            <div id="session-list">
+                                                <p class="text-muted text-center mb-0">Loading sessions...</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Photo</label>
+                                        <div class="avatar-upload">
+                                            <div class="avatar-preview">
+                                                <div id="imagePreview"
+                                                     style="background-image: url(/static/assets/images/no-img-avatar.png);"></div>
+                                            </div>
+                                        </div>
+                                        <div class="change-btn mt-1">
+                                            <input type="file" id="teacher_imgFile" name="teacher[imgFile]"
+                                                   class="d-none" accept=".png, .jpg, .jpeg">
+                                            <label for="teacher_imgFile"
+                                                   class="dlab-upload mb-0 btn btn-primary btn-sm">Choose File</label>
+                                            <a href="javascript:void(0);"
+                                               class="btn btn-danger light remove-img ms-2 btn-sm"
+                                               id="remove-img">Remove</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-5">
+                                <div class="col-xl-6 mb-3">
+                                    <label class="form-label text-primary">Password <span
+                                            class="required">*</span></label>
+                                    <input type="password" id="teacher_password_first" name="teacher[password][first]"
+                                           required class="form-control" minlength="4" maxlength="25">
+                                </div>
+                                <div class="col-xl-6 mb-3">
+                                    <label class="form-label text-primary">Re-Enter Password <span
+                                            class="required">*</span></label>
+                                    <input type="password" id="teacher_password_second" name="teacher[password][second]"
+                                           required class="form-control" minlength="4" maxlength="25">
+                                </div>
+                            </div>
+
+                            <div class="float-end">
+                                <button class="btn btn-outline-primary me-3" type="submit">Create</button>
+                                <a href="/dashboard/show-teacher" class="btn btn-outline-danger">Close</a>
+                            </div>
+
+                            <input type="hidden" id="teacher__token" name="teacher[_token]" value="">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const accountId = {{ account_id }};  // ✅ must be at the top, outside DOMContentLoaded
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // ─── Image Preview ────────────────────────────────────────────────
+        document.getElementById("teacher_imgFile").addEventListener("change", function () {
+            const file = this.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById("imagePreview").style.backgroundImage = `url(${e.target.result})`;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // ─── Remove Image ─────────────────────────────────────────────────
+        document.getElementById("remove-img").addEventListener("click", function () {
+            document.getElementById("teacher_imgFile").value = "";
+            document.getElementById("imagePreview").style.backgroundImage =
+                `url(/static/assets/images/no-img-avatar.png)`;
+        });
+
+        // ─── Load Sessions ────────────────────────────────────────────────
+        fetch(`/api/get-sessions/${accountId}`)
+            .then(res => res.json())
+            .then(sessions => {
+                const sessionList = document.getElementById("session-list");
+
+                if (!sessions || sessions.length === 0) {
+                    sessionList.innerHTML = `<p class="text-muted text-center mb-0">No sessions available</p>`;
+                    return;
+                }
+
+                sessionList.innerHTML = sessions.map(session => `
+                    <div class="session-item d-flex align-items-center justify-content-between p-2 rounded mb-1"
+                         style="cursor:pointer; transition: background 0.2s;"
+                         onclick="toggleSession(this, '${session.id}')"
+                         onmouseover="this.style.background='#f0f4ff'"
+                         onmouseout="if(!this.classList.contains('selected')) this.style.background='transparent'">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-layer-group text-primary"></i>
+                            <div class="fw-semibold" style="font-size:0.9rem;">${session.name}</div>
+                        </div>
+                        <i class="fa-solid fa-circle-check text-success tick-icon" style="display:none; font-size:1.1rem;"></i>
+                        <input type="hidden" name="teacher[access_session][]" value="${session.id}" disabled>
+                    </div>
+                `).join("");
+            })
+            .catch(err => {
+                console.error("❌ Failed to load sessions:", err);
+                document.getElementById("session-list").innerHTML =
+                    `<p class="text-danger text-center mb-0">Error loading sessions</p>`;
+            });
+
+        // ─── Form Submit ──────────────────────────────────────────────────
+        document.getElementById("teacher-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const selectedPermissions = Array.from(
+                document.querySelectorAll('input[name="teacher[access_permission][]"]:checked')
+            ).map(cb => cb.value);
+
+            const selectedSessions = Array.from(
+                document.querySelectorAll('input[name="teacher[access_session][]"]:not([disabled])')
+            ).map(input => input.value);
+
+            const payload = {
+                username:          document.getElementById("teacher_username").value,
+                email:             document.getElementById("teacher_email").value,
+                full_name:         document.getElementById("teacher_fullName").value,
+                phone:             document.getElementById("teacher_phone").value,
+                address:           document.getElementById("teacher_address").value,
+                password:          document.getElementById("teacher_password_first").value,
+                confirm_password:  document.getElementById("teacher_password_second").value,
+                access_permission: selectedPermissions,
+                access_session:    selectedSessions,
+                account_id:        accountId,
+            };
+
+            console.log("📋 Teacher Form Data:");
+            console.table([payload]);
+            console.log("✅ Access Permissions:", selectedPermissions);
+            console.log("✅ Access Sessions:", selectedSessions);
+        });
+    });
+
+    // ─── Toggle Session ───────────────────────────────────────────────────────
+    function toggleSession(el, sessionId) {
+        const isSelected = el.classList.contains("selected");
+        const tick = el.querySelector(".tick-icon");
+        const hiddenInput = el.querySelector("input[type='hidden']");
+
+        if (isSelected) {
+            el.classList.remove("selected");
+            el.style.background = "transparent";
+            tick.style.display = "none";
+            hiddenInput.disabled = true;
+        } else {
+            el.classList.add("selected");
+            el.style.background = "#e8f0fe";
+            tick.style.display = "inline-block";
+            hiddenInput.disabled = false;
+        }
+    }
+</script>

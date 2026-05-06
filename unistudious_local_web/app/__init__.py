@@ -23,7 +23,13 @@ def create_app():
     from app.groups.routes import groups_bp
     from app.user.routes import user_bp
     from app.formation.routes import formation_bp
+
+
+
+    # View Blueprints
+    from app.session.views import session_view_bp
     from app.user.views import user_views_bp
+
     app.register_blueprint(auth_bp)
     app.register_blueprint(session_bp)
     app.register_blueprint(calendar_bp)
@@ -32,4 +38,5 @@ def create_app():
     app.register_blueprint(user_bp)
     app.register_blueprint(formation_bp)
     app.register_blueprint(user_views_bp)
+    app.register_blueprint(session_view_bp)
     return app
