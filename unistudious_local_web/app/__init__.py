@@ -26,9 +26,10 @@ def create_app():
 
 
 
-    # View Blueprints
+    # VIEWS imports
     from app.session.views import session_view_bp
     from app.user.views import user_views_bp
+    from app.payments.views import payment_view_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(session_bp)
@@ -37,6 +38,9 @@ def create_app():
     app.register_blueprint(groups_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(formation_bp)
+
+    # view Blueprint
     app.register_blueprint(user_views_bp)
     app.register_blueprint(session_view_bp)
+    app.register_blueprint(payment_view_bp)
     return app

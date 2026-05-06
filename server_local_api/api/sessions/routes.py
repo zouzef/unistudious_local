@@ -60,7 +60,7 @@ def get_session_detail(account_id):
                 f.name as formation_name
             FROM session as s
             INNER JOIN formation as f ON f.id = s.formation_id
-            WHERE s.account_id = %s AND s.enabled = 1
+            WHERE s.account_id = %s AND s.enabled = 1 ORDER BY s.created_at DESC
         """
         results = Database.execute_query(query, (account_id,))
 

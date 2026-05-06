@@ -142,14 +142,14 @@
 {% include 'components/session_view/show_user_session.html'%}
 
 {% elif page == 'show-payment-session' %}
-{% include 'components/show_payment_session.html' %}
+{% include 'components/payment_view/show_payment_session.html' %}
 
 {% elif page == 'show_payment_session_detail' %}
-{% include 'components/show_payment_session_detail.html' %}
+{% include 'components/payment_view/show_payment_session_detail.html' %}
 
 
 {% elif page == 'show_payment_user_session' %}
-{% include 'components/show_payment_user.html'%}
+{% include 'components/session_view/show_payment_user.html'%}
 {% elif page == 'show_attendance_presence' %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 {%include 'components/calendar_view/show_attendance_presence.html' %}
@@ -161,7 +161,7 @@
 
             <!-- Unknown page part-->
 {% elif page == 'show-unknown-student'%}
-{% include 'components/show_unknown_student.html'%}
+{% include 'components/calendar_view/show_unknown_student.html'%}
             <!-- End Unknown page part-->
 
             <!-- Calander_request part  -->
