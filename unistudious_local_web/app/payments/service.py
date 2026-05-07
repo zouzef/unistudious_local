@@ -1,0 +1,16 @@
+# app/payments/service.py
+import requests
+from flask import current_app
+
+def get_paymet_session_service(session_id: int) -> tuple:
+	url = f"{current_app.config['BASE_URL']}get_payment_session/{session_id}"
+	try:
+		response = requests.get(url,verify=False,timeout=10)
+		if response.status_code == 200:
+			return True,response.json()
+		else:
+			return False,response.json()
+
+	except Exception as e:
+		print(f"Error: {e} coming from server!")
+		return False,None

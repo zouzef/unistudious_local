@@ -49,8 +49,12 @@ function buildSessionCard(item) {
                 <div class="card-body">
                     <div class="user-content">
                         <div class="user-info">
-                            <div class="modulel flex-wrap mb-3">
-                                <img src="/api/get_session_img/${item.id}" alt="" class="img-fluid">
+                            <div class="modulel flex-wrap mb-3" id="lightgallery">
+                                <a href="/api/get_session_img/${item.id}"
+                                   data-exthumbimage="/api/get_session_img/${item.id}"
+                                   data-src="/api/get_session_img/${item.id}">
+                                    <img src="/api/get_session_img/${item.id}" alt="" class="img-fluid" height="200px" width="200px" >
+                                </a>
                             </div>
                             <div class="user-details">
                                 <p class="short-title">${item.name}</p>

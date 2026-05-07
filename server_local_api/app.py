@@ -62,6 +62,9 @@ def create_app():
     from api.formation.routes import formation_bp
     app.register_blueprint(formation_bp)
 
+    # Payment
+    from api.payment.routes import payment_bp
+    app.register_blueprint(payment_bp)
 
     # ========================================
     # HOME ROUTE

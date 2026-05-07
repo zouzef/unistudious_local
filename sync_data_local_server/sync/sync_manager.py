@@ -227,6 +227,11 @@ def process_sync_data(db, data):
         print("\n VirtuelUser: ")
         process_virtuelUser(db,normalize(data['virtualUser']), token)
 
+    if 'paymentSessions' in data:
+        from sync.processors.payment_processor import process_payment_sessions
+        print("\n Payment Sessions: ")
+        process_payment_sessions(db, normalize(data['paymentSessions']))
+
 
 
 def run_continuous_sync(settings):
