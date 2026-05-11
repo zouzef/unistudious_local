@@ -149,7 +149,9 @@
 
 
 {% elif page == 'show_payment_user_session' %}
-{% include 'components/session_view/show_payment_user.html'%}
+{% include 'components/payment_view/show_payment_user.html'%}
+
+
 {% elif page == 'show_attendance_presence' %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 {%include 'components/calendar_view/show_attendance_presence.html' %}
@@ -280,55 +282,49 @@
 <!--**********************************
     Scripts
 ***********************************-->
-<!-- Required vendors -->
+<!-- 1. Global bundle first (has its own jQuery + metisMenu + plugins) -->
 <script src="/static/js/socket.io.min.js"></script>
 <script src="/static/vendor/global/global.min.js"></script>
 
-<!-- ✅ ADD JQUERY FIRST -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- 2. Moment BEFORE datepicker -->
+<script src="/static/vendor/bootstrap-datetimepicker/js/moment.js"></script>
+<script src="/static/vendor/moment/moment.min.js"></script>
 
-<script src="/static/vendor/chart.js/Chart.bundle.min.js"></script>
-<script src="/static/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
-<!-- Apex Chart -->
-<script src="/static/vendor/apexchart/apexchart.js"></script>
-<!-- Chart piety plugin files -->
-<script src="/static/vendor/peity/jquery.peity.min.js"></script>
-<script src="/static/vendor/jquery-nice-select/js/jquery.nice-select.min.js"></script>
-<!--swiper-slider-->
-<script src="/static/vendor/swiper/js/swiper-bundle.min.js"></script>
-{% if page == 'home' %}
-<script src="/static/js/dashboard/dashboard-1.js"></script>
-{% endif %}
+<!-- 3. Load jQuery UI on top of global.min.js's existing jQuery -->
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 
-<!-- ✅ DATATABLES AFTER JQUERY -->
+<!-- 4. Load DataTables on top of the same $ -->
 <script src="/static/vendor/datatables/js/jquery.dataTables.min.js"></script>
 <script src="/static/js/plugins-init/datatables.init.js"></script>
 
-<!-- Dashboard 1 -->
-<script src="/static/vendor/wow-master/dist/wow.min.js"></script>
-<script src="/static/vendor/bootstrap-datetimepicker/js/moment.js"></script>
-<script src="/static/vendor/datepicker/js/bootstrap-datepicker.min.js"></script>
+<!-- 5. jQuery plugins -->
+<script src="/static/vendor/peity/jquery.peity.min.js"></script>
+<script src="/static/vendor/jquery-nice-select/js/jquery.nice-select.min.js"></script>
+<script src="/static/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
 <script src="/static/vendor/bootstrap-select-country/js/bootstrap-select-country.min.js"></script>
+<script src="/static/vendor/datepicker/js/bootstrap-datepicker.min.js"></script>
 
+<!-- 6. Other vendors -->
+<script src="/static/vendor/chart.js/Chart.bundle.min.js"></script>
+<script src="/static/vendor/apexchart/apexchart.js"></script>
+<script src="/static/vendor/swiper/js/swiper-bundle.min.js"></script>
+<script src="/static/vendor/wow-master/dist/wow.min.js"></script>
+<script src="/static/vendor/fullcalendar-5.11.0/lib/main.js"></script>
+
+<!-- 7. App scripts -->
 <script src="/static/js/dlabnav-init.js"></script>
 <script src="/static/js/custom.js"></script>
 <script src="/static/js/demo.js"></script>
 <script src="/static/js/styleSwitcher.js"></script>
-
-<!-- calander-->
-<script src="/static/vendor/global/global.min.js"></script>
-<script src="/static/vendor/moment/moment.min.js"></script>
-<script src="/static/vendor/fullcalendar-5.11.0/lib/main.js"></script>
-<script src="/static/vendor/jquery-nice-select/js/jquery.nice-select.min.js"></script>
-<script src="/static/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
 <script src="/static/js/calendar.js"></script>
-<!-- Bootstrap 5 (no jQuery needed) -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- page group js -->
 <script src="/static/js/dashboard/groups-config.js"></script>
 
-<!-- ✅ JQUERY UI LAST -->
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<!-- 8. SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{% if page == 'home' %}
+<script src="/static/js/dashboard/dashboard-1.js"></script>
+{% endif %}
 </body>
 
 <!-- Mirrored from akademi.dexignlab.com/xhtml/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 04 Mar 2025 13:05:23 GMT -->

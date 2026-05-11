@@ -14,3 +14,16 @@ def get_paymet_session_service(session_id: int) -> tuple:
 	except Exception as e:
 		print(f"Error: {e} coming from server!")
 		return False,None
+
+
+def update_payment_user_service(payment_session_id: int, data) -> tuple:
+    try:
+        url = f"{current_app.config['BASE_URL']}update_payment_session/{payment_session_id}"
+        response = requests.post(url, verify=False,json=data, timeout=10)
+        if response.status_code == 200:  # ✅ no parentheses
+            return True, response.json()
+        else:
+            return False, response.json()
+    except Exception as e:
+        print(f"Error: {e} coming from update_payment_user_service")
+        return False, None
