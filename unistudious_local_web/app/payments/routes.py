@@ -4,7 +4,8 @@ from csv import excel_tab
 from flask import Blueprint, render_template,request, jsonify, session, redirect, url_for
 from app.payments.service import(
 	get_paymet_session_service,
-	update_payment_user_service
+	update_payment_user_service,
+	get_payment_user_info_service
 
 )
 
@@ -36,3 +37,17 @@ def update_payment_session(payment_session):
 			return jsonify(response),400
 	except Exception as e:
 		return jsonify({"Message": f"Error {e} coming from backend"}), 500
+
+
+@payment_bp.route('/api/get_payment_user_info_service/<int:session_id>/<int:user_id>')
+def get_payment_user_info(session_id,user_id):
+	try:
+		status,response = get_payment_user_info_service(user_id,session_id)
+		if status :
+			return jsonify(response),200
+		else:
+			return jsonify(response),400
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from server"
+		})

@@ -27,7 +27,8 @@ def show_payment_session_details(session_id):
 def show_user_session(id_user, id_session):
     if 'moderator_id' not in session:
         return redirect(url_for('auth.login'))
-
+    print("User_id: ",id_user)
+    print("Session_id",id_session)
     return render_template('index.html',
                       id_user=id_user,
                       id_session=id_session,

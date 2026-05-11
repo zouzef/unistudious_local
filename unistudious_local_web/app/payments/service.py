@@ -2,6 +2,8 @@
 import requests
 from flask import current_app
 
+
+
 def get_paymet_session_service(session_id: int) -> tuple:
 	url = f"{current_app.config['BASE_URL']}get_payment_session/{session_id}"
 	try:
@@ -16,6 +18,17 @@ def get_paymet_session_service(session_id: int) -> tuple:
 		return False,None
 
 
+def get_payment_user_info_service(user_id: int,session_id: int) -> tuple:
+    try:
+        url = f"{current_app.config['BASE_URL']}get_payment_session_user/{user_id}/{session_id}"
+        response = requests.get(url,verify=False,timeout=10)
+        if response.status_code == 200:
+            return True,response.json()
+        else:
+            return False,response.json()
+
+    except Exception as e:
+        return False,None
 def update_payment_user_service(payment_session_id: int, data) -> tuple:
     try:
         url = f"{current_app.config['BASE_URL']}update_payment_session/{payment_session_id}"
