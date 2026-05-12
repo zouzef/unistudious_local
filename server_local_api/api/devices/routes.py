@@ -1,7 +1,9 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify,request
 from datetime import datetime
 import sys
 import os
+
+
 
 # Add parent directories to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -76,6 +78,7 @@ def get_all_cameras_by_room(room_id):
         print(f"DEBUG: Error {e} coming from get_all_camera_by_room")
         return jsonify({'message': 'Internal Server Error'}), 500
 
+
 # ENDPOINT 3: Get camera by ID
 @devices_bp.route('/view-camera/<int:camera_id>', methods=['GET'])
 # @token_required
@@ -102,6 +105,95 @@ def view_camera_by_id(camera_id):
     except Exception as e:
         print(f"DEBUG: Error {e} coming from view_camera_by_id")
         return jsonify({'message': 'Internal Server Error'}), 500
+
+
+# ENDPOINT 4: Create Camera
+@devices_bp.route('/create_camera', methods=['POST'])
+def create_camera():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({
+                "Message": "There is no data to create camera"
+            }), 400
+
+        required_fields = ['slc_id', 'room_id', 'name', 'mac_id', 'username', 'password', 'type', 'status']
+        missing_fields = [field for field in required_fields if field not in data or not data[field]]
+
+        if missing_fields:
+            return jsonify({
+                "Message": f"Missing required fields: {', '.join(missing_fields)}"
+            }), 400
+
+        slc_id      = data.get('slc_id')
+        room_id     = data.get('room_id')
+        name        = data.get('name')
+        mac_id      = data.get('mac_id')
+        username    = data.get('username')
+        password    = data.get('password')
+        cam_type    = data.get('type')   # renamed to avoid shadowing built-in
+        status      = data.get('status')
+
+        query = """
+            INSERT INTO camera 
+            (slc_id, room_id, name, mac_id, username, password, type, status, enabled, timestamp, created_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
+        """
+        values = (slc_id, room_id, name, mac_id, username, password, cam_type, status, 1)
+        result = Database.execute_query(query, values, fetch=False)
+
+        if result:
+            return jsonify({
+                "Message": "Camera created successfully"
+            }), 200
+        else:
+            return jsonify({
+                "Message": "Failed to create camera"
+            }), 400
+
+    except Exception as e:
+        print(e)
+        return jsonify({
+
+            "Message": f"Error: {e} coming from server"
+        }), 500
+
+
+# ENDPOINT 5: DELETE Camera
+@devices_bp.route('/delete_camera/<int:camera_id>',methods=['POST'])
+def delete_camera(camera_id):
+    try:
+        query = """
+            SELECT count(*) AS nbr
+            FROM camera 
+            WHERE id = %s AND enabled = 1
+        """
+        values =(camera_id,)
+        result = Database.execute_query(query, values,fetch=True)[0]['nbr']
+        if result == 0:
+            return jsonify({
+                "Message":f"There is no camra with this id"
+            }),404
+        else:
+            query = """
+                UPDATE camera
+                set enabled = 0
+                WHERE id = %s
+            """
+            values=(camera_id,)
+            result = Database.execute_query(query, values,fetch=False)
+            if result:
+                return jsonify({
+                    "Message":f"Camera Deleted with Success"
+                }),200
+            else:
+                return jsonify({
+                    "Message":f"Camera dosent deleted "
+                }),400
+    except Exception as e:
+        return jsonify({
+            "Message":f"Error: {e} coming from server"
+        })
 
 # ========================================
 # TABLET ENDPOINTS

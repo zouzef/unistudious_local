@@ -31,7 +31,7 @@ def show_sessions():
     if 'moderator_id' not in session:
         return redirect(url_for('auth.login_page'))
 
-    account_id = session.get('account_id', 3)
+    account_id = session.get('account_id')
 
     return render_template('index.html',
                            sessions=get_all_sessions(account_id),

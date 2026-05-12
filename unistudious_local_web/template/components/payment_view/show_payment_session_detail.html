@@ -140,7 +140,7 @@ window.addEventListener('load', function() {
                 document.getElementById('payment-table-body').innerHTML = payments.map(item => `
                     <tr>
                         <td>${item.user_id}</td>
-                        <td>${item.username}</td>
+                        <td>${item.full_name}</td>
                         <td>${item.price}TND</td>
                         <td>${getStatusBadge(item.status)}</td>
                         <td>${formatDate(item.date_payment)}</td>

@@ -1,0 +1,89 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header px-3">
+                        <h4 class="card-title">List Server Local</h4>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table id="example" class="display table dataTable no-footer" style="min-width: 845px;">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                        <th>Capacity</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="slc-table-body">
+                                    <!-- filled by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function loadSlcData() {
+    const account_id = {{ account_id }};  // from Flask session
+
+    fetch(`/api/get_slc_info/${account_id}`)
+        .then(res => res.json())
+        .then(result => {
+            const tbody = document.getElementById('slc-table-body');
+            const data = result.data || [];
+
+            if (data.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center">No SLC found</td>
+                    </tr>`;
+                return;
+            }
+
+            tbody.innerHTML = data.map(slc => `
+                <tr>
+                    <td><span class="text-primary font-w600">${slc.id}</span></td>
+                    <td>${slc.name}</td>
+                    <td>${slc.address}</td>
+                    <td>${slc.capacity}</td>
+                    <td>
+                        ${slc.status === 1
+                            ? `<span class="badge light badge-success">
+                                <i class="fa fa-circle text-success me-1"></i> Active
+                               </span>`
+                            : `<span class="badge light badge-danger">
+                                <i class="fa fa-circle text-danger me-1"></i> Inactive
+                               </span>`
+                        }
+                    </td>
+                    <td>
+                        <div class="d-flex">
+                            <div class="icon-box icon-box-sm me-2">
+                                <a href="#" class="open-local-slc-admin-modal" data-slc-id="${slc.id}">
+                                    <i class="fas fa-home" style="font-size:10px;color:Blue"></i>
+                                </a>
+                            </div>
+                            <div class="icon-box icon-box-sm">
+                                <a href="#" class="open-slc-attendance-qr-admin-modal" data-slc-id="${slc.id}">
+                                    <i class="fas fa-qrcode" style="font-size:10px;color:Green"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        })
+        .catch(err => console.error('Error loading SLC data:', err));
+}
+
+document.addEventListener('DOMContentLoaded', loadSlcData);
+</script>
