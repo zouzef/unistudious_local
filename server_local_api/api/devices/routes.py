@@ -24,7 +24,11 @@ devices_bp = Blueprint('devices', __name__, url_prefix='/scl')
 # @token_required
 def get_all_cameras():
     try:
-        query = "SELECT * FROM camera"
+        query = """
+            SELECT c.*,r.name
+                FROM camera c,room r
+                WHERE r.id = c.room_id AND r.enabled = 1 AND c.enabled = 1
+         """
         rows = Database.execute_query(query)
 
         cameras = []
@@ -276,8 +280,8 @@ def create_tablet():
             }), 400
 
         query = """
-            INSERT INTO tablet (slc_id, room_id, name, mac_id, password,enabled,created_at)
-            VALUES (%s, %s, %s, %s, %s,1)
+            INSERT INTO tablet (slc_id, room_id, name, mac_id, password, enabled, created_at,slc_edit)
+            VALUES (%s, %s, %s, %s, %s, 1, NOW(),1)
         """
         values = (
             data.get('slc_id', None),
@@ -291,14 +295,86 @@ def create_tablet():
 
         return jsonify({
             "Message": "Tablet created successfully"
-        }), 201
+        }), 200
 
     except Exception as e:
         return jsonify({
             "Message": f"Error: {e} coming from server"
         }), 500
 
-# ENDPOINT 1: Get all tablets
+
+# ENDPOINT 2: Delete tablet
+@devices_bp.route('/delete_tablet/<int:tablet_id>',methods=['POST'])
+def delete_tablet(tablet_id):
+    try:
+        query_test = """
+            SELECT count(*) AS nbr
+            FROM tablet 
+            WHERE id=%s AND enabled = 1
+        """
+        values=(tablet_id,)
+        result = Database.execute_query(query_test,values,fetch=True)
+        if result[0]['nbr']==0:
+            return jsonify({
+                "Message":f"There is no Tablet with id: {tablet_id}"
+            }),404
+        else:
+            query = """
+                UPDATE tablet set enabled = 0 AND slc_edit = 1 WHERE id = %s AND enabled = 1
+            """
+            values=(tablet_id,)
+            result = Database.execute_query(query,values,fetch=False)
+            if result:
+                return jsonify({
+                    "Message":"Tablet deleted with Success"
+                }),200
+            else:
+                return jsonify({
+                    "Message":"Error in deleting tablet"
+                })
+    except Exception as e:
+        return jsonify({
+            "Message":f"Error: {e} coming from server"
+        }),500
+
+
+# ENDPOINT 3: Update table
+@devices_bp.route('/update_tablet/<int:tablet_id>', methods=['POST'])
+def update_tablet(tablet_id):
+    try:
+        data = request.get_json()
+
+        allowed_fields = ['name', 'mac_id', 'password']
+
+        # Filter only the fields that were actually sent
+        fields_to_update = {key: data[key] for key in allowed_fields if key in data and data[key] != ''}
+
+        # Nothing to update
+        if not fields_to_update:
+            return jsonify({
+                "Message": "No valid fields provided to update"
+            }), 400
+
+        # Build query dynamically
+        set_clause = ", ".join([f"{key} = %s" for key in fields_to_update])
+        values = list(fields_to_update.values())
+        values.append(tablet_id)
+
+        query = f"UPDATE tablet SET {set_clause} WHERE id = %s"
+
+        Database.execute_query(query, tuple(values), fetch=False)
+
+        return jsonify({
+            "Message": "Tablet updated successfully"
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
+
+
+# ENDPOINT 4: Get all tablets
 @devices_bp.route('/get-all-tablets', methods=['GET'])
 # @token_required
 def get_all_tablets():
@@ -312,6 +388,7 @@ def get_all_tablets():
                 status,
                 room_id as roomId
             FROM tablet
+            WHERE enabled = 1
         """
         rows = Database.execute_query(query)
 
@@ -338,8 +415,7 @@ def get_all_tablets():
         }), 500
 
 
-
-# ENDPOINT 2: Get all tablets by room
+# ENDPOINT 5: Get all tablets by room
 @devices_bp.route('/get-all-tablet-room/<int:room_id>', methods=['GET'])
 # @token_required
 def get_tablets_by_room(room_id):
@@ -380,13 +456,18 @@ def get_tablets_by_room(room_id):
         }), 500
 
 
-
 # ENDPOINT 3: Get tablet by ID
 @devices_bp.route('/view-tablet/<int:id_tablette>', methods=['GET'])
 # @token_required
 def view_tablet_by_id(id_tablette):
     try:
-        query = "SELECT * FROM tablet WHERE id = %s"
+        print(id_tablette)
+        query = """
+            SELECT t.id, t.name, t.mac_id, t.password, r.id, r.name, t.created_at, s.username
+            FROM tablet t, room r,slc s
+            WHERE t.id = %s AND t.enabled = 1 AND t.room_id = r.id AND r.enabled = 1 AND s.id = t.slc_id
+        
+        """
         rows = Database.execute_query(query, (id_tablette,))
 
         if not rows:
@@ -403,8 +484,9 @@ def view_tablet_by_id(id_tablette):
                 "name": row["name"],
                 "mac": row["mac_id"],
                 "password": row["password"],
-                "status": row["status"],
-                "roomId": row["room_id"]
+                "slc_mac": row["username"],
+                "created_at": row["created_at"]
+
             })
 
         return jsonify(formatted_data), 200

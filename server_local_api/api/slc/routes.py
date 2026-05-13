@@ -19,7 +19,6 @@ slc_bp = Blueprint('slc', __name__, url_prefix='/scl')
 
 # ENDPOINT 1: Get all rooms
 @slc_bp.route('/get-all-room', methods=['GET'])
-@token_required
 def get_all_rooms():
     try:
         query = "SELECT * FROM room"
