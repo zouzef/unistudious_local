@@ -136,8 +136,8 @@ def create_camera():
 
         query = """
             INSERT INTO camera 
-            (slc_id, room_id, name, mac_id, username, password, type, status, enabled, timestamp, created_at)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
+            (slc_id, room_id, name, mac_id, username, password, type, status, enabled, timestamp, created_at,slc_edit)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NOW(), NOW(),1)
         """
         values = (slc_id, room_id, name, mac_id, username, password, cam_type, status, 1)
         result = Database.execute_query(query, values, fetch=False)
@@ -177,8 +177,8 @@ def delete_camera(camera_id):
         else:
             query = """
                 UPDATE camera
-                set enabled = 0
-                WHERE id = %s
+                set enabled = 0 AND slc_edit = 1
+                WHERE id = %s 
             """
             values=(camera_id,)
             result = Database.execute_query(query, values,fetch=False)
@@ -195,11 +195,110 @@ def delete_camera(camera_id):
             "Message":f"Error: {e} coming from server"
         })
 
+
+# ENDPOINT 6: Update Camera
+@devices_bp.route('/update_camera/<int:camera_id>', methods=['POST'])
+def update_camera(camera_id):
+    try:
+        data = request.get_json()
+
+        # Check if camera exists
+        query = """
+            SELECT count(*) as nbr 
+            FROM camera 
+            WHERE id = %s
+        """
+        values = (camera_id,)
+        result = Database.execute_query(query, values, fetch=True)
+
+        if result[0]['nbr'] == 0:
+            return jsonify({
+                "Message": "There is no camera with this id"
+            }), 404
+
+        # Build dynamic update query based on provided fields
+        allowed_fields = {
+            "type": "type",
+            "name": "name",
+            "mac_id": "mac_id"
+        }
+
+        fields_to_update = []
+        values_to_update = []
+
+        for key, column in allowed_fields.items():
+            if key in data:
+                fields_to_update.append(f"{column} = %s")
+                values_to_update.append(data[key])
+
+        if not fields_to_update:
+            return jsonify({
+                "Message": "No valid fields provided to update"
+            }), 400
+
+        values_to_update.append(camera_id)
+
+        query = f"""
+            UPDATE camera
+            SET {', '.join(fields_to_update)}
+            WHERE id = %s
+        """
+
+        Database.execute_query(query, tuple(values_to_update), fetch=False)
+
+        return jsonify({
+            "Message": "Camera updated successfully"
+        }), 200
+
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
+
+
 # ========================================
 # TABLET ENDPOINTS
 # ========================================
 
-# ENDPOINT 4: Get all tablets
+# ENDPOINT 1: Create tablet
+@devices_bp.route('/create_tablet', methods=['POST'])
+def create_tablet():
+    try:
+        data = request.get_json()
+        required_fields = ['name', 'mac_id', 'password','slc_id','room_id']
+
+        # Check for missing fields
+        missing_fields = [field for field in required_fields if field not in data or data[field] == '']
+        if missing_fields:
+            return jsonify({
+                "Message": f"Missing required fields: {', '.join(missing_fields)}"
+            }), 400
+
+        query = """
+            INSERT INTO tablet (slc_id, room_id, name, mac_id, password,enabled,created_at)
+            VALUES (%s, %s, %s, %s, %s,1)
+        """
+        values = (
+            data.get('slc_id', None),
+            data.get('room_id', None),
+            data['name'],
+            data['mac_id'],
+            data['password']
+        )
+
+        Database.execute_query(query, values, fetch=False)
+
+        return jsonify({
+            "Message": "Tablet created successfully"
+        }), 201
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
+
+# ENDPOINT 1: Get all tablets
 @devices_bp.route('/get-all-tablets', methods=['GET'])
 # @token_required
 def get_all_tablets():
@@ -240,7 +339,7 @@ def get_all_tablets():
 
 
 
-# ENDPOINT 5: Get all tablets by room
+# ENDPOINT 2: Get all tablets by room
 @devices_bp.route('/get-all-tablet-room/<int:room_id>', methods=['GET'])
 # @token_required
 def get_tablets_by_room(room_id):
@@ -282,7 +381,7 @@ def get_tablets_by_room(room_id):
 
 
 
-# ENDPOINT 6: Get tablet by ID
+# ENDPOINT 3: Get tablet by ID
 @devices_bp.route('/view-tablet/<int:id_tablette>', methods=['GET'])
 # @token_required
 def view_tablet_by_id(id_tablette):
