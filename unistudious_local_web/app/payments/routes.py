@@ -1,12 +1,14 @@
 # app/payments/routes.py
 from csv import excel_tab
 
-from flask import Blueprint, render_template,request, jsonify, session, redirect, url_for
+from flask import Blueprint, render_template,request, jsonify, session, redirect, url_for,send_file
 from app.payments.service import(
 	get_paymet_session_service,
 	update_payment_service,
 	get_payment_user_info_service,
-	update_payment_user_service
+	update_payment_user_service,
+	fetch_invoices_payment_service,
+	fetch_invoice_by_id_service
 
 )
 
@@ -70,3 +72,80 @@ def update_payment_user(payment_id,session_id,user_id):
 		return jsonify({
 			"Message":f"Error: {e} coming from update_payment_user"
 		}),500
+
+
+#====================================== Invoices payment ======================================
+
+@payment_bp.route('/api/get_all_invoice_session/<int:account_id>',methods=['GET'])
+def get_all_invoice_session(account_id):
+	try:
+		status,response = fetch_invoices_payment_service(account_id)
+		return jsonify(response.json()),response.status_code
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from backend"
+		})
+
+
+@payment_bp.route('/api/get_invoice_by_id/<int:invoice_id>/<int:account_id>/<int:admin_user_id>', methods=['GET'])
+def get_invoice_by_id(invoice_id, account_id, admin_user_id):
+    try:
+        status, response = fetch_invoice_by_id_service(invoice_id, account_id, admin_user_id)
+        if not status or response is None:
+            return jsonify({"Message": "Invoice not found"}), 404
+        return jsonify(response.json()), response.status_code  # ✅ fixed
+    except Exception as e:
+        return jsonify({"Message": f"Error: {e} coming from backend"})
+
+@payment_bp.route('/api/download_invoice/<int:invoice_id>', methods=['GET'])
+def download_invoice(invoice_id):
+    try:
+        from app.utils.generate_invoice_pdf import generate_invoice_pdf
+        import io
+
+        account_id    = session.get('account_id')
+        admin_user_id = session.get('user_id')
+
+        if not account_id or not admin_user_id:
+            return jsonify({"Message": "Unauthorized"}), 401
+
+        status, response = fetch_invoice_by_id_service(invoice_id, account_id, admin_user_id)
+
+        if not status or response is None:
+            return jsonify({"Message": "Invoice not found"}), 404
+
+        row = response.json()
+
+        invoice = {
+            "invoice_number": row["id"],
+            "created_at":     row["created_at"],
+            "from_name":      row.get("academy_name",    ""),
+            "from_address":   row.get("academy_address", ""),
+            "from_phone":     row.get("agent_phone",     ""),
+            "from_email":     row.get("agent_email",     ""),
+            "to_name":        row.get("student_name",    ""),
+            "to_address":     row.get("student_address", ""),
+            "to_phone":       row.get("student_phone",   ""),
+            "to_email":       row.get("student_email",   ""),
+            "order_id":       row["payment_session_id"],
+            "order_type":     row["type"],
+            "description":    row["description"],
+            "status":         "Paid" if row["is_status"] else "Unpaid",
+            "price":          row["total_amount"],
+            "total_amount":   row["total_amount"],
+            "agent_name":     row.get("agent_name",  ""),
+            "agent_phone":    row.get("agent_phone", ""),
+            "agent_email":    row.get("agent_email", ""),
+        }
+
+        pdf_bytes = generate_invoice_pdf(invoice)
+
+        return send_file(
+            io.BytesIO(pdf_bytes),
+            mimetype='application/pdf',
+            as_attachment=True,
+            download_name=f"invoice_{invoice_id}.pdf"
+        )
+
+    except Exception as e:
+        return jsonify({"Message": f"Error: {e} coming from backend"}), 500

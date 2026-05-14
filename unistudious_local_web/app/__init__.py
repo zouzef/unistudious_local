@@ -25,13 +25,15 @@ def create_app():
     from app.formation.routes import formation_bp
     from app.payments.routes import payment_bp
     from app.slc.routes import slc_bp
+    from app.configuration.routes import configuration_bp
+
 
     # VIEWS imports
     from app.session.views import session_view_bp
     from app.user.views import user_views_bp
     from app.payments.views import payment_view_bp
     from app.slc.views import slc_view_bp
-
+    from app.configuration.views import configuration_view_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(session_bp)
@@ -42,10 +44,12 @@ def create_app():
     app.register_blueprint(formation_bp)
     app.register_blueprint(payment_bp)
     app.register_blueprint(slc_bp)
+    app.register_blueprint(configuration_bp)
 
     # view Blueprint
     app.register_blueprint(user_views_bp)
     app.register_blueprint(session_view_bp)
     app.register_blueprint(payment_view_bp)
     app.register_blueprint(slc_view_bp)
+    app.register_blueprint(configuration_view_bp)
     return app

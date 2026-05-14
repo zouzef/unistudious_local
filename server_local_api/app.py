@@ -66,6 +66,10 @@ def create_app():
     from api.payment.routes import payment_bp
     app.register_blueprint(payment_bp)
 
+    # Account level
+    from api.account_level.routes import account_level_bp
+    app.register_blueprint(account_level_bp)
+
     # ========================================
     # HOME ROUTE
     # ========================================

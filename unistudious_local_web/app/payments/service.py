@@ -57,3 +57,28 @@ def update_payment_user_service(payment_id, session_id,user_id,data):
 	except Exception as e:
 		print(f"Error: {e} coming from update_payment_user_service ")
 		return False,None
+
+
+def fetch_invoices_payment_service(account_id: int) -> tuple:
+	try:
+		url = f"{current_app.config['BASE_URL']}get_all_invoice/{account_id}"
+		response = requests.get(url,verify=False,timeout=10)
+		if response.status_code == 200:
+			return True,response
+		else:
+			return False,response
+
+	except Exception as e:
+		return False,None
+
+def fetch_invoice_by_id_service(invoice_id: int, account_id: int, admin_user_id: int) -> tuple:
+	try:
+		url = f"{current_app.config['BASE_URL']}get_invoice_by_id/{invoice_id}/{account_id}/{admin_user_id}"
+		response = requests.get(url,verify=False,timeout=10)
+		if response.status_code == 200:
+			return True,response
+		else:
+			return False,response
+	except Exception as e:
+		print(e)
+		return False,None

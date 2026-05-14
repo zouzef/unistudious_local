@@ -1,0 +1,202 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header flex-wrap px-3">
+                        <h4 class="card-title">List Levels</h4>
+                        <a href="/dashboard/create-level" class="btn btn-primary">+ New Level</a>
+                    </div>
+
+                    <div class="card-body p-0">
+
+                        <!-- Loading state -->
+                        <div id="table-loading" class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status"></div>
+                            <p class="mt-2 text-muted">Loading levels...</p>
+                        </div>
+
+                        <!-- Error state -->
+                        <div id="table-error" class="alert alert-danger mx-3 my-3 d-none">
+                            <i class="fa fa-exclamation-triangle me-2"></i>
+                            <span id="error-message">Failed to load data.</span>
+                        </div>
+
+                        <!-- Table -->
+                        <div id="table-wrapper" class="table-responsive d-none">
+                            <table id="example" class="display table dataTable no-footer">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Level</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="levels-tbody">
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const ACCOUNT_ID = {{ account_id }};
+
+    window.addEventListener('load', function () {
+
+        let dataTableInstance = null;
+
+        const truncate = (text, wordLimit = 8) => {
+            if (!text) return 'N/A';
+            const words = text.split(' ');
+            return words.length <= wordLimit
+                ? text
+                : words.slice(0, wordLimit).join(' ') + '...';
+        };
+
+        function initDataTable() {
+            if ($.fn.DataTable.isDataTable('#example')) {
+                $('#example').DataTable().destroy();
+                dataTableInstance = null;
+            }
+
+            dataTableInstance = $('#example').DataTable({
+                order: [[0, 'desc']],
+                pageLength: 10,
+                lengthChange: true,
+                lengthMenu: [10, 25, 50, 100],
+                language: {
+                    lengthMenu: 'Show _MENU_ entries',
+                    paginate: {
+                        next: '<i class="fa-solid fa-angle-right"></i>',
+                        previous: '<i class="fa-solid fa-angle-left"></i>'
+                    }
+                },
+                drawCallback: function () {
+                    stylePaginationButtons();
+                }
+            });
+        }
+
+        function loadLevels() {
+            fetch(`/api/get_all_account_level/${ACCOUNT_ID}`)
+                .then(res => {
+                    if (!res.ok) throw new Error(`Server returned ${res.status}`);
+                    return res.json();
+                })
+                .then(levels => {
+                    const loading = document.getElementById('table-loading');
+                    const error   = document.getElementById('table-error');
+                    const wrapper = document.getElementById('table-wrapper');
+                    const tbody   = document.getElementById('levels-tbody');
+
+                    if ($.fn.DataTable.isDataTable('#example')) {
+                        $('#example').DataTable().destroy();
+                        dataTableInstance = null;
+                    }
+
+                    if (!levels || levels.length === 0) {
+                        tbody.innerHTML = `
+                            <tr>
+                                <td colspan="4" class="text-center">No levels found</td>
+                            </tr>`;
+                        loading.classList.add('d-none');
+                        wrapper.classList.remove('d-none');
+                        initDataTable();
+                        return;
+                    }
+
+                    tbody.innerHTML = levels.map(level => {
+                        const displayName = level.other_level ?? `Level #${level.level_config_id}`;
+                        const isActive    = level.status === 1 && level.enabled === 1;
+                        const badgeClass  = isActive ? 'badge-success' : 'badge-danger';
+                        const dotClass    = isActive ? 'text-success'  : 'text-danger';
+                        const badgeLabel  = isActive ? 'Active'        : 'Inactive';
+
+                        return `
+                            <tr>
+                                <td><span class="text-primary font-w600">${level.id}</span></td>
+                                <td>${displayName}</td>
+                                <td>
+                                    <span class="badge light ${badgeClass}">
+                                        <i class="fa fa-circle ${dotClass} me-1"></i>
+                                        ${badgeLabel}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <div class="icon-box icon-box-sm me-2">
+                                            <a href="#" data-id="${level.id}" class="delete-level">
+                                                <i class="material-icons" style="font-size:10px;color:red">delete</i>
+                                            </a>
+                                        </div>
+                                        <div class="icon-box icon-box-sm">
+                                            <a href="/dashboard/view-level/${level.id}">
+                                                <i class="fas fa-pencil-alt" style="font-size:10px;color:green"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>`;
+                    }).join('');
+
+                    loading.classList.add('d-none');
+                    wrapper.classList.remove('d-none');
+                    initDataTable();
+
+                })
+                .catch(err => {
+                    const loading = document.getElementById('table-loading');
+                    const error   = document.getElementById('table-error');
+                    loading.classList.add('d-none');
+                    error.classList.remove('d-none');
+                    document.getElementById('error-message').textContent = err.message;
+                });
+        }
+
+        function stylePaginationButtons() {
+            const paginate = document.querySelector('.dataTables_paginate');
+            if (!paginate) return;
+
+            paginate.querySelectorAll('span > a, a.paginate_button').forEach(btn => {
+                btn.style.cssText = `
+                    min-width: 32px; height: 32px; border-radius: 8px;
+                    border: 1.5px solid #e0dfef; background: #fff;
+                    color: #4c4b8f; font-size: 13px; font-weight: 500;
+                    cursor: pointer; display: inline-flex; align-items: center;
+                    justify-content: center; padding: 0 6px; margin: 0 2px;
+                    text-decoration: none; transition: background .15s;
+                `;
+            });
+
+            paginate.querySelectorAll('a.paginate_button.current').forEach(btn => {
+                btn.style.cssText += `background: #4c4b9e !important; color: #fff !important; border-color: #4c4b9e !important;`;
+            });
+
+            paginate.querySelectorAll('a.paginate_button.disabled').forEach(btn => {
+                btn.style.opacity = '0.35';
+                btn.style.cursor = 'default';
+            });
+        }
+
+        // Delete handler (event delegation)
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.delete-level');
+            if (!btn) return;
+            e.preventDefault();
+            const id = btn.dataset.id;
+            if (confirm(`Delete level #${id}?`)) {
+                // call your delete endpoint here
+                console.log('Delete level', id);
+            }
+        });
+
+        loadLevels();
+    });
+</script>

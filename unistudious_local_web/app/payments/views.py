@@ -38,8 +38,9 @@ def show_user_session(id_user, id_session):
 
 @payment_view_bp.route('/dashboard/invoice-payment-session')
 def show_invoice_payment():
-    if not 'moderator_id' not in session:
+    if not 'moderator_id' in session:
         return redirect(url_for('auth.login'))
+
     return render_template('index.html',
                            account_id=session.get('account_id'),
                            page ='invoice_session'

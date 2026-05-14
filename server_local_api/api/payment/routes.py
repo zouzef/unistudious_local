@@ -206,3 +206,74 @@ def update_payment_session_user(session_id, user_id, payment_id):
         return jsonify({
             "Message": f"Error: {e} coming from server"
         }), 500
+
+# INVOICE endpointS
+@payment_bp.route('/get_all_invoice/<int:account_id>',methods=['GET'])
+def get_all_invoice(account_id):
+	try:
+		query = """
+			SELECT i.*, u.full_name as username
+			FROM invoice i
+			JOIN user u ON i.user_id = u.id
+			WHERE i.account_id = %s 
+			  AND i.enabled = 1
+		"""
+		values =(account_id,)
+		result = Database.execute_query(query,values,fetch=True)
+		if result:
+			return jsonify(result),200
+		else:
+			return jsonify({
+				"Message":"There is no invoice with this account_id "
+			}),404
+
+	except Exception as e:
+		print(e)
+		return jsonify({
+			"Message":f"Error: {e} coming from server"
+		})
+
+@payment_bp.route('/get_invoice_by_id/<int:invoice_id>/<int:account_id>/<int:admin_user_id>', methods=['GET'])
+def get_invoice_by_id(invoice_id, account_id, admin_user_id):
+    try:
+        query = """
+            SELECT 
+                i.*,
+                -- Student info
+                student.full_name   AS student_name,
+                student.email       AS student_email,
+                student.phone       AS student_phone,
+                student.address     AS student_address,
+                -- Academy info
+                a.name             AS academy_name,
+                a.file_link
+                -- Admin info (logged-in user)
+                admin.full_name     AS agent_name,
+                admin.email         AS agent_email,
+                admin.phone         AS agent_phone,
+                
+                -- Local info
+                l.address as academy_address,
+                l.name
+                
+            FROM invoice i
+            JOIN user    student ON i.user_id    = student.id
+            JOIN account a       ON i.account_id = a.id
+            JOIN user    admin   ON admin.id      = %s
+            JOIN local l         ON i.account_id = l.account_id
+            WHERE i.id         = %s
+              AND i.account_id = %s
+        """
+        result = Database.execute_query(
+            query,
+            (admin_user_id, invoice_id, account_id),
+            fetch=True
+        )
+        if result:
+            return jsonify(result[0]), 200
+        else:
+            return jsonify({"Message": "Invoice not found"}), 404
+
+    except Exception as e:
+        print(e)
+        return jsonify({"Message": f"Error: {e} coming from server"}), 500

@@ -27,7 +27,7 @@ def login_post():
         session['moderator_name'] = user_data['username']
         session['user_id'] = user_data['user_id']
         session['account_id'] = user_data['account_id']
-
+        print(user_data)
         return jsonify({
             'success': True,
             'message': message,
@@ -45,3 +45,5 @@ def logout():
     """Handle logout"""
     session.clear()
     return redirect('/login')
+
+

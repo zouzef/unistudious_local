@@ -1,0 +1,168 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="card" id="accordion-one">
+            <div class="card-header">
+                <h4 class="card-title">List Invoices Sessions</h4>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table id="invoiceTable" class="display table dataTable no-footer"
+                           style="min-width: 845px;">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Type</th>
+                                <th>Name</th>
+                                <th>User</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoice-table-body">
+                        <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const accountId = {{ account_id }};
+
+    const truncate = (text, wordLimit = 8) => {
+        if (!text) return 'N/A';
+        const words = text.split(' ');
+        return words.length <= wordLimit
+            ? text
+            : words.slice(0, wordLimit).join(' ') + '...';
+    };
+
+    window.addEventListener('load', function () {
+
+        let dataTableInstance = null;
+
+        const formatDate = (dateStr) => {
+            if (!dateStr) return 'N/A';
+            return new Date(dateStr).toLocaleString('en-GB');
+        };
+
+        function initDataTable() {
+            if ($.fn.dataTable.isDataTable('#invoiceTable')) {
+                $('#invoiceTable').DataTable().destroy();
+                dataTableInstance = null;
+            }
+
+            dataTableInstance = $('#invoiceTable').DataTable({
+                order: [[0, 'desc']],
+                pageLength: 10,
+                lengthChange: true,
+                lengthMenu: [10, 25, 50, 100],
+                language: {
+                    lengthMenu: 'Show _MENU_ entries',
+                    paginate: {
+                        next: '<i class="fa-solid fa-angle-right"></i>',
+                        previous: '<i class="fa-solid fa-angle-left"></i>'
+                    }
+                },
+                drawCallback: function () {
+                    stylePaginationButtons();
+                }
+            });
+        }
+
+        function loadInvoices() {
+            fetch(`/api/get_all_invoice_session/${accountId}`)
+                .then(res => res.json())
+                .then(data => {
+
+                    if ($.fn.dataTable.isDataTable('#invoiceTable')) {
+                        $('#invoiceTable').DataTable().destroy();
+                        dataTableInstance = null;
+                    }
+
+                    const tbody = document.getElementById('invoice-table-body');
+
+                    if (!data || data.length === 0) {
+                        tbody.innerHTML = `
+                            <tr>
+                                <td colspan="7" class="text-center">No invoice records found</td>
+                            </tr>`;
+                        initDataTable();
+                        return;
+                    }
+
+                    tbody.innerHTML = data.map(item => `
+                        <tr>
+                            <td><span class="text-primary font-w600">${item.id}</span></td>
+                            <td>
+                                <div class="trans-list">
+                                    <h4>${item.type ?? 'N/A'}</h4>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="trans-list">
+                                    <h4>${item.name ?? 'N/A'}</h4>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="trans-list">
+                                    <h4>${item.username ?? 'N/A'}</h4>   <!-- ✅ user name -->
+                                </div>
+                            </td>
+                            <td>
+                                <div class="trans-list">
+                                    <h4>${truncate(item.description)}</h4>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="date">${parseFloat(item.total_amount || 0).toFixed(2)} TND</div>
+                            </td>
+                            <td>
+                                <div class="date">${formatDate(item.created_at)}</div>
+                            </td>
+                            <td style="text-align: center;">
+                                <a href="/api/download_invoice/${item.id}" title="Download Invoice">
+                                    <i class="fa-solid fa-print" style="font-size:18px; color:#A098AE;"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    `).join('');
+
+                    initDataTable();
+
+                })
+                .catch(err => console.error('Error loading invoices:', err));
+        }
+
+        function stylePaginationButtons() {
+            const paginate = document.querySelector('.dataTables_paginate');
+            if (!paginate) return;
+
+            paginate.querySelectorAll('span > a, a.paginate_button').forEach(btn => {
+                btn.style.cssText = `
+                    min-width: 32px; height: 32px; border-radius: 8px;
+                    border: 1.5px solid #e0dfef; background: #fff;
+                    color: #4c4b8f; font-size: 13px; font-weight: 500;
+                    cursor: pointer; display: inline-flex; align-items: center;
+                    justify-content: center; padding: 0 6px; margin: 0 2px;
+                    text-decoration: none; transition: background .15s;
+                `;
+            });
+
+            paginate.querySelectorAll('a.paginate_button.current').forEach(btn => {
+                btn.style.cssText += `background: #4c4b9e !important; color: #fff !important; border-color: #4c4b9e !important;`;
+            });
+
+            paginate.querySelectorAll('a.paginate_button.disabled').forEach(btn => {
+                btn.style.opacity = '0.35';
+                btn.style.cursor = 'default';
+            });
+        }
+
+        loadInvoices();
+    });
+</script>

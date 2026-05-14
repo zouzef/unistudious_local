@@ -65,7 +65,7 @@ def auth_moderator():
         if has_all_roles:
             return jsonify({
                 "message": "success",
-                "user_id": user_id
+                "user_id": user_id,
             }), 200
         else:
             missing_roles = [role for role in REQUIRED_MODERATOR_ROLES if role not in user_roles]

@@ -15,7 +15,7 @@ class Config:
     # ==========================================
     # EXTERNAL API
     # ==========================================
-    BASE_URL = "https://192.168.1.23:5004/scl/"
+    BASE_URL = " https://192.168.1.249:5004/scl/"
     REQUEST_TIMEOUT = 10
     VERIFY_SSL = False
 
