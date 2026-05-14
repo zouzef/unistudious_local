@@ -31,7 +31,7 @@ def get_list_camera_service() -> tuple:
 		return False,None
 
 def create_camera_service(data:dict) -> tuple:
-	url =f"{current_app.config['BASE_URL']}/create_camera"
+	url =f"{current_app.config['BASE_URL']}create_camera"
 	try:
 		response = requests.post(url,json=data,verify=False,timeout=10)
 		if response.status_code == 200:
@@ -53,6 +53,19 @@ def update_camera_service(data: dict, camera_id: int) -> tuple:
 		print(e)
 		return False,None
 
+def delete_camera_service(tablet_id: int) -> tuple:
+	try:
+		url = f"{current_app.config['BASE_URL']}delete_camera/{tablet_id}"
+		response = requests.post(url,verify=False,timeout=10)
+		if response.status_code == 200:
+			return True,response.json()
+		else:
+			return False,response.json()
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from backend"
+		})
 
 # ====================================================== TABLET service ======================================================
 

@@ -25,7 +25,7 @@ devices_bp = Blueprint('devices', __name__, url_prefix='/scl')
 def get_all_cameras():
     try:
         query = """
-            SELECT c.*,r.name
+            SELECT c.*,r.name as roomName
                 FROM camera c,room r
                 WHERE r.id = c.room_id AND r.enabled = 1 AND c.enabled = 1
          """
@@ -42,7 +42,7 @@ def get_all_cameras():
                 "password": row.get("password") or "",
                 "status": "Active" if row.get("enabled", 1) else "Inactive",
                 "roomId": row.get("room_id"),
-                "roomName": row.get("room_name"),
+                "roomName": row.get("roomName"),
                 "created_at": row["created_at"].strftime("%Y-%m-%d %H:%M:%S") if row.get("created_at") else None
             })
 
@@ -58,7 +58,7 @@ def get_all_cameras():
 # @token_required
 def get_all_cameras_by_room(room_id):
     try:
-        query = "SELECT * FROM camera WHERE room_id = %s"
+        query = "SELECT * FROM camera WHERE room_id = %s AND enabled = 1"
         rows = Database.execute_query(query, (room_id,))
 
         cameras = []
@@ -116,18 +116,29 @@ def view_camera_by_id(camera_id):
 def create_camera():
     try:
         data = request.get_json()
+        print(data)
         if not data:
             return jsonify({
                 "Message": "There is no data to create camera"
             }), 400
 
-        required_fields = ['slc_id', 'room_id', 'name', 'mac_id', 'username', 'password', 'type', 'status']
+        required_fields = ['slc_id', 'room_id', 'name', 'mac_id', 'type', 'status']
         missing_fields = [field for field in required_fields if field not in data or not data[field]]
 
         if missing_fields:
             return jsonify({
                 "Message": f"Missing required fields: {', '.join(missing_fields)}"
             }), 400
+
+        # username & password are required only for IP cameras
+        if data.get('type') == 'ipcam':
+            ip_required = ['username', 'password']
+            ip_missing = [field for field in ip_required if field not in data or not data[field]]
+
+            if ip_missing:
+                return jsonify({
+                    "Message": f"Missing required fields for IP camera: {', '.join(ip_missing)}"
+                }), 400
 
         slc_id      = data.get('slc_id')
         room_id     = data.get('room_id')
@@ -145,7 +156,7 @@ def create_camera():
         """
         values = (slc_id, room_id, name, mac_id, username, password, cam_type, status, 1)
         result = Database.execute_query(query, values, fetch=False)
-
+        print(result)
         if result:
             return jsonify({
                 "Message": "Camera created successfully"

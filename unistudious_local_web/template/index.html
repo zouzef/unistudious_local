@@ -148,9 +148,12 @@
 {% include 'components/payment_view/show_payment_session_detail.html' %}
 
 
+
 {% elif page == 'show_payment_user_session' %}
 {% include 'components/payment_view/show_payment_user.html'%}
 
+{% elif page == 'invoice_session'%}
+    {% include 'components/payment_view/invoice-payment-session.html'%}
 
 {% elif page == 'show_attendance_presence' %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>

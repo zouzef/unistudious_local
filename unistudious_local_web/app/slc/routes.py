@@ -11,7 +11,7 @@ from app.slc.service import(
 	fetch_all_tablet_service,
 	fetch_room_service,
 	view_tablet_service,
-	update_camera_service
+	delete_camera_service
 
 )
 
@@ -82,6 +82,20 @@ def update_camera(camera_id):
 		return jsonify({
 			"Message":f"Error: {e} coming from backend"
 		}),500
+
+@slc_bp.route('/api/delete_camera/<int:camera_id>',methods=['POST'])
+def delete_camera(camera_id):
+	try:
+		status,response = delete_camera_service(camera_id)
+		if status:
+			return jsonify(response),200
+		else:
+			return jsonify(response),400
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from backend "
+		})
 
 # ================================================ TABLET backend endpoints ================================================
 @slc_bp.route('/api/create_tablet',methods=['POST'])
