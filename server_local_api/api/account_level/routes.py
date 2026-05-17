@@ -18,9 +18,13 @@ account_level_bp = Blueprint('account_level',__name__, url_prefix='/scl')
 def get_account_level(account_id):
 	try:
 		query = """
-			SELECT * 
-			FROM account_level 
-			WHERE account_id = %s and enabled = 1 
+			SELECT 
+				a.*,
+				COALESCE(a.other_level, lc.name) AS level_name
+			FROM account_level a
+			LEFT JOIN level_config lc ON a.level_config_id = lc.id
+			WHERE a.account_id = %s 
+			  AND a.enabled = 1
 			
 		"""
 		values = (account_id,)

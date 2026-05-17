@@ -113,7 +113,7 @@
                     }
 
                     tbody.innerHTML = levels.map(level => {
-                        const displayName = level.other_level ?? `Level #${level.level_config_id}`;
+                        const displayName = <level class="level_name"></level> ?? `Level #${level.level_config_id}`;
                         const isActive    = level.status === 1 && level.enabled === 1;
                         const badgeClass  = isActive ? 'badge-success' : 'badge-danger';
                         const dotClass    = isActive ? 'text-success'  : 'text-danger';

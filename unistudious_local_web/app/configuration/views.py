@@ -12,3 +12,11 @@ def show_level():
 						   page='show_level',
 						   account_id=session.get('account_id'))
 
+@configuration_view_bp.route('/dashboard/create-level')
+def create_level():
+	if 'moderator_id' not in session:
+		return redirect(url_for('auth.login'))
+
+	return render_template('index.html',
+						   page='create_level',
+						   account_id=session.get('account_id'))

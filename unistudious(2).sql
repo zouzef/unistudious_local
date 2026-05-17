@@ -42,7 +42,7 @@ CREATE TABLE `account` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `account`
+ -- Dumping data for table `account`
 --
 
 INSERT INTO `account` (`id`, `account_type_id`, `file_link`, `name`, `status`, `other_type`, `enabled`, `created_at`, `timestamp`, `updated_at`, `slc_use`) VALUES
