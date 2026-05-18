@@ -104,7 +104,7 @@ def insert_account_levels(db, account_level_data):
                             timestamp = %s,
                             created_at = %s,
                             updated_at = %s,
-                            is_sync = 1
+                            
                         WHERE id = %s
                     """
 
@@ -264,7 +264,7 @@ def update_account_levels(db, account_level_data):
                             use_token = %s,
                             timestamp = %s,
                             updated_at = %s,
-                            is_sync = 1
+                            
                         WHERE id = %s
                     """
 

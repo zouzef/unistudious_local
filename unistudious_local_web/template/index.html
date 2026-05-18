@@ -227,10 +227,22 @@
 
         <!-- BEGIN configuration -->
 {% elif page == 'show_level'%}
-{% include 'components/configuration/show_level.html'%}
+{% include 'components/configuration/levels/show_level.html'%}
 
 {% elif page == 'create_level'%}
-{% include 'components/configuration/create-level.html'%}
+{% include 'components/configuration/levels/create-level.html'%}
+
+{% elif page == 'view_level'%}
+    {% include 'components/configuration/levels/view_level.html'%}
+
+{% elif page == 'show_section'%}
+    {% include 'components/configuration/section/show_section.html'%}
+
+{% elif page == 'create_section'%}
+    {% include 'components/configuration/section/create_section.html'%}
+
+{% elif page == 'view_section'%}
+    {% include 'components/configuration/section/view_section.html'%}
         <!-- END configuration -->
 
 

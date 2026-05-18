@@ -243,6 +243,18 @@ def process_sync_data(db, data):
         print("\n Account Level: ")
         processor_account_level(db,normalize(data['accountLevel']))
 
+    if 'section' in data:
+        from sync.processors.section_processor import processor_section
+        print("\n Section: ")
+        processor_section(db,normalize(data['section']))
+
+    if 'accountSection' in data:
+        from sync.processors.account_section_processor import processor_account_section
+        print("\n Account Section: ")
+        processor_account_section(db, normalize(data['accountSection']))
+
+
+
 def run_continuous_sync(settings):
     """
     Run sync continuously at specified interval

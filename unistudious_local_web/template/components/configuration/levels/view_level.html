@@ -1,0 +1,197 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Level Details</h4>
+                    </div>
+                    <div class="card-body">
+                        <form name="account_level" method="post" id="account-level-form" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12">
+                                    <div class="row">
+
+                                        <div class="col-xl-6 col-sm-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="account_level_levelConfig">
+                                                    Level <code class="highlighter-rouge">*</code>
+                                                </label>
+                                                <br>
+                                                <select id="account_level_levelConfig"
+                                                        name="account_level[levelConfig]"
+                                                        class="selectpicker"
+                                                        aria-label="Level"
+                                                        data-live-search="true"
+                                                        required>
+                                                    <option value="">Choose the Level...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-6 col-sm-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="account_level_status">
+                                                    Status <code class="highlighter-rouge">*</code>
+                                                </label>
+                                                <select id="account_level_status"
+                                                        name="account_level[status]"
+                                                        class="selectpicker form-control">
+                                                    <option value="1" selected>Active</option>
+                                                    <option value="0">Inactive</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-6 col-sm-6" id="div-other-title" style="display: none">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="account_level_otherLevel">
+                                                    Other Level <code class="highlighter-rouge">*</code>
+                                                </label>
+                                                <input type="text" id="account_level_otherLevel"
+                                                       name="account_level[otherLevel]" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-12 col-sm-12">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="account_level_description">
+                                                    Description
+                                                </label>
+                                                <textarea id="account_level_description"
+                                                          name="account_level[description]"
+                                                          class="form-control"
+                                                          rows="7"
+                                                          data-ckeditor="true"></textarea>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="float-end">
+                                <button type="submit" class="btn btn-outline-success me-2">Edit</button>
+                                <a class="btn btn-outline-danger" href="/dashboard/show-level">Close</a>
+                            </div>
+
+                            <input type="hidden" id="account_level__token"
+                                   name="account_level[_token]"
+                                   value="ec83135ee5af62ba146a318b93fe3._N-AytWiGXVa5EDFAmJ9f4DjZR-m0kZbKXgkDniHIho.0bP6qIHEKT0UojOuZ1I3BfOzEXHqqgQueScUegLxW3am6O6vh-ZPOAipeA">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const ACCOUNT_ID = {{ account_id }};
+    const ACCOUNT_LEVEL_ID = {{ account_level }};
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // ─── Load levels into select + prefill form ────────────────────────
+        Promise.all([
+            fetch('/api/get_all_level').then(res => res.json()),
+            fetch(`/api/view_account_config/${ACCOUNT_LEVEL_ID}`).then(res => res.json())
+        ])
+        .then(([levels, accountLevelArr]) => {
+            const accountLevel = accountLevelArr[0]; // 👈 array, get first element
+            const select       = document.getElementById('account_level_levelConfig');
+
+            // Load all levels into select
+            levels.forEach(level => {
+                const option = document.createElement('option');
+                option.value = level.id;
+                option.textContent = level.name;
+                if (level.id === accountLevel.level_config_id) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
+            });
+
+            $('#account_level_levelConfig').selectpicker('refresh');
+
+            // Pre-fill status
+            document.getElementById('account_level_status').value = accountLevel.status;
+            $('#account_level_status').selectpicker('refresh');
+
+            // Pre-fill description
+            if (accountLevel.description) {
+                document.getElementById('account_level_description').value = accountLevel.description;
+                if (typeof CKEDITOR !== 'undefined') {
+                    CKEDITOR.instances['account_level_description']?.setData(accountLevel.description);
+                }
+            }
+        })
+        .catch(err => {
+            console.error('Failed to load data:', err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to load level data.',
+                confirmButtonColor: '#4c4b9e',
+            });
+        });
+
+        // ─── Form submit (Edit) ────────────────────────────────────────────
+        document.getElementById('account-level-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const level_config_id = document.getElementById('account_level_levelConfig').value;
+            const status          = document.getElementById('account_level_status').value;
+            const description     = document.getElementById('account_level_description').value;
+
+            if (!level_config_id) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Required!',
+                    text: 'Please select a level.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+                return;
+            }
+
+            fetch(`/api/update_account_config/${ACCOUNT_LEVEL_ID}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    level_config_id : level_config_id,
+                    status          : status,
+                    description     : description
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.Message === 'Account level updated with success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Level updated successfully!',
+                        confirmButtonColor: '#4c4b9e',
+                    }).then(() => {
+                        window.location.href = '/dashboard/show-level';
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops!',
+                        text: data.Message,
+                        confirmButtonColor: '#4c4b9e',
+                    });
+                }
+            })
+            .catch(err => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Server Error',
+                    text: 'Something went wrong, please try again.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+            });
+        });
+
+    });
+</script>

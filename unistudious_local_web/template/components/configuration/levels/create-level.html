@@ -1,0 +1,179 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Add new Level</h4>
+                    </div>
+                    <div class="card-body">
+                        <form name="account_level" method="post" id="account-level-form">
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12">
+                                    <div class="col-xl-12 col-lg-12">
+                                        <div class="row">
+                                            <div class="col-xl-6 col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="account_level_levelConfig">
+                                                        Level <code class="highlighter-rouge">*</code>
+                                                    </label>
+                                                    <select id="account_level_levelConfig"
+                                                            name="account_level[levelConfig]"
+                                                            class="selectpicker" aria-label="Level" required
+                                                            data-live-search="true">
+                                                        <option value="" selected>Choose the Level...</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-12 col-sm-12">
+                                                <div class="mb-3">
+                                                    <label class="form-label"
+                                                           for="account_level_description">Description</label>
+                                                    <textarea id="account_level_description"
+                                                              name="account_level[description]"
+                                                              class="form-control"
+                                                              rows="7"></textarea>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="float-end">
+                                        <button type="submit" class="btn btn-outline-primary me-3">Create</button>
+                                        <a class="btn btn-outline-danger" href="/dashboard/show-level">Close</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Load levels into select
+        fetch('/api/get_all_level')
+            .then(res => {
+                if (!res.ok) throw new Error(`Server returned ${res.status}`);
+                return res.json();
+            })
+            .then(levels => {
+                const select = document.getElementById('account_level_levelConfig');
+
+                levels.forEach(level => {
+                    const option = document.createElement('option');
+                    option.value = level.id;
+                    option.textContent = level.name;
+                    select.appendChild(option);
+                });
+
+                $('#account_level_levelConfig').selectpicker('refresh');
+            })
+            .catch(err => {
+                console.error('Failed to load levels:', err);
+            });
+
+        // Form submit
+        document.getElementById('account-level-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const level_config_id = document.getElementById('account_level_levelConfig').value;
+            const description     = document.getElementById('account_level_description').value;
+            const account_id      = {{ account_id }};  // 👈 inject from your template
+
+            if (!level_config_id) {
+                alert('Please select a level.');
+                return;
+            }
+
+            fetch(`/api/create_account_config/${account_id}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    account_id      : account_id,
+                    level_config_id : level_config_id,
+                    description     : description
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                if (data.Message === 'Account_level created with success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Level created successfully!',
+                        confirmButtonColor: '#4c4b9e',
+                    }).then(() => {
+                        window.location.href = '/dashboard/show-level';
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops!',
+                        text: data.Message,
+                        confirmButtonColor: '#4c4b9e',
+                    });
+                }
+            })
+            .catch(err => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Server Error',
+                    text: 'Something went wrong, please try again.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+            });
+        });
+    });
+    // Delete level handler
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.delete-level');
+        if (!btn) return;
+        e.preventDefault();
+
+        const account_level_id = btn.dataset.id;
+        const account_id       = {{ account_id }};
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This level will be permanently deleted!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#4c4b9e',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`/api/delete_account_config/${account_id}/${account_level_id}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Deleted!',
+                        text: 'Level has been deleted successfully.',
+                        confirmButtonColor: '#4c4b9e',
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                })
+                .catch(err => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Server Error',
+                        text: 'Something went wrong, please try again.',
+                        confirmButtonColor: '#4c4b9e',
+                    });
+                });
+            }
+        });
+    });
+
+
+</script>

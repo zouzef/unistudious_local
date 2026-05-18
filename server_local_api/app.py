@@ -70,6 +70,11 @@ def create_app():
     from api.account_level.routes import account_level_bp
     app.register_blueprint(account_level_bp)
 
+    # Account Section
+    from api.account_section.routes import account_section_bp
+    app.register_blueprint(account_section_bp)
+
+
     # ========================================
     # HOME ROUTE
     # ========================================

@@ -113,8 +113,8 @@
                     }
 
                     tbody.innerHTML = levels.map(level => {
-                        const displayName = <level class="level_name"></level> ?? `Level #${level.level_config_id}`;
-                        const isActive    = level.status === 1 && level.enabled === 1;
+                        const displayName = level.level_name ?? `Level #${level.level_config_id}`;
+                        const isActive    = level.status === 1 && level.enabled === 1; // ✅ only once
                         const badgeClass  = isActive ? 'badge-success' : 'badge-danger';
                         const dotClass    = isActive ? 'text-success'  : 'text-danger';
                         const badgeLabel  = isActive ? 'Active'        : 'Inactive';
@@ -149,7 +149,6 @@
                     loading.classList.add('d-none');
                     wrapper.classList.remove('d-none');
                     initDataTable();
-
                 })
                 .catch(err => {
                     const loading = document.getElementById('table-loading');
@@ -185,16 +184,50 @@
             });
         }
 
-        // Delete handler (event delegation)
+        // ─── Delete handler with SweetAlert2 ──────────────────────────────
         document.addEventListener('click', function (e) {
             const btn = e.target.closest('.delete-level');
             if (!btn) return;
             e.preventDefault();
-            const id = btn.dataset.id;
-            if (confirm(`Delete level #${id}?`)) {
-                // call your delete endpoint here
-                console.log('Delete level', id);
-            }
+
+            const account_level_id = btn.dataset.id;
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This level will be permanently deleted!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#4c4b9e',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/api/delete_account_config/${ACCOUNT_ID}/${account_level_id}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: 'Level has been deleted successfully.',
+                            confirmButtonColor: '#4c4b9e',
+                        }).then(() => {
+                            loadLevels();
+                        });
+                    })
+                    .catch(err => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Server Error',
+                            text: 'Something went wrong, please try again.',
+                            confirmButtonColor: '#4c4b9e',
+                        });
+                    });
+                }
+            });
         });
 
         loadLevels();
