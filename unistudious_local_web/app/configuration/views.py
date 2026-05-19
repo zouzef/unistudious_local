@@ -45,7 +45,6 @@ def show_section():
 						   page='show_section',
 						   account_id = session.get('account_id'))
 
-
 @configuration_view_bp.route('/dashboard/create-section')
 def create_section():
 	if 'moderator_id' not in session:
@@ -62,4 +61,35 @@ def viw_section(account_section_id):
 
 	return render_template('index.html',
 						   page='view_section',
+						   account_section_id=account_section_id,
+						   account_id = session.get('account_id'))
+
+# ========================================= SUBJECTS =========================================
+
+@configuration_view_bp.route('/dashboard/show-subject')
+def show_subject():
+	if 'moderator_id' not in session:
+		return redirect(url_for('auth.login'))
+
+	return render_template('index.html',
+						   page='show_subject',
+						   account_id = session.get('account_id'))
+
+@configuration_view_bp.route('/dashboard/create-subject')
+def create_subject():
+	if 'moderator_id' not in session:
+		return redirect(url_for('auth.login'))
+
+	return render_template('index.html',
+						   page='create_subject',
+						   account_id = session.get('account_id'))
+
+@configuration_view_bp.route('/dashboard/view_subject/<int:subject_id>')
+def view_subject(subject_id):
+	if 'moderator_id' not in session:
+		return redirect(url_for('auth.login'))
+
+	return render_template('index.html',
+						   page='view_subject',
+						   subject_id = subject_id,
 						   account_id = session.get('account_id'))

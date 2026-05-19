@@ -1,5 +1,199 @@
 <div class="content-body">
     <div class="container-fluid">
-      <h4> hiii from create section</h4>
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Add New Section</h4>
+                    </div>
+                    <div class="card-body">
+                        <form name="account_section" method="post" id="account-section-form">
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12">
+                                    <div class="row">
+
+                                        <div class="col-xl-6 col-sm-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="account_section_sectionConfig">
+                                                    Section <code class="highlighter-rouge">*</code>
+                                                </label>
+                                                <select id="account_section_sectionConfig"
+                                                        name="account_section[sectionConfig]"
+                                                        required
+                                                        class="selectpicker"
+                                                        aria-label="Section"
+                                                        data-live-search="true">
+                                                    <option value="" selected>Choose the Section...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-6 col-sm-6" id="div-other-title" style="display: none;">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="account_section_otherSection">
+                                                    Other Section <code class="highlighter-rouge">*</code>
+                                                </label>
+                                                <input type="text"
+                                                       id="account_section_otherSection"
+                                                       name="account_section[otherSection]"
+                                                       class="form-control"
+                                                       placeholder="Enter new section name...">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-12 col-sm-12">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="account_section_description">
+                                                    Description
+                                                </label>
+                                                <textarea id="account_section_description"
+                                                          name="account_section[description]"
+                                                          class="form-control"
+                                                          rows="7"
+                                                          data-ckeditor="true"></textarea>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="float-end">
+                                <button type="submit" class="btn btn-outline-primary me-3">Create</button>
+                                <a class="btn btn-outline-danger" href="/dashboard/show-section">Close</a>
+                            </div>
+
+                            <input type="hidden"
+                                   id="account_section__token"
+                                   name="account_section[_token]"
+                                   value="0a1d.g3ie1OZok7IA6bvxl887ow_rqug3YdkK7G6XO199dRo.6FWvrYUyx_EypPGkxoR14Umckt5-MI453Rb4CQc-MWnGNfbmrl31xEaRgw">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<script>
+    window.addEventListener('load', function () {
+
+        const select     = document.getElementById('account_section_sectionConfig');
+        const divOther   = document.getElementById('div-other-title');
+        const inputOther = document.getElementById('account_section_otherSection');
+        const account_id = {{ account_id }};
+
+        // ── Load sections into select ──────────────────────────────────────
+        fetch('/api/get_section_config')
+            .then(res => {
+                if (!res.ok) throw new Error(`Server returned ${res.status}`);
+                return res.json();
+            })
+            .then(sections => {
+                sections.forEach(section => {
+                    const option       = document.createElement('option');
+                    option.value       = section.id;
+                    option.textContent = section.name;
+                    if (section.name.toLowerCase() === 'other') {
+                        option.dataset.isOther = 'true';
+                    }
+                    select.appendChild(option);
+                });
+
+                $('#account_section_sectionConfig').selectpicker('refresh');
+            })
+            .catch(err => {
+                console.error('Failed to load subjects:', err);
+            });
+
+        // ── Show / hide "Other" input on change ───────────────────────────
+        $('#account_section_sectionConfig').on('change', function () {
+            const selectedOption = this.options[this.selectedIndex];
+            const isOther        = selectedOption.dataset.isOther === 'true';
+
+            if (isOther) {
+                divOther.style.display = 'block';
+                inputOther.required    = true;
+            } else {
+                divOther.style.display = 'none';
+                inputOther.required    = false;
+                inputOther.value       = '';
+            }
+        });
+
+        // ── Form submit ───────────────────────────────────────────────────
+        document.getElementById('account-section-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const section_id     = select.value;
+            const selectedOption = select.options[select.selectedIndex];
+            const isOther        = selectedOption.dataset.isOther === 'true';
+            const otherSection   = inputOther.value.trim();
+            const description    = document.getElementById('account_section_description').value.trim() || null;
+
+            // ── Validation ────────────────────────────────────────────────
+            if (!section_id) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Required',
+                    text: 'Please select a section.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+                return;
+            }
+
+            if (isOther && !otherSection) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Required',
+                    text: 'Please enter the name of the new section.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+                return;
+            }
+
+            // ── Build payload ─────────────────────────────────────────────
+            const payload = {
+                sectionId    : section_id,
+                description  : description,
+                otherSection : isOther ? otherSection : null
+            };
+
+            // ── Send request ──────────────────────────────────────────────
+            fetch(`/api/create_account_section/${account_id}`, {
+                method  : 'POST',
+                headers : { 'Content-Type': 'application/json' },
+                body    : JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.Message && data.Message.toLowerCase().includes('success')) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Section created successfully!',
+                        confirmButtonColor: '#4c4b9e',
+                    }).then(() => {
+                        window.location.href = '/dashboard/show-section';
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops!',
+                        text: data.Message || 'Something went wrong.',
+                        confirmButtonColor: '#4c4b9e',
+                    });
+                }
+            })
+            .catch(err => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Server Error',
+                    text: 'Something went wrong, please try again.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+            });
+        });
+
+    });
+</script>

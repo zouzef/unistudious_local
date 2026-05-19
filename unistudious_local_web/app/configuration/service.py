@@ -70,6 +70,7 @@ def create_account_section_service(data,account_id):
 	try:
 		url = f"{current_app.config['BASE_URL']}create_account_section/{account_id}"
 		response = requests.post(url,json=data,verify=False,timeout=10)
+		print(response)
 		return response.status_code == 200,response
 	except Exception as e:
 		return False,None
@@ -98,4 +99,47 @@ def view_account_section_service(account_section_id):
 		return response.status_code == 200,response
 
 	except Exception as e:
+		return False,None
+
+def get_section_config_service():
+	try:
+		url = f"{current_app.config['BASE_URL']}get_section_config"
+		response = requests.get(url,verify=False,timeout=10)
+		return response.status_code == 200,response
+	except Exception as e:
+		return False,None
+
+
+
+def get_account_subject_service(account_id):
+	try:
+		url = f"{current_app.config['BASE_URL']}get_account_subject/{account_id}"
+		response = requests.get(url,verify=False,timeout=10)
+		return response.status_code == 200,response
+	except Exception as e:
+		return False,None
+
+def delete_account_subject_service(account_subject_id):
+	try:
+		url = f"{current_app.config['BASE_URL']}delete_account_subject/{account_subject_id}"
+		response = requests.post(url,verify=False,timeout=10)
+		return response.status_code == 200,response
+	except Exception as e:
+		return False,None
+
+def get_subject_service():
+	try:
+		url = f"{current_app.config['BASE_URL']}get_subject_config"
+		response = requests.get(url,verify=False,timeout=10)
+		return response.status_code == 200,response
+	except Exception as e:
+		return False,None
+
+def create_subject_config_service(data,account_id):
+	try:
+		url = f"{current_app.config['BASE_URL']}create_account_subject/{account_id}"
+		response = requests.post(url,json=data,verify=False,timeout=10)
+		return response.status_code == 200,response
+	except Exception as e:
+		print(e)
 		return False,None

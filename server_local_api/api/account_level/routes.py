@@ -17,7 +17,7 @@ account_level_bp = Blueprint('account_level',__name__, url_prefix='/scl')
 def get_account_level(account_id):
 	try:
 		query = """
-			SELECT 
+			SELECT DISTINCT
 				a.*,
 				COALESCE(a.other_level, lc.name) AS level_name
 			FROM account_level a

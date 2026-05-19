@@ -12,26 +12,39 @@ from core.middleware import token_required
 account_section_bp = Blueprint('account_section',__name__,url_prefix='/scl')
 
 # ENDPOINT 1: Get account_section
-@account_section_bp.route('/get_account_section/<int:account_id>',methods=['GET'])
+@account_section_bp.route('/get_account_section/<int:account_id>', methods=['GET'])
 def get_account_section(account_id):
-	try:
-		query = """
-			SELECT * 
-			FROM account_section
-			WHERE account_id = %s AND enabled = 1
-		"""
-		values =(account_id,)
-		result = Database.execute_query(query,values,fetch=True)
-		if result:
-			return jsonify(result),200
-		else:
-			return jsonify({
-				"Message":"There is no account_section with this account_id"
-			}),404
-	except Exception as e:
-		return jsonify({
-			"Message":f"Error: {e} coming from server"
-		}),500
+    try:
+        query = """
+            SELECT 
+                a.id,
+                a.account_id,
+                a.section_config_id,
+                a.description,
+                a.enabled,
+                a.status,
+                CASE 
+                    WHEN a.other_section IS NOT NULL THEN a.other_section
+                    ELSE s.name 
+                END AS section_name
+            FROM account_section a
+            LEFT JOIN section_config s ON s.id = a.section_config_id
+            WHERE a.account_id = %s AND a.enabled = 1
+        """
+        values = (account_id,)
+        result = Database.execute_query(query, values, fetch=True)
+
+        if result:
+            return jsonify(result), 200
+        else:
+            return jsonify({
+                "Message": "There is no account_section with this account_id"
+            }), 404
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
 
 
 # ENDPOINT 2: Create account_section
@@ -71,7 +84,7 @@ def create_account_section(account_id):
             "Message": f"Error: {e} coming from server"
         }), 500
 
-
+# ENDPOINT 3: Delete account_section
 @account_section_bp.route('/delete_account_section/<int:account_section_id>',methods=['POST'])
 def delete_account_section(account_section_id):
 	try:
@@ -95,7 +108,7 @@ def delete_account_section(account_section_id):
 			"Message":f"Error: {e} coming from server"
 		}),500
 
-
+# ENDPOINT 4: Update account_section
 @account_section_bp.route('/update_account_section/<int:account_section_id>', methods=['POST'])
 def update_account_section(account_section_id):
 	try:
@@ -138,7 +151,7 @@ def update_account_section(account_section_id):
             "Message": f"Error: {e} coming from server"
         }), 500  # Fix: was missing status code
 
-
+# ENDPOINT 5: View account_section
 @account_section_bp.route('/view_account_section/<int:account_section_id>',methods=['GET'])
 def view_account_section(account_section_id):
 	try:
@@ -155,6 +168,32 @@ def view_account_section(account_section_id):
 		else:
 			return jsonify({"Message":"There is no account_section with this id "}),404
 	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from server"
+		}),500
+
+# ENDPOINT 6: Get subject_config
+@account_section_bp.route('/get_section_config',methods=['GET'])
+def get_section_config():
+	try:
+		query = """
+			SELECT *
+			FROM section_config 
+			WHERE enabled = 1
+		"""
+		result = Database.execute_query(query,fetch=True)
+
+		if result:
+			return jsonify(
+				result
+			),200
+		else:
+			return jsonify({
+				"Message":"There is no section_config"
+			}),404
+
+	except Exception as e:
+		print(e)
 		return jsonify({
 			"Message":f"Error: {e} coming from server"
 		}),500

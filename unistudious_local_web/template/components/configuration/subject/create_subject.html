@@ -1,0 +1,275 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Add New Subject</h4>
+                    </div>
+                    <div class="card-body">
+                        <form name="account_subject" method="post" id="account-subject-form">
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12">
+                                    <div class="row">
+
+                                        <div class="col-xl-6 col-sm-6">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="account_subject_subjectConfig">
+                                                    Subject <code class="highlighter-rouge">*</code>
+                                                </label>
+                                                <br>
+                                                <select id="account_subject_subjectConfig"
+                                                        name="account_subject[subjectConfig]"
+                                                        required
+                                                        class="selectpicker"
+                                                        aria-label="Subject"
+                                                        data-live-search="true">
+                                                    <option value="" selected>Choose the Subject...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-6 col-sm-6" id="div-other-title" style="display: none;">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="account_subject_otherSubject">
+                                                    Other Subject <code class="highlighter-rouge">*</code>
+                                                </label>
+                                                <input type="text"
+                                                       id="account_subject_otherSubject"
+                                                       name="account_subject[otherSubject]"
+                                                       class="form-control"
+                                                       placeholder="Enter new subject name...">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-12 col-sm-12">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="account_subject_description">
+                                                    Description
+                                                </label>
+                                                <textarea id="account_subject_description"
+                                                          name="account_subject[description]"
+                                                          class="form-control"
+                                                          rows="7"
+                                                          data-ckeditor="true"></textarea>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="float-end">
+                                <button type="submit" class="btn btn-outline-primary me-3">Create</button>
+                                <a class="btn btn-outline-danger" href="/dashboard/show-subject">Close</a>
+                            </div>
+
+                            <input type="hidden"
+                                   id="account_subject__token"
+                                   name="account_subject[_token]"
+                                   value="">
+                        </form>
+                        <!-- Sub Subject Table -->
+                        <div class="col-xl-12 mt-4">
+                            <div class="table-responsive">
+                                <div class="container mt-5">
+                                    <h2>Sub Subject</h2>
+                                    <table class="table table-bordered">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th class="title-column">Sections/levels</th>
+                                                <th class="title-column" data-id="2">Bac</th>
+                                                <th class="title-column" data-id="9">Kindergarten</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th class="title-column" data-id="2">Info</th>
+                                                <td id="cell-2-2">
+                                                    <button type="button" class="btn btn-outline-primary me-3"
+                                                            data-bs-toggle="modal" data-bs-target="#subSubjectModal"
+                                                            data-section="2" data-level="2">
+                                                        Add <i class="fa fa-plus" style="font-size:10px;color:green"></i>
+                                                    </button>
+                                                </td>
+                                                <td id="cell-2-9">
+                                                    <button type="button" class="btn btn-outline-primary me-3"
+                                                            data-bs-toggle="modal" data-bs-target="#subSubjectModal"
+                                                            data-section="2" data-level="9">
+                                                        Add <i class="fa fa-plus" style="font-size:10px;color:green"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="title-column" data-id="5">economie et gestion</th>
+                                                <td id="cell-5-2">
+                                                    <button type="button" class="btn btn-outline-primary me-3"
+                                                            data-bs-toggle="modal" data-bs-target="#subSubjectModal"
+                                                            data-section="5" data-level="2">
+                                                        Add <i class="fa fa-plus" style="font-size:10px;color:green"></i>
+                                                    </button>
+                                                </td>
+                                                <td id="cell-5-9">
+                                                    <button type="button" class="btn btn-outline-primary me-3"
+                                                            data-bs-toggle="modal" data-bs-target="#subSubjectModal"
+                                                            data-section="5" data-level="9">
+                                                        Add <i class="fa fa-plus" style="font-size:10px;color:green"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sub Subject Modal -->
+                        <div class="modal fade" id="subSubjectModal" tabindex="-1" aria-labelledby="subSubjectModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-center">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="subSubjectModalLabel">New Sub Subject</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <label for="sub_subject_name" class="form-label">Name</label>
+                                            <input type="text" class="form-control" id="sub_subject_name" value="">
+                                            <input type="hidden" id="section_id" value="">
+                                            <input type="hidden" id="level_id" value="">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" id="add_new_sub_subject">Add New Sub Subject</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const ACCOUNT_ID = {{ account_id }};
+
+    window.addEventListener('load', function () {
+
+        const select     = document.getElementById('account_subject_subjectConfig');
+        const divOther   = document.getElementById('div-other-title');
+        const inputOther = document.getElementById('account_subject_otherSubject');
+
+        // ── Load subjects into select ──────────────────────────────────────
+        fetch('/api/get_subject')
+            .then(res => {
+                if (!res.ok) throw new Error(`Server returned ${res.status}`);
+                return res.json();
+            })
+            .then(subjects => {
+                subjects.forEach(subject => {
+                    const option       = document.createElement('option');
+                    option.value       = subject.id;
+                    option.textContent = subject.name;
+                    if (subject.name.toLowerCase() === 'other') {
+                        option.dataset.isOther = 'true';
+                    }
+                    select.appendChild(option);
+                });
+
+                $('#account_subject_subjectConfig').selectpicker('refresh');
+            })
+            .catch(err => {
+                console.error('Failed to load subjects:', err);
+            });
+
+        // ── Show / hide "Other" input on change ───────────────────────────
+        $('#account_subject_subjectConfig').on('change', function () {
+            const selectedOption = this.options[this.selectedIndex];
+            const isOther        = selectedOption.dataset.isOther === 'true';
+
+            if (isOther) {
+                divOther.style.display = 'block';
+                inputOther.required    = true;
+            } else {
+                divOther.style.display = 'none';
+                inputOther.required    = false;
+                inputOther.value       = '';
+            }
+        });
+
+        // ── Form submit ───────────────────────────────────────────────────
+        document.getElementById('account-subject-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const subject_id     = select.value;
+            const selectedOption = select.options[select.selectedIndex];
+            const isOther        = selectedOption.dataset.isOther === 'true';
+            const otherSubject   = inputOther.value.trim();
+            const description    = document.getElementById('account_subject_description').value.trim() || null;
+
+            // ── Validation ─────────────────────────────────────────────────
+            if (!subject_id) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Required',
+                    text: 'Please select a subject.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+                return;
+            }
+
+            if (isOther && !otherSubject) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Required',
+                    text: 'Please enter the name of the new subject.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+                return;
+            }
+
+            // ── Send request ───────────────────────────────────────────────
+            fetch(`/api/create_account_subject/${ACCOUNT_ID}`, {
+                method  : 'POST',
+                headers : { 'Content-Type': 'application/json' },
+                body    : JSON.stringify({
+                    subjectId    : subject_id,
+                    description  : description,
+                    otherSubject : isOther ? otherSubject : null
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.Message && data.Message.toLowerCase().includes('success')) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Subject created successfully!',
+                        confirmButtonColor: '#4c4b9e',
+                    }).then(() => {
+                        window.location.href = '/dashboard/show-subject';
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops!',
+                        text: data.Message || 'Something went wrong.',
+                        confirmButtonColor: '#4c4b9e',
+                    });
+                }
+            })
+            .catch(err => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Server Error',
+                    text: 'Something went wrong, please try again.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+            });
+        });
+
+    });
+</script>

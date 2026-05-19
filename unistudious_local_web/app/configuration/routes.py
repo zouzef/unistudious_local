@@ -11,7 +11,12 @@ from app.configuration.service import (
 	create_account_section_service,
 	delete_account_section_service,
 	update_account_section_service,
-	view_account_section_service
+	view_account_section_service,
+	get_section_config_service,
+	get_account_subject_service,
+	delete_account_subject_service,
+	get_subject_service,
+	create_subject_config_service
 
 )
 
@@ -85,7 +90,7 @@ def get_all_level():
 			"Message":f"Error: {e} coming from backend"
 		}),500
 
-
+# =============================================== SECTION CONFIG ENDPOINTS ===============================================
 @configuration_bp.route('/api/get_all_account_section/<int:account_id>',methods=['GET'])
 def get_all_section_config(account_id):
 	try:
@@ -97,27 +102,40 @@ def get_all_section_config(account_id):
 		}),500
 
 
-@configuration_bp.route('/api/create_account_section/<int:account_id>',methods=['POST'])
+@configuration_bp.route('/api/create_account_section/<int:account_id>', methods=['POST'])
 def create_account_section(account_id):
 	try:
-		data=request.get_json()
-		status,response = create_account_section_service(data,account_id)
-		return jsonify(response.json()).response.status_code()
+		data        = request.get_json()
+		section_id  = data.get('sectionId')
+
+		if not section_id:
+			return jsonify({
+                "Message": "Missing section id"
+            }), 400
+
+		description = data.get('description') or None
+		other       = data.get('otherSection') or None
+
+		status, response = create_account_section_service(data, account_id)
+		return jsonify(response.json()), response.status_code
+
 	except Exception as e:
+		print(e)
 		return jsonify({
-			"Message":f"Error: {e} coming from server"
-		}),500
+            "Message": f"Error: {e} coming from server"
+        }), 500
 
 
-@configuration_bp.route('/api/delete_account_section/<int:account_section_id>',methods=['POST'])
+@configuration_bp.route('/api/delete_account_section/<int:account_section_id>', methods=['POST'])
 def delete_account_section(account_section_id):
 	try:
-		status,response = delete_account_section_service(account_section_id)
-		return jsonify(response.json()),response.status_code()
+		status, response = delete_account_section_service(account_section_id)
+		return jsonify(response.json()), response.status_code
 	except Exception as e:
+		print(e)
 		return jsonify({
-			"Message":f"Error: {e} coming from server"
-		}),500
+            "Message": f"Error: {e} coming from server"
+        }), 500
 
 
 @configuration_bp.route('/api/update_account_section/<int:account_section_id>',methods=['POST'])
@@ -142,3 +160,69 @@ def view_account_section(account_section_id):
 			"Message":f"Error: {e} coming from server"
 		}),500
 
+
+@configuration_bp.route('/api/get_section_config',methods=['GET'])
+def get_section_config():
+	try:
+		status,response = get_section_config_service()
+		return jsonify(response.json()),response.status_code
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from backend"
+		})
+
+
+# =============================================== ACCOUNT SUBJECT CONFIG ENDPOINTS ===============================================
+@configuration_bp.route('/api/get_account_subject/<int:account_id>',methods=['GET'])
+def get_account_subject(account_id):
+	try:
+		status,response=get_account_subject_service(account_id)
+		return jsonify(response.json()),response.status_code
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from server"
+		}),500
+
+@configuration_bp.route('/api/delete_account_subject/<int:account_subject_id>', methods=['POST'])
+def delete_account_subject(account_subject_id):
+	try:
+		status, response = delete_account_subject_service(account_subject_id)
+		return jsonify(response.json()), response.status_code
+	except Exception as e:
+		print(e)
+		return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
+
+@configuration_bp.route('/api/get_subject', methods=['GET'])
+def get_subject():
+	try:
+		status, response = get_subject_service()
+		return jsonify(response.json()), response.status_code
+	except Exception as e:
+		print(e)
+		return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
+
+@configuration_bp.route('/api/create_account_subject/<int:account_id>',methods=['POST'])
+def create_account_subject(account_id):
+	try:
+		data = request.get_json()
+		subject_id = data.get('subjectId')
+		description = data.get('description') or None
+		other = data.get('otherSubject') or None
+		if not(subject_id):
+			return jsonify({
+				"Message":"Missing to select subject_id"
+			}),402
+
+
+		status,response = create_subject_config_service(data,account_id)
+		return jsonify(response.json()),response.status_code
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from the backend "
+		})

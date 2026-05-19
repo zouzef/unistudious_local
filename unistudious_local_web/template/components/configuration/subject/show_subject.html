@@ -4,18 +4,16 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header flex-wrap px-3">
-                        <h4 class="card-title">List Sections</h4>
-                        <a href="/dashboard/create-section" class="btn btn-primary">+ New Section</a>
+                        <h4 class="card-title">List Subjects</h4>
+                        <a href="/dashboard/create-subject" class="btn btn-primary">+ New Subject</a>
                     </div>
 
                     <div class="card-body p-0">
 
                         <!-- Loading state -->
                         <div id="table-loading" class="text-center py-4">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                            <p class="mt-2 text-muted">Loading sections...</p>
+                            <div class="spinner-border text-primary" role="status"></div>
+                            <p class="mt-2 text-muted">Loading subjects...</p>
                         </div>
 
                         <!-- Error state -->
@@ -29,12 +27,12 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Section</th>
+                                        <th>Subject</th>
                                         <th>Status</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody id="sections-tbody">
+                                <tbody id="subjects-tbody">
                                     <!-- Rows injected by JS -->
                                 </tbody>
                             </table>
@@ -78,27 +76,27 @@
             });
         }
 
-        function loadSections() {
-            fetch(`/api/get_all_account_section/${ACCOUNT_ID}`)
+        function loadSubjects() {
+            fetch(`/api/get_account_subject/${ACCOUNT_ID}`)
                 .then(res => {
                     if (!res.ok) throw new Error(`Server returned ${res.status}`);
                     return res.json();
                 })
-                .then(sections => {
+                .then(subjects => {
                     const loading = document.getElementById('table-loading');
                     const error   = document.getElementById('table-error');
                     const wrapper = document.getElementById('table-wrapper');
-                    const tbody   = document.getElementById('sections-tbody');
+                    const tbody   = document.getElementById('subjects-tbody');
 
                     if ($.fn.DataTable.isDataTable('#example')) {
                         $('#example').DataTable().destroy();
                         dataTableInstance = null;
                     }
 
-                    if (!sections || sections.length === 0) {
+                    if (!subjects || subjects.length === 0) {
                         tbody.innerHTML = `
                             <tr>
-                                <td colspan="4" class="text-center">No sections found</td>
+                                <td colspan="4" class="text-center">No subjects found</td>
                             </tr>`;
                         loading.classList.add('d-none');
                         wrapper.classList.remove('d-none');
@@ -106,16 +104,16 @@
                         return;
                     }
 
-                    tbody.innerHTML = sections.map(section => {
-                        const isActive   = section.status === 1;
+                    tbody.innerHTML = subjects.map(subject => {
+                        const isActive   = subject.status === 1;
                         const badgeClass = isActive ? 'badge-success' : 'badge-danger';
                         const dotClass   = isActive ? 'text-success'  : 'text-danger';
                         const badgeLabel = isActive ? 'Active'        : 'Inactive';
 
                         return `
                             <tr>
-                                <td><span class="text-primary font-w600">${section.id}</span></td>
-                                <td>${section.section_name ?? section.name ?? '—'}</td>
+                                <td><span class="text-primary font-w600">${subject.id}</span></td>
+                                <td>${subject.section_name ?? subject.name ?? '—'}</td>
                                 <td>
                                     <span class="badge light ${badgeClass}">
                                         <i class="fa fa-circle ${dotClass} me-1"></i>
@@ -125,12 +123,12 @@
                                 <td>
                                     <div class="d-flex">
                                         <div class="icon-box icon-box-sm me-2">
-                                            <a href="#" data-id="${section.id}" class="delete-section">
+                                            <a href="#" data-id="${subject.id}" class="delete-subject">
                                                 <i class="material-icons" style="font-size:10px;color:red">delete</i>
                                             </a>
                                         </div>
                                         <div class="icon-box icon-box-sm">
-                                            <a href="/dashboard/view-section/${section.id}">
+                                            <a href="/dashboard/view_subject/${subject.id}">
                                                 <i class="fas fa-pencil-alt" style="font-size:10px;color:green"></i>
                                             </a>
                                         </div>
@@ -173,21 +171,21 @@
 
             paginate.querySelectorAll('a.paginate_button.disabled').forEach(btn => {
                 btn.style.opacity = '0.35';
-                btn.style.cursor = 'default';
+                btn.style.cursor  = 'default';
             });
         }
 
         // ─── Delete handler with SweetAlert2 ──────────────────────────────
         document.addEventListener('click', function (e) {
-            const btn = e.target.closest('.delete-section');
+            const btn = e.target.closest('.delete-subject');
             if (!btn) return;
             e.preventDefault();
 
-            const section_id = btn.dataset.id;
+            const subject_id = btn.dataset.id;
 
             Swal.fire({
                 title: 'Are you sure?',
-                text: 'This section will be permanently deleted!',
+                text: 'This subject will be permanently deleted!',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
@@ -196,7 +194,7 @@
                 cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch(`/api/delete_account_section/${section_id}`, {
+                    fetch(`/api/delete_account_subject/${subject_id}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' }
                     })
@@ -205,10 +203,10 @@
                         Swal.fire({
                             icon: 'success',
                             title: 'Deleted!',
-                            text: 'Section has been deleted successfully.',
+                            text: 'Subject has been deleted successfully.',
                             confirmButtonColor: '#4c4b9e',
                         }).then(() => {
-                            loadSections();
+                            loadSubjects();
                         });
                     })
                     .catch(err => {
@@ -223,6 +221,6 @@
             });
         });
 
-        loadSections();
+        loadSubjects();
     });
 </script>
