@@ -174,3 +174,157 @@
         </div>
     </div>
 </div>
+<script>
+    const ACCOUNT_ID         = {{ account_id }};
+const ACCOUNT_SUBJECT_ID = {{ subject_id }};
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const select     = document.getElementById('account_subject_subjectConfig');
+    const divOther   = document.getElementById('div-other-title');
+    const inputOther = document.getElementById('account_subject_otherSubject');
+
+    // ─── Load subjects + prefill form ─────────────────────────────────
+    Promise.all([
+        fetch('/api/get_subject').then(res => res.json()),
+        fetch(`/api/view_account_subject/${ACCOUNT_SUBJECT_ID}`).then(res => res.json())
+    ])
+    .then(([subjects, accountSubjectArr]) => {
+        const accountSubject = accountSubjectArr[0];
+
+        // Load all subjects into select
+        subjects.forEach(subject => {
+            const option       = document.createElement('option');
+            option.value       = subject.id;
+            option.textContent = subject.name;
+            if (subject.name.toLowerCase() === 'other') {
+                option.dataset.isOther = 'true';
+            }
+            if (subject.id === accountSubject.subject_config_id) {
+                option.selected = true;
+            }
+            select.appendChild(option);
+        });
+
+        $('#account_subject_subjectConfig').selectpicker('refresh');
+
+        // Show "Other" input if the selected subject is "Other"
+        const selectedOption = select.options[select.selectedIndex];
+        if (selectedOption && selectedOption.dataset.isOther === 'true') {
+            divOther.style.display = 'block';
+            inputOther.required    = true;
+            inputOther.value       = accountSubject.other_subject ?? '';
+        }
+
+        // Pre-fill status
+        document.getElementById('account_subject_status').value = accountSubject.status;
+        $('#account_subject_status').selectpicker('refresh');
+
+        // Pre-fill description
+        if (accountSubject.description) {
+            document.getElementById('account_subject_description').value = accountSubject.description;
+            if (typeof CKEDITOR !== 'undefined') {
+                CKEDITOR.instances['account_subject_description']?.setData(accountSubject.description);
+            }
+        }
+    })
+    .catch(err => {
+        console.error('Failed to load data:', err);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to load subject data.',
+            confirmButtonColor: '#4c4b9e',
+        });
+    });
+
+    // ─── Show / hide "Other" input on change ──────────────────────────
+    $('#account_subject_subjectConfig').on('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const isOther        = selectedOption.dataset.isOther === 'true';
+
+        if (isOther) {
+            divOther.style.display = 'block';
+            inputOther.required    = true;
+        } else {
+            divOther.style.display = 'none';
+            inputOther.required    = false;
+            inputOther.value       = '';
+        }
+    });
+
+    // ─── Form submit (Edit) ────────────────────────────────────────────
+    document.getElementById('account-subject-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const subject_id     = select.value;
+        const selectedOption = select.options[select.selectedIndex];
+        const isOther        = selectedOption.dataset.isOther === 'true';
+        const otherSubject   = inputOther.value.trim();
+        const status         = document.getElementById('account_subject_status').value;
+        const description    = document.getElementById('account_subject_description').value.trim() || null;
+
+        // ── Validation ─────────────────────────────────────────────────
+        if (!subject_id) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Required!',
+                text: 'Please select a subject.',
+                confirmButtonColor: '#4c4b9e',
+            });
+            return;
+        }
+
+        if (isOther && !otherSubject) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Required!',
+                text: 'Please enter the name of the other subject.',
+                confirmButtonColor: '#4c4b9e',
+            });
+            return;
+        }
+
+        // ── Send request ───────────────────────────────────────────────
+        fetch(`/api/update_account_subject/${ACCOUNT_SUBJECT_ID}`, {
+            method  : 'POST',
+            headers : { 'Content-Type': 'application/json' },
+            body    : JSON.stringify({
+                subjectId   : subject_id,
+                status      : status,
+                description : description,
+                otherSubject: isOther ? otherSubject : null
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.Message === 'account_subject updated successfully') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Subject updated successfully!',
+                    confirmButtonColor: '#4c4b9e',
+                }).then(() => {
+                    window.location.href = '/dashboard/show-subject';
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops!',
+                    text: data.Message,
+                    confirmButtonColor: '#4c4b9e',
+                });
+            }
+        })
+        .catch(err => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Server Error',
+                text: 'Something went wrong, please try again.',
+                confirmButtonColor: '#4c4b9e',
+            });
+        });
+    });
+
+});
+</script>

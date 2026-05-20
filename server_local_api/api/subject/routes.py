@@ -182,3 +182,35 @@ def create_account_subject(account_id):
         return jsonify({
             "Message":f"Error: {e} coming from server"
         }),500
+
+@subject_bp.route('/update_account_subject/<int:account_subject_id>', methods=['POST'])
+def update_account_subject(account_subject_id):
+    try:
+        data         = request.get_json()
+        subject_id   = data.get('subjectId')
+        status       = data.get('status') or 1
+        description  = data.get('description') or None
+        other_subject = data.get('otherSubject') or None
+
+        if not subject_id:
+            return jsonify({"Message": "Missing subject_id"}), 400
+
+        query = """
+            UPDATE account_subject
+            SET subject_config_id = %s,
+                status            = %s,
+                description       = %s,
+                other_subject     = %s,
+                timestamp         = NOW()
+            WHERE id = %s
+        """
+        values = (subject_id, status, description, other_subject, account_subject_id)
+        result = Database.execute_query(query, values, fetch=False)
+
+        if result:
+            return jsonify({"Message": "account_subject updated successfully"}), 200
+        else:
+            return jsonify({"Message": "Error updating account_subject"}), 400
+
+    except Exception as e:
+        return jsonify({"Message": f"Error: {e} coming from server"}), 500

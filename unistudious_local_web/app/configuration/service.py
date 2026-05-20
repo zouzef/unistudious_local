@@ -143,3 +143,54 @@ def create_subject_config_service(data,account_id):
 	except Exception as e:
 		print(e)
 		return False,None
+
+def update_subject_config_service(data,account_subject_id):
+	try:
+		url = f"{current_app.config['BASE_URL']}update_account_subject/{account_subject_id}"
+		response = requests.post(url,json=data,verify=False,timeout=10)
+		return response.status_code == 200,response
+
+	except Exception as e:
+		return False,None
+
+def view_account_subject_service(account_subject_id):
+	try:
+		url = f"{current_app.config['BASE_URL']}view_account_subject/{account_subject_id}"
+		response = requests.get(url,verify=False,timeout=10)
+		return response.status_code==200,response
+	except Exception as e:
+		return False,None
+
+
+
+def get_all_foramtion_service(account_id):
+	try:
+		url = f"{current_app.config['BASE_URL']}get-formation-info/{account_id}"
+		response = requests.get(url,verify=False,timeout=10)
+		return response.status_code==200,response
+	except Exception as e:
+		return False,None
+
+def delete_formation_service(formation_id,account_id):
+	try:
+		url =f"{current_app.config['BASE_URL']}delete_formation/{formation_id}/{account_id}"
+		response = requests.post(url,verify=False,timeout=10)
+		return response.status_code == 200,response
+	except Exception as e:
+		return False,None
+
+def view_formation_service(formation_id):
+	try:
+		url = f"{current_app.config['BASE_URL']}view_formation/{formation_id}"
+		response = requests.get(url,verify=False,timeout=10)
+		return response.status_code == 200,response
+	except Exception as e:
+		return False,None
+
+def update_formation_service(formation_id,data):
+	try:
+		url=f"{current_app.config['BASE_URL']}update_formation/{formation_id}"
+		response = requests.post(url,json=data,verify=False,timeout=10)
+		return response.status_code == 200,response
+	except Exception as e:
+		return False,None

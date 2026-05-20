@@ -93,3 +93,34 @@ def view_subject(subject_id):
 						   page='view_subject',
 						   subject_id = subject_id,
 						   account_id = session.get('account_id'))
+
+
+# ========================================= FORMATION =========================================
+@configuration_view_bp.route('/dashboard/show-formation')
+def show_formation():
+	if 'moderator_id' not in session:
+		return redirect(url_for('auth.login'))
+
+	return render_template('index.html',
+						   page='show_formation',
+						   account_id = session.get('account_id'))
+
+@configuration_view_bp.route('/dashboard/create-formation')
+def create_formation():
+	if 'moderator_id' not in session:
+		return redirect(url_for('auth.login'))
+
+	return render_template('index.html',
+						   page='create_formation',
+						   account_id = session.get('account_id'))
+
+@configuration_view_bp.route('/dashboard/view_formation/<int:formation_id>')
+def view_formation(formation_id):
+	if 'moderator_id' not in session:
+		return redirect(url_for('auth.login'))
+
+	return render_template('index.html',
+						   page='view_formation',
+						   formation_id = formation_id,
+						   account_id = session.get('account_id'))
+

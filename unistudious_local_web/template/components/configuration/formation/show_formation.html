@@ -1,0 +1,147 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="page-title flex-wrap">
+                    <form id="searchForm" method="get" action="/dashboard/show-formation">
+                        <div class="input-group search-area mb-3">
+                            <input type="text" class="form-control" placeholder="Search here..."
+                                   name="search_formation" value="">
+                            <span class="input-group-text">
+                                <a href="javascript:void(0)">
+                                    <svg width="15" height="15" viewBox="0 0 18 18" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M17.5605 15.4395L13.7527 11.6317C14.5395 10.446 15 9.02625 15 7.5C15 3.3645 11.6355 0 7.5 0C3.3645 0 0 3.3645 0 7.5C0 11.6355 3.3645 15 7.5 15C9.02625 15 10.446 14.5395 11.6317 13.7527L15.4395 17.5605C16.0245 18.1462 16.9755 18.1462 17.5605 17.5605C18.1462 16.9747 18.1462 16.0252 17.5605 15.4395V15.4395ZM2.25 7.5C2.25 4.605 4.605 2.25 7.5 2.25C10.395 2.25 12.75 4.605 12.75 7.5C12.75 10.395 10.395 12.75 7.5 12.75C4.605 12.75 2.25 10.395 2.25 7.5V7.5Z"
+                                              fill="#01A3FF"></path>
+                                    </svg>
+                                </a>
+                            </span>
+                        </div>
+                    </form>
+                    <a class="btn btn-primary" href="/dashboard/create-formation">+ Formation</a>
+                </div>
+            </div>
+
+            <!-- Formation Cards Container -->
+            <div class="row" id="formation-container">
+                <!-- loaded dynamically -->
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        loadFormations();
+    });
+
+    function loadFormations() {
+        fetch(`/api/get_all_formation/${ACCOUNT_ID}`)
+            .then(res => res.json())
+            .then(data => {
+                const formations = Array.isArray(data) ? data : (data.Data || []);
+                const container  = document.getElementById('formation-container');
+                container.innerHTML = '';
+
+                if (!formations || formations.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-12 text-center mt-4">
+                            <p class="text-muted">No formations found.</p>
+                        </div>`;
+                    return;
+                }
+
+                formations.forEach(formation => {
+                    const statusBadge = formation.status == 1
+                        ? `<span class="badge badge-lg badge-success light">Active</span>`
+                        : `<span class="badge badge-lg badge-danger light">Inactive</span>`;
+
+                    const img = formation.img_link
+                        ? formation.img_link
+                        : '../static/assets/images/formation-empty.jpg';
+
+                    const card = `
+                        <div class="col-xl-3 col-lg-4 col-sm-6">
+                            <div class="card contact_list text-center">
+                                <div class="card-body">
+                                    <div class="user-content">
+                                        <div class="user-info">
+                                            <div class="modulel flex-wrap mb-3">
+                                                <img src="${img}" alt="" class="img-fluid">
+                                            </div>
+                                            <div class="user-details">
+                                                <p class="short-title mb-3" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; margin: 0 auto;">
+                                                    ${formation.name}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="contact-icon mb-3">
+                                        ${statusBadge}
+                                    </div>
+                                    <div class="d-flex align-items-center mt-4">
+                                        <a href="/dashboard/view_formation/${formation.id}"
+                                           class="btn btn-primary btn-sm w-50 me-2"
+                                           style="height:35px; line-height:23px; padding: 6px 12px;">
+                                            <i class="fa-solid fa-edit me-2"></i>Edit
+                                        </a>
+                                        <a href="javascript:void(0)"
+                                           class="btn btn-danger btn-sm w-50"
+                                           style="height:35px; line-height:23px; padding: 6px 12px;"
+                                           onclick="deleteFormation(${formation.id})">
+                                            <i class="fa-solid fa-trash me-2"></i>Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+
+                    container.insertAdjacentHTML('beforeend', card);
+                });
+            })
+            .catch(err => {
+                console.error('Failed to load formations:', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to load formations.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+            });
+    }
+
+    function deleteFormation(formationId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'This formation will be deleted permanently.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#4c4b9e',
+            confirmButtonText: 'Yes, delete it!'
+        }).then(result => {
+            if (result.isConfirmed) {
+                fetch(`/api/delete_formation/${ACCOUNT_ID}/${formationId}`, { method: 'POST' })
+                    .then(res => res.json())
+                    .then(data => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: 'Formation deleted successfully.',
+                            confirmButtonColor: '#4c4b9e',
+                        }).then(() => loadFormations());
+                    })
+                    .catch(err => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Failed to delete formation.',
+                            confirmButtonColor: '#4c4b9e',
+                        });
+                    });
+            }
+        });
+    }
+
+</script>

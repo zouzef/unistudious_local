@@ -1,3 +1,5 @@
+from http.client import responses
+
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
 
 from app.configuration.service import (
@@ -16,9 +18,17 @@ from app.configuration.service import (
 	get_account_subject_service,
 	delete_account_subject_service,
 	get_subject_service,
-	create_subject_config_service
+	create_subject_config_service,
+	update_subject_config_service,
+	view_account_subject_service,
+	get_all_foramtion_service,
+	delete_formation_service,
+	view_formation_service,
+	update_formation_service
 
 )
+
+
 
 configuration_bp = Blueprint('configuration',__name__)
 
@@ -226,3 +236,94 @@ def create_account_subject(account_id):
 		return jsonify({
 			"Message":f"Error: {e} coming from the backend "
 		})
+
+@configuration_bp.route('/api/update_account_subject/<int:account_subject_id>', methods=['POST'])
+def update_subject(account_subject_id):
+    try:
+        data          = request.get_json()
+        subject_id    = data.get('subjectId')      # ← fix key
+        status        = data.get('status') or 1
+        description   = data.get('description') or None
+        other_subject = data.get('otherSubject') or None
+
+        if not subject_id:
+            return jsonify({"Message": "Missing subject_id"}), 400
+
+        status, response = update_subject_config_service(data, account_subject_id)
+        return jsonify(response.json()), response.status_code
+
+    except Exception as e:
+        return jsonify({"Message": f"Error: {e} coming from backend"}), 500
+
+@configuration_bp.route('/api/view_account_subject/<int:account_subject_id>',methods=['GET'])
+def view_subject_config(account_subject_id):
+	try:
+		status,response = view_account_subject_service(account_subject_id)
+		return jsonify(response.json()),response.status_code
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from backend"
+		})
+
+
+# =============================================== FORMATION ENDPOINTS ===============================================
+@configuration_bp.route('/api/get_all_formation/<int:account_id>',methods=['GET'])
+def get_all_formation(account_id):
+	try:
+		status,response = get_all_foramtion_service(account_id)
+		if status:
+			return jsonify(response.json()),response.status_code
+		else:
+			return jsonify({
+				"Message":"There is no data"
+			}),400
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from backend"
+		}),500
+
+@configuration_bp.route('/api/delete_formation/<int:account_id>/<int:formation_id>',methods=['POST'])
+def delete_formation(account_id,formation_id):
+	try:
+		status,response = delete_formation_service(formation_id,account_id)
+		if status:
+			return jsonify(response.json()),response.status_code
+		else:
+			return jsonify({"Message":"Error in deleting formation"}),400
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from backend"
+		}),500
+
+@configuration_bp.route('/api/view_formation/<int:formation_id>',methods=['GET'])
+def view_formation(formation_id):
+	try:
+		status,response = view_formation_service(formation_id)
+		if status:
+			return jsonify(response.json()),response.status_code
+		else:
+			return jsonify({
+				"Message":"There is no data for this fomation"
+			}),500
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from backend"
+		})
+
+@configuration_bp.route('/api/update_formation/<int:formation_id>',methods=['POST'])
+def update_session(formation_id):
+	try:
+		data = request.get_json()
+
+		status,response=update_formation_service(formation_id,data)
+		if status:
+			return jsonify(response.json()),response.status_code
+		else:
+			return jsonify({
+				"Message":f"Error in updating formation"
+			}),400
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from backend"
+		}),500

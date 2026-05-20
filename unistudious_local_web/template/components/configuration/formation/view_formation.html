@@ -1,0 +1,623 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="card-header">
+                <h4 class="card-title">Formation Details #{{formation_id}}</h4>
+            </div>
+            <form>
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Formation Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-3 col-sm-4">
+                                    <div class="clearfix">
+                                        <div class="card card-bx profile-card author-profile m-b30">
+                                            <div class="card-body">
+                                                <div class="p-5">
+                                                    <div class="author-profile">
+                                                        <div class="author-media-formation">
+                                                            <img id="imagePreview"
+                                                                 src="{{ url_for('static', filename='assets/images/formation-empty.jpg') }}"
+                                                                 alt="">
+                                                        </div>
+                                                        <div class="change-btn mt-5 mb-lg-0 mb-3">
+                                                            <input type="file" id="formation_logoFile"
+                                                                   name="formation[logoFile]" class="d-none"
+                                                                   accept=".png, .jpg, .jpeg">
+                                                            <label for="formation_logoFile"
+                                                                   class="dlab-upload mb-0 btn btn-primary btn-sm">Choose
+                                                                File</label>
+                                                            <a href="javascript:void(0);"
+                                                               class="btn btn-danger light remove-img ms-2 btn-sm"
+                                                               id="remove-img">Remove</a>
+                                                        </div>
+                                                        <hr class="mb-4 mt-4">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-9 col-sm-8">
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary" for="formation_name">Name <code
+                                                class="highlighter-rouge">*</code></label>
+                                        <input type="text" id="formation_name" name="formation[name]" required
+                                               class="form-control">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary" for="formation_status">Status <code
+                                                class="highlighter-rouge">*</code></label>
+                                        <br>
+                                        <select id="formation_status" name="formation[status]" class="selectpicker">
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select>
+                                    </div>
+
+                                    <hr class="mb-4 mt-4">
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary"
+                                               for="formation_accountLevel">Level</label>
+                                        <br>
+                                        <select id="formation_accountLevel" name="formation[accountLevel]"
+                                                class="selectpicker" aria-label="Level">
+                                            <option value="">Choose the Level...</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary"
+                                               for="formation_accountSection">Section</label>
+                                        <br>
+                                        <select id="formation_accountSection" name="formation[accountSection]"
+                                                class="selectpicker" aria-label="Section">
+                                            <option value="">Choose the Section...</option>
+                                        </select>
+                                    </div>
+
+                                    <hr class="mb-4 mt-4">
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary" for="formation_typeDate">Date and Session
+                                            Analytics <code class="highlighter-rouge">*</code></label>
+                                        <br>
+                                        <select id="formation_typeDate" name="formation[typeDate]" required
+                                                class="selectpicker">
+                                            <option value="">Choice Date and Session Analytics...</option>
+                                            <option value="total Duration">Total Duration per day</option>
+                                            <option value="By Number Of Sessions">Number Of Sessions per hours</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3" id="div-other-title-date" style="display: none;">
+                                        <label class="form-label text-primary" for="formation_otherTypeDate">Other Date
+                                            and Session Analytics <code class="highlighter-rouge">*</code></label>
+
+                                        <input type="text" id="formation_otherTypeDate" name="formation[otherTypeDate]"
+                                               class="form-control">
+                                    </div>
+
+                                    <div class="mb-3" id="div-duration-day" style="display: none;">
+                                        <label class="form-label text-primary" for="formation_numberDayDuration">Duration
+                                            by Number of Days <code class="highlighter-rouge">*</code></label>
+                                        <input type="text" id="formation_numberDayDuration"
+                                               name="formation[numberDayDuration]" class="form-control"
+                                               inputmode="decimal">
+                                    </div>
+
+                                    <div class="mb-3" id="div-duration-session">
+                                        <label class="form-label text-primary" for="formation_numberSession">Duration by
+                                            Number of Sessions <code class="highlighter-rouge">*</code></label>
+                                        <input type="text" id="formation_numberSession" name="formation[numberSession]"
+                                               class="form-control" inputmode="decimal">
+                                    </div>
+
+                                    <hr class="mb-4 mt-4">
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary" for="formation_typeSession">Session Modes
+                                            Analysis <code class="highlighter-rouge">*</code></label>
+                                        <br>
+                                        <select id="formation_typeSession" name="formation[typeSession]" required
+                                                class="selectpicker">
+                                            <option value="">Choice Session Modes Analysis...</option>
+                                            <option value="O">Online</option>
+                                            <option value="P">Presence</option>
+                                            <option value="M">Mixed</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3" id="div-other-title-session" style="display: none;">
+                                        <label class="form-label text-primary" for="formation_otherTypeSession">Other
+                                            Session Modes Analysis <code class="highlighter-rouge">*</code></label>
+                                        <input type="text" id="formation_otherTypeSession"
+                                               name="formation[otherTypeSession]" class="form-control">
+                                    </div>
+
+                                    <hr class="mb-4 mt-4">
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary" for="formation_conditionOfPassage">Passage
+                                            Conditions and Criteria <code class="highlighter-rouge">*</code></label>
+                                        <br>
+                                        <select id="formation_conditionOfPassage" name="formation[conditionOfPassage]"
+                                                required class="selectpicker">
+                                            <option value="">Choice Passage Conditions and Criteria...</option>
+                                            <option value="Auto">Auto</option>
+                                            <option value="Decision">Decision</option>
+                                            <option value="Formula">Formula</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3" id="div-formulas-passage" style="display: none;">
+                                        <label class="form-label text-primary"
+                                               for="formation_conditionOfPassageFormule">Formulas for Passage Conditions
+                                            <code class="highlighter-rouge">*</code></label>
+                                        <select id="formation_conditionOfPassageFormule"
+                                                name="formation[conditionOfPassageFormule]" class="selectpicker">
+                                            <option value="">Choice Formulas for Passage Conditions...</option>
+                                            <option value="Score">Score</option>
+                                            <option value="Present">Present</option>
+                                            <option value="Note And Presence">Note And Presence</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3" id="div-passage-score" style="display: none;">
+                                        <label class="form-label text-primary"
+                                               for="formation_conditionOfPassageFormuleByNote">Passage Requirements by
+                                            Score <code class="highlighter-rouge">*</code></label>
+                                        <input type="text" id="formation_conditionOfPassageFormuleByNote"
+                                               name="formation[conditionOfPassageFormuleByNote]" class="form-control">
+                                    </div>
+
+                                    <div class="mb-3" id="div-passage-present" style="display: none;">
+                                        <label class="form-label text-primary"
+                                               for="formation_conditionOfPassageFormuleByPresent">Passage Formulas by
+                                            Presence <code class="highlighter-rouge">*</code></label>
+                                        <input type="text" id="formation_conditionOfPassageFormuleByPresent"
+                                               name="formation[conditionOfPassageFormuleByPresent]"
+                                               class="form-control">
+                                    </div>
+
+                                    <div class="mb-3" id="div-passage-note-present" style="display: none;">
+                                        <label class="form-label text-primary"
+                                               for="formation_conditionOfPassageFormuleByNotePresent">Comprehensive
+                                            Passage Criteria: Scores and Presence <code
+                                                    class="highlighter-rouge">*</code></label>
+                                        <input type="text" id="formation_conditionOfPassageFormuleByNotePresent"
+                                               name="formation[conditionOfPassageFormuleByNotePresent]"
+                                               class="form-control">
+                                    </div>
+
+                                    <hr class="mb-4 mt-4">
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary" for="formation_publicResource">Share
+                                            Resource</label>
+                                        <br>
+                                        <select id="formation_publicResource" name="formation[publicResource]"
+                                                class="selectpicker">
+                                            <option value="">Do you want to share your resource from the file manager?
+                                            </option>
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                    </div>
+
+                                    <div id="fileManagerContainerFormation" class="mb-3" style="display: none;">
+                                        <label class="form-label text-primary">Folder</label>
+                                        <select id="multi-value-select" multiple class="form-control"></select>
+                                        <br><br>
+                                        <label class="form-label text-primary">Select New Folder</label>
+                                        <input type="text" id="selectedFolder" class="form-control"
+                                               placeholder="No folder selected" readonly>
+                                        <button type="button" id="openFileManager" class="btn btn-primary mt-2">Choose
+                                            Folder
+                                        </button>
+                                    </div>
+
+                                    <!-- File Manager Modal -->
+                                    <div class="modal fade" id="fileManagerModal" tabindex="-1"
+                                         aria-labelledby="fileManagerModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="fileManagerModalLabel">
+                                                        <i class="bi bi-folder2-open"></i> Select a Folder
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body" id="share-folder-modal">
+                                                    <ul id="fileManagerList" class="list-group"></ul>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" id="selectFoldersBtn" class="btn btn-success">
+                                                        Select
+                                                    </button>
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr class="mb-4 mt-4">
+
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary"
+                                               for="formation_description">Description</label>
+                                        <textarea id="formation_description" name="formation[description]"
+                                                  class="form-control" rows="7" data-ckeditor="true"></textarea>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="float-end">
+                                <input type="hidden" id="deleteSeasonJson" name="deleteSeasonJson" value="[]">
+                                <input type="hidden" id="deleteSubjectsJson" name="deleteSubjectsJson" value="[]">
+                                <button class="btn btn-outline-success me-3" id="create_formation">Edit</button>
+                                <a href="/dashboard/show-formation" class="btn btn-outline-danger">Close</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const account_id   = {{ account_id }};
+    const FORMATION_ID = {{ formation_id }};
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        Promise.all([
+            fetch(`/api/get_all_account_level/${account_id}`).then(res => res.json()),
+            fetch(`/api/get_all_account_section/${account_id}`).then(res => res.json()),
+            fetch(`/api/view_formation/${FORMATION_ID}`).then(res => res.json())
+        ])
+        .then(([levels, sections, formationArr]) => {
+
+            const formation = formationArr[0];
+
+            console.log('FORMATION DATA:', formation);
+
+            // ────────────────────────────────────────────────────────────────
+            // Load Levels
+            // ────────────────────────────────────────────────────────────────
+            const levelSelect = document.getElementById('formation_accountLevel');
+
+            levelSelect.innerHTML = '';
+
+            levels.forEach(level => {
+
+                const option = document.createElement('option');
+
+                option.value = level.id;
+                option.textContent = level.other_level
+                    ? level.other_level
+                    : level.level_name;
+
+                if (level.level_name == formation.level_name) {
+                    option.selected = true;
+                }
+
+                levelSelect.appendChild(option);
+            });
+
+            $('#formation_accountLevel').selectpicker('refresh');
+
+
+            // ────────────────────────────────────────────────────────────────
+            // Load Sections
+            // ────────────────────────────────────────────────────────────────
+            const sectionSelect = document.getElementById('formation_accountSection');
+
+            sectionSelect.innerHTML = '';
+
+            sections.forEach(section => {
+
+                const option = document.createElement('option');
+
+                option.value = section.id;
+                option.textContent = section.other_section
+                    ? section.other_section
+                    : section.section_name;
+
+                if (String(section.id) === String(formation.account_section_id)) {
+                    option.selected = true;
+                }
+
+                sectionSelect.appendChild(option);
+            });
+
+            $('#formation_accountSection').selectpicker('refresh');
+
+
+            // ────────────────────────────────────────────────────────────────
+            // Name
+            // ────────────────────────────────────────────────────────────────
+            document.getElementById('formation_name').value =
+                formation.name ?? '';
+
+
+            // ────────────────────────────────────────────────────────────────
+            // Status
+            // ────────────────────────────────────────────────────────────────
+            $('#formation_status')
+                .val((formation.status ?? '').toString().trim())
+                .selectpicker('refresh');
+
+
+            // ────────────────────────────────────────────────────────────────
+            // Type Date
+            // ────────────────────────────────────────────────────────────────
+            $('#formation_typeDate')
+                .val((formation.type_date ?? '').toString().trim())
+                .selectpicker('refresh');
+
+
+            // ────────────────────────────────────────────────────────────────
+            // Number Session / Day Duration
+            // ────────────────────────────────────────────────────────────────
+            if (formation.number_session) {
+
+                document.getElementById('formation_numberSession').value =
+                    formation.number_session;
+
+                document.getElementById('div-duration-session').style.display =
+                    'block';
+            }
+
+            if (formation.number_day_duration) {
+
+                document.getElementById('formation_numberDayDuration').value =
+                    formation.number_day_duration;
+
+                document.getElementById('div-duration-day').style.display =
+                    'block';
+            }
+
+
+            // ────────────────────────────────────────────────────────────────
+            // Type Session
+            // ────────────────────────────────────────────────────────────────
+            console.log('TYPE SESSION:', formation.type_session);
+
+            let typeSessionValue = '';
+
+            switch ((formation.type_session || '').trim()) {
+
+                case 'Online':
+                    typeSessionValue = 'O';
+                    break;
+
+                case 'Presence':
+                    typeSessionValue = 'P';
+                    break;
+
+                case 'Mixed':
+                    typeSessionValue = 'M';
+                    break;
+
+                default:
+                    typeSessionValue = formation.type_session;
+            }
+
+            $('#formation_typeSession')
+                .val(typeSessionValue)
+                .selectpicker('refresh');
+
+
+            // ────────────────────────────────────────────────────────────────
+            // Condition Of Passage
+            // ────────────────────────────────────────────────────────────────
+            $('#formation_conditionOfPassage')
+                .val((formation.condition_of_passage ?? '').toString().trim())
+                .selectpicker('refresh');
+
+
+            // ────────────────────────────────────────────────────────────────
+            // Public Resource
+            // ────────────────────────────────────────────────────────────────
+            $('#formation_publicResource')
+                .val((formation.public_resource ?? '').toString().trim())
+                .selectpicker('refresh');
+
+            if (String(formation.public_resource) === '1') {
+
+                document.getElementById(
+                    'fileManagerContainerFormation'
+                ).style.display = 'block';
+            }
+
+
+            // ────────────────────────────────────────────────────────────────
+            // Description
+            // ────────────────────────────────────────────────────────────────
+            if (formation.description) {
+
+                document.getElementById('formation_description').value =
+                    formation.description;
+
+                if (
+                    typeof CKEDITOR !== 'undefined' &&
+                    CKEDITOR.instances['formation_description']
+                ) {
+
+                    CKEDITOR.instances['formation_description']
+                        .setData(formation.description);
+                }
+            }
+
+
+            // ────────────────────────────────────────────────────────────────
+            // Image
+            // ────────────────────────────────────────────────────────────────
+            if (formation.img_link) {
+
+                document.getElementById('imagePreview').src =
+                    formation.img_link;
+            }
+
+        })
+        .catch(err => {
+
+            console.error('Failed to load data:', err);
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to load formation data.',
+                confirmButtonColor: '#4c4b9e',
+            });
+        });
+
+
+        // ────────────────────────────────────────────────────────────────
+        // Image Preview
+        // ────────────────────────────────────────────────────────────────
+        document.getElementById('formation_logoFile')
+            .addEventListener('change', function () {
+
+                const file = this.files[0];
+
+                if (file) {
+
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+
+                        document.getElementById('imagePreview').src =
+                            e.target.result;
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+            });
+
+
+
+        // ────────────────────────────────────────────────────────────────
+        // Remove Image
+        // ────────────────────────────────────────────────────────────────
+        document.getElementById('remove-img')
+            .addEventListener('click', function () {
+
+                document.getElementById('imagePreview').src =
+                    "{{ url_for('static', filename='assets/images/formation-empty.jpg') }}";
+
+                document.getElementById('formation_logoFile').value = '';
+            });
+
+        // ────────────────────────────────────────────────────────────────
+        // Submit / Edit button
+        // ────────────────────────────────────────────────────────────────
+        document.getElementById('create_formation').addEventListener('click', async function (e) {
+            e.preventDefault();
+
+            // ── Collect plain fields ──────────────────────────────────────
+            const payload = {
+                name:           document.getElementById('formation_name').value.trim(),
+                status:         document.getElementById('formation_status').value,
+                accountLevel:   document.getElementById('formation_accountLevel').value,
+                accountSection: document.getElementById('formation_accountSection').value,
+                typeDate:       document.getElementById('formation_typeDate').value,
+                otherTypeDate:  document.getElementById('formation_otherTypeDate').value.trim(),
+                numberDayDuration: document.getElementById('formation_numberDayDuration').value.trim(),
+                numberSession:  document.getElementById('formation_numberSession').value.trim(),
+                typeSession:    document.getElementById('formation_typeSession').value,
+                otherTypeSession: document.getElementById('formation_otherTypeSession').value.trim(),
+                conditionOfPassage: document.getElementById('formation_conditionOfPassage').value,
+                conditionOfPassageFormule: document.getElementById('formation_conditionOfPassageFormule').value,
+                conditionOfPassageFormuleByNote: document.getElementById('formation_conditionOfPassageFormuleByNote').value.trim(),
+                conditionOfPassageFormuleByPresent: document.getElementById('formation_conditionOfPassageFormuleByPresent').value.trim(),
+                conditionOfPassageFormuleByNotePresent: document.getElementById('formation_conditionOfPassageFormuleByNotePresent').value.trim(),
+                publicResource: document.getElementById('formation_publicResource').value,
+
+                // Hidden delete-tracking fields
+                deleteSeasonJson:   document.getElementById('deleteSeasonJson').value,
+                deleteSubjectsJson: document.getElementById('deleteSubjectsJson').value,
+            };
+
+            // ── Description (CKEditor or plain textarea) ──────────────────
+            if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances['formation_description']) {
+                payload.description = CKEDITOR.instances['formation_description'].getData();
+            } else {
+                payload.description = document.getElementById('formation_description').value;
+            }
+
+            // ── Selected folders (multi-select) ───────────────────────────
+            const folderSelect = document.getElementById('multi-value-select');
+            if (folderSelect) {
+                payload.selectedFolders = Array.from(folderSelect.selectedOptions).map(o => o.value);
+            }
+
+            // ── Basic validation ──────────────────────────────────────────
+            if (!payload.name) {
+                return Swal.fire({ icon: 'warning', title: 'Required', text: 'Name is required.', confirmButtonColor: '#4c4b9e' });
+            }
+            if (!payload.typeDate) {
+                return Swal.fire({ icon: 'warning', title: 'Required', text: 'Date and Session Analytics is required.', confirmButtonColor: '#4c4b9e' });
+            }
+            if (!payload.typeSession) {
+                return Swal.fire({ icon: 'warning', title: 'Required', text: 'Session Modes Analysis is required.', confirmButtonColor: '#4c4b9e' });
+            }
+            if (!payload.conditionOfPassage) {
+                return Swal.fire({ icon: 'warning', title: 'Required', text: 'Passage Conditions is required.', confirmButtonColor: '#4c4b9e' });
+            }
+
+            // ── Send ──────────────────────────────────────────────────────
+            try {
+                const response = await fetch(`/api/update_formation/${FORMATION_ID}`, {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify(payload),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Updated',
+                        text: 'Formation updated successfully.',
+                        confirmButtonColor: '#4c4b9e',
+                    }).then(() => {
+                        window.location.href = '/dashboard/show-formation';
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: result.Message || 'Failed to update formation.',
+                        confirmButtonColor: '#4c4b9e',
+                    });
+                }
+
+            } catch (err) {
+                console.error('Update error:', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Network Error',
+                    text: 'Could not reach the server.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+            }
+        });
+
+
+
+    });
+</script>
