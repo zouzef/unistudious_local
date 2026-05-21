@@ -212,44 +212,44 @@
                                         </select>
                                     </div>
 
-                                    <div id="fileManagerContainerFormation" class="mb-3" style="display: none;">
-                                        <label class="form-label text-primary">Folder</label>
-                                        <select id="multi-value-select" multiple class="form-control"></select>
-                                        <br><br>
-                                        <label class="form-label text-primary">Select New Folder</label>
-                                        <input type="text" id="selectedFolder" class="form-control"
-                                               placeholder="No folder selected" readonly>
-                                        <button type="button" id="openFileManager" class="btn btn-primary mt-2">Choose
-                                            Folder
-                                        </button>
-                                    </div>
+<!--                                    <div id="fileManagerContainerFormation" class="mb-3" style="display: none;">-->
+<!--                                        <label class="form-label text-primary">Folder</label>-->
+<!--                                        <select id="multi-value-select" multiple class="form-control"></select>-->
+<!--                                        <br><br>-->
+<!--                                        <label class="form-label text-primary">Select New Folder</label>-->
+<!--                                        <input type="text" id="selectedFolder" class="form-control"-->
+<!--                                               placeholder="No folder selected" readonly>-->
+<!--                                        <button type="button" id="openFileManager" class="btn btn-primary mt-2">Choose-->
+<!--                                            Folder-->
+<!--                                        </button>-->
+<!--                                    </div>-->
 
                                     <!-- File Manager Modal -->
-                                    <div class="modal fade" id="fileManagerModal" tabindex="-1"
-                                         aria-labelledby="fileManagerModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="fileManagerModalLabel">
-                                                        <i class="bi bi-folder2-open"></i> Select a Folder
-                                                    </h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body" id="share-folder-modal">
-                                                    <ul id="fileManagerList" class="list-group"></ul>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" id="selectFoldersBtn" class="btn btn-success">
-                                                        Select
-                                                    </button>
-                                                    <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Close
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+<!--                                    <div class="modal fade" id="fileManagerModal" tabindex="-1"-->
+<!--                                         aria-labelledby="fileManagerModalLabel" aria-hidden="true">-->
+<!--                                        <div class="modal-dialog modal-lg">-->
+<!--                                            <div class="modal-content">-->
+<!--                                                <div class="modal-header">-->
+<!--                                                    <h5 class="modal-title" id="fileManagerModalLabel">-->
+<!--                                                        <i class="bi bi-folder2-open"></i> Select a Folder-->
+<!--                                                    </h5>-->
+<!--                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"-->
+<!--                                                            aria-label="Close"></button>-->
+<!--                                                </div>-->
+<!--                                                <div class="modal-body" id="share-folder-modal">-->
+<!--                                                    <ul id="fileManagerList" class="list-group"></ul>-->
+<!--                                                </div>-->
+<!--                                                <div class="modal-footer">-->
+<!--                                                    <button type="button" id="selectFoldersBtn" class="btn btn-success">-->
+<!--                                                        Select-->
+<!--                                                    </button>-->
+<!--                                                    <button type="button" class="btn btn-secondary"-->
+<!--                                                            data-bs-dismiss="modal">Close-->
+<!--                                                    </button>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
 
                                     <hr class="mb-4 mt-4">
 
@@ -429,21 +429,6 @@
 
 
             // ────────────────────────────────────────────────────────────────
-            // Public Resource
-            // ────────────────────────────────────────────────────────────────
-            $('#formation_publicResource')
-                .val((formation.public_resource ?? '').toString().trim())
-                .selectpicker('refresh');
-
-            if (String(formation.public_resource) === '1') {
-
-                document.getElementById(
-                    'fileManagerContainerFormation'
-                ).style.display = 'block';
-            }
-
-
-            // ────────────────────────────────────────────────────────────────
             // Description
             // ────────────────────────────────────────────────────────────────
             if (formation.description) {
@@ -558,11 +543,7 @@
                 payload.description = document.getElementById('formation_description').value;
             }
 
-            // ── Selected folders (multi-select) ───────────────────────────
-            const folderSelect = document.getElementById('multi-value-select');
-            if (folderSelect) {
-                payload.selectedFolders = Array.from(folderSelect.selectedOptions).map(o => o.value);
-            }
+
 
             // ── Basic validation ──────────────────────────────────────────
             if (!payload.name) {

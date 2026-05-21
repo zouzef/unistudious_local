@@ -1,0 +1,81 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card" id="accordion-one">
+                            <div class="card-header flex-wrap px-3">
+                                <div>
+                                    <h4 class="card-title">List tags</h4>
+                                </div>
+                                <ul class="nav nav-tabs dzm-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a href="/dashboard/create-tag" class="btn btn-primary">
+                                            + New Tag
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="Preview" role="tabpanel">
+                                    <div class="card-body p-0">
+                                        <div class="table-responsive">
+                                            <table id="example" class="display table dataTable no-footer" style="min-width: 845px;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Tag</th>
+                                                        <th>Visibility</th>
+                                                        <th>Status</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for tag in tags %}
+                                                    <tr class="selected">
+                                                        <td><span class="text-primary font-w600">{{ tag.id }}</span></td>
+                                                        <td>{{ tag.name }}</td>
+                                                        <td>
+                                                            <span class="badge light badge-primary">
+                                                                <i class="fa fa-circle text-primary me-1"></i>
+                                                                Public
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge light badge-success">
+                                                                <i class="fa fa-circle text-success me-1"></i>
+                                                                Active
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <div class="d-flex">
+                                                                <div class="icon-box icon-box-sm me-2">
+                                                                    <a data-id="{{ tag.id }}" class="delete-tag">
+                                                                        <i class="material-icons" style="font-size:10px;color:red">delete</i>
+                                                                    </a>
+                                                                </div>
+                                                                <div class="icon-box icon-box-sm">
+                                                                    <a href="/dashboard/view-tag/{{ tag.id }}">
+                                                                        <i class="fas fa-pencil-alt" style="font-size:10px;color:green"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

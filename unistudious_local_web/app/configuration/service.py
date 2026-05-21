@@ -194,3 +194,11 @@ def update_formation_service(formation_id,data):
 		return response.status_code == 200,response
 	except Exception as e:
 		return False,None
+
+def create_formation_service(account_id, data):
+	try:
+		url = f"{current_app.config['BASE_URL']}create_formation/{account_id}"
+		response = requests.post(url, json=data, verify=False, timeout=10)
+		return response.status_code == 201, response
+	except Exception as e:
+		return False, None

@@ -124,3 +124,63 @@ def view_formation(formation_id):
 						   formation_id = formation_id,
 						   account_id = session.get('account_id'))
 
+
+
+# ========================================= TAGS =========================================
+@configuration_view_bp.route('/dashboard/show-tag')
+def show_tag():
+	if 'moderator_id' not in session:
+		return redirect(url_for('auth.login'))
+
+	return render_template('index.html',
+						   page='show_tag',
+						   account_id = session.get('account_id'))
+
+@configuration_view_bp.route('/dashboard/create-tag')
+def create_tage():
+	if 'moderator_id' not in session:
+		return redirect(url_for('auth.login'))
+
+	return render_template('index.html',
+						   page='create_tag',
+						   account_id = session.get('account_id'))
+
+@configuration_view_bp.route('/dashboard/view-tag/<int:tag_id>')
+def view_tag(tag_id):
+	if 'moderator_id' not in session:
+		return redirect(url_for('auth.login'))
+
+	return render_template('index.html',
+						   page='view_tag',
+						   tag_id = tag_id,
+						   account_id= session.get('account_id'))
+
+
+# =========================================COMPLETION TAGS =========================================
+@configuration_view_bp.route('/dashboard/show-completion-tag')
+def show_completion_tag():
+	if 'moderator_id' not in session:
+		return redirect(url_for('auth.login'))
+
+	return render_template('index.html',
+						   page='show_completion_tag',
+						   account_id = session.get('account_id'))
+
+@configuration_view_bp.route('/dashboard/create-completion-tag')
+def create_completion_tag():
+	if 'moderator_id' not in session:
+		return redirect(url_for('auth.login'))
+
+	return render_template('index.html',
+						   page='create_completion_tag',
+						   account_id = session.get('account_id'))
+
+@configuration_view_bp.route('/dashboard/view-completion-tag/<int:completionTag_id>')
+def view_completion_tag(completionTag_id):
+	if 'moderator_id' not in session:
+		return redirect(url_for('auth.login'))
+
+	return render_template('index.html',
+						   page='view_completion_tag',
+						   completionTag_id = completionTag_id,
+						   account_id= session.get('account_id'))

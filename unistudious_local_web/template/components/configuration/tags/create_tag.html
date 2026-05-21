@@ -1,0 +1,82 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Add New Tag</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="account-tag-form">
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12">
+                                    <div class="row">
+
+                                        <!-- Tag -->
+                                        <div class="col-xl-6 col-sm-6">
+                                            <div class="mb-3">
+                                                <label class="form-label d-block" for="account_tag_tagConfig">
+                                                    Tag <code class="highlighter-rouge">*</code>
+                                                </label>
+                                                <select id="account_tag_tagConfig" name="account_tag[tagConfig]"
+                                                        required class="form-control selectpicker" aria-label="Tag">
+                                                    <option value="">Choose the Tag...</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Other Tag (conditional) -->
+                                        <div class="col-xl-6 col-sm-6" id="div-other-title" style="display: none;">
+                                            <div class="mb-3">
+                                                <label class="form-label d-block" for="account_tag_otherTag">
+                                                    Other Tag <code class="highlighter-rouge">*</code>
+                                                </label>
+                                                <input type="text" id="account_tag_otherTag"
+                                                       name="account_tag[otherTag]" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <!-- Visibility -->
+                                        <div class="col-xl-12 col-sm-12">
+                                            <div class="mb-3">
+                                                <label class="form-label d-block" for="account_tag_public">
+                                                    Visibility <code class="highlighter-rouge">*</code>
+                                                </label>
+                                                <select id="account_tag_public" name="account_tag[public]"
+                                                        class="form-control selectpicker">
+                                                    <option value="1">Public</option>
+                                                    <option value="0">Private</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Description -->
+                                        <div class="col-xl-12 col-sm-12">
+                                            <div class="mb-3">
+                                                <label class="form-label d-block" for="account_tag_description">
+                                                    Description
+                                                </label>
+                                                <textarea id="account_tag_description"
+                                                          name="account_tag[description]"
+                                                          class="form-control" rows="7"
+                                                          data-ckeditor="true"></textarea>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="float-end">
+                                <button type="button" class="btn btn-outline-primary me-3"
+                                        id="create_tag">Create</button>
+                                <a class="btn btn-outline-danger" href="/dashboard/show-tag">Close</a>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

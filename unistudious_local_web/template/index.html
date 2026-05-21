@@ -264,6 +264,30 @@
         <!-- END configuration -->
 
 
+        <!-- BEGIN TAG -->
+{% elif page == 'show_tag'%}
+    {% include 'components/configuration/tags/show_tag.html'%}
+
+{% elif page == 'create_tag'%}
+    {% include 'components/configuration/tags/create_tag.html'%}
+
+{% elif page == 'view_tag'%}
+    {% include 'components/configuration/tags/view_tag.html'%}
+
+        <!-- END TAG -->
+
+        <!-- BEGIN TAG -->
+{% elif page == 'show_completion_tag'%}
+    {% include 'components/configuration/completion_tag/show_completion_tag.html'%}
+
+{% elif page == 'create_completion_tag'%}
+    {% include 'components/configuration/completion_tag/create_completion_tag.html'%}
+
+{% elif page == 'view_completion_tag'%}
+    {% include 'components/configuration/completion_tag/view_completion_tag.html'%}
+
+        <!-- END TAG -->
+
 
 
 {% endif %}

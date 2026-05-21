@@ -1,0 +1,90 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Add New Completion Tag</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="completion-tag-form">
+                            <div class="row">
+
+                                <!-- Image -->
+                                <div class="col-xl-3 col-sm-4">
+                                    <div class="card card-bx profile-card author-profile m-b30">
+                                        <div class="card-body">
+                                            <div class="p-5">
+                                                <div class="author-profile">
+                                                    <div class="author-media-formation">
+                                                        <img id="imagePreview"
+                                                             src="/assets/admin/images/completion-tag-defult.jpg"
+                                                             alt="">
+                                                    </div>
+                                                    <div class="change-btn mt-5 mb-lg-0 mb-3">
+                                                        <input type="file" id="completion_tag_imgFile"
+                                                               name="completion_tag[imgFile]"
+                                                               class="d-none"
+                                                               accept=".png, .jpg, .jpeg">
+                                                        <label for="completion_tag_imgFile"
+                                                               class="dlab-upload mb-0 btn btn-primary btn-sm">
+                                                            Choose File
+                                                        </label>
+                                                        <a href="javascript:void(0);"
+                                                           class="btn btn-danger light remove-img ms-2 btn-sm"
+                                                           id="remove-img-completion-tag">Remove</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Fields -->
+                                <div class="col-xl-9 col-lg-8">
+                                    <div class="row">
+
+                                        <!-- Name -->
+                                        <div class="col-xl-12 col-sm-12">
+                                            <div class="mb-3">
+                                                <label class="form-label d-block" for="completion_tag_name">
+                                                    Name <code class="highlighter-rouge">*</code>
+                                                </label>
+                                                <input type="text" id="completion_tag_name"
+                                                       name="completion_tag[name]"
+                                                       required class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <!-- Description -->
+                                        <div class="col-xl-12 col-sm-12">
+                                            <div class="mb-3">
+                                                <label class="form-label d-block" for="completion_tag_description">
+                                                    Description
+                                                </label>
+                                                <textarea id="completion_tag_description"
+                                                          name="completion_tag[description]"
+                                                          class="form-control" rows="7"
+                                                          data-ckeditor="true"></textarea>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="float-end">
+                                <button type="button" class="btn btn-outline-primary me-3"
+                                        id="create_completion_tag">Create</button>
+                                <a class="btn btn-outline-danger"
+                                   href="/dashboard/show-completion-tag">Close</a>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

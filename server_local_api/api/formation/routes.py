@@ -182,3 +182,101 @@ def update_formation(formation_id):
 
     except Exception as e:
         return jsonify({"Message": f"Error: {e} coming from server"}), 500
+
+@formation_bp.route('/create_formation/<int:account_id>', methods=['POST'])
+def create_formation(account_id):
+    try:
+        data = request.get_json()
+
+        # Required fields validation
+        required_fields = ['name', 'status', 'typeDate', 'typeSession', 'conditionOfPassage']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({"Message": f"'{field}' is required"}), 400
+
+        # Map camelCase (from JS payload) → snake_case (DB columns)
+        name                                         = data.get('name', '').strip()
+        status                                       = data.get('status')
+        account_level_id                             = data.get('accountLevel') or None
+        account_section_id                           = data.get('accountSection') or None
+        type_date                                    = data.get('typeDate')
+        other_type_date                              = data.get('otherTypeDate', '').strip() or None
+        number_day_duration                          = data.get('numberDayDuration') or None
+        number_session                               = data.get('numberSession') or None
+        type_session                                 = data.get('typeSession')
+        other_type_session                           = data.get('otherTypeSession', '').strip() or None
+        condition_of_passage                         = data.get('conditionOfPassage')
+        condition_of_passage_formule                 = data.get('conditionOfPassageFormule') or None
+        condition_of_passage_formule_by_note         = data.get('conditionOfPassageFormuleByNote', '').strip() or None
+        condition_of_passage_formule_by_present      = data.get('conditionOfPassageFormuleByPresent', '').strip() or None
+        condition_of_passage_formule_by_note_present = data.get('conditionOfPassageFormuleByNotePresent', '').strip() or None
+        public_resource                              = data.get('publicResource') or None
+        description                                  = data.get('description', '').strip() or None
+        img_link                                     = data.get('imgLink') or None
+
+        query = """
+            INSERT INTO formation (
+                account_id,
+                account_level_id,
+                account_section_id,
+                name,
+                description,
+                status,
+                type_date,
+                other_type_date,
+                type_session,
+                other_type_session,
+                number_day_duration,
+                number_session,
+                condition_of_passage,
+                condition_of_passage_formule,
+                condition_of_passage_formule_by_note,
+                condition_of_passage_formule_by_present,
+                condition_of_passage_formule_by_note_present,
+                img_link,
+                public_resource,
+                enabled,
+                created_at,
+                updated_at
+            ) VALUES (
+                %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s,
+                %s, %s, %s, %s,
+                1,
+                NOW(), NOW()
+            )
+        """
+
+        values = [
+            account_id,
+            account_level_id,
+            account_section_id,
+            name,
+            description,
+            status,
+            type_date,
+            other_type_date,
+            type_session,
+            other_type_session,
+            number_day_duration,
+            number_session,
+            condition_of_passage,
+            condition_of_passage_formule,
+            condition_of_passage_formule_by_note,
+            condition_of_passage_formule_by_present,
+            condition_of_passage_formule_by_note_present,
+            img_link,
+            public_resource,
+        ]
+
+        result = Database.execute_query(query, values, fetch=False)
+
+        if result:
+            return jsonify({"Message": "Formation created successfully"}), 201
+        else:
+            return jsonify({"Message": "Error creating formation"}), 400
+
+    except Exception as e:
+        return jsonify({"Message": f"Error: {e} coming from server"}), 500
+

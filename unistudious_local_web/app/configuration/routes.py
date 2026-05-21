@@ -1,6 +1,9 @@
 from http.client import responses
 
-from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
+from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for, current_app
+from werkzeug.utils import secure_filename
+import time
+import os
 
 from app.configuration.service import (
 	get_account_level_service,
@@ -24,7 +27,8 @@ from app.configuration.service import (
 	get_all_foramtion_service,
 	delete_formation_service,
 	view_formation_service,
-	update_formation_service
+	update_formation_service,
+	create_formation_service
 
 )
 
@@ -327,3 +331,52 @@ def update_session(formation_id):
 		return jsonify({
 			"Message":f"Error: {e} coming from backend"
 		}),500
+
+@configuration_bp.route('/api/create_formation/<int:account_id>', methods=['POST'])
+def create_formation(account_id):
+	try:
+		img_link = None
+		file = request.files.get('formation_logoFile')
+
+		if file and file.filename != '':
+			filename  = secure_filename(file.filename)
+			# Add timestamp to avoid duplicate filenames
+			unique_filename = f"{int(time.time())}_{filename}"
+			save_path = os.path.join(current_app.root_path, '..', 'static', 'assets', 'images', 'formations', unique_filename)
+			os.makedirs(os.path.dirname(save_path), exist_ok=True)
+			file.save(save_path)
+			img_link = f'/static/assets/images/formations/{unique_filename}'
+
+		# ── 2. Collect form fields ──────────────────────────────────
+		payload = {
+            'name':                                    request.form.get('formation[name]'),
+            'status':                                  request.form.get('formation[status]'),
+            'accountLevel':                            request.form.get('formation[accountLevel]'),
+            'accountSection':                          request.form.get('formation[accountSection]'),
+            'typeDate':                                request.form.get('formation[typeDate]'),
+            'otherTypeDate':                           request.form.get('formation[otherTypeDate]'),
+            'numberDayDuration':                       request.form.get('formation[numberDayDuration]'),
+            'numberSession':                           request.form.get('formation[numberSession]'),
+            'typeSession':                             request.form.get('formation[typeSession]'),
+            'otherTypeSession':                        request.form.get('formation[otherTypeSession]'),
+            'conditionOfPassage':                      request.form.get('formation[conditionOfPassage]'),
+            'conditionOfPassageFormule':               request.form.get('formation[conditionOfPassageFormule]'),
+            'conditionOfPassageFormuleByNote':         request.form.get('formation[conditionOfPassageFormuleByNote]'),
+            'conditionOfPassageFormuleByPresent':      request.form.get('formation[conditionOfPassageFormuleByPresent]'),
+            'conditionOfPassageFormuleByNotePresent':  request.form.get('formation[conditionOfPassageFormuleByNotePresent]'),
+            'publicResource':                          request.form.get('formation[publicResource]'),
+            'description':                             request.form.get('formation[description]'),
+            'imgLink':                                 img_link,
+		}
+
+		# ── 3. Forward to local server ──────────────────────────────
+		status, response = create_formation_service(account_id, payload)
+
+		if status:
+			return jsonify(response.json()), response.status_code
+		else:
+			return jsonify({"Message": "Error creating formation"}), 400
+
+	except Exception as e:
+		print(f"error: {e}")
+		return jsonify({"Message": f"Error: {e} coming from backend"}), 500
