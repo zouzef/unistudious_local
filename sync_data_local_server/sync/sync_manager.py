@@ -253,6 +253,16 @@ def process_sync_data(db, data):
         print("\n Account Section: ")
         processor_account_section(db, normalize(data['accountSection']))
 
+    if 'tag' in data:
+        from sync.processors.tag_config_processor import processor_tag_config
+        print("\n Tag Config: ")
+        processor_tag_config(db, normalize(data['tag']))
+
+    if 'accountTag' in data:
+        from sync.processors.account_tag_processor import processor_account_tag
+        print("\n Account Tag: ")
+        processor_account_tag(db, normalize(data['accountTag']))
+
 
 
 def run_continuous_sync(settings):

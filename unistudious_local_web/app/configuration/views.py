@@ -145,7 +145,7 @@ def create_tage():
 						   page='create_tag',
 						   account_id = session.get('account_id'))
 
-@configuration_view_bp.route('/dashboard/view-tag/<int:tag_id>')
+@configuration_view_bp.route('/dashboard/view-account-tag/<int:tag_id>')
 def view_tag(tag_id):
 	if 'moderator_id' not in session:
 		return redirect(url_for('auth.login'))

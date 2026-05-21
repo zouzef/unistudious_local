@@ -202,3 +202,56 @@ def create_formation_service(account_id, data):
 		return response.status_code == 201, response
 	except Exception as e:
 		return False, None
+
+
+
+def get_all_tag_service():
+	try:
+		url = f"{current_app.config['BASE_URL']}get_all_tag"
+		response= requests.get(url,verify=False,timeout=10)
+		return response.status_code==200,response
+	except Exception as e:
+		return False,None
+
+def get_all_subject_config_service(account_id):
+	try:
+		url = f"{current_app.config['BASE_URL']}get_account_tag/{account_id}"
+		response = requests.get(url,verify=False,timeout=10)
+		return response.status_code == 200,response
+	except Exception as e:
+		return False,None
+
+def delete_account_tag_service(account_tag_id):
+	try:
+		url = f"{current_app.config['BASE_URL']}delete_account_tag/{account_tag_id}"
+		response = requests.post(url,verify=False,timeout=10)
+		return response.status_code == 200,response
+	except Exception as e:
+		return False,None
+
+def get_account_tag_service(account_tag_id):
+	try:
+		url =f"{current_app.config['BASE_URL']}view_account_tag/{account_tag_id}"
+		response = requests.get(url,verify=False,timeout=10)
+		return response.status_code == 200 ,response
+	except Exception as e:
+		return False,None
+
+def update_account_tag_service(account_tag_id, data):
+	try:
+		url = f"{current_app.config['BASE_URL']}edit_account_tag/{account_tag_id}"
+		response= requests.post(url,json=data,verify=False,timeout=10)
+		return response.status_code == 200,response
+
+
+	except Exception as e:
+		return False,None
+
+def create_account_tag_service(account_id, data):
+	try:
+		url =f"{current_app.config['BASE_URL']}create_account_tag/{account_id}"
+		response = requests.post(url, json=data, verify=False,timeout=10)
+		return response.status_code == 200,response
+	except Exception as e:
+		print(e)
+		return False,None

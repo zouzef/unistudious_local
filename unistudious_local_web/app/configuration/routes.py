@@ -28,7 +28,12 @@ from app.configuration.service import (
 	delete_formation_service,
 	view_formation_service,
 	update_formation_service,
-	create_formation_service
+	create_formation_service,
+	get_all_tag_service,
+	get_all_subject_config_service,
+	delete_account_tag_service,
+	get_account_tag_service,
+	update_account_tag_service
 
 )
 
@@ -380,3 +385,86 @@ def create_formation(account_id):
 	except Exception as e:
 		print(f"error: {e}")
 		return jsonify({"Message": f"Error: {e} coming from backend"}), 500
+
+# =============================================== TAG ENDPOINTS ===============================================
+@configuration_bp.route('/api/get_tag_config',methods=['GET'])
+def get_tag_confg():
+	try:
+		status,response = get_all_tag_service()
+		if status:
+			return jsonify(response.json()),response.status_code
+		else:
+			return jsonify({
+				"Message":f"Error coming from server"
+			})
+	except Exception as e:
+		print(e)
+		return jsonify({
+			"Message":f"Error: {e} coming from backend"
+		}),500
+
+@configuration_bp.route('/api/get_account_tag/<int:account_id>',methods=['GET'])
+def get_account_tag(account_id):
+	try:
+		status,response = get_all_subject_config_service(account_id)
+		if status:
+			return jsonify(response.json()),response.status_code
+		else:
+			return jsonify({
+				"Message":"There is no data for this account_id"
+			}),404
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from backend"
+		}),500
+
+@configuration_bp.route('/api/delete_account_tag/<int:account_tag_id>',methods=['POST'])
+def delete_account_tag(account_tag_id):
+	try:
+		status,response = delete_account_tag_service(account_tag_id)
+		if status:
+			return jsonify(response.json()),response.status_code
+		else:
+			return jsonify({"Message":"Error in deleting tag_account"}),400
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from backend"
+		}),500
+
+@configuration_bp.route('/api/view_account_tag/<int:account_tag_id>',methods=['GET'])
+def view_account_tag(account_tag_id):
+	try:
+		status,response = get_account_tag_service(account_tag_id)
+		if status:
+			return jsonify(response.json()),response.status_code
+		else:
+			return jsonify({
+				"Message":f"There is no data for this account_tag_id"
+			}),404
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from server"
+		}),500
+
+@configuration_bp.route('/api/update_account_tag/<int:account_tag_id>', methods=['POST'])
+def api_update_account_tag(account_tag_id):
+    try:
+        if not account_tag_id:
+            return jsonify({"Message": "Account tag ID is required"}), 400
+
+        data = request.get_json()
+
+        status, response = update_account_tag_service(account_tag_id, data)
+        if status:
+            return jsonify(response.json()), response.status_code
+        else:
+            return jsonify({
+                "Message": "Error in updating account tag"
+            }), 400
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from backend"
+        }), 500

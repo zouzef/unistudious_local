@@ -74,6 +74,9 @@ def create_app():
     from api.account_section.routes import account_section_bp
     app.register_blueprint(account_section_bp)
 
+    # Account Tag
+    from api.tag.routes import tag_bp
+    app.register_blueprint(tag_bp)
 
     # ========================================
     # HOME ROUTE

@@ -94,7 +94,7 @@
 
         // ─── Load levels into select + prefill form ────────────────────────
         Promise.all([
-            fetch('/api/get_all_level').then(res => res.json()),
+            fetch('/api/get_tag_config').then(res => res.json()),
             fetch(`/api/view_account_config/${ACCOUNT_LEVEL_ID}`).then(res => res.json())
         ])
         .then(([levels, accountLevelArr]) => {

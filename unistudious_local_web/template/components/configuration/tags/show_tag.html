@@ -7,7 +7,7 @@
                         <div class="card" id="accordion-one">
                             <div class="card-header flex-wrap px-3">
                                 <div>
-                                    <h4 class="card-title">List tags</h4>
+                                    <h4 class="card-title">List Account Tags</h4>
                                 </div>
                                 <ul class="nav nav-tabs dzm-tabs" id="myTab" role="tablist">
                                     <li class="nav-item" role="presentation">
@@ -17,61 +17,46 @@
                                     </li>
                                 </ul>
                             </div>
-
                             <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade show active" id="Preview" role="tabpanel">
                                     <div class="card-body p-0">
-                                        <div class="table-responsive">
-                                            <table id="example" class="display table dataTable no-footer" style="min-width: 845px;">
+
+                                        <!-- Loading state -->
+                                        <div id="table-loading" class="text-center py-5">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <p class="mt-2 text-muted">Loading tags...</p>
+                                        </div>
+
+                                        <!-- Error state -->
+                                        <div id="table-error" class="d-none text-center py-5">
+                                            <i class="fas fa-exclamation-triangle text-danger fa-2x mb-2"></i>
+                                            <p class="text-danger" id="error-message">Something went wrong.</p>
+                                        </div>
+
+                                        <!-- Table (hidden until loaded) -->
+                                        <div id="table-wrapper" class="d-none table-responsive">
+                                            <table id="example" class="display table dataTable no-footer"
+                                                   style="min-width: 845px;">
                                                 <thead>
-                                                    <tr>
-                                                        <th>ID</th>
-                                                        <th>Tag</th>
-                                                        <th>Visibility</th>
-                                                        <th>Status</th>
-                                                        <th>Actions</th>
-                                                    </tr>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>tag</th>
+                                                    <th>Visibility</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
                                                 </thead>
-                                                <tbody>
-                                                    {% for tag in tags %}
-                                                    <tr class="selected">
-                                                        <td><span class="text-primary font-w600">{{ tag.id }}</span></td>
-                                                        <td>{{ tag.name }}</td>
-                                                        <td>
-                                                            <span class="badge light badge-primary">
-                                                                <i class="fa fa-circle text-primary me-1"></i>
-                                                                Public
-                                                            </span>
-                                                        </td>
-                                                        <td>
-                                                            <span class="badge light badge-success">
-                                                                <i class="fa fa-circle text-success me-1"></i>
-                                                                Active
-                                                            </span>
-                                                        </td>
-                                                        <td>
-                                                            <div class="d-flex">
-                                                                <div class="icon-box icon-box-sm me-2">
-                                                                    <a data-id="{{ tag.id }}" class="delete-tag">
-                                                                        <i class="material-icons" style="font-size:10px;color:red">delete</i>
-                                                                    </a>
-                                                                </div>
-                                                                <div class="icon-box icon-box-sm">
-                                                                    <a href="/dashboard/view-tag/{{ tag.id }}">
-                                                                        <i class="fas fa-pencil-alt" style="font-size:10px;color:green"></i>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    {% endfor %}
+                                                <tbody id="tags-tbody">
+                                                <!-- filled by JS -->
                                                 </tbody>
                                             </table>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -79,3 +64,195 @@
         </div>
     </div>
 </div>
+
+<script>
+    const ACCOUNT_ID = {{ account_id }};
+
+    window.addEventListener('load', function () {
+
+        let dataTableInstance = null;
+
+        // ── Helpers ──────────────────────────────────────────────────
+        const truncate = (text, wordLimit = 8) => {
+            if (!text) return 'N/A';
+            const words = text.split(' ');
+            return words.length <= wordLimit
+                ? text
+                : words.slice(0, wordLimit).join(' ') + '...';
+        };
+
+        // ── DataTable init ───────────────────────────────────────────
+        function initDataTable() {
+            if ($.fn.DataTable.isDataTable('#example')) {
+                $('#example').DataTable().destroy();
+                dataTableInstance = null;
+            }
+            dataTableInstance = $('#example').DataTable({
+                order: [[0, 'desc']],
+                pageLength: 10,
+                lengthChange: true,
+                lengthMenu: [10, 25, 50, 100],
+                language: {
+                    lengthMenu: 'Show _MENU_ entries',
+                    paginate: {
+                        next:     '<i class="fa-solid fa-angle-right"></i>',
+                        previous: '<i class="fa-solid fa-angle-left"></i>'
+                    }
+                },
+                drawCallback: function () { stylePaginationButtons(); }
+            });
+        }
+
+        // ── Load tags ────────────────────────────────────────────────
+        function loadTags() {
+            const loading = document.getElementById('table-loading');
+            const error   = document.getElementById('table-error');
+            const wrapper = document.getElementById('table-wrapper');
+            const tbody   = document.getElementById('tags-tbody');
+
+            loading.classList.remove('d-none');
+            error.classList.add('d-none');
+            wrapper.classList.add('d-none');
+
+            fetch(`/api/get_account_tag/${ACCOUNT_ID}`)
+                .then(res => {
+                    if (!res.ok) throw new Error(`Server returned ${res.status}`);
+                    return res.json();
+                })
+                .then(tags => {
+                    if ($.fn.DataTable.isDataTable('#example')) {
+                        $('#example').DataTable().destroy();
+                        dataTableInstance = null;
+                    }
+
+                    if (!tags || tags.length === 0) {
+                        tbody.innerHTML = `
+                            <tr>
+                                <td colspan="6" class="text-center">No tags found for this account</td>
+                            </tr>`;
+                        loading.classList.add('d-none');
+                        wrapper.classList.remove('d-none');
+                        initDataTable();
+                        return;
+                    }
+
+                    tbody.innerHTML = tags.map(tag => {
+                        const isActive = tag.status === 1 && tag.status === 1;
+                        const isPublic = tag.public === 1;
+
+                        return `
+                            <tr class="selected">
+                                <td><span class="text-primary font-w600">${tag.id}</span></td>
+                                <td>${truncate(tag.tag_name)}</td>
+                                <td>
+                                    <span class="badge light ${isPublic ? 'badge-primary' : 'badge-secondary'}">
+                                        <i class="fa fa-circle ${isPublic ? 'text-primary' : 'text-secondary'} me-1"></i>
+                                        ${isPublic ? 'Public' : 'Private'}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge light ${isActive ? 'badge-success' : 'badge-danger'}">
+                                        <i class="fa fa-circle ${isActive ? 'text-success' : 'text-danger'} me-1"></i>
+                                        ${isActive ? 'Active' : 'Inactive'}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <div class="icon-box icon-box-sm me-2">
+                                            <a href="#" data-id="${tag.id}" class="delete-tag">
+                                                <i class="material-icons" style="font-size:10px;color:red">delete</i>
+                                            </a>
+                                        </div>
+                                        <div class="icon-box icon-box-sm">
+                                            <a href="/dashboard/view-account-tag/${tag.id}">
+                                                <i class="fas fa-pencil-alt" style="font-size:10px;color:green"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>`;
+                    }).join('');
+
+                    loading.classList.add('d-none');
+                    wrapper.classList.remove('d-none');
+                    initDataTable();
+                })
+                .catch(err => {
+                    loading.classList.add('d-none');
+                    error.classList.remove('d-none');
+                    document.getElementById('error-message').textContent = err.message;
+                });
+        }
+
+        // ── Pagination styling ───────────────────────────────────────
+        function stylePaginationButtons() {
+            const paginate = document.querySelector('.dataTables_paginate');
+            if (!paginate) return;
+
+            paginate.querySelectorAll('span > a, a.paginate_button').forEach(btn => {
+                btn.style.cssText = `
+                    min-width: 32px; height: 32px; border-radius: 8px;
+                    border: 1.5px solid #e0dfef; background: #fff;
+                    color: #4c4b8f; font-size: 13px; font-weight: 500;
+                    cursor: pointer; display: inline-flex; align-items: center;
+                    justify-content: center; padding: 0 6px; margin: 0 2px;
+                    text-decoration: none; transition: background .15s;
+                `;
+            });
+            paginate.querySelectorAll('a.paginate_button.current').forEach(btn => {
+                btn.style.cssText += `background: #4c4b9e !important; color: #fff !important; border-color: #4c4b9e !important;`;
+            });
+            paginate.querySelectorAll('a.paginate_button.disabled').forEach(btn => {
+                btn.style.opacity = '0.35';
+                btn.style.cursor  = 'default';
+            });
+        }
+
+        // ── Delete handler ───────────────────────────────────────────
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.delete-tag');
+            if (!btn) return;
+            e.preventDefault();
+
+            const tagId = btn.dataset.id;
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This tag will be permanently deleted!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#4c4b9e',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    fetch(`/api/delete_account_tag/${tagId}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(res => res.json())
+                    .then(() => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: 'Tag deleted successfully.',
+                            confirmButtonColor: '#4c4b9e',
+                        }).then(() => loadTags());
+                    })
+                    .catch(() => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Server Error',
+                            text: 'Something went wrong, please try again.',
+                            confirmButtonColor: '#4c4b9e',
+                        });
+                    });
+                }
+            });
+        });
+
+        // ── Boot ─────────────────────────────────────────────────────
+        loadTags();
+    });
+</script>

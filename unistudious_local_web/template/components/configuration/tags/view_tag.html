@@ -4,7 +4,7 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Tag Details #{{ tag_id }}</h4>
+                        <h4 class="card-title">Tag Details</h4>
                     </div>
                     <div class="card-body">
                         <form id="account-tag-form">
@@ -12,21 +12,25 @@
                                 <div class="col-xl-12 col-lg-12">
                                     <div class="row">
 
-                                        <!-- Tag -->
+                                        <!-- Tag select -->
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
                                                 <label class="form-label d-block" for="account_tag_tagConfig">
                                                     Tag <code class="highlighter-rouge">*</code>
                                                 </label>
-                                                <select id="account_tag_tagConfig" name="account_tag[tagConfig]"
-                                                        required class="form-control selectpicker" aria-label="Tag">
+                                                <select id="account_tag_tagConfig"
+                                                        name="account_tag[tagConfig]"
+                                                        class="selectpicker form-control"
+                                                        aria-label="Tag"
+                                                        data-live-search="true"
+                                                        required>
                                                     <option value="">Choose the Tag...</option>
                                                 </select>
                                             </div>
                                         </div>
 
-                                        <!-- Other Tag (conditional) -->
-                                        <div class="col-xl-6 col-sm-6" id="div-other-title" style="display: none;">
+                                        <!-- Other Tag (shown only when tag_config_id = 1) -->
+                                        <div class="col-xl-6 col-sm-6" id="div-other-tag" style="display: none;">
                                             <div class="mb-3">
                                                 <label class="form-label d-block" for="account_tag_otherTag">
                                                     Other Tag <code class="highlighter-rouge">*</code>
@@ -42,8 +46,9 @@
                                                 <label class="form-label d-block" for="account_tag_status">
                                                     Status <code class="highlighter-rouge">*</code>
                                                 </label>
-                                                <select id="account_tag_status" name="account_tag[status]"
-                                                        class="form-control selectpicker" style="width: 150px;">
+                                                <select id="account_tag_status"
+                                                        name="account_tag[status]"
+                                                        class="selectpicker form-control">
                                                     <option value="1">Active</option>
                                                     <option value="0">Inactive</option>
                                                 </select>
@@ -51,13 +56,14 @@
                                         </div>
 
                                         <!-- Visibility -->
-                                        <div class="col-xl-12 col-sm-12">
+                                        <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
                                                 <label class="form-label d-block" for="account_tag_public">
                                                     Visibility <code class="highlighter-rouge">*</code>
                                                 </label>
-                                                <select id="account_tag_public" name="account_tag[public]"
-                                                        class="form-control selectpicker" style="width: 150px;">
+                                                <select id="account_tag_public"
+                                                        name="account_tag[public]"
+                                                        class="selectpicker form-control">
                                                     <option value="1">Public</option>
                                                     <option value="0">Private</option>
                                                 </select>
@@ -72,7 +78,8 @@
                                                 </label>
                                                 <textarea id="account_tag_description"
                                                           name="account_tag[description]"
-                                                          class="form-control" rows="7"
+                                                          class="form-control"
+                                                          rows="7"
                                                           data-ckeditor="true"></textarea>
                                             </div>
                                         </div>
@@ -82,8 +89,7 @@
                             </div>
 
                             <div class="float-end">
-                                <button type="button" class="btn btn-outline-success me-2"
-                                        id="edit_tag">Edit</button>
+                                <button type="submit" class="btn btn-outline-success me-2">Edit</button>
                                 <a class="btn btn-outline-danger" href="/dashboard/show-tag">Close</a>
                             </div>
 
@@ -94,3 +100,157 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    const ACCOUNT_TAG_ID = {{ tag_id }};
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // ─── Load tag list + current tag data in parallel ──────────────────
+        Promise.all([
+            fetch('/api/get_tag_config').then(res => res.json()),
+            fetch(`/api/view_account_tag/${ACCOUNT_TAG_ID}`).then(res => res.json())
+        ])
+        .then(([tags, accountTagArr]) => {
+            const accountTag = accountTagArr[0]; // API returns an array, grab first element
+            const select     = document.getElementById('account_tag_tagConfig');
+
+            // ── Populate tag select ────────────────────────────────────────
+            tags.forEach(tag => {
+                const option       = document.createElement('option');
+                option.value       = tag.id;
+                option.textContent = tag.title ?? tag.name; // adjust to your tag_config column name
+                if (tag.id === accountTag.tag_config_id) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
+            });
+
+            $('#account_tag_tagConfig').selectpicker('refresh');
+
+            // ── Show / hide "Other Tag" based on selected tag_config_id ────
+            toggleOtherTag(accountTag.tag_config_id);
+
+            // ── Pre-fill Other Tag input ───────────────────────────────────
+            if (accountTag.other_tag) {
+                document.getElementById('account_tag_otherTag').value = accountTag.other_tag;
+            }
+
+            // ── Pre-fill Status ────────────────────────────────────────────
+            document.getElementById('account_tag_status').value = accountTag.status;
+            $('#account_tag_status').selectpicker('refresh');
+
+            // ── Pre-fill Visibility ────────────────────────────────────────
+            document.getElementById('account_tag_public').value = accountTag.public;
+            $('#account_tag_public').selectpicker('refresh');
+
+            // ── Pre-fill Description ───────────────────────────────────────
+            if (accountTag.description) {
+                document.getElementById('account_tag_description').value = accountTag.description;
+                if (typeof CKEDITOR !== 'undefined') {
+                    CKEDITOR.instances['account_tag_description']?.setData(accountTag.description);
+                }
+            }
+        })
+        .catch(err => {
+            console.error('Failed to load data:', err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to load tag data.',
+                confirmButtonColor: '#4c4b9e',
+            });
+        });
+
+        // ─── Show/hide "Other Tag" field when select changes ───────────────
+        document.getElementById('account_tag_tagConfig').addEventListener('change', function () {
+            toggleOtherTag(parseInt(this.value));
+        });
+
+        function toggleOtherTag(tagConfigId) {
+            const div = document.getElementById('div-other-tag');
+            if (tagConfigId === 1) {
+                div.style.display = 'block';
+            } else {
+                div.style.display = 'none';
+                document.getElementById('account_tag_otherTag').value = '';
+            }
+        }
+
+        // ─── Form submit (Edit) ────────────────────────────────────────────
+        document.getElementById('account-tag-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const tag_config_id = document.getElementById('account_tag_tagConfig').value;
+            const other_tag     = document.getElementById('account_tag_otherTag').value;
+            const status        = document.getElementById('account_tag_status').value;
+            const public_val    = document.getElementById('account_tag_public').value;
+            const description   = typeof CKEDITOR !== 'undefined' && CKEDITOR.instances['account_tag_description']
+                                    ? CKEDITOR.instances['account_tag_description'].getData()
+                                    : document.getElementById('account_tag_description').value;
+
+            // Validate
+            if (!tag_config_id) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Required!',
+                    text: 'Please select a tag.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+                return;
+            }
+
+            if (parseInt(tag_config_id) === 1 && !other_tag.trim()) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Required!',
+                    text: 'Please fill in the Other Tag field.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+                return;
+            }
+
+            fetch(`/api/update_account_tag/${ACCOUNT_TAG_ID}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    tag_config_id : tag_config_id,
+                    other_tag     : other_tag,
+                    status        : status,
+                    public        : public_val,
+                    description   : description
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.Message === 'Account tag updated with success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Tag updated successfully!',
+                        confirmButtonColor: '#4c4b9e',
+                    }).then(() => {
+                        window.location.href = '/dashboard/show-tag';
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops!',
+                        text: data.Message,
+                        confirmButtonColor: '#4c4b9e',
+                    });
+                }
+            })
+            .catch(() => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Server Error',
+                    text: 'Something went wrong, please try again.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+            });
+        });
+
+    });
+</script>
