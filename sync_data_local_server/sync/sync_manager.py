@@ -13,6 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config.settings import get_settings
 from core.auth import init_auth, start_auto_refresh
 from core.database import Database
+from core.database_initializer import init_database
 from sync.data_fetcher import DataFetcher
 from utils.helpers import (
     get_last_sync_time,
@@ -364,6 +365,7 @@ if __name__ == "__main__":
         print("\n📋 Loading configuration...")
         settings = get_settings("config/config.json")
 
+        init_database(settings)
         # Initialize authentication
         print("🔐 Initializing authentication...")
         init_auth(settings)

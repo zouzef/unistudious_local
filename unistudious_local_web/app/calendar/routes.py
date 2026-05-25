@@ -15,33 +15,6 @@ from app.calendar.service import (
 calendar_bp = Blueprint('calendar', __name__)
 
 
-# ==========================================
-# PAGE ROUTES
-# ==========================================
-
-@calendar_bp.route('/dashboard/create-session-calendar/<int:id_session>')
-def show_create_session_calendar(id_session):
-    """Create/edit session calendar page"""
-    if 'moderator_id' not in session:
-        return redirect(url_for('auth.login_page'))
-
-    account_id = session.get('account_id', 3)
-
-    return render_template('index.html',
-                           id_session=id_session,
-                           account_id=account_id,
-                           page='session_calander')
-
-
-@calendar_bp.route('/dashboard/show-calander-request/<int:account_id>')
-def show_calendar_request(account_id):
-    """Show calendar requests page"""
-    if 'moderator_id' not in session:
-        return redirect(url_for('auth.login_page'))
-
-    return render_template('index.html',
-                           account_id=account_id,
-                           page='calander_request_page')
 
 
 # ==========================================

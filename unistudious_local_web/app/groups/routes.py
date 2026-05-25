@@ -13,29 +13,6 @@ from app.session.service import get_locals
 
 groups_bp = Blueprint('groups', __name__)
 
-
-# ==========================================
-# PAGE ROUTES
-# ==========================================
-
-@groups_bp.route('/dashboard/create-group-user-session/<int:id_session>')
-def show_create_group_session(id_session):
-    """Create/edit group for session page"""
-    if 'moderator_id' not in session:
-        return redirect(url_for('auth.login_page'))
-
-    account_id = session.get('account_id', 3)
-
-    local_details = get_locals(account_id)
-    local_id = local_details[0].get('id', 1) if local_details else 1
-
-    return render_template('index.html',
-                           id_session=id_session,
-                           account_id=account_id,
-                           local_id=local_id,
-                           page='group_user_session')
-
-
 # ==========================================
 # API ROUTES
 # ==========================================

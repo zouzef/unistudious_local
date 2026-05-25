@@ -1,57 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<!-- Mirrored from akademi.dexignlab.com/xhtml/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 04 Mar 2025 13:04:47 GMT -->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="author" content="DexignLab">
     <meta name="robots" content="">
-    <meta name="keywords"
-          content="school, school admin, education, academy, admin dashboard, college, college management, education management, institute, school management, school management system, student management, teacher management, university, university management">
-    <meta name="description"
-          content="Discover Akademi - the ultimate admin dashboard and Bootstrap 5 template. Specially designed for professionals, and for business. Akademi provides advanced features and an easy-to-use interface for creating a top-quality website with School and Education Dashboard">
+    <meta name="keywords" content="school, school admin, education, academy, admin dashboard, college, college management, education management, institute, school management, school management system, student management, teacher management, university, university management">
+    <meta name="description" content="Discover Akademi - the ultimate admin dashboard and Bootstrap 5 template.">
     <meta property="og:title" content="Akademi : School and Education Management Admin Dashboard Template">
-    <meta property="og:description"
-          content="Akademi - the ultimate admin dashboard and Bootstrap 5 template. Specially designed for professionals, and for business. Akademi provides advanced features and an easy-to-use interface for creating a top-quality website with School and Education Dashboard">
+    <meta property="og:description" content="Akademi - the ultimate admin dashboard and Bootstrap 5 template.">
     <meta property="og:image" content="social-image.html">
     <meta name="format-detection" content="telephone=no">
-
-    <!-- Mobile Specific -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Page Title Here -->
     <title>Akademi : School and Education Management Admin Dashboard Template</title>
 
     <!-- FAVICONS ICON -->
     <link rel="shortcut icon" type="image/png" href="/static/assets/images/favicon.png">
-    <link href="/static/vendor/wow-master/css/libs/animate.css" rel="stylesheet">
-    <link href="/static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/vendor/bootstrap-select-country/css/bootstrap-select-country.min.css">
-    <link rel="stylesheet" href="/static/vendor/jquery-nice-select/css/nice-select.css">
-    <link href="/static/vendor/datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
 
-    <!--tablet-->
-    <link href="/static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+    <!-- CSS -->
+    <link href="../static/vendor/wow-master/css/libs/animate.css" rel="stylesheet">
+    <link href="../static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/vendor/bootstrap-select-country/css/bootstrap-select-country.min.css">
+    <link rel="stylesheet" href="../static/vendor/jquery-nice-select/css/nice-select.css">
+    <link href="../static/vendor/datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <link href="../static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/vendor/fullcalendar-5.11.0/lib/main.css">
-    <link href="/static/vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
+    <link href="../static/vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
-
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <link href="/static/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <!--swiper-slider-->
-    <link rel="stylesheet" href="/static/vendor/swiper/css/swiper-bundle.min.css">
-    <!-- Style css -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="../static/vendor/swiper/css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="../static/icons/flaticon-1/font/flaticon-1.css">
     <link href="/static/css/style.css" rel="stylesheet">
-
 </head>
 <body>
 
-<!--*******************
-    Preloader start
-********************-->
+<!--****************** Preloader ******************-->
 <div id="preloader">
     <div class="loader">
         <div class="dots">
@@ -61,242 +47,48 @@
             <div class="dot"></div>
             <div class="dot"></div>
         </div>
-
     </div>
 </div>
 
-<!--*******************
-    Preloader end
-********************-->
-<!--**********************************
-    Main wrapper start
-***********************************-->
-
+<!--****************** Main wrapper ******************-->
 <div id="main-wrapper">
-<!--**********************************
-    Nav header start
-***********************************-->
-{% include 'components/nav-header.html'%}
 
-<!--**********************************
-    Header start
-***********************************-->
+    {% include 'components/nav-header.html' %}
+    {% include 'components/header.html' %}
+    {% include 'components/sidebar.html' %}
 
-{% include 'components/header.html' %}
+    <!--****************** Page-specific scripts ******************-->
+    {% if page == 'home' %}
+    <script>
+        window.ACCOUNT_ID = {{ account_id }};
+    </script>
 
-<!--**********************************
-    Header end
-***********************************-->
+    {% elif page == 'group_user_session' %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        window.ACCOUNT_ID = {{ account_id }};
+        window.SESSION_ID = {{ id_session }};
+        window.LOCAL_ID = {{ local_id }};
+        window.addEventListener('load', function () {
+            if (typeof loadGroupsToGroupConfig === 'function') {
+                loadGroupsToGroupConfig(window.ACCOUNT_ID, window.SESSION_ID);
+            }
+            loadUsersNotAffected(window.SESSION_ID, window.ACCOUNT_ID);
+        });
+    </script>
 
+    {% elif page == 'show_attendance_presence' %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-<!--**********************************
-    Sidebar start
-***********************************-->
-{% include 'components/sidebar.html' %}
-<!--**********************************
-    Sidebar end
-***********************************-->
+    {% endif %}
 
-{% block content %}{% endblock %}
+    <!--****************** Dynamic page content ******************-->
+    {% include 'components/' + page_template %}
 
-{% if page == 'home' %}
-<script>
-    window.ACCOUNT_ID = {{ account_id }};
-</script>
-{% include 'components/home_page.html' %}
-{% elif page == 'session_config' %}
-{% include 'components/session_view/session_config.html' %}
-
-
-{% elif page == 'attendance_page' %}
-{% include 'components/calendar_view/attendance_page.html' %}
-
-
-<!--/dashboard/create-group-user-session/-->
-{% elif page == 'group_user_session' %}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    window.ACCOUNT_ID = {{ account_id }};
-    window.SESSION_ID = {{ id_session }};
-    window.LOCAL_ID = {{ local_id }};
-
-    window.addEventListener('load', function() {
-       const accountId = window.ACCOUNT_ID;
-       const sessionId = window.SESSION_ID;
-
-       if (typeof loadGroupsToGroupConfig === 'function') {
-         loadGroupsToGroupConfig(accountId, sessionId);
-       }
-       loadUsersNotAffected(sessionId, accountId);
-    });
-</script>
-{% include 'components/user_view/group_config.html' %}
-
-{% elif page == 'session_calander'%}
-{% include 'components/session_view/session_calander.html' %}
-
-{% elif page == 'show-session' %}
-{% include 'components/session_view/show_session.html' %}
-
-{% elif page == 'show_user_session' %}
-{% include 'components/session_view/show_user_session.html'%}
-
-{% elif page == 'show-payment-session' %}
-{% include 'components/payment_view/show_payment_session.html' %}
-
-{% elif page == 'show_payment_session_detail' %}
-{% include 'components/payment_view/show_payment_session_detail.html' %}
-
-
-
-{% elif page == 'show_payment_user_session' %}
-{% include 'components/payment_view/show_payment_user.html'%}
-
-{% elif page == 'invoice_session'%}
-    {% include 'components/payment_view/invoice-payment-session.html'%}
-
-{% elif page == 'show_attendance_presence' %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-{%include 'components/calendar_view/show_attendance_presence.html' %}
-
-            <!-- Create session page part-->
-{% elif page == 'create-session'%}
-{% include 'components/session_view/create_session.html'%}
-            <!-- End Create session page part-->
-
-            <!-- BEGIN SERVER SETTING -->
-{% elif page == 'show-slc'%}
-{% include 'components/settingServer_view/show_slc.html'%}
-
-{% elif page == 'show-list-camera'%}
-{% include 'components/settingServer_view/list_camera.html'%}
-
-{% elif page == 'show-list-tablet'%}
-{% include 'components/settingServer_view/list_tablet.html'%}
-        <!-- END SERVER SETTING -->
-
-            <!-- Unknown page part-->
-{% elif page == 'show-unknown-student'%}
-{% include 'components/calendar_view/show_unknown_student.html'%}
-            <!-- End Unknown page part-->
-
-            <!-- Calander_request part  -->
-{% elif page == 'calander_request_page'%}
-{% include 'components/calendar_view/calander_request_page.html'%}
-            <!-- End Calander_request part  -->
-
-            <!-- Student part  -->
-{% elif page == 'my_student'%}
-{% include 'components/user_view/my_student.html'%}
-         <!-- End Student part  -->
-
-        <!-- Platform student part -->
-{% elif page == 'platform_student'%}
-{% include 'components/user_view/platform_student.html'%}
-        <!-- End Platform student part -->
-
-{% elif page == 'view_session'%}
-{% include 'components/session_view/view_session.html' %}
-
-        <!-- Edit session-->
-
-        <!-- BEGIN show manager part-->
-{% elif page == 'show_manager'%}
-{% include 'components/manager_view/show_manager.html'%}
-        <!-- END show manager part-->
-
-        <!-- BEGIN View Manager -->
-{% elif page == 'view_manager'%}
-{% include 'components/manager_view/view_manager.html'%}
-        <!-- END View Manager -->
-
-        <!-- BEGIN Create Manager -->
-{% elif page == 'create_manager'%}
-{% include 'components/manager_view/create_manager.html'%}
-        <!-- END Create Manager   -->
-
-        <!-- BEGIN Show Teacher-->
-{% elif page == 'show_teacher'%}
-{% include 'components/teacher_view/show_teacher.html' %}
-        <!-- END Show Teacher-->
-
-        <!-- BEGIN Create Teacher -->
-{% elif page == 'create_teacher'%}
-{% include 'components/teacher_view/create_teacher.html'%}
-        <!-- END Create Teacher -->
-
-        <!-- BEGIN configuration -->
-{% elif page == 'show_level'%}
-{% include 'components/configuration/levels/show_level.html'%}
-
-{% elif page == 'create_level'%}
-{% include 'components/configuration/levels/create-level.html'%}
-
-{% elif page == 'view_level'%}
-    {% include 'components/configuration/levels/view_level.html'%}
-
-{% elif page == 'show_section'%}
-    {% include 'components/configuration/section/show_section.html'%}
-
-{% elif page == 'create_section'%}
-    {% include 'components/configuration/section/create_section.html'%}
-
-{% elif page == 'view_section'%}
-    {% include 'components/configuration/section/view_section.html'%}
-
-{% elif page == 'show_subject'%}
-    {% include 'components/configuration/subject/show_subject.html'%}
-
-{% elif page == 'create_subject'%}
-    {% include 'components/configuration/subject/create_subject.html'%}
-
-{% elif page == 'view_subject'%}
-    {% include 'components/configuration/subject/view_subject.html'%}
-
-{% elif page == 'show_formation'%}
-    {% include 'components/configuration/formation/show_formation.html'%}
-
-{% elif page == 'create_formation'%}
-        {% include 'components/configuration/formation/create_formation.html'%}
-
-{% elif page == 'view_formation'%}
-        {% include 'components/configuration/formation/view_formation.html'%}
-        <!-- END configuration -->
-
-
-        <!-- BEGIN TAG -->
-{% elif page == 'show_tag'%}
-    {% include 'components/configuration/tags/show_tag.html'%}
-
-{% elif page == 'create_tag'%}
-    {% include 'components/configuration/tags/create_tag.html'%}
-
-{% elif page == 'view_tag'%}
-    {% include 'components/configuration/tags/view_tag.html'%}
-
-        <!-- END TAG -->
-
-        <!-- BEGIN TAG -->
-{% elif page == 'show_completion_tag'%}
-    {% include 'components/configuration/completion_tag/show_completion_tag.html'%}
-
-{% elif page == 'create_completion_tag'%}
-    {% include 'components/configuration/completion_tag/create_completion_tag.html'%}
-
-{% elif page == 'view_completion_tag'%}
-    {% include 'components/configuration/completion_tag/view_completion_tag.html'%}
-
-        <!-- END TAG -->
-
-
-
-{% endif %}
-
+    {% include 'components/footer.html'%}
 </div>
 
-
-
-<!--***********************************-->
+<!--****************** Modal ******************-->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-center">
         <div class="modal-content">
@@ -313,8 +105,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="exampleFormControlInput2" class="form-label mb-2">Email</label>
-                            <input type="email" class="form-control" id="exampleFormControlInput2"
-                                   placeholder="hello@example.com">
+                            <input type="email" class="form-control" id="exampleFormControlInput2" placeholder="hello@example.com">
                         </div>
                         <div class="mb-3">
                             <label class="form-label mb-2">Gender</label>
@@ -328,23 +119,19 @@
                     </div>
                     <div class="col-xl-6">
                         <div class="mb-3">
-                            <label for="exampleFormControlInput4" class="form-label mb-2">Entery Year</label>
-                            <input type="number" class="form-control" id="exampleFormControlInput4"
-                                   placeholder="EX: 2023">
+                            <label for="exampleFormControlInput4" class="form-label mb-2">Entry Year</label>
+                            <input type="number" class="form-control" id="exampleFormControlInput4" placeholder="EX: 2023">
                         </div>
                         <div class="mb-3">
                             <label for="exampleFormControlInput5" class="form-label mb-2">Student ID</label>
-                            <input type="number" class="form-control" id="exampleFormControlInput5"
-                                   placeholder="14EMHEE092">
+                            <input type="number" class="form-control" id="exampleFormControlInput5" placeholder="14EMHEE092">
                         </div>
                         <div class="mb-3">
                             <label for="exampleFormControlInput6" class="form-label mb-2">Phone Number</label>
-                            <input type="number" class="form-control" id="exampleFormControlInput6"
-                                   placeholder="+123456">
+                            <input type="number" class="form-control" id="exampleFormControlInput6" placeholder="+123456">
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
@@ -354,57 +141,35 @@
     </div>
 </div>
 
-
-<!--**********************************
-    Modal
-***********************************-->
-<!--**********************************
-    Scripts
-***********************************-->
-<!-- 1. Global bundle first (has its own jQuery + metisMenu + plugins) -->
+<!--****************** Scripts ******************-->
 <script src="/static/js/socket.io.min.js"></script>
 <script src="/static/vendor/global/global.min.js"></script>
-
-<!-- 2. Moment BEFORE datepicker -->
 <script src="/static/vendor/bootstrap-datetimepicker/js/moment.js"></script>
 <script src="/static/vendor/moment/moment.min.js"></script>
-
-<!-- 3. Load jQuery UI on top of global.min.js's existing jQuery -->
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-
-<!-- 4. Load DataTables on top of the same $ -->
 <script src="/static/vendor/datatables/js/jquery.dataTables.min.js"></script>
 <script src="/static/js/plugins-init/datatables.init.js"></script>
-
-<!-- 5. jQuery plugins -->
 <script src="/static/vendor/peity/jquery.peity.min.js"></script>
 <script src="/static/vendor/jquery-nice-select/js/jquery.nice-select.min.js"></script>
 <script src="/static/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
 <script src="/static/vendor/bootstrap-select-country/js/bootstrap-select-country.min.js"></script>
 <script src="/static/vendor/datepicker/js/bootstrap-datepicker.min.js"></script>
-
-<!-- 6. Other vendors -->
 <script src="/static/vendor/chart.js/Chart.bundle.min.js"></script>
 <script src="/static/vendor/apexchart/apexchart.js"></script>
 <script src="/static/vendor/swiper/js/swiper-bundle.min.js"></script>
 <script src="/static/vendor/wow-master/dist/wow.min.js"></script>
 <script src="/static/vendor/fullcalendar-5.11.0/lib/main.js"></script>
-
-<!-- 7. App scripts -->
 <script src="/static/js/dlabnav-init.js"></script>
 <script src="/static/js/custom.js"></script>
 <script src="/static/js/demo.js"></script>
 <script src="/static/js/styleSwitcher.js"></script>
 <script src="/static/js/calendar.js"></script>
 <script src="/static/js/dashboard/groups-config.js"></script>
-
-<!-- 8. SweetAlert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 {% if page == 'home' %}
 <script src="/static/js/dashboard/dashboard-1.js"></script>
 {% endif %}
-</body>
 
-<!-- Mirrored from akademi.dexignlab.com/xhtml/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 04 Mar 2025 13:05:23 GMT -->
+</body>
 </html>

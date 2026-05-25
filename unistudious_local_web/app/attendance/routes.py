@@ -14,51 +14,6 @@ attendance_bp = Blueprint('attendance', __name__)
 
 
 # ==========================================
-# PAGE ROUTES
-# ==========================================
-
-@attendance_bp.route('/dashboard/show-attendance-sessions/<int:session_id>', methods=['GET'])
-def show_attendance_page(session_id):
-    """Show attendance overview for session"""
-    if 'moderator_id' not in session:
-        return redirect(url_for('auth.login_page'))
-
-    account_id = session.get('account_id', 3)
-
-    return render_template('index.html',
-                           id_session=session_id,
-                           account_id=account_id,
-                           page='attendance_page')
-
-
-@attendance_bp.route('/dashboard/show-attendance-presence/<int:calendar_id>')
-def show_attendance_presence(calendar_id):
-    """Show detailed attendance presence page"""
-    if 'moderator_id' not in session:
-        return redirect(url_for('auth.login_page'))
-
-    account_id = session.get('account_id', 3)
-    data = get_attendance_page_data(calendar_id)
-
-    return render_template('index.html',
-                           id_calander=calendar_id,
-                           account_id=account_id,
-                           page='show_attendance_presence',
-                           **data)
-
-
-@attendance_bp.route('/dashboard/show-attendance-unknown-student/<int:calendar_id>')
-def show_attendance_unknown(calendar_id):
-    """Show unknown students page"""
-    if 'moderator_id' not in session:
-        return redirect(url_for('auth.login_page'))
-
-    return render_template('index.html',
-                           calender_id=calendar_id,
-                           page='show-unknown-student')
-
-
-# ==========================================
 # API ROUTES
 # ==========================================
 

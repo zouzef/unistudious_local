@@ -1,79 +1,81 @@
-from flask import Blueprint, render_template, session, redirect, url_for
+from flask import Blueprint, session
+from app.utils import render_page, login_required
 
-user_views_bp = Blueprint('user_views',__name__)
+user_views_bp = Blueprint('user_views', __name__)
 
-# Show the component my_student.html
+
+# ========================================= STUDENT =========================================
+
 @user_views_bp.route('/dashboard/my-student')
 def show_my_student_view():
-    if 'moderator_id' not in session:
-        return redirect(url_for('auth.login_page'))
-    return render_template('index.html', page='my_student', account_id=session.get('account_id'))
+    guard = login_required()
+    if guard: return guard
+
+    return render_page('my_student',
+        account_id=session.get('account_id'),
+    )
 
 
-
-# ========================================= BEGIN Manager View ========================================
-# Show the component platform_student.html
 @user_views_bp.route('/dashboard/platform_student')
 def show_platform_student_view():
-    if 'moderator_id' not in session:
-        return redirect(url_for('auth.login_page'))
-    return render_template('index.html', page='platform_student', account_id=session.get('account_id'))
+    guard = login_required()
+    if guard: return guard
+
+    return render_page('platform_student',
+        account_id=session.get('account_id'),
+    )
 
 
-# Show the component show_manager.html
+# ========================================= MANAGER =========================================
+
 @user_views_bp.route('/dashboard/show-manager')
 def show_manager_users_view():
-    if 'moderator_id' not in session:
-        return redirect(url_for('auth.login_page'))
-    return render_template('index.html',
-						   page='show_manager',
-						   account_id=session.get('account_id')
-						   )
+    guard = login_required()
+    if guard: return guard
+
+    return render_page('show_manager',
+        account_id=session.get('account_id'),
+    )
 
 
-# Show the component view_manager.html
 @user_views_bp.route('/dashboard/view-manager/<int:manager_id>')
 def show_manager_info_view(manager_id):
-	if 'moderator_id' not in session:
-		return redirect(url_for('auth.login_page'))
-	return render_template('index.html',
-						   page='view_manager',
-						   account_id= session.get('account_id'),
-						   manager_id=manager_id
-						   )
+    guard = login_required()
+    if guard: return guard
+
+    return render_page('view_manager',
+        account_id=session.get('account_id'),
+        manager_id=manager_id,
+    )
 
 
-
-# Show the component add_manager
 @user_views_bp.route('/dashboard/create-manager')
 def create_manager_view():
-	if 'moderator_id' not in session:
-		return redirect(url_for('auth.login_page'))
-	return render_template('index.html',
-						   page='create_manager',
-						   account_id=session.get('account_id')
-						   )
-# ========================================= END Manager View ========================================
+    guard = login_required()
+    if guard: return guard
+
+    return render_page('create_manager',
+        account_id=session.get('account_id'),
+    )
 
 
-# ========================================= BEGIN TEACHER View ========================================
+# ========================================= TEACHER =========================================
+
 @user_views_bp.route('/dashboard/show-teacher')
 def show_teacher_view():
-	if 'moderator_id' not in session:
-		return redirect(url_for('auth.login_page'))
-	return render_template('index.html',
-						   page='show_teacher',
-						   account_id=session.get('account_id'))
+    guard = login_required()
+    if guard: return guard
+
+    return render_page('show_teacher',
+        account_id=session.get('account_id'),
+    )
 
 
 @user_views_bp.route('/dashboard/create-teacher')
 def create_teacher_view():
-	if 'moderator_id' not in session:
-		return redirect(url_for('auth.login_page'))
-	return render_template('index.html',
-						   page='create_teacher',
-						   account_id=session.get('account_id'))
+    guard = login_required()
+    if guard: return guard
 
-
-
-# ========================================= END TEACHER View ========================================
+    return render_page('create_teacher',
+        account_id=session.get('account_id'),
+    )

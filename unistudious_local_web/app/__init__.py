@@ -34,6 +34,9 @@ def create_app():
     from app.payments.views import payment_view_bp
     from app.slc.views import slc_view_bp
     from app.configuration.views import configuration_view_bp
+    from app.attendance.views import attendance_view
+    from app.calendar.views import calendar_view
+    from app.groups.views import groups_view
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(session_bp)
@@ -52,4 +55,8 @@ def create_app():
     app.register_blueprint(payment_view_bp)
     app.register_blueprint(slc_view_bp)
     app.register_blueprint(configuration_view_bp)
+    app.register_blueprint(attendance_view)
+    app.register_blueprint(calendar_view)
+    app.register_blueprint(groups_view)
+
     return app
