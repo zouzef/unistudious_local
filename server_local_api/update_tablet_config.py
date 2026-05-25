@@ -71,3 +71,29 @@ def update_attendance_system_config():
     print(f"✅ Attendance config updated!")
     print(f"   Old URL: {old_url}")
     print(f"   New URL: {new_url}")
+
+
+def update_local_web_config():
+    local_web_unistudious = os.path.join(
+        os.path.dirname(__file__),
+        "../unistudious_local_web/config.json"
+    )
+    current_ip = get_local_ip()
+
+    with open(local_web_unistudious, "r") as f:
+        config = json.load(f)
+
+    # Read port from the config instead of hardcoding it
+    port = 5004
+
+    old_url = config["external_api"]["base_url"]
+    new_url = f"https://{current_ip}:{port}/scl/"
+
+    config["external_api"]["base_url"] = new_url  # fixed key path + consistent casing
+
+    with open(local_web_unistudious, "w") as f:
+        json.dump(config, f, indent=2)
+
+    print(f"✅ Local Web config updated!")
+    print(f"   Old URL: {old_url}")
+    print(f"   New URL: {new_url}")

@@ -7,66 +7,222 @@
                         <div>
                             <h4 class="card-title">List Completion Tags</h4>
                         </div>
-                        <ul class="nav nav-tabs dzm-tabs" id="myTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <a href="/dashboard/create-completion-tag" class="btn btn-primary">
-                                    + Add New Completion Tag
-                                </a>
-                            </li>
-                        </ul>
+                        <a href="/dashboard/create-completion-tag" class="btn btn-primary">
+                            + Add New Completion Tag
+                        </a>
                     </div>
 
-                    <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="Preview" role="tabpanel">
-                            <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table id="example" class="display table dataTable no-footer" style="min-width: 845px;">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Name</th>
-                                                <th>Created At</th>
-                                                <th>Status</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for tag in completion_tags %}
-                                            <tr class="selected">
-                                                <td><span class="text-primary font-w600">{{ tag.id }}</span></td>
-                                                <td>{{ tag.name }}</td>
-                                                <td>{{ tag.created_at }}</td>
-                                                <td>
-                                                    <span class="badge light badge-success">
-                                                        <i class="fa fa-circle text-success me-1"></i>
-                                                        Active
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex">
-                                                        <div class="icon-box icon-box-sm me-2">
-                                                            <a data-id="{{ tag.id }}" class="delete-completion-tag">
-                                                                <i class="material-icons" style="font-size:10px;color:red">delete</i>
-                                                            </a>
-                                                        </div>
-                                                        <div class="icon-box icon-box-sm">
-                                                            <a href="/dashboard/view-completion-tag/{{ tag.id }}">
-                                                                <i class="fas fa-pencil-alt" style="font-size:10px;color:green"></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                    <div class="card-body p-0">
+
+                        <!-- Loading state -->
+                        <div id="table-loading" class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status"></div>
+                            <p class="mt-2 text-muted">Loading completion tags...</p>
                         </div>
-                    </div>
 
+                        <!-- Error state -->
+                        <div id="table-error" class="alert alert-danger mx-3 my-3 d-none">
+                            <i class="fa fa-exclamation-triangle me-2"></i>
+                            <span id="error-message">Failed to load data.</span>
+                        </div>
+
+                        <!-- Table -->
+                        <div id="table-wrapper" class="table-responsive d-none">
+                            <table id="example" class="display table dataTable no-footer">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Created At</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="completion-tag-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    window.addEventListener('load', function () {
+
+        let dataTableInstance = null;
+
+        function initDataTable() {
+            if ($.fn.DataTable.isDataTable('#example')) {
+                $('#example').DataTable().destroy();
+                dataTableInstance = null;
+            }
+
+            dataTableInstance = $('#example').DataTable({
+                order: [[0, 'desc']],
+                pageLength: 10,
+                lengthChange: true,
+                lengthMenu: [10, 25, 50, 100],
+                language: {
+                    lengthMenu: 'Show _MENU_ entries',
+                    paginate: {
+                        next: '<i class="fa-solid fa-angle-right"></i>',
+                        previous: '<i class="fa-solid fa-angle-left"></i>'
+                    }
+                },
+                drawCallback: function () {
+                    stylePaginationButtons();
+                }
+            });
+        }
+
+        function loadCompletionTags() {
+            fetch(`/api/get_completion_tag/${ACCOUNT_ID}`)
+                .then(res => {
+                    if (!res.ok) throw new Error(`Server returned ${res.status}`);
+                    return res.json();
+                })
+                .then(data => {
+                    const tags    = Array.isArray(data) ? data : (data.Data || []);
+                    const loading = document.getElementById('table-loading');
+                    const error   = document.getElementById('table-error');
+                    const wrapper = document.getElementById('table-wrapper');
+                    const tbody   = document.getElementById('completion-tag-table-body');
+
+                    if ($.fn.DataTable.isDataTable('#example')) {
+                        $('#example').DataTable().destroy();
+                        dataTableInstance = null;
+                    }
+
+                    if (!tags || tags.length === 0) {
+                        tbody.innerHTML = `
+                            <tr>
+                                <td colspan="6" class="text-center">No completion tags found.</td>
+                            </tr>`;
+                        loading.classList.add('d-none');
+                        wrapper.classList.remove('d-none');
+                        initDataTable();
+                        return;
+                    }
+
+                    tbody.innerHTML = tags.map(tag => {
+                        const isActive   = tag.status == 1;
+                        const badgeClass = isActive ? 'badge-success' : 'badge-danger';
+                        const dotClass   = isActive ? 'text-success'  : 'text-danger';
+                        const badgeLabel = isActive ? 'Active'        : 'Inactive';
+
+
+
+                        return `
+                            <tr>
+                                <td><span class="text-primary font-w600">${tag.id}</span></td>
+                                <td>${tag.name}</td>
+                                <td>${tag.created_at ?? '—'}</td>
+                                <td>
+                                    <span class="badge light ${badgeClass}">
+                                        <i class="fa fa-circle ${dotClass} me-1"></i>
+                                        ${badgeLabel}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <div class="icon-box icon-box-sm me-2">
+                                            <a href="#" data-id="${tag.id}" class="delete-tag">
+                                                <i class="material-icons" style="font-size:10px; color:red;">delete</i>
+                                            </a>
+                                        </div>
+                                        <div class="icon-box icon-box-sm">
+                                            <a href="/dashboard/view-completion-tag/${tag.id}">
+                                                <i class="fas fa-pencil-alt" style="font-size:10px; color:green;"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>`;
+                    }).join('');
+
+                    loading.classList.add('d-none');
+                    wrapper.classList.remove('d-none');
+                    initDataTable();
+                })
+                .catch(err => {
+                    const loading = document.getElementById('table-loading');
+                    const error   = document.getElementById('table-error');
+                    loading.classList.add('d-none');
+                    error.classList.remove('d-none');
+                    document.getElementById('error-message').textContent = err.message;
+                });
+        }
+
+        function stylePaginationButtons() {
+            const paginate = document.querySelector('.dataTables_paginate');
+            if (!paginate) return;
+
+            paginate.querySelectorAll('span > a, a.paginate_button').forEach(btn => {
+                btn.style.cssText = `
+                    min-width: 32px; height: 32px; border-radius: 8px;
+                    border: 1.5px solid #e0dfef; background: #fff;
+                    color: #4c4b8f; font-size: 13px; font-weight: 500;
+                    cursor: pointer; display: inline-flex; align-items: center;
+                    justify-content: center; padding: 0 6px; margin: 0 2px;
+                    text-decoration: none; transition: background .15s;
+                `;
+            });
+
+            paginate.querySelectorAll('a.paginate_button.current').forEach(btn => {
+                btn.style.cssText += `background: #4c4b9e !important; color: #fff !important; border-color: #4c4b9e !important;`;
+            });
+
+            paginate.querySelectorAll('a.paginate_button.disabled').forEach(btn => {
+                btn.style.opacity = '0.35';
+                btn.style.cursor = 'default';
+            });
+        }
+
+        // ─── Delete handler ───────────────────────────────────────────────
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.delete-tag');
+            if (!btn) return;
+            e.preventDefault();
+
+            const tagId = btn.dataset.id;
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This completion tag will be permanently deleted!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#4c4b9e',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    fetch(`/api/delete_completion_tag/${tagId}`, { method: 'POST' })
+                        .then(res => res.json())
+                        .then(() => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Deleted!',
+                                text: 'Completion tag deleted successfully.',
+                                confirmButtonColor: '#4c4b9e',
+                            }).then(() => loadCompletionTags());
+                        })
+                        .catch(() => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Failed to delete completion tag.',
+                                confirmButtonColor: '#4c4b9e',
+                            });
+                        });
+                }
+            });
+        });
+
+        loadCompletionTags();
+    });
+</script>

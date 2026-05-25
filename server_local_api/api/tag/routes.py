@@ -250,3 +250,149 @@ def create_account_tag(account_id):
 		return jsonify({
 			"Message":f"Error: {e} coming from server"
 		}),500
+
+
+# ================================= COMPLETION TAG =================================
+@tag_bp.route('/get_all_completion_tag/<int:account_id>',methods=['GET'])
+def get_completion_tag(account_id):
+	try:
+		query = """
+			SELECT
+			 id,
+			 name,
+			 description,
+			 status,
+			 created_at
+			FROM completion_tag_account 
+			WHERE enabled = 1 AND account_id = %s
+		"""
+		values =(account_id,)
+		result = Database.execute_query(query,values,fetch=True)
+		if result:
+			return jsonify(
+				result
+			),200
+		else:
+			return jsonify({
+				"Message":f"There is no data for this account_id"
+			}),404
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from server"
+		}),500
+
+@tag_bp.route('/create_completion_tag/<int:account_id>',methods=['POST'])
+def create_completion_tag(account_id):
+	try:
+		data = request.get_json()
+		name = data.get('name')
+		img_url = data.get('img_url') or None
+		description = data.get('description') or None
+		query = """
+		    INSERT INTO completion_tag_account
+		    (account_id, name, description, status, img_link, enabled, created_at)
+		    VALUES (%s, %s, %s, 1, %s, 1, NOW())
+		"""
+		values = (account_id, name, description, img_url)
+		result = Database.execute_query(query,values,fetch=False)
+		if result:
+			return jsonify({
+				"Message":"Success in creating completion_tag"
+			}),200
+		else:
+			return jsonify({
+				"Message":"Error in creating completion_tag"
+			}),400
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from server "
+		}),500
+
+@tag_bp.route('/view_completion_tag/<int:completionTagId>', methods=['GET'])
+def view_completion_tag(completionTagId):
+    try:
+        query = """
+            SELECT 
+                id,
+                account_id,
+                name,
+                description,
+                status
+            FROM completion_tag_account
+            WHERE enabled = 1 AND id = %s
+        """
+        values = (completionTagId,)
+        result = Database.execute_query(query, values, fetch=True)
+        if result:
+            return jsonify(result), 200
+        else:
+            return jsonify({
+                "Message": "There is no data for this id"
+            }), 404
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
+
+@tag_bp.route('/update_completion_tag/<int:completionTagId>', methods=['POST'])
+def update_completion_tag(completionTagId):
+    try:
+        data = request.get_json()
+
+        # Map request fields → DB columns (only include what the client can update)
+        allowed_fields = {
+            "name":        "name",
+            "description": "description",
+            "img_url":     "img_link",
+            "status":      "status",
+            "enabled":     "enabled",
+        }
+
+        fields_to_update = {}
+        for request_key, db_column in allowed_fields.items():
+            if request_key in data:  # only if client actually sent this field
+                fields_to_update[db_column] = data[request_key]
+
+        if not fields_to_update:
+            return jsonify({"Message": "No fields to update"}), 400
+
+        # Build dynamic SET clause
+        set_clause = ", ".join(f"{col} = %s" for col in fields_to_update.keys())
+        values     = list(fields_to_update.values())
+        values.append(completionTagId)
+
+        query = f"""
+            UPDATE completion_tag_account
+            SET {set_clause}, updated_at = NOW()
+            WHERE id = %s
+        """
+
+        Database.execute_query(query, tuple(values), fetch=False)
+
+        return jsonify({"Message": "Success in updating completion_tag"}), 200
+
+    except Exception as e:
+        return jsonify({"Message": f"Error: {e} coming from server"}), 500
+
+@tag_bp.route('/delete_completion_tag/<int:completionTagId>',methods=['POST'])
+def delete_completion_tag(completionTagId):
+	try:
+		query = """
+			UPDATE completion_tag_account
+			SET enabled = 0 
+			WHERE id = %s
+		"""
+		result = Database.execute_query(query,(completionTagId,),fetch=False)
+		if result:
+			return jsonify({
+				"Message":"completion_tag deleted with success"
+			}),200
+		else:
+			return jsonify({
+				"Message":"Error in deleting completion_tag"
+			}),400
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from server"
+		}),500

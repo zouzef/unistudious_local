@@ -233,36 +233,41 @@ def process_sync_data(db, data):
     #     from sync.processors.invoice_processor import process_invoice_session
     #     print("\n Invoice Sessions: ")
     #     process_invoice_session(db,normalize(data['invoices']))
-
+    #
     # if 'level' in data:
     #     from sync.processors.level_processor import processor_level_session
     #     print("\n Level account: ")
     #     processor_level_session(db,normalize(data['level']))
+    #
+    # if 'accountLevel' in data:
+    #     from sync.processors.accountLevel_processor import processor_account_level
+    #     print("\n Account Level: ")
+    #     processor_account_level(db,normalize(data['accountLevel']))
+    #
+    # if 'section' in data:
+    #     from sync.processors.section_processor import processor_section
+    #     print("\n Section: ")
+    #     processor_section(db,normalize(data['section']))
+    #
+    # if 'accountSection' in data:
+    #     from sync.processors.account_section_processor import processor_account_section
+    #     print("\n Account Section: ")
+    #     processor_account_section(db, normalize(data['accountSection']))
+    #
+    # if 'tag' in data:
+    #     from sync.processors.tag_config_processor import processor_tag_config
+    #     print("\n Tag Config: ")
+    #     processor_tag_config(db, normalize(data['tag']))
+    #
+    # if 'accountTag' in data:
+    #     from sync.processors.account_tag_processor import processor_account_tag
+    #     print("\n Account Tag: ")
+    #     processor_account_tag(db, normalize(data['accountTag']))
 
-    if 'accountLevel' in data:
-        from sync.processors.accountLevel_processor import processor_account_level
-        print("\n Account Level: ")
-        processor_account_level(db,normalize(data['accountLevel']))
-
-    if 'section' in data:
-        from sync.processors.section_processor import processor_section
-        print("\n Section: ")
-        processor_section(db,normalize(data['section']))
-
-    if 'accountSection' in data:
-        from sync.processors.account_section_processor import processor_account_section
-        print("\n Account Section: ")
-        processor_account_section(db, normalize(data['accountSection']))
-
-    if 'tag' in data:
-        from sync.processors.tag_config_processor import processor_tag_config
-        print("\n Tag Config: ")
-        processor_tag_config(db, normalize(data['tag']))
-
-    if 'accountTag' in data:
-        from sync.processors.account_tag_processor import processor_account_tag
-        print("\n Account Tag: ")
-        processor_account_tag(db, normalize(data['accountTag']))
+    if 'completionTagAccount' in data:
+        from sync.processors.completion_tag_account_processor import processor_completion_tag
+        print("\n Completion_Tag: ")
+        processor_completion_tag(db, normalize(data['completionTagAccount']))
 
 
 

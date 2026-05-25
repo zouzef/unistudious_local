@@ -59,6 +59,24 @@ def create_manager_view():
     )
 
 
+@user_views_bp.route('/dashboard/view-profile')
+def view_profile():
+    guard = login_required()
+    if guard: return guard
+    print(session.get('user_id'))
+    return render_page('view_profile',
+                       account_id = session.get('account_id'),
+                       user_id = session.get('user_id')
+                       )
+
+
+@user_views_bp.route('/dashboard/view-account-setting')
+def view_account_setting():
+    guard = login_required()
+    if guard: return guard
+    return render_page('view_account_setting',
+                       account_id = session.get('account_id'),
+                       )
 # ========================================= TEACHER =========================================
 
 @user_views_bp.route('/dashboard/show-teacher')
@@ -79,3 +97,5 @@ def create_teacher_view():
     return render_page('create_teacher',
         account_id=session.get('account_id'),
     )
+
+

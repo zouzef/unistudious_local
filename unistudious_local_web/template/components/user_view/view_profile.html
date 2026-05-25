@@ -1,0 +1,185 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form name="admin" method="post" id="admin-form" enctype="multipart/form-data" data-user-id="{{ user_id }}">
+                            <div class="row">
+                                <div class="col-xl-6 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="admin_username" class="form-label text-primary">Username<span class="required">*</span></label>
+                                        <input type="text" id="admin_username" name="admin[username]" required class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="admin_email" class="form-label text-primary">Email<span class="required">*</span></label>
+                                        <input type="email" id="admin_email" name="admin[email]" required class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="admin_birthPlace" class="form-label text-primary">Place of Birth<span class="required">*</span></label>
+                                        <input type="text" id="admin_birthPlace" name="admin[birthPlace]" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="admin_birthDate" class="form-label text-primary">Date of Birth<span class="required">*</span></label>
+                                        <input type="date" id="admin_birthDate" name="admin[birthDate]" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="admin_Address" class="form-label text-primary">Address</label>
+                                        <textarea id="admin_Address" name="admin[Address]" class="form-control" rows="7"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-6 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="admin_fullName" class="form-label text-primary">First Name And Last Name<span class="required">*</span></label>
+                                        <input type="text" id="admin_fullName" name="admin[fullName]" required class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="admin_phone" class="form-label text-primary">Phone<span class="required">*</span></label>
+                                        <input type="tel" id="admin_phone" name="admin[phone]" class="form-control" minlength="8" maxlength="16">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="admin_grand" class="form-label">Gender<span class="required">*</span></label>
+                                        <select id="admin_grand" name="admin[grand]" class="form-control">
+                                            <option value="">Select gender...</option>
+                                            <option value="M">Male</option>
+                                            <option value="F">Female</option>
+                                            <option value="O">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Photo<span class="required">*</span></label>
+                                        <div class="avatar-upload">
+                                            <div class="avatar-preview">
+                                                <div id="imagePreview"></div>
+                                            </div>
+                                        </div>
+                                        <div class="change-btn mt-1">
+                                            <input type="file" id="admin_imgFile" name="admin[imgFile]" class="d-none" accept=".png, .jpg, .jpeg">
+                                            <br>
+                                            <label for="admin_imgFile" class="dlab-upload mb-0 btn btn-primary btn-sm">Choose File</label>
+                                            <a href="javascript:void(0);" class="btn btn-danger light remove-img ms-2 btn-sm" id="remove-img">Remove</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="float-end">
+                                <button class="btn btn-outline-primary me-3" type="submit">Change</button>
+                                <a href="/dashboard/show-admin" class="btn btn-outline-danger">Close</a>
+                            </div>
+
+                            <input type="hidden" id="admin__token" name="admin[_token]" value="9caf.I6y39IXsNPh1kS5MStt63TI1kXgFTzo6n41il4YIVFI.Ztb6mNPZWaks330uP7czv3xn0hJEHwhA0cg14cddNxVint6c07Z9mgPEHg">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ── Load on page ready ─────────────────────────────────────
+    document.addEventListener("DOMContentLoaded", () => {
+        const userId = document.getElementById("admin-form").dataset.userId;
+        loadUserData(userId);
+    });
+
+    // ── Fetch & populate form ──────────────────────────────────
+    async function loadUserData(userId) {
+        try {
+            const [userResponse, imgResponse] = await Promise.all([
+                fetch(`/api/get-user-info/${userId}`),
+                fetch(`/api/get_profile_img/${userId}`)
+            ]);
+
+            if (userResponse.ok) {
+                const result = await userResponse.json();
+                const user   = result.Data[0];
+
+                document.getElementById("admin_username").value   = user.username    ?? "";
+                document.getElementById("admin_email").value      = user.email       ?? "";
+                document.getElementById("admin_birthPlace").value = user.birth_place ?? "";
+                document.getElementById("admin_birthDate").value  = user.birth_date  ?? "";
+                document.getElementById("admin_Address").value    = user.address     ?? "";
+                document.getElementById("admin_fullName").value   = user.full_name   ?? "";
+                document.getElementById("admin_phone").value      = user.phone       ?? "";
+                document.getElementById("admin_grand").value      = user.grand       ?? "";
+            } else {
+                console.error("Failed to fetch user data");
+            }
+
+            if (imgResponse.ok) {
+                const blob    = await imgResponse.blob();
+                const dataUrl = await blobToDataUrl(blob);
+                document.getElementById("imagePreview").style.backgroundImage = `url(${dataUrl})`;
+            } else {
+                console.error("Failed to fetch profile image");
+            }
+
+        } catch (error) {
+            console.error("Error loading user data:", error);
+        }
+    }
+
+    // ── Submit → POST JSON ─────────────────────────────────────
+    document.getElementById("admin-form").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const userId = this.dataset.userId;
+
+        const payload = {
+            username:    document.getElementById("admin_username").value.trim(),
+            email:       document.getElementById("admin_email").value.trim(),
+            birth_place: document.getElementById("admin_birthPlace").value.trim(),
+            birth_date:  document.getElementById("admin_birthDate").value.trim(),
+            address:     document.getElementById("admin_Address").value.trim(),
+            full_name:   document.getElementById("admin_fullName").value.trim(),
+            phone:       document.getElementById("admin_phone").value.trim(),
+            grand:       document.getElementById("admin_grand").value,
+        };
+
+        try {
+            const response = await fetch(`/api/update-user/${userId}`, {
+                method:  "POST",
+                headers: { "Content-Type": "application/json" },
+                body:    JSON.stringify(payload),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                showToast("success", result.Message ?? "Profile updated successfully");
+            } else {
+                showToast("error", result.Message ?? "Failed to update profile");
+            }
+
+        } catch (error) {
+            console.error("Update error:", error);
+            showToast("error", "An unexpected error occurred");
+        }
+    });
+
+    // ── Helpers ────────────────────────────────────────────────
+    function blobToDataUrl(blob) {
+        return new Promise((resolve, reject) => {
+            const reader   = new FileReader();
+            reader.onload  = () => resolve(reader.result);
+            reader.onerror = () => reject(new Error("Failed to read image blob"));
+            reader.readAsDataURL(blob);
+        });
+    }
+
+    function showToast(type, message) {
+        if (typeof Swal !== "undefined") {
+            Swal.fire({
+                icon:  type === "success" ? "success" : "error",
+                title: message,
+                timer: 2500,
+                showConfirmButton: false,
+            });
+            return;
+        }
+        alert(message);
+    }
+</script>

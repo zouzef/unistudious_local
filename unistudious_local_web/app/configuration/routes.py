@@ -33,8 +33,12 @@ from app.configuration.service import (
 	get_all_subject_config_service,
 	delete_account_tag_service,
 	get_account_tag_service,
-	update_account_tag_service
-
+	update_account_tag_service,
+	get_all_completion_tag_serice,
+	create_completion_tag_service,
+	view_completion_tag_service,
+	update_completion_tag_service,
+	delete_completion_tag_service
 )
 
 
@@ -468,3 +472,84 @@ def api_update_account_tag(account_tag_id):
         return jsonify({
             "Message": f"Error: {e} coming from backend"
         }), 500
+
+
+# =============================================== COMPLETION TAG ENDPOINTS ===============================================
+@configuration_bp.route('/api/get_completion_tag/<account_id>',methods=['GET'])
+def get_completion_tag(account_id):
+	try:
+		status,response = get_all_completion_tag_serice(account_id)
+		if status:
+			return jsonify(response.json()),response.status_code
+		else:
+			return jsonify({
+				"Message":"Error in getting all completion_tag"
+			}),404
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from server"
+		}),500
+
+@configuration_bp.route('/api/delete_completion_tag/<int:completion_tag_id>',methods=['POST'])
+def delete_completion_tag(completion_tag_id):
+	try:
+		status,response = delete_completion_tag_service(completion_tag_id)
+		if status:
+			return jsonify(response.json()),response.status_code
+		else:
+			return jsonify({
+				"Message":"Error in deleting completion_tag"
+			}),400
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from backend"
+		})
+
+@configuration_bp.route('/api/update_completion_tag/<int:completion_tag_id>', methods=['POST'])
+def update_completion_tag(completion_tag_id):
+	try:
+		data = request.get_json()
+		status,response = update_completion_tag_service(completion_tag_id,data)
+		if status:
+			return jsonify(response.json()),response.status_code
+		else:
+			return jsonify({
+				"Message":"Error in updating completion_tag"
+			}),400
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from the backend"
+		}),500
+
+@configuration_bp.route('/api/view_completion_tag/<int:completion_tag_id>', methods=['GET'])
+def view_completion_tag(completion_tag_id):
+	try:
+		status,response = view_completion_tag_service(completion_tag_id)
+		if status:
+			return jsonify(response.json()),response.status_code
+		else:
+			return jsonify({
+				"Message":"There is no completion_tag"
+			}),400
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from server"
+		}),500
+
+@configuration_bp.route('/api/create_completion_tag/<int:account_id>', methods=['POST'])
+def create_completion_tag(account_id):
+	try:
+		data = request.get_json()
+		status,response = create_completion_tag_service(account_id,data)
+		if status:
+			return jsonify(response.json()),response.status_code
+		else:
+			return jsonify({
+				"Message":f"Error in creating completion_tag"
+			}),400
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from server"
+		}),500

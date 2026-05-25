@@ -2,42 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="author" content="DexignLab">
-    <meta name="robots" content="">
-    <meta name="keywords" content="school, school admin, education, academy, admin dashboard, college, college management, education management, institute, school management, school management system, student management, teacher management, university, university management">
-    <meta name="description" content="Discover Akademi - the ultimate admin dashboard and Bootstrap 5 template.">
-    <meta property="og:title" content="Akademi : School and Education Management Admin Dashboard Template">
-    <meta property="og:description" content="Akademi - the ultimate admin dashboard and Bootstrap 5 template.">
-    <meta property="og:image" content="social-image.html">
-    <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Akademi - School and Education Management Admin Dashboard">
+    <title>Akademi : School and Education Management Admin Dashboard</title>
 
-    <title>Akademi : School and Education Management Admin Dashboard Template</title>
-
-    <!-- FAVICONS ICON -->
     <link rel="shortcut icon" type="image/png" href="/static/assets/images/favicon.png">
 
     <!-- CSS -->
-    <link href="../static/vendor/wow-master/css/libs/animate.css" rel="stylesheet">
-    <link href="../static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../static/vendor/bootstrap-select-country/css/bootstrap-select-country.min.css">
-    <link rel="stylesheet" href="../static/vendor/jquery-nice-select/css/nice-select.css">
-    <link href="../static/vendor/datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
-    <link href="../static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/vendor/wow-master/css/libs/animate.css">
+    <link rel="stylesheet" href="/static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="/static/vendor/bootstrap-select-country/css/bootstrap-select-country.min.css">
+    <link rel="stylesheet" href="/static/vendor/jquery-nice-select/css/nice-select.css">
+    <link rel="stylesheet" href="/static/vendor/datepicker/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="/static/vendor/fullcalendar-5.11.0/lib/main.css">
-    <link href="../static/vendor/jquery-nice-select/css/nice-select.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/static/vendor/datatables/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="/static/vendor/swiper/css/swiper-bundle.min.css">
+    <link rel="stylesheet" href="/static/icons/flaticon-1/font/flaticon-1.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Icons">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <link href="/static/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <link rel="stylesheet" href="../static/vendor/swiper/css/swiper-bundle.min.css">
-    <link rel="stylesheet" href="../static/icons/flaticon-1/font/flaticon-1.css">
-    <link href="/static/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
 
-<!--****************** Preloader ******************-->
+<!-- Preloader -->
 <div id="preloader">
     <div class="loader">
         <div class="dots">
@@ -50,14 +39,14 @@
     </div>
 </div>
 
-<!--****************** Main wrapper ******************-->
+<!-- Main wrapper -->
 <div id="main-wrapper">
 
     {% include 'components/nav-header.html' %}
     {% include 'components/header.html' %}
     {% include 'components/sidebar.html' %}
 
-    <!--****************** Page-specific scripts ******************-->
+    <!-- Page-specific scripts -->
     {% if page == 'home' %}
     <script>
         window.ACCOUNT_ID = {{ account_id }};
@@ -82,69 +71,15 @@
 
     {% endif %}
 
-    <!--****************** Dynamic page content ******************-->
+    <!-- Dynamic page content -->
     {% include 'components/' + page_template %}
 
-    {% include 'components/footer.html'%}
+    {% include 'components/footer.html' %}
 </div>
 
-<!--****************** Modal ******************-->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-center">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Recent Student title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-xl-6">
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput1" class="form-label mb-2">Student Name</label>
-                            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="James">
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput2" class="form-label mb-2">Email</label>
-                            <input type="email" class="form-control" id="exampleFormControlInput2" placeholder="hello@example.com">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label mb-2">Gender</label>
-                            <select class="default-select wide" aria-label="Default select example">
-                                <option selected>Select Option</option>
-                                <option value="1">Male</option>
-                                <option value="2">Women</option>
-                                <option value="3">Other</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-xl-6">
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput4" class="form-label mb-2">Entry Year</label>
-                            <input type="number" class="form-control" id="exampleFormControlInput4" placeholder="EX: 2023">
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput5" class="form-label mb-2">Student ID</label>
-                            <input type="number" class="form-control" id="exampleFormControlInput5" placeholder="14EMHEE092">
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleFormControlInput6" class="form-label mb-2">Phone Number</label>
-                            <input type="number" class="form-control" id="exampleFormControlInput6" placeholder="+123456">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--****************** Scripts ******************-->
+<!-- Scripts -->
 <script src="/static/js/socket.io.min.js"></script>
 <script src="/static/vendor/global/global.min.js"></script>
-<script src="/static/vendor/bootstrap-datetimepicker/js/moment.js"></script>
 <script src="/static/vendor/moment/moment.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 <script src="/static/vendor/datatables/js/jquery.dataTables.min.js"></script>

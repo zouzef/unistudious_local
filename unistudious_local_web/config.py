@@ -1,23 +1,29 @@
 # config.py
 import urllib3
 from datetime import timedelta
+from pathlib import Path
+import json
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+# Load JSON config file
+_config_path = Path(__file__).parent / "config.json"
+with open (_config_path, "r") as f:
+    _cfg = json.load(f)
 
 class Config:
     # ==========================================
     # CORE
     # ==========================================
-    SECRET_KEY = 'a3f8b2c1d4e5f6a7b8c9d0e1f2a3b4c5'
-    TEMPLATE_FOLDER = "../template"
+    SECRET_KEY = _cfg["core"]["secret_key"]
+    TEMPLATE_FOLDER = _cfg["core"]["template_folder"]
 
     # ==========================================
     # EXTERNAL API
     # ==========================================
-    BASE_URL = "https://192.168.1.23:5004/scl/"
-    REQUEST_TIMEOUT = 10
-    VERIFY_SSL = False
+    BASE_URL = _cfg["external_api"]["base_url"]
+    REQUEST_TIMEOUT = _cfg["external_api"]["request_timeout"]
+    VERIFY_SSL = _cfg["external_api"]["verify_ssl"]
 
     # ==========================================
     # SESSION

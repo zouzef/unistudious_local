@@ -1,0 +1,24 @@
+{
+  "core": {
+    "secret_key": "a3f8b2c1d4e5f6a7b8c9d0e1f2a3b4c5",
+    "template_folder": "../template"
+  },
+  "external_api": {
+    "base_url": "https://192.168.1.249:5004/scl/",
+    "request_timeout": 10,
+    "verify_ssl": false
+  },
+  "session": {
+    "session_permanent": true,
+    "permanent_session_lifetime_hours": 24,
+    "session_cookie_secure": true,
+    "session_cookie_httponly": true,
+    "session_cookie_samesite": "Lax"
+  },
+  "server": {
+    "host": "0.0.0.0",
+    "port": 5016,
+    "certfile": "cert.pem",
+    "keyfile": "key.pem"
+  }
+}

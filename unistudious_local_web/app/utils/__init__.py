@@ -47,6 +47,7 @@ PAGE_TEMPLATES = {
     'show_completion_tag':         'configuration/completion_tag/show_completion_tag.html',
     'create_completion_tag':       'configuration/completion_tag/create_completion_tag.html',
     'view_completion_tag':         'configuration/completion_tag/view_completion_tag.html',
+    'view_profile':                'user_view/view_profile.html'
 }
 
 

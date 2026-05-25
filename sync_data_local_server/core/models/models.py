@@ -2,6 +2,7 @@
 All Table Models
 Each class = one table. Edit columns here, changes apply on next run automatically.
 """
+from email.policy import default
 
 from core.models.base_model import BaseModel, Column
 
@@ -48,8 +49,10 @@ class AccountLevelModel(BaseModel):
         Column("created_at",      "DATETIME",    nullable=False, default="current_timestamp()"),
         Column("timestamp",       "DATETIME",    nullable=False, default="current_timestamp()"),
         Column("updated_at",      "DATETIME"),
+        # FIX: SQL uses release_token (snake_case) and use_token + slc_edit, not releaseToken/useToken
         Column("release_token",   "TINYINT(1)",  nullable=False, default="0"),
         Column("use_token",       "VARCHAR(255)"),
+        Column("slc_edit",        "INT(11)",     default="0"),
     ]
 
 
@@ -789,7 +792,6 @@ class UserModel(BaseModel):
         Column("isvirtual",             "TINYINT(1)",  default="0"),
         Column("slc_edit",              "INT(11)",     default="0"),
         Column("id_user",               "INT(11)"),
-
     ]
 
 
@@ -842,11 +844,13 @@ class VirtualUserAuditModel(BaseModel):
     ]
 
 
-class SectionModel(BaseModel):
-    table_name = "section"
+# ── NEW / FIXED MODELS BELOW ──────────────────────────────────────────────────
+
+# FIX: was "SectionModel" with table_name="section" — SQL has "section_config"
+class SectionConfigModel(BaseModel):
+    table_name = "section_config"
     columns = [
         Column("id",          "INT(11)",      primary_key=True, auto_increment=True, nullable=False),
-        Column("account_id",  "INT(11)"),
         Column("name",        "VARCHAR(255)", nullable=False),
         Column("description", "LONGTEXT"),
         Column("status",      "TINYINT(1)",  nullable=False, default="1"),
@@ -857,29 +861,33 @@ class SectionModel(BaseModel):
     ]
 
 
+# FIX: was wrong — Python had (account_id, section_id). SQL has section_config_id +
+#      description, other_section columns.
 class AccountSectionModel(BaseModel):
     table_name = "account_section"
     columns = [
-        Column("id",         "INT(11)",   primary_key=True, auto_increment=True, nullable=False),
-        Column("account_id", "INT(11)"),
-        Column("section_id", "INT(11)"),
-        Column("status",     "TINYINT(1)", nullable=False, default="1"),
-        Column("enabled",    "TINYINT(1)", nullable=False, default="1"),
-        Column("created_at", "DATETIME",   nullable=False, default="current_timestamp()"),
-        Column("timestamp",  "DATETIME",   nullable=False, default="current_timestamp()"),
-        Column("updated_at", "DATETIME"),
+        Column("id",                "INT(11)",      primary_key=True, auto_increment=True, nullable=False),
+        Column("account_id",        "INT(11)"),
+        Column("section_config_id", "INT(11)"),
+        Column("status",            "TINYINT(1)",  nullable=False, default="1"),
+        Column("description",       "LONGTEXT"),
+        Column("other_section",     "VARCHAR(255)"),
+        Column("enabled",           "TINYINT(1)",  nullable=False, default="1"),
+        Column("created_at",        "DATETIME",    nullable=False, default="current_timestamp()"),
+        Column("timestamp",         "DATETIME",    nullable=False, default="current_timestamp()"),
+        Column("updated_at",        "DATETIME"),
     ]
 
 
+# FIX: was "TagConfigModel" with table_name="tag" and column "name". SQL has
+#      table_name="tag_config" and column "title" (not "name").
 class TagConfigModel(BaseModel):
-    table_name = "tag"
+    table_name = "tag_config"
     columns = [
         Column("id",          "INT(11)",      primary_key=True, auto_increment=True, nullable=False),
-        Column("account_id",  "INT(11)"),
-        Column("name",        "VARCHAR(255)", nullable=False),
-        Column("color",       "VARCHAR(50)"),
-        Column("description", "LONGTEXT"),
+        Column("title",       "VARCHAR(255)", nullable=False),   # SQL uses "title", not "name"
         Column("status",      "TINYINT(1)",  nullable=False, default="1"),
+        Column("description", "LONGTEXT"),
         Column("enabled",     "TINYINT(1)",  nullable=False, default="1"),
         Column("created_at",  "DATETIME",    nullable=False, default="current_timestamp()"),
         Column("timestamp",   "DATETIME",    nullable=False, default="current_timestamp()"),
@@ -887,19 +895,53 @@ class TagConfigModel(BaseModel):
     ]
 
 
+# FIX: was wrong — Python had (account_id, tag_id). SQL has tag_config_id +
+#      description, other_tag, public columns.
 class AccountTagModel(BaseModel):
     table_name = "account_tag"
     columns = [
-        Column("id",         "INT(11)",   primary_key=True, auto_increment=True, nullable=False),
-        Column("account_id", "INT(11)"),
-        Column("tag_id",     "INT(11)"),
-        Column("status",     "TINYINT(1)", nullable=False, default="1"),
-        Column("enabled",    "TINYINT(1)", nullable=False, default="1"),
-        Column("created_at", "DATETIME",   nullable=False, default="current_timestamp()"),
-        Column("timestamp",  "DATETIME",   nullable=False, default="current_timestamp()"),
-        Column("updated_at", "DATETIME"),
+        Column("id",            "INT(11)",      primary_key=True, auto_increment=True, nullable=False),
+        Column("account_id",    "INT(11)"),
+        Column("tag_config_id", "INT(11)"),
+        Column("status",        "TINYINT(1)",  nullable=False, default="1"),
+        Column("description",   "LONGTEXT"),
+        Column("other_tag",     "VARCHAR(255)"),
+        Column("public",        "TINYINT(1)",  nullable=False, default="1"),
+        Column("enabled",       "TINYINT(1)",  nullable=False, default="1"),
+        Column("created_at",    "DATETIME",    nullable=False, default="current_timestamp()"),
+        Column("timestamp",     "DATETIME",    nullable=False, default="current_timestamp()"),
+        Column("updated_at",    "DATETIME"),
     ]
 
+
+
+class YourTableModel(BaseModel):
+    table_name = "your_table"
+    collate = "utf8mb4_general_ci"
+    columns = [
+        Column("id",       "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+        Column("data",     "LONGTEXT"),   # JSON-validated in SQL (CHECK json_valid)
+        Column("settings", "LONGTEXT"),   # JSON-validated in SQL
+        Column("metadata", "LONGTEXT"),   # JSON-validated in SQL
+    ]
+
+class CompletionTagAccount(BaseModel):
+    table_name = "completion_tag_account"
+    collate = "utf8mb4_general_ci"
+    columns = [
+        Column("id",          "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+        Column("account_id",  "INT(11)"),
+        Column("name",        "VARCHAR(255)"),
+        Column("description", "LONGTEXT"),
+        Column("status",      "TINYINT(1)",  nullable=False, default="1"),
+        Column("img_link",    "VARCHAR(255)"),
+        Column("enabled",     "TINYINT(1)",  nullable=False, default="1"),
+        Column("created_at",  "DATETIME",    nullable=False, default="current_timestamp()"),
+        Column("timestamp",   "DATETIME",    nullable=False, default="current_timestamp()"),
+        Column("updated_at",  "DATETIME"),
+        Column("release_token", "TINYINT(1)", nullable=False, default="0"),
+        Column("use_token", "VARCHAR(255)"),
+    ]
 
 ALL_MODELS = [
     AccountModel,
@@ -951,8 +993,10 @@ ALL_MODELS = [
     UserAuditModel,
     VirtualUserModel,
     VirtualUserAuditModel,
-    SectionModel,
+    CompletionTagAccount,
+    SectionConfigModel,
     AccountSectionModel,
     TagConfigModel,
     AccountTagModel,
+    YourTableModel,
 ]

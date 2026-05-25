@@ -255,3 +255,46 @@ def create_account_tag_service(account_id, data):
 	except Exception as e:
 		print(e)
 		return False,None
+
+
+
+def get_all_completion_tag_serice(account_id):
+	try:
+		url = f"{current_app.config['BASE_URL']}get_all_completion_tag/{account_id}"
+		response = requests.get(url,verify=False,timeout=10)
+		return response.status_code == 200,response
+	except Exception as e:
+		return False,None
+
+def create_completion_tag_service(account_id,data):
+	try:
+		url =f"{current_app.config['BASE_URL']}create_completion_tag/{account_id}"
+		response = requests.post(url, json=data, verify=False,timeout=10)
+		return response.status_code == 200,response
+	except Exception as e:
+		return False,None
+
+def view_completion_tag_service(completionTagId):
+	try:
+		url = f"{current_app.config['BASE_URL']}view_completion_tag/{completionTagId}"
+		response = requests.get(url,verify=False,timeout=10)
+		return response.status_code == 200,response
+	except Exception as e:
+		return False,None
+
+def update_completion_tag_service(completonTagId,data):
+	try:
+		url = f"{current_app.config['BASE_URL']}update_completion_tag/{completonTagId}"
+		response = requests.post(url,json=data,verify=False,timeout=10)
+		return response.status_code == 200,response
+
+	except Exception as e:
+		return False,None
+
+def delete_completion_tag_service(completionTagId):
+	try:
+		url = f"{current_app.config['BASE_URL']}delete_completion_tag/{completionTagId}"
+		response = requests.post(url,verify=False,timeout=10)
+		return response.status_code == 200,response
+	except Exception as e:
+		return False,None

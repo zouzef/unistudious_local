@@ -18,7 +18,7 @@
                                                 <div class="author-profile">
                                                     <div class="author-media-formation">
                                                         <img id="imagePreview"
-                                                             src="/assets/admin/images/completion-tag-defult.jpg"
+                                                             src="../static/assets/images/completion_tag.png"
                                                              alt="">
                                                     </div>
                                                     <div class="change-btn mt-5 mb-lg-0 mb-3">
@@ -39,7 +39,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <!-- Fields -->
                                 <div class="col-xl-9 col-lg-8">
                                     <div class="row">
@@ -87,7 +86,6 @@
 
                                     </div>
                                 </div>
-
                             </div>
 
                             <div class="float-end">
@@ -104,3 +102,150 @@
         </div>
     </div>
 </div>
+<script>
+    const ACCOUNT_ID = {{ account_id }};
+    const COMPLETION_TAG_ID = {{ completionTag_id }};
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // ─── Preview image on file select ─────────────────────────────────
+        document.getElementById('completion_tag_imgFile').addEventListener('change', function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    document.getElementById('imagePreview').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // ─── Remove image ──────────────────────────────────────────────────
+        document.getElementById('remove-img-completion-tag').addEventListener('click', function () {
+            document.getElementById('imagePreview').src = '/assets/admin/images/completion-tag-defult.jpg';
+            document.getElementById('completion_tag_imgFile').value = '';
+        });
+
+        // ─── Load completion tag data and prefill form ─────────────────────
+        fetch(`/api/view_completion_tag/${COMPLETION_TAG_ID}`)
+            .then(res => {
+                if (!res.ok) throw new Error(`Server returned ${res.status}`);
+                return res.json();
+            })
+            .then(data => {
+                const tag = Array.isArray(data) ? data[0] : data;
+
+                // Pre-fill name
+                document.getElementById('completion_tag_name').value = tag.name ?? '';
+
+                // Pre-fill status
+                document.getElementById('completion_tag_status').value = tag.status ?? 1;
+                $('#completion_tag_status').selectpicker('refresh');
+
+                // Pre-fill image
+                if (tag.img_link) {
+                    document.getElementById('imagePreview').src = tag.img_link;
+                }
+
+                // Pre-fill description
+                if (tag.description) {
+                    document.getElementById('completion_tag_description').value = tag.description;
+                    if (typeof CKEDITOR !== 'undefined') {
+                        CKEDITOR.instances['completion_tag_description']?.setData(tag.description);
+                    }
+                }
+            })
+            .catch(err => {
+                console.error('Failed to load completion tag:', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to load completion tag data.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+            });
+
+        // ─── Edit button → submit ──────────────────────────────────────────
+        document.getElementById('edit_completion_tag').addEventListener('click', function () {
+
+            const name        = document.getElementById('completion_tag_name').value.trim();
+            const status      = document.getElementById('completion_tag_status').value;
+            const description = typeof CKEDITOR !== 'undefined' && CKEDITOR.instances['completion_tag_description']
+                ? CKEDITOR.instances['completion_tag_description'].getData()
+                : document.getElementById('completion_tag_description').value;
+
+            // ─── Validation ────────────────────────────────────────────────
+            if (!name) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Required!',
+                    text: 'Please enter a name for the completion tag.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+                return;
+            }
+
+            // ─── Build payload ─────────────────────────────────────────────
+            const fileInput = document.getElementById('completion_tag_imgFile');
+            const file      = fileInput.files[0];
+
+            // If there's a file, use FormData; otherwise use JSON
+            if (file) {
+                const formData = new FormData();
+                formData.append('name',        name);
+                formData.append('status',      status);
+                formData.append('description', description);
+                formData.append('imgFile',     file);
+
+                fetch(`/api/update_completion_tag/${COMPLETION_TAG_ID}`, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(handleUpdateResponse)
+                .catch(handleUpdateError);
+
+            } else {
+                fetch(`/api/update_completion_tag/${COMPLETION_TAG_ID}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, status, description })
+                })
+                .then(res => res.json())
+                .then(handleUpdateResponse)
+                .catch(handleUpdateError);
+            }
+        });
+
+        // ─── Helpers ───────────────────────────────────────────────────────
+        function handleUpdateResponse(data) {
+            if (data.Message && data.Message.toLowerCase().includes('error')) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops!',
+                    text: data.Message,
+                    confirmButtonColor: '#4c4b9e',
+                });
+            } else {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Completion tag updated successfully!',
+                    confirmButtonColor: '#4c4b9e',
+                }).then(() => {
+                    window.location.href = '/dashboard/show-completion-tag';
+                });
+            }
+        }
+
+        function handleUpdateError() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Server Error',
+                text: 'Something went wrong, please try again.',
+                confirmButtonColor: '#4c4b9e',
+            });
+        }
+
+    });
+</script>

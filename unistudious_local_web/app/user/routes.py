@@ -149,7 +149,6 @@ def get_manager_info():
     try:
         status, response = get_manager_info_service()
         if status:
-            print(response)
             return jsonify(response), 200  # ✅ pass response directly
         else:
             return jsonify({"Message": "Failed to fetch data"}), 400
