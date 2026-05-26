@@ -78,7 +78,7 @@ def insert_users(db, user_data, token):
                     "created_at": format_date(user.get("createdAt")),
                     "updated_at": format_date(user.get("updatedAt")),
                     "isvirtual": user.get("isVirtual"),
-                    "password": user.get("password", "TEMP_PASSWORD_NEEDS_RESET"),  # ← from API
+                    "password": user.get("password", "TEMP_PASSWORD_NEEDS_RESET"),
                 }
 
                 select_query = "SELECT * FROM user WHERE id = %s"
@@ -737,7 +737,7 @@ def insert_admins(db, admin_data, token):
 
                     db.execute_query(insert_query, (
                         user_id,
-                        default_values["account_id"],
+                        3,
                         new_data["username"],
                         new_data["email"],
                         new_data["full_name"],

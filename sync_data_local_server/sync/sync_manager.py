@@ -127,87 +127,87 @@ def process_sync_data(db, data):
             return {"created": raw}
         return raw
 
-    if 'account' in data:
-        from sync.processors.account_processor import process_accounts
-        print("\n ACCOUNTS: ")
-        process_accounts(db, normalize(data['account']),token)
-
-    if 'accountSubject' in data:
-        from sync.processors.account_subject_processor import process_account_subjects
-        print("\n Account_subject: ")
-        process_account_subjects(db, normalize(data['accountSubject']))
-
-    if 'calendar' in data:
-        print("\n \n Calendar Data: ",data['calendar'])
-        from sync.processors.calendar_processor import process_calendars
-        print("\n Calendar: ")
-        process_calendars(db, normalize(data['calendar']))
-
-    if 'group' in data:
-        print("\n \n Group Data: ",data['group'])
-        from sync.processors.group_local_session_processor import process_groups
-        print("\n Groups: ")
-        process_groups(db, normalize(data['group']))
-
-    if 'attendance' in data:
-        print("\n \n attendance_data:",data['attendance'])
-        from sync.processors.attendance_processor import process_attendances
-        print("\n Attendance: ")
-        process_attendances(db, normalize(data['attendance']),settings)
-
-    if 'slcCamera' in data:
-        from sync.processors.camera_processor import process_cameras
-        print("\n Camera: ")
-        process_cameras(db, normalize(data['slcCamera']))
-
-    if 'formation' in data:
-        from sync.processors.formation_processor import process_formations
-        print("\n Formation: ")
-        process_formations(db, normalize(data['formation']))
-
-    if 'slcLocal' in data:
-        from sync.processors.slc_local_processor import process_slc_local
-        print("\n SLC local: ")
-        process_slc_local(db, normalize(data['slcLocal']))
-
-    if 'relationTeacherAndSubjectData' in data:
-        print("\n \n Relation Teacher And Subject Data: ",data['relationTeacherAndSubjectData'])
-        from sync.processors.relation_teacher_subject_processor import process_teacher_subject_relations
-        print("\n Teacher Subjects")
-        process_teacher_subject_relations(db, normalize(data['relationTeacherAndSubjectData']))
-
-    if 'relationUserSession' in data:
-        print("\n \n Relation User Session Data: ",data['relationUserSession'])
-
-        from sync.processors.user_session_processor import process_user_session_relations
-        print("\n Relation User Session: ")
-        process_user_session_relations(db, normalize(data['relationUserSession']))
-
-    if 'local_with_room' in data:
-        from sync.processors.local_room_processor import process_local_and_rooms
-        print("\n local_with_room")
-        process_local_and_rooms(db, normalize(data['local_with_room']))
-
-    if 'session' in data:
-        print("\n",data['session'])
-        from sync.processors.session_processor import process_sessions
-        print("\n Session")
-        process_sessions(db, normalize(data['session']), token)
-
-    if 'slc' in data:
-        from sync.processors.slc_processor import process_slcs
-        print("\n SLC")
-        process_slcs(db, normalize(data['slc']))
-
-    if 'subject' in data:
-        from sync.processors.subject_config_processor import process_subjects
-        print("\n Subject: ")
-        process_subjects(db, normalize(data['subject']))
-
-    if 'slcTablet' in data:
-        from sync.processors.tablet_processor import process_tablets
-        print("\n SlcTablet: ")
-        process_tablets(db, normalize(data['slcTablet']))
+    # if 'account' in data:
+    #     from sync.processors.account_processor import process_accounts
+    #     print("\n ACCOUNTS: ")
+    #     process_accounts(db, normalize(data['account']),token)
+    #
+    # if 'accountSubject' in data:
+    #     from sync.processors.account_subject_processor import process_account_subjects
+    #     print("\n Account_subject: ")
+    #     process_account_subjects(db, normalize(data['accountSubject']))
+    #
+    # if 'calendar' in data:
+    #     print("\n \n Calendar Data: ",data['calendar'])
+    #     from sync.processors.calendar_processor import process_calendars
+    #     print("\n Calendar: ")
+    #     process_calendars(db, normalize(data['calendar']))
+    #
+    # if 'group' in data:
+    #     print("\n \n Group Data: ",data['group'])
+    #     from sync.processors.group_local_session_processor import process_groups
+    #     print("\n Groups: ")
+    #     process_groups(db, normalize(data['group']))
+    #
+    # if 'attendance' in data:
+    #     print("\n \n attendance_data:",data['attendance'])
+    #     from sync.processors.attendance_processor import process_attendances
+    #     print("\n Attendance: ")
+    #     process_attendances(db, normalize(data['attendance']),settings)
+    #
+    # if 'slcCamera' in data:
+    #     from sync.processors.camera_processor import process_cameras
+    #     print("\n Camera: ")
+    #     process_cameras(db, normalize(data['slcCamera']))
+    #
+    # if 'formation' in data:
+    #     from sync.processors.formation_processor import process_formations
+    #     print("\n Formation: ")
+    #     process_formations(db, normalize(data['formation']))
+    #
+    # if 'slcLocal' in data:
+    #     from sync.processors.slc_local_processor import process_slc_local
+    #     print("\n SLC local: ")
+    #     process_slc_local(db, normalize(data['slcLocal']))
+    #
+    # if 'relationTeacherAndSubjectData' in data:
+    #     print("\n \n Relation Teacher And Subject Data: ",data['relationTeacherAndSubjectData'])
+    #     from sync.processors.relation_teacher_subject_processor import process_teacher_subject_relations
+    #     print("\n Teacher Subjects")
+    #     process_teacher_subject_relations(db, normalize(data['relationTeacherAndSubjectData']))
+    #
+    # if 'relationUserSession' in data:
+    #     print("\n \n Relation User Session Data: ",data['relationUserSession'])
+    #
+    #     from sync.processors.user_session_processor import process_user_session_relations
+    #     print("\n Relation User Session: ")
+    #     process_user_session_relations(db, normalize(data['relationUserSession']))
+    #
+    # if 'local_with_room' in data:
+    #     from sync.processors.local_room_processor import process_local_and_rooms
+    #     print("\n local_with_room")
+    #     process_local_and_rooms(db, normalize(data['local_with_room']))
+    #
+    # if 'session' in data:
+    #     print("\n",data['session'])
+    #     from sync.processors.session_processor import process_sessions
+    #     print("\n Session")
+    #     process_sessions(db, normalize(data['session']), token)
+    #
+    # if 'slc' in data:
+    #     from sync.processors.slc_processor import process_slcs
+    #     print("\n SLC")
+    #     process_slcs(db, normalize(data['slc']))
+    #
+    # if 'subject' in data:
+    #     from sync.processors.subject_config_processor import process_subjects
+    #     print("\n Subject: ")
+    #     process_subjects(db, normalize(data['subject']))
+    #
+    # if 'slcTablet' in data:
+    #     from sync.processors.tablet_processor import process_tablets
+    #     print("\n SlcTablet: ")
+    #     process_tablets(db, normalize(data['slcTablet']))
 
     if 'user' in data:
         from sync.processors.user_processor import process_users
@@ -219,55 +219,55 @@ def process_sync_data(db, data):
         print("\n Admin: ")
         process_admins(db, normalize(data['admin']), token)
 
-    if 'virtualUser' in data:
-        from sync.processors.VirtuelUser_processor import process_virtuelUser
-        print("\n VirtuelUser: ")
-        process_virtuelUser(db,normalize(data['virtualUser']), token)
-
-    if 'paymentSessions' in data:
-        from sync.processors.payment_processor import process_payment_sessions
-        print("\n Payment Sessions: ")
-        process_payment_sessions(db, normalize(data['paymentSessions']))
-
-    if 'invoices' in data:
-        from sync.processors.invoice_processor import process_invoice_session
-        print("\n Invoice Sessions: ")
-        process_invoice_session(db,normalize(data['invoices']))
-
-    if 'level' in data:
-        from sync.processors.level_processor import processor_level_session
-        print("\n Level account: ")
-        processor_level_session(db,normalize(data['level']))
-
-    if 'accountLevel' in data:
-        from sync.processors.accountLevel_processor import processor_account_level
-        print("\n Account Level: ")
-        processor_account_level(db,normalize(data['accountLevel']))
-
-    if 'section' in data:
-        from sync.processors.section_processor import processor_section
-        print("\n Section: ")
-        processor_section(db,normalize(data['section']))
-
-    if 'accountSection' in data:
-        from sync.processors.account_section_processor import processor_account_section
-        print("\n Account Section: ")
-        processor_account_section(db, normalize(data['accountSection']))
-
-    if 'tag' in data:
-        from sync.processors.tag_config_processor import processor_tag_config
-        print("\n Tag Config: ")
-        processor_tag_config(db, normalize(data['tag']))
-
-    if 'accountTag' in data:
-        from sync.processors.account_tag_processor import processor_account_tag
-        print("\n Account Tag: ")
-        processor_account_tag(db, normalize(data['accountTag']))
-
-    if 'completionTagAccount' in data:
-        from sync.processors.completion_tag_account_processor import processor_completion_tag
-        print("\n Completion_Tag: ")
-        processor_completion_tag(db, normalize(data['completionTagAccount']))
+    # if 'virtualUser' in data:
+    #     from sync.processors.VirtuelUser_processor import process_virtuelUser
+    #     print("\n VirtuelUser: ")
+    #     process_virtuelUser(db,normalize(data['virtualUser']), token)
+    #
+    # if 'paymentSessions' in data:
+    #     from sync.processors.payment_processor import process_payment_sessions
+    #     print("\n Payment Sessions: ")
+    #     process_payment_sessions(db, normalize(data['paymentSessions']))
+    #
+    # if 'invoices' in data:
+    #     from sync.processors.invoice_processor import process_invoice_session
+    #     print("\n Invoice Sessions: ")
+    #     process_invoice_session(db,normalize(data['invoices']))
+    #
+    # if 'level' in data:
+    #     from sync.processors.level_processor import processor_level_session
+    #     print("\n Level account: ")
+    #     processor_level_session(db,normalize(data['level']))
+    #
+    # if 'accountLevel' in data:
+    #     from sync.processors.accountLevel_processor import processor_account_level
+    #     print("\n Account Level: ")
+    #     processor_account_level(db,normalize(data['accountLevel']))
+    #
+    # if 'section' in data:
+    #     from sync.processors.section_processor import processor_section
+    #     print("\n Section: ")
+    #     processor_section(db,normalize(data['section']))
+    #
+    # if 'accountSection' in data:
+    #     from sync.processors.account_section_processor import processor_account_section
+    #     print("\n Account Section: ")
+    #     processor_account_section(db, normalize(data['accountSection']))
+    #
+    # if 'tag' in data:
+    #     from sync.processors.tag_config_processor import processor_tag_config
+    #     print("\n Tag Config: ")
+    #     processor_tag_config(db, normalize(data['tag']))
+    #
+    # if 'accountTag' in data:
+    #     from sync.processors.account_tag_processor import processor_account_tag
+    #     print("\n Account Tag: ")
+    #     processor_account_tag(db, normalize(data['accountTag']))
+    #
+    # if 'completionTagAccount' in data:
+    #     from sync.processors.completion_tag_account_processor import processor_completion_tag
+    #     print("\n Completion_Tag: ")
+    #     processor_completion_tag(db, normalize(data['completionTagAccount']))
 
 
 
