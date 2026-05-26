@@ -1,1 +1,287 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form name="account" method="post" id="account-form" enctype="multipart/form-data"
+                              data-account-id="{{ account_id }}">
 
+                            <div class="row">
+
+                                <!-- ── Logo ── -->
+                                <div class="col-xl-3 col-lg-4">
+                                    <label class="form-label text-primary">Logo<span class="required">*</span></label>
+                                    <div class="avatar-upload">
+                                        <div class="avatar-preview">
+                                            <div id="imagePreview"></div>
+                                        </div>
+                                        <div class="change-btn mt-2 mb-lg-0 mb-3">
+                                            <input type="file" id="account_logoFile" name="account[logoFile]"
+                                                   class="d-none" accept=".png, .jpg, .jpeg">
+                                            <label for="account_logoFile"
+                                                   class="dlab-upload mb-0 btn btn-primary btn-sm">Choose File</label>
+                                            <a href="javascript:void(0);"
+                                               class="btn btn-danger light remove-img ms-2 btn-sm"
+                                               id="remove-img">Remove</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ── Fields ── -->
+                                <div class="col-xl-9 col-lg-8">
+                                    <div class="row">
+
+                                        <!-- Name -->
+                                        <div class="col-xl-6 col-sm-6">
+                                            <div class="mb-3">
+                                                <label for="account_name" class="form-label text-primary">Name<span
+                                                        class="required">*</span></label>
+                                                <input type="text" id="account_name" name="account[name]" required
+                                                       class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <!-- Status -->
+                                        <div class="col-xl-6 col-sm-6">
+                                            <div class="mb-3">
+                                                <label for="account_status"
+                                                       class="form-label text-primary">Status<span
+                                                        class="required">*</span></label>
+                                                <select id="account_status" name="account[status]"
+                                                        class="form-control">
+                                                    <option value="1">Active</option>
+                                                    <option value="0">Inactive</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Type -->
+                                        <div class="col-xl-6 col-sm-6">
+                                            <div class="mb-3">
+                                                <label for="account_accountType"
+                                                       class="form-label text-primary">Type<span
+                                                        class="required">*</span></label>
+                                                <select id="account_accountType" name="account[accountType]" required
+                                                        class="form-control">
+                                                    <option value="">Choose the Type...</option>
+                                                    <option value="2">Agency</option>
+                                                    <option value="3">Company</option>
+                                                    <option value="4">Particular</option>
+                                                    <option value="5">Primary School</option>
+                                                    <option value="6">College</option>
+                                                    <option value="7">High School</option>
+                                                    <option value="8">University</option>
+                                                    <option value="9">Training Center</option>
+                                                    <option value="10">Language Center</option>
+                                                    <option value="11">Educational Institution</option>
+                                                    <option value="12">Consultancy</option>
+                                                    <option value="13">Nonprofit Organization</option>
+                                                    <option value="14">Government Organization</option>
+                                                    <option value="15">Individual</option>
+                                                    <option value="16">Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Other Type (hidden by default) -->
+                                        <div class="col-xl-6 col-sm-6" id="div-other-title" style="display: none;">
+                                            <div class="mb-3">
+                                                <label for="account_otherType"
+                                                       class="form-label text-primary">Other Type<span
+                                                        class="required">*</span></label>
+                                                <input type="text" id="account_otherType" name="account[otherType]"
+                                                       class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <!-- Teacher -->
+                                        <div class="col-xl-6 col-sm-6">
+                                            <div class="mb-3">
+                                                <label for="account_teacher"
+                                                       class="form-label text-primary">Teacher</label>
+                                                <select id="account_teacher" name="account[teacher]"
+                                                        class="form-control">
+                                                    <option value="1">True</option>
+                                                    <option value="0">False</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ── Actions ── -->
+                            <div class="float-end">
+                                <!-- ✅ type="button" — prevents native form submit -->
+                                <button type="button" class="btn btn-outline-success me-3"
+                                        id="btn-edit-account">Edit</button>
+                                <a class="btn btn-outline-danger" href="/dashboard/show-account">Close</a>
+                            </div>
+
+                            <!-- ── Hidden token ── -->
+                            <input type="hidden" id="account__token" name="account[_token]"
+                                   value="{{ csrf_token }}">
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const ACCOUNT_ID = document.getElementById("account-form").dataset.accountId;
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // ── Load account data ─────────────────────────────────────────────
+        Promise.all([
+            fetch(`/api/get_account_data/${ACCOUNT_ID}`).then(res => res.json()),
+            fetch(`/api/get_account_image/${ACCOUNT_ID}`)
+        ])
+        .then(([json, imgResponse]) => {
+
+            const account = Array.isArray(json) ? json[0] : (json.Data?.[0] ?? json);
+
+            console.log("ACCOUNT DATA:", account);
+
+            // ── Name ──────────────────────────────────────────────────────
+            document.getElementById("account_name").value = account.name ?? "";
+
+            // ── Status ────────────────────────────────────────────────────
+            Array.from(document.getElementById("account_status").options).forEach(opt => {
+                opt.selected = opt.value === String(account.status);
+            });
+
+            // ── Account Type ──────────────────────────────────────────────
+            if (account.account_type !== undefined) {
+                Array.from(document.getElementById("account_accountType").options).forEach(opt => {
+                    opt.selected = opt.value === String(account.account_type);
+                });
+                if (String(account.account_type) === "16") {
+                    document.getElementById("div-other-title").style.display = "block";
+                    document.getElementById("account_otherType").required    = true;
+                    document.getElementById("account_otherType").value       = account.other_type ?? "";
+                }
+            }
+
+            // ── Teacher ───────────────────────────────────────────────────
+            if (account.teacher !== undefined) {
+                Array.from(document.getElementById("account_teacher").options).forEach(opt => {
+                    opt.selected = opt.value === String(account.teacher);
+                });
+            }
+
+            // ── Image ─────────────────────────────────────────────────────
+            if (imgResponse.ok) {
+                return imgResponse.blob().then(blob => {
+                    const dataUrl = URL.createObjectURL(blob);
+                    document.getElementById("imagePreview").style.backgroundImage = `url(${dataUrl})`;
+                });
+            }
+        })
+        .catch(err => {
+            console.error("Failed to load account data:", err);
+            Swal.fire({
+                icon:               "error",
+                title:              "Error",
+                text:               "Failed to load account data.",
+                confirmButtonColor: "#4c4b9e",
+            });
+        });
+
+
+        // ── Show/hide "Other Type" on change ──────────────────────────────
+        document.getElementById("account_accountType").addEventListener("change", function () {
+            const isOther = this.value === "16";
+            document.getElementById("div-other-title").style.display = isOther ? "block" : "none";
+            document.getElementById("account_otherType").required     = isOther;
+        });
+
+
+        // ── Image preview on file select ──────────────────────────────────
+        document.getElementById("account_logoFile").addEventListener("change", function () {
+            const file = this.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById("imagePreview").style.backgroundImage = `url(${e.target.result})`;
+            };
+            reader.readAsDataURL(file);
+        });
+
+
+        // ── Remove image ──────────────────────────────────────────────────
+        document.getElementById("remove-img").addEventListener("click", function () {
+            document.getElementById("account_logoFile").value = "";
+            document.getElementById("imagePreview").style.backgroundImage = "none";
+        });
+
+
+        // ── Edit button click ─────────────────────────────────────────────
+        document.getElementById("btn-edit-account").addEventListener("click", async function () {
+
+            const payload = {
+                name:         document.getElementById("account_name").value.trim(),
+                status:       document.getElementById("account_status").value,
+                account_type: document.getElementById("account_accountType").value,
+                other_type:   document.getElementById("account_otherType").value.trim(),
+                teacher:      document.getElementById("account_teacher").value,
+            };
+
+            console.log("📋 Sending payload:", payload);
+
+            // ── Validation ────────────────────────────────────────────────
+            if (!payload.name) {
+                return Swal.fire({
+                    icon: "warning", title: "Required",
+                    text: "Name is required.",
+                    confirmButtonColor: "#4c4b9e",
+                });
+            }
+
+            // ── Send ──────────────────────────────────────────────────────
+            try {
+                const response = await fetch(`/api/update_account/${ACCOUNT_ID}`, {
+                    method:  "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body:    JSON.stringify(payload),
+                });
+
+                const result = await response.json();
+                console.log("🔁 Response:", result);
+
+                if (response.ok) {
+                    Swal.fire({
+                        icon:               "success",
+                        title:              "Updated",
+                        text:               "Account updated successfully.",
+                        confirmButtonColor: "#4c4b9e",
+                    }).then(() => {
+                        window.location.href = "/dashboard/show-account";
+                    });
+                } else {
+                    Swal.fire({
+                        icon:               "error",
+                        title:              "Error",
+                        text:               result.Message || "Failed to update account.",
+                        confirmButtonColor: "#4c4b9e",
+                    });
+                }
+
+            } catch (err) {
+                console.error("❌ Update error:", err);
+                Swal.fire({
+                    icon:               "error",
+                    title:              "Network Error",
+                    text:               "Could not reach the server.",
+                    confirmButtonColor: "#4c4b9e",
+                });
+            }
+        });
+
+    });
+</script>

@@ -77,6 +77,8 @@ def view_account_setting():
     return render_page('view_account_setting',
                        account_id = session.get('account_id'),
                        )
+
+
 # ========================================= TEACHER =========================================
 
 @user_views_bp.route('/dashboard/show-teacher')

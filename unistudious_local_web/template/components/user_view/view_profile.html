@@ -79,11 +79,68 @@
 </div>
 
 <script>
-    // ── Load on page ready ─────────────────────────────────────
     document.addEventListener("DOMContentLoaded", () => {
+
         const userId = document.getElementById("admin-form").dataset.userId;
         loadUserData(userId);
-    });
+
+        // ── Submit → POST JSON ─────────────────────────────────────
+        document.getElementById("admin-form").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const userId = this.dataset.userId;
+
+            const payload = {
+                username:    document.getElementById("admin_username").value.trim(),
+                email:       document.getElementById("admin_email").value.trim(),
+                birth_place: document.getElementById("admin_birthPlace").value.trim(),
+                birth_date:  document.getElementById("admin_birthDate").value.trim(),
+                address:     document.getElementById("admin_Address").value.trim(),
+                full_name:   document.getElementById("admin_fullName").value.trim(),
+                phone:       document.getElementById("admin_phone").value.trim(),
+                grand:       document.getElementById("admin_grand").value,
+            };
+
+            try {
+                const response = await fetch(`/api/update-user/${userId}`, {
+                    method:  "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body:    JSON.stringify(payload),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showToast("success", result.Message ?? "Profile updated successfully");
+                } else {
+                    showToast("error", result.Message ?? "Failed to update profile");
+                }
+
+            } catch (error) {
+                console.error("Update error:", error);
+                showToast("error", "An unexpected error occurred");
+            }
+        });
+
+        // ── Image preview on file select ───────────────────────────
+        document.getElementById("admin_imgFile").addEventListener("change", function () {
+            const file = this.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById("imagePreview").style.backgroundImage = `url(${e.target.result})`;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // ── Remove image ───────────────────────────────────────────
+        document.getElementById("remove-img").addEventListener("click", function () {
+            document.getElementById("admin_imgFile").value = "";
+            document.getElementById("imagePreview").style.backgroundImage = "none";
+        });
+
+    }); // end DOMContentLoaded
 
     // ── Fetch & populate form ──────────────────────────────────
     async function loadUserData(userId) {
@@ -104,7 +161,20 @@
                 document.getElementById("admin_Address").value    = user.address     ?? "";
                 document.getElementById("admin_fullName").value   = user.full_name   ?? "";
                 document.getElementById("admin_phone").value      = user.phone       ?? "";
-                document.getElementById("admin_grand").value      = user.grand       ?? "";
+
+                // ── Gender: explicitly set selected option ──
+                const genderSelect = document.getElementById("admin_grand");
+                const genderValue  = (user.grand ?? "").trim();
+
+                console.log("Gender from API:", genderValue); // debug — check browser console
+
+                genderSelect.value = genderValue;
+
+                // Double safety: manually loop options
+                Array.from(genderSelect.options).forEach(opt => {
+                    opt.selected = opt.value === genderValue;
+                });
+
             } else {
                 console.error("Failed to fetch user data");
             }
@@ -121,44 +191,6 @@
             console.error("Error loading user data:", error);
         }
     }
-
-    // ── Submit → POST JSON ─────────────────────────────────────
-    document.getElementById("admin-form").addEventListener("submit", async function (e) {
-        e.preventDefault();
-
-        const userId = this.dataset.userId;
-
-        const payload = {
-            username:    document.getElementById("admin_username").value.trim(),
-            email:       document.getElementById("admin_email").value.trim(),
-            birth_place: document.getElementById("admin_birthPlace").value.trim(),
-            birth_date:  document.getElementById("admin_birthDate").value.trim(),
-            address:     document.getElementById("admin_Address").value.trim(),
-            full_name:   document.getElementById("admin_fullName").value.trim(),
-            phone:       document.getElementById("admin_phone").value.trim(),
-            grand:       document.getElementById("admin_grand").value,
-        };
-
-        try {
-            const response = await fetch(`/api/update-user/${userId}`, {
-                method:  "POST",
-                headers: { "Content-Type": "application/json" },
-                body:    JSON.stringify(payload),
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                showToast("success", result.Message ?? "Profile updated successfully");
-            } else {
-                showToast("error", result.Message ?? "Failed to update profile");
-            }
-
-        } catch (error) {
-            console.error("Update error:", error);
-            showToast("error", "An unexpected error occurred");
-        }
-    });
 
     // ── Helpers ────────────────────────────────────────────────
     function blobToDataUrl(blob) {
