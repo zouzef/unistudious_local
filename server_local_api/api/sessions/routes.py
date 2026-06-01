@@ -130,7 +130,6 @@ def get_session_detail(account_id):
                 "message": "No sessions found for this account",
                 "data": []
             }), 404
-
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({
@@ -268,10 +267,7 @@ def create_session():
             data.get('logoFile'),
             new_uuid
         )
-
         result = Database.execute_query(query, values, fetch=False)
-        print("resultat:", result)
-
         # 1️⃣ Get the new session's ID (last inserted row)
 
         # 2️⃣ Build new_data snapshot
@@ -357,8 +353,6 @@ def update_session(session_id):
         data = request.get_json(force=True)
         if not data:
             return jsonify({"Message": "No data received"}), 400
-
-        print(f"📋 Updating session {session_id} with: {data}")
 
         # 1️⃣ Fetch old data before updating
         fetch_query = "SELECT * FROM session WHERE id = %s AND enabled = 1"
@@ -527,7 +521,9 @@ def get_all_user_sesssion(session_id):
 
 
 #ENDPOINT 8: GET all_group_session
+
 @sessions_bp.route('/get_all_group_session/<int:session_id>', methods=['GET'])
+@token_required
 def get_all_group_session(session_id):
     try:
         query = """

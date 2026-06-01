@@ -15,6 +15,7 @@ import random
 import string
 import requests
 import json
+import jwt
 
 # Create blueprint
 calendar_bp = Blueprint('calendar', __name__, url_prefix='/scl')
@@ -23,6 +24,7 @@ calendar_bp = Blueprint('calendar', __name__, url_prefix='/scl')
 # ========================================
 # ENDPOINT 1: Delete calendar interval
 # ========================================
+
 @calendar_bp.route('/deleting_interval/<int:session_id>', methods=['POST'])
 # @token_required
 def delete_calendar(session_id):

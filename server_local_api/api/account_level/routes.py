@@ -34,7 +34,6 @@ def get_account_level(account_id):
 			return jsonify({
 				"Message":f"There is no level for this account"
 			}),404
-
 	except Exception as e:
 		return jsonify({
 			"Message":f"Error: {e} coming from server"
@@ -117,14 +116,14 @@ def view_account_level(account_level_id):
 # ENDPOINT 5: Edit account_level
 @account_level_bp.route('/edit_account_level/<int:account_level_id>', methods=['POST'])  # 👈 missing methods
 def update_account_level(account_level_id):
-    try:
-        data = request.get_json()
+	try:
+		data = request.get_json()
 
-        level_config_id = data.get('level_config_id')  # 👈 was data.get('description') by mistake
-        status          = data.get('status')
-        description     = data.get('description') or None
+		level_config_id = data.get('level_config_id')  # 👈 was data.get('description') by mistake
+		status          = data.get('status')
+		description     = data.get('description') or None
 
-        query = """
+		query = """
             UPDATE account_level
             SET level_config_id = %s,
                 status = %s,
@@ -134,20 +133,20 @@ def update_account_level(account_level_id):
             WHERE id = %s
             AND enabled = 1
         """
-        values = (level_config_id, status, description, account_level_id)
+		values = (level_config_id, status, description, account_level_id)
 
-        response = Database.execute_query(query, values, fetch=False)
-        if response:
-            return jsonify({
+		response = Database.execute_query(query, values, fetch=False)
+		if response:
+			return jsonify({
                 "Message": "Account level updated with success"
             }), 200
-        else:
-            return jsonify({
+		else:
+			return jsonify({
                 "Message": "Account level update failed"
-            }), 400
+            }),400
 
-    except Exception as e:
-        return jsonify({
+	except Exception as e:
+		return jsonify({
             "Message": f"Error: {e} coming from server"
         }), 500
 

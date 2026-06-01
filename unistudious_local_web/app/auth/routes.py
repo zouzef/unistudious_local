@@ -27,6 +27,7 @@ def login_post():
         session['moderator_name'] = user_data['username']
         session['user_id'] = user_data['user_id']
         session['account_id'] = user_data['account_id']
+        session['access_token'] = user_data['access_token']
         print(user_data)
         return jsonify({
             'success': True,

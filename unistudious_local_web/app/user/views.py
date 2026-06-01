@@ -25,6 +25,15 @@ def show_platform_student_view():
         account_id=session.get('account_id'),
     )
 
+@user_views_bp.route('/dashboard/create-platform-student')
+def create_platform_student():
+    guard = login_required()
+    if guard: return guard
+
+    return render_page('create-platform-student',
+                       account_id = session.get('account_id')
+                       )
+
 
 # ========================================= MANAGER =========================================
 
@@ -78,7 +87,13 @@ def view_account_setting():
                        account_id = session.get('account_id'),
                        )
 
-
+@user_views_bp.route('/dashboard/change-password-profile')
+def change_password_profile():
+    guard = login_required()
+    if guard: return guard
+    return render_page('change_password_profile',
+                       account_id = session.get('account_id'),
+                       user_id = session)
 # ========================================= TEACHER =========================================
 
 @user_views_bp.route('/dashboard/show-teacher')

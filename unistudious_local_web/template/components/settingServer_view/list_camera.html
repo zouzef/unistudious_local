@@ -185,6 +185,60 @@
     </div>
 </div>
 
+<div class="modal fade" id="editSlcCameraModal" tabindex="-1" aria-labelledby="editSlcCameraModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="editSlcCameraForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editSlcCameraModalLabel">Edit Camera</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" id="editCameraId" name="id">
+
+                    <div class="mb-3">
+                        <label for="editCameraType" class="form-label">Type</label>
+                        <input type="text" class="form-control" id="editCameraType" name="type" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editCameraName" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="editCameraName" name="name">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editCameraMac" class="form-label">MAC ID</label>
+                        <input type="text" class="form-control" id="editCameraMac" name="macId">
+                    </div>
+
+                    <div id="editIpCameraFields" style="display:none;">
+                        <div class="mb-3">
+                            <label for="editCameraUsername" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="editCameraUsername" name="username">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editCameraPassword" class="form-label">Password</label>
+                            <input type="text" class="form-control" id="editCameraPassword" name="password">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <script>
     // ─── Load Locals ─────────────────────────────────────────────────────────
 
@@ -264,14 +318,17 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
                                             <a data-id="${camera.id}" class="dropdown-item delete-slc-camera">Delete</a>
-                                            <a href="#" class="dropdown-item open-edit-slc-camera-modal"
-                                                data-id="${camera.id}"
-                                                data-name="${camera.name}"
-                                                data-mac="${camera.mac}"
-                                                data-username="${camera.username}"
-                                                data-password="${camera.password}"
-                                                data-type="${camera.type}">
-                                                Edit
+                                            <a href="#"
+                                               class="dropdown-item open-edit-slc-camera-modal"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#editSlcCameraModal"
+                                               data-id="${camera.id}"
+                                               data-name="${camera.name}"
+                                               data-mac="${camera.mac}"
+                                               data-username="${camera.username}"
+                                               data-password="${camera.password}"
+                                               data-type="${camera.type}">
+                                               Edit
                                             </a>
                                         </div>
                                     </div>

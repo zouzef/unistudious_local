@@ -1,0 +1,162 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Create New Student</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="student-form" name="student" method="post">
+                            <div class="row">
+                                <div class="col-xl-6 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="username" class="form-label text-primary">Username <span
+                                                class="required">*</span></label>
+                                        <input type="text" id="student_username" name="student[username]"
+                                               required="required" class="form-control"><br>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label text-primary">Email <span class="required">*</span></label>
+                                        <input type="email" id="student_email" name="student[email]" required="required"
+                                               class="form-control"><br>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlTextarea1"
+                                               class="form-label text-primary">Address</label>
+                                        <textarea id="student_Address" name="student[Address]" class="form-control"
+                                                  rows="7"></textarea><br>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-sm-6">
+                                    <div class="mb-3">
+                                        <label for="fullName" class="form-label text-primary">First Name And Last Name
+                                            <span class="required">*</span></label>
+                                        <input type="text" id="student_fullName" name="student[fullName]"
+                                               required="required" class="form-control"><br>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="phone" class="form-label text-primary">Phone</label>
+                                        <input type="tel" id="student_phone" name="student[phone]" class="form-control"
+                                               minlength="8" maxlength="16"><br>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="gender&quot;" class="form-label text-primary">Gender</label>
+                                        <div class="dropdown bootstrap-select form-control"><select id="student_grand"
+                                                                                                    name="student[grand]"
+                                                                                                    class="form-control">
+                                            <option value="">Select gender...</option>
+                                            <option value="M">Male</option>
+                                            <option value="F">Female</option>
+                                            <option value="O">Other</option>
+                                        </select>
+                                            <button type="button" tabindex="-1"
+                                                    class="btn dropdown-toggle bs-placeholder btn-light"
+                                                    data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-1"
+                                                    aria-haspopup="listbox" aria-expanded="false"
+                                                    title="Select gender..." data-id="student_grand">
+                                                <div class="filter-option">
+                                                    <div class="filter-option-inner">
+                                                        <div class="filter-option-inner-inner">Select gender...</div>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                            <div class="dropdown-menu ">
+                                                <div class="inner show" role="listbox" id="bs-select-1" tabindex="-1">
+                                                    <ul class="dropdown-menu inner show" role="presentation"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                    </div>
+                                    <br>
+                                    <div class="mb-3">
+                                        <label for="gender&quot;" class="form-label text-primary">Session</label>
+                                        <input type="hidden" id="account-id" value="3">
+                                        <div class="dropdown bootstrap-select show-tick form-control select2-hidden-accessible">
+                                            <select id="multi-value-select" multiple=""
+                                                    class="form-control select2-hidden-accessible"
+                                                    data-select2-id="multi-value-select" tabindex="-1"
+                                                    aria-hidden="true">
+                                                <option value="12">SESSION TEST</option>
+                                                <option value="25">Révision Math bac info 2026</option>
+                                                <option value="26">heithem session</option>
+                                            </select>
+                                            <button type="button" tabindex="-1"
+                                                    class="btn dropdown-toggle bs-placeholder btn-light"
+                                                    data-bs-toggle="dropdown" role="combobox" aria-owns="bs-select-2"
+                                                    aria-haspopup="listbox" aria-expanded="false"
+                                                    title="Nothing selected" data-id="multi-value-select">
+                                                <div class="filter-option">
+                                                    <div class="filter-option-inner">
+                                                        <div class="filter-option-inner-inner">Nothing selected</div>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                            <div class="dropdown-menu ">
+                                                <div class="inner show" role="listbox" id="bs-select-2" tabindex="-1"
+                                                     aria-multiselectable="true">
+                                                    <ul class="dropdown-menu inner show" role="presentation"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <span class="select2 select2-container select2-container--default" dir="ltr"
+                                              data-select2-id="1" style="width: 469.5px;"><span class="selection"><span
+                                                class="select2-selection select2-selection--multiple" role="combobox"
+                                                aria-haspopup="true" aria-expanded="false" tabindex="-1"
+                                                aria-disabled="false"><ul class="select2-selection__rendered"><li
+                                                class="select2-search select2-search--inline"><input
+                                                class="select2-search__field" type="search" tabindex="0"
+                                                autocomplete="off" autocorrect="off" autocapitalize="none"
+                                                spellcheck="false" role="searchbox" aria-autocomplete="list"
+                                                placeholder="" style="width: 0.75em;"></li></ul></span></span><span
+                                                class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                    </div>
+                                    <br>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary">Photo</label>
+                                        <div class="avatar-upload">
+                                            <div class="avatar-preview">
+                                                <div id="imagePreview"
+                                                     style="background-image: url(/assets/admin/images/no-img-avatar.png);"></div>
+                                            </div>
+                                        </div>
+                                        <div class="change-btn mt-1">
+                                            <input type="file" id="student_imgFile" name="student[imgFile]"
+                                                   class="d-none" accept=".png, .jpg, .jpeg">
+                                            <br>
+                                            <label for="manager_imgFile"
+                                                   class="dlab-upload mb-0 btn btn-primary btn-sm">Choose File</label>
+                                            <a href="javascript:void(0);"
+                                               class="btn btn-danger light remove-img ms-2 btn-sm" id="remove-img">Remove</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-xl-6 mb-3">
+                                    <label class="form__label">Password <span class="required">*</span></label>
+                                    <input type="password" id="student_password_first" name="student[password][first]"
+                                           required="required" class="form-control" minlength="4" maxlength="25">
+                                </div>
+                                <div class="col-xl-6 mb-3">
+                                    <label class="form__label">Re-Enter Password <span class="required">*</span></label>
+                                    <input type="password" id="student_password_second" name="student[password][second]"
+                                           required="required" class="form-control" minlength="4" maxlength="25">
+                                </div>
+                            </div>
+                            <div class="float-end">
+                                <input type="hidden" id="sessions_input" name="sessions">
+                                <button class="btn btn-outline-primary me-3" type="submit" id="create_student">Create
+                                </button>
+                                <a href="/dashboard/show-platform-student" class="btn btn-outline-danger">Close</a>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

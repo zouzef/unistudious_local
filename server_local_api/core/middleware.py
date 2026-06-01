@@ -1,3 +1,4 @@
+# server/core/middleware.py  (LOCAL API SERVER)
 from functools import wraps
 from flask import request, jsonify
 import jwt
@@ -15,13 +16,17 @@ def token_required(f):
             return jsonify({'error': 'Token is missing'}), 401
 
         try:
-            # Remove 'Bearer ' prefix if present
             if token.startswith('Bearer '):
                 token = token[7:]
 
-            # Decode token
             data = jwt.decode(token, Config.SECRET_KEY, algorithms=["HS256"])
-            request.user = data['user']
+
+            # Our JWT payload: { sub, username, account_id, iat, exp }
+            request.user = {
+                "user_id":    data.get("sub"),
+                "username":   data.get("username"),
+                "account_id": data.get("account_id"),
+            }
 
         except jwt.ExpiredSignatureError:
             return jsonify({'error': 'Token has expired'}), 401

@@ -20,7 +20,6 @@ attendance_bp = Blueprint('attendance', __name__, url_prefix='/scl')
 @attendance_bp.route('/get-attendance/<int:calendar_id>', methods=['GET'])
 def get_todays_attendance(calendar_id):
     try:
-        print("\n \n \n \n \n \n id_attendance: ",calendar_id)
         query = """
             SELECT 
                 a.id,
@@ -45,9 +44,7 @@ def get_todays_attendance(calendar_id):
                      a.account_id, a.is_present, a.day, a.calander_id, 
                      a.note, a.updated_at
         """
-
         rows = Database.execute_query(query, (calendar_id,))
-
         formatted_rows = []
         for row in rows:
             formatted_row = {
@@ -65,9 +62,7 @@ def get_todays_attendance(calendar_id):
                 "updatedAt": str(row['updatedAt']) if row['updatedAt'] else None
             }
             formatted_rows.append(formatted_row)
-
         return jsonify({"attendance": formatted_rows}), 200
-
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": "Internal server error"}), 500
@@ -80,16 +75,12 @@ def get_todays_attendance(calendar_id):
 def get_attendance_group_student(calendarId, userId):
     try:
         account_id = userId
-
         # Get session_id from calendar
         query = "SELECT session_id FROM relation_calander_group_session WHERE id = %s"
         calendar_result = Database.execute_query(query, (calendarId,))
-
         if not calendar_result:
             return jsonify({'error': 'Calendar not found'}), 404
-
         session_id = calendar_result[0]['session_id']
-
         # Get user's group assignments
         query = """
             SELECT id, relation_group_local_session_id 
@@ -97,18 +88,14 @@ def get_attendance_group_student(calendarId, userId):
             WHERE session_id = %s AND user_id = %s AND relation_group_local_session_id IS NOT NULL
         """
         student_group = Database.execute_query(query, (session_id, account_id))
-
         if not student_group:
             return jsonify({'groups': []}), 200
-
         # Extract unique group IDs
         group_ids = list(set(group['relation_group_local_session_id'] for group in student_group))
-
         # Get group details
         placeholders = ', '.join(['%s'] * len(group_ids))
         query = f"SELECT id, name FROM relation_group_local_session WHERE session_id = %s AND id IN ({placeholders})"
         groups = Database.execute_query(query, (session_id, *group_ids))
-
         # Build result
         result_groups = []
         for student_rec in student_group:
@@ -120,9 +107,7 @@ def get_attendance_group_student(calendarId, userId):
                     "id": matching_group['id'],
                     "name": matching_group['name']
                 })
-
         return jsonify({"groups": result_groups}), 200
-
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": "Internal server error"}), 500
@@ -135,7 +120,6 @@ def insert_attendance_audit(attendance_id, userId, calendarId, groupId,
                             relationId, addToGroup, selectedGroupId, joinToGroup,
                             action_type="ADD_STUDENT"):
     """Insert audit trail for attendance actions"""
-
     formatted_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     audit_data = {
         "userId": userId,
@@ -147,7 +131,6 @@ def insert_attendance_audit(attendance_id, userId, calendarId, groupId,
         "joinToGroup": joinToGroup
     }
     new_data_json = json.dumps(audit_data)
-
     query = """
         INSERT INTO attendance_audit 
         (action_type, new_data, changed_at, is_synced, id_attendance)
@@ -160,8 +143,6 @@ def insert_attendance_audit(attendance_id, userId, calendarId, groupId,
 def add_student_attendance():
     try:
         data = request.get_json()
-        print("Incoming request:", data)
-
         # Extract and validate required fields
         userId = data.get('userId')
         calendarId = data.get('calendarId')
@@ -172,9 +153,7 @@ def add_student_attendance():
 
         if not userId or not calendarId:
             return jsonify({"success": False, "error": "Missing userId or calendarId"}), 400
-
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
         # Get calendar/session info
         query = """
             SELECT session_id, account_id, group_session_id
@@ -182,14 +161,11 @@ def add_student_attendance():
             WHERE id = %s AND enabled = 1
         """
         calendar_info = Database.execute_query(query, (calendarId,))
-
         if not calendar_info:
             return jsonify({"success": False, "error": "Calendar not found or disabled"}), 404
-
         session_id = calendar_info[0]['session_id']
         account_id = calendar_info[0]['account_id']
         current_group_id = calendar_info[0]['group_session_id']
-
         # Prevent duplicate attendance
         query = """
             SELECT id FROM attendance
@@ -197,13 +173,10 @@ def add_student_attendance():
         """
         if Database.execute_query(query, (userId, session_id, calendarId)):
             return jsonify({"success": False, "error": "User already marked present"}), 400
-
         # Generate next attendance ID
         query = "SELECT COALESCE(MAX(id), 0) + 1 AS next_id FROM attendance"
         new_attendance_id = Database.execute_query(query)[0]['next_id']
-
         final_group_id = current_group_id
-
         # CASE 1: Move user to a new group (addToGroup = true)
         if addToGroup and selectedGroupId is not None and not joinToGroup:
             query = """
@@ -214,14 +187,11 @@ def add_student_attendance():
                 ORDER BY id ASC LIMIT 1
             """
             relation = Database.execute_query(query, (userId, session_id))
-            print(relation)
 
             if not relation:
                 return jsonify({"success": False, "error": "User not assigned to any group yet"}), 400
 
             rel_id = relation[0]['id']
-            print(rel_id)
-            print(selectedGroupId)
 
             # Update group
             query = """
@@ -260,7 +230,6 @@ def add_student_attendance():
                 LIMIT 1
             """
             relation = Database.execute_query(query, (userId, session_id))
-            print("Relation", relation)
 
             if not relation:
                 return jsonify({"success": False, "error": "User already in a group or no relation"}), 400
@@ -330,8 +299,6 @@ def add_student_attendance():
 @attendance_bp.route('/attendance-statistics/<int:id_calender>', methods=['GET'])
 def statistics_attendance(id_calender):
     try:
-        print(id_calender)
-
         # Count present students
         query = """
             SELECT COUNT(*) as present_count 
@@ -358,13 +325,11 @@ def statistics_attendance(id_calender):
         """
         total_result = Database.execute_query(query, (id_calender,))
         total_count = total_result[0]['total_count'] if total_result else 0
-
         return jsonify({
             "present_count": present_count,
             "absent_count": absent_count,
             "total_count": total_count
         }), 200
-
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": "Internal server error"}), 500
@@ -382,9 +347,6 @@ def delete_attendance_api(calender_id, user_id):
             WHERE calander_id = %s AND enabled = 1 AND user_id = %s
         """
         attendance_data = Database.execute_query(query, (calender_id, user_id))
-
-        print(attendance_data)
-
         if attendance_data:
             # Soft delete: set enabled = 0
             query = """
@@ -418,7 +380,6 @@ def delete_attendance_api(calender_id, user_id):
 @attendance_bp.route('/attendance-delete-student/<int:id_attendance>', methods=['DELETE'])
 def delete_attendance_by_id(id_attendance):
     try:
-        print(id_attendance)
 
         # Fixed: Delete by attendance ID, not calendar_id and user_id
         query = """
@@ -459,20 +420,13 @@ def list_add_student_attendance(calender_id):
             WHERE a.calander_id = %s AND a.enabled = 1
         """
         attendance_data = Database.execute_query(query, (calender_id,))
-
         list_student_in = [student["userId"] for student in attendance_data]
-        print("list_student_in:", list_student_in)
-
         # Step 2: Get the session_id for this calendar
         query = "SELECT session_id FROM relation_calander_group_session WHERE id = %s"
         session_row = Database.execute_query(query, (calender_id,))
-
         if not session_row:
             return jsonify({"error": "No session found for this calendar"}), 404
-
         session_id = session_row[0]["session_id"]
-        print("session_id:", session_id)
-
         # Step 3: Build query for users in this session but not in attendance
         if list_student_in:
             placeholders = ', '.join(['%s'] * len(list_student_in))
@@ -504,10 +458,8 @@ def list_add_student_attendance(calender_id):
                 GROUP BY u.id, u.full_name
             """
             params = [session_id]
-
         # Step 4: Execute query
         users = Database.execute_query(query, params)
-
         # Step 5: Format output
         formatted_users = [
             {
@@ -519,9 +471,7 @@ def list_add_student_attendance(calender_id):
             }
             for user in users
         ]
-
         return jsonify({"users": formatted_users}), 200
-
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
@@ -533,8 +483,6 @@ def list_add_student_attendance(calender_id):
 @attendance_bp.route('/get-next-attendance/<int:calendarId>', methods=['GET'])
 def get_next_attendance_scl(calendarId):
     try:
-        print(f"Looking for next attendance after calendar ID: {calendarId}")
-
         # Get only the NEXT calendar that starts after the given calendar's start time
         query = """
             SELECT rcgs.*, 
@@ -553,13 +501,11 @@ def get_next_attendance_scl(calendarId):
             LIMIT 1
         """
         next_calendar = Database.execute_query(query, (calendarId,))
-
         if not next_calendar:
             return jsonify({
                 "message": "No next calendar found after the given calendar ID",
                 "calendar_id": calendarId
             }), 404
-
         # Format the result
         calendar_data = {
             'id': next_calendar[0]['calendar_id'],
@@ -568,13 +514,11 @@ def get_next_attendance_scl(calendarId):
             'end_time': next_calendar[0]['end_time'].strftime('%Y-%m-%d %H:%M:%S') if next_calendar[0]['end_time'] else 'unknown',
             'description': next_calendar[0].get('description', '')
         }
-
         return jsonify({
             "message": "Success",
             "reference_calendar_id": calendarId,
             "next_calendar": calendar_data
         }), 200
-
     except Exception as e:
         print(f"Unexpected error: {e}")
         return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
@@ -586,8 +530,6 @@ def get_next_attendance_scl(calendarId):
 @attendance_bp.route('/get-next-single-attendance/<int:calendarId>', methods=['GET'])
 def get_next_single_attendance(calendarId):
     try:
-        print(f"Looking for next single attendance after calendar ID: {calendarId}")
-
         # Same as above - get only the NEXT calendar
         query = """
             SELECT rcgs.*, 
@@ -606,13 +548,11 @@ def get_next_single_attendance(calendarId):
             LIMIT 1
         """
         next_calendar = Database.execute_query(query, (calendarId,))
-
         if not next_calendar:
             return jsonify({
                 "message": "No next calendar found after the given calendar ID",
                 "calendar_id": calendarId
             }), 404
-
         calendar_data = {
             'id': next_calendar[0]['calendar_id'],
             'name': next_calendar[0].get('calendar_name', ''),
@@ -620,13 +560,11 @@ def get_next_single_attendance(calendarId):
             'end_time': next_calendar[0]['end_time'].strftime('%Y-%m-%d %H:%M:%S') if next_calendar[0]['end_time'] else 'unknown',
             'description': next_calendar[0].get('description', '')
         }
-
         return jsonify({
             "message": "Success",
             "reference_calendar_id": calendarId,
             "next_calendar": calendar_data
         }), 200
-
     except Exception as e:
         print(f"Unexpected error: {e}")
         return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
@@ -638,8 +576,6 @@ def get_next_single_attendance(calendarId):
 @attendance_bp.route('/get-next-attendance-v2/<int:calendarId>', methods=['GET'])
 def get_next_attendance_v2(calendarId):
     try:
-        print(f"Looking for next attendance after calendar ID: {calendarId} (Version 2)")
-
         # Step 1: Get the start_time of the reference calendar
         query = """
             SELECT start_time 
@@ -647,15 +583,11 @@ def get_next_attendance_v2(calendarId):
             WHERE id = %s
         """
         current_calendar = Database.execute_query(query, (calendarId,))
-
         if not current_calendar:
             return jsonify({
                 "error": "No calendar records found for the given calendar ID"
             }), 404
-
         reference_start_time = current_calendar[0]['start_time']
-        print(f"Reference calendar start_time: {reference_start_time}")
-
         # Step 2: Get all calendars after this start_time
         query = """
             SELECT rcgs.*, 
@@ -669,7 +601,6 @@ def get_next_attendance_v2(calendarId):
             ORDER BY rcgs.start_time ASC
         """
         next_calendars = Database.execute_query(query, (reference_start_time,))
-
         if not next_calendars:
             return jsonify({
                 "message": "No future calendars found after the reference time",
@@ -701,7 +632,6 @@ def get_next_attendance_v2(calendarId):
         print(f"Unexpected error: {e}")
         return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
 
-
 # ========================================
 # ENDPOINT 11: Reset attendance for a calendar
 # ========================================
@@ -716,9 +646,7 @@ def reset_attendance(calender_id):
         """
         result = Database.execute_query(query, (calender_id,))
         present_count = result[0]['count']
-
         if present_count == 0:
-            print("All the attendance records are already reset")
             return jsonify({
                 "status": "ok",
                 "message": "All the attendance records are already reset"
@@ -761,10 +689,8 @@ def static_attendance(calander_id):
             ) AS distinct_attendance
         """
         result = Database.execute_query(query, (calander_id,))
-
         present_count = result[0]['present'] if result[0]['present'] is not None else 0
         absent_count = result[0]['absent'] if result[0]['absent'] is not None else 0
-
         return jsonify({
             "status": "ok",
             "message": "static_attendance",
@@ -790,21 +716,14 @@ def get_slc_mac(attendance_id):
         # Get account_id from attendance
         query = "SELECT account_id FROM attendance WHERE id = %s"
         row = Database.execute_query(query, (attendance_id,))
-
         if not row:
-            print(f"No attendance found for id {attendance_id}")
             return None
-
         id_account = int(row[0]['account_id'])
-
         # Get SLC username (mac address)
         query = "SELECT username FROM slc WHERE account_id = %s"
         row = Database.execute_query(query, (id_account,))
-
         if not row:
-            print(f"No SLC record found for account_id {id_account}")
             return None
-
         mac_address = row[0]['username']
         return mac_address
 
@@ -820,23 +739,17 @@ def update_attendance_status(id_attendance):
             data = request.get_json()
         else:
             data = request.form.to_dict()
-
         # Validate that the payload contains 'status'
         if not data or 'status' not in data:
             return jsonify({"error": "Missing 'status' in request payload"}), 400
-
         status = data['status']
-        print(status)
-
         # Convert string to boolean if it's form data
         if isinstance(status, str):
             status = status.lower() in ['true', '1', 'yes', 'on']
         elif not isinstance(status, bool):
             return jsonify({"error": "Status must be a boolean value (true/false)"}), 400
-
         # Get SLC mac address
         mac_address = get_slc_mac(id_attendance)
-
         # Update attendance status
         query = """
             UPDATE attendance 
@@ -848,7 +761,6 @@ def update_attendance_status(id_attendance):
             WHERE id = %s
         """
         Database.execute_query(query, (status, mac_address, id_attendance), fetch=False)
-
         return jsonify({
             "message": "Attendance status updated successfully",
             "attendance_id": id_attendance,
@@ -865,27 +777,18 @@ def update_attendance_status(id_attendance):
 @attendance_bp.route('/update-attendance-note/<int:attendanceId>', methods=['POST'])
 def update_attendance_note(attendanceId):
     try:
-        print(f"Received request for attendance ID: {attendanceId}")
-
         # Get data from request (supports both JSON and form data)
         if request.is_json:
             data = request.get_json()
         else:
             data = request.form.to_dict()
-
-        print(f"Received Payload Data: {data}")
-
         # Validate that the payload contains 'note'
         if not data or 'note' not in data:
             return jsonify({"error": "Missing 'note' in request payload"}), 400
-
         note = data['note']
-        print(f"Extracted Note: {note}")
-
         # Validate that note is a string
         if not isinstance(note, str):
             return jsonify({"error": "Note must be a string value"}), 400
-
         # Update attendance note
         query = """
             UPDATE attendance 
@@ -895,13 +798,11 @@ def update_attendance_note(attendanceId):
             WHERE id = %s
         """
         Database.execute_query(query, (note, attendanceId), fetch=False)
-
         return jsonify({
             "message": "Attendance note updated successfully",
             "attendance_id": attendanceId,
             "note": note
         }), 200
-
     except Exception as e:
         return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
 
@@ -909,9 +810,6 @@ def update_attendance_note(attendanceId):
 # ========================================
 # ENDPOINT 15: Create attendance
 # ========================================
-import json
-
-
 @attendance_bp.route('/create-attendance/<int:group_id>', methods=['POST'])
 def create_attendance(group_id):
     try:
@@ -920,31 +818,19 @@ def create_attendance(group_id):
             FROM attendance_audit 
             WHERE is_synced = 0 AND action_type = 'INSERT_attendance';
         """
-
         results = Database.execute_query(query, fetch=True)
-
         for row in results:
             # adjust depending on your structure
             id_attendance = row[0] if isinstance(row, tuple) else row["id_attendance"]
             new_data = row[1] if isinstance(row, tuple) else row["new_data"]
-
             # convert JSON string → dict
             data = json.loads(new_data)
             calander_id = data.get("calander_id")
-            print("ID:", id_attendance)
-            print("DATA:", data)
-            print("CALANDER_ID:", calander_id)
             query = """
                 SELECT id_prod FROM relation_calander_group_session where id = %s
             """
             values = (calander_id,)
             results = Database.execute_query(query, values)
-            print("calander: ",results)
-
-
-
-
-
         return jsonify({
             "message": "Success in creating attendance"
         }), 200
