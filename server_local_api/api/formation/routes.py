@@ -7,6 +7,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from config import Config
 from core.database import Database
+from util.audit import log_audit
 
 formation_bp = Blueprint('formation', __name__, url_prefix='/scl')
 
@@ -63,34 +64,62 @@ def get_formation_info(account_id):
 		}),500
 
 
-@formation_bp.route('/delete_formation/<formation_id>/<int:account_id>',methods=['POST'])
-def delete_formation(formation_id,account_id):
-	try:
-		if not(check_formation(formation_id)):
-			return jsonify({
-				"Message":"There is no formation with this id"
-			}),404
+@formation_bp.route('/delete_formation/<int:formation_id>/<int:account_id>', methods=['POST'])
+def delete_formation(formation_id, account_id):
+    try:
+        if not check_formation(formation_id):
+            return jsonify({
+                "Message": "There is no formation with this id"
+            }), 404
 
-		query = """
-			UPDATE formation
-			SET enabled = 0
-			WHERE id = %s and account_id = %s
-		"""
-		values = (formation_id,account_id)
-		result = Database.execute_query(query,values,fetch=False)
-		if result:
-			return jsonify({
-				"Message":"Foramtion deleted with success"
-			}),200
-		else:
-			return jsonify({
-				"Message":"Failed to delete formation"
-			}),400
+        # ✅ Get old record before delete
+        old_record = Database.execute_query(
+            """
+            SELECT *
+            FROM formation
+            WHERE id = %s AND account_id = %s
+            """,
+            (formation_id, account_id),
+            fetch=True
+        )
 
-	except Exception as e:
-		return jsonify({
-			"Message":f"Error: {e} coming from server"
-		}),500
+        query = """
+            UPDATE formation
+            SET enabled = 0,
+                updated_at = NOW()
+            WHERE id = %s
+              AND account_id = %s
+        """
+
+        result = Database.execute_query(
+            query,
+            (formation_id, account_id),
+            fetch=False
+        )
+
+        if result:
+
+            # ✅ Audit log
+            log_audit(
+				table_name="formation_audit",
+                action_type="DELETE",
+                old_data=old_record[0] if old_record else None,
+                new_data=None
+            )
+
+            return jsonify({
+                "Message": "Formation deleted with success"
+            }), 200
+
+        return jsonify({
+            "Message": "Failed to delete formation"
+        }), 400
+
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
 
 
 @formation_bp.route('/view_formation/<int:formation_id>',methods=['GET'])
@@ -105,15 +134,6 @@ def view_formation(formation_id):
 				DISTINCT
 				f.name,
 				f.status,
-				CASE 
-					WHEN al.other_level IS NOT NULL THEN al.other_level
-					ELSE l.name 
-				END AS level_name,
-				f.account_section_id,
-				CASE
-					WHEN ast.other_section IS NOT NULL THEN ast.other_section
-					ELSE s.name
-				END AS section_name,       -- ← missing this
 				f.type_date,
 				f.number_day_duration,
 				f.number_session,
@@ -122,11 +142,8 @@ def view_formation(formation_id):
 				f.public_resource,
 				f.description
 			FROM formation f
-			JOIN account_level al    ON al.id  = f.account_level_id
-			JOIN level_config l      ON l.id   = al.level_config_id
-			JOIN account_section ast ON ast.id = f.account_section_id
-			JOIN section_config s    ON s.id   = ast.section_config_id  -- ← also fixed: ast not act
-			WHERE f.id = %s AND f.enabled = 1 AND s.enabled = 1  
+			
+			WHERE f.id = %s AND f.enabled = 1
 		"""
 		result = Database.execute_query(query,(formation_id,),fetch=True)
 		return jsonify(result),200
@@ -141,7 +158,23 @@ def update_formation(formation_id):
     try:
         data = request.get_json()
 
-        # All updatable fields
+        # ✅ Get old record before update
+        old_record = Database.execute_query(
+            """
+            SELECT *
+            FROM formation
+            WHERE id = %s
+              AND enabled = 1
+            """,
+            (formation_id,),
+            fetch=True
+        )
+
+        if not old_record:
+            return jsonify({
+                "Message": "Formation not found"
+            }), 404
+
         allowed_fields = [
             'name',
             'status',
@@ -156,15 +189,22 @@ def update_formation(formation_id):
             'account_level_id'
         ]
 
-        # Build SET clause dynamically from only what was sent
-        fields_to_update = {k: v for k, v in data.items() if k in allowed_fields}
+        fields_to_update = {
+            k: v for k, v in data.items()
+            if k in allowed_fields
+        }
 
         if not fields_to_update:
-            return jsonify({"Message": "No fields provided to update"}), 400
+            return jsonify({
+                "Message": "No fields provided to update"
+            }), 400
 
-        set_clause = ", ".join([f"{k} = %s" for k in fields_to_update.keys()])
-        values     = list(fields_to_update.values())
-        values.append(formation_id)  # for WHERE clause
+        set_clause = ", ".join(
+            [f"{k} = %s" for k in fields_to_update.keys()]
+        )
+
+        values = list(fields_to_update.values())
+        values.append(formation_id)
 
         query = f"""
             UPDATE formation
@@ -173,28 +213,65 @@ def update_formation(formation_id):
             WHERE id = %s
         """
 
-        result = Database.execute_query(query, values, fetch=False)
+        result = Database.execute_query(
+            query,
+            values,
+            fetch=False
+        )
 
         if result:
-            return jsonify({"Message": "formation updated successfully"}), 200
-        else:
-            return jsonify({"Message": "Error updating formation"}), 400
+
+            # ✅ Get new record after update
+            new_record = Database.execute_query(
+                """
+                SELECT *
+                FROM formation
+                WHERE id = %s
+                """,
+                (formation_id,),
+                fetch=True
+            )
+
+            # ✅ Audit log
+            log_audit(
+				table_name="formation_audit",
+                action_type="UPDATE",
+                old_data=old_record[0],
+                new_data=new_record[0] if new_record else None
+            )
+
+            return jsonify({
+                "Message": "Formation updated successfully"
+            }), 200
+
+        return jsonify({
+            "Message": "Error updating formation"
+        }), 400
 
     except Exception as e:
-        return jsonify({"Message": f"Error: {e} coming from server"}), 500
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
 
 @formation_bp.route('/create_formation/<int:account_id>', methods=['POST'])
 def create_formation(account_id):
     try:
         data = request.get_json()
 
-        # Required fields validation
-        required_fields = ['name', 'status', 'typeDate', 'typeSession', 'conditionOfPassage']
+        required_fields = [
+            'name',
+            'status',
+            'typeDate',
+            'typeSession',
+            'conditionOfPassage'
+        ]
+
         for field in required_fields:
             if not data.get(field):
-                return jsonify({"Message": f"'{field}' is required"}), 400
+                return jsonify({
+                    "Message": f"'{field}' is required"
+                }), 400
 
-        # Map camelCase (from JS payload) → snake_case (DB columns)
         name                                         = data.get('name', '').strip()
         status                                       = data.get('status')
         account_level_id                             = data.get('accountLevel') or None
@@ -239,12 +316,12 @@ def create_formation(account_id):
                 created_at,
                 updated_at
             ) VALUES (
-                %s, %s, %s, %s, %s,
-                %s, %s, %s, %s, %s,
-                %s, %s, %s, %s, %s,
-                %s, %s, %s, %s,
+                %s,%s,%s,%s,%s,
+                %s,%s,%s,%s,%s,
+                %s,%s,%s,%s,%s,
+                %s,%s,%s,%s,
                 1,
-                NOW(), NOW()
+                NOW(),NOW()
             )
         """
 
@@ -267,16 +344,45 @@ def create_formation(account_id):
             condition_of_passage_formule_by_present,
             condition_of_passage_formule_by_note_present,
             img_link,
-            public_resource,
+            public_resource
         ]
 
-        result = Database.execute_query(query, values, fetch=False)
+        result = Database.execute_query(
+            query,
+            values,
+            fetch=False
+        )
 
         if result:
-            return jsonify({"Message": "Formation created successfully"}), 201
-        else:
-            return jsonify({"Message": "Error creating formation"}), 400
+
+            # ✅ Get inserted record
+            new_record = Database.execute_query(
+                """
+                SELECT *
+                FROM formation
+                WHERE id = LAST_INSERT_ID()
+                """,
+                fetch=True
+            )
+
+            # ✅ Audit log
+            log_audit(
+				table_name="formation_audit",
+                action_type="INSERT",
+                old_data=None,
+                new_data=new_record[0] if new_record else data
+            )
+
+            return jsonify({
+                "Message": "Formation created successfully"
+            }), 200
+
+        return jsonify({
+            "Message": "Error creating formation"
+        }), 400
 
     except Exception as e:
-        return jsonify({"Message": f"Error: {e} coming from server"}), 500
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
 

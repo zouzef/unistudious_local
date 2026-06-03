@@ -15,7 +15,8 @@ def insert_account_levels(db, account_level_data):
     """
     Handle 'created' account levels from API
     Logic:
-    - If record exists in DB → UPDATE it
+    - Check if id_prod already exists (avoid duplicates from local pushes)
+    - If record exists in DB by id → UPDATE it
     - If record does NOT exist → INSERT it
 
     Args:
@@ -49,8 +50,18 @@ def insert_account_levels(db, account_level_data):
                 if not account_level_id:
                     raise ValueError("Missing required field: id")
 
+                # ✅ FIRST: Check if this remote ID already exists as id_prod (from local push)
+                check_prod_query = "SELECT id FROM account_level WHERE id_prod = %s"
+                existing_by_prod = db.fetch_query(check_prod_query, (account_level_id,))
+
+                if existing_by_prod:
+                    print(f"   [{i}/{len(created_account_levels)}] Account Level ID {account_level_id} already exists as id_prod (local id: {existing_by_prod[0]['id']}) - skipped to avoid duplicate")
+                    result["skipped"] += 1
+                    continue
+
                 # Prepare new data
                 new_data = {
+                    "id_prod": account_level.get("id"),
                     "account_id": account_level.get("accountId"),
                     "level_config_id": account_level.get("levelConfigId"),
                     "other_level": account_level.get("otherLevel"),
@@ -64,7 +75,7 @@ def insert_account_levels(db, account_level_data):
                     "updated_at": format_date(account_level.get("updatedAt"))
                 }
 
-                # Check if record exists
+                # Check if record exists by id
                 select_query = "SELECT * FROM account_level WHERE id = %s"
                 existing_records = db.fetch_query(select_query, (account_level_id,))
 
@@ -93,6 +104,7 @@ def insert_account_levels(db, account_level_data):
 
                     update_query = """
                         UPDATE account_level SET
+                            id_prod = %s,
                             account_id = %s,
                             level_config_id = %s,
                             other_level = %s,
@@ -103,12 +115,12 @@ def insert_account_levels(db, account_level_data):
                             use_token = %s,
                             timestamp = %s,
                             created_at = %s,
-                            updated_at = %s,
-                            
+                            updated_at = %s
                         WHERE id = %s
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["level_config_id"],
                         new_data["other_level"],
@@ -132,16 +144,17 @@ def insert_account_levels(db, account_level_data):
 
                     insert_query = """
                         INSERT INTO account_level (
-                            id, account_id, level_config_id, other_level, description,
+                            id, id_prod, account_id, level_config_id, other_level, description,
                             status, enabled, release_token, use_token,
                             timestamp, created_at, updated_at
                         ) VALUES (
-                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
                         )
                     """
 
                     db.execute_query(insert_query, (
                         account_level_id,
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["level_config_id"],
                         new_data["other_level"],
@@ -213,6 +226,7 @@ def update_account_levels(db, account_level_data):
 
                 # Prepare new data
                 new_data = {
+                    "id_prod": account_level.get("id"),
                     "account_id": account_level.get("accountId"),
                     "level_config_id": account_level.get("levelConfigId"),
                     "other_level": account_level.get("otherLevel"),
@@ -225,9 +239,13 @@ def update_account_levels(db, account_level_data):
                     "updated_at": format_date(account_level.get("updatedAt"))
                 }
 
-                # Check if record exists
-                select_query = "SELECT * FROM account_level WHERE id = %s"
-                existing_records = db.fetch_query(select_query, (account_level_id,))
+                # Check if record exists by id_prod first, then by id
+                check_prod_query = "SELECT * FROM account_level WHERE id_prod = %s"
+                existing_records = db.fetch_query(check_prod_query, (account_level_id,))
+
+                if not existing_records:
+                    select_query = "SELECT * FROM account_level WHERE id = %s"
+                    existing_records = db.fetch_query(select_query, (account_level_id,))
 
                 print(f"   [{i}/{len(updated_account_levels)}] Account Level ID {account_level_id}...")
 
@@ -249,11 +267,12 @@ def update_account_levels(db, account_level_data):
                         result["skipped"] += 1
                         continue
 
-                    # Data is different - UPDATE
+                    # Data is different - UPDATE using the local id
                     print(f"      🔄 Data changed - updating...")
 
                     update_query = """
                         UPDATE account_level SET
+                            id_prod = %s,
                             account_id = %s,
                             level_config_id = %s,
                             other_level = %s,
@@ -263,12 +282,12 @@ def update_account_levels(db, account_level_data):
                             release_token = %s,
                             use_token = %s,
                             timestamp = %s,
-                            updated_at = %s,
-                            
+                            updated_at = %s
                         WHERE id = %s
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["level_config_id"],
                         new_data["other_level"],
@@ -279,7 +298,7 @@ def update_account_levels(db, account_level_data):
                         new_data["use_token"],
                         new_data["timestamp"],
                         new_data["updated_at"],
-                        account_level_id
+                        existing["id"]  # ← use actual local id (handles both cases)
                     ))
 
                     result["updated"] += 1
@@ -291,17 +310,17 @@ def update_account_levels(db, account_level_data):
 
                     insert_query = """
                         INSERT INTO account_level (
-                            id, account_id, level_config_id, other_level, description,
+                            id, id_prod, account_id, level_config_id, other_level, description,
                             status, enabled, release_token, use_token,
                             timestamp, created_at, updated_at
                         ) VALUES (
-                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
                         )
                     """
 
-                    # For records in 'updated' that don't exist, use updated_at as created_at
                     db.execute_query(insert_query, (
                         account_level_id,
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["level_config_id"],
                         new_data["other_level"],

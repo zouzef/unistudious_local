@@ -28,7 +28,6 @@ def get_payment_session(session_id):
 			"Message":f"Error: {e} coming from backend"
 		}),500
 
-
 @payment_bp.route('/api/get_payment_user_info_service/<int:session_id>/<int:user_id>')
 def get_payment_user_info(session_id,user_id):
 	try:
@@ -43,7 +42,6 @@ def get_payment_user_info(session_id,user_id):
 			"Message":f"Error: {e} coming from server"
 		})
 
-
 @payment_bp.route('/api/update_payment_session/<int:payment_session>',methods=['POST'])
 def update_payment_session(payment_session):
 	try:
@@ -55,7 +53,6 @@ def update_payment_session(payment_session):
 			return jsonify(response),400
 	except Exception as e:
 		return jsonify({"Message": f"Error {e} coming from backend"}), 500
-
 
 @payment_bp.route('/api/update_payment_session_user/<int:payment_id>/<int:session_id>/<int:user_id>',methods=['POST'])
 def update_payment_user(payment_id,session_id,user_id):
@@ -75,7 +72,6 @@ def update_payment_user(payment_id,session_id,user_id):
 
 
 #====================================== Invoices payment ======================================
-
 @payment_bp.route('/api/get_all_invoice_session/<int:account_id>',methods=['GET'])
 def get_all_invoice_session(account_id):
 	try:
@@ -85,7 +81,6 @@ def get_all_invoice_session(account_id):
 		return jsonify({
 			"Message":f"Error: {e} coming from backend"
 		})
-
 
 @payment_bp.route('/api/get_invoice_by_id/<int:invoice_id>/<int:account_id>/<int:admin_user_id>', methods=['GET'])
 def get_invoice_by_id(invoice_id, account_id, admin_user_id):

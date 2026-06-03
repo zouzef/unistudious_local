@@ -625,6 +625,22 @@ def delete_user(id):
 			"Message":"Error: {e} coming from the delete user"
 		}),500
 
+# =============================================
+# ENDPOINT 10: Create Student
+# @users_bp.route('/create-user',methods=['POST'])
+# def create_student():
+# 	try:
+# 		data = request.get_json()
+# 		print(data)
+# 		return jsonify(data),200
+#
+#
+# 	except Exception as e:
+# 		return jsonify({
+# 			"Message":f"Error: {e} coming from server"
+# 		}),500
+
+# =============================================
 
 # =============================================
 # ENDPOINT 9: Get Profile image of user
@@ -687,6 +703,13 @@ def get_profile_file(user_id):
 
 
 # =============================================
+# ENDPOINT 9: Get Profile image of user
+# =============================================
+
+
+
+
+# =============================================
 # ENDPOINT 10: Affect user to session
 # =============================================
 
@@ -695,7 +718,7 @@ def get_profile_file(user_id):
 # =============================================
 # ENDPOINT 11: User authetificate
 # =============================================
-import json
+
 
 @users_bp.route('/Authentificate-Teacher', methods=['POST'])
 def authentification_teacher():

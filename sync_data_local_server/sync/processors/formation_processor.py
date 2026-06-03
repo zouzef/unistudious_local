@@ -15,7 +15,8 @@ def insert_formations(db, formation_data):
     """
     Handle 'created' formations from API
     Logic:
-    - If record exists in DB → UPDATE it
+    - Check if id_prod already exists (avoid duplicates from local pushes)
+    - If record exists in DB by id → UPDATE it
     - If record does NOT exist → INSERT it
 
     Args:
@@ -49,44 +50,52 @@ def insert_formations(db, formation_data):
                 if not formation_id:
                     raise ValueError("Missing required field: id")
 
+                # ✅ FIRST: Check if this remote ID already exists as id_prod (from local push)
+                check_prod_query = "SELECT id FROM formation WHERE id_prod = %s"
+                existing_by_prod = db.fetch_query(check_prod_query, (formation_id,))
+
+                if existing_by_prod:
+                    print(f"   [{i}/{len(created_formations)}] Formation ID {formation_id} already exists as id_prod (local id: {existing_by_prod[0]['id']}) - skipped to avoid duplicate")
+                    result["skipped"] += 1
+                    continue
+
                 # Prepare new data
                 new_data = {
-                    "account_id": formation.get("accountId"),
-                    "account_level_id": formation.get("accountLevelId"),
-                    "account_section_id": formation.get("accountSectionId"),
-                    "name": formation.get("name", ""),
-                    "description": formation.get("description", ""),
-                    "type_date": formation.get("type_date", ""),
-                    "other_type_date": formation.get("other_type_date"),
-                    "type_session": formation.get("type_session", ""),
-                    "other_type_session": formation.get("other_type_session"),
-                    "number_day_duration": formation.get("number_day_duration"),
-                    "number_session": formation.get("number_session"),
-                    "condition_of_passage": formation.get("condition_of_passage", ""),
-                    "condition_of_passage_formule": formation.get("condition_of_passage_formule"),
-                    "condition_of_passage_formule_by_note": formation.get("condition_of_passage_formule_by_note"),
-                    "condition_of_passage_formule_by_present": formation.get("condition_of_passage_formule_by_present"),
+                    "id_prod":                                    formation_id,
+                    "account_id":                                 formation.get("accountId"),
+                    "account_level_id":                           formation.get("accountLevelId"),
+                    "account_section_id":                         formation.get("accountSectionId"),
+                    "name":                                       formation.get("name", ""),
+                    "description":                                formation.get("description", ""),
+                    "type_date":                                  formation.get("type_date", ""),
+                    "other_type_date":                            formation.get("other_type_date"),
+                    "type_session":                               formation.get("type_session", ""),
+                    "other_type_session":                         formation.get("other_type_session"),
+                    "number_day_duration":                        formation.get("number_day_duration"),
+                    "number_session":                             formation.get("number_session"),
+                    "condition_of_passage":                       formation.get("condition_of_passage", ""),
+                    "condition_of_passage_formule":               formation.get("condition_of_passage_formule"),
+                    "condition_of_passage_formule_by_note":       formation.get("condition_of_passage_formule_by_note"),
+                    "condition_of_passage_formule_by_present":    formation.get("condition_of_passage_formule_by_present"),
                     "condition_of_passage_formule_by_note_present": formation.get("condition_of_passage_formule_by_note_present"),
-                    "img_link": formation.get("img_link", ""),
-                    "public_resource": formation.get("public_resource", "0"),
-                    "status": 1 if formation.get("status", True) else 0,
-                    "enabled": 1 if formation.get("enabled", True) else 0,
-                    "timestamp": format_date(formation.get("timestamp")),
-                    "created_at": format_date(formation.get("createdAt")),
-                    "updated_at": format_date(formation.get("updatedAt"))
+                    "img_link":                                   formation.get("img_link", ""),
+                    "public_resource":                            formation.get("public_resource", "0"),
+                    "status":                                     1 if formation.get("status", True) else 0,
+                    "enabled":                                    1 if formation.get("enabled", True) else 0,
+                    "timestamp":                                  format_date(formation.get("timestamp")),
+                    "created_at":                                 format_date(formation.get("createdAt")),
+                    "updated_at":                                 format_date(formation.get("updatedAt")),
                 }
 
-                # Check if record exists
+                # Check if record exists by id
                 select_query = "SELECT * FROM formation WHERE id = %s"
                 existing_records = db.fetch_query(select_query, (formation_id,))
 
                 print(f"   [{i}/{len(created_formations)}] Formation ID {formation_id}...")
 
                 if existing_records:
-                    # EXISTS → Compare and UPDATE if different
                     existing = existing_records[0]
 
-                    # Compare data
                     has_changes = False
                     for key, value in new_data.items():
                         old_value = str(existing.get(key)) if existing.get(key) is not None else None
@@ -100,39 +109,40 @@ def insert_formations(db, formation_data):
                         result["skipped"] += 1
                         continue
 
-                    # Data is different - UPDATE
                     print(f"      🔄 Already exists but data changed - updating...")
 
                     update_query = """
                         UPDATE formation SET
-                            account_id = %s,
-                            account_level_id = %s,
-                            account_section_id = %s,
-                            name = %s,
-                            description = %s,
-                            type_date = %s,
-                            other_type_date = %s,
-                            type_session = %s,
-                            other_type_session = %s,
-                            number_day_duration = %s,
-                            number_session = %s,
-                            condition_of_passage = %s,
-                            condition_of_passage_formule = %s,
-                            condition_of_passage_formule_by_note = %s,
-                            condition_of_passage_formule_by_present = %s,
+                            id_prod                                   = %s,
+                            account_id                                = %s,
+                            account_level_id                          = %s,
+                            account_section_id                        = %s,
+                            name                                      = %s,
+                            description                               = %s,
+                            type_date                                 = %s,
+                            other_type_date                           = %s,
+                            type_session                              = %s,
+                            other_type_session                        = %s,
+                            number_day_duration                       = %s,
+                            number_session                            = %s,
+                            condition_of_passage                      = %s,
+                            condition_of_passage_formule              = %s,
+                            condition_of_passage_formule_by_note      = %s,
+                            condition_of_passage_formule_by_present   = %s,
                             condition_of_passage_formule_by_note_present = %s,
-                            img_link = %s,
-                            public_resource = %s,
-                            status = %s,
-                            enabled = %s,
-                            timestamp = %s,
-                            created_at = %s,
-                            updated_at = %s,
-                            is_sync = 1
+                            img_link                                  = %s,
+                            public_resource                           = %s,
+                            status                                    = %s,
+                            enabled                                   = %s,
+                            timestamp                                 = %s,
+                            created_at                                = %s,
+                            updated_at                                = %s,
+                            is_sync                                   = 1
                         WHERE id = %s
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["account_level_id"],
                         new_data["account_section_id"],
@@ -163,24 +173,29 @@ def insert_formations(db, formation_data):
                     print(f"      ✅ Updated successfully")
 
                 else:
-                    # DOES NOT EXIST → INSERT
                     print(f"      ✨ New record - inserting...")
 
                     insert_query = """
                         INSERT INTO formation (
-                            id, account_id, account_level_id, account_section_id, name, description,
-                            type_date, other_type_date, type_session, other_type_session,
-                            number_day_duration, number_session, condition_of_passage,
-                            condition_of_passage_formule, condition_of_passage_formule_by_note,
-                            condition_of_passage_formule_by_present, condition_of_passage_formule_by_note_present,
-                            img_link, public_resource, status, enabled, timestamp, created_at, updated_at
+                            id, id_prod, account_id, account_level_id, account_section_id,
+                            name, description, type_date, other_type_date, type_session,
+                            other_type_session, number_day_duration, number_session,
+                            condition_of_passage, condition_of_passage_formule,
+                            condition_of_passage_formule_by_note,
+                            condition_of_passage_formule_by_present,
+                            condition_of_passage_formule_by_note_present,
+                            img_link, public_resource, status, enabled,
+                            timestamp, created_at, updated_at
                         ) VALUES (
-                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s
                         )
                     """
 
                     db.execute_query(insert_query, (
                         formation_id,
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["account_level_id"],
                         new_data["account_section_id"],
@@ -203,7 +218,7 @@ def insert_formations(db, formation_data):
                         new_data["enabled"],
                         new_data["timestamp"],
                         new_data["created_at"],
-                        new_data["updated_at"]
+                        new_data["updated_at"],
                     ))
 
                     result["inserted"] += 1
@@ -264,41 +279,44 @@ def update_formations(db, formation_data):
 
                 # Prepare new data
                 new_data = {
-                    "account_id": formation.get("accountId"),
-                    "account_level_id": formation.get("accountLevelId"),
-                    "account_section_id": formation.get("accountSectionId"),
-                    "name": formation.get("name", ""),
-                    "description": formation.get("description", ""),
-                    "type_date": formation.get("type_date", ""),
-                    "other_type_date": formation.get("other_type_date"),
-                    "type_session": formation.get("type_session", ""),
-                    "other_type_session": formation.get("other_type_session"),
-                    "number_day_duration": formation.get("number_day_duration"),
-                    "number_session": formation.get("number_session"),
-                    "condition_of_passage": formation.get("condition_of_passage", ""),
-                    "condition_of_passage_formule": formation.get("condition_of_passage_formule"),
-                    "condition_of_passage_formule_by_note": formation.get("condition_of_passage_formule_by_note"),
-                    "condition_of_passage_formule_by_present": formation.get("condition_of_passage_formule_by_present"),
+                    "id_prod":                                    formation_id,
+                    "account_id":                                 formation.get("accountId"),
+                    "account_level_id":                           formation.get("accountLevelId"),
+                    "account_section_id":                         formation.get("accountSectionId"),
+                    "name":                                       formation.get("name", ""),
+                    "description":                                formation.get("description", ""),
+                    "type_date":                                  formation.get("type_date", ""),
+                    "other_type_date":                            formation.get("other_type_date"),
+                    "type_session":                               formation.get("type_session", ""),
+                    "other_type_session":                         formation.get("other_type_session"),
+                    "number_day_duration":                        formation.get("number_day_duration"),
+                    "number_session":                             formation.get("number_session"),
+                    "condition_of_passage":                       formation.get("condition_of_passage", ""),
+                    "condition_of_passage_formule":               formation.get("condition_of_passage_formule"),
+                    "condition_of_passage_formule_by_note":       formation.get("condition_of_passage_formule_by_note"),
+                    "condition_of_passage_formule_by_present":    formation.get("condition_of_passage_formule_by_present"),
                     "condition_of_passage_formule_by_note_present": formation.get("condition_of_passage_formule_by_note_present"),
-                    "img_link": formation.get("img_link", ""),
-                    "public_resource": formation.get("public_resource", "0"),
-                    "status": 1 if formation.get("status", True) else 0,
-                    "enabled": 1 if formation.get("enabled", True) else 0,
-                    "timestamp": format_date(formation.get("timestamp")),
-                    "updated_at": format_date(formation.get("updatedAt"))
+                    "img_link":                                   formation.get("img_link", ""),
+                    "public_resource":                            formation.get("public_resource", "0"),
+                    "status":                                     1 if formation.get("status", True) else 0,
+                    "enabled":                                    1 if formation.get("enabled", True) else 0,
+                    "timestamp":                                  format_date(formation.get("timestamp")),
+                    "updated_at":                                 format_date(formation.get("updatedAt")),
                 }
 
-                # Check if record exists
-                select_query = "SELECT * FROM formation WHERE id = %s"
-                existing_records = db.fetch_query(select_query, (formation_id,))
+                # ✅ Check by id_prod first, then fall back to id
+                check_prod_query = "SELECT * FROM formation WHERE id_prod = %s"
+                existing_records = db.fetch_query(check_prod_query, (formation_id,))
+
+                if not existing_records:
+                    select_query = "SELECT * FROM formation WHERE id = %s"
+                    existing_records = db.fetch_query(select_query, (formation_id,))
 
                 print(f"   [{i}/{len(updated_formations)}] Formation ID {formation_id}...")
 
                 if existing_records:
-                    # EXISTS → Compare and UPDATE if different
                     existing = existing_records[0]
 
-                    # Compare data
                     has_changes = False
                     for key, value in new_data.items():
                         old_value = str(existing.get(key)) if existing.get(key) is not None else None
@@ -312,38 +330,39 @@ def update_formations(db, formation_data):
                         result["skipped"] += 1
                         continue
 
-                    # Data is different - UPDATE
                     print(f"      🔄 Data changed - updating...")
 
                     update_query = """
                         UPDATE formation SET
-                            account_id = %s,
-                            account_level_id = %s,
-                            account_section_id = %s,
-                            name = %s,
-                            description = %s,
-                            type_date = %s,
-                            other_type_date = %s,
-                            type_session = %s,
-                            other_type_session = %s,
-                            number_day_duration = %s,
-                            number_session = %s,
-                            condition_of_passage = %s,
-                            condition_of_passage_formule = %s,
-                            condition_of_passage_formule_by_note = %s,
-                            condition_of_passage_formule_by_present = %s,
+                            id_prod                                   = %s,
+                            account_id                                = %s,
+                            account_level_id                          = %s,
+                            account_section_id                        = %s,
+                            name                                      = %s,
+                            description                               = %s,
+                            type_date                                 = %s,
+                            other_type_date                           = %s,
+                            type_session                              = %s,
+                            other_type_session                        = %s,
+                            number_day_duration                       = %s,
+                            number_session                            = %s,
+                            condition_of_passage                      = %s,
+                            condition_of_passage_formule              = %s,
+                            condition_of_passage_formule_by_note      = %s,
+                            condition_of_passage_formule_by_present   = %s,
                             condition_of_passage_formule_by_note_present = %s,
-                            img_link = %s,
-                            public_resource = %s,
-                            status = %s,
-                            enabled = %s,
-                            timestamp = %s,
-                            updated_at = %s,
-                            is_sync = 1
+                            img_link                                  = %s,
+                            public_resource                           = %s,
+                            status                                    = %s,
+                            enabled                                   = %s,
+                            timestamp                                 = %s,
+                            updated_at                                = %s,
+                            is_sync                                   = 1
                         WHERE id = %s
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["account_level_id"],
                         new_data["account_section_id"],
@@ -366,32 +385,36 @@ def update_formations(db, formation_data):
                         new_data["enabled"],
                         new_data["timestamp"],
                         new_data["updated_at"],
-                        formation_id
+                        existing["id"]  # ← use actual local id (handles both cases)
                     ))
 
                     result["updated"] += 1
                     print(f"      ✅ Updated successfully")
 
                 else:
-                    # DOES NOT EXIST → INSERT (don't skip!)
                     print(f"      ⚠️  Record not found in DB - inserting...")
 
                     insert_query = """
                         INSERT INTO formation (
-                            id, account_id, account_level_id, account_section_id, name, description,
-                            type_date, other_type_date, type_session, other_type_session,
-                            number_day_duration, number_session, condition_of_passage,
-                            condition_of_passage_formule, condition_of_passage_formule_by_note,
-                            condition_of_passage_formule_by_present, condition_of_passage_formule_by_note_present,
-                            img_link, public_resource, status, enabled, timestamp, created_at, updated_at
+                            id, id_prod, account_id, account_level_id, account_section_id,
+                            name, description, type_date, other_type_date, type_session,
+                            other_type_session, number_day_duration, number_session,
+                            condition_of_passage, condition_of_passage_formule,
+                            condition_of_passage_formule_by_note,
+                            condition_of_passage_formule_by_present,
+                            condition_of_passage_formule_by_note_present,
+                            img_link, public_resource, status, enabled,
+                            timestamp, created_at, updated_at
                         ) VALUES (
-                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s
                         )
                     """
 
-                    # For records in 'updated' that don't exist, use updated_at as created_at
                     db.execute_query(insert_query, (
                         formation_id,
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["account_level_id"],
                         new_data["account_section_id"],
@@ -413,8 +436,8 @@ def update_formations(db, formation_data):
                         new_data["status"],
                         new_data["enabled"],
                         new_data["timestamp"],
-                        new_data["updated_at"],  # Use updated_at as created_at
-                        new_data["updated_at"]
+                        new_data["updated_at"],  # fallback for created_at
+                        new_data["updated_at"],
                     ))
 
                     result["inserted"] += 1
@@ -466,9 +489,9 @@ def process_formations(db, formation_data):
 
     # Print total summary
     total_inserted = results["created_section"]["inserted"] + results["updated_section"]["inserted"]
-    total_updated = results["created_section"]["updated"] + results["updated_section"]["updated"]
-    total_skipped = results["created_section"]["skipped"] + results["updated_section"]["skipped"]
-    total_errors = results["created_section"]["errors"] + results["updated_section"]["errors"]
+    total_updated  = results["created_section"]["updated"]  + results["updated_section"]["updated"]
+    total_skipped  = results["created_section"]["skipped"]  + results["updated_section"]["skipped"]
+    total_errors   = results["created_section"]["errors"]   + results["updated_section"]["errors"]
 
     print("\n" + "=" * 60)
     print("📊 FORMATIONS - TOTAL SUMMARY")

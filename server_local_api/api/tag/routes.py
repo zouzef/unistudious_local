@@ -14,7 +14,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 from config import Config
 from core.database import Database
 from core.middleware import token_required
-
+from util.audit import log_audit
 # ========================================
 # TAG ENDPOINTS
 # ========================================
@@ -86,9 +86,16 @@ def get_account_tag(account_id):
 			"Message":f"Error: {e} coming from server"
 		}),500
 
+
 @tag_bp.route('/delete_account_tag/<int:account_tag_id>',methods=['POST'])
 def delete_account_tag(account_tag_id):
 	try:
+		old_record = Database.execute_query(
+			"SELECT * FROM account_tag WHERE id = %s",
+			(account_tag_id,),
+			fetch=True
+		)
+
 		query = """
 			UPDATE account_tag
 			set enabled = 0
@@ -96,6 +103,12 @@ def delete_account_tag(account_tag_id):
 		"""
 		result = Database.execute_query(query,(account_tag_id,),fetch=False)
 		if result:
+			log_audit(
+				table_name="account_tag_audit",
+				action_type="DELETE",
+				old_data=old_record[0] if old_record else None,
+				new_data=None
+			)
 			return jsonify({
 				"Message":"account_tag Delete with success"
 			}),200
@@ -132,124 +145,122 @@ def view_account_tag(account_tag_id):
 
 @tag_bp.route('/edit_account_tag/<int:account_tag_id>', methods=['POST'])
 def update_account_tag(account_tag_id):
-	try:
-		data = request.get_json()
+    try:
+        data = request.get_json()
 
-		# ── Step 1: fetch current record ──────────────────────────────────
-		current = Database.execute_query(
+        # ✅ Fetch old record BEFORE updating for audit
+        old_record = Database.execute_query(
             "SELECT * FROM account_tag WHERE id = %s AND enabled = 1",
             (account_tag_id,),
             fetch=True
         )
-		if not current:
-			return jsonify({"Message": "Account tag not found"}), 404
 
-		current = current[0]
+        if not old_record:
+            return jsonify({"Message": "Account tag not found"}), 404
 
-		# ── Step 2: compare sent values vs current values ─────────────────
-		fields_to_update = {}
+        tag_config_id = data.get('tag_config_id')
+        other_tag     = data.get('other_tag') or None
+        status        = data.get('status')
+        public        = data.get('public')
+        description   = data.get('description') or None
 
-		if str(data.get('tag_config_id')) != str(current['tag_config_id']):
-			fields_to_update['tag_config_id'] = data.get('tag_config_id')
-
-		if data.get('other_tag') != current['other_tag']:
-			fields_to_update['other_tag'] = data.get('other_tag') or None
-
-		if str(data.get('status')) != str(current['status']):
-			fields_to_update['status'] = data.get('status')
-
-		if str(data.get('public')) != str(current['public']):
-			fields_to_update['public'] = data.get('public')
-
-		if data.get('description') != current['description']:
-			fields_to_update['description'] = data.get('description') or None
-
-		# ── Step 3: nothing changed ───────────────────────────────────────
-		if not fields_to_update:
-			return jsonify({"Message": "No changes detected"}), 200
-
-		# ── Step 4: build dynamic UPDATE query ───────────────────────────
-		fields_to_update['updated_at'] = 'NOW()'
-
-		set_clause = ', '.join([
-            f"{col} = NOW()" if val == 'NOW()' else f"{col} = %s"
-            for col, val in fields_to_update.items()
-		])
-
-		values = tuple(
-            val for val in fields_to_update.values() if val != 'NOW()'
-		)
-		values += (account_tag_id,)
-
-		query = f"""
+        update_query = """
             UPDATE account_tag
-            SET {set_clause}
+            SET tag_config_id = %s,
+                other_tag     = %s,
+                status        = %s,
+                public        = %s,
+                description   = %s,
+                updated_at    = NOW()
+                
             WHERE id = %s
-            AND enabled = 1
+              AND enabled = 1
         """
+        response = Database.execute_query(update_query, (
+            tag_config_id,
+            other_tag,
+            status,
+            public,
+            description,
+            account_tag_id
+        ), fetch=False)
 
-		response = Database.execute_query(query, values, fetch=False)
-		if response:
-			return jsonify({"Message": "Account tag updated with success"}), 200
-		else:
-			return jsonify({"Message": "Account tag update failed"}), 400
+        if response:
+            # ✅ Fetch updated record AFTER updating for audit
+            new_record = Database.execute_query(
+                "SELECT * FROM account_tag WHERE id = %s",
+                (account_tag_id,),
+                fetch=True
+            )
+            log_audit(
+                table_name="account_tag_audit",
+                action_type="UPDATE",
 
-	except Exception as e:
-		return jsonify({"Message": f"Error: {e} coming from server"}), 500
+                old_data=old_record[0],
+                new_data=new_record[0] if new_record else None
+            )
+            return jsonify({"Message": "Account tag updated with success"}), 200
+        else:
+            return jsonify({"Message": "Account tag update failed"}), 400
 
-@tag_bp.route('/create_account_tag/<int:account_id>',methods=['POST'])
+    except Exception as e:
+        return jsonify({"Message": f"Error: {e} coming from server"}), 500
+
+@tag_bp.route('/create_account_tag/<int:account_id>', methods=['POST'])
 def create_account_tag(account_id):
-	try:
-		data = request.get_json()
-		if not data:
-			return jsonify({"Message": "There is no data to insert it"}), 400
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"Message": "There is no data to insert it"}), 400
 
-		tag_id = data.get('tag_id')
-		visibility = data.get('visibility') or 1
-		description = data.get('description') or None
-		other_tag = data.get('other_tag') or None
-		public = data.get('public')
-		if not(check_exist_tag(tag_id)):
-			return jsonify({
-				"Message":"Error in tag_id"
-			}),404
+        tag_id      = data.get('tag_id')
+        description = data.get('description') or None
+        other_tag   = data.get('other_tag') or None
+        public      = data.get('public')
 
-		query = """
-			INSERT INTO account_tag 
-			(
-				account_id,
-				tag_config_id,
-				status,
-				description,
-				other_tag,
-				public,
-				enabled,
-				created_at,
-				timestamp
-				)
-			values(
-				%s,
-				%s,
-				1,
-				%s,
-				%s,
-				%s,
-				1,
-				NOW(),
-				NOW())
-		"""
-		values=(account_id,tag_id,description,other_tag,public)
-		result= Database.execute_query(query,values,fetch=False)
-		if result:
-			return jsonify({"Message": "account_tag created with success"}), 200
-		else:
-			return jsonify({"Message": "account_tag creation failed"}), 400
+        if not check_exist_tag(tag_id):
+            return jsonify({"Message": "Error in tag_id"}), 404
 
+        query = """
+            INSERT INTO account_tag (
+                account_id,
+                tag_config_id,
+                status,
+                description,
+                other_tag,
+                public,
+                enabled,
+                created_at,
+                timestamp
+            ) VALUES (
+                %s, %s, 1, %s, %s, %s, 1, NOW(), NOW()
+            )
+        """
+        result = Database.execute_query(query, (account_id, tag_id, description, other_tag, public), fetch=False)
 
-	except Exception as e:
-		return jsonify({
-			"Message":f"Error: {e} coming from server"
-		}),500
+        if result:
+            # ✅ result is the inserted ID returned by execute_query (lastrowid)
+            inserted_id = result
+
+            new_record = Database.execute_query(
+                "SELECT * FROM account_tag WHERE id = %s",
+                (inserted_id,),
+                fetch=True
+            )
+            new_rec = new_record[0] if new_record else None
+
+            log_audit(
+                table_name="account_tag_audit",
+                action_type="INSERT",
+                old_data=None,
+                new_data=new_rec
+            )
+            return jsonify({"Message": "account_tag created with success"}), 200
+        else:
+            return jsonify({"Message": "account_tag creation failed"}), 400
+
+    except Exception as e:
+        return jsonify({"Message": f"Error: {e} coming from server"}), 500
 
 
 # ================================= COMPLETION TAG =================================
@@ -282,32 +293,53 @@ def get_completion_tag(account_id):
 			"Message":f"Error: {e} coming from server"
 		}),500
 
-@tag_bp.route('/create_completion_tag/<int:account_id>',methods=['POST'])
+
+
+AUDIT_TABLE = "completion_tag_account_audit"
+
+
+# ─── ENDPOINT 1: Create completion_tag ────────────────────────────────────────
+
+@tag_bp.route('/create_completion_tag/<int:account_id>', methods=['POST'])
 def create_completion_tag(account_id):
-	try:
-		data = request.get_json()
-		name = data.get('name')
-		img_url = data.get('img_url') or None
-		description = data.get('description') or None
-		query = """
-		    INSERT INTO completion_tag_account
-		    (account_id, name, description, status, img_link, enabled, created_at)
-		    VALUES (%s, %s, %s, 1, %s, 1, NOW())
-		"""
-		values = (account_id, name, description, img_url)
-		result = Database.execute_query(query,values,fetch=False)
-		if result:
-			return jsonify({
-				"Message":"Success in creating completion_tag"
-			}),200
-		else:
-			return jsonify({
-				"Message":"Error in creating completion_tag"
-			}),400
-	except Exception as e:
-		return jsonify({
-			"Message":f"Error: {e} coming from server "
-		}),500
+    try:
+        data        = request.get_json()
+        name        = data.get('name')
+        img_url     = data.get('img_url') or None
+        description = data.get('description') or None
+
+        query = """
+            INSERT INTO completion_tag_account
+            (account_id, name, description, status, img_link, enabled, created_at)
+            VALUES (%s, %s, %s, 1, %s, 1, NOW())
+        """
+        values = (account_id, name, description, img_url)
+        result = Database.execute_query(query, values, fetch=False)
+
+        if result:
+            inserted_id = result
+
+            new_record = Database.execute_query(
+                "SELECT * FROM completion_tag_account WHERE id = %s",
+                (inserted_id,),
+                fetch=True
+            )
+            new_rec = new_record[0] if new_record else None
+            log_audit(
+                table_name=AUDIT_TABLE,
+                action_type="INSERT",
+                old_data=None,
+                new_data=new_rec
+            )
+            return jsonify({"Message": "Success in creating completion_tag"}), 200
+        else:
+            return jsonify({"Message": "Error in creating completion_tag"}), 400
+
+    except Exception as e:
+        return jsonify({"Message": f"Error: {e} coming from server"}), 500
+
+
+# ─── ENDPOINT 2: View completion_tag ──────────────────────────────────────────
 
 @tag_bp.route('/view_completion_tag/<int:completionTagId>', methods=['GET'])
 def view_completion_tag(completionTagId):
@@ -322,23 +354,33 @@ def view_completion_tag(completionTagId):
             FROM completion_tag_account
             WHERE enabled = 1 AND id = %s
         """
-        values = (completionTagId,)
-        result = Database.execute_query(query, values, fetch=True)
+        result = Database.execute_query(query, (completionTagId,), fetch=True)
+
         if result:
             return jsonify(result), 200
         else:
-            return jsonify({
-                "Message": "There is no data for this id"
-            }), 404
+            return jsonify({"Message": "There is no data for this id"}), 404
+
     except Exception as e:
-        return jsonify({
-            "Message": f"Error: {e} coming from server"
-        }), 500
+        return jsonify({"Message": f"Error: {e} coming from server"}), 500
+
+
+# ─── ENDPOINT 3: Update completion_tag ────────────────────────────────────────
 
 @tag_bp.route('/update_completion_tag/<int:completionTagId>', methods=['POST'])
 def update_completion_tag(completionTagId):
     try:
         data = request.get_json()
+
+        # Fetch old record before updating
+        old_record = Database.execute_query(
+            "SELECT * FROM completion_tag_account WHERE id = %s AND enabled = 1",
+            (completionTagId,),
+            fetch=True
+        )
+
+        if not old_record:
+            return jsonify({"Message": "completion_tag not found"}), 404
 
         # Map request fields → DB columns (only include what the client can update)
         allowed_fields = {
@@ -351,7 +393,7 @@ def update_completion_tag(completionTagId):
 
         fields_to_update = {}
         for request_key, db_column in allowed_fields.items():
-            if request_key in data:  # only if client actually sent this field
+            if request_key in data:
                 fields_to_update[db_column] = data[request_key]
 
         if not fields_to_update:
@@ -367,32 +409,56 @@ def update_completion_tag(completionTagId):
             SET {set_clause}, updated_at = NOW()
             WHERE id = %s
         """
+        result = Database.execute_query(query, tuple(values), fetch=False)
 
-        Database.execute_query(query, tuple(values), fetch=False)
-
-        return jsonify({"Message": "Success in updating completion_tag"}), 200
+        if result:
+            new_record = Database.execute_query(
+                "SELECT * FROM completion_tag_account WHERE id = %s",
+                (completionTagId,),
+                fetch=True
+            )
+            log_audit(
+                table_name=AUDIT_TABLE,
+                action_type="UPDATE",
+                old_data=old_record[0],
+                new_data=new_record[0] if new_record else None
+            )
+            return jsonify({"Message": "Success in updating completion_tag"}), 200
+        else:
+            return jsonify({"Message": "Error in updating completion_tag"}), 400
 
     except Exception as e:
         return jsonify({"Message": f"Error: {e} coming from server"}), 500
 
-@tag_bp.route('/delete_completion_tag/<int:completionTagId>',methods=['POST'])
+
+# ─── ENDPOINT 4: Delete completion_tag (soft delete) ──────────────────────────
+
+@tag_bp.route('/delete_completion_tag/<int:completionTagId>', methods=['POST'])
 def delete_completion_tag(completionTagId):
-	try:
-		query = """
-			UPDATE completion_tag_account
-			SET enabled = 0 
-			WHERE id = %s
-		"""
-		result = Database.execute_query(query,(completionTagId,),fetch=False)
-		if result:
-			return jsonify({
-				"Message":"completion_tag deleted with success"
-			}),200
-		else:
-			return jsonify({
-				"Message":"Error in deleting completion_tag"
-			}),400
-	except Exception as e:
-		return jsonify({
-			"Message":f"Error: {e} coming from server"
-		}),500
+    try:
+        old_record = Database.execute_query(
+            "SELECT * FROM completion_tag_account WHERE id = %s",
+            (completionTagId,),
+            fetch=True
+        )
+
+        query = """
+            UPDATE completion_tag_account
+            SET enabled = 0
+            WHERE id = %s
+        """
+        result = Database.execute_query(query, (completionTagId,), fetch=False)
+
+        if result:
+            log_audit(
+                table_name=AUDIT_TABLE,
+                action_type="DELETE",
+                old_data=old_record[0] if old_record else None,
+                new_data=None
+            )
+            return jsonify({"Message": "completion_tag deleted with success"}), 200
+        else:
+            return jsonify({"Message": "Error in deleting completion_tag"}), 400
+
+    except Exception as e:
+        return jsonify({"Message": f"Error: {e} coming from server"}), 500

@@ -15,7 +15,8 @@ def insert_cameras(db, camera_data):
     """
     Handle 'created' cameras from API
     Logic:
-    - If record exists in DB → UPDATE it
+    - Check if id_prod already exists (avoid duplicates from local pushes)
+    - If record exists in DB by id → UPDATE it
     - If record does NOT exist → INSERT it
 
     Args:
@@ -49,23 +50,33 @@ def insert_cameras(db, camera_data):
                 if not camera_id:
                     raise ValueError("Missing required field: id")
 
+                # ✅ FIRST: Check if this remote ID already exists as id_prod (from local push)
+                check_prod_query = "SELECT id FROM camera WHERE id_prod = %s"
+                existing_by_prod = db.fetch_query(check_prod_query, (camera_id,))
+
+                if existing_by_prod:
+                    print(f"   [{i}/{len(created_cameras)}] Camera ID {camera_id} already exists as id_prod (local id: {existing_by_prod[0]['id']}) - skipped to avoid duplicate")
+                    result["skipped"] += 1
+                    continue
+
                 # Prepare new data
                 new_data = {
-                    "slc_id": camera.get("slcId"),
-                    "room_id": camera.get("roomId"),
-                    "name": camera.get("name", ""),
-                    "mac_id": camera.get("mac_id", ""),
-                    "username": camera.get("username", ""),
-                    "password": camera.get("password", ""),
-                    "type": camera.get("type", "webcam"),
-                    "status": camera.get("status", "Active"),
-                    "enabled": 1 if camera.get("enabled", True) else 0,
-                    "timestamp": format_date(camera.get("timestamp")),
+                    "id_prod":    camera.get("id"),
+                    "slc_id":     camera.get("slcId"),
+                    "room_id":    camera.get("roomId"),
+                    "name":       camera.get("name", ""),
+                    "mac_id":     camera.get("mac_id", ""),
+                    "username":   camera.get("username", ""),
+                    "password":   camera.get("password", ""),
+                    "type":       camera.get("type", "webcam"),
+                    "status":     camera.get("status", "Active"),
+                    "enabled":    1 if camera.get("enabled", True) else 0,
+                    "timestamp":  format_date(camera.get("timestamp")),
                     "created_at": format_date(camera.get("createdAt")),
                     "updated_at": format_date(camera.get("updatedAt"))
                 }
 
-                # Check if record exists
+                # Check if record exists by id
                 select_query = "SELECT * FROM camera WHERE id = %s"
                 existing_records = db.fetch_query(select_query, (camera_id,))
 
@@ -75,7 +86,6 @@ def insert_cameras(db, camera_data):
                     # EXISTS → Compare and UPDATE if different
                     existing = existing_records[0]
 
-                    # Compare data
                     has_changes = False
                     for key, value in new_data.items():
                         old_value = str(existing.get(key)) if existing.get(key) is not None else None
@@ -89,27 +99,28 @@ def insert_cameras(db, camera_data):
                         result["skipped"] += 1
                         continue
 
-                    # Data is different - UPDATE
                     print(f"      🔄 Already exists but data changed - updating...")
 
                     update_query = """
                         UPDATE camera SET
-                            slc_id = %s,
-                            room_id = %s,
-                            name = %s,
-                            mac_id = %s,
-                            username = %s,
-                            password = %s,
-                            type = %s,
-                            status = %s,
-                            enabled = %s,
-                            timestamp = %s,
+                            id_prod    = %s,
+                            slc_id     = %s,
+                            room_id    = %s,
+                            name       = %s,
+                            mac_id     = %s,
+                            username   = %s,
+                            password   = %s,
+                            type       = %s,
+                            status     = %s,
+                            enabled    = %s,
+                            timestamp  = %s,
                             created_at = %s,
                             updated_at = %s
                         WHERE id = %s
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["slc_id"],
                         new_data["room_id"],
                         new_data["name"],
@@ -134,13 +145,16 @@ def insert_cameras(db, camera_data):
 
                     insert_query = """
                         INSERT INTO camera (
-                            id, slc_id, room_id, name, mac_id, username, password,
+                            id, id_prod, slc_id, room_id, name, mac_id, username, password,
                             type, status, enabled, timestamp, created_at, updated_at
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        ) VALUES (
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                        )
                     """
 
                     db.execute_query(insert_query, (
                         camera_id,
+                        new_data["id_prod"],
                         new_data["slc_id"],
                         new_data["room_id"],
                         new_data["name"],
@@ -213,30 +227,33 @@ def update_cameras(db, camera_data):
 
                 # Prepare new data
                 new_data = {
-                    "slc_id": camera.get("slcId"),
-                    "room_id": camera.get("roomId"),
-                    "name": camera.get("name", ""),
-                    "mac_id": camera.get("mac_id", ""),
-                    "username": camera.get("username", ""),
-                    "password": camera.get("password", ""),
-                    "type": camera.get("type", "webcam"),
-                    "status": camera.get("status", "Active"),
-                    "enabled": 1 if camera.get("enabled", True) else 0,
-                    "timestamp": format_date(camera.get("timestamp")),
+                    "id_prod":    camera.get("id"),
+                    "slc_id":     camera.get("slcId"),
+                    "room_id":    camera.get("roomId"),
+                    "name":       camera.get("name", ""),
+                    "mac_id":     camera.get("mac_id", ""),
+                    "username":   camera.get("username", ""),
+                    "password":   camera.get("password", ""),
+                    "type":       camera.get("type", "webcam"),
+                    "status":     camera.get("status", "Active"),
+                    "enabled":    1 if camera.get("enabled", True) else 0,
+                    "timestamp":  format_date(camera.get("timestamp")),
                     "updated_at": format_date(camera.get("updatedAt"))
                 }
 
-                # Check if record exists
-                select_query = "SELECT * FROM camera WHERE id = %s"
-                existing_records = db.fetch_query(select_query, (camera_id,))
+                # ✅ Check by id_prod first, then fall back to id
+                check_prod_query = "SELECT * FROM camera WHERE id_prod = %s"
+                existing_records = db.fetch_query(check_prod_query, (camera_id,))
+
+                if not existing_records:
+                    select_query = "SELECT * FROM camera WHERE id = %s"
+                    existing_records = db.fetch_query(select_query, (camera_id,))
 
                 print(f"   [{i}/{len(updated_cameras)}] Camera ID {camera_id}...")
 
                 if existing_records:
-                    # EXISTS → Compare and UPDATE if different
                     existing = existing_records[0]
 
-                    # Compare data
                     has_changes = False
                     for key, value in new_data.items():
                         old_value = str(existing.get(key)) if existing.get(key) is not None else None
@@ -250,27 +267,28 @@ def update_cameras(db, camera_data):
                         result["skipped"] += 1
                         continue
 
-                    # Data is different - UPDATE
                     print(f"      🔄 Data changed - updating...")
 
                     update_query = """
                         UPDATE camera SET
-                            slc_id = %s,
-                            room_id = %s,
-                            name = %s,
-                            mac_id = %s,
-                            username = %s,
-                            password = %s,
-                            type = %s,
-                            status = %s,
-                            enabled = %s,
-                            timestamp = %s,
+                            id_prod    = %s,
+                            slc_id     = %s,
+                            room_id    = %s,
+                            name       = %s,
+                            mac_id     = %s,
+                            username   = %s,
+                            password   = %s,
+                            type       = %s,
+                            status     = %s,
+                            enabled    = %s,
+                            timestamp  = %s,
                             updated_at = %s,
-                            is_sync = 1
+                            is_sync    = 1
                         WHERE id = %s
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["slc_id"],
                         new_data["room_id"],
                         new_data["name"],
@@ -282,7 +300,7 @@ def update_cameras(db, camera_data):
                         new_data["enabled"],
                         new_data["timestamp"],
                         new_data["updated_at"],
-                        camera_id
+                        existing["id"]  # ← use actual local id (handles both cases)
                     ))
 
                     result["updated"] += 1
@@ -294,14 +312,16 @@ def update_cameras(db, camera_data):
 
                     insert_query = """
                         INSERT INTO camera (
-                            id, slc_id, room_id, name, mac_id, username, password,
+                            id, id_prod, slc_id, room_id, name, mac_id, username, password,
                             type, status, enabled, timestamp, created_at, updated_at
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        ) VALUES (
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                        )
                     """
 
-                    # For records in 'updated' that don't exist, use updated_at as created_at
                     db.execute_query(insert_query, (
                         camera_id,
+                        new_data["id_prod"],
                         new_data["slc_id"],
                         new_data["room_id"],
                         new_data["name"],
@@ -312,7 +332,7 @@ def update_cameras(db, camera_data):
                         new_data["status"],
                         new_data["enabled"],
                         new_data["timestamp"],
-                        new_data["updated_at"],  # Use updated_at as created_at
+                        new_data["updated_at"],  # fallback for created_at
                         new_data["updated_at"]
                     ))
 
@@ -365,9 +385,9 @@ def process_cameras(db, camera_data):
 
     # Print total summary
     total_inserted = results["created_section"]["inserted"] + results["updated_section"]["inserted"]
-    total_updated = results["created_section"]["updated"] + results["updated_section"]["updated"]
-    total_skipped = results["created_section"]["skipped"] + results["updated_section"]["skipped"]
-    total_errors = results["created_section"]["errors"] + results["updated_section"]["errors"]
+    total_updated  = results["created_section"]["updated"]  + results["updated_section"]["updated"]
+    total_skipped  = results["created_section"]["skipped"]  + results["updated_section"]["skipped"]
+    total_errors   = results["created_section"]["errors"]   + results["updated_section"]["errors"]
 
     print("\n" + "=" * 60)
     print("📊 CAMERAS - TOTAL SUMMARY")

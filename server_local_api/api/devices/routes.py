@@ -10,6 +10,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 from config import Config
 from core.database import Database
 from core.middleware import token_required
+from util.audit import log_audit
 
 # Create blueprint
 devices_bp = Blueprint('devices', __name__, url_prefix='/scl')
@@ -151,13 +152,25 @@ def create_camera():
 
         query = """
             INSERT INTO camera 
-            (slc_id, room_id, name, mac_id, username, password, type, status, enabled, timestamp, created_at,slc_edit)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NOW(), NOW(),1)
+            (slc_id, room_id, name, mac_id, username, password, type, status, enabled, timestamp, created_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
         """
         values = (slc_id, room_id, name, mac_id, username, password, cam_type, status, 1)
         result = Database.execute_query(query, values, fetch=False)
-        print(result)
         if result:
+            inserted_id = result
+            new_record = Database.execute_query(
+                "SELECT * FROM camera WHERE id = %s",
+                (inserted_id,),
+                fetch=True
+            )
+            new_rec = new_record[0] if new_record else None
+            log_audit(
+                table_name="camera_audit",
+                action_type="INSERT",
+                old_data=None,
+                new_data=new_rec
+            )
             return jsonify({
                 "Message": "Camera created successfully"
             }), 200
@@ -178,6 +191,12 @@ def create_camera():
 @devices_bp.route('/delete_camera/<int:camera_id>',methods=['POST'])
 def delete_camera(camera_id):
     try:
+        old_record = Database.execute_query(
+            "SELECT * FROM camera WHERE id = %s",
+            (camera_id,),
+            fetch=True
+        )
+
         query = """
             SELECT count(*) AS nbr
             FROM camera 
@@ -192,12 +211,18 @@ def delete_camera(camera_id):
         else:
             query = """
                 UPDATE camera
-                set enabled = 0 AND slc_edit = 1
+                set enabled = 0
                 WHERE id = %s 
             """
             values=(camera_id,)
             result = Database.execute_query(query, values,fetch=False)
             if result:
+                log_audit(
+                    table_name="camera_audit",
+                    action_type="DELETE",
+                    old_data=old_record[0] if old_record else None,
+                    new_data=None
+                )
                 return jsonify({
                     "Message":f"Camera Deleted with Success"
                 }),200
@@ -253,14 +278,33 @@ def update_camera(camera_id):
 
         values_to_update.append(camera_id)
 
+        old_record = Database.execute_query(
+            "SELECT * FROM camera WHERE id = %s AND enabled = 1",
+            (camera_id,),
+            fetch=True
+        )
+        if not  old_record:
+            return jsonify({"Message":" camera not found"}), 404
+
         query = f"""
             UPDATE camera
             SET {', '.join(fields_to_update)}
             WHERE id = %s
         """
 
-        Database.execute_query(query, tuple(values_to_update), fetch=False)
-
+        result = Database.execute_query(query, tuple(values_to_update), fetch=False)
+        if result:
+            new_record = Database.execute_query(
+                "SELECT * FROM camera WHERE id = %s",
+                (camera_id,),
+                fetch=True
+            )
+            log_audit(
+                table_name = "camera_audit",
+                action_type="UPDATE",
+                old_data = old_record[0],
+                new_data=new_record[0] if new_record else None
+            )
         return jsonify({
             "Message": "Camera updated successfully"
         }), 200

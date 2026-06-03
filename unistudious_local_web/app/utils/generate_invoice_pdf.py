@@ -1,43 +1,42 @@
-"""
-Invoice PDF Generator
-Generates invoice PDFs matching the Piuma Academy template layout.
-
-Flask usage:
-    from generate_invoice_pdf import generate_invoice_pdf
-    from flask import send_file
-    import io
-
-    @payment_bp.route('/api/download_invoice/<int:invoice_id>', methods=['GET'])
-    def download_invoice(invoice_id):
-        # fetch invoice data from DB ...
-        invoice = {
-            "invoice_number": "6a02f4fd02b89",
-            "created_at": "May 12, 2026",
-            "from_name": "piuma academy elearning math",
-            "from_address": "123 rue de la république hammam lif",
-            "from_phone": "28037571",
-            "to_name": "hedi",
-            "to_address": "15 rue monji slim hammam lif",
-            "to_phone": "97705610",
-            "to_email": "hedi.laater@gmail.com",
-            "order_id": "4664",
-            "order_type": "Year",
-            "description": "2026",
-            "status": "Paid",
-            "price": "250.00",
-            "total_amount": "250.00",
-            "agent_name": "Mkaissi khalil",
-            "agent_phone": "28037571",
-            "agent_email": "khalilmkaissi@gmail.com",
-        }
-        pdf_bytes = generate_invoice_pdf(invoice)
-        return send_file(
-            io.BytesIO(pdf_bytes),
-            mimetype='application/pdf',
-            as_attachment=True,
-            download_name=f"invoice_{invoice_id}.pdf"
-        )
-"""
+#
+# Invoice PDF Generator
+# Generates invoice PDFs matching the Piuma Academy template layout.
+#
+# Flask usage:
+#     from generate_invoice_pdf import generate_invoice_pdf
+#     from flask import send_file
+#     import io
+#
+#     @payment_bp.route('/api/download_invoice/<int:invoice_id>', methods=['GET'])
+#     def download_invoice(invoice_id):
+#         # fetch invoice data from DB ...
+#         invoice = {
+#             "invoice_number": "6a02f4fd02b89",
+#             "created_at": "May 12, 2026",
+#             "from_name": "piuma academy elearning math",
+#             "from_address": "123 rue de la république hammam lif",
+#             "from_phone": "28037571",
+#             "to_name": "hedi",
+#             "to_address": "15 rue monji slim hammam lif",
+#             "to_phone": "97705610",
+#             "to_email": "hedi.laater@gmail.com",
+#             "order_id": "4664",
+#             "order_type": "Year",
+#             "description": "2026",
+#             "status": "Paid",
+#             "price": "250.00",
+#             "total_amount": "250.00",
+#             "agent_name": "Mkaissi khalil",
+#             "agent_phone": "28037571",
+#             "agent_email": "khalilmkaissi@gmail.com",
+#         }
+#         pdf_bytes = generate_invoice_pdf(invoice)
+#         return send_file(
+#             io.BytesIO(pdf_bytes),
+#             mimetype='application/pdf',
+#             as_attachment=True,
+#             download_name=f"invoice_{invoice_id}.pdf"
+#         )
 
 import io
 from reportlab.lib.pagesizes import A4

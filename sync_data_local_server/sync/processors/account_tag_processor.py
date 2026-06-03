@@ -14,8 +14,9 @@ def insert_account_tag(db, tag_data):
     """
     Handle 'created' account_tag records from API
     Logic:
-    - If record exists in DB → UPDATE it
-    - If record does NOT exist → INSERT it
+    - Check if id_prod already exists (avoid duplicates from local pushes)
+    - If record exists in DB by id -> UPDATE it
+    - If record does NOT exist -> INSERT it
 
     Args:
         db: Database instance
@@ -48,8 +49,18 @@ def insert_account_tag(db, tag_data):
                 if not record_id:
                     raise ValueError("Missing required field: id")
 
-                # Prepare new data — map API fields → DB columns
+                # ✅ FIRST: Check if this remote ID already exists as id_prod (from local push)
+                check_prod_query = "SELECT id FROM account_tag WHERE id_prod = %s"
+                existing_by_prod = db.fetch_query(check_prod_query, (record_id,))
+
+                if existing_by_prod:
+                    print(f"   [{i}/{len(created_records)}] Account Tag ID {record_id} already exists as id_prod (local id: {existing_by_prod[0]['id']}) - skipped to avoid duplicate")
+                    result["skipped"] += 1
+                    continue
+
+                # Prepare new data — map API fields -> DB columns
                 new_data = {
+                    "id_prod":       record.get("id"),
                     "account_id":    record.get("accountId"),
                     "tag_config_id": record.get("tagConfigId"),
                     "status":        1 if record.get("status") else 0,
@@ -62,14 +73,14 @@ def insert_account_tag(db, tag_data):
                     "updated_at":    format_date(record.get("updatedAt")),
                 }
 
-                # Check if record exists
+                # Check if record exists by id
                 select_query = "SELECT * FROM account_tag WHERE id = %s"
                 existing_records = db.fetch_query(select_query, (record_id,))
 
                 print(f"   [{i}/{len(created_records)}] Account Tag ID {record_id}...")
 
                 if existing_records:
-                    # EXISTS → Compare and UPDATE if different
+                    # EXISTS -> Compare and UPDATE if different
                     existing = existing_records[0]
 
                     has_changes = False
@@ -89,6 +100,7 @@ def insert_account_tag(db, tag_data):
 
                     update_query = """
                         UPDATE account_tag SET
+                            id_prod       = %s,
                             account_id    = %s,
                             tag_config_id = %s,
                             status        = %s,
@@ -103,6 +115,7 @@ def insert_account_tag(db, tag_data):
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["tag_config_id"],
                         new_data["status"],
@@ -120,21 +133,22 @@ def insert_account_tag(db, tag_data):
                     print(f"      ✅ Updated successfully")
 
                 else:
-                    # DOES NOT EXIST → INSERT
+                    # DOES NOT EXIST -> INSERT
                     print(f"      ✨ New record - inserting...")
 
                     insert_query = """
                         INSERT INTO account_tag (
-                            id, account_id, tag_config_id, status, description,
+                            id, id_prod, account_id, tag_config_id, status, description,
                             other_tag, public, enabled, timestamp, created_at, updated_at
                         ) VALUES (
-                            %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s
                         )
                     """
 
                     db.execute_query(insert_query, (
                         record_id,
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["tag_config_id"],
                         new_data["status"],
@@ -155,7 +169,7 @@ def insert_account_tag(db, tag_data):
                 result["errors"] += 1
                 continue
 
-        print(f"\n   📊 Created section → Inserted: {result['inserted']}, "
+        print(f"\n   📊 Created section -> Inserted: {result['inserted']}, "
               f"Updated: {result['updated']}, Skipped: {result['skipped']}, "
               f"Errors: {result['errors']}")
 
@@ -169,8 +183,8 @@ def update_account_tag(db, tag_data):
     """
     Handle 'updated' account_tag records from API
     Logic:
-    - If record exists in DB → UPDATE it
-    - If record does NOT exist → INSERT it (don't skip!)
+    - If record exists in DB -> UPDATE it
+    - If record does NOT exist -> INSERT it (don't skip!)
 
     Args:
         db: Database instance
@@ -203,8 +217,9 @@ def update_account_tag(db, tag_data):
                 if not record_id:
                     raise ValueError("Missing required field: id")
 
-                # Prepare new data — map API fields → DB columns
+                # Prepare new data — map API fields -> DB columns
                 new_data = {
+                    "id_prod":       record.get("id"),
                     "account_id":    record.get("accountId"),
                     "tag_config_id": record.get("tagConfigId"),
                     "status":        1 if record.get("status") else 0,
@@ -216,9 +231,13 @@ def update_account_tag(db, tag_data):
                     "updated_at":    format_date(record.get("updatedAt")),
                 }
 
-                # Check if record exists
-                select_query = "SELECT * FROM account_tag WHERE id = %s"
-                existing_records = db.fetch_query(select_query, (record_id,))
+                # ✅ Check by id_prod first, then fall back to id
+                check_prod_query = "SELECT * FROM account_tag WHERE id_prod = %s"
+                existing_records = db.fetch_query(check_prod_query, (record_id,))
+
+                if not existing_records:
+                    select_query = "SELECT * FROM account_tag WHERE id = %s"
+                    existing_records = db.fetch_query(select_query, (record_id,))
 
                 print(f"   [{i}/{len(updated_records)}] Account Tag ID {record_id}...")
 
@@ -242,6 +261,7 @@ def update_account_tag(db, tag_data):
 
                     update_query = """
                         UPDATE account_tag SET
+                            id_prod       = %s,
                             account_id    = %s,
                             tag_config_id = %s,
                             status        = %s,
@@ -255,6 +275,7 @@ def update_account_tag(db, tag_data):
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["tag_config_id"],
                         new_data["status"],
@@ -264,28 +285,29 @@ def update_account_tag(db, tag_data):
                         new_data["enabled"],
                         new_data["timestamp"],
                         new_data["updated_at"],
-                        record_id
+                        existing["id"]  # <- use actual local id (handles both cases)
                     ))
 
                     result["updated"] += 1
                     print(f"      ✅ Updated successfully")
 
                 else:
-                    # DOES NOT EXIST → INSERT (don't skip!)
+                    # DOES NOT EXIST -> INSERT (don't skip!)
                     print(f"      ⚠️  Record not found in DB - inserting...")
 
                     insert_query = """
                         INSERT INTO account_tag (
-                            id, account_id, tag_config_id, status, description,
+                            id, id_prod, account_id, tag_config_id, status, description,
                             other_tag, public, enabled, timestamp, created_at, updated_at
                         ) VALUES (
-                            %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s
                         )
                     """
 
                     db.execute_query(insert_query, (
                         record_id,
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["tag_config_id"],
                         new_data["status"],
@@ -306,7 +328,7 @@ def update_account_tag(db, tag_data):
                 result["errors"] += 1
                 continue
 
-        print(f"\n   📊 Updated section → Inserted: {result['inserted']}, "
+        print(f"\n   📊 Updated section -> Inserted: {result['inserted']}, "
               f"Updated: {result['updated']}, Skipped: {result['skipped']}, "
               f"Errors: {result['errors']}")
 

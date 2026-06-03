@@ -160,7 +160,6 @@ def get_data_academie(tablet_id):
     try:
 
         result = get_account_data_tablet(tablet_id)
-        print(result)
         return jsonify(result),200
     except Exception as e:
         print(f"DEBUG: Error {e} come from get_data_academie")

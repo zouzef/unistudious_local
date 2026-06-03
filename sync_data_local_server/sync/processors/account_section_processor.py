@@ -14,7 +14,8 @@ def insert_account_section(db, section_data):
     """
     Handle 'created' account_section records from API
     Logic:
-    - If record exists in DB → UPDATE it
+    - Check if id_prod already exists (avoid duplicates from local pushes)
+    - If record exists in DB by id → UPDATE it
     - If record does NOT exist → INSERT it
 
     Args:
@@ -48,8 +49,18 @@ def insert_account_section(db, section_data):
                 if not record_id:
                     raise ValueError("Missing required field: id")
 
+                # ✅ FIRST: Check if this remote ID already exists as id_prod (from local push)
+                check_prod_query = "SELECT id FROM account_section WHERE id_prod = %s"
+                existing_by_prod = db.fetch_query(check_prod_query, (record_id,))
+
+                if existing_by_prod:
+                    print(f"   [{i}/{len(created_records)}] Account Section ID {record_id} already exists as id_prod (local id: {existing_by_prod[0]['id']}) - skipped to avoid duplicate")
+                    result["skipped"] += 1
+                    continue
+
                 # Prepare new data — map API fields → DB columns
                 new_data = {
+                    "id_prod":            record.get("id"),
                     "account_id":         record.get("accountId"),
                     "section_config_id":  record.get("sectionConfigId"),
                     "status":             1 if record.get("status") else 0,
@@ -61,7 +72,7 @@ def insert_account_section(db, section_data):
                     "updated_at":         format_date(record.get("updatedAt")),
                 }
 
-                # Check if record exists
+                # Check if record exists by id
                 select_query = "SELECT * FROM account_section WHERE id = %s"
                 existing_records = db.fetch_query(select_query, (record_id,))
 
@@ -88,6 +99,7 @@ def insert_account_section(db, section_data):
 
                     update_query = """
                         UPDATE account_section SET
+                            id_prod           = %s,
                             account_id        = %s,
                             section_config_id = %s,
                             status            = %s,
@@ -101,6 +113,7 @@ def insert_account_section(db, section_data):
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["section_config_id"],
                         new_data["status"],
@@ -122,11 +135,11 @@ def insert_account_section(db, section_data):
 
                     insert_query = """
                         INSERT INTO account_section (
-                            id, account_id, section_config_id,
+                            id, id_prod, account_id, section_config_id,
                             status, description, other_section, enabled,
                             timestamp, created_at, updated_at
                         ) VALUES (
-                            %s, %s, %s,
+                            %s, %s, %s, %s,
                             %s, %s, %s, %s,
                             %s, %s, %s
                         )
@@ -134,6 +147,7 @@ def insert_account_section(db, section_data):
 
                     db.execute_query(insert_query, (
                         record_id,
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["section_config_id"],
                         new_data["status"],
@@ -203,6 +217,7 @@ def update_account_section(db, section_data):
 
                 # Prepare new data — map API fields → DB columns
                 new_data = {
+                    "id_prod":           record.get("id"),
                     "account_id":        record.get("accountId"),
                     "section_config_id": record.get("sectionConfigId"),
                     "status":            1 if record.get("status") else 0,
@@ -210,13 +225,16 @@ def update_account_section(db, section_data):
                     "other_section":     record.get("other_section"),
                     "enabled":           1 if record.get("enabled") else 0,
                     "timestamp":         format_date(record.get("timestamp")),
-                    "created_at":        format_date(record.get("createdAt")),
                     "updated_at":        format_date(record.get("updatedAt")),
                 }
 
-                # Check if record exists
-                select_query = "SELECT * FROM account_section WHERE id = %s"
-                existing_records = db.fetch_query(select_query, (record_id,))
+                # ✅ Check by id_prod first, then fall back to id
+                check_prod_query = "SELECT * FROM account_section WHERE id_prod = %s"
+                existing_records = db.fetch_query(check_prod_query, (record_id,))
+
+                if not existing_records:
+                    select_query = "SELECT * FROM account_section WHERE id = %s"
+                    existing_records = db.fetch_query(select_query, (record_id,))
 
                 print(f"   [{i}/{len(updated_records)}] Account Section ID {record_id}...")
 
@@ -240,6 +258,7 @@ def update_account_section(db, section_data):
 
                     update_query = """
                         UPDATE account_section SET
+                            id_prod           = %s,
                             account_id        = %s,
                             section_config_id = %s,
                             status            = %s,
@@ -252,6 +271,7 @@ def update_account_section(db, section_data):
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["section_config_id"],
                         new_data["status"],
@@ -260,7 +280,7 @@ def update_account_section(db, section_data):
                         new_data["enabled"],
                         new_data["timestamp"],
                         new_data["updated_at"],
-                        record_id
+                        existing["id"]  # ← use actual local id (handles both cases)
                     ))
 
                     result["updated"] += 1
@@ -272,11 +292,11 @@ def update_account_section(db, section_data):
 
                     insert_query = """
                         INSERT INTO account_section (
-                            id, account_id, section_config_id,
+                            id, id_prod, account_id, section_config_id,
                             status, description, other_section, enabled,
                             timestamp, created_at, updated_at
                         ) VALUES (
-                            %s, %s, %s,
+                            %s, %s, %s, %s,
                             %s, %s, %s, %s,
                             %s, %s, %s
                         )
@@ -284,6 +304,7 @@ def update_account_section(db, section_data):
 
                     db.execute_query(insert_query, (
                         record_id,
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["section_config_id"],
                         new_data["status"],
@@ -291,7 +312,7 @@ def update_account_section(db, section_data):
                         new_data["other_section"],
                         new_data["enabled"],
                         new_data["timestamp"],
-                        new_data["updated_at"],   # fallback for created_at
+                        new_data["updated_at"],  # fallback for created_at
                         new_data["updated_at"],
                     ))
 

@@ -53,7 +53,20 @@ class AccountLevelModel(BaseModel):
         Column("release_token",   "TINYINT(1)",  nullable=False, default="0"),
         Column("use_token",       "VARCHAR(255)"),
         Column("slc_edit",        "INT(11)",     default="0"),
+        Column("id_prod",         "INT(11)",     default=None)
     ]
+
+class AccountLevel_Audit(BaseModel):
+    table_name="account_level_audit"
+    columns = [
+        Column("audit_id",    "INT(11)",                          primary_key=True, auto_increment=True, nullable=False),
+        Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
+        Column("old_data",    "LONGTEXT"),
+        Column("new_data",    "LONGTEXT"),
+        Column("changed_at",  "TIMESTAMP",  nullable=False, default="current_timestamp()"),
+        Column("is_synced",   "TINYINT(1)", default="0"),
+    ]
+
 
 
 class AccountSubjectModel(BaseModel):
@@ -72,6 +85,7 @@ class AccountSubjectModel(BaseModel):
         Column("releaseToken",      "TINYINT(1)"),
         Column("useToken",          "VARCHAR(255)"),
         Column("slc_use",           "INT(11)",     default="0"),
+        Column("id_prod",           "INT(11)",     default=None)
     ]
 
 
@@ -183,6 +197,7 @@ class CameraModel(BaseModel):
         Column("timestamp",  "DATETIME",     nullable=False, default="current_timestamp()"),
         Column("created_at", "DATETIME",     nullable=False, default="current_timestamp()"),
         Column("updated_at", "DATETIME"),
+        Column("id_prod",    "INT(11)",      default=None)
     ]
 
 
@@ -225,6 +240,18 @@ class FormationModel(BaseModel):
         Column("created_at",                                   "DATETIME",    nullable=False, default="current_timestamp()"),
         Column("timestamp",                                    "DATETIME",    nullable=False, default="current_timestamp()", on_update="current_timestamp()"),
         Column("updated_at",                                   "DATETIME"),
+        Column("id_prod",                                      "INT(11)",     default=None)
+    ]
+
+class FormationAuditModel(BaseModel):
+    table_name = "formation_audit"
+    columns = [
+        Column("audit_id",    "INT(11)",                          primary_key=True, auto_increment=True, nullable=False),
+        Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
+        Column("old_data",    "LONGTEXT"),
+        Column("new_data",    "LONGTEXT"),
+        Column("changed_at",  "TIMESTAMP",  nullable=False, default="current_timestamp()"),
+        Column("is_synced",   "TINYINT(1)", default="0"),
     ]
 
 
@@ -844,9 +871,7 @@ class VirtualUserAuditModel(BaseModel):
     ]
 
 
-# ── NEW / FIXED MODELS BELOW ──────────────────────────────────────────────────
 
-# FIX: was "SectionModel" with table_name="section" — SQL has "section_config"
 class SectionConfigModel(BaseModel):
     table_name = "section_config"
     columns = [
@@ -861,8 +886,7 @@ class SectionConfigModel(BaseModel):
     ]
 
 
-# FIX: was wrong — Python had (account_id, section_id). SQL has section_config_id +
-#      description, other_section columns.
+
 class AccountSectionModel(BaseModel):
     table_name = "account_section"
     columns = [
@@ -876,7 +900,21 @@ class AccountSectionModel(BaseModel):
         Column("created_at",        "DATETIME",    nullable=False, default="current_timestamp()"),
         Column("timestamp",         "DATETIME",    nullable=False, default="current_timestamp()"),
         Column("updated_at",        "DATETIME"),
+        Column("id_prod",           "INT(11)",     default=None)
     ]
+
+class AccountSectionAuditModel(BaseModel):
+    table_name = "account_section_audit"
+    columns = [
+        Column("audit_id",    "INT(11)",     primary_key=True, auto_increment=True, nullable=False),
+        Column("action_type", "VARCHAR(10)", nullable=False),
+        Column("record_id",   "INT(11)",     nullable=False),
+        Column("old_data",    "LONGTEXT"),
+        Column("new_data",    "LONGTEXT"),
+        Column("changed_at",  "DATETIME",   nullable=False, default="current_timestamp()"),
+        Column("is_synced",   "TINYINT(1)", nullable=False, default="0"),
+    ]
+
 
 
 # FIX: was "TagConfigModel" with table_name="tag" and column "name". SQL has
@@ -911,6 +949,18 @@ class AccountTagModel(BaseModel):
         Column("created_at",    "DATETIME",    nullable=False, default="current_timestamp()"),
         Column("timestamp",     "DATETIME",    nullable=False, default="current_timestamp()"),
         Column("updated_at",    "DATETIME"),
+        Column("id_prod",       "INT(11)",     default=None)
+    ]
+
+class AccountTagAuditModel(BaseModel):
+    table_name = "account_tag_audit"
+    columns = [
+        Column("audit_id",    "INT(11)",                          primary_key=True, auto_increment=True, nullable=False),
+        Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
+        Column("old_data",    "LONGTEXT"),
+        Column("new_data",    "LONGTEXT"),
+        Column("changed_at",  "TIMESTAMP",  nullable=False, default="current_timestamp()"),
+        Column("is_synced",   "TINYINT(1)", default="0"),
     ]
 
 
@@ -925,29 +975,43 @@ class YourTableModel(BaseModel):
         Column("metadata", "LONGTEXT"),   # JSON-validated in SQL
     ]
 
+
 class CompletionTagAccount(BaseModel):
     table_name = "completion_tag_account"
     collate = "utf8mb4_general_ci"
     columns = [
-        Column("id",          "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-        Column("account_id",  "INT(11)"),
-        Column("name",        "VARCHAR(255)"),
-        Column("description", "LONGTEXT"),
-        Column("status",      "TINYINT(1)",  nullable=False, default="1"),
-        Column("img_link",    "VARCHAR(255)"),
-        Column("enabled",     "TINYINT(1)",  nullable=False, default="1"),
-        Column("created_at",  "DATETIME",    nullable=False, default="current_timestamp()"),
-        Column("timestamp",   "DATETIME",    nullable=False, default="current_timestamp()"),
-        Column("updated_at",  "DATETIME"),
-        Column("release_token", "TINYINT(1)", nullable=False, default="0"),
-        Column("use_token", "VARCHAR(255)"),
+        Column("id",             "INT(11)",        primary_key=True, auto_increment=True, nullable=False),
+        Column("account_id",     "INT(11)"),
+        Column("name",           "VARCHAR(255)"),
+        Column("description",    "LONGTEXT"),
+        Column("status",         "TINYINT(1)",     nullable=False, default="1"),
+        Column("img_link",       "VARCHAR(255)"),
+        Column("enabled",        "TINYINT(1)",     nullable=False, default="1"),
+        Column("created_at",     "DATETIME",       nullable=False, default="current_timestamp()"),
+        Column("timestamp",      "DATETIME",       nullable=False, default="current_timestamp()"),
+        Column("updated_at",     "DATETIME"),
+        Column("release_token",  "TINYINT(1)",     nullable=False, default="0"),
+        Column("use_token",      "VARCHAR(255)"),
+        Column("id_prod",        "INT(11)",        default=None)
     ]
 
+class CompletionTagAudit(BaseModel):
+    table_name = "completion_tag_account_audit"
+    columns = [
+        Column("audit_id",    "INT(11)",                          primary_key=True, auto_increment=True, nullable=False),
+        Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
+        Column("old_data",    "LONGTEXT"),
+        Column("new_data",    "LONGTEXT"),
+        Column("changed_at",  "TIMESTAMP",  nullable=False, default="current_timestamp()"),
+        Column("is_synced",   "TINYINT(1)", default="0"),
+    ]
 ALL_MODELS = [
     AccountModel,
     AccountAuditModel,
     AccountLevelModel,
+    AccountLevel_Audit,
     AccountSubjectModel,
+    AccountSectionAuditModel,
     AccountSubjectAuditModel,
     AssociationAuditModel,
     AttendanceModel,
@@ -994,9 +1058,12 @@ ALL_MODELS = [
     VirtualUserModel,
     VirtualUserAuditModel,
     CompletionTagAccount,
+    CompletionTagAudit,
     SectionConfigModel,
     AccountSectionModel,
     TagConfigModel,
     AccountTagModel,
+    AccountTagAuditModel,
     YourTableModel,
+    FormationAuditModel
 ]

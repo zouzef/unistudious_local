@@ -8,6 +8,7 @@ from services.client import FlaskClient
 from services.calendar_service import get_all_calendars
 from services.student_service import get_list_students
 from services.camera_service import get_all_camera
+from detection.detector import start_detection_for_calendar, stop_detection_for_calendar  # ← NEW
 from utils.logger import logger
 
 PATH_CONFIG = "configurations.json"
@@ -32,9 +33,9 @@ def main():
     client = FlaskClient(BASE_URL, token=token)
 
     # --- TRACKING LISTS ---
-    started_calendars   = []   # calendars we already started
-    active_calendars    = []   # calendars currently running
-    completed_calendars = []   # calendars fully finished
+    started_calendars     = []
+    active_calendars      = []
+    completed_calendars   = []
     rooms_without_cameras = set()
 
     while True:
@@ -51,23 +52,16 @@ def main():
                 calendars_soon = []
 
                 for calendar in calendars:
-                    # Skip already completed
                     if calendar["id"] in completed_calendars:
                         continue
-
-                    # Skip already ended
                     if now > calendar["endTime"]:
                         logger.info(f"Calendar {calendar['id']} already ended — skipping.")
                         continue
-
-                    # Skip rooms with no cameras
                     if calendar["roomId"] in rooms_without_cameras:
                         logger.info(f"Room {calendar['roomId']} has no cameras — skipping.")
                         continue
 
                     time_to_start = (calendar["startTime"] - now).total_seconds()
-
-                    # Only process calendars starting within 15 minutes or already started
                     if time_to_start <= 900:
                         calendars_soon.append(calendar)
                     else:
@@ -76,7 +70,7 @@ def main():
                             f"{int(time_to_start // 60)} min — waiting."
                         )
 
-                # --- STEP 4: PROCESS CALENDARS STARTING SOON ---
+                # --- STEP 4: START DETECTION FOR CALENDARS STARTING SOON ---
                 for calendar in calendars_soon:
                     if calendar["id"] in started_calendars:
                         logger.info(f"Calendar {calendar['id']} already started — skipping.")
@@ -84,26 +78,28 @@ def main():
 
                     logger.info(f"Processing calendar {calendar['id']} in room {calendar['roomId']}...")
 
-                    # --- GET CAMERAS ---
                     cameras = get_all_camera(client, calendar["roomId"])
                     if not cameras:
                         logger.warning(f"No cameras in room {calendar['roomId']} — skipping.")
                         rooms_without_cameras.add(calendar["roomId"])
                         continue
 
-                    for cam in cameras:
-                        logger.info(f"  Camera: {cam['name']} — mac: {cam['mac']} — status: {cam['status']}")
-
-                    # --- GET STUDENTS ---
                     attendances = get_list_students(client, calendar["id"])
                     if not attendances:
-                        logger.warning(f"No students found for calendar {calendar['id']} — skipping.")
+                        logger.warning(f"No students for calendar {calendar['id']} — skipping.")
                         continue
 
-                    for attendance in attendances:
-                        logger.info(f"  Student: {attendance['userName']} — present: {attendance['isPresent']}")
+                    # ✅ START CAMERA DETECTION
+                    processes, stop_event = start_detection_for_calendar(
+                        calendar_id=calendar["id"],
+                        room_id=calendar["roomId"],
+                        cameras=cameras
+                    )
 
-                    # --- MARK AS STARTED ---
+                    if not processes:
+                        logger.warning(f"No detection processes started for calendar {calendar['id']} — skipping.")
+                        continue
+
                     started_calendars.append(calendar["id"])
                     active_calendars.append({
                         "calendar_id": calendar["id"],
@@ -111,15 +107,24 @@ def main():
                         "end_time":    calendar["endTime"],
                         "cameras":     cameras,
                         "attendances": attendances,
+                        "processes":   processes,    # ✅ store processes
+                        "stop_event":  stop_event,   # ✅ store stop_event
                     })
-                    logger.info(f"Calendar {calendar['id']} started successfully.")
+                    logger.info(f"Calendar {calendar['id']} started — {len(processes)} camera(s) running.")
 
-            # --- STEP 5: CHECK FINISHED CALENDARS ---
+            # --- STEP 5: STOP DETECTION FOR FINISHED CALENDARS ---
             finished = []
             for active in active_calendars:
                 if now >= active["end_time"]:
-                    logger.info(f"Calendar {active['calendar_id']} has ended — cleaning up...")
-                    # TODO: stop detection processes here later
+                    logger.info(f"Calendar {active['calendar_id']} ended — stopping cameras...")
+
+                    # ✅ STOP CAMERA DETECTION
+                    stop_detection_for_calendar(
+                        calendar_id=active["calendar_id"],
+                        processes=active["processes"],
+                        stop_event=active["stop_event"]
+                    )
+
                     finished.append(active["calendar_id"])
                     logger.info(f"Calendar {active['calendar_id']} completed.")
                 else:
@@ -132,7 +137,7 @@ def main():
             # --- STEP 6: MOVE FINISHED TO COMPLETED ---
             for calendar_id in finished:
                 started_calendars = [s for s in started_calendars if s != calendar_id]
-                active_calendars  = [a for a in active_calendars if a["calendar_id"] != calendar_id]
+                active_calendars  = [a for a in active_calendars  if a["calendar_id"] != calendar_id]
                 completed_calendars.append(calendar_id)
 
             if active_calendars:

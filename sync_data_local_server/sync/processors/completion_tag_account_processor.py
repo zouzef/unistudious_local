@@ -14,7 +14,8 @@ def insert_completion_tag_account(db, tag_data):
     """
     Handle 'created' completion_tag_account records from API
     Logic:
-    - If record exists in DB → UPDATE it
+    - Check if id_prod already exists (avoid duplicates from local pushes)
+    - If record exists in DB by id → UPDATE it
     - If record does NOT exist → INSERT it
 
     Args:
@@ -48,8 +49,18 @@ def insert_completion_tag_account(db, tag_data):
                 if not record_id:
                     raise ValueError("Missing required field: id")
 
+                # ✅ FIRST: Check if this remote ID already exists as id_prod (from local push)
+                check_prod_query = "SELECT id FROM completion_tag_account WHERE id_prod = %s"
+                existing_by_prod = db.fetch_query(check_prod_query, (record_id,))
+
+                if existing_by_prod:
+                    print(f"   [{i}/{len(created_records)}] Completion Tag Account ID {record_id} already exists as id_prod (local id: {existing_by_prod[0]['id']}) - skipped to avoid duplicate")
+                    result["skipped"] += 1
+                    continue
+
                 # Prepare new data — map API fields → DB columns
                 new_data = {
+                    "id_prod":        record_id,
                     "account_id":     record.get("accountId"),
                     "name":           record.get("name"),
                     "img_link":       record.get("imgLink"),
@@ -61,7 +72,7 @@ def insert_completion_tag_account(db, tag_data):
                     "updated_at":     format_date(record.get("updatedAt")),
                 }
 
-                # Check if record exists
+                # Check if record exists by id
                 select_query = "SELECT * FROM completion_tag_account WHERE id = %s"
                 existing_records = db.fetch_query(select_query, (record_id,))
 
@@ -87,6 +98,7 @@ def insert_completion_tag_account(db, tag_data):
 
                     update_query = """
                         UPDATE completion_tag_account SET
+                            id_prod       = %s,
                             account_id    = %s,
                             name          = %s,
                             img_link      = %s,
@@ -100,6 +112,7 @@ def insert_completion_tag_account(db, tag_data):
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["name"],
                         new_data["img_link"],
@@ -120,16 +133,17 @@ def insert_completion_tag_account(db, tag_data):
 
                     insert_query = """
                         INSERT INTO completion_tag_account (
-                            id, account_id, name, img_link, enabled,
+                            id, id_prod, account_id, name, img_link, enabled,
                             release_token, use_token, timestamp, created_at, updated_at
                         ) VALUES (
-                            %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s
                         )
                     """
 
                     db.execute_query(insert_query, (
                         record_id,
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["name"],
                         new_data["img_link"],
@@ -199,6 +213,7 @@ def update_completion_tag_account(db, tag_data):
 
                 # Prepare new data — map API fields → DB columns
                 new_data = {
+                    "id_prod":        record_id,
                     "account_id":     record.get("accountId"),
                     "name":           record.get("name"),
                     "img_link":       record.get("imgLink"),
@@ -209,9 +224,13 @@ def update_completion_tag_account(db, tag_data):
                     "updated_at":     format_date(record.get("updatedAt")),
                 }
 
-                # Check if record exists
-                select_query = "SELECT * FROM completion_tag_account WHERE id = %s"
-                existing_records = db.fetch_query(select_query, (record_id,))
+                # ✅ Check by id_prod first, then fall back to id
+                check_prod_query = "SELECT * FROM completion_tag_account WHERE id_prod = %s"
+                existing_records = db.fetch_query(check_prod_query, (record_id,))
+
+                if not existing_records:
+                    select_query = "SELECT * FROM completion_tag_account WHERE id = %s"
+                    existing_records = db.fetch_query(select_query, (record_id,))
 
                 print(f"   [{i}/{len(updated_records)}] Completion Tag Account ID {record_id}...")
 
@@ -235,6 +254,7 @@ def update_completion_tag_account(db, tag_data):
 
                     update_query = """
                         UPDATE completion_tag_account SET
+                            id_prod       = %s,
                             account_id    = %s,
                             name          = %s,
                             img_link      = %s,
@@ -242,11 +262,12 @@ def update_completion_tag_account(db, tag_data):
                             release_token = %s,
                             use_token     = %s,
                             timestamp     = %s,
-                            updated_at    = %s
+                            updated_at    = %s,
                         WHERE id = %s
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["name"],
                         new_data["img_link"],
@@ -255,7 +276,7 @@ def update_completion_tag_account(db, tag_data):
                         new_data["use_token"],
                         new_data["timestamp"],
                         new_data["updated_at"],
-                        record_id
+                        existing["id"]  # ← use actual local id (handles both cases)
                     ))
 
                     result["updated"] += 1
@@ -266,16 +287,17 @@ def update_completion_tag_account(db, tag_data):
 
                     insert_query = """
                         INSERT INTO completion_tag_account (
-                            id, account_id, name, img_link, enabled,
+                            id, id_prod, account_id, name, img_link, enabled,
                             release_token, use_token, timestamp, created_at, updated_at
                         ) VALUES (
-                            %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s
                         )
                     """
 
                     db.execute_query(insert_query, (
                         record_id,
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["name"],
                         new_data["img_link"],
@@ -283,7 +305,7 @@ def update_completion_tag_account(db, tag_data):
                         new_data["release_token"],
                         new_data["use_token"],
                         new_data["timestamp"],
-                        new_data["updated_at"],   # fallback for created_at
+                        new_data["updated_at"],  # fallback for created_at
                         new_data["updated_at"],
                     ))
 

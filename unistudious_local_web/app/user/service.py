@@ -76,7 +76,6 @@ def create_user_service(data: dict) -> tuple:
         print(f"Error: {e} coming from create_user_service")
         return False,None
 
-
 def update_user(user_id: int, data: dict) -> tuple:
     """Update user data"""
     url = f"{current_app.config['BASE_URL']}update-user/{user_id}"
@@ -90,7 +89,6 @@ def update_user(user_id: int, data: dict) -> tuple:
         print(f"[USER ERROR] update_user: {e}")
         return False, "Connection error"
 
-
 def delete_user(user_id: int) -> tuple:
     """Delete user"""
     url = f"{current_app.config['BASE_URL']}delete-user/{user_id}"
@@ -103,7 +101,6 @@ def delete_user(user_id: int) -> tuple:
     except Exception as e:
         print(f"[USER ERROR] delete_user: {e}")
         return False, "Connection error"
-
 
 def get_user_info_service(user_id: int) -> tuple:
     url = f"{current_app.config['BASE_URL']}get_user_info/{user_id}"
@@ -132,7 +129,6 @@ def update_virtual_user(user_id: int, data: dict) -> tuple:
         print(f"[USER ERROR] update_virtual_user: {e}")
         return False, "Connection error"
 
-
 def delete_virtual_user(user_id: int) -> tuple:
     """Delete virtual user"""
     url = f"{current_app.config['BASE_URL']}delete-virtuel-user/{user_id}"
@@ -146,7 +142,6 @@ def delete_virtual_user(user_id: int) -> tuple:
         print(f"[USER ERROR] delete_virtual_user: {e}")
         return False, "Connection error"
 
-
 def get_manager_info_service() -> tuple:
     url=f"{current_app.config['BASE_URL']}get-manager-info"
     try:
@@ -158,7 +153,6 @@ def get_manager_info_service() -> tuple:
     except Exception as e:
         print(e)
         return False,None
-
 
 def get_all_teacher_service() -> tuple:
     url=f"{current_app.config['BASE_URL']}get_all_teachers"
@@ -172,7 +166,6 @@ def get_all_teacher_service() -> tuple:
         print(f"Error: {e} coming from server")
         return False,None
 
-
 def create_teacher_service(data:dict) -> tuple:
     url = f"{current_app.config['BASE_URL']}create_teacher"
     try:
@@ -184,4 +177,3 @@ def create_teacher_service(data:dict) -> tuple:
     except Exception as e:
         print(f"Error: {e} coming from create_teacher")
         return False,None
-

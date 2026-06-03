@@ -1,6 +1,6 @@
 """
 Account Subject Data Processor
-Handle inserting and updating account_subject recrods in the database
+Handle inserting and updating account_subject records in the database
 """
 
 import sys
@@ -14,7 +14,8 @@ def insert_account_subjects(db, account_subject_data):
     """
     Handle 'created' account_subjects from API
     Logic:
-    - If record exists in DB → UPDATE it
+    - Check if id_prod already exists (avoid duplicates from local pushes)
+    - If record exists in DB by id → UPDATE it
     - If record does NOT exist → INSERT it
 
     Args:
@@ -48,22 +49,32 @@ def insert_account_subjects(db, account_subject_data):
                 if not account_subject_id:
                     raise ValueError("Missing required field: id")
 
+                # ✅ FIRST: Check if this remote ID already exists as id_prod (from local push)
+                check_prod_query = "SELECT id FROM account_subject WHERE id_prod = %s"
+                existing_by_prod = db.fetch_query(check_prod_query, (account_subject_id,))
+
+                if existing_by_prod:
+                    print(f"   [{i}/{len(created_account_subjects)}] Account_subject ID {account_subject_id} already exists as id_prod (local id: {existing_by_prod[0]['id']}) - skipped to avoid duplicate")
+                    result["skipped"] += 1
+                    continue
+
                 # Prepare new data
                 new_data = {
-                    "account_id": account_subject.get("accountId"),
+                    "id_prod":           account_subject.get("id"),
+                    "account_id":        account_subject.get("accountId"),
                     "subject_config_id": account_subject.get("subjectConfigId"),
-                    "other_subject": account_subject.get("otherSubject"),
-                    "status": 1 if account_subject.get("status", True) else 0,
-                    "description": account_subject.get("description", ""),
-                    "enabled": 1 if account_subject.get("enabled", True) else 0,
-                    "releaseToken": 1 if account_subject.get("releaseToken", False) else 0,
-                    "useToken": account_subject.get("useToken"),
-                    "created_at": format_date(account_subject.get("createdAt")),
-                    "updated_at": format_date(account_subject.get("updatedAt")),
-                    "timestamp": format_date(account_subject.get("timestamp"))
+                    "other_subject":     account_subject.get("otherSubject"),
+                    "status":            1 if account_subject.get("status", True) else 0,
+                    "description":       account_subject.get("description", ""),
+                    "enabled":           1 if account_subject.get("enabled", True) else 0,
+                    "releaseToken":      1 if account_subject.get("releaseToken", False) else 0,
+                    "useToken":          account_subject.get("useToken"),
+                    "created_at":        format_date(account_subject.get("createdAt")),
+                    "updated_at":        format_date(account_subject.get("updatedAt")),
+                    "timestamp":         format_date(account_subject.get("timestamp"))
                 }
 
-                # Check if record exists
+                # Check if record exists by id
                 select_query = "SELECT * FROM account_subject WHERE id = %s"
                 existing_records = db.fetch_query(select_query, (account_subject_id,))
 
@@ -73,7 +84,6 @@ def insert_account_subjects(db, account_subject_data):
                     # EXISTS → Compare and UPDATE if different
                     existing = existing_records[0]
 
-                    # Compare data
                     has_changes = False
                     for key, value in new_data.items():
                         old_value = str(existing.get(key)) if existing.get(key) is not None else None
@@ -87,26 +97,27 @@ def insert_account_subjects(db, account_subject_data):
                         result["skipped"] += 1
                         continue
 
-                    # Data is different - UPDATE
                     print(f"      🔄 Already exists but data changed - updating...")
 
                     update_query = """
                         UPDATE account_subject SET
-                            account_id = %s,
+                            id_prod          = %s,
+                            account_id       = %s,
                             subject_config_id = %s,
-                            other_subject = %s,
-                            status = %s,
-                            description = %s,
-                            enabled = %s,
-                            releaseToken = %s,
-                            useToken = %s,
-                            created_at = %s,
-                            updated_at = %s,
-                            timestamp = %s
+                            other_subject    = %s,
+                            status           = %s,
+                            description      = %s,
+                            enabled          = %s,
+                            releaseToken     = %s,
+                            useToken         = %s,
+                            created_at       = %s,
+                            updated_at       = %s,
+                            timestamp        = %s
                         WHERE id = %s
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["subject_config_id"],
                         new_data["other_subject"],
@@ -130,14 +141,15 @@ def insert_account_subjects(db, account_subject_data):
 
                     insert_query = """
                         INSERT INTO account_subject (
-                            id, account_id, subject_config_id, other_subject, status,
+                            id, id_prod, account_id, subject_config_id, other_subject, status,
                             description, enabled, releaseToken, useToken,
                             created_at, updated_at, timestamp
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """
 
                     db.execute_query(insert_query, (
                         account_subject_id,
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["subject_config_id"],
                         new_data["other_subject"],
@@ -210,29 +222,32 @@ def update_account_subjects(db, account_subject_data):
 
                 # Prepare new data
                 new_data = {
-                    "account_id": account_subject.get("accountId"),
+                    "id_prod":           account_subject.get("id"),
+                    "account_id":        account_subject.get("accountId"),
                     "subject_config_id": account_subject.get("subjectConfigId"),
-                    "other_subject": account_subject.get("otherSubject"),
-                    "status": 1 if account_subject.get("status", True) else 0,
-                    "description": account_subject.get("description", ""),
-                    "enabled": 1 if account_subject.get("enabled", True) else 0,
-                    "releaseToken": 1 if account_subject.get("releaseToken", False) else 0,
-                    "useToken": account_subject.get("useToken"),
-                    "updated_at": format_date(account_subject.get("updatedAt")),
-                    "timestamp": format_date(account_subject.get("timestamp"))
+                    "other_subject":     account_subject.get("otherSubject"),
+                    "status":            1 if account_subject.get("status", True) else 0,
+                    "description":       account_subject.get("description", ""),
+                    "enabled":           1 if account_subject.get("enabled", True) else 0,
+                    "releaseToken":      1 if account_subject.get("releaseToken", False) else 0,
+                    "useToken":          account_subject.get("useToken"),
+                    "updated_at":        format_date(account_subject.get("updatedAt")),
+                    "timestamp":         format_date(account_subject.get("timestamp"))
                 }
 
-                # Check if record exists
-                select_query = "SELECT * FROM account_subject WHERE id = %s"
-                existing_records = db.fetch_query(select_query, (account_subject_id,))
+                # ✅ Check by id_prod first, then fall back to id
+                check_prod_query = "SELECT * FROM account_subject WHERE id_prod = %s"
+                existing_records = db.fetch_query(check_prod_query, (account_subject_id,))
+
+                if not existing_records:
+                    select_query = "SELECT * FROM account_subject WHERE id = %s"
+                    existing_records = db.fetch_query(select_query, (account_subject_id,))
 
                 print(f"   [{i}/{len(updated_account_subjects)}] Account_subject ID {account_subject_id}...")
 
                 if existing_records:
-                    # EXISTS → Compare and UPDATE if different
                     existing = existing_records[0]
 
-                    # Compare data
                     has_changes = False
                     for key, value in new_data.items():
                         old_value = str(existing.get(key)) if existing.get(key) is not None else None
@@ -246,25 +261,26 @@ def update_account_subjects(db, account_subject_data):
                         result["skipped"] += 1
                         continue
 
-                    # Data is different - UPDATE
                     print(f"      🔄 Data changed - updating...")
 
                     update_query = """
                         UPDATE account_subject SET
-                            account_id = %s,
+                            id_prod           = %s,
+                            account_id        = %s,
                             subject_config_id = %s,
-                            other_subject = %s,
-                            status = %s,
-                            description = %s,
-                            enabled = %s,
-                            releaseToken = %s,
-                            useToken = %s,
-                            updated_at = %s,
-                            timestamp = %s
+                            other_subject     = %s,
+                            status            = %s,
+                            description       = %s,
+                            enabled           = %s,
+                            releaseToken      = %s,
+                            useToken          = %s,
+                            updated_at        = %s,
+                            timestamp         = %s
                         WHERE id = %s
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["subject_config_id"],
                         new_data["other_subject"],
@@ -275,7 +291,7 @@ def update_account_subjects(db, account_subject_data):
                         new_data["useToken"],
                         new_data["updated_at"],
                         new_data["timestamp"],
-                        account_subject_id
+                        existing["id"]  # ← use actual local id (handles both cases)
                     ))
 
                     result["updated"] += 1
@@ -287,15 +303,15 @@ def update_account_subjects(db, account_subject_data):
 
                     insert_query = """
                         INSERT INTO account_subject (
-                            id, account_id, subject_config_id, other_subject, status,
+                            id, id_prod, account_id, subject_config_id, other_subject, status,
                             description, enabled, releaseToken, useToken,
                             created_at, updated_at, timestamp
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """
 
-                    # For records in 'updated' that don't exist, use current time for created_at
                     db.execute_query(insert_query, (
                         account_subject_id,
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["subject_config_id"],
                         new_data["other_subject"],
@@ -304,7 +320,7 @@ def update_account_subjects(db, account_subject_data):
                         new_data["enabled"],
                         new_data["releaseToken"],
                         new_data["useToken"],
-                        new_data["updated_at"],  # Use updated_at as created_at
+                        new_data["updated_at"],  # fallback for created_at
                         new_data["updated_at"],
                         new_data["timestamp"]
                     ))
@@ -358,9 +374,9 @@ def process_account_subjects(db, account_subject_data):
 
     # Print total summary
     total_inserted = results["created_section"]["inserted"] + results["updated_section"]["inserted"]
-    total_updated = results["created_section"]["updated"] + results["updated_section"]["updated"]
-    total_skipped = results["created_section"]["skipped"] + results["updated_section"]["skipped"]
-    total_errors = results["created_section"]["errors"] + results["updated_section"]["errors"]
+    total_updated  = results["created_section"]["updated"]  + results["updated_section"]["updated"]
+    total_skipped  = results["created_section"]["skipped"]  + results["updated_section"]["skipped"]
+    total_errors   = results["created_section"]["errors"]   + results["updated_section"]["errors"]
 
     print("\n" + "=" * 60)
     print("📊 ACCOUNT_SUBJECTS - TOTAL SUMMARY")
