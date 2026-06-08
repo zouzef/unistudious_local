@@ -16,7 +16,8 @@ def insert_sessions(db, session_data, token):
     """
     Handle 'created' sessions from API
     Logic:
-    - If session exists in DB → UPDATE it
+    - Check if id_prod already exists (avoid duplicates from local pushes)
+    - If session exists in DB by id → UPDATE it
     - If session does NOT exist → INSERT it
 
     Args:
@@ -51,8 +52,18 @@ def insert_sessions(db, session_data, token):
                 if not session_id:
                     raise ValueError("Missing required field: id")
 
+                # ✅ FIRST: Check if this remote ID already exists as id_prod (from local push)
+                check_prod_query = "SELECT id FROM session WHERE id_prod = %s"
+                existing_by_prod = db.fetch_query(check_prod_query, (session_id,))
+
+                if existing_by_prod:
+                    print(f"   [{i}/{len(created_sessions)}] Session ID {session_id} already exists as id_prod (local id: {existing_by_prod[0]['id']}) - skipped to avoid duplicate")
+                    result["skipped"] += 1
+                    continue
+
                 # Prepare new data with safe defaults
                 new_data = {
+                    "id_prod": session.get("id"),
                     "uuid": session.get("uuid"),
                     "account_id": session.get("accountId"),
                     "formation_id": session.get("formationId"),
@@ -86,7 +97,7 @@ def insert_sessions(db, session_data, token):
                     "season_id": None
                 }
 
-                # Check if session exists
+                # Check if session exists by id
                 select_query = "SELECT * FROM session WHERE id = %s"
                 existing_records = db.fetch_query(select_query, (session_id,))
 
@@ -120,6 +131,7 @@ def insert_sessions(db, session_data, token):
 
                     update_query = """
                         UPDATE session SET
+                            id_prod = %s,
                             uuid = %s,
                             account_id = %s,
                             formation_id = %s,
@@ -155,6 +167,7 @@ def insert_sessions(db, session_data, token):
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["uuid"],
                         new_data["account_id"],
                         new_data["formation_id"],
@@ -200,7 +213,7 @@ def insert_sessions(db, session_data, token):
 
                     insert_query = """
                         INSERT INTO session (
-                            id, uuid, account_id, formation_id, name, description, status, img_link,
+                            id, id_prod, uuid, account_id, formation_id, name, description, status, img_link,
                             start_date, end_date, capacity, price, currency, type_pay,
                             request_change_group, max_group_change, special_group, enabled, 
                             user_register_after_start, releaseToken, useToken, created_at, 
@@ -209,12 +222,13 @@ def insert_sessions(db, session_data, token):
                             passage, season_id
                         ) VALUES (
                             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
-                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
                         )
                     """
 
                     db.execute_query(insert_query, (
                         session_id,
+                        new_data["id_prod"],
                         new_data["uuid"],
                         new_data["account_id"],
                         new_data["formation_id"],
@@ -272,7 +286,8 @@ def update_sessions(db, session_data, token):
     """
     Handle 'updated' sessions from API
     Logic:
-    - If session exists in DB → UPDATE it
+    - Look up by id_prod first, then by id
+    - If session exists in DB → UPDATE it (using the local id)
     - If session does NOT exist → INSERT it (don't skip!)
 
     Args:
@@ -309,6 +324,7 @@ def update_sessions(db, session_data, token):
 
                 # Prepare new data
                 new_data = {
+                    "id_prod": session.get("id"),
                     "uuid": session.get("uuid"),
                     "account_id": session.get("accountId"),
                     "formation_id": session.get("formationId"),
@@ -333,9 +349,13 @@ def update_sessions(db, session_data, token):
                     "timestamp": format_date(session.get("timestamp"))
                 }
 
-                # Check if session exists
-                select_query = "SELECT * FROM session WHERE id = %s"
-                existing_records = db.fetch_query(select_query, (session_id,))
+                # Check if session exists by id_prod first, then by id
+                check_prod_query = "SELECT * FROM session WHERE id_prod = %s"
+                existing_records = db.fetch_query(check_prod_query, (session_id,))
+
+                if not existing_records:
+                    select_query = "SELECT * FROM session WHERE id = %s"
+                    existing_records = db.fetch_query(select_query, (session_id,))
 
                 print(f"   [{i}/{len(updated_sessions)}] Session ID {session_id}...")
 
@@ -343,15 +363,13 @@ def update_sessions(db, session_data, token):
                     # EXISTS → Compare and UPDATE if different
                     existing = existing_records[0]
 
-                    # Compare data (skip fields that are always None or not in new_data)
-                    has_changes = False
                     # Compare only relevant fields
-                    comparison_fields = ["uuid", "account_id", "formation_id", "name", "description",
+                    comparison_fields = ["id_prod", "uuid", "account_id", "formation_id", "name", "description",
                                          "status", "img_link", "start_date", "end_date", "capacity",
                                          "price", "currency", "type_pay", "request_change_group",
                                          "max_group_change", "special_group", "enabled",
                                          "user_register_after_start", "releaseToken", "useToken",
-                                         "created_at", "updated_at", "timestamp"]
+                                         "updated_at", "timestamp"]
 
                     has_changes = False
                     for field in comparison_fields:
@@ -366,11 +384,12 @@ def update_sessions(db, session_data, token):
                         result["skipped"] += 1
                         continue
 
-                    # Data is different - UPDATE
+                    # Data is different - UPDATE using the local id
                     print(f"      🔄 Data changed - updating...")
 
                     update_query = """
                         UPDATE session SET
+                            id_prod = %s,
                             uuid = %s,
                             account_id = %s,
                             formation_id = %s,
@@ -397,6 +416,7 @@ def update_sessions(db, session_data, token):
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["uuid"],
                         new_data["account_id"],
                         new_data["formation_id"],
@@ -419,13 +439,13 @@ def update_sessions(db, session_data, token):
                         new_data["useToken"],
                         new_data["updated_at"],
                         new_data["timestamp"],
-                        session_id
+                        existing["id"]  # ← use actual local id (handles both id_prod and id matches)
                     ))
 
                     result["updated"] += 1
                     print(f"      ✅ Updated successfully")
 
-                    download_session_image(session_id, new_data["img_link"], token)
+                    download_session_image(existing["id"], new_data["img_link"], token)
 
                 else:
                     # DOES NOT EXIST → INSERT (don't skip!)
@@ -433,7 +453,7 @@ def update_sessions(db, session_data, token):
 
                     insert_query = """
                         INSERT INTO session (
-                            id, uuid, account_id, formation_id, name, description, status, img_link,
+                            id, id_prod, uuid, account_id, formation_id, name, description, status, img_link,
                             start_date, end_date, capacity, price, currency, type_pay,
                             request_change_group, max_group_change, special_group, enabled, 
                             user_register_after_start, releaseToken, useToken, created_at, 
@@ -442,7 +462,7 @@ def update_sessions(db, session_data, token):
                             passage, season_id
                         ) VALUES (
                             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
-                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
                         )
                     """
 
@@ -450,6 +470,7 @@ def update_sessions(db, session_data, token):
                     # Set NULL values for optional fields
                     db.execute_query(insert_query, (
                         session_id,
+                        new_data["id_prod"],
                         new_data["uuid"],
                         new_data["account_id"],
                         new_data["formation_id"],

@@ -49,10 +49,8 @@ def _send_note_update(settings,attendance_id,note):
         payload = {'note':str(note)}
         print("payload:",payload)
         url = f"{settings.api_base_url}/slc/update-attendance-note/{attendance_id}"
-        print(url)
         response = requests.post(url,data=payload,headers=headers,timeout=10)
         if response.status_code == 200:
-            print("hiii")
             response_data = response.json()
             print(f"✅ Remote API success: {response_data}")
             return True
@@ -261,7 +259,6 @@ def push_update(db, settings, audit_row):
         traceback.print_exc()
         return False
 
-
 def service_send_dattendance(settings, data, id_prod):
     try:
         token = get_token()
@@ -292,7 +289,6 @@ def service_send_dattendance(settings, data, id_prod):
         import traceback
         traceback.print_exc()
         return False, None  # ✅ Always return a tuple
-
 
 def send_new_attendance(db, settings, audit_row):
     print("send_new_attendance called")
@@ -349,3 +345,26 @@ def send_new_attendance(db, settings, audit_row):
         import traceback
         traceback.print_exc()
         return None
+
+def push_delete(db, settings, audit_row):
+    print("🗑️ DELETE — pushing to remote...")
+    try:
+        id_attendance = audit_row.get('id_attendance')
+
+        conn = db.connection
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT id_prod FROM attendance WHERE id = %s", (id_attendance,))
+        row = cursor.fetchone()
+        cursor.close()
+
+        if not row or not row['id_prod']:
+            print(f"❌ No id_prod found for local attendance id={id_attendance} — skipping")
+            return False
+
+        id_prod = row['id_prod']
+        result = _delete_attendance(settings, id_prod)
+        return result
+
+    except Exception as e:
+        print(f"❌ Unexpected error in push_delete: {e}")
+        return False

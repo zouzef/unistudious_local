@@ -13,6 +13,24 @@ from core.middleware import token_required
 # Create ONE blueprint for all attendance endpoints
 attendance_bp = Blueprint('attendance', __name__, url_prefix='/scl')
 
+def log_attendance_audit(action_type, old_data=None, new_data=None, id_attendance=None, id_calander=None):
+    """Shared audit logger for all attendance changes"""
+    try:
+        query = """
+            INSERT INTO attendance_audit
+                (action_type, old_data, new_data, is_synced, id_attendance, id_calander)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        Database.execute_query(query, (
+            action_type,
+            json.dumps(old_data)  if old_data  else None,
+            json.dumps(new_data)  if new_data  else None,
+            0,
+            id_attendance,
+            id_calander
+        ), fetch=False)
+    except Exception as e:
+        print(f"⚠️ attendance_audit log failed: {e}")
 
 # ========================================
 # ENDPOINT 1: Get attendance by calendar
@@ -341,14 +359,21 @@ def statistics_attendance(id_calender):
 @attendance_bp.route('/delete_attendance_api/<int:calender_id>/<int:user_id>', methods=['DELETE'])
 def delete_attendance_api(calender_id, user_id):
     try:
-        # Check if attendance exists
         query = """
             SELECT * FROM attendance 
             WHERE calander_id = %s AND enabled = 1 AND user_id = %s
         """
         attendance_data = Database.execute_query(query, (calender_id, user_id))
         if attendance_data:
-            # Soft delete: set enabled = 0
+            old_data = {
+                "id":         attendance_data[0]['id'],
+                "user_id":    user_id,
+                "calander_id": calender_id,
+                "is_present": attendance_data[0]['is_present'],
+                "enabled":    attendance_data[0]['enabled'],
+                "note":       attendance_data[0]['note']
+            }
+
             query = """
                 UPDATE attendance 
                 SET enabled = 0, slc_edit = 1 
@@ -356,22 +381,21 @@ def delete_attendance_api(calender_id, user_id):
             """
             Database.execute_query(query, (calender_id, user_id), fetch=False)
 
-            return jsonify({
-                "status": "ok",
-                "message": "Attendance deleted successfully"
-            }), 200
+            log_attendance_audit(
+                action_type   = "DELETE",
+                old_data      = old_data,
+                new_data      = {"enabled": 0},
+                id_attendance = old_data['id'],
+                id_calander   = calender_id
+            )
+
+            return jsonify({"status": "ok", "message": "Attendance deleted successfully"}), 200
         else:
-            return jsonify({
-                "status": "error",
-                "message": "No attendance records found for the given calendar_id and user_id"
-            }), 404
+            return jsonify({"status": "error", "message": "No attendance records found"}), 404
 
     except Exception as e:
         print(f"DEBUG: Error {e} coming from delete_attendance api")
-        return jsonify({
-            "status": "error",
-            "message": "Error occurred"
-        }), 500
+        return jsonify({"status": "error", "message": "Error occurred"}), 500
 
 
 # ========================================
@@ -380,27 +404,36 @@ def delete_attendance_api(calender_id, user_id):
 @attendance_bp.route('/attendance-delete-student/<int:id_attendance>', methods=['DELETE'])
 def delete_attendance_by_id(id_attendance):
     try:
+        # Fetch before deleting for audit
+        old_row = Database.execute_query(
+            "SELECT * FROM attendance WHERE id = %s", (id_attendance,)
+        )
+        if not old_row:
+            return jsonify({"message": "No attendance record found with the given ID"}), 404
 
-        # Fixed: Delete by attendance ID, not calendar_id and user_id
-        query = """
-            UPDATE attendance 
-            SET enabled = 0 
-            WHERE id = %s
-        """
-        Database.execute_query(query, (id_attendance,), fetch=False)
+        old_data = {
+            "id":         old_row[0]['id'],
+            "user_id":    old_row[0]['user_id'],
+            "calander_id": old_row[0]['calander_id'],
+            "is_present": old_row[0]['is_present'],
+            "enabled":    old_row[0]['enabled'],
+            "note":       old_row[0]['note']
+        }
 
-        # Check if any row was updated
-        query_check = "SELECT * FROM attendance WHERE id = %s"
-        result = Database.execute_query(query_check, (id_attendance,))
+        Database.execute_query(
+            "UPDATE attendance SET enabled = 0 WHERE id = %s",
+            (id_attendance,), fetch=False
+        )
 
-        if result:
-            return jsonify({
-                "message": "Attendance record deleted successfully"
-            }), 200
-        else:
-            return jsonify({
-                "message": "No attendance record found with the given ID"
-            }), 404
+        log_attendance_audit(
+            action_type   = "DELETE",
+            old_data      = old_data,
+            new_data      = {"enabled": 0},
+            id_attendance = id_attendance,
+            id_calander   = old_data['calander_id']
+        )
+
+        return jsonify({"message": "Attendance record deleted successfully"}), 200
 
     except Exception as e:
         print(f"Error: {e}")
@@ -638,7 +671,6 @@ def get_next_attendance_v2(calendarId):
 @attendance_bp.route('/reset_attendance/<int:calender_id>', methods=['POST'])
 def reset_attendance(calender_id):
     try:
-        # Check if there are any records to reset
         query = """
             SELECT COUNT(id) as count
             FROM attendance
@@ -646,30 +678,36 @@ def reset_attendance(calender_id):
         """
         result = Database.execute_query(query, (calender_id,))
         present_count = result[0]['count']
-        if present_count == 0:
-            return jsonify({
-                "status": "ok",
-                "message": "All the attendance records are already reset"
-            }), 200
-        else:
-            # Reset attendance: set is_present=0 and note=NULL
-            query = """
-                UPDATE attendance 
-                SET is_present = 0, note = NULL 
-                WHERE calander_id = %s
-            """
-            Database.execute_query(query, (calender_id,), fetch=False)
 
-            return jsonify({
-                "status": "ok",
-                "message": "Reset successfully"
-            }), 200
+        if present_count == 0:
+            return jsonify({"status": "ok", "message": "All the attendance records are already reset"}), 200
+
+        # Fetch all rows before reset for audit
+        rows_before = Database.execute_query(
+            "SELECT id, user_id, is_present, note FROM attendance WHERE calander_id = %s",
+            (calender_id,)
+        )
+
+        Database.execute_query(
+            "UPDATE attendance SET is_present = 0, note = NULL WHERE calander_id = %s",
+            (calender_id,), fetch=False
+        )
+
+        # One audit entry per attendance row
+        for row in rows_before:
+            log_attendance_audit(
+                action_type   = "RESET",
+                old_data      = {"is_present": row['is_present'], "note": row['note']},
+                new_data      = {"is_present": 0, "note": None},
+                id_attendance = row['id'],
+                id_calander   = calender_id
+            )
+
+        return jsonify({"status": "ok", "message": "Reset successfully"}), 200
 
     except Exception as e:
         print(f"DEBUG: Error {e} from reset_attendance")
-        return jsonify({
-            "message": "Something went wrong."
-        }), 500
+        return jsonify({"message": "Something went wrong."}), 500
 
 
 # ========================================
@@ -734,33 +772,50 @@ def get_slc_mac(attendance_id):
 @attendance_bp.route('/update-attendance-student/<int:id_attendance>', methods=['POST'])
 def update_attendance_status(id_attendance):
     try:
-        # Get data from request (supports both JSON and form data)
         if request.is_json:
             data = request.get_json()
         else:
             data = request.form.to_dict()
-        # Validate that the payload contains 'status'
+
         if not data or 'status' not in data:
             return jsonify({"error": "Missing 'status' in request payload"}), 400
+
         status = data['status']
-        # Convert string to boolean if it's form data
         if isinstance(status, str):
             status = status.lower() in ['true', '1', 'yes', 'on']
         elif not isinstance(status, bool):
             return jsonify({"error": "Status must be a boolean value (true/false)"}), 400
-        # Get SLC mac address
+
+        # Fetch old data before update
+        old_row = Database.execute_query(
+            "SELECT id, calander_id, user_id, is_present, note FROM attendance WHERE id = %s",
+            (id_attendance,)
+        )
+        if not old_row:
+            return jsonify({"error": "Attendance not found"}), 404
+
+        old_data = {
+            "is_present": old_row[0]['is_present'],
+            "user_id":    old_row[0]['user_id']
+        }
+
         mac_address = get_slc_mac(id_attendance)
-        # Update attendance status
-        query = """
+
+        Database.execute_query("""
             UPDATE attendance 
-            SET is_present = %s,
-                updated_at = NOW(),
-                releaseToken = 1,
-                useToken = %s,
-                slc_edit = 1
+            SET is_present = %s, updated_at = NOW(), releaseToken = 1,
+                useToken = %s, slc_edit = 1
             WHERE id = %s
-        """
-        Database.execute_query(query, (status, mac_address, id_attendance), fetch=False)
+        """, (status, mac_address, id_attendance), fetch=False)
+
+        log_attendance_audit(
+            action_type   = "UPDATE",
+            old_data      = old_data,
+            new_data      = {"is_present": status},
+            id_attendance = id_attendance,
+            id_calander   = old_row[0]['calander_id']
+        )
+
         return jsonify({
             "message": "Attendance status updated successfully",
             "attendance_id": id_attendance,
@@ -777,32 +832,46 @@ def update_attendance_status(id_attendance):
 @attendance_bp.route('/update-attendance-note/<int:attendanceId>', methods=['POST'])
 def update_attendance_note(attendanceId):
     try:
-        # Get data from request (supports both JSON and form data)
         if request.is_json:
             data = request.get_json()
         else:
             data = request.form.to_dict()
-        # Validate that the payload contains 'note'
+
         if not data or 'note' not in data:
             return jsonify({"error": "Missing 'note' in request payload"}), 400
+
         note = data['note']
-        # Validate that note is a string
         if not isinstance(note, str):
             return jsonify({"error": "Note must be a string value"}), 400
-        # Update attendance note
-        query = """
+
+        # Fetch old note before update
+        old_row = Database.execute_query(
+            "SELECT id, calander_id, user_id, note FROM attendance WHERE id = %s",
+            (attendanceId,)
+        )
+        if not old_row:
+            return jsonify({"error": "Attendance not found"}), 404
+
+        Database.execute_query("""
             UPDATE attendance 
-            SET note = %s,
-                updated_at = NOW(),
-                slc_edit = 1
+            SET note = %s, updated_at = NOW(), slc_edit = 1
             WHERE id = %s
-        """
-        Database.execute_query(query, (note, attendanceId), fetch=False)
+        """, (note, attendanceId), fetch=False)
+
+        log_attendance_audit(
+            action_type   = "UPDATE",
+            old_data      = {"note": old_row[0]['note']},
+            new_data      = {"note": note},
+            id_attendance = attendanceId,
+            id_calander   = old_row[0]['calander_id']
+        )
+
         return jsonify({
             "message": "Attendance note updated successfully",
             "attendance_id": attendanceId,
             "note": note
         }), 200
+
     except Exception as e:
         return jsonify({"error": f"Unexpected error: {str(e)}"}), 500
 

@@ -16,6 +16,7 @@ import string
 import requests
 import json
 import jwt
+from util.audit import log_audit
 
 # Create blueprint
 calendar_bp = Blueprint('calendar', __name__, url_prefix='/scl')
@@ -407,6 +408,7 @@ def check_color(color):
         print(f"Database Error: {e}")
         return True
 
+
 # ========================================
 # ENDPOINT 8: Create calendar api
 # ========================================
@@ -429,6 +431,7 @@ def get_name_group(id):
     except Exception as e:
         print(f"❌ Error getting group name: {e}")
         return None
+
 
 # Create calendar api
 @calendar_bp.route('/create_calender',methods=['POST'])
@@ -562,6 +565,37 @@ def create_calander():
         # Execute insert query using Database helper
         calander_id = Database.execute_query(query, values, fetch=False)
         if calander_id:
+            # Audit: log the new calendar entry
+            new_data = {
+                "session_id": session_id,
+                "account_id": account_id,
+                "local_id": local_id,
+                "group_id": group_id,
+                "room_id": room_id,
+                "teacher_id": teacher_id,
+                "subject_id": subject_id,
+                "color": color,
+                "status": status,
+                "description": description,
+                "start_time": start_time,
+                "end_time": end_time,
+                "ref": ref,
+                "title": title,
+                "type": type_val,
+                "created_at": create_time.isoformat(),
+            }
+            audit_query = """
+                INSERT INTO relation_calander_group_audit
+                    (action_type, old_data, new_data, is_synced, id_calander)
+                VALUES (%s, %s, %s, %s, %s)
+            """
+            Database.execute_query(audit_query, (
+                "INSERT",
+                None,
+                json.dumps(new_data),
+                0,
+                calander_id
+            ), fetch=False)
             query = """
                 SELECT DISTINCT user_id
                 FROM relation_user_session
@@ -1741,13 +1775,44 @@ def create_calander_special_group():
             'title':name,
             'type':type,
         }
-        resp_calander,id = create_calander_special(payload2)
-        resp_rel_teach,id = create_relation_teacher_to_subject(payload2)
+        resp_calander, calander_id = create_calander_special(payload2)
+        resp_rel_teach, rel_id = create_relation_teacher_to_subject(payload2)
+
         if resp_calander == False or resp_rel_teach == False:
             return jsonify({
-                "Message":"Error in creating calender"
-            })
+                "Message": "Error in creating calender"
+            }), 500
         else:
+            # Audit: log the new calendar entry
+            if calander_id:
+                new_data = {
+                    "session_id": session_id,
+                    "account_id": account_id,
+                    "local_id": local_id,
+                    "group_id": group_id,
+                    "room_id": room_id,
+                    "teacher_id": teacher_id,
+                    "subject_id": subject_id,
+                    "description": description,
+                    "start_time": start_datetime,
+                    "end_time": end_datetime,
+                    "title": name,
+                    "type": type,
+                    "is_special": is_special,
+                }
+                audit_query = """
+                    INSERT INTO relation_calander_group_audit
+                        (action_type, old_data, new_data, is_synced, id_calander)
+                    VALUES (%s, %s, %s, %s, %s)
+                """
+                Database.execute_query(audit_query, (
+                    "INSERT",
+                    None,
+                    json.dumps(new_data),
+                    0,
+                    calander_id
+                ), fetch=False)
+
             return jsonify({
                 "Message": "calender created with success for special group"
             }), 200

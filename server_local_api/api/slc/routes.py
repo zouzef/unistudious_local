@@ -188,7 +188,7 @@ def get_academie_image(tablet_id):
                 AND s.account_id = a.id;
         """
         rows = Database.execute_query(query, (tablet_id,))
-        print(rows)
+
         if not rows:
             return jsonify({
                 "status": "error",
@@ -196,6 +196,7 @@ def get_academie_image(tablet_id):
             }), 404
 
         account_id = rows[0]["id"]
+        print(account_id)
         file_link = rows[0]["file_link"]
 
         if not file_link:

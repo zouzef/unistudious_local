@@ -599,6 +599,7 @@ class SessionModel(BaseModel):
         Column("releaseToken",              "TINYINT(1)"),
         Column("useToken",                  "VARCHAR(255)"),
         Column("slc_use",                   "INT(11)",     default="0"),
+        Column("id_prod",                   "INT(11)")
     ]
 
 
