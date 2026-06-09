@@ -1,68 +1,97 @@
-<!-- ============================= -->
-<!-- HEADER SECTION -->
-<!-- ============================= -->
 <div class="col-lg-9">
-    <!-- Subject Attendance Section -->
-    <div class="card mt-3" style="border:solid 1px lightgrey">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="card-title mb-0" style="color: rgb(48, 57, 114);">Subject Attendance</h5>
-            <!-- Real-time connection status -->
+    <div class="card mt-3 attendance-card">
+
+        <!-- Card Header -->
+        <div class="card-header attendance-header">
+            <div class="d-flex align-items-center gap-2">
+                <div class="header-icon">
+                    <i class="bi bi-calendar-check"></i>
+                </div>
+                <div>
+                    <h5 class="card-title mb-0">Subject Attendance</h5>
+                    <small class="header-subtitle">Manage and track student attendance</small>
+                </div>
+            </div>
             <div id="connectionStatus" class="connection-badge disconnected">
                 <span class="status-dot"></span>
                 <span class="status-text">Connecting...</span>
             </div>
         </div>
-        <div class="card-body">
-            <!-- Filter Form -->
-            <form class="row g-3 mb-4 ">
-                <div class="col-md-3">
-                    <label class="form-label">Name Group</label>
-                    <div type="text" class="form-control form2" id="name_group_label"></div>
+
+        <div class="card-body p-4">
+
+            <!-- Session Info Pills -->
+            <div class="session-info-grid mb-4">
+                <div class="info-pill">
+                    <div class="info-pill-icon"><i class="bi bi-people"></i></div>
+                    <div>
+                        <span class="info-pill-label">Group</span>
+                        <span class="info-pill-value" id="name_group_label">—</span>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <label class="form-label">Teacher Name</label>
-                    <div type="text" class="form-control form2" id="teacher_name"></div>
+                <div class="info-pill">
+                    <div class="info-pill-icon"><i class="bi bi-person-badge"></i></div>
+                    <div>
+                        <span class="info-pill-label">Teacher</span>
+                        <span class="info-pill-value" id="teacher_name">—</span>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <label class="form-label">Name Subject</label>
-                    <div type="text" class="form-control form2" id="subject_name"></div>
+                <div class="info-pill">
+                    <div class="info-pill-icon"><i class="bi bi-book"></i></div>
+                    <div>
+                        <span class="info-pill-label">Subject</span>
+                        <span class="info-pill-value" id="subject_name">—</span>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <label class="form-label">Room Name</label>
-                   <div type="text" class="form-control form2" id="room_name"></div>
+                <div class="info-pill">
+                    <div class="info-pill-icon"><i class="bi bi-door-open"></i></div>
+                    <div>
+                        <span class="info-pill-label">Room</span>
+                        <span class="info-pill-value" id="room_name">—</span>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label class="form-label">Student</label>
-                    <input type="text" class="form-control" id="studentSearch" placeholder="Search by Student ID or Name" style="border-color: #DDDDDD;">
+            </div>
+
+            <!-- Search + Add Row -->
+            <div class="d-flex gap-3 mb-4 align-items-center">
+                <div class="search-wrapper flex-grow-1">
+                    <i class="bi bi-search search-icon"></i>
+                    <input type="text" class="form-control search-input"
+                           id="studentSearch"
+                           placeholder="Search by Student ID or Name">
                 </div>
-                <div class="col-md-6 d-flex align-items-center" style="padding-top: 20px;">
-                    <button
-                        type="button"
-                        class="btn custom-btn ms-auto"
-                        style="background-color: rgb(90, 71, 207); color: white;"
+                <button type="button"
+                        class="btn ms-auto"
+                        style="background-color: rgb(90, 71, 207);
+                               color: white;
+                               border: none;
+                               border-radius: 10px;
+                               padding: 10px 20px;
+                               font-weight: 500;
+                               font-size: 14px;
+                               letter-spacing: 0.3px;
+                               white-space: nowrap;"
                         data-bs-toggle="modal"
                         data-bs-target="#model-add-student"
                         onclick="loadStudentList()">
-                        <i class="bi bi-person-plus"></i> Add student
-                    </button>
-                </div>
-            </form>
+                    <i class="bi bi-person-plus"></i> Add Student
+                </button>
+            </div>
 
             <!-- Attendance Table -->
             <div class="table-responsive">
                 <table id="attendanceTable">
-                    <thead style="background-color:black;color: #4D44B5;">
-                        <tr>
-                            <th>Delete</th>
-                            <th>ID</th>
-                            <th>User Name</th>
-                            <th>Status</th>
-                            <th>Note</th>
-                            <th>Actions</th>
-                        </tr>
+                    <thead>
+                    <tr>
+                        <th style="width:50px;"></th>
+                        <th>ID</th>
+                        <th>Student Name</th>
+                        <th>Status</th>
+                        <th>Note</th>
+                        <th>Actions</th>
+                    </tr>
                     </thead>
                     <tbody id="attendanceBody">
-                        <!-- Dynamic rows will go here -->
                     </tbody>
                 </table>
             </div>
@@ -71,16 +100,15 @@
             <div class="pagination-container d-flex justify-content-center align-items-center mt-3">
                 <nav aria-label="Table pagination">
                     <ul class="pagination pagination-custom mb-0" id="paginationNav">
-                        <!-- Previous Button -->
                         <li class="page-item" id="prevPageItem">
-                            <a class="page-link pagination-link" href="#" onclick="changePage(currentPage - 1)">
+                            <a class="page-link pagination-link" href="#"
+                               onclick="changePage(currentPage - 1)">
                                 <i class="bi bi-chevron-left"></i> Previous
                             </a>
                         </li>
-                        <!-- Page numbers will be inserted here -->
-                        <!-- Next Button -->
                         <li class="page-item" id="nextPageItem">
-                            <a class="page-link pagination-link" href="#" onclick="changePage(currentPage + 1)">
+                            <a class="page-link pagination-link" href="#"
+                               onclick="changePage(currentPage + 1)">
                                 Next <i class="bi bi-chevron-right"></i>
                             </a>
                         </li>
@@ -93,11 +121,13 @@
                 <div class="spinner-border text-primary" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
-                <p>Loading attendance data...</p>
+                <p class="mt-2">Loading attendance data...</p>
             </div>
+
         </div>
     </div>
 </div>
+
 
 <!-- ============================= -->
 <!-- MODALS SECTION -->
@@ -130,12 +160,12 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                style="background-color: rgb(251, 125, 91); border:none;">
-                Close
+                        style="background-color: rgb(251, 125, 91); border:none;">
+                    Close
                 </button>
                 <button type="button" class="btn btn-primary"
-                style="border:none; background-color: rgb(77, 68, 181);" id="add-note">
-                Add note user
+                        style="border:none; background-color: rgb(77, 68, 181);" id="add-note">
+                    Add note user
                 </button>
             </div>
         </div>
@@ -143,184 +173,144 @@
 </div>
 
 <!-- Add student modal -->
-<div class="modal fade" id="model-add-student" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-g">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" style="font-size: 0.9rem;">Add new student</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="recherche">
-                <label for="student-select" class="form-label">Select user</label>
-                <select id="student-select" class="form-select my-select" style="width:100%;"></select>
+<div class="modal fade" id="model-add-student" tabindex="-1" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-g">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="font-size: 0.9rem;">Add new student</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body">
+                <div class="recherche">
+                    <label for="student-select" class="form-label">Select user</label>
+                    <select id="student-select" class="form-select my-select" style="width:100%;"></select>
+                </div>
 
-            <div class="recherche" style="margin-top: 20px;">
-                <label for="change-group" class="form-label">Change user group?</label>
+                <div class="recherche" style="margin-top: 20px;">
+                    <label for="change-group" class="form-label">Change user group?</label>
+                    <br>
+                    <div class="custom-checkbox">
+                        <input type="checkbox" id="checkbox1" name="checkbox">
+                        <label for="checkbox1">
+                            <span class="box"></span>
+                            Yes, change this user to the selected group.
+                        </label>
+                    </div>
+                </div>
+
                 <br>
+                <label for="change-group" class="form-label">Join user to this group?</label>
                 <div class="custom-checkbox">
-                    <input type="checkbox" id="checkbox1" name="checkbox">
-                    <label for="checkbox1">
+                    <input type="checkbox" id="checkbox2" name="checkbox">
+                    <label for="checkbox2">
                         <span class="box"></span>
-                        Yes, change this user to the selected group.
+                        Yes, add user to this group.
                     </label>
                 </div>
-            </div>
 
-            <br>
-            <label for="change-group" class="form-label">Join user to this group?</label>
-            <div class="custom-checkbox">
-                <input type="checkbox" id="checkbox2" name="checkbox">
-                <label for="checkbox2">
-                    <span class="box"></span>
-                    Yes, add user to this group.
-                </label>
-            </div>
-
-            <br>
-            <div class="current-group" style="display: none;" id="current-group">
-                <label for="change-group" class="form-label">Select Current Group</label>
-                <div class="custom-checkbox">
-                    <select class="form-select my-select" id="change-group" style="width:100%;">
-                        <!-- options will be added dynamically by JS -->
-                    </select>
+                <br>
+                <div class="current-group" style="display: none;" id="current-group">
+                    <label for="change-group" class="form-label">Select Current Group</label>
+                    <div class="custom-checkbox">
+                        <select class="form-select my-select" id="change-group" style="width:100%;">
+                            <!-- options will be added dynamically by JS -->
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-              style="background-color: rgb(251, 125, 91); border:none;">
-              Close
-            </button>
-            <button type="button" class="btn btn-primary"
-              style="border:none; background-color: rgb(77, 68, 181);" id="add-new-user">
-              Add new user
-            </button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        style="background-color: rgb(251, 125, 91); border:none;">
+                    Close
+                </button>
+                <button type="button" class="btn btn-primary"
+                        style="border:none; background-color: rgb(77, 68, 181);" id="add-new-user">
+                    Add new user
+                </button>
+            </div>
         </div>
     </div>
-  </div>
 </div>
 
 <!-- ============================= -->
 <!-- EXTERNAL LIBRARIES -->
 <!-- ============================= -->
 <!-- jQuery (must come before Select2 JS) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Select2 JS (must come after jQuery) -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<!-- Include Socket.IO -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+<script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/select2.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/socket.io.js') }}"></script>
 
 <!-- ============================= -->
 <!-- STYLES SECTION -->
 <!-- ============================= -->
 <style>
-    /* Custom button hover */
-    .custom-btn:hover {
-       opacity: 0.8;
-       border-color: #5A4FCF;
+    /* ═══════════════════════════════════════════
+       ANIMATIONS
+       ═══════════════════════════════════════════ */
+    @keyframes pulse {
+        0%   { opacity: 1; }
+        50%  { opacity: 0.5; }
+        100% { opacity: 1; }
     }
 
-    /* Form styles */
-    .form2 {
-        background-color: #f8f9fa;
-        font-weight: 500;
-        color: rgb(137, 135, 159);
+    @keyframes highlight {
+        0%   { background-color: #fff3cd; }
+        100% { background-color: transparent; }
     }
 
-    /* Status badges */
-    .status-present {
-        background-color: #d4edda;
-        color: #155724;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-weight: 500;
-        font-size: 13px;
+    /* ═══════════════════════════════════════════
+       MAIN ATTENDANCE CARD
+       ═══════════════════════════════════════════ */
+    .attendance-card {
+        border: none !important;
+        border-radius: 16px !important;
+        box-shadow: 0 2px 16px rgba(77, 68, 181, 0.08);
+        overflow: hidden;
     }
 
-    .status-absent {
-        background-color: rgb(253, 83, 83);
+    .attendance-header {
+        background: linear-gradient(135deg, rgb(77, 68, 181) 0%, rgb(90, 71, 207) 100%);
+        padding: 18px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: none !important;
+    }
+
+    .header-icon {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         color: white;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 13px;
+        font-size: 18px;
     }
 
-    /* Note content */
-    .note-content {
-        color: rgb(137, 135, 159);
-        font-style: italic;
-    }
-
-    /* Table styles */
-    #attendanceTable {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    #attendanceTable th,
-    #attendanceTable td {
-        padding: 12px;
-        text-align: center;
-        border-bottom: 1px solid #ddd;
-    }
-
-    #attendanceTable th {
-        background-color: #CBD6E2;
-        font-weight: 600;
-    }
-
-    #attendanceTable td {
-        color: rgb(137, 135, 159);
-    }
-
-    /* Button styles */
-    .btn-present {
-        margin-right: 5px;
-    }
-
-    .btn-note {
-        background-color: #17a2b8;
-        border-color: #17a2b8;
+    .attendance-header .card-title {
         color: white;
+        font-weight: 700;
+        font-size: 16px;
+        letter-spacing: 0.3px;
+        margin: 0;
     }
 
-    /* Attendance toggle buttons */
-    .attendance-toggle-btn.btn-success {
-        background-color: #5A4FCF !important;
-        border-color: #5A4FCF !important;
-        color: #FFFFFF !important;
-        font-weight: 500;
-        height: 45px;
+    .header-subtitle {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 12px;
     }
 
-    .attendance-toggle-btn.btn-danger {
-        background-color: #dc3545 !important;
-        border-color: #dc3545 !important;
-        color: white !important;
-        font-weight: 500;
-        height: 45px;
-    }
-
-    .attendance-toggle-btn.btn-danger:hover {
-        background-color: #c82333 !important;
-        border-color: #bd2130 !important;
-    }
-
-    /* Loading indicator */
-    .loading {
-        text-align: center;
-        padding: 20px;
-        color: #6c757d;
-    }
-
-    /* Real-time connection status styles */
+    /* ═══════════════════════════════════════════
+       CONNECTION BADGE
+       ═══════════════════════════════════════════ */
     .connection-badge {
         display: flex;
         align-items: center;
-        padding: 8px 12px;
+        padding: 6px 12px;
         border-radius: 20px;
         font-size: 12px;
         font-weight: 500;
@@ -328,15 +318,15 @@
     }
 
     .connection-badge.connected {
-        background-color: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
+        background-color: rgba(255, 255, 255, 0.25);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.4);
     }
 
     .connection-badge.disconnected {
-        background-color: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
+        background-color: rgba(220, 38, 38, 0.25);
+        color: white;
+        border: 1px solid rgba(220, 38, 38, 0.4);
     }
 
     .status-dot {
@@ -347,26 +337,220 @@
         animation: pulse 2s infinite;
     }
 
-    .connected .status-dot {
-        background-color: #28a745;
+    .connected .status-dot    { background-color: #4ade80; }
+    .disconnected .status-dot { background-color: #f87171; }
+
+    /* ═══════════════════════════════════════════
+       SESSION INFO PILLS
+       ═══════════════════════════════════════════ */
+    .session-info-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
     }
 
-    .disconnected .status-dot {
-        background-color: #dc3545;
+    .info-pill {
+        background: #f8f7ff;
+        border: 1px solid #e8e6f8;
+        border-radius: 12px;
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
 
-    @keyframes pulse {
-        0% { opacity: 1; }
-        50% { opacity: 0.5; }
-        100% { opacity: 1; }
+    .info-pill-icon {
+        width: 34px;
+        height: 34px;
+        background: rgb(77, 68, 181);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 15px;
+        flex-shrink: 0;
     }
 
-    /* Toast positioning */
-    .toast-container {
-        z-index: 1050;
+    .info-pill-label {
+        display: block;
+        font-size: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: rgb(160, 152, 174);
     }
 
-    /* Updated row styles for real-time updates */
+    .info-pill-value {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: rgb(48, 39, 99);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* ═══════════════════════════════════════════
+       SEARCH BAR
+       ═══════════════════════════════════════════ */
+    .search-wrapper {
+        position: relative;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgb(160, 152, 174);
+        font-size: 14px;
+        z-index: 1;
+    }
+
+    .search-input {
+        padding-left: 38px !important;
+        border-radius: 10px !important;
+        border: 1.5px solid #e8e6f8 !important;
+        height: 42px;
+        font-size: 14px;
+        font-weight: 500;
+        color: rgb(48, 39, 99);
+        transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+        border-color: rgb(77, 68, 181) !important;
+        box-shadow: 0 0 0 3px rgba(77, 68, 181, 0.1) !important;
+        outline: none;
+    }
+
+    /* ═══════════════════════════════════════════
+       ATTENDANCE TABLE
+       ═══════════════════════════════════════════ */
+    #attendanceTable {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    #attendanceTable thead tr {
+        background: #f4f3fc;
+    }
+
+    #attendanceTable th {
+        padding: 12px 16px;
+        text-align: center;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: rgb(77, 68, 181);
+        border-bottom: 2px solid #e8e6f8;
+    }
+
+    #attendanceTable td {
+        padding: 14px 16px;
+        text-align: center;
+        border-bottom: 1px solid #f0effe;
+        color: rgb(80, 75, 120);
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    #attendanceTable tbody tr:hover {
+        background-color: #faf9ff;
+    }
+
+    #attendanceTable tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* ═══════════════════════════════════════════
+       STATUS BADGES
+       ═══════════════════════════════════════════ */
+    .status-present {
+        background-color: #e8f8f0;
+        color: #1a7a4a;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 0.3px;
+        display: inline-block;
+    }
+
+    .status-absent {
+        background-color: #fff0f0;
+        color: #c0392b;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        display: inline-block;
+    }
+
+    /* ═══════════════════════════════════════════
+       ACTION BUTTONS
+       ═══════════════════════════════════════════ */
+    .attendance-toggle-btn.btn-success {
+        background-color: #5A4FCF !important;
+        border-color: #5A4FCF !important;
+        color: white !important;
+        font-weight: 500;
+        font-size: 13px;
+        padding: 7px 16px;
+        border-radius: 8px;
+        height: auto;
+    }
+
+    .attendance-toggle-btn.btn-danger {
+        background-color: #e74c3c !important;
+        border-color: #e74c3c !important;
+        color: white !important;
+        font-weight: 500;
+        font-size: 13px;
+        padding: 7px 16px;
+        border-radius: 8px;
+        height: auto;
+    }
+
+    .attendance-toggle-btn.btn-danger:hover {
+        background-color: #c0392b !important;
+        border-color: #c0392b !important;
+    }
+
+    .btn-note {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        color: white;
+        font-weight: 500;
+        font-size: 13px;
+        padding: 7px 16px;
+        border-radius: 8px;
+    }
+
+    /* ═══════════════════════════════════════════
+       NOTE CONTENT
+       ═══════════════════════════════════════════ */
+    .note-content {
+        color: rgb(137, 135, 159);
+        font-style: italic;
+        font-size: 13px;
+    }
+
+    /* ═══════════════════════════════════════════
+       LOADING INDICATOR
+       ═══════════════════════════════════════════ */
+    .loading {
+        text-align: center;
+        padding: 20px;
+        color: #6c757d;
+    }
+
+    /* ═══════════════════════════════════════════
+       ROW HIGHLIGHT (real-time updates)
+       ═══════════════════════════════════════════ */
     #attendanceBody tr {
         transition: background-color 0.3s ease;
     }
@@ -376,35 +560,33 @@
         animation: highlight 2s ease-out;
     }
 
-    @keyframes highlight {
-        0% { background-color: #fff3cd; }
-        100% { background-color: transparent; }
-    }
-
-    /* Improved button states */
+    /* ═══════════════════════════════════════════
+       DISABLED BUTTON STATES
+       ═══════════════════════════════════════════ */
     .btn:disabled {
         opacity: 0.6;
         cursor: not-allowed;
     }
 
-    .btn-present:disabled {
-        background-color: #6c757d;
-        border-color: #6c757d;
+    /* ═══════════════════════════════════════════
+       TOAST
+       ═══════════════════════════════════════════ */
+    .toast-container {
+        z-index: 1050;
     }
 
-    /* Pagination Styles */
+    /* ═══════════════════════════════════════════
+       PAGINATION
+       ═══════════════════════════════════════════ */
     .pagination-container {
-        background-color: #f8f9fa;
+        background-color: #f8f7ff;
         border-radius: 8px;
         padding: 15px;
-        border: 1px solid #e9ecef;
+        border: 1px solid #e8e6f8;
         margin-top: 20px;
     }
 
-    .pagination-custom {
-        gap: 5px;
-        justify-content: center;
-    }
+    .pagination-custom { gap: 5px; justify-content: center; }
 
     .pagination-custom .page-item .page-link {
         border: 1px solid #3D3690;
@@ -435,40 +617,21 @@
 
     .pagination-custom .page-item.disabled .page-link {
         color: rgb(137, 135, 159);
-        background-color: #f8f9fa;
-        border-color: #e9ecef;
+        background-color: #f8f7ff;
+        border-color: #e8e6f8;
         cursor: not-allowed;
     }
 
     .pagination-custom .page-item.disabled .page-link:hover {
-        background-color: #f8f9fa;
+        background-color: #f8f7ff;
         color: rgb(137, 135, 159);
         transform: none;
         box-shadow: none;
     }
 
-    /* Responsive pagination */
-    @media (max-width: 768px) {
-        .pagination-custom .page-item .page-link {
-            padding: 8px 12px;
-            min-width: 40px;
-            font-size: 14px;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .pagination-custom .page-item .page-link {
-            padding: 6px 10px;
-            min-width: 35px;
-            font-size: 13px;
-        }
-
-        .pagination-custom {
-            gap: 3px;
-        }
-    }
-
-    /* Select2 styles */
+    /* ═══════════════════════════════════════════
+       SELECT2 OVERRIDES
+       ═══════════════════════════════════════════ */
     .select2-container .select2-selection--single {
         height: 40px !important;
         display: flex;
@@ -487,57 +650,90 @@
         padding-left: 20px;
     }
 
-    .select2-container {
-        width: 100% !important;
-    }
+    .select2-container { width: 100% !important; }
 
+    /* ═══════════════════════════════════════════
+       MODAL RECHERCHE SECTION
+       ═══════════════════════════════════════════ */
     .recherche {
         border-radius: 5px;
         padding: 10px;
         background-color: #edf3f8;
     }
 
-    .recherche>label{
+    .recherche > label { color: rgb(160, 152, 174); }
+
+    /* ═══════════════════════════════════════════
+       CUSTOM CHECKBOX
+       ═══════════════════════════════════════════ */
+    .custom-checkbox input[type="checkbox"] { display: none; }
+
+    .custom-checkbox label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: 16px;
         color: rgb(160, 152, 174);
     }
 
-    /* Custom checkbox styles */
-    .custom-checkbox input[type="checkbox"] {
-      display: none;
-    }
-
-    .custom-checkbox label {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      font-size: 16px;
-      color: rgb(160, 152, 174);
-    }
-
     .custom-checkbox .box {
-      display: inline-block;
-      width: 19px;
-      height: 19px;
-      background-color: transparent;
-      border: 1px solid #c4c3c3;
-      border-radius: 4px;
-      margin-right: 8px;
-      position: relative;
+        display: inline-block;
+        width: 19px;
+        height: 19px;
+        background-color: transparent;
+        border: 1px solid #c4c3c3;
+        border-radius: 4px;
+        margin-right: 8px;
+        position: relative;
     }
 
     .custom-checkbox input[type="checkbox"]:checked + label .box {
-      background-color: #673ab7;
-      border-color: #673ab7;
+        background-color: #673ab7;
+        border-color: #673ab7;
     }
 
     .custom-checkbox input[type="checkbox"]:checked + label .box::after {
-      content: "✔";
-      color: white;
-      font-size: 16px;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+        content: "✔";
+        color: white;
+        font-size: 16px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+       ═══════════════════════════════════════════ */
+    @media (max-width: 768px) {
+        .session-info-grid { grid-template-columns: repeat(2, 1fr); }
+
+        .pagination-custom .page-item .page-link {
+            padding: 8px 12px;
+            min-width: 40px;
+            font-size: 14px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .session-info-grid { grid-template-columns: 1fr; }
+
+        .pagination-custom .page-item .page-link {
+            padding: 6px 10px;
+            min-width: 35px;
+            font-size: 13px;
+        }
+
+        .pagination-custom { gap: 3px; }
+    }
+
+    .attendance-toggle-btn,
+    .btn-note {
+        min-width: 130px !important;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
     }
 </style>
 
@@ -561,6 +757,8 @@
     let currentCalendarId = null;
     let currentNoteStudentId = null;
     let currentNoteAttendanceId = null;
+
+
 
     // =============================
     // SOCKET.IO FUNCTIONS
@@ -743,7 +941,33 @@
                             data-is-present="${item.isPresent}">
                         ${item.isPresent ? 'Mark Absent' : 'Mark Present'}
                     </button>
-                    <button class="btn btn-note btn-info" onclick="addNote(${item.userId}, ${item.id})" data-bs-toggle="modal" data-bs-target="#model-add-note">Add Note</button>
+                    <button class="btn btn-note"
+                        onclick="addNote(${item.userId}, ${item.id})"
+                        data-bs-toggle="modal"
+                        data-bs-target="#model-add-note"
+                        style="
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 6px;
+                            background: #EEEDFE;
+                            color: #3C3489;
+                            border: 1.5px solid #AFA9EC;
+                            padding: 7px 16px;
+                            border-radius: 8px;
+                            font-size: 13px;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: background 0.15s, transform 0.1s;
+                        "
+                        onmouseover="this.style.background='#CECBF6'"
+                        onmouseout="this.style.background='#EEEDFE'"
+                        onmousedown="this.style.transform='scale(0.97)'"
+                        onmouseup="this.style.transform='scale(1)'">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                    Add Note
+                </button>
                 </td>
             `;
             tbody.appendChild(row);
@@ -932,15 +1156,26 @@
 
         if (!searchTerm) {
             filteredData = [];
-        } else {
-            filteredData = attendanceData.filter(student => {
-                const userName = student.userName.toLowerCase();
-                const userId = student.userId.toString().toLowerCase();
-                return userName.includes(searchTerm) || userId.includes(searchTerm);
-            });
+            currentPage = 1;
+            renderAttendanceTable();
+            return;
         }
 
+        filteredData = attendanceData.filter(student => {
+            const userName = student.userName.toLowerCase();
+            const userId = student.userId.toString().toLowerCase();
+            return userName.includes(searchTerm) || userId.includes(searchTerm);
+        });
+
         currentPage = 1;
+
+        if (filteredData.length === 0) {
+            const tbody = document.getElementById('attendanceBody');
+            tbody.innerHTML = "<tr><td colspan='6' style='text-align:center; color:#9490c9; padding:20px; font-style:italic;'>No students found matching your search.</td></tr>";
+            document.getElementById('paginationNav').style.display = 'none';
+            return;
+        }
+
         renderAttendanceTable();
     }
 

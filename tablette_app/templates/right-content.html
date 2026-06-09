@@ -1,71 +1,93 @@
 <div class="col-lg-3">
 
-    <!-- Qr code -->
+    <!-- QR Code Card -->
     <div class="summary-cards mt-3 mb-3">
-        <div class="card mb-3 summary-card-purple">
-            <div class="card-body2">
-                <h4 class="titre" style="color:rgb(55, 48, 163); font-size:22px;">scan for presence</h4>
-                <p style="color:black; font-size:12px; color:rgb(99, 102, 241);">Students can scan this QR code to mark
-                    their attendance</p>
-                <div id="qrcode" style="padding-top:15px;"></div>
+        <div class="card mb-3" style="border-radius:12px; border:none; overflow:hidden; box-shadow:0 2px 8px rgba(77,68,181,0.10);">
+            <div style="background:#4D44B5; padding:12px 16px; display:flex; align-items:center; gap:10px;">
+                <div style="width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="3" height="3"/>
+                        <rect x="18" y="14" width="3" height="3"/><rect x="14" y="18" width="3" height="3"/>
+                        <rect x="18" y="18" width="3" height="3"/>
+                    </svg>
+                </div>
+                <div>
+                    <h4 style="color:white;font-size:15px;font-weight:600;margin:0 0 2px;">Scan for Presence</h4>
+                    <p style="color:rgba(255,255,255,0.65);font-size:11px;margin:0;">Use Unistudious app to scan</p>
+                </div>
+            </div>
+            <div style="padding:20px;display:flex;flex-direction:column;align-items:center;gap:12px;background:#f8f7ff;">
+                <div id="qrcode"></div>
+                <p style="margin:0;font-size:11px;color:#7b72d6;text-align:center;">Students can scan this QR code to mark their attendance</p>
             </div>
         </div>
-
     </div>
 
     <!-- Session Progress Card -->
-    <!--    <div class="card session-card">-->
-    <!--        <div class="session-header">-->
-    <!--        </div>-->
+    <div style="border-radius:12px; border:none; overflow:hidden; box-shadow:0 2px 8px rgba(77,68,181,0.10); background:white;">
 
-    <div class="session-body summary-card-purple">
-        <p class="title-card p-1" style="color: rgb(55, 48, 163);text-align: center;">Session Progress</p>
-
-        <!-- Time Display - NOW DYNAMIC -->
-        <div class="time-display">
-            <div class="time-box start">
-                <h6>Start Time</h6>
-                <div class="time" id="startTime">{{ session_start_time }}</div>
+        <div style="background:#4D44B5; padding:12px 16px; display:flex; align-items:center; gap:10px;">
+            <div style="width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                </svg>
             </div>
-            <div class="time-box end">
-                <h6>End Time</h6>
-                <div class="time" id="endTime">{{ session_end_time }}</div>
+            <div>
+                <h4 style="color:white;font-size:15px;font-weight:600;margin:0 0 2px;">Session Progress</h4>
+                <p style="color:rgba(255,255,255,0.65);font-size:11px;margin:0;">Live session tracking</p>
             </div>
         </div>
 
-        <!-- Progress Bar -->
-        <div class="progress-section">
-            <h6>Session Progress</h6>
-            <div class="progress">
-                <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%" aria-valuenow="0"
-                     aria-valuemin="0" aria-valuemax="100">
-                    0%
+        <div class="session-body" style="padding:14px 16px;">
+
+            <!-- Time Display -->
+            <div class="time-display">
+                <div class="time-box start">
+                    <h6>Start</h6>
+                    <div class="time" id="startTime">{{ session_start_time }}</div>
+                </div>
+                <div class="time-box end">
+                    <h6>End</h6>
+                    <div class="time" id="endTime">{{ session_end_time }}</div>
                 </div>
             </div>
-        </div>
 
-        <!-- Session Info -->
-        <div class="session-info">
-            <div class="info-item">
-                <label>Duration</label>
-                <div class="value" id="duration">00:00:00</div>
+            <!-- Progress Bar -->
+            <div class="progress-section">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                    <h6 style="margin:0;">Progress</h6>
+                    <span id="progressPct" style="font-size:11px;font-weight:600;color:#4D44B5;">0%</span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" id="progressBar" role="progressbar" style="width:0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
             </div>
-            <div class="info-item">
-                <label>Elapsed</label>
-                <div class="value" id="elapsed">00:00:00</div>
+
+            <!-- Session Info -->
+            <div class="session-info">
+                <div class="info-item">
+                    <label>Duration</label>
+                    <div class="value" id="duration">00:00:00</div>
+                </div>
+                <div class="info-item elapsed-item">
+                    <label>Elapsed</label>
+                    <div class="value elapsed-val" id="elapsed">00:00:00</div>
+                </div>
+                <div class="info-item remaining-item">
+                    <label>Remaining</label>
+                    <div class="value remaining-val" id="remaining">00:00:00</div>
+                </div>
+                <div class="info-item">
+                    <label>Status</label>
+                    <div><span class="status-badge active" id="statusBadge">Not Started</span></div>
+                </div>
             </div>
-            <div class="info-item">
-                <label>Remaining</label>
-                <div class="value" id="remaining">00:00:00</div>
-            </div>
-            <div class="info-item">
-                <label>Status</label>
-                <div><span class="status-badge active" id="statusBadge">Not Started</span></div>
-            </div>
+
         </div>
     </div>
-</div>
 
+</div>
 </div>
 
 <!-- Attendance QR fullscreen overlay -->
@@ -76,83 +98,38 @@
     flex-direction: column;
     cursor: pointer;
 ">
-    <!-- Title -->
-    <div style="text-align: center; margin-bottom: 50px; animation: fadeSlideDown<!-- Title -->
-    <div style=" text-align: center; margin-bottom: 20px; animation: fadeSlideDown 0.6s ease; padding-top: 20px;
-    ">
-    <div style="
-            background: rgba(255,255,255,0.95);
-            border-radius: 12px;
-            padding: 6px 14px;
-            margin: 0 auto 8px;
-            display: inline-block;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-        ">
-        <img src="../static/assets/images/UNISTUDIOS.png"
-             alt="Unistudious Logo"
-             style="height: 42px; width: auto; display: block;">
-    </div>
-    <h2 style="color: white; font-size: 28px; font-weight: 800; margin: 0 0 8px; letter-spacing: -0.5px;">
-        Mark your attendance
-    </h2>
-    <p style="color: rgba(255,255,255,0.6); font-size: 15px; margin: 0;">
-        Scan the QR code with the Unistudious app
-    </p>
-</div>
-
-<!-- QR Card -->
-<div style="
-        display: flex; flex-direction: column; align-items: center;
-        animation: floatUpDown 4s ease-in-out infinite;
-    ">
-    <div style="
-            background: white;
-            border-radius: 28px;
-            padding: 24px;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.1);
-            margin-bottom: 24px;
-            position: relative;
-            display: inline-block;
-        ">
-        <!-- Corner decorations -->
-        <div style="position:absolute;top:10px;left:10px;width:20px;height:20px;border-top:3px solid #4D44B5;border-left:3px solid #4D44B5;border-radius:4px 0 0 0;"></div>
-        <div style="position:absolute;top:10px;right:10px;width:20px;height:20px;border-top:3px solid #4D44B5;border-right:3px solid #4D44B5;border-radius:0 4px 0 0;"></div>
-        <div style="position:absolute;bottom:10px;left:10px;width:20px;height:20px;border-bottom:3px solid #4D44B5;border-left:3px solid #4D44B5;border-radius:0 0 0 4px;"></div>
-        <div style="position:absolute;bottom:10px;right:10px;width:20px;height:20px;border-bottom:3px solid #4D44B5;border-right:3px solid #4D44B5;border-radius:0 0 4px 0;"></div>
-
-        <!-- QR Code -->
-        <div id="qr-overlay-attendance"></div>
+    <div style="text-align:center; margin-bottom:20px; animation:fadeSlideDown 0.6s ease; padding-top:20px;">
+        <div style="background:rgba(255,255,255,0.95);border-radius:12px;padding:6px 14px;margin:0 auto 8px;display:inline-block;box-shadow:0 4px 16px rgba(0,0,0,0.2);">
+            <img src="../static/assets/images/UNISTUDIOS.png" alt="Unistudious Logo" style="height:42px;width:auto;display:block;">
+        </div>
+        <h2 style="color:white;font-size:28px;font-weight:800;margin:0 0 8px;letter-spacing:-0.5px;">Mark your attendance</h2>
+        <p style="color:rgba(255,255,255,0.6);font-size:15px;margin:0;">Scan the QR code with the Unistudious app</p>
     </div>
 
-    <!-- Badge -->
-    <div style="
-            background: rgba(255,255,255,0.12);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 50px;
-            padding: 10px 28px;
-            display: flex; align-items: center; gap: 10px;
-        ">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
-             stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-            <circle cx="9" cy="7" r="4"/>
-            <polyline points="16 11 18 13 22 9"/>
-        </svg>
-        <span style="color: white; font-size: 16px; font-weight: 700;">Attendance check-in</span>
-    </div>
-</div>
+    <div style="display:flex;flex-direction:column;align-items:center;animation:floatUpDown 4s ease-in-out infinite;">
+        <div style="background:white;border-radius:28px;padding:24px;box-shadow:0 30px 80px rgba(0,0,0,0.35),0 0 0 1px rgba(255,255,255,0.1);margin-bottom:24px;position:relative;display:inline-block;">
+            <div style="position:absolute;top:10px;left:10px;width:20px;height:20px;border-top:3px solid #4D44B5;border-left:3px solid #4D44B5;border-radius:4px 0 0 0;"></div>
+            <div style="position:absolute;top:10px;right:10px;width:20px;height:20px;border-top:3px solid #4D44B5;border-right:3px solid #4D44B5;border-radius:0 4px 0 0;"></div>
+            <div style="position:absolute;bottom:10px;left:10px;width:20px;height:20px;border-bottom:3px solid #4D44B5;border-left:3px solid #4D44B5;border-radius:0 0 0 4px;"></div>
+            <div style="position:absolute;bottom:10px;right:10px;width:20px;height:20px;border-bottom:3px solid #4D44B5;border-right:3px solid #4D44B5;border-radius:0 0 4px 0;"></div>
+            <div id="qr-overlay-attendance"></div>
+        </div>
 
-<!-- Tap to dismiss -->
-<div style="
-    position: absolute; bottom: 16px;
-    display: flex; align-items: center; gap: 8px;
-    animation: pulse 2s ease-in-out infinite;
-">
-    <div style="width: 6px; height: 6px; background: rgba(255,255,255,0.4); border-radius: 50%;"></div>
-    <span style="color: rgba(255,255,255,0.45); font-size: 13px; letter-spacing: 0.5px;">Tap anywhere to dismiss</span>
-    <div style="width: 6px; height: 6px; background: rgba(255,255,255,0.4); border-radius: 50%;"></div>
-</div>
+        <div style="background:rgba(255,255,255,0.12);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);border-radius:50px;padding:10px 28px;display:flex;align-items:center;gap:10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <polyline points="16 11 18 13 22 9"/>
+            </svg>
+            <span style="color:white;font-size:16px;font-weight:700;">Attendance check-in</span>
+        </div>
+    </div>
+
+    <div style="position:absolute;bottom:16px;display:flex;align-items:center;gap:8px;animation:pulse 2s ease-in-out infinite;">
+        <div style="width:6px;height:6px;background:rgba(255,255,255,0.4);border-radius:50%;"></div>
+        <span style="color:rgba(255,255,255,0.45);font-size:13px;letter-spacing:0.5px;">Tap anywhere to dismiss</span>
+        <div style="width:6px;height:6px;background:rgba(255,255,255,0.4);border-radius:50%;"></div>
+    </div>
 </div>
 
 
@@ -171,6 +148,11 @@
         0%, 100% { opacity: 1; }
         50%       { opacity: 0.4; }
     }
+    @keyframes spin {
+        0%   { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
     #qr-overlay-attendance {
         width: 335px;
         height: 335px;
@@ -185,158 +167,150 @@
     }
 
     /* ═══════════════════════════════════════════
-       SESSION CARD STYLES (TABLET OPTIMIZED)
+       SESSION CARD STYLES — NEW DESIGN
        ═══════════════════════════════════════════ */
 
-    .session-card {
-        border-radius: 12px;
-        border: none;
-    }
-
-    .session-header {
-        color: rgb(55, 48, 163);
-        padding: 8px 12px;
-        border-radius: 12px 12px 0 0;
-        background-color:
-    }
-
-    .title-card-p{
-        color:rgb(99, 102, 241);
-        font-size: 14px;
-        margin: 0 !important;
-    }
-
     .session-body {
-        border-radius: 12px;
-        padding: 12px;
+        background: white;
+        padding: 14px 16px;
     }
 
     .time-display {
         display: flex;
-        justify-content: space-around;
         gap: 8px;
-        margin-bottom: 12px;
+        margin-bottom: 14px;
     }
 
     .time-box {
         flex: 1;
-        background: #f8f9fa;
-        padding: 10px;
+        padding: 10px 8px;
         border-radius: 8px;
         text-align: center;
-        border: 2px solid #e9ecef;
+        border: 1.5px solid;
     }
 
     .time-box h6 {
-        color: #6c757d;
         font-size: 9px;
         font-weight: 600;
         text-transform: uppercase;
-        margin: 0 0 4px 0;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.6px;
+        margin: 0 0 4px;
     }
 
     .time-box .time {
-        font-size: 16px;
-        font-weight: bold;
-        color: #667eea;
+        font-size: 17px;
+        font-weight: 600;
     }
 
     .time-box.start {
-        border-color: #28a745;
+        background: #f0fff4;
+        border-color: #86efac;
+    }
+
+    .time-box.start h6 {
+        color: #15803d;
     }
 
     .time-box.start .time {
-        color: #28a745;
+        color: #16a34a;
     }
 
     .time-box.end {
-        border-color: #dc3545;
+        background: #fff1f2;
+        border-color: #fca5a5;
+    }
+
+    .time-box.end h6 {
+        color: #b91c1c;
     }
 
     .time-box.end .time {
-        color: #dc3545;
+        color: #dc2626;
     }
 
     .progress-section {
-        margin-bottom: 12px;
+        margin-bottom: 14px;
     }
 
     .progress-section h6 {
-        color: #495057;
-        font-weight: 600;
-        margin: 0 0 6px 0;
         font-size: 10px;
+        font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        color: #6c757d;
+        margin: 0;
     }
 
     .progress {
-        height: 16px;
-        border-radius: 8px;
-        background-color: #e9ecef;
+        height: 8px;
+        border-radius: 99px;
+        background: #e8e6f8;
+        overflow: hidden;
     }
 
     .progress-bar {
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-        border-radius: 8px;
+        background: #4D44B5;
+        border-radius: 99px;
         transition: width 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: 600;
-        font-size: 9px;
+        height: 100%;
     }
 
     .session-info {
-        display: flex;
-        justify-content: space-between;
-        padding: 8px;
-        background: #f8f9fa;
-        border-radius: 8px;
-        margin-top: 8px;
-        gap: 4px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 4px;
     }
 
     .info-item {
+        background: #f5f4fc;
+        border-radius: 8px;
+        padding: 10px 8px;
         text-align: center;
-        flex: 1;
     }
 
     .info-item label {
         display: block;
-        color: #6c757d;
-        font-size: 8px;
+        font-size: 9px;
         font-weight: 600;
         text-transform: uppercase;
-        margin: 0 0 3px 0;
         letter-spacing: 0.5px;
+        color: #6c757d;
+        margin: 0 0 4px;
     }
 
     .info-item .value {
-        font-size: 12px;
-        font-weight: bold;
-        color: #667eea;
+        font-size: 13px;
+        font-weight: 600;
+        color: #4D44B5;
+    }
+
+    .elapsed-item .elapsed-val {
+        color: #16a34a;
+    }
+
+    .remaining-item .remaining-val {
+        color: #dc2626;
     }
 
     .status-badge {
         display: inline-block;
-        padding: 3px 8px;
-        border-radius: 12px;
-        font-size: 8px;
+        padding: 3px 10px;
+        border-radius: 99px;
+        font-size: 9px;
         font-weight: 600;
         text-transform: uppercase;
+        letter-spacing: 0.4px;
     }
 
     .status-badge.active {
-        background-color: #d4edda;
-        color: #155724;
+        background: #dcfce7;
+        color: #15803d;
     }
 
     .status-badge.completed {
-        background-color: #d1ecf1;
-        color: #0c5460;
+        background: #dbeafe;
+        color: #1e40af;
     }
 </style>
 
@@ -370,10 +344,6 @@
     let attendanceQrGenerated = false;
     const QR_IDLE_SECONDS     = 10;
 
-    /**
-     * Dynamically update both QR codes when id_prod becomes available.
-     * Called by either Socket.IO event or HTTP polling.
-     */
     function updateQRCode(newIdProd) {
         if (!newIdProd || idProd === newIdProd) return;
 
@@ -381,14 +351,12 @@
         idProd = newIdProd;
         attendanceUrl = `https://www.unistudious.com/${slcId}/${idProd}`;
 
-        // Stop polling — we have what we need
         if (idProdPollingInterval) {
             clearInterval(idProdPollingInterval);
             idProdPollingInterval = null;
             console.log("🛑 Stopped id_prod polling");
         }
 
-        // ── Update inline QR (sidebar card) ──
         const qrcodeEl = document.getElementById("qrcode");
         qrcodeEl.innerHTML = "";
         new QRCode(qrcodeEl, {
@@ -397,7 +365,6 @@
             height: 200
         });
 
-        // ── Update fullscreen overlay QR ──
         const qrOverlayEl = document.getElementById("qr-overlay-attendance");
         qrOverlayEl.innerHTML = "";
         new QRCode(qrOverlayEl, {
@@ -410,13 +377,9 @@
         });
         attendanceQrGenerated = true;
 
-        // ── Set up the idle overlay timer ──
         setupIdleOverlayTimer();
     }
 
-    /**
-     * Set up the idle overlay timer (shows QR fullscreen after inactivity).
-     */
     function setupIdleOverlayTimer() {
         function showAttendanceOverlay() {
             document.getElementById("attendance-qr-overlay").style.display = "flex";
@@ -451,14 +414,12 @@
        ══════════════════════════════════════════════════════ */
 
     if (idProd !== null && idProd !== undefined && idProd !== "") {
-        // id_prod is already available — render QR codes immediately
         new QRCode(document.getElementById("qrcode"), {
             text: attendanceUrl,
             width: 200,
             height: 200
         });
 
-        // Fullscreen overlay QR
         new QRCode(document.getElementById("qr-overlay-attendance"), {
             text: attendanceUrl,
             width: 400,
@@ -469,11 +430,9 @@
         });
         attendanceQrGenerated = true;
 
-        // Set up idle overlay
         setupIdleOverlayTimer();
 
     } else {
-        // ── id_prod NOT available yet — show placeholders ──
         document.getElementById("qrcode").innerHTML = `
             <div style="
                 display: flex; flex-direction: column; align-items: center;
@@ -516,9 +475,6 @@
             document.getElementById("attendance-qr-overlay").style.display = "none";
         });
 
-        /* ──────────────────────────────────────────────────
-           HTTP POLLING FALLBACK (every 10 seconds)
-           ────────────────────────────────────────────────── */
         if (qrCalendarId) {
             console.log(`🔄 Starting id_prod polling for calendar_id=${qrCalendarId}`);
             idProdPollingInterval = setInterval(() => {
@@ -535,12 +491,9 @@
                     .catch(err => {
                         console.error("📡 Polling error:", err);
                     });
-            }, 10000); // Poll every 10 seconds
+            }, 10000);
         }
 
-        /* ──────────────────────────────────────────────────
-           SOCKET.IO LISTENER (secondary channel)
-           ────────────────────────────────────────────────── */
         if (typeof io !== 'undefined') {
             try {
                 const socket = io();
@@ -569,10 +522,6 @@
        DYNAMIC SESSION TIME MANAGEMENT
        ══════════════════════════════════════════════════════ */
 
-    /**
-     * Update session progress bar based on current time
-     * Updates elapsed time and remaining time in real-time
-     */
     function updateSessionProgress() {
         if (!sessionData.startTime || !sessionData.endTime) {
             return;
@@ -582,58 +531,45 @@
         const start = parseTimeString(sessionData.startTime);
         const end = parseTimeString(sessionData.endTime);
 
-        // Calculate total duration in milliseconds
         const totalMs = end - start;
 
         if (now < start) {
-            // Session hasn't started yet
             document.getElementById('statusBadge').textContent = 'Not Started';
             document.getElementById('statusBadge').className = 'status-badge';
             document.getElementById('progressBar').style.width = '0%';
-            document.getElementById('progressBar').textContent = '0%';
+            document.getElementById('progressPct').textContent = '0%';
             document.getElementById('elapsed').textContent = '00:00:00';
 
-            // Show remaining time until session starts
             const timeUntilStart = start - now;
             const remainingSeconds = Math.ceil(timeUntilStart / 1000);
             document.getElementById('remaining').textContent = formatSeconds(Math.max(0, remainingSeconds));
 
         } else if (now > end) {
-            // Session has ended
             document.getElementById('statusBadge').textContent = 'Completed';
             document.getElementById('statusBadge').className = 'status-badge completed';
             document.getElementById('progressBar').style.width = '100%';
-            document.getElementById('progressBar').textContent = '100%';
+            document.getElementById('progressPct').textContent = '100%';
             document.getElementById('elapsed').textContent = formatSeconds(sessionData.duration);
             document.getElementById('remaining').textContent = '00:00:00';
 
         } else {
-            // Session is in progress
             document.getElementById('statusBadge').textContent = 'In Progress';
             document.getElementById('statusBadge').className = 'status-badge active';
 
-            // Calculate elapsed time in milliseconds
             const elapsedMs = now - start;
-
-            // Calculate progress percentage
             const progressPercent = Math.min((elapsedMs / totalMs) * 100, 100);
             document.getElementById('progressBar').style.width = progressPercent + '%';
-            document.getElementById('progressBar').textContent = Math.round(progressPercent) + '%';
+            document.getElementById('progressPct').textContent = Math.round(progressPercent) + '%';
 
-            // DYNAMIC: Calculate elapsed time in seconds (counts up every second)
             const elapsedSeconds = Math.floor(elapsedMs / 1000);
             document.getElementById('elapsed').textContent = formatSeconds(elapsedSeconds);
 
-            // DYNAMIC: Calculate remaining time in seconds (counts down every second)
             const remainingMs = totalMs - elapsedMs;
             const remainingSeconds = Math.floor(remainingMs / 1000);
             document.getElementById('remaining').textContent = formatSeconds(Math.max(0, remainingSeconds));
         }
     }
 
-    /**
-     * Parse time string (HH:MM:SS) to Date object
-     */
     function parseTimeString(timeStr) {
         const [hours, minutes, seconds] = timeStr.split(':').map(Number);
         const now = new Date();
@@ -641,9 +577,6 @@
         return now;
     }
 
-    /**
-     * Format seconds to HH:MM:SS
-     */
     function formatSeconds(seconds) {
         const hours = Math.floor(seconds / 3600);
         const minutes = Math.floor((seconds % 3600) / 60);
@@ -651,22 +584,11 @@
         return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     }
 
-    // Initialize duration display
     document.getElementById('duration').textContent = formatSeconds(sessionData.duration);
     document.getElementById('remaining').textContent = formatSeconds(sessionData.duration);
 
-    // Update progress every 100ms for smooth real-time updates
     setInterval(updateSessionProgress, 100);
 
-    // Initial update
     updateSessionProgress();
 
 </script>
-
-<style>
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-</style>
-
