@@ -287,7 +287,8 @@
                                         onblur="this.style.borderColor='#eee'">
                                     <option value="" selected>SELECT GROUP</option>
                                 </select>
-                                <small id="group-hint" style="color: #aaa; font-size: 11px; margin-top: 4px; display: block;">
+                                <small id="group-hint"
+                                       style="color: #aaa; font-size: 11px; margin-top: 4px; display: block;">
                                     ⚠️ Select a session first
                                 </small>
                             </div>
@@ -555,32 +556,34 @@
             </div>
 
             <!-- ── Footer ── -->
-            <div class="modal-footer" style="border: none; padding: 16px 24px; background: #f8f9fc; display: flex; justify-content: space-between; align-items: center;">
+            <div class="modal-footer"
+                 style="border: none; padding: 16px 24px; background: #f8f9fc; display: flex; justify-content: space-between; align-items: center;">
 
-    <!-- Left side: Cancel, Save, Save & Disconnect -->
-    <div style="display: flex; gap: 10px;">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-key="btnCancel"
-                style="border-radius: 10px; padding: 10px 20px; font-size: 13px;">
-            Cancel
-        </button>
-        <button type="button" class="btn btn-primary" id="saveEventButton" data-key="btnSave"
-                style="border-radius: 10px; background: #4D44B5; border-color: #4D44B5;
+                <!-- Left side: Cancel, Save, Save & Disconnect -->
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-key="btnCancel"
+                            style="border-radius: 10px; padding: 10px 20px; font-size: 13px;">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" id="saveEventButton" data-key="btnSave"
+                            style="border-radius: 10px; background: #4D44B5; border-color: #4D44B5;
                        padding: 10px 24px; font-size: 13px; font-weight: 600;">
-            💾 Save
-        </button>
-        <button type="button" class="btn btn-danger" id="saveAndDisconnectButton" data-key="btnSaveDisconnect"
-                style="border-radius: 10px; padding: 10px 24px; font-size: 13px; font-weight: 600;">
-            🔒 Save & Disconnect
-        </button>
-    </div>
+                        💾 Save
+                    </button>
+                    <button type="button" class="btn btn-danger" id="saveAndDisconnectButton"
+                            data-key="btnSaveDisconnect"
+                            style="border-radius: 10px; padding: 10px 24px; font-size: 13px; font-weight: 600;">
+                        🔒 Save & Disconnect
+                    </button>
+                </div>
 
-    <!-- Right side: Create Special Group -->
-    <button type="button" class="btn btn-info" onclick="openSpecialGroupModal()"
-            style="border-radius: 10px; padding: 10px 20px; font-size: 13px;">
-        ＋ Create Special Group
-    </button>
+                <!-- Right side: Create Special Group -->
+                <button type="button" class="btn btn-info" onclick="openSpecialGroupModal()"
+                        style="border-radius: 10px; padding: 10px 20px; font-size: 13px;">
+                    ＋ Create Special Group
+                </button>
 
-</div>
+            </div>
 
         </div>
     </div>
@@ -1014,44 +1017,98 @@
                                    style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">
                                 Start Time
                             </label>
-                            <div style="position: relative;">
-                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
-                                         stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"/>
-                                        <path d="M12 6v6l4 2"/>
-                                    </svg>
-                                </span>
-                                <input type="time" class="form-control" id="sg-start-time"
-                                       style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white;"
-                                       onfocus="this.style.borderColor='#4D44B5'"
-                                       onblur="this.style.borderColor='#eee'">
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <div style="position: relative; flex: 1;">
 
+                                    <select id="sg-start-hour" class="form-control"
+                                            style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white; appearance: none; -webkit-appearance: none;"
+                                            onfocus="this.style.borderColor='#4D44B5'"
+                                            onblur="this.style.borderColor='#eee'">
+                                        <option value="">HH</option>
+                                        <!-- hours injected by JS -->
+                                    </select>
+                                </div>
+                                <span style="font-weight: 700; color: #4D44B5; font-size: 16px;">:</span>
+                                <div style="position: relative; flex: 1;">
+                                    <select id="sg-start-minute" class="form-control"
+                                            style="border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white; appearance: none; -webkit-appearance: none;"
+                                            onfocus="this.style.borderColor='#4D44B5'"
+                                            onblur="this.style.borderColor='#eee'">
+                                        <option value="">MM</option>
+                                        <!-- minutes injected by JS -->
+                                    </select>
+                                </div>
                             </div>
                             <div id="sg-starttime-error" class="alert alert-danger d-none mt-2" role="alert"></div>
                         </div>
+
                         <div class="col-12 col-md-6">
                             <label class="form-label"
                                    style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">
                                 End Time
                             </label>
-                            <div style="position: relative;">
-                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
-                                         stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"/>
-                                        <path d="M12 6v6l4 2"/>
-                                    </svg>
-                                </span>
-                                <input type="time" class="form-control" id="sg-end-time"
-                                       style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white;"
-                                       onfocus="this.style.borderColor='#4D44B5'"
-                                       onblur="this.style.borderColor='#eee'">
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <div style="position: relative; flex: 1;">
 
+                                    <select id="sg-end-hour" class="form-control"
+                                            style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white; appearance: none; -webkit-appearance: none;"
+                                            onfocus="this.style.borderColor='#4D44B5'"
+                                            onblur="this.style.borderColor='#eee'">
+                                        <option value="">HH</option>
+                                    </select>
+                                </div>
+                                <span style="font-weight: 700; color: #4D44B5; font-size: 16px;">:</span>
+                                <div style="position: relative; flex: 1;">
+                                    <select id="sg-end-minute" class="form-control"
+                                            style="border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white; appearance: none; -webkit-appearance: none;"
+                                            onfocus="this.style.borderColor='#4D44B5'"
+                                            onblur="this.style.borderColor='#eee'">
+                                        <option value="">MM</option>
+                                    </select>
+                                </div>
                             </div>
                             <div id="sg-endtime-error" class="alert alert-danger d-none mt-2" role="alert"></div>
                         </div>
                     </div>
+                    <script>
+                        // Populate hour and minute dropdowns
+                        function populateTimePickers() {
+                            const hourSelects   = ['sg-start-hour', 'sg-end-hour'];
+                            const minuteSelects = ['sg-start-minute', 'sg-end-minute'];
+
+                            hourSelects.forEach(id => {
+                                const sel = document.getElementById(id);
+                                for (let h = 0; h < 24; h++) {
+                                    const opt = document.createElement('option');
+                                    opt.value = String(h).padStart(2, '0');
+                                    opt.textContent = String(h).padStart(2, '0');
+                                    sel.appendChild(opt);
+                                }
+                            });
+
+                            minuteSelects.forEach(id => {
+                                const sel = document.getElementById(id);
+                                for (let m = 0; m < 60; m += 5) {   // 5-min steps, change to 1 if needed
+                                    const opt = document.createElement('option');
+                                    opt.value = String(m).padStart(2, '0');
+                                    opt.textContent = String(m).padStart(2, '0');
+                                    sel.appendChild(opt);
+                                }
+                            });
+                        }
+
+                        populateTimePickers();
+
+                        // Helper: get combined time value as "HH:MM" (use this wherever you read the time)
+                        function getTime(prefix) {
+                            const h = document.getElementById(`${prefix}-hour`).value;
+                            const m = document.getElementById(`${prefix}-minute`).value;
+                            if (!h || !m) return null;
+                            return `${h}:${m}`;
+                        }
+
+
+                    </script>
 
                     <!-- Row 5: Room + Teacher -->
                     <div class="row mb-3">

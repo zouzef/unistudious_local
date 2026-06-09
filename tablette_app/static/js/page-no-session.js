@@ -45,14 +45,55 @@ checkForSession();
 setInterval(checkForSession, 10000);
 
 /* ─────────────────────────────────────────────────────────────
+   TIME PICKER HELPERS
+   Replaces <input type="time"> with two <select> dropdowns
+   for reliable tablet UX.
+───────────────────────────────────────────────────────────── */
+
+function populateTimePickers() {
+  const hourSelects   = ["sg-start-hour", "sg-end-hour"];
+  const minuteSelects = ["sg-start-minute", "sg-end-minute"];
+
+  hourSelects.forEach((id) => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    for (let h = 0; h < 24; h++) {
+      const opt = document.createElement("option");
+      opt.value = String(h).padStart(2, "0");
+      opt.textContent = String(h).padStart(2, "0");
+      sel.appendChild(opt);
+    }
+  });
+
+  minuteSelects.forEach((id) => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    for (let m = 0; m < 60; m += 5) {
+      const opt = document.createElement("option");
+      opt.value = String(m).padStart(2, "0");
+      opt.textContent = String(m).padStart(2, "0");
+      sel.appendChild(opt);
+    }
+  });
+}
+
+// Returns "HH:MM" or null if either select is empty
+function getTime(prefix) {
+  const h = document.getElementById(`${prefix}-hour`)?.value;
+  const m = document.getElementById(`${prefix}-minute`)?.value;
+  if (!h || !m) return null;
+  return `${h}:${m}`;
+}
+
+populateTimePickers();
+
+/* ─────────────────────────────────────────────────────────────
    3. SCHEDULE MODAL — duplicate field visibility
 ───────────────────────────────────────────────────────────── */
 
 document
   .getElementById("eventDuplicate")
   .addEventListener("change", function () {
-    const startTimeFields = document.getElementById("startTimeFields");
-    const endTimeFields = document.getElementById("endTimeFields");
     const eventEndFields = document.getElementById("eventEndFields");
 
     if (this.value === "none") {
@@ -98,13 +139,13 @@ function resetInactivityTimer() {
 
   inactivityTimer = setTimeout(() => {
     isAuthenticated = false;
-    sessionStorage.removeItem("isAuthenticated"); // ← clear on expiry
+    sessionStorage.removeItem("isAuthenticated");
     clearInterval(countdownInterval);
     console.log("🔒 Session expired — teacher disconnected");
   }, SESSION_DURATION);
 }
 
-// ✅ restore auth state here, AFTER the function is defined
+// Restore auth state after the function is defined
 if (sessionStorage.getItem("isAuthenticated") === "true") {
   isAuthenticated = true;
   resetInactivityTimer();
@@ -203,7 +244,7 @@ function onAuthSuccess() {
   bootstrap.Modal.getInstance(document.getElementById("authModal")).hide();
   stopCamera();
   isAuthenticated = true;
-  sessionStorage.setItem("isAuthenticated", "true"); // ← add this
+  sessionStorage.setItem("isAuthenticated", "true");
   resetInactivityTimer();
 
   setTimeout(() => {
@@ -224,7 +265,7 @@ function onAuthSuccess() {
 
 function disconnectTeacher() {
   isAuthenticated = false;
-  sessionStorage.removeItem("isAuthenticated"); // ← add this
+  sessionStorage.removeItem("isAuthenticated");
   clearTimeout(inactivityTimer);
   clearInterval(countdownInterval);
   inactivityTimer = null;
@@ -499,12 +540,12 @@ function toggleStudent(checkbox) {
 }
 
 function generateDescription() {
-  const name = document.getElementById("sg-name").value.trim();
-  const startDate = document.getElementById("sg-end-date").value;
-  const startTime = document.getElementById("sg-start-time").value;
-  const endTime = document.getElementById("sg-end-time").value;
+  const name      = document.getElementById("sg-name")?.value.trim() || "";
+  const startDate = document.getElementById("sg-end-date")?.value || "";
+  const startTime = getTime("sg-start") || "";
+  const endTime   = getTime("sg-end")   || "";
   const subjectEl = document.getElementById("sg-subject");
-  const subjectText = subjectEl.options[subjectEl.selectedIndex]?.text || "";
+  const subjectText = subjectEl?.options[subjectEl.selectedIndex]?.text || "";
 
   if (!name && !startDate && !startTime && !endTime && !subjectText) return;
 
@@ -615,7 +656,7 @@ async function loadSpecialGroupDropdowns() {
     });
     if (teacherResponse.ok) {
       const teachers = await teacherResponse.json();
-      const teacherList = teachers.Data || []; // ← capital D
+      const teacherList = teachers.Data || [];
       if (Array.isArray(teacherList) && teacherList.length > 0) {
         teacherList.forEach((teacher) => {
           _addOption(subjectSelect, teacher.id, teacher.username);
@@ -702,13 +743,10 @@ function openSpecialGroupModal() {
   const modalElement = document.getElementById("specialGroupModal");
   const modal = new bootstrap.Modal(modalElement);
 
-  // Remove any existing event listeners to avoid duplicates
   modalElement.removeEventListener("shown.bs.modal", loadSpecialGroupDropdowns);
 
-  // Add event listener to load dropdowns when modal is fully shown
   modalElement.addEventListener("shown.bs.modal", function onShown() {
     loadSpecialGroupDropdowns();
-    // Remove the event listener after execution
     modalElement.removeEventListener("shown.bs.modal", onShown);
   });
 
@@ -737,24 +775,28 @@ document
     );
   });
 
-// Live description generation
-[
-  "sg-name",
-  "sg-end-date",
-  "sg-start-time",
-  "sg-end-time",
-  "sg-subject",
-].forEach((id) => {
-  document.getElementById(id).addEventListener("change", generateDescription);
-  document.getElementById(id).addEventListener("input", generateDescription);
+// Live description generation — text fields
+["sg-name", "sg-end-date", "sg-subject"].forEach((id) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener("change", generateDescription);
+  el.addEventListener("input", generateDescription);
 });
 
-// send the data via the api
+// Live description generation — time select dropdowns
+["sg-start-hour", "sg-start-minute", "sg-end-hour", "sg-end-minute"].forEach((id) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener("change", generateDescription);
+});
+
+// Send the data via the API
 document
   .getElementById("specialGroupSaveBtn")
   .addEventListener("click", function () {
     let valid = true;
 
+    // Validate all standard fields (no time fields here — handled separately below)
     const fields = [
       {
         id: "sg-name",
@@ -793,18 +835,6 @@ document
         check: (v) => !!v,
       },
       {
-        id: "sg-start-time",
-        errId: "sg-starttime-error",
-        msg: "❌ Start time is required",
-        check: (v) => !!v,
-      },
-      {
-        id: "sg-end-time",
-        errId: "sg-endtime-error",
-        msg: "❌ End time is required",
-        check: (v) => !!v,
-      },
-      {
         id: "sg-room",
         errId: "sg-room-error",
         msg: "❌ Please select a room",
@@ -830,17 +860,36 @@ document
       }
     });
 
+    // Validate time selects separately (they use getTime(), not .value on a single input)
+    const startTime = getTime("sg-start");
+    const endTime   = getTime("sg-end");
+
+    if (!startTime) {
+      const err = document.getElementById("sg-starttime-error");
+      err.textContent = "❌ Start time is required";
+      err.classList.remove("d-none");
+      valid = false;
+    } else {
+      document.getElementById("sg-starttime-error").classList.add("d-none");
+    }
+
+    if (!endTime) {
+      const err = document.getElementById("sg-endtime-error");
+      err.textContent = "❌ End time is required";
+      err.classList.remove("d-none");
+      valid = false;
+    } else {
+      document.getElementById("sg-endtime-error").classList.add("d-none");
+    }
+
     if (!valid) return;
 
-    // ✅ Check start_time is before end_time
-    const startTime = document.getElementById("sg-start-time").value;
-    const endTime = document.getElementById("sg-end-time").value;
-
+    // Check start_time is before end_time
     if (startTime && endTime && startTime >= endTime) {
       const err = document.getElementById("sg-endtime-error");
       err.textContent = "❌ End time must be after start time";
       err.classList.remove("d-none");
-      return; // ← stop here, don't send
+      return;
     }
 
     const payload = {
@@ -853,8 +902,8 @@ document
       type: document.getElementById("sg-type").value,
       room_id: document.getElementById("sg-room").value,
       start_date: document.getElementById("sg-end-date").value || null,
-      start_time: document.getElementById("sg-start-time").value,
-      end_time: document.getElementById("sg-end-time").value,
+      start_time: startTime,
+      end_time: endTime,
       end_date: null,
       description: document.getElementById("sg-description").value.trim(),
       is_special: true,
@@ -866,8 +915,6 @@ document
         document.getElementById("eventLocalId")?.value ||
         document.getElementById("local_id")?.value,
     };
-
-    // ✅ TEMP: show all data in alert before sending
 
     Swal.fire({
       icon: "info",
@@ -902,7 +949,6 @@ document
               }, 300);
             });
           } else {
-            // ← } correctly closes if before else
             Swal.fire({
               icon: "error",
               title: "❌ Error",
