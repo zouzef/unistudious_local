@@ -154,3 +154,17 @@ def create_special_group(data):
     except Exception as e:
         print(f"Error in create_calander: {e}")
         return 500, {"Message": str(e)}
+
+def fetch_completion_tag(account_id):
+	try:
+		url =f"{base_url}/get_all_completion_tag/{account_id}"
+		response = requests.get(url,verify=False)
+		response.raise_for_status()
+		if response.status_code == 200:
+			return response.json()
+		else:
+			return None
+
+	except Exception as e:
+		print(f"Error: {e} coming from fetch_completionTag")
+		return None

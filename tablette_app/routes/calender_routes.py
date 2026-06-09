@@ -10,7 +10,9 @@ from services.calender_service import (
 	create_calander,
 	fetch_all_teacher,
 	fetch_calander_request,
-	create_special_group
+	create_special_group,
+	fetch_completion_tag
+
 
 )
 
@@ -285,3 +287,23 @@ def create_special_group_api():
             "Message": f"Error: {str(e)} coming from create_special_group",
             "Data": []
         }), 500
+
+@calendar_bp.route('/api/get-compltetion-tag/<int:account_id>', methods=['GET'])
+def get_completion_tag(account_id):
+	try:
+		completion_tag = fetch_completion_tag(account_id)
+		if completion_tag:
+
+			return jsonify({
+				completion_tag
+			}),200
+		else:
+			return jsonify({
+				"Message":"There is no completionTag"
+			}),404
+
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from server"
+		}),500
