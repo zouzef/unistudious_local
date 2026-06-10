@@ -26,11 +26,11 @@
     <link href="/static/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
     <link href="/static/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/sweetalert2.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <link href="/static/css/vendor/material-icons.css" rel="stylesheet">
     <link href="/static/css/style4.css" rel="stylesheet">
 
     <!-- ── Socket.IO ── -->
-    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="/static/js/vendor/socket.io.min.js"></script>
 
     <!-- ══════════════════════════════════════════
          PAGE STYLES
@@ -413,19 +413,10 @@
                                     </svg>
                                 </span>
                                 <select class="form-control" id="eventCompletionTagCalander" multiple
+                                        data-plugin="false"
                                         style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee;
-                                               font-size: 13px; background: white; min-height: 80px;"
-                                        onfocus="this.style.borderColor='#4D44B5'"
-                                        onblur="this.style.borderColor='#eee'">
-                                    <option value="1">Bronze</option>
-                                    <option value="2">Silver</option>
-                                    <option value="3">Gold</option>
-                                    <option value="4">Platinum</option>
-                                    <option value="5">Diamond</option>
-                                    <option value="6">Master</option>
-                                    <option value="7">Grand Master</option>
-                                    <option value="8">Legendary</option>
-                                    <option value="10">fonction 1</option>
+               font-size: 13px; background: white; min-height: 80px;
+               color: #333; cursor: pointer; overflow: auto !important;">
                                 </select>
                             </div>
                         </div>
@@ -460,41 +451,51 @@
                     <!-- Row 5: Start Time + End Time (hidden by default) -->
                     <div class="row mb-3">
                         <div class="col-12 col-md-6 mb-3 mb-md-0 d-none" id="startTimeFields">
-                            <label for="eventStartTime" class="form-label"
+                            <label class="form-label"
                                    style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;"
                                    data-key="labelStartTime">Start Time</label>
-                            <div style="position: relative;">
-                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
-                                         stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"/>
-                                        <path d="M12 6v6l4 2"/>
-                                    </svg>
-                                </span>
-                                <input type="time" class="form-control" id="eventStartTime"
-                                       style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee;
-                                              font-size: 13px; background: white;"
-                                       onfocus="this.style.borderColor='#4D44B5'"
-                                       onblur="this.style.borderColor='#eee'">
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <div style="position: relative; flex: 1;">
+                                    <select id="event-start-hour" class="form-control"
+                                            style="border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white; appearance: none; -webkit-appearance: none;"
+                                            onfocus="this.style.borderColor='#4D44B5'"
+                                            onblur="this.style.borderColor='#eee'">
+                                        <option value="">HH</option>
+                                    </select>
+                                </div>
+                                <span style="font-weight: 700; color: #4D44B5; font-size: 16px;">:</span>
+                                <div style="position: relative; flex: 1;">
+                                    <select id="event-start-minute" class="form-control"
+                                            style="border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white; appearance: none; -webkit-appearance: none;"
+                                            onfocus="this.style.borderColor='#4D44B5'"
+                                            onblur="this.style.borderColor='#eee'">
+                                        <option value="">MM</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="col-12 col-md-6 d-none" id="endTimeFields">
-                            <label for="eventEndTime" class="form-label"
+                            <label class="form-label"
                                    style="font-weight: 600; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;"
                                    data-key="labelEndTime">End Time</label>
-                            <div style="position: relative;">
-                                <span style="position: absolute; left: 11px; top: 50%; transform: translateY(-50%); pointer-events: none;">
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4D44B5"
-                                         stroke-width="2">
-                                        <circle cx="12" cy="12" r="10"/>
-                                        <path d="M12 6v6l4 2"/>
-                                    </svg>
-                                </span>
-                                <input type="time" class="form-control" id="eventEndTime"
-                                       style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee;
-                                              font-size: 13px; background: white;"
-                                       onfocus="this.style.borderColor='#4D44B5'"
-                                       onblur="this.style.borderColor='#eee'">
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <div style="position: relative; flex: 1;">
+                                    <select id="event-end-hour" class="form-control"
+                                            style="border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white; appearance: none; -webkit-appearance: none;"
+                                            onfocus="this.style.borderColor='#4D44B5'"
+                                            onblur="this.style.borderColor='#eee'">
+                                        <option value="">HH</option>
+                                    </select>
+                                </div>
+                                <span style="font-weight: 700; color: #4D44B5; font-size: 16px;">:</span>
+                                <div style="position: relative; flex: 1;">
+                                    <select id="event-end-minute" class="form-control"
+                                            style="border-radius: 10px; border: 2px solid #eee; font-size: 13px; background: white; appearance: none; -webkit-appearance: none;"
+                                            onfocus="this.style.borderColor='#4D44B5'"
+                                            onblur="this.style.borderColor='#eee'">
+                                        <option value="">MM</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -551,7 +552,6 @@
                     <input type="hidden" id="eventSessionId" value="12">
                     <input type="hidden" id="eventAccountId" value="3">
                     <input type="hidden" id="eventLocalId" value="8">
-
                 </form>
             </div>
 
@@ -582,9 +582,7 @@
                         style="border-radius: 10px; padding: 10px 20px; font-size: 13px;">
                     ＋ Create Special Group
                 </button>
-
             </div>
-
         </div>
     </div>
 </div>
@@ -1196,25 +1194,13 @@
                                     </svg>
                                 </span>
                                 <select class="form-control" id="sg-completion-tag" multiple
+                                        data-plugin="false"
                                         style="padding-left: 34px; border-radius: 10px; border: 2px solid #eee;
-                                        font-size: 13px; background: white; min-height: 80px;"
-                                        onfocus="this.style.borderColor='#4D44B5'"
-                                        onblur="this.style.borderColor='#eee'">
-                                    <option value="1">Bronze</option>
-                                    <option value="2">Silver</option>
-                                    <option value="3">Gold</option>
-                                    <option value="4">Platinum</option>
-                                    <option value="5">Diamond</option>
-                                    <option value="6">Master</option>
-                                    <option value="7">Grand Master</option>
-                                    <option value="8">Legendary</option>
-                                    <option value="10">fonction 1</option>
+               font-size: 13px; background: white; min-height: 80px; color: #333; cursor: pointer;">
                                 </select>
                             </div>
                         </div>
-
                     </div>
-
 
                     <!-- Description -->
                     <div class="mb-1">

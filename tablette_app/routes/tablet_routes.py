@@ -81,14 +81,11 @@ def tablet_page(tablet_id):
             session_end = datetime.strptime(session_end_str, "%Y-%m-%d %H:%M:%S")
 
         now = datetime.now()
-        print(session_start)
 
         # Show session only if current time is within the session duration
         if session_start - timedelta(minutes=5) <= now <= session_end:
             # Get room name from tablets data
             room_name = get_room_name(room, tablette)
-            print("slc_id: \n")
-            print(slc_id)
 
             # ✅ NEW: Format times for the frontend (HH:MM:SS)
             session_start_time = session_start.strftime("%H:%M:%S")
@@ -160,7 +157,6 @@ def check_session(tablet_id):
 
         # ✅ Print only once per session end
         if tablet_id not in _session_ended_logged:
-            print("the session end")
 
             _session_ended_logged.add(tablet_id)
             calender_id = session_room.get("id")
@@ -189,6 +185,7 @@ def check_id_prod(tablet_id, calendar_id):
     except Exception as e:
         print(f"DEBUG: Exception in check_id_prod: {e}")
         return jsonify({"id_prod": None, "error": str(e)}), 200
+
 
 @tablet_bp.route('/api/get-profile-image/<int:user_id>', methods=['GET'])
 def get_profile_img(user_id):

@@ -73,8 +73,6 @@ def get_session(account_id):
 def get_Teacher_Session(session_id):
 	try:
 		teacher_data = fetch_teacher(session_id)
-
-		print(teacher_data)
 		if teacher_data:
 			return jsonify(teacher_data),200
 		else:
@@ -87,7 +85,7 @@ def get_Teacher_Session(session_id):
 def get_all_teacher():
 	try:
 		teachers_data = fetch_all_teacher()
-		print(teachers_data)
+
 		if teachers_data:
 			return jsonify(teachers_data), 200
 		else:
@@ -192,7 +190,6 @@ def create_calander_request(session_id):
 def create_calander_tablet():
 	try:
 		calander_data = request.get_json()
-		print(calander_data)
 		if not calander_data:
 			return jsonify({
                 "Message": "Error: No Data Provided",
@@ -290,20 +287,17 @@ def create_special_group_api():
 
 @calendar_bp.route('/api/get-compltetion-tag/<int:account_id>', methods=['GET'])
 def get_completion_tag(account_id):
-	try:
-		completion_tag = fetch_completion_tag(account_id)
-		if completion_tag:
-
-			return jsonify({
-				completion_tag
-			}),200
-		else:
-			return jsonify({
-				"Message":"There is no completionTag"
-			}),404
-
-
-	except Exception as e:
-		return jsonify({
-			"Message":f"Error: {e} coming from server"
-		}),500
+    try:
+       completion_tag = fetch_completion_tag(account_id)
+       if completion_tag:
+          return jsonify({
+             "data": completion_tag
+          }),200
+       else:
+          return jsonify({
+             "Message":"There is no completionTag"
+          }),404
+    except Exception as e:
+       return jsonify({
+          "Message":f"Error: {e} coming from server"
+       }),500

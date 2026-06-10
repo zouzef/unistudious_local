@@ -41,9 +41,6 @@ def serve_unknown_image(session_id, person_folder, filename):
             person_folder
         )
 
-        print(f"Serving image from directory: {directory}")
-        print(f"Filename: {filename}")
-
         file_path = os.path.join(directory, filename)
         if not os.path.exists(file_path):
             print(f"File not found: {file_path}")
@@ -72,8 +69,6 @@ def associate_known_student_attendance():
     """Associate an unknown student folder to a known user."""
     try:
         data = request.get_json() or {}
-        print(data)
-
         # Extract the data from request
         user_id = data.get('userId')
         folder = data.get('folder')
@@ -121,9 +116,6 @@ def add_student_attendance_route():
         checkbox1_checked = data.get('checkbox1', False)
         checkbox2_checked = data.get('checkbox2', False)
         selected_group_id = data.get('selectedGroupId')
-
-        print(get_student_current_group(calendar_id, user_id))
-
         result = add_student_to_attendance(
             user_id, calendar_id, group_id, relation_id,
             checkbox1_checked, checkbox2_checked, selected_group_id

@@ -22,7 +22,6 @@ def fetch_calender_room(room_id):
 	except Exception as e:
 		return None
 
-
 def fetch_group_session(account_id, session_id):
 	try:
 		url = f"{base_url}/get-group/{account_id}/{session_id}"
@@ -42,7 +41,6 @@ def fetch_group_session(account_id, session_id):
 		print(f"Unexpected error: {e}")
 		return None
 
-
 def fetch_room(local_id):
 	try:
 		url = f"{base_url}/get_room/{local_id}"
@@ -55,7 +53,6 @@ def fetch_room(local_id):
 	except Exception as e:
 		print(f"Unexpected error: {e}")
 		return None
-
 
 def fetch_session(account_id):
 	try:
@@ -70,7 +67,6 @@ def fetch_session(account_id):
 		print(F"Error: {Err} coming from get_session")
 		return None
 
-
 def fetch_teacher(session_id):
 	try:
 		url = f"{base_url}/get_teacher/{session_id}"
@@ -83,7 +79,6 @@ def fetch_teacher(session_id):
 	except Exception as e :
 		print(f"Error: {e} coming from get_teacher ")
 		return None
-
 
 def fetch_all_teacher():
 	try:
@@ -108,7 +103,6 @@ def request_calander(calander_data):
 	except Exception:
 		return False
 
-
 def fetch_calander_request(room_id):
 	try:
 		url = f"{base_url}/get-calander_request/{room_id}"
@@ -120,7 +114,6 @@ def fetch_calander_request(room_id):
 			return None
 	except Exception:
 		return None
-
 
 def create_calander(data):
 	try:
@@ -136,7 +129,6 @@ def create_calander(data):
 	except Exception as e:
 		print(f"Error in create_calander: {e}")
 		return 500
-
 
 def create_special_group(data):
     try:

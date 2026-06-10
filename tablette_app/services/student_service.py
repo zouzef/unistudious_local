@@ -93,7 +93,6 @@ def get_students_list(calendar_id):
         data = response.json()
 
         if 'users' not in data:
-            print("No 'users' key in response, returning empty array")
             return {"users": []}
 
         return data

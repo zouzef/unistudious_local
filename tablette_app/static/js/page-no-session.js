@@ -51,8 +51,8 @@ setInterval(checkForSession, 10000);
 ───────────────────────────────────────────────────────────── */
 
 function populateTimePickers() {
-  const hourSelects   = ["sg-start-hour", "sg-end-hour"];
-  const minuteSelects = ["sg-start-minute", "sg-end-minute"];
+  const hourSelects   = ["sg-start-hour", "sg-end-hour", "event-start-hour", "event-end-hour"];
+  const minuteSelects = ["sg-start-minute", "sg-end-minute", "event-start-minute", "event-end-minute"];
 
   hourSelects.forEach((id) => {
     const sel = document.getElementById(id);
@@ -94,7 +94,9 @@ populateTimePickers();
 document
   .getElementById("eventDuplicate")
   .addEventListener("change", function () {
-    const eventEndFields = document.getElementById("eventEndFields");
+    const startTimeFields = document.getElementById("startTimeFields");
+    const endTimeFields   = document.getElementById("endTimeFields");
+    const eventEndFields  = document.getElementById("eventEndFields");
 
     if (this.value === "none") {
       startTimeFields.classList.remove("d-none");
@@ -110,6 +112,58 @@ document
       eventEndFields.classList.add("d-none");
     }
   });
+
+
+/* ─────────────────────────────────────────────────────────────
+   3b. CALENDAR COMPLETION TAG LOADING
+───────────────────────────────────────────────────────────── */
+
+async function loadCalendarCompletionTags() {
+  const accountId = document.getElementById("eventAccountId").value;
+  const select = document.getElementById("eventCompletionTagCalander");
+  if (!select || !accountId) return;
+
+  // Destroy selectpicker before clearing
+  try { $('#eventCompletionTagCalander').selectpicker('destroy'); } catch(e) {}
+
+  select.innerHTML = "";
+
+  try {
+    const response = await fetch(`/api/get-compltetion-tag/${accountId}`);
+    if (response.ok) {
+      const result = await response.json();
+      const tags = result.data || [];
+      if (Array.isArray(tags) && tags.length > 0) {
+        tags.forEach((tag) => {
+          _addOption(select, tag.id, tag.name);
+        });
+      } else {
+        _addOption(select, "", "No tags available", true);
+      }
+    } else {
+      _addOption(select, "", "Error loading tags", true);
+    }
+  } catch (e) {
+    console.error("Error loading calendar completion tags:", e);
+    _addOption(select, "", "Connection error", true);
+  }
+
+  // Remove any forced inline styles that were overriding selectpicker
+  select.removeAttribute("style");
+
+  // Init selectpicker exactly like the special group version
+  try {
+    $('#eventCompletionTagCalander').selectpicker({
+      noneSelectedText: 'Select completion tags',
+      actionsBox: false
+    });
+    $('#eventCompletionTagCalander').selectpicker('refresh');
+  } catch(e) {}
+}
+
+document.getElementById("eventModal").addEventListener("shown.bs.modal", function () {
+  loadCalendarCompletionTags();
+});
 
 /* ─────────────────────────────────────────────────────────────
    4. TEACHER AUTHENTICATION
@@ -582,6 +636,42 @@ async function loadSpecialGroupDropdowns() {
   const roomSelect = document.getElementById("sg-room");
   const subjectSelect = document.getElementById("sg-subject");
 
+    // --- COMPLETION TAG LOADING ---
+// --- COMPLETION TAG LOADING ---
+  const completionTagSelect = document.getElementById("sg-completion-tag");
+  if (completionTagSelect) {
+    completionTagSelect.innerHTML = "";
+
+    try {
+      const tagResponse = await fetch(`/api/get-compltetion-tag/${accountId}`);
+      if (tagResponse.ok) {
+        const result = await tagResponse.json();
+        const tags = result.data || [];
+        if (Array.isArray(tags) && tags.length > 0) {
+          tags.forEach((tag) => {
+            _addOption(completionTagSelect, tag.id, tag.name);
+          });
+        } else {
+          _addOption(completionTagSelect, "", "No tags available", true);
+        }
+      } else {
+        _addOption(completionTagSelect, "", "Error loading tags", true);
+      }
+    } catch (e) {
+      _addOption(completionTagSelect, "", "Connection error", true);
+      console.error("Error loading completion tags:", e);
+    }
+  }
+
+
+  try {
+    $('#sg-completion-tag').selectpicker('destroy');
+    $('#sg-completion-tag').selectpicker({
+        noneSelectedText: 'Select completion tags',
+        actionsBox: false
+    });
+    $('#sg-completion-tag').selectpicker('refresh');
+  } catch(e) {}
   if (!sessionSelect) return console.error("Session select not found");
 
   // --- SESSION LOADING ---

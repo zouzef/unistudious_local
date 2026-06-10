@@ -79,8 +79,7 @@ def get_calendar_details(session_id):
     url = f"{base_url}{end_point}/{session_id}"
     try:
         response = requests.get(url, headers=headers, verify=False)
-        print(session_id)
-        print(response.json())
+
         response.raise_for_status()
         return response.json()
     except requests.RequestException as e:
@@ -210,6 +209,7 @@ def get_account_data(calendar_id):
     except Exception as e:
         print(f"DEBUG: Error {e} from get_account_data")
         return {"status": "error", "message": str(e)}
+
 
 def get_account_data_tablet(tablet_id):
     try:

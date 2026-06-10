@@ -11,7 +11,6 @@ subject_bp = Blueprint('subject',__name__)
 def api_get_subject():
     try:
         subject_data = fetch_subject()
-        print(subject_data)
         if subject_data:
             return jsonify({
                 "data": subject_data

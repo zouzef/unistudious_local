@@ -108,7 +108,6 @@ def get_statics_attendance(calendar_id):
         print(f"DEBUG: Error {e} coming from get_statics_attendance")
         return jsonify({"status": "error", "message": str(e)}), 500
 
-
 @attendance_bp.route('/reset_attendance_api/<int:calendar_id>')
 def reset_attendance_api(calendar_id):
     """Reset all attendance for a calendar."""
@@ -126,7 +125,6 @@ def reset_attendance_api(calendar_id):
         print(f"DEBUG: Error {e} come from reset_attendance_api")
         return jsonify({"status": "error", "message": "error from reset_attendance_api"}), 500
 
-
 @attendance_bp.route('/delete_attendance_api/<int:calendar_id>/<int:user_id>')
 def delete_attendance_api(calendar_id, user_id):
     """Delete attendance for a specific user."""
@@ -143,7 +141,6 @@ def delete_attendance_api(calendar_id, user_id):
     except Exception as e:
         print(f"DEBUG: Error {e} come from delete_attendance_api")
         return jsonify({"status": "error", "message": "error from delete_attendance_api"}), 500
-
 
 @attendance_bp.route('/get-data-account/<int:calendar_id>')
 def get_data_account_route(calendar_id):
