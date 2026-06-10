@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from sync.pushers.attendance_pusher import push_add, push_update, send_new_attendance
 from sync.pushers.calendar_pusher import push_calendar_add, push_calendar_update, push_calendar_delete
-
+from sync.pushers.accountLevel_pusher import push_accountLevelAdd,push_accountLevelUpdate,push_accountLevelDelete
 logger = logging.getLogger(__name__)
 
 
@@ -96,6 +96,29 @@ class DataPusher:
                         "INSERT_attendance": lambda row: send_new_attendance(db, self.settings, row),
                     }
                 )
+
+            # # --- Account_Level ---
+            # cursor.execute("""
+            #     SELECT * FROM account_level_audit
+            #     WHERE is_synced = 0
+            #     ORDER BY audit_id ASC
+            # """)
+            # account_level_rows = cursor.fetchall()
+            #
+            # if not account_level_rows:
+            #     logger.debug("No pending calendar changes to push")
+            # else:
+            #     logger.info("Fount %d pending calendar change(s)", len(account_level_rows))
+            #     self._process_audit_rows(
+            #         cursor, conn,
+            #         "account_level_audit",
+            #         account_level_rows,
+            #         {
+            #             "INSERT": lambda row: push_accountLevelAdd(db, self.settings, row),
+            #             "UPDATE": lambda row: push_accountLevelUpdate(db, self.settings, row),
+            #             "DELETE": lambda row: push_accountLevelDelete(db, self.settings, row),
+            #         }
+            #     )
 
         except Exception as e:
             logger.exception("Fatal error in data_pusher: %s", e)
