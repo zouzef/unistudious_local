@@ -7,7 +7,6 @@ def get_account_level_service(account_id):
 	try:
 		url = f"{current_app.config['BASE_URL']}get_account_level/{account_id}"
 		response = requests.get(url,verify=False,timeout=10)
-		print(response.json())
 		return response.status_code == 200,response
 	except Exception as e:
 		print(e)
@@ -70,7 +69,7 @@ def create_account_section_service(data,account_id):
 	try:
 		url = f"{current_app.config['BASE_URL']}create_account_section/{account_id}"
 		response = requests.post(url,json=data,verify=False,timeout=10)
-		print(response)
+
 		return response.status_code == 200,response
 	except Exception as e:
 		return False,None
