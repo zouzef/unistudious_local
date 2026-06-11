@@ -69,7 +69,8 @@
 
                             <div class="float-end">
                                 <button type="button" class="btn btn-outline-primary me-3"
-                                        id="create_tag">Create</button>
+                                        id="create_tag">Create
+                                </button>
                                 <a class="btn btn-outline-danger" href="/dashboard/show-tag">Close</a>
                             </div>
 
@@ -80,3 +81,124 @@
         </div>
     </div>
 </div>
+
+<script>
+    const ACCOUNT_ID = {{ account_id }};
+
+window.addEventListener('load', function () {
+
+    const select     = document.getElementById('account_tag_tagConfig');
+    const divOther   = document.getElementById('div-other-title');
+    const inputOther = document.getElementById('account_tag_otherTag');
+
+    // ── Load tags into select ──────────────────────────────────────────────
+    fetch('/api/get_tag_config')
+        .then(res => {
+            if (!res.ok) throw new Error(`Server returned ${res.status}`);
+            return res.json();
+        })
+        .then(tags => {
+            tags.forEach(tag => {
+                const option       = document.createElement('option');
+                option.value       = tag.id;
+                option.textContent = tag.title;
+                if (tag.title.toLowerCase() === 'other') {
+                    option.dataset.isOther = 'true';
+                }
+                select.appendChild(option);
+            });
+            $('#account_tag_tagConfig').selectpicker('refresh');
+        })
+        .catch(err => {
+            console.error('Failed to load tags:', err);
+        });
+
+    // ── Show / hide "Other" input on change ───────────────────────────────
+    $('#account_tag_tagConfig').on('change', function () {
+        const selectedOption = this.options[this.selectedIndex];
+        const isOther        = selectedOption.dataset.isOther === 'true';
+
+        if (isOther) {
+            divOther.style.display = 'block';
+            inputOther.required    = true;
+        } else {
+            divOther.style.display = 'none';
+            inputOther.required    = false;
+            inputOther.value       = '';
+        }
+    });
+
+    // ── Create button click ───────────────────────────────────────────────
+    document.getElementById('create_tag').addEventListener('click', function () {
+
+        const tag_id         = select.value;
+        const selectedOption = select.options[select.selectedIndex];
+        const isOther        = selectedOption.dataset.isOther === 'true';
+        const otherTag       = inputOther.value.trim();
+        const description    = document.getElementById('account_tag_description').value.trim() || null;
+        const public_val     = document.getElementById('account_tag_public').value;
+
+        // ── Validation ─────────────────────────────────────────────────────
+        if (!tag_id) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Required',
+                text: 'Please select a tag.',
+                confirmButtonColor: '#4c4b9e',
+            });
+            return;
+        }
+
+        if (isOther && !otherTag) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Required',
+                text: 'Please enter the name of the new tag.',
+                confirmButtonColor: '#4c4b9e',
+            });
+            return;
+        }
+
+        // ── Send request ───────────────────────────────────────────────────
+        fetch(`/api/create_account_tag/${ACCOUNT_ID}`, {
+            method  : 'POST',
+            headers : { 'Content-Type': 'application/json' },
+            body    : JSON.stringify({
+                tagId       : tag_id,
+                description : description,
+                public      : public_val,
+                otherTag    : isOther ? otherTag : null
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.Message && data.Message.toLowerCase().includes('success')) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Tag created successfully!',
+                    confirmButtonColor: '#4c4b9e',
+                }).then(() => {
+                    window.location.href = '/dashboard/show-tag';
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops!',
+                    text: data.Message || 'Something went wrong.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+            }
+        })
+        .catch(err => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Server Error',
+                text: 'Something went wrong, please try again.',
+                confirmButtonColor: '#4c4b9e',
+            });
+        });
+    });
+
+});
+</script>

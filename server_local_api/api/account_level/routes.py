@@ -90,9 +90,11 @@ def create_account_level(account_id):
         if response:
             # ✅ Fetch the newly created record for audit
             new_record = Database.execute_query(
-                "SELECT * FROM account_level WHERE id = LAST_INSERT_ID()",
+                "SELECT * FROM account_level WHERE id = %s",
+                (response,),
                 fetch=True
             )
+
             log_audit(
                 action_type="INSERT",
                 old_data=None,
@@ -137,6 +139,7 @@ def delete_account_level(account_id, id_account_level):
             return jsonify({"Message": "Error in deleting account_level"}), 400
 
     except Exception as e:
+
         return jsonify({"Message": f"Error: {e} coming from server"}), 500
 
 
@@ -176,20 +179,26 @@ def update_account_level(account_level_id):
             return jsonify({"Message": "Account level not found"}), 404
 
         level_config_id = data.get('level_config_id')
-        status          = data.get('status')
-        description     = data.get('description') or None
+        status = data.get('status')
+        description = data.get('description') or None
+        other_level = data.get('other_level') or None  # ✅ add this
 
         update_query = """
             UPDATE account_level
             SET level_config_id = %s,
                 status = %s,
                 description = %s,
+                other_level = %s,        -- ✅ add this
                 updated_at = NOW(),
                 slc_edit = 1
             WHERE id = %s
               AND enabled = 1
         """
-        response = Database.execute_query(update_query, (level_config_id, status, description, account_level_id), fetch=False)
+        response = Database.execute_query(
+            update_query,
+            (level_config_id, status, description, other_level, account_level_id),  # ✅ add other_level
+            fetch=False
+        )
 
         if response:
             # ✅ Fetch updated record AFTER updating for audit

@@ -38,9 +38,9 @@ from app.configuration.service import (
 	create_completion_tag_service,
 	view_completion_tag_service,
 	update_completion_tag_service,
+	create_account_tag_service,
 	delete_completion_tag_service
 )
-
 
 
 configuration_bp = Blueprint('configuration',__name__)
@@ -472,6 +472,22 @@ def api_update_account_tag(account_tag_id):
         return jsonify({
             "Message": f"Error: {e} coming from backend"
         }), 500
+
+@configuration_bp.route('/api/create_account_tag/<int:account_id>', methods=['POST'])
+def create_account_tag(account_id):
+	try:
+		data = request.get_json()
+		status, response = create_account_tag_service(account_id,data)
+		if status:
+			return jsonify(response.json()),response.status_code
+		else:
+			return jsonify({
+				"Message":"Error in updating accountTag"
+			}),400
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from server"
+		}),500
 
 
 # =============================================== COMPLETION TAG ENDPOINTS ===============================================
