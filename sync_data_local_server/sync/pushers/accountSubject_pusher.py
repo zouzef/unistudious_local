@@ -44,7 +44,6 @@ def _send_create_accountSubject_api(settings,payload):
 		logger.exception("Remote API error in create accountLevel: %s", e)
 		return False, None
 
-
 def _send_update_accountSubject_api(settings,payload,accountSubjectId):
 	try:
 		token = get_token()
@@ -114,7 +113,6 @@ def push_accountSubjectAdd(db, settings, row):
 			db.connection.commit()
 			cursor.close()
 			logger.info("AccountSubject updated <UNK> %s", AccountSubjectIdLocal)
-
 		return status
 	except Exception as e:
 		logger.exception("Error in push accountSubjectAdd: %s", e)

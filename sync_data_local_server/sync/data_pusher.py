@@ -9,7 +9,8 @@ from sync.pushers.calendar_pusher import push_calendar_add, push_calendar_update
 from sync.pushers.accountLevel_pusher import push_accountLevelAdd,push_accountLevelUpdate,push_accountLevelDelete
 from sync.pushers.accountSection_pusher import push_accountSectionAdd, push_accountSectionUpdate,push_accountSectionDelete
 from sync.pushers.accountSubject_pusher import push_accountSubjectAdd, push_accountSubjectUpdate, push_accountSubjectDelete
-from sync.pushers.accountTag_pusher import push_accountTagAdd, push_accountTagUpdate, push_accountTagDelte
+from sync.pushers.accountTag_pusher import push_accountTagAdd, push_accountTagUpdate, push_accountTagDelete
+from sync.pushers.completionTag_pusher import push_completionTagAdd, push_completionTagUpdate, push_completionTagDelete
 logger = logging.getLogger(__name__)
 
 
@@ -76,7 +77,6 @@ class DataPusher:
                     }
                 )
 
-
             # --- Attendance ---
             cursor.execute("""
                 SELECT * FROM attendance_audit
@@ -98,7 +98,6 @@ class DataPusher:
                         "INSERT_attendance": lambda row: send_new_attendance(db, self.settings, row),
                     }
                 )
-
 
             # --- Account_Level ---
             cursor.execute("""
@@ -122,7 +121,6 @@ class DataPusher:
                     }
                 )
 
-
             # --- Account_Section ---
             cursor.execute("""
                 SELECT * FROM account_section_audit
@@ -145,7 +143,6 @@ class DataPusher:
                     }
                 )
 
-
             # --- Account_Subject
             cursor.execute("""
                 SELECT * FROM account_subject_audit
@@ -159,7 +156,7 @@ class DataPusher:
                 logger.info("Found %d pending AccountSubject change(s)", len(account_subject_rows))
                 self._process_audit_rows(
                     cursor,conn,
-                    "account_section_audit",
+                    "account_subject_audit",
                     account_subject_rows,
                     {
                         "INSERT": lambda  row: push_accountSubjectAdd(db, self.settings, row),
@@ -186,9 +183,35 @@ class DataPusher:
                     {
                         "INSERT": lambda row: push_accountTagAdd(db, self.settings, row),
                         "UPDATE": lambda row: push_accountTagUpdate(db, self.settings, row),
-                        "DELETE": lambda  row: push_accountTagDelte(db, self.settings, row)
+                        "DELETE": lambda  row: push_accountTagDelete(db, self.settings, row)
                     }
                 )
+
+            # --- Compltetion_Tag
+            cursor.execute(
+                """SELECT * FROM completion_tag_account_audit
+                WHERE is_synced = 0
+                ORDER BY audit_id ASC 
+            """)
+            completion_tag_rows = cursor.fetchall()
+            if not completion_tag_rows:
+                logger.debug("No pending CompletionTag changes to push")
+            else:
+                logger.info("Found %s PENDING CompletionTag change(s)", len(completion_tag_rows))
+                self._process_audit_rows(
+                    cursor, conn,
+                    "completion_tag_account_audit",
+                    completion_tag_rows,
+                    {
+                        "INSERT": lambda row: push_completionTagAdd(db, self.settings, row),
+                        "UPDATE": lambda row: push_completionTagUpdate(db, self.settings, row),
+                        "DELETE": lambda row: push_completionTagDelete(db, self.settings, row)
+                    }
+                )
+
+
+
+
 
 
         except Exception as e:
