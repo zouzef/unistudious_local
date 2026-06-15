@@ -351,6 +351,14 @@ def process_sync_data(db, data, settings):
             logger.info("Processing Season ...")
             process_season(db,n)
 
+    if 'seasonSubSubject' in data:
+        n = normalize(data['seasonSubSubject'])
+        if has_records(n):
+            from sync.processors.subsubject_processor import process_subsubject
+            logger.info("Processing Subsubject")
+            process_subsubject(db,n)
+
+
 
 # ---------------------------------------------------------------------------
 # Sync runners

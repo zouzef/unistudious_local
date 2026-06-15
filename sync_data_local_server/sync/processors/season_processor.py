@@ -364,7 +364,7 @@ def process_season(db, season_data):
     }
 
     if season_data.get("created"):
-        print(f"\n✨ Processing 'created' section ({len(season_data['created'])} records)...")
+        print(f"\n✨ Processing 'created' section ({len(season_data['created'])} record(s)...")
         results["created_section"] = insert_season(db, season_data)
 
     if season_data.get("updated"):
