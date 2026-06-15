@@ -4,10 +4,8 @@ import os
 import json
 import requests
 from core.auth import get_token
-# from server_local_api.core.database import Database
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-
 logger = logging.getLogger(__name__)
 
 

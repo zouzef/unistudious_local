@@ -1,2 +1,3 @@
 UpdateCompletionTagApi:
-    status ne9sa
+    -documentation api AccountTag
+    -status column ne9sa

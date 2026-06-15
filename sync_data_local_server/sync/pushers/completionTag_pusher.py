@@ -128,7 +128,7 @@ def push_completionTagUpdate(db, settings, row):
         }
         cursor = db.connection.cursor(dictionary=True)
         cursor.execute(
-            """SELECT id_prod FROM completion_tag_account_audit WHERE id = %s""",
+            """SELECT id_prod FROM completion_tag_account WHERE id = %s""",
             (CompletionTagId,)
         )
         result = cursor.fetchone()
@@ -138,8 +138,6 @@ def push_completionTagUpdate(db, settings, row):
     except Exception as e:
         logger.exceptin("Error in push_CompletionTagUpdate: %s", CompletionTagId)
         return False
-
-
     except Exception as e:
         logger.exception("Error in push_accountCompletionTagUpdate: %s", e)
         return False

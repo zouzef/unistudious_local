@@ -1,16 +1,10 @@
 <div class="content-body">
     <div class="container-fluid">
-
         <div class="row">
             <div class="card-header">
                 <h4 class="card-title">Add New Formation</h4>
             </div>
-
             <form id="formation-form" enctype="multipart/form-data">
-
-                <!-- ═══════════════════════════════════════════════════════ -->
-                <!--  FORMATION DETAILS                                      -->
-                <!-- ═══════════════════════════════════════════════════════ -->
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-header">
@@ -272,8 +266,163 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Season Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row" id="lists-seasons">
+                                <!-- Add new season button -->
+                                <div class="col-xl-2 col-lg-2 col-sm-2" id="add-div-seasons">
+                                    <div class="card contact_list text-center">
+                                        <div class="card-body">
+                                            <button type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#modalFormationSeason" id="open-season-modal">
+                                                <img src="../static/assets/images/plus.png" alt="Add Season"
+                                                     class="avatar avatar-xl">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-
+                            <!-- Modal: Create / Edit Season -->
+                            <div class="modal fade" id="modalFormationSeason" tabindex="-1"
+                                 aria-labelledby="seasonModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-center">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="seasonModalLabel">New Season</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label for="season_title" class="form-label">Title</label>
+                                                <input type="text" class="form-control" id="season_title">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="season_description" class="form-label">Description</label>
+                                                <textarea class="form-control" id="season_description"></textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="season_type_of_duration" class="form-label">Type</label>
+                                                <input type="text" class="form-control" id="season_type_of_duration"
+                                                       disabled readonly>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="season_number_of_duration"
+                                                       class="form-label">Duration</label>
+                                                <input type="number" class="form-control"
+                                                       id="season_number_of_duration">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">
+                                                Close
+                                            </button>
+                                            <button type="button" class="btn btn-primary" id="add_new_season">Add New
+                                                Season
+                                            </button>
+                                            <button type="button" class="btn btn-primary" id="update_season"
+                                                    style="display:none;">Update Season
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Subject Details</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row" id="listSubjects">
+                                <div class="col-xl-2 col-lg-2 col-sm-2" id="adddivsubject">
+                                    <div class="card contact_list text-center">
+                                        <div class="card-body">
+                                            <div class="user-content">
+                                                <br><br>
+                                                <div class="user-info">
+                                                    <div class="user-img">
+                                                        <button type="button" data-bs-toggle="modal"
+                                                                data-bs-target="#modalFormationSubject">
+                                                            <img src="../static/assets/images/plus.png" alt=""
+                                                                 class="avatar avatar-xl">
+                                                        </button>
+                                                    </div>
+                                                    <div class="row">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="modalFormationSubject" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-center">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">New Subject</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <label for="subject_select" class="form-label">Subject</label>
+                                                <select class="form-control" id="subject_select">
+                                                    <option value="1">Math bac info</option>
+                                                    <option value="14">test</option>
+                                                </select>
+                                            </div>
+                                            <br>
+                                            <div class="row">
+                                                <label for="number_of_session" class="form-label">Number of
+                                                    Hours</label>
+                                                <input type="number" class="form-control" id="number_of_session"
+                                                       value="">
+                                            </div>
+                                            <br>
+                                            <div class="row">
+                                                <label for="subject_description" class="form-label">Description</label>
+                                                <textarea class="form-control" id="subject_description"></textarea>
+                                            </div>
+                                            <br>
+                                            <div class="row" id="season_coefficient_container">
+                                                <label class="form-label">Select Seasons</label>
+                                                <div id="season_coefficient_list" class="row">
+                                                    <p class="text-muted">No seasons found. Please add a season
+                                                        first.</p>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" id="formation_account_id" value="3">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">
+                                                Close
+                                            </button>
+                                            <button type="button" class="btn btn-primary" id="add_new_subject">Add New
+                                                Subject
+                                            </button>
+                                            <button type="button" class="btn btn-primary" id="update_subject"
+                                                    style="display:none;">Update Subject
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="float-end">
+                                <button class="btn btn-outline-primary me-3" id="create_formation">Create</button>
+                                <a href="/dashboard/show-formation" class="btn btn-outline-danger">Close</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -281,6 +430,240 @@
 
 <script>
     const account_id = {{ account_id }};
+
+    // ────────────────────────────────────────────────────────────────
+    // Local stores
+    // ────────────────────────────────────────────────────────────────
+    let seasons = [];
+    let editingSeasonIndex = null;
+
+    let subjects = [];
+    let editingSubjectIndex = null;
+
+    const typeDateLabels = {
+        'total Duration':        'Total Duration per day',
+        'By Number Of Sessions': 'Number Of Sessions per hours',
+        'other':                 'Other'
+    };
+
+    // ────────────────────────────────────────────────────────────────
+    // Render season cards
+    // ────────────────────────────────────────────────────────────────
+    function renderSeasons() {
+        const container = document.getElementById('lists-seasons');
+        container.querySelectorAll('.season-card-col').forEach(el => el.remove());
+
+        const addBtn = document.getElementById('add-div-seasons');
+
+        seasons.forEach((season, index) => {
+            const col = document.createElement('div');
+            col.className = 'col-xl-2 col-lg-2 col-sm-2 season-card-col';
+            col.innerHTML = `
+                <div class="card contact_list text-center">
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between mb-1">
+                                <strong>Title:</strong>
+                                <span>${season.title}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-1">
+                                <strong>Type:</strong>
+                                <span>${season.type}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-1">
+                                <strong>Duration:</strong>
+                                <span>${season.duration}</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-3">
+                            <button type="button" class="btn btn-danger btn-sm w-100 me-1" onclick="deleteSeason(${index})">
+                                <i class="fa fa-trash"></i> Delete
+                            </button>
+                            <button type="button" class="btn btn-primary btn-sm w-100 ms-1" onclick="editSeason(${index})">
+                                <i class="fa fa-pencil"></i> Edit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.insertBefore(col, addBtn);
+        });
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // Delete season
+    // ────────────────────────────────────────────────────────────────
+    function deleteSeason(index) {
+        seasons.splice(index, 1);
+        renderSeasons();
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // Render season checkboxes inside subject modal
+    // ────────────────────────────────────────────────────────────────
+    function renderSeasonCheckboxes() {
+        const container = document.getElementById('season_coefficient_list');
+
+        if (seasons.length === 0) {
+            container.innerHTML = '<p class="text-muted">No seasons found. Please add a season first.</p>';
+            return;
+        }
+
+        container.innerHTML = seasons.map((season, index) => `
+            <div class="col-12 mb-2">
+                <div class="form-check">
+                    <input
+                        class="form-check-input season-checkbox"
+                        type="checkbox"
+                        id="season_check_${index}"
+                        value="${index}"
+                    >
+                    <label class="form-check-label" for="season_check_${index}">
+                        ${season.title} (${season.type})
+                    </label>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // Render subject cards
+    // ────────────────────────────────────────────────────────────────
+    function renderSubjects() {
+        const container = document.getElementById('listSubjects');
+        container.querySelectorAll('.subject-card-col').forEach(el => el.remove());
+
+        const addBtn = document.getElementById('adddivsubject');
+
+        subjects.forEach((subject, index) => {
+            const col = document.createElement('div');
+            col.className = 'col-xl-2 col-lg-2 col-sm-2 subject-card-col';
+            col.innerHTML = `
+                <div class="card contact_list text-center">
+                    <div class="card-body">
+                        <div class="user-content">
+                            <div class="user-info">
+                                <div class="user-img mb-3">
+                                    <img src="../static/assets/images/subject-default.png"
+                                         alt="" class="avatar avatar-xl"
+                                         onerror="this.src='/assets/admin/images/formation-empty.jpg'">
+                                </div>
+                                <div class="text-start mb-2">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <strong>Subject:</strong>
+                                        <span>${subject.name}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <strong>Number of Hours:</strong>
+                                        <span>${subject.hours}</span>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mt-3">
+                                    <button type="button" class="btn btn-danger btn-sm w-100 me-1" onclick="deleteSubject(${index})">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm w-100 ms-1" onclick="editSubject(${index})">
+                                        <i class="fa fa-pencil"></i> Edit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.insertBefore(col, addBtn);
+        });
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // Delete subject
+    // ────────────────────────────────────────────────────────────────
+    function deleteSubject(index) {
+        subjects.splice(index, 1);
+        renderSubjects();
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // Edit subject — open modal prefilled
+    // ────────────────────────────────────────────────────────────────
+    function editSubject(index) {
+        editingSubjectIndex = index;
+        const subject = subjects[index];
+
+        document.getElementById('subject_select').value      = subject.subjectId;
+        document.getElementById('number_of_session').value   = subject.hours;
+        document.getElementById('subject_description').value = subject.description;
+
+        $('#subject_select').selectpicker('refresh');
+
+        // Render checkboxes then re-check saved ones
+        renderSeasonCheckboxes();
+        subject.seasons.forEach(si => {
+            const cb = document.getElementById(`season_check_${si}`);
+            if (cb) cb.checked = true;
+        });
+
+        document.getElementById('add_new_subject').style.display = 'none';
+        document.getElementById('update_subject').style.display  = 'inline-block';
+
+        const modal = new bootstrap.Modal(document.getElementById('modalFormationSubject'));
+        modal.show();
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // Reset subject modal to "Add" state
+    // ────────────────────────────────────────────────────────────────
+    function resetSubjectModal() {
+        editingSubjectIndex = null;
+        document.getElementById('subject_select').value      = '';
+        document.getElementById('number_of_session').value   = '';
+        document.getElementById('subject_description').value = '';
+        $('#subject_select').selectpicker('refresh');
+        document.getElementById('add_new_subject').style.display = 'inline-block';
+        document.getElementById('update_subject').style.display  = 'none';
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // Edit season — open modal prefilled
+    // ────────────────────────────────────────────────────────────────
+    function editSeason(index) {
+        editingSeasonIndex = index;
+        const season = seasons[index];
+
+        document.getElementById('season_title').value              = season.title;
+        document.getElementById('season_description').value        = season.description;
+        document.getElementById('season_type_of_duration').value   = season.type;
+        document.getElementById('season_number_of_duration').value = season.duration;
+
+        document.getElementById('seasonModalLabel').textContent = 'Edit Season';
+        document.getElementById('add_new_season').style.display = 'none';
+        document.getElementById('update_season').style.display  = 'inline-block';
+
+        const modal = new bootstrap.Modal(document.getElementById('modalFormationSeason'));
+        modal.show();
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // Reset season modal to "Add" state
+    // ────────────────────────────────────────────────────────────────
+    function resetSeasonModal() {
+        editingSeasonIndex = null;
+        document.getElementById('season_title').value              = '';
+        document.getElementById('season_description').value        = '';
+        document.getElementById('season_number_of_duration').value = '';
+        document.getElementById('seasonModalLabel').textContent    = 'New Season';
+        document.getElementById('add_new_season').style.display    = 'inline-block';
+        document.getElementById('update_season').style.display     = 'none';
+        syncSeasonType();
+    }
+
+    // ────────────────────────────────────────────────────────────────
+    // Sync Type field in modal from formation_typeDate
+    // ────────────────────────────────────────────────────────────────
+    function syncSeasonType() {
+        const val = document.getElementById('formation_typeDate').value;
+        document.getElementById('season_type_of_duration').value = typeDateLabels[val] || '';
+    }
 
     document.addEventListener('DOMContentLoaded', function () {
 
@@ -293,36 +676,27 @@
         ])
         .then(([levels, sections]) => {
 
-            // ── Levels ───────────────────────────────────────────────
-            const levelSelect  = document.getElementById('formation_accountLevel');
+            const levelSelect = document.getElementById('formation_accountLevel');
             levelSelect.innerHTML = '<option value="">Choose the Level...</option>';
-
             levels.forEach(level => {
                 const option       = document.createElement('option');
                 option.value       = level.id;
                 option.textContent = level.other_level ? level.other_level : level.level_name;
                 levelSelect.appendChild(option);
             });
-
             $('#formation_accountLevel').selectpicker('refresh');
 
-            // ── Sections ─────────────────────────────────────────────
-            const sectionSelect  = document.getElementById('formation_accountSection');
+            const sectionSelect = document.getElementById('formation_accountSection');
             sectionSelect.innerHTML = '<option value="">Choose the Section...</option>';
-
             sections.forEach(section => {
                 const option       = document.createElement('option');
                 option.value       = section.id;
                 option.textContent = section.other_section ? section.other_section : section.section_name;
                 sectionSelect.appendChild(option);
             });
-
             $('#formation_accountSection').selectpicker('refresh');
         })
-        .catch(err => {
-            console.error('Failed to load levels/sections:', err);
-        });
-
+        .catch(err => console.error('Failed to load levels/sections:', err));
 
         // ────────────────────────────────────────────────────────────────
         // Image Preview
@@ -331,9 +705,7 @@
             const file = this.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function (e) {
-                    document.getElementById('imagePreview').src = e.target.result;
-                };
+                reader.onload = e => document.getElementById('imagePreview').src = e.target.result;
                 reader.readAsDataURL(file);
             }
         });
@@ -347,7 +719,7 @@
         });
 
         // ────────────────────────────────────────────────────────────────
-        // Conditional Show/Hide — Type Date
+        // Conditional Show/Hide — Type Date + sync modal
         // ────────────────────────────────────────────────────────────────
         document.getElementById('formation_typeDate').addEventListener('change', function () {
             const val = this.value;
@@ -363,14 +735,138 @@
             } else if (val === 'other') {
                 document.getElementById('div-other-title-date').style.display = 'block';
             }
+
+            syncSeasonType();
+        });
+
+        // ────────────────────────────────────────────────────────────────
+        // Open season modal — reset + sync
+        // ────────────────────────────────────────────────────────────────
+        document.getElementById('open-season-modal').addEventListener('click', function () {
+            resetSeasonModal();
+        });
+
+        // ────────────────────────────────────────────────────────────────
+        // Open subject modal — reset + render checkboxes
+        // ────────────────────────────────────────────────────────────────
+        document.querySelector('[data-bs-target="#modalFormationSubject"]').addEventListener('click', function () {
+            resetSubjectModal();
+            renderSeasonCheckboxes();
+        });
+
+        // ────────────────────────────────────────────────────────────────
+        // Add New Season
+        // ────────────────────────────────────────────────────────────────
+        document.getElementById('add_new_season').addEventListener('click', function () {
+            const title    = document.getElementById('season_title').value.trim();
+            const duration = document.getElementById('season_number_of_duration').value.trim();
+            const type     = document.getElementById('season_type_of_duration').value;
+
+            if (!title) {
+                return Swal.fire({ icon: 'warning', title: 'Required', text: 'Season title is required.', confirmButtonColor: '#4c4b9e' });
+            }
+            if (!type) {
+                return Swal.fire({ icon: 'warning', title: 'Required', text: 'Please select Date and Session Analytics first.', confirmButtonColor: '#4c4b9e' });
+            }
+            if (!duration) {
+                return Swal.fire({ icon: 'warning', title: 'Required', text: 'Duration is required.', confirmButtonColor: '#4c4b9e' });
+            }
+
+            seasons.push({
+                title:       title,
+                description: document.getElementById('season_description').value.trim(),
+                type:        type,
+                duration:    duration,
+            });
+
+            renderSeasons();
+            bootstrap.Modal.getInstance(document.getElementById('modalFormationSeason')).hide();
+        });
+
+        // ────────────────────────────────────────────────────────────────
+        // Update Season
+        // ────────────────────────────────────────────────────────────────
+        document.getElementById('update_season').addEventListener('click', function () {
+            const title    = document.getElementById('season_title').value.trim();
+            const duration = document.getElementById('season_number_of_duration').value.trim();
+            const type     = document.getElementById('season_type_of_duration').value;
+
+            if (!title) {
+                return Swal.fire({ icon: 'warning', title: 'Required', text: 'Season title is required.', confirmButtonColor: '#4c4b9e' });
+            }
+            if (!duration) {
+                return Swal.fire({ icon: 'warning', title: 'Required', text: 'Duration is required.', confirmButtonColor: '#4c4b9e' });
+            }
+
+            seasons[editingSeasonIndex] = {
+                title:       title,
+                description: document.getElementById('season_description').value.trim(),
+                type:        type,
+                duration:    duration,
+            };
+
+            renderSeasons();
+            bootstrap.Modal.getInstance(document.getElementById('modalFormationSeason')).hide();
+        });
+
+        // ────────────────────────────────────────────────────────────────
+        // Add New Subject
+        // ────────────────────────────────────────────────────────────────
+        document.getElementById('add_new_subject').addEventListener('click', function () {
+            const subjectSelect = document.getElementById('subject_select');
+            const subjectName   = subjectSelect.options[subjectSelect.selectedIndex]?.text || '';
+            const subjectId     = subjectSelect.value;
+            const hours         = document.getElementById('number_of_session').value.trim();
+            const description   = document.getElementById('subject_description').value.trim();
+            const selectedSeasons = [...document.querySelectorAll('.season-checkbox:checked')]
+                                        .map(cb => parseInt(cb.value));
+
+            if (!subjectId) {
+                return Swal.fire({ icon: 'warning', title: 'Required', text: 'Please select a subject.', confirmButtonColor: '#4c4b9e' });
+            }
+            if (!hours) {
+                return Swal.fire({ icon: 'warning', title: 'Required', text: 'Number of hours is required.', confirmButtonColor: '#4c4b9e' });
+            }
+
+            subjects.push({ subjectId, name: subjectName, hours, description, seasons: selectedSeasons });
+            renderSubjects();
+
+            bootstrap.Modal.getInstance(document.getElementById('modalFormationSubject')).hide();
+        });
+
+        // ────────────────────────────────────────────────────────────────
+        // Update Subject
+        // ────────────────────────────────────────────────────────────────
+        document.getElementById('update_subject').addEventListener('click', function () {
+            const subjectSelect = document.getElementById('subject_select');
+            const subjectName   = subjectSelect.options[subjectSelect.selectedIndex]?.text || '';
+            const subjectId     = subjectSelect.value;
+            const hours         = document.getElementById('number_of_session').value.trim();
+            const description   = document.getElementById('subject_description').value.trim();
+            const selectedSeasons = [...document.querySelectorAll('.season-checkbox:checked')]
+                                        .map(cb => parseInt(cb.value));
+
+            if (!subjectId) {
+                return Swal.fire({ icon: 'warning', title: 'Required', text: 'Please select a subject.', confirmButtonColor: '#4c4b9e' });
+            }
+            if (!hours) {
+                return Swal.fire({ icon: 'warning', title: 'Required', text: 'Number of hours is required.', confirmButtonColor: '#4c4b9e' });
+            }
+
+            subjects[editingSubjectIndex] = { subjectId, name: subjectName, hours, description, seasons: selectedSeasons };
+            renderSubjects();
+
+            bootstrap.Modal.getInstance(document.getElementById('modalFormationSubject')).hide();
+            editingSubjectIndex = null;
+            document.getElementById('add_new_subject').style.display = 'inline-block';
+            document.getElementById('update_subject').style.display  = 'none';
         });
 
         // ────────────────────────────────────────────────────────────────
         // Conditional Show/Hide — Type Session
         // ────────────────────────────────────────────────────────────────
         document.getElementById('formation_typeSession').addEventListener('change', function () {
-            const val = this.value;
-            document.getElementById('div-other-title-session').style.display = (val === 'other') ? 'block' : 'none';
+            document.getElementById('div-other-title-session').style.display = (this.value === 'other') ? 'block' : 'none';
         });
 
         // ────────────────────────────────────────────────────────────────
@@ -378,7 +874,6 @@
         // ────────────────────────────────────────────────────────────────
         document.getElementById('formation_conditionOfPassage').addEventListener('change', function () {
             const val = this.value;
-
             document.getElementById('div-formulas-passage').style.display     = 'none';
             document.getElementById('div-passage-score').style.display        = 'none';
             document.getElementById('div-passage-present').style.display      = 'none';
@@ -394,7 +889,6 @@
         // ────────────────────────────────────────────────────────────────
         document.getElementById('formation_conditionOfPassageFormule').addEventListener('change', function () {
             const val = this.value;
-
             document.getElementById('div-passage-score').style.display        = 'none';
             document.getElementById('div-passage-present').style.display      = 'none';
             document.getElementById('div-passage-note-present').style.display = 'none';
@@ -409,12 +903,11 @@
         });
 
         // ────────────────────────────────────────────────────────────────
-        // Submit
+        // Submit Formation
         // ────────────────────────────────────────────────────────────────
         document.getElementById('create_formation').addEventListener('click', async function (e) {
             e.preventDefault();
 
-            // ── Validation ────────────────────────────────────────────
             if (!document.getElementById('formation_name').value.trim()) {
                 return Swal.fire({ icon: 'warning', title: 'Required', text: 'Name is required.', confirmButtonColor: '#4c4b9e' });
             }
@@ -431,21 +924,15 @@
                 return Swal.fire({ icon: 'warning', title: 'Required', text: 'Passage Conditions is required.', confirmButtonColor: '#4c4b9e' });
             }
 
-            // ── Build FormData ────────────────────────────────────────
             const formData = new FormData();
 
-            // Image
             const fileInput = document.getElementById('formation_logoFile');
-            if (fileInput.files[0]) {
-                formData.append('formation_logoFile', fileInput.files[0]);
-            }
+            if (fileInput.files[0]) formData.append('formation_logoFile', fileInput.files[0]);
 
-            // Description (CKEditor or plain textarea)
             const description = (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances['formation_description'])
                 ? CKEDITOR.instances['formation_description'].getData()
                 : document.getElementById('formation_description').value;
 
-            // All fields
             formData.append('formation[name]',                                   document.getElementById('formation_name').value.trim());
             formData.append('formation[status]',                                 document.getElementById('formation_status').value);
             formData.append('formation[accountLevel]',                           document.getElementById('formation_accountLevel').value);
@@ -464,7 +951,10 @@
             formData.append('formation[publicResource]',                         document.getElementById('formation_publicResource').value);
             formData.append('formation[description]',                            description);
 
-            // ── Send ──────────────────────────────────────────────────
+            // Attach seasons and subjects as JSON
+            formData.append('formation[seasons]',  JSON.stringify(seasons));
+            formData.append('formation[subjects]', JSON.stringify(subjects));
+
             try {
                 const response = await fetch(`/api/create_formation/${account_id}`, {
                     method: 'POST',
@@ -483,22 +973,12 @@
                         window.location.href = '/dashboard/show-formation';
                     });
                 } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: result.Message || 'Failed to create formation.',
-                        confirmButtonColor: '#4c4b9e',
-                    });
+                    Swal.fire({ icon: 'error', title: 'Error', text: result.Message || 'Failed to create formation.', confirmButtonColor: '#4c4b9e' });
                 }
 
             } catch (err) {
                 console.error('Create error:', err);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Network Error',
-                    text: 'Could not reach the server.',
-                    confirmButtonColor: '#4c4b9e',
-                });
+                Swal.fire({ icon: 'error', title: 'Network Error', text: 'Could not reach the server.', confirmButtonColor: '#4c4b9e' });
             }
         });
 

@@ -344,6 +344,13 @@ def process_sync_data(db, data, settings):
             logger.info("Processing Completion Tags...")
             processor_completion_tag(db, n)
 
+    if 'season' in data:
+        n = normalize(data['season'])
+        if has_records(n):
+            from sync.processors.season_processor import process_season
+            logger.info("Processing Season ...")
+            process_season(db,n)
+
 
 # ---------------------------------------------------------------------------
 # Sync runners

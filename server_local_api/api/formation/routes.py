@@ -63,7 +63,6 @@ def get_formation_info(account_id):
 			"Message":f"Error: {e} coming from get_formation_info"
 		}),500
 
-
 @formation_bp.route('/delete_formation/<int:formation_id>/<int:account_id>', methods=['POST'])
 def delete_formation(formation_id, account_id):
     try:
@@ -121,7 +120,6 @@ def delete_formation(formation_id, account_id):
             "Message": f"Error: {e} coming from server"
         }), 500
 
-
 @formation_bp.route('/view_formation/<int:formation_id>',methods=['GET'])
 def view_formation(formation_id):
 	try:
@@ -175,24 +173,60 @@ def update_formation(formation_id):
                 "Message": "Formation not found"
             }), 404
 
-        allowed_fields = [
-            'name',
-            'status',
-            'type_date',
-            'number_day_duration',
-            'number_session',
-            'type_session',
-            'condition_of_passage',
-            'public_resource',
-            'description',
-            'account_section_id',
-            'account_level_id'
-        ]
-
-        fields_to_update = {
-            k: v for k, v in data.items()
-            if k in allowed_fields
+        # camelCase (JS payload) -> snake_case (DB column)
+        field_map = {
+            'name':                                        'name',
+            'status':                                       'status',
+            'typeDate':                                      'type_date',
+            'otherTypeDate':                                 'other_type_date',
+            'numberDayDuration':                             'number_day_duration',
+            'numberSession':                                 'number_session',
+            'typeSession':                                   'type_session',
+            'otherTypeSession':                              'other_type_session',
+            'conditionOfPassage':                            'condition_of_passage',
+            'conditionOfPassageFormule':                     'condition_of_passage_formule',
+            'conditionOfPassageFormuleByNote':               'condition_of_passage_formule_by_note',
+            'conditionOfPassageFormuleByPresent':            'condition_of_passage_formule_by_present',
+            'conditionOfPassageFormuleByNotePresent':        'condition_of_passage_formule_by_note_present',
+            'publicResource':                                'public_resource',
+            'description':                                   'description',
+            'accountSection':                                'account_section_id',
+            'accountLevel':                                  'account_level_id',
+            'imgLink':                                        'img_link',
         }
+
+        # Fields that are FK / nullable ints, where '' should become NULL
+        nullable_fields = {
+            'accountSection',
+            'accountLevel',
+            'otherTypeDate',
+            'otherTypeSession',
+            'numberDayDuration',
+            'numberSession',
+            'conditionOfPassageFormule',
+            'conditionOfPassageFormuleByNote',
+            'conditionOfPassageFormuleByPresent',
+            'conditionOfPassageFormuleByNotePresent',
+            'publicResource',
+            'description',
+            'imgLink',
+        }
+
+        fields_to_update = {}
+        for k, v in data.items():
+            if k not in field_map:
+                continue
+
+            if k in nullable_fields:
+                if isinstance(v, str):
+                    v = v.strip() or None
+                elif v == '':
+                    v = None
+
+            if k == 'name' and isinstance(v, str):
+                v = v.strip()
+
+            fields_to_update[field_map[k]] = v
 
         if not fields_to_update:
             return jsonify({
@@ -200,7 +234,7 @@ def update_formation(formation_id):
             }), 400
 
         set_clause = ", ".join(
-            [f"{k} = %s" for k in fields_to_update.keys()]
+            [f"{col} = %s" for col in fields_to_update.keys()]
         )
 
         values = list(fields_to_update.values())
@@ -220,24 +254,17 @@ def update_formation(formation_id):
         )
 
         if result:
-
-            # ✅ Get new record after update
-            new_record = Database.execute_query(
-                """
-                SELECT *
-                FROM formation
-                WHERE id = %s
-                """,
+            updated_record = Database.execute_query(
+                "SELECT * FROM formation WHERE id = %s",
                 (formation_id,),
                 fetch=True
             )
 
-            # ✅ Audit log
             log_audit(
-				table_name="formation_audit",
+                table_name="formation_audit",
                 action_type="UPDATE",
                 old_data=old_record[0],
-                new_data=new_record[0] if new_record else None
+                new_data=updated_record[0] if updated_record else data
             )
 
             return jsonify({

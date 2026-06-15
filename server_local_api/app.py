@@ -79,6 +79,10 @@ def create_app():
     from api.tag.routes import tag_bp
     app.register_blueprint(tag_bp)
 
+    # Season
+    from api.season.routes import season_bp
+    app.register_blueprint(season_bp)
+
     # ========================================
     # HOME ROUTE
     # ========================================
