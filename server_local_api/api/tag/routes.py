@@ -330,7 +330,7 @@ def create_completion_tag(account_id):
                 table_name=AUDIT_TABLE,
                 action_type="INSERT",
                 old_data=None,
-                new_data=new_rec
+                new_data=new_rec  # ✅ id is already inside this dict
             )
             return jsonify({"Message": "Success in creating completion_tag"}), 200
         else:
@@ -421,9 +421,10 @@ def update_completion_tag(completionTagId):
             log_audit(
                 table_name=AUDIT_TABLE,
                 action_type="UPDATE",
-                old_data=old_record[0],
+                old_data=old_record[0],  # ✅ id is already inside this dict
                 new_data=new_record[0] if new_record else None
             )
+
             return jsonify({"Message": "Success in updating completion_tag"}), 200
         else:
             return jsonify({"Message": "Error in updating completion_tag"}), 400
@@ -454,7 +455,7 @@ def delete_completion_tag(completionTagId):
             log_audit(
                 table_name=AUDIT_TABLE,
                 action_type="DELETE",
-                old_data=old_record[0] if old_record else None,
+                old_data=old_record[0],  # ✅ id is already inside this dict
                 new_data=None
             )
             return jsonify({"Message": "completion_tag deleted with success"}), 200

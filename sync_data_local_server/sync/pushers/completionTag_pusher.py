@@ -42,10 +42,51 @@ def _send_create_completionTag_api(settings, payload):
         return False, None
 
 def _send_update_completionTag_api(settings, payload, completionTag):
-    pass
+    try:
+        token = get_token()
+        headers = {"Authorization": f"Bearer {token}"}
+        url = f"{settings.api_base_url}/slc/update-completion-tag-account/{completionTag}"
+        response = requests.post(url, data=payload, headers=headers, timeout=10)
+        if response.status_code == 200:
+            try:
+                response_data = response.json()
+                logger.info("AccountSubject updated  - %s", response_data)
+                return True
+            except Exception:
+                logger.error("Invalid JSON  response: %s", response.text)
+                return False
+        else:
+            logger.error("Remote API returned %s: %s", response.status_code, response.text)
+            return False
+    except Exception as e:
+        logger.exception("Remote API error in _send_update_completion_tag: %s",e)
+        return False
+    except Exception as e:
+        logger.exception("Remote API error in _send_update_completionTag: %s", e)
+        return False
 
 def _send_delete_completionTag_api(settings,completionTagId):
-    pass
+    try:
+        token = get_token()
+        headers = {"Authorization": f"Bearer {token}"}
+        url = f"{settings.api_base_url}/slc/delete-completion-tag-account/{completionTagId}"
+
+        response = requests.post(url, headers=headers, timeout=10)
+        if response.status_code == 200:
+            try:
+                response_data = response.json()
+                logger.info("CompletionTag deleted - %s", response_data)
+                return True
+            except Exception:
+                logger.error("Invalid JSON reponse: %s",response.text)
+                return False
+        else:
+            logger.error("Remote API returned %s: %s", response.status_code,response.text)
+            return False
+    except Exception as e:
+        logger.exception("Remote API error in _send_delete_completionTag_api: %s",e)
+        return False
+
 
 
 def push_completionTagAdd(db, settings, row):
@@ -75,7 +116,47 @@ def push_completionTagAdd(db, settings, row):
         return False
 
 def push_completionTagUpdate(db, settings, row):
-    pass
+    try:
+        new_data = json.loads(row.get('new_data','{}'))
+        CompletionTagId = new_data.get('id')
+        Name = new_data.get('name')
+        Description = new_data.get('description') or None
+        Status = new_data.get('status')
+        payload = {
+            "name": Name,
+            "description": Description
+        }
+        cursor = db.connection.cursor(dictionary=True)
+        cursor.execute(
+            """SELECT id_prod FROM completion_tag_account_audit WHERE id = %s""",
+            (CompletionTagId,)
+        )
+        result = cursor.fetchone()
+        id_prod = result['id_prod']
+        success = _send_update_completionTag_api(settings,payload,id_prod)
+        return success
+    except Exception as e:
+        logger.exceptin("Error in push_CompletionTagUpdate: %s", CompletionTagId)
+        return False
+
+
+    except Exception as e:
+        logger.exception("Error in push_accountCompletionTagUpdate: %s", e)
+        return False
 
 def push_completionTagDelete(db, settings, row):
-    pass
+    try:
+        old_data = json.loads(row.get('old_data', '{}'))
+        CompletionTag = old_data.get('id')
+        cursor = db.connection.cursor(dictionary=True)
+        cursor.execute(
+            """SELECT id_prod FROM completion_tag_account WHERE id = %s""",
+            (CompletionTag,)
+        )
+        result = cursor.fetchone()
+        id_prod = result['id_prod']
+        status= _send_delete_completionTag_api(settings,id_prod)
+        return status
+    except Exception as e:
+        logger.exception("Error in push_completionTagDelete: %s", CompletionTag)
+        return False
