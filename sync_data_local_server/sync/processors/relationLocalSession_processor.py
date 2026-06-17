@@ -1,6 +1,6 @@
 """
-SubSubject Data Processor
-Handles inserting and updating SubSubject records in the database
+RelationLocalSession Data Processor
+Handles inserting and updating RelationLocalSession records in the database
 """
 
 import sys
@@ -10,9 +10,9 @@ from utils.helpers import format_date
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 
-def insert_subsubject(db, subsubject_data):
+def insert_relation_local_session(db, relation_data):
     """
-    Handle 'created' season_sub_subject records from API
+    Handle 'created' relation_local_session records from API
     Logic:
     - Check if id_prod already exists (avoid duplicates from local pushes)
     - If record exists in DB by id → UPDATE it
@@ -20,7 +20,7 @@ def insert_subsubject(db, subsubject_data):
 
     Args:
         db: Database instance
-        subsubject_data: Dictionary with 'created' key
+        relation_data: Dictionary with 'created' key
 
     Returns:
         dict: Statistics (inserted, updated, skipped, errors)
@@ -34,14 +34,14 @@ def insert_subsubject(db, subsubject_data):
     }
 
     try:
-        created_records = subsubject_data.get("created", [])
+        created_records = relation_data.get("created", [])
         result["total_processed"] = len(created_records)
 
         if not created_records:
-            print("   ℹ️  No SubSubject records in 'created'")
+            print("   ℹ️  No RelationLocalSession records in 'created'")
             return result
 
-        print(f"   Processing {len(created_records)} subsubject record(s) from 'created'...")
+        print(f"   Processing {len(created_records)} relation_local_session record(s) from 'created'...")
 
         for i, record in enumerate(created_records, 1):
             try:
@@ -50,30 +50,29 @@ def insert_subsubject(db, subsubject_data):
                     raise ValueError("Missing required field: id")
 
                 # ✅ FIRST: Check if this remote ID already exists as id_prod (from local push)
-                check_prod_query = "SELECT id FROM season_sub_subject WHERE id_prod = %s"
+                check_prod_query = "SELECT id FROM relation_local_session WHERE id_prod = %s"
                 existing_by_prod = db.fetch_query(check_prod_query, (record_id,))
 
                 if existing_by_prod:
-                    print(f"   [{i}/{len(created_records)}] SubSubject ID {record_id} already exists as id_prod (local id: {existing_by_prod[0]['id']}) - skipped to avoid duplicate")
+                    print(f"   [{i}/{len(created_records)}] RelationLocalSession ID {record_id} already exists as id_prod (local id: {existing_by_prod[0]['id']}) - skipped to avoid duplicate")
                     result["skipped"] += 1
                     continue
 
                 # Prepare new data with safe defaults — snake_case DB columns
                 new_data = {
                     "id_prod": record.get("id"),
-                    "season_id": record.get("seasonId"),
-                    "formation_sub_subject": record.get("formationSubjectId"),
+                    "local_id": record.get("localId"),
+                    "session_id": record.get("sessionId"),
                     "enabled": 1 if record.get("enabled", True) else 0,
-                    "ref": record.get("ref"),
                     "created_at": format_date(record.get("createdAt")),
                     "updated_at": format_date(record.get("updatedAt")),
                 }
 
                 # Check if record exists by id
-                select_query = "SELECT * FROM season_sub_subject WHERE id = %s"
+                select_query = "SELECT * FROM relation_local_session WHERE id = %s"
                 existing_records = db.fetch_query(select_query, (record_id,))
 
-                print(f"   [{i}/{len(created_records)}] SubSubject ID {record_id}...")
+                print(f"   [{i}/{len(created_records)}] RelationLocalSession ID {record_id}...")
 
                 if existing_records:
                     existing = existing_records[0]
@@ -94,12 +93,11 @@ def insert_subsubject(db, subsubject_data):
                     print(f"      🔄 Already exists but data changed - updating...")
 
                     update_query = """
-                        UPDATE season_sub_subject SET
+                        UPDATE relation_local_session SET
                             id_prod = %s,
-                            season_id = %s,
-                            formation_sub_subject = %s,
+                            local_id = %s,
+                            session_id = %s,
                             enabled = %s,
-                            ref = %s,
                             created_at = %s,
                             updated_at = %s
                         WHERE id = %s
@@ -107,10 +105,9 @@ def insert_subsubject(db, subsubject_data):
 
                     db.execute_query(update_query, (
                         new_data["id_prod"],
-                        new_data["season_id"],
-                        new_data["formation_sub_subject"],
+                        new_data["local_id"],
+                        new_data["session_id"],
                         new_data["enabled"],
-                        new_data["ref"],
                         new_data["created_at"],
                         new_data["updated_at"],
                         record_id
@@ -120,24 +117,23 @@ def insert_subsubject(db, subsubject_data):
                     print(f"      ✅ Updated successfully")
 
                 else:
-                    print(f"      ✨ New subsubject - inserting...")
+                    print(f"      ✨ New relation_local_session - inserting...")
 
                     insert_query = """
-                        INSERT INTO season_sub_subject (
-                            id, id_prod, season_id, formation_sub_subject,
-                            enabled, ref, created_at, updated_at
+                        INSERT INTO relation_local_session (
+                            id, id_prod, local_id, session_id,
+                            enabled, created_at, updated_at
                         ) VALUES (
-                            %s, %s, %s, %s, %s, %s, %s, %s
+                            %s, %s, %s, %s, %s, %s, %s
                         )
                     """
 
                     db.execute_query(insert_query, (
                         record_id,
                         new_data["id_prod"],
-                        new_data["season_id"],
-                        new_data["formation_sub_subject"],
+                        new_data["local_id"],
+                        new_data["session_id"],
                         new_data["enabled"],
-                        new_data["ref"],
                         new_data["created_at"],
                         new_data["updated_at"]
                     ))
@@ -146,7 +142,7 @@ def insert_subsubject(db, subsubject_data):
                     print(f"      ✅ Inserted successfully")
 
             except Exception as err:
-                print(f"      ❌ Error processing subsubject ID {record.get('id', 'unknown')}: {err}")
+                print(f"      ❌ Error processing relation_local_session ID {record.get('id', 'unknown')}: {err}")
                 result["errors"] += 1
                 continue
 
@@ -155,14 +151,14 @@ def insert_subsubject(db, subsubject_data):
               f"Errors: {result['errors']}")
 
     except Exception as err:
-        print(f"   💥 Unexpected error in insert_subsubject: {err}")
+        print(f"   💥 Unexpected error in insert_relation_local_session: {err}")
 
     return result
 
 
-def update_subsubject(db, subsubject_data):
+def update_relation_local_session(db, relation_data):
     """
-    Handle 'updated' season_sub_subject records from API
+    Handle 'updated' relation_local_session records from API
     Logic:
     - Look up by id_prod first, then by id
     - If exists → UPDATE (using local id)
@@ -170,7 +166,7 @@ def update_subsubject(db, subsubject_data):
 
     Args:
         db: Database instance
-        subsubject_data: Dictionary with 'updated' key
+        relation_data: Dictionary with 'updated' key
 
     Returns:
         dict: Statistics (inserted, updated, skipped, errors)
@@ -184,14 +180,14 @@ def update_subsubject(db, subsubject_data):
     }
 
     try:
-        updated_records = subsubject_data.get("updated", [])
+        updated_records = relation_data.get("updated", [])
         result["total_processed"] = len(updated_records)
 
         if not updated_records:
-            print("   ℹ️  No SubSubject records in 'updated'")
+            print("   ℹ️  No RelationLocalSession records in 'updated'")
             return result
 
-        print(f"   Processing {len(updated_records)} subsubject record(s) from 'updated'...")
+        print(f"   Processing {len(updated_records)} relation_local_session record(s) from 'updated'...")
 
         for i, record in enumerate(updated_records, 1):
             try:
@@ -201,21 +197,20 @@ def update_subsubject(db, subsubject_data):
 
                 new_data = {
                     "id_prod": record.get("id"),
-                    "season_id": record.get("seasonId"),
-                    "formation_sub_subject": record.get("formationSubjectId"),
+                    "local_id": record.get("localId"),
+                    "session_id": record.get("sessionId"),
                     "enabled": 1 if record.get("enabled", True) else 0,
-                    "ref": record.get("ref"),
                     "updated_at": format_date(record.get("updatedAt")),
                 }
 
-                check_prod_query = "SELECT * FROM season_sub_subject WHERE id_prod = %s"
+                check_prod_query = "SELECT * FROM relation_local_session WHERE id_prod = %s"
                 existing_records = db.fetch_query(check_prod_query, (record_id,))
 
                 if not existing_records:
-                    select_query = "SELECT * FROM season_sub_subject WHERE id = %s"
+                    select_query = "SELECT * FROM relation_local_session WHERE id = %s"
                     existing_records = db.fetch_query(select_query, (record_id,))
 
-                print(f"   [{i}/{len(updated_records)}] SubSubject ID {record_id}...")
+                print(f"   [{i}/{len(updated_records)}] RelationLocalSession ID {record_id}...")
 
                 if existing_records:
                     existing = existing_records[0]
@@ -236,22 +231,20 @@ def update_subsubject(db, subsubject_data):
                     print(f"      🔄 Data changed - updating...")
 
                     update_query = """
-                        UPDATE season_sub_subject SET
+                        UPDATE relation_local_session SET
                             id_prod = %s,
-                            season_id = %s,
-                            formation_sub_subject = %s,
+                            local_id = %s,
+                            session_id = %s,
                             enabled = %s,
-                            ref = %s,
                             updated_at = %s
                         WHERE id = %s
                     """
 
                     db.execute_query(update_query, (
                         new_data["id_prod"],
-                        new_data["season_id"],
-                        new_data["formation_sub_subject"],
+                        new_data["local_id"],
+                        new_data["session_id"],
                         new_data["enabled"],
-                        new_data["ref"],
                         new_data["updated_at"],
                         existing["id"]
                     ))
@@ -260,24 +253,23 @@ def update_subsubject(db, subsubject_data):
                     print(f"      ✅ Updated successfully")
 
                 else:
-                    print(f"      ⚠️  SubSubject not found in DB - inserting...")
+                    print(f"      ⚠️  RelationLocalSession not found in DB - inserting...")
 
                     insert_query = """
-                        INSERT INTO season_sub_subject (
-                            id, id_prod, season_id, formation_sub_subject,
-                            enabled, ref, created_at, updated_at
+                        INSERT INTO relation_local_session (
+                            id, id_prod, local_id, session_id,
+                            enabled, created_at, updated_at
                         ) VALUES (
-                            %s, %s, %s, %s, %s, %s, %s, %s
+                            %s, %s, %s, %s, %s, %s, %s
                         )
                     """
 
                     db.execute_query(insert_query, (
                         record_id,
                         new_data["id_prod"],
-                        new_data["season_id"],
-                        new_data["formation_sub_subject"],
+                        new_data["local_id"],
+                        new_data["session_id"],
                         new_data["enabled"],
-                        new_data["ref"],
                         new_data["updated_at"],  # used as created_at too
                         new_data["updated_at"]
                     ))
@@ -286,7 +278,7 @@ def update_subsubject(db, subsubject_data):
                     print(f"      ✅ Inserted successfully")
 
             except Exception as err:
-                print(f"      ❌ Error processing subsubject ID {record.get('id', 'unknown')}: {err}")
+                print(f"      ❌ Error processing relation_local_session ID {record.get('id', 'unknown')}: {err}")
                 result["errors"] += 1
                 continue
 
@@ -295,41 +287,43 @@ def update_subsubject(db, subsubject_data):
               f"Errors: {result['errors']}")
 
     except Exception as err:
-        print(f"   💥 Unexpected error in update_subsubject: {err}")
+        print(f"   💥 Unexpected error in update_relation_local_session: {err}")
 
     return result
 
 
-def process_subsubject(db, subsubject_data):
+def process_relation_local_session(db, relation_data):
     """
-       Process Subsubject data (handles both 'created' and 'updated' subsubject)
+    Process RelationLocalSession data (handles both 'created' and 'updated' sections)
     """
-    print("\n📌 PROCESSING SUBSUBJECT")
+    print("\n📌 PROCESSING RELATION LOCAL SESSION")
     print("=" * 60)
 
     results = {
-       "created_subsubject": {"inserted": 0, "updated": 0, "skipped": 0, "errors": 0},
-       "updated_subsubject": {"inserted": 0, "updated": 0, "skipped": 0, "errors": 0}
+        "created_relation_local_session": {"inserted": 0, "updated": 0, "skipped": 0, "errors": 0},
+        "updated_relation_local_session": {"inserted": 0, "updated": 0, "skipped": 0, "errors": 0}
     }
-    if subsubject_data.get("created"):
-       print(f"\n Processing 'created' subsubject ({len(subsubject_data['created'])} record(s)...")
-       results['created_subsubject'] = insert_subsubject(db, subsubject_data)
 
-    if subsubject_data.get("updated"):
-       print(f"\n Processing 'updated' subsubject ({len(subsubject_data['updated'])} record(s)...")
-       results['updated_subsubject'] = update_subsubject(db, subsubject_data)
+    if relation_data.get("created"):
+        print(f"\n✨ Processing 'created' section ({len(relation_data['created'])} record(s)...")
+        results["created_relation_local_session"] = insert_relation_local_session(db, relation_data)
 
-    total_inserted = results["created_subsubject"]["inserted"] + results["updated_subsubject"]["inserted"]
-    total_updated = results["created_subsubject"]["updated"] + results["updated_subsubject"]["updated"]
-    total_skipped = results["created_subsubject"]["skipped"] + results["updated_subsubject"]["skipped"]
-    total_errors = results["created_subsubject"]["errors"] + results["updated_subsubject"]["errors"]
+    if relation_data.get("updated"):
+        print(f"\n🔄 Processing 'updated' section ({len(relation_data['updated'])} record(s)...")
+        results["updated_relation_local_session"] = update_relation_local_session(db, relation_data)
+
+    total_inserted = results["created_relation_local_session"]["inserted"] + results["updated_relation_local_session"]["inserted"]
+    total_updated = results["created_relation_local_session"]["updated"] + results["updated_relation_local_session"]["updated"]
+    total_skipped = results["created_relation_local_session"]["skipped"] + results["updated_relation_local_session"]["skipped"]
+    total_errors = results["created_relation_local_session"]["errors"] + results["updated_relation_local_session"]["errors"]
 
     print("\n" + "=" * 60)
-    print("📊 SubSubject - TOTAL SUMMARY")
+    print("📊 RELATION LOCAL SESSION - TOTAL SUMMARY")
     print("=" * 60)
     print(f"   ✨ Total Inserted: {total_inserted}")
     print(f"   🔄 Total Updated:  {total_updated}")
     print(f"   ⏭️  Total Skipped:  {total_skipped}")
     print(f"   ❌ Total Errors:   {total_errors}")
+    print("=" * 60)
 
     return results

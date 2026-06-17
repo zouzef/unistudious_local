@@ -6,7 +6,10 @@ from email.policy import default
 
 from core.models.base_model import BaseModel, Column
 
+from sync_data_local_server.utils.helpers import format_date
 
+
+# ----------------------------------- Account Models -----------------------------------
 class AccountModel(BaseModel):
 	table_name = "account"
 	columns = [
@@ -22,8 +25,6 @@ class AccountModel(BaseModel):
 		Column("updated_at", "DATETIME"),
 		Column("slc_use", "INT(11)", default="0"),
 	]
-
-
 class AccountAuditModel(BaseModel):
 	table_name = "account_audit"
 	columns = [
@@ -34,40 +35,6 @@ class AccountAuditModel(BaseModel):
 		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
 		Column("is_synced", "TINYINT(1)", default="0"),
 	]
-
-
-class AccountLevelModel(BaseModel):
-	table_name = "account_level"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("account_id", "INT(11)"),
-		Column("level_config_id", "INT(11)"),
-		Column("status", "TINYINT(1)", nullable=False, default="1"),
-		Column("description", "LONGTEXT"),
-		Column("other_level", "VARCHAR(255)"),
-		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
-		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("updated_at", "DATETIME"),
-		# FIX: SQL uses release_token (snake_case) and use_token + slc_edit, not releaseToken/useToken
-		Column("release_token", "TINYINT(1)", nullable=False, default="0"),
-		Column("use_token", "VARCHAR(255)"),
-		Column("slc_edit", "INT(11)", default="0"),
-		Column("id_prod", "INT(11)", default=None)
-	]
-
-
-class AccountLevel_Audit(BaseModel):
-	table_name = "account_level_audit"
-	columns = [
-		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
-		Column("old_data", "LONGTEXT"),
-		Column("new_data", "LONGTEXT"),
-		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
-		Column("is_synced", "TINYINT(1)", default="0"),
-	]
-
 
 class AccountSubjectModel(BaseModel):
 	table_name = "account_subject"
@@ -87,8 +54,6 @@ class AccountSubjectModel(BaseModel):
 		Column("slc_use", "INT(11)", default="0"),
 		Column("id_prod", "INT(11)", default=None)
 	]
-
-
 class AccountSubjectAuditModel(BaseModel):
 	table_name = "account_subject_audit"
 	columns = [
@@ -100,153 +65,154 @@ class AccountSubjectAuditModel(BaseModel):
 		Column("is_synced", "TINYINT(1)", default="0"),
 	]
 
+class RelationTeacherAccount(BaseModel):
+	table_name = "relation_teacher_account"
+	columns = [
+        Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+        Column("account_id", "INT(11)", default=None),
+        Column("user_id", "INT(11)", default=None),
+        Column("status", "TINYINT(1)", nullable=False, default=0),
+        Column("enabled", "TINYINT(1)", nullable=False, default=1),
+        Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+        Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
+        Column("updated_at", "DATETIME", default=None),
+        Column("uuid", "VARCHAR(255)", nullable=False),
+        Column("release_token", "TINYINT(1)", nullable=False, default=0),
+        Column("use_token", "VARCHAR(255)", default=None),
+        Column("access_permissions", "LONGTEXT", default=None),
+        Column("invitation_relation_teacher_account_id", "INT(11)", default=None),
+        Column("cloud_path", "VARCHAR(255)", default=None),
+        Column("access_session", "LONGTEXT", default=None),
+		Column("id_prod", "INT(11)", default=None)
+	]
+class RelationTeacherAccountAudit(BaseModel):
+	table_name = "relation_teacher_account_audit"
+	columns = [
+		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
+		Column("old_data", "LONGTEXT"),
+		Column("new_data", "LONGTEXT"),
+		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("is_synced", "TINYINT(1)", default="0"),
+	]
 
-class AssociationAuditModel(BaseModel):
-	table_name = "association_audit"
+
+# ----------------------------------- TAG Models -----------------------------------
+class TagConfigModel(BaseModel):
+	table_name = "tag_config"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("title", "VARCHAR(255)", nullable=False),  # SQL uses "title", not "name"
+		Column("status", "TINYINT(1)", nullable=False, default="1"),
+		Column("description", "LONGTEXT"),
+		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
+		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("updated_at", "DATETIME"),
+	]
+
+class AccountTagModel(BaseModel):
+	table_name = "account_tag"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("account_id", "INT(11)"),
+		Column("tag_config_id", "INT(11)"),
+		Column("status", "TINYINT(1)", nullable=False, default="1"),
+		Column("description", "LONGTEXT"),
+		Column("other_tag", "VARCHAR(255)"),
+		Column("public", "TINYINT(1)", nullable=False, default="1"),
+		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
+		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("updated_at", "DATETIME"),
+		Column("id_prod", "INT(11)", default=None)
+	]
+class AccountTagAuditModel(BaseModel):
+	table_name = "account_tag_audit"
+	columns = [
+		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
+		Column("old_data", "LONGTEXT"),
+		Column("new_data", "LONGTEXT"),
+		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("is_synced", "TINYINT(1)", default="0"),
+	]
+
+class RelationCompletionTag(BaseModel):
+	table_name = "relation_completion_tag"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("tag_id", "INT(11)", nullable=None),
+		Column("account_id", "INT(11)", nullable=None),
+		Column("calander_group_id", "INT(11)", nullable=None),
+		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
+		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("updated_at", "DATETIME"),
+		Column("release_token", "TINYINT(1)", nullable=False, default="0"),
+		Column("use_token", "VARCHAR(255)"),
+		Column("id_prod", "INT(11)", default=None)
+	]
+class RelationCompletionTagAudit(BaseModel):
+	table_name = "relation_completion_tag_audit"
+	columns = [
+		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
+		Column("old_data", "LONGTEXT"),
+		Column("new_data", "LONGTEXT"),
+		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("is_synced", "TINYINT(1)", default="0"),
+	]
+
+class CompletionTagAccount(BaseModel):
+	table_name = "completion_tag_account"
 	collate = "utf8mb4_general_ci"
 	columns = [
 		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("user_id", "INT(11)", nullable=False),
-		Column("folder_id", "INT(11)", nullable=False),
-		Column("calander_id", "INT(11)", nullable=False),
-		Column("is_synced", "INT(11)", default="0"),
-		Column("created_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
-		Column("synced_at", "TIMESTAMP"),
-	]
-
-
-class AttendanceModel(BaseModel):
-	table_name = "attendance"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("user_id", "INT(11)"),
-		Column("session_id", "INT(11)"),
 		Column("account_id", "INT(11)"),
-		Column("group_session_id", "INT(11)"),
-		Column("calander_id", "INT(11)"),
-		Column("payment_session_id", "INT(11)"),
-		Column("is_present", "TINYINT(1)", nullable=False, default="0"),
-		Column("day", "DATETIME"),
-		Column("note", "LONGTEXT"),
-		Column("is_editable", "TINYINT(1)", nullable=False, default="1"),
-		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
-		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("updated_at", "DATETIME"),
-		Column("releaseToken", "TINYINT(1)"),
-		Column("useToken", "VARCHAR(255)"),
-		Column("is_sync", "INT(11)", default="0"),
-		Column("slc_edit", "INT(11)", default="0"),
-		Column("id_prod", "INT(11)"),
-	]
-
-
-class AttendanceAuditModel(BaseModel):
-	table_name = "attendance_audit"
-	columns = [
-		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("action_type", "VARCHAR(30)"),
-		Column("old_data", "LONGTEXT"),
-		Column("new_data", "LONGTEXT"),
-		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
-		Column("is_synced", "TINYINT(1)", default="0"),
-		Column("id_attendance", "INT(11)"),
-		Column("id_calander", "INT(11)"),
-	]
-
-
-class CalendarRequestModel(BaseModel):
-	table_name = "calendar_request"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("session_id", "INT(11)", nullable=False),
-		Column("group_id", "INT(11)", nullable=False),
-		Column("type", "CHAR(1)", nullable=False),
-		Column("room_id", "INT(11)", nullable=False),
-		Column("subject_id", "INT(11)"),
-		Column("user_id", "INT(11)"),
-		Column("completion_tags", "VARCHAR(255)"),
-		Column("duplicate", "VARCHAR(20)", default="'none'"),
-		Column("start_time", "TIME", nullable=False),
-		Column("end_time", "TIME", nullable=False),
-		Column("end_date", "DATE"),
-		Column("description", "TEXT"),
-		Column("account_id", "INT(11)", nullable=False),
-		Column("accepted", "TINYINT(1)", default="0"),
-		Column("created_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
-		Column("updated_at", "TIMESTAMP", nullable=False, default="current_timestamp()",
-			   on_update="current_timestamp()"),
-		Column("enabled", "INT(11)", default="1"),
-		Column("start_date", "DATE", nullable=False),
-		Column("slc_edit", "INT(11)", default="0"),
-	]
-
-
-class CameraModel(BaseModel):
-	table_name = "camera"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("slc_id", "INT(11)"),
-		Column("room_id", "INT(11)"),
-		Column("name", "VARCHAR(255)", nullable=False),
-		Column("mac_id", "VARCHAR(255)"),
-		Column("username", "VARCHAR(255)"),
-		Column("password", "VARCHAR(255)"),
-		Column("type", "VARCHAR(50)", nullable=False, default="'webcam'"),
-		Column("status", "VARCHAR(50)", nullable=False, default="'Active'"),
-		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
-		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("updated_at", "DATETIME"),
-		Column("id_prod", "INT(11)", default=None)
-	]
-
-
-class CameraAuditModel(BaseModel):
-	table_name = "camera_audit"
-	columns = [
-		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
-		Column("old_data", "LONGTEXT"),
-		Column("new_data", "LONGTEXT"),
-		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
-		Column("is_synced", "TINYINT(1)", default="0"),
-	]
-
-
-class FormationModel(BaseModel):
-	table_name = "formation"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("account_id", "INT(11)"),
-		Column("account_level_id", "INT(11)"),
-		Column("account_section_id", "INT(11)"),
-		Column("name", "VARCHAR(255)", nullable=False),
+		Column("name", "VARCHAR(255)"),
 		Column("description", "LONGTEXT"),
 		Column("status", "TINYINT(1)", nullable=False, default="1"),
-		Column("type_date", "VARCHAR(255)", nullable=False),
-		Column("other_type_date", "VARCHAR(255)"),
-		Column("type_session", "VARCHAR(255)", nullable=False),
-		Column("other_type_session", "VARCHAR(255)"),
-		Column("number_day_duration", "VARCHAR(255)"),
-		Column("number_session", "VARCHAR(255)"),
-		Column("condition_of_passage", "VARCHAR(255)", nullable=False),
-		Column("condition_of_passage_formule", "VARCHAR(255)"),
-		Column("condition_of_passage_formule_by_note", "VARCHAR(255)"),
-		Column("condition_of_passage_formule_by_present", "VARCHAR(255)"),
-		Column("condition_of_passage_formule_by_note_present", "VARCHAR(255)"),
 		Column("img_link", "VARCHAR(255)"),
-		Column("public_resource", "VARCHAR(255)"),
 		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
 		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()", on_update="current_timestamp()"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
 		Column("updated_at", "DATETIME"),
+		Column("release_token", "TINYINT(1)", nullable=False, default="0"),
+		Column("use_token", "VARCHAR(255)"),
 		Column("id_prod", "INT(11)", default=None)
 	]
+class CompletionTagAudit(BaseModel):
+	table_name = "completion_tag_account_audit"
+	columns = [
+		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
+		Column("old_data", "LONGTEXT"),
+		Column("new_data", "LONGTEXT"),
+		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("is_synced", "TINYINT(1)", default="0"),
+	]
 
+class CompletionTagUser(BaseModel):
+	table_name = "completion_tag_user"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("user_id", "INT(11)", default=None),
+		Column("tag_id", "INT(11)", default=None),
+		Column("session_id", "INT(11)", default=None),
+		Column("account_id", "INT(11)", default=None),
+		Column("group_calander_id", "INT(11)", default=None),
+		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
+		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("updated_at", "DATETIME"),
+		Column("release_token", "TINYINT(1)", nullable=False, default="0"),
+		Column("use_token", "VARCHAR(255)", default=None),
+		Column("id_prod", "INT(11)", default=None)
 
-class FormationAuditModel(BaseModel):
-	table_name = "formation_audit"
+	]
+class CompletionTagUserAudit(BaseModel):
+	table_name = "completion_tag_user_audit"
 	columns = [
 		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
 		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
@@ -257,145 +223,7 @@ class FormationAuditModel(BaseModel):
 	]
 
 
-class InvoiceModel(BaseModel):
-	table_name = "invoice"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("account_id", "INT(11)"),
-		Column("user_id", "INT(11)"),
-		Column("session_id", "INT(11)"),
-		Column("name", "VARCHAR(255)", nullable=False),
-		Column("type", "VARCHAR(255)", nullable=False),
-		Column("file_link", "VARCHAR(255)", nullable=False),
-		Column("description", "LONGTEXT"),
-		Column("is_status", "TINYINT(1)", nullable=False, default="1"),
-		Column("created_by", "VARCHAR(255)"),
-		Column("total_amount", "VARCHAR(255)"),
-		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
-		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("updated_at", "DATETIME"),
-		Column("payment_session_id", "INT(11)"),
-	]
-
-
-class LevelConfigModel(BaseModel):
-	table_name = "level_config"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("name", "VARCHAR(255)", nullable=False),
-		Column("status", "TINYINT(1)", nullable=False, default="1"),
-		Column("description", "LONGTEXT"),
-		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
-		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("updated_at", "DATETIME"),
-	]
-
-
-class LocalModel(BaseModel):
-	table_name = "local"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("account_id", "INT(11)"),
-		Column("name", "VARCHAR(255)", nullable=False),
-		Column("address", "LONGTEXT", nullable=False),
-		Column("status", "TINYINT(1)", nullable=False, default="1"),
-		Column("gps", "VARCHAR(255)"),
-		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
-		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("updated_at", "DATETIME"),
-		Column("default_local", "TINYINT(1)", nullable=False, default="0"),
-	]
-
-
-class LocalAuditModel(BaseModel):
-	table_name = "local_audit"
-	columns = [
-		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
-		Column("old_data", "LONGTEXT"),
-		Column("new_data", "LONGTEXT"),
-		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
-		Column("is_synced", "TINYINT(1)", default="0"),
-	]
-
-
-class NotificationModel(BaseModel):
-	table_name = "notification"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("user_id", "INT(11)", nullable=False),
-		Column("title", "VARCHAR(255)", nullable=False),
-		Column("message", "TEXT", nullable=False),
-		Column("type", "VARCHAR(50)"),
-		Column("is_read", "TINYINT(1)", default="0"),
-		Column("created_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
-		Column("notif_data", "LONGTEXT"),
-		Column("enabled", "INT(11)", default="1"),
-	]
-
-
-class PaymentSessionModel(BaseModel):
-	table_name = "payment_session"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("account_id", "INT(11)"),
-		Column("session_id", "INT(11)"),
-		Column("user_id", "INT(11)"),
-		Column("type", "VARCHAR(255)", nullable=False),
-		Column("type_date", "VARCHAR(255)"),
-		Column("type_number_session", "VARCHAR(255)"),
-		Column("date_payment", "DATETIME"),
-		Column("status", "VARCHAR(255)", default="'Pending'"),
-		Column("amount", "VARCHAR(255)"),
-		Column("created_by", "VARCHAR(255)"),
-		Column("price", "VARCHAR(255)"),
-		Column("description", "LONGTEXT"),
-		Column("forcing", "VARCHAR(255)"),
-		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
-		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("updated_at", "DATETIME"),
-		Column("uuid", "VARCHAR(255)", nullable=False),
-	]
-
-
-class PaymentSessionAuditModel(BaseModel):
-	table_name = "payment_session_audit"
-	columns = [
-		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("action_type", "VARCHAR(30)"),
-		Column("old_data", "LONGTEXT"),
-		Column("new_data", "LONGTEXT"),
-		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
-		Column("is_synced", "TINYINT(1)", default="0"),
-	]
-
-
-class PushedRecordsTrackingModel(BaseModel):
-	table_name = "pushed_records_tracking"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("table_name", "VARCHAR(255)", nullable=False),
-		Column("audit_id", "INT(11)", nullable=False),
-		Column("pushed_at", "DATETIME", default="current_timestamp()"),
-	]
-
-
-class RelationCalanderAuditModel(BaseModel):
-	table_name = "relation_calander_audit"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("calander_id", "INT(11)", nullable=False),
-		Column("unknown_folder_path", "VARCHAR(800)"),
-		Column("is_synced", "INT(11)", default="0"),
-		Column("created_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
-		Column("synced_at", "TIMESTAMP"),
-	]
-
-
+# ------------------------------------ CALANDER Models -----------------------------------
 class RelationCalanderGroupAuditModel(BaseModel):
 	table_name = "relation_calander_group_audit"
 	columns = [
@@ -407,8 +235,6 @@ class RelationCalanderGroupAuditModel(BaseModel):
 		Column("is_synced", "TINYINT(1)", default="0"),
 		Column("id_calander", "INT(11)"),
 	]
-
-
 class RelationCalanderGroupSessionModel(BaseModel):
 	table_name = "relation_calander_group_session"
 	columns = [
@@ -442,7 +268,6 @@ class RelationCalanderGroupSessionModel(BaseModel):
 		Column("id_prod", "INT(11)"),
 	]
 
-
 class RelationGroupLocalSessionModel(BaseModel):
 	table_name = "relation_group_local_session"
 	columns = [
@@ -464,8 +289,6 @@ class RelationGroupLocalSessionModel(BaseModel):
 		Column("slc_use", "INT(11)", default="0"),
 		Column("id_prod", "INT(11)"),
 	]
-
-
 class RelationGroupLocalSessionAuditModel(BaseModel):
 	table_name = "relation_group_local_session_audit"
 	columns = [
@@ -477,27 +300,104 @@ class RelationGroupLocalSessionAuditModel(BaseModel):
 		Column("is_synced", "TINYINT(1)", default="0"),
 	]
 
-
-class RelationTeacherToSubjectGroupModel(BaseModel):
-	table_name = "relation_teacher_to_subject_group"
+class CalendarRequestModel(BaseModel):
+	table_name = "calendar_request"
 	columns = [
 		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("relation_group_local_session_id", "INT(11)"),
+		Column("session_id", "INT(11)", nullable=False),
+		Column("group_id", "INT(11)", nullable=False),
+		Column("type", "CHAR(1)", nullable=False),
+		Column("room_id", "INT(11)", nullable=False),
 		Column("subject_id", "INT(11)"),
 		Column("user_id", "INT(11)"),
+		Column("completion_tags", "VARCHAR(255)"),
+		Column("duplicate", "VARCHAR(20)", default="'none'"),
+		Column("start_time", "TIME", nullable=False),
+		Column("end_time", "TIME", nullable=False),
+		Column("end_date", "DATE"),
+		Column("description", "TEXT"),
+		Column("account_id", "INT(11)", nullable=False),
+		Column("accepted", "TINYINT(1)", default="0"),
+		Column("created_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("updated_at", "TIMESTAMP", nullable=False, default="current_timestamp()",
+			   on_update="current_timestamp()"),
+		Column("enabled", "INT(11)", default="1"),
+		Column("start_date", "DATE", nullable=False),
+		Column("slc_edit", "INT(11)", default="0"),
+	]
+
+class RelationCalanderAuditModel(BaseModel):
+	table_name = "relation_calander_audit"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("calander_id", "INT(11)", nullable=False),
+		Column("unknown_folder_path", "VARCHAR(800)"),
+		Column("is_synced", "INT(11)", default="0"),
+		Column("created_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("synced_at", "TIMESTAMP"),
+	]
+
+
+# ------------------------------------ Attendance Models -----------------------------------
+class AttendanceModel(BaseModel):
+	table_name = "attendance"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("user_id", "INT(11)"),
+		Column("session_id", "INT(11)"),
+		Column("account_id", "INT(11)"),
+		Column("group_session_id", "INT(11)"),
+		Column("calander_id", "INT(11)"),
+		Column("payment_session_id", "INT(11)"),
+		Column("is_present", "TINYINT(1)", nullable=False, default="0"),
+		Column("day", "DATETIME"),
+		Column("note", "LONGTEXT"),
+		Column("is_editable", "TINYINT(1)", nullable=False, default="1"),
 		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
 		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
 		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
 		Column("updated_at", "DATETIME"),
 		Column("releaseToken", "TINYINT(1)"),
 		Column("useToken", "VARCHAR(255)"),
-		Column("slc_use", "INT(11)", default="0"),
+		Column("is_sync", "INT(11)", default="0"),
+		Column("slc_edit", "INT(11)", default="0"),
 		Column("id_prod", "INT(11)"),
+	]
+class AttendanceAuditModel(BaseModel):
+	table_name = "attendance_audit"
+	columns = [
+		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("action_type", "VARCHAR(30)"),
+		Column("old_data", "LONGTEXT"),
+		Column("new_data", "LONGTEXT"),
+		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("is_synced", "TINYINT(1)", default="0"),
+		Column("id_attendance", "INT(11)"),
+		Column("id_calander", "INT(11)"),
 	]
 
 
-class RelationTeacherToSubjectGroupAuditModel(BaseModel):
-	table_name = "relation_teacher_to_subject_group_audit"
+# ------------------------------------ SLC Models -----------------------------------
+class CameraModel(BaseModel):
+	table_name = "camera"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("slc_id", "INT(11)"),
+		Column("room_id", "INT(11)"),
+		Column("name", "VARCHAR(255)", nullable=False),
+		Column("mac_id", "VARCHAR(255)"),
+		Column("username", "VARCHAR(255)"),
+		Column("password", "VARCHAR(255)"),
+		Column("type", "VARCHAR(50)", nullable=False, default="'webcam'"),
+		Column("status", "VARCHAR(50)", nullable=False, default="'Active'"),
+		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("updated_at", "DATETIME"),
+		Column("id_prod", "INT(11)", default=None)
+	]
+class CameraAuditModel(BaseModel):
+	table_name = "camera_audit"
 	columns = [
 		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
 		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
@@ -507,27 +407,23 @@ class RelationTeacherToSubjectGroupAuditModel(BaseModel):
 		Column("is_synced", "TINYINT(1)", default="0"),
 	]
 
-
-class RelationUserSessionModel(BaseModel):
-	table_name = "relation_user_session"
+class LocalModel(BaseModel):
+	table_name = "local"
 	columns = [
 		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("user_id", "INT(11)"),
-		Column("session_id", "INT(11)"),
-		Column("relation_group_local_session_id", "INT(11)"),
-		Column("ref", "VARCHAR(255)"),
+		Column("account_id", "INT(11)"),
+		Column("name", "VARCHAR(255)", nullable=False),
+		Column("address", "LONGTEXT", nullable=False),
+		Column("status", "TINYINT(1)", nullable=False, default="1"),
+		Column("gps", "VARCHAR(255)"),
 		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
 		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
 		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
 		Column("updated_at", "DATETIME"),
-		Column("releaseToken", "TINYINT(1)"),
-		Column("useToken", "VARCHAR(255)"),
-		Column("slc_use", "INT(11)", default="0"),
+		Column("default_local", "TINYINT(1)", nullable=False, default="0"),
 	]
-
-
-class RelationUserSessionAuditModel(BaseModel):
-	table_name = "relation_user_session_audit"
+class LocalAuditModel(BaseModel):
+	table_name = "local_audit"
 	columns = [
 		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
 		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
@@ -551,8 +447,6 @@ class RoomModel(BaseModel):
 		Column("updated_at", "DATETIME"),
 		Column("slc_use", "INT(11)", default="0"),
 	]
-
-
 class RoomAuditModel(BaseModel):
 	table_name = "room_audit"
 	columns = [
@@ -564,6 +458,108 @@ class RoomAuditModel(BaseModel):
 		Column("is_synced", "TINYINT(1)", default="0"),
 	]
 
+class SlcModel(BaseModel):
+	table_name = "slc"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("uuid", "VARCHAR(255)"),
+		Column("username", "VARCHAR(255)"),
+		Column("slc_username", "VARCHAR(255)"),
+		Column("slc_password", "VARCHAR(255)"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("updated_at", "DATETIME"),
+		Column("account_id", "INT(11)"),
+	]
+class SlcAuditModel(BaseModel):
+	table_name = "slc_audit"
+	columns = [
+		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
+		Column("old_data", "LONGTEXT"),
+		Column("new_data", "LONGTEXT"),
+		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("is_synced", "TINYINT(1)", default="0"),
+	]
+
+class SlcLocalModel(BaseModel):
+	table_name = "slc_local"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("slc_id", "INT(11)"),
+		Column("account_id", "INT(11)"),
+		Column("local_id", "INT(11)"),
+		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("updated_at", "DATETIME"),
+	]
+class SlcLocalAuditModel(BaseModel):
+	table_name = "slc_local_audit"
+	columns = [
+		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
+		Column("old_data", "LONGTEXT"),
+		Column("new_data", "LONGTEXT"),
+		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("is_synced", "TINYINT(1)", default="0"),
+	]
+
+class TabletModel(BaseModel):
+	table_name = "tablet"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("slc_id", "INT(11)"),
+		Column("room_id", "INT(11)"),
+		Column("name", "VARCHAR(255)", nullable=False),
+		Column("mac_id", "VARCHAR(255)", nullable=False),
+		Column("password", "VARCHAR(255)", nullable=False),
+		Column("status", "VARCHAR(50)", nullable=False, default="'Active'"),
+		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("updated_at", "DATETIME"),
+		Column("slc_edit", "TINYINT(1)", default="0"),
+	]
+class TabletAuditModel(BaseModel):
+	table_name = "tablet_audit"
+	columns = [
+		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
+		Column("old_data", "LONGTEXT"),
+		Column("new_data", "LONGTEXT"),
+		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("is_synced", "TINYINT(1)", default="0"),
+	]
+
+
+# ------------------------------------ SESSION Models -----------------------------------
+class RelationUserSessionModel(BaseModel):
+	table_name = "relation_user_session"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("user_id", "INT(11)"),
+		Column("session_id", "INT(11)"),
+		Column("relation_group_local_session_id", "INT(11)"),
+		Column("ref", "VARCHAR(255)"),
+		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
+		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("updated_at", "DATETIME"),
+		Column("releaseToken", "TINYINT(1)"),
+		Column("useToken", "VARCHAR(255)"),
+		Column("slc_use", "INT(11)", default="0"),
+	]
+class RelationUserSessionAuditModel(BaseModel):
+	table_name = "relation_user_session_audit"
+	columns = [
+		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
+		Column("old_data", "LONGTEXT"),
+		Column("new_data", "LONGTEXT"),
+		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("is_synced", "TINYINT(1)", default="0"),
+	]
 
 class SessionModel(BaseModel):
 	table_name = "session"
@@ -603,8 +599,6 @@ class SessionModel(BaseModel):
 		Column("slc_use", "INT(11)", default="0"),
 		Column("id_prod", "INT(11)")
 	]
-
-
 class SessionAuditModel(BaseModel):
 	table_name = "session_audit"
 	columns = [
@@ -617,24 +611,20 @@ class SessionAuditModel(BaseModel):
 		Column("id_session", "INT(11)"),
 	]
 
-
-class SlcModel(BaseModel):
-	table_name = "slc"
+class RelationLocalSession(BaseModel):
+	table_name = "relation_local_session"
 	columns = [
 		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("uuid", "VARCHAR(255)"),
-		Column("username", "VARCHAR(255)"),
-		Column("slc_username", "VARCHAR(255)"),
-		Column("slc_password", "VARCHAR(255)"),
-		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("local_id", "INT(11)", default=None),
+		Column("session_id", "INT(11)", default=None),
+		Column("enabled", "TINYINT(1)", default="1"),
 		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
 		Column("updated_at", "DATETIME"),
-		Column("account_id", "INT(11)"),
+		Column("id_prod", "INT(11)", default=None)
 	]
-
-
-class SlcAuditModel(BaseModel):
-	table_name = "slc_audit"
+class RelationLocalSessionAudit(BaseModel):
+	table_name = "relation_local_session_audit"
 	columns = [
 		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
 		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
@@ -645,22 +635,95 @@ class SlcAuditModel(BaseModel):
 	]
 
 
-class SlcLocalModel(BaseModel):
-	table_name = "slc_local"
+# ------------------------------------ PAYMENT Models -----------------------------------
+class PaymentSessionModel(BaseModel):
+	table_name = "payment_session"
 	columns = [
 		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("slc_id", "INT(11)"),
 		Column("account_id", "INT(11)"),
-		Column("local_id", "INT(11)"),
+		Column("session_id", "INT(11)"),
+		Column("user_id", "INT(11)"),
+		Column("type", "VARCHAR(255)", nullable=False),
+		Column("type_date", "VARCHAR(255)"),
+		Column("type_number_session", "VARCHAR(255)"),
+		Column("date_payment", "DATETIME"),
+		Column("status", "VARCHAR(255)", default="'Pending'"),
+		Column("amount", "VARCHAR(255)"),
+		Column("created_by", "VARCHAR(255)"),
+		Column("price", "VARCHAR(255)"),
+		Column("description", "LONGTEXT"),
+		Column("forcing", "VARCHAR(255)"),
 		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
-		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
 		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
 		Column("updated_at", "DATETIME"),
+		Column("uuid", "VARCHAR(255)", nullable=False),
+	]
+class PaymentSessionAuditModel(BaseModel):
+	table_name = "payment_session_audit"
+	columns = [
+		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("action_type", "VARCHAR(30)"),
+		Column("old_data", "LONGTEXT"),
+		Column("new_data", "LONGTEXT"),
+		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("is_synced", "TINYINT(1)", default="0"),
+	]
+
+class InvoiceModel(BaseModel):
+	table_name = "invoice"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("account_id", "INT(11)"),
+		Column("user_id", "INT(11)"),
+		Column("session_id", "INT(11)"),
+		Column("name", "VARCHAR(255)", nullable=False),
+		Column("type", "VARCHAR(255)", nullable=False),
+		Column("file_link", "VARCHAR(255)", nullable=False),
+		Column("description", "LONGTEXT"),
+		Column("is_status", "TINYINT(1)", nullable=False, default="1"),
+		Column("created_by", "VARCHAR(255)"),
+		Column("total_amount", "VARCHAR(255)"),
+		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
+		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("updated_at", "DATETIME"),
+		Column("payment_session_id", "INT(11)"),
 	]
 
 
-class SlcLocalAuditModel(BaseModel):
-	table_name = "slc_local_audit"
+# ------------------------------------ FORMATION Models -----------------------------------
+class FormationModel(BaseModel):
+	table_name = "formation"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("account_id", "INT(11)"),
+		Column("account_level_id", "INT(11)"),
+		Column("account_section_id", "INT(11)"),
+		Column("name", "VARCHAR(255)", nullable=False),
+		Column("description", "LONGTEXT"),
+		Column("status", "TINYINT(1)", nullable=False, default="1"),
+		Column("type_date", "VARCHAR(255)", nullable=False),
+		Column("other_type_date", "VARCHAR(255)"),
+		Column("type_session", "VARCHAR(255)", nullable=False),
+		Column("other_type_session", "VARCHAR(255)"),
+		Column("number_day_duration", "VARCHAR(255)"),
+		Column("number_session", "VARCHAR(255)"),
+		Column("condition_of_passage", "VARCHAR(255)", nullable=False),
+		Column("condition_of_passage_formule", "VARCHAR(255)"),
+		Column("condition_of_passage_formule_by_note", "VARCHAR(255)"),
+		Column("condition_of_passage_formule_by_present", "VARCHAR(255)"),
+		Column("condition_of_passage_formule_by_note_present", "VARCHAR(255)"),
+		Column("img_link", "VARCHAR(255)"),
+		Column("public_resource", "VARCHAR(255)"),
+		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
+		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()", on_update="current_timestamp()"),
+		Column("updated_at", "DATETIME"),
+		Column("id_prod", "INT(11)", default=None)
+	]
+class FormationAuditModel(BaseModel):
+	table_name = "formation_audit"
 	columns = [
 		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
 		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
@@ -671,15 +734,52 @@ class SlcLocalAuditModel(BaseModel):
 	]
 
 
-class SpecialTableModel(BaseModel):
-	table_name = "special_table"
+# ------------------------------------ LEVEL Models -----------------------------------
+class LevelConfigModel(BaseModel):
+	table_name = "level_config"
 	columns = [
-		Column("id_slc", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("mac_slc", "VARCHAR(30)", nullable=False),
-		Column("pass", "VARCHAR(100)", nullable=False),
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("name", "VARCHAR(255)", nullable=False),
+		Column("status", "TINYINT(1)", nullable=False, default="1"),
+		Column("description", "LONGTEXT"),
+		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
+		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("updated_at", "DATETIME"),
+	]
+
+class AccountLevelModel(BaseModel):
+	table_name = "account_level"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("account_id", "INT(11)"),
+		Column("level_config_id", "INT(11)"),
+		Column("status", "TINYINT(1)", nullable=False, default="1"),
+		Column("description", "LONGTEXT"),
+		Column("other_level", "VARCHAR(255)"),
+		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
+		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("updated_at", "DATETIME"),
+		# FIX: SQL uses release_token (snake_case) and use_token + slc_edit, not releaseToken/useToken
+		Column("release_token", "TINYINT(1)", nullable=False, default="0"),
+		Column("use_token", "VARCHAR(255)"),
+		Column("slc_edit", "INT(11)", default="0"),
+		Column("id_prod", "INT(11)", default=None)
+	]
+class AccountLevel_Audit(BaseModel):
+	table_name = "account_level_audit"
+	columns = [
+		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
+		Column("old_data", "LONGTEXT"),
+		Column("new_data", "LONGTEXT"),
+		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("is_synced", "TINYINT(1)", default="0"),
 	]
 
 
+# ----------------------------------- SUBJECT Models -----------------------------------
 class SubjectConfigModel(BaseModel):
 	table_name = "subject_config"
 	columns = [
@@ -694,8 +794,6 @@ class SubjectConfigModel(BaseModel):
 		Column("releaseToken", "TINYINT(1)"),
 		Column("useToken", "VARCHAR(255)"),
 	]
-
-
 class SubjectConfigAuditModel(BaseModel):
 	table_name = "subject_config_audit"
 	columns = [
@@ -707,62 +805,24 @@ class SubjectConfigAuditModel(BaseModel):
 		Column("is_synced", "TINYINT(1)", default="0"),
 	]
 
-
-class SyncImagesModel(BaseModel):
-	table_name = "sync_images"
+class RelationTeacherToSubjectGroupModel(BaseModel):
+	table_name = "relation_teacher_to_subject_group"
 	columns = [
 		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("relation_group_local_session_id", "INT(11)"),
+		Column("subject_id", "INT(11)"),
 		Column("user_id", "INT(11)"),
-		Column("images_path", "TEXT"),
-		Column("calendar_id", "INT(11)"),
-		Column("is_synced", "INT(11)", default="0"),
-		Column("created_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
-		Column("synced_at", "TIMESTAMP"),
-	]
-
-
-class SyncStatusModel(BaseModel):
-	table_name = "sync_status"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("last_sync_time", "DATETIME"),
-		Column("created_at", "DATETIME", default="current_timestamp()"),
-		Column("is_sync", "INT(11)", default="0"),
-	]
-
-
-class SyncStatusAuditModel(BaseModel):
-	table_name = "sync_status_audit"
-	columns = [
-		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
-		Column("old_data", "LONGTEXT"),
-		Column("new_data", "LONGTEXT"),
-		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
-		Column("is_synced", "TINYINT(1)", default="0"),
-	]
-
-
-class TabletModel(BaseModel):
-	table_name = "tablet"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("slc_id", "INT(11)"),
-		Column("room_id", "INT(11)"),
-		Column("name", "VARCHAR(255)", nullable=False),
-		Column("mac_id", "VARCHAR(255)", nullable=False),
-		Column("password", "VARCHAR(255)", nullable=False),
-		Column("status", "VARCHAR(50)", nullable=False, default="'Active'"),
 		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
-		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
 		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
 		Column("updated_at", "DATETIME"),
-		Column("slc_edit", "TINYINT(1)", default="0"),
+		Column("releaseToken", "TINYINT(1)"),
+		Column("useToken", "VARCHAR(255)"),
+		Column("slc_use", "INT(11)", default="0"),
+		Column("id_prod", "INT(11)"),
 	]
-
-
-class TabletAuditModel(BaseModel):
-	table_name = "tablet_audit"
+class RelationTeacherToSubjectGroupAuditModel(BaseModel):
+	table_name = "relation_teacher_to_subject_group_audit"
 	columns = [
 		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
 		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
@@ -773,6 +833,7 @@ class TabletAuditModel(BaseModel):
 	]
 
 
+# ----------------------------------- USER Models -----------------------------------
 class UserModel(BaseModel):
 	table_name = "user"
 	columns = [
@@ -823,8 +884,6 @@ class UserModel(BaseModel):
 		Column("slc_edit", "INT(11)", default="0"),
 		Column("id_user", "INT(11)"),
 	]
-
-
 class UserAuditModel(BaseModel):
 	table_name = "user_audit"
 	columns = [
@@ -836,7 +895,6 @@ class UserAuditModel(BaseModel):
 		Column("changed_at", "DATETIME", nullable=False, default="current_timestamp()"),
 		Column("is_synced", "TINYINT(1)", nullable=False, default="0"),
 	]
-
 
 class VirtualUserModel(BaseModel):
 	table_name = "virtual_user"
@@ -859,8 +917,6 @@ class VirtualUserModel(BaseModel):
 		Column("use_token", "VARCHAR(255)"),
 		Column("slc_edit", "INT(11)", default="0"),
 	]
-
-
 class VirtualUserAuditModel(BaseModel):
 	table_name = "virtual_user_audit"
 	columns = [
@@ -874,137 +930,7 @@ class VirtualUserAuditModel(BaseModel):
 	]
 
 
-class SectionConfigModel(BaseModel):
-	table_name = "section_config"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("name", "VARCHAR(255)", nullable=False),
-		Column("description", "LONGTEXT"),
-		Column("status", "TINYINT(1)", nullable=False, default="1"),
-		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
-		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("updated_at", "DATETIME"),
-	]
-
-
-class AccountSectionModel(BaseModel):
-	table_name = "account_section"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("account_id", "INT(11)"),
-		Column("section_config_id", "INT(11)"),
-		Column("status", "TINYINT(1)", nullable=False, default="1"),
-		Column("description", "LONGTEXT"),
-		Column("other_section", "VARCHAR(255)"),
-		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
-		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("updated_at", "DATETIME"),
-		Column("id_prod", "INT(11)", default=None)
-	]
-
-
-class AccountSectionAuditModel(BaseModel):
-	table_name = "account_section_audit"
-	columns = [
-		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("action_type", "VARCHAR(10)", nullable=False),
-		Column("record_id", "INT(11)", nullable=False),
-		Column("old_data", "LONGTEXT"),
-		Column("new_data", "LONGTEXT"),
-		Column("changed_at", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("is_synced", "TINYINT(1)", nullable=False, default="0"),
-	]
-
-
-class TagConfigModel(BaseModel):
-	table_name = "tag_config"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("title", "VARCHAR(255)", nullable=False),  # SQL uses "title", not "name"
-		Column("status", "TINYINT(1)", nullable=False, default="1"),
-		Column("description", "LONGTEXT"),
-		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
-		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("updated_at", "DATETIME"),
-	]
-
-
-class AccountTagModel(BaseModel):
-	table_name = "account_tag"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("account_id", "INT(11)"),
-		Column("tag_config_id", "INT(11)"),
-		Column("status", "TINYINT(1)", nullable=False, default="1"),
-		Column("description", "LONGTEXT"),
-		Column("other_tag", "VARCHAR(255)"),
-		Column("public", "TINYINT(1)", nullable=False, default="1"),
-		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
-		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("updated_at", "DATETIME"),
-		Column("id_prod", "INT(11)", default=None)
-	]
-
-
-class AccountTagAuditModel(BaseModel):
-	table_name = "account_tag_audit"
-	columns = [
-		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
-		Column("old_data", "LONGTEXT"),
-		Column("new_data", "LONGTEXT"),
-		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
-		Column("is_synced", "TINYINT(1)", default="0"),
-	]
-
-
-class YourTableModel(BaseModel):
-	table_name = "your_table"
-	collate = "utf8mb4_general_ci"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("data", "LONGTEXT"),  # JSON-validated in SQL (CHECK json_valid)
-		Column("settings", "LONGTEXT"),  # JSON-validated in SQL
-		Column("metadata", "LONGTEXT"),  # JSON-validated in SQL
-	]
-
-
-class CompletionTagAccount(BaseModel):
-	table_name = "completion_tag_account"
-	collate = "utf8mb4_general_ci"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("account_id", "INT(11)"),
-		Column("name", "VARCHAR(255)"),
-		Column("description", "LONGTEXT"),
-		Column("status", "TINYINT(1)", nullable=False, default="1"),
-		Column("img_link", "VARCHAR(255)"),
-		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
-		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("updated_at", "DATETIME"),
-		Column("release_token", "TINYINT(1)", nullable=False, default="0"),
-		Column("use_token", "VARCHAR(255)"),
-		Column("id_prod", "INT(11)", default=None)
-	]
-
-
-class CompletionTagAudit(BaseModel):
-	table_name = "completion_tag_account_audit"
-	columns = [
-		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
-		Column("old_data", "LONGTEXT"),
-		Column("new_data", "LONGTEXT"),
-		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
-		Column("is_synced", "TINYINT(1)", default="0"),
-	]
-
-
+# ----------------------------------- SEASON Models -----------------------------------
 class Season(BaseModel):
 	table_name = "season"
 	columns = [
@@ -1023,7 +949,6 @@ class Season(BaseModel):
 		Column("id_prod", "INT(11)", default=None),
 		Column("ref", "VARCHAR(255)", default=None)
 	]
-
 class SeasonAudit(BaseModel):
 	table_name = "season_audit"
 	columns = [
@@ -1034,7 +959,6 @@ class SeasonAudit(BaseModel):
 		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
 		Column("is_synced", "TINYINT(1)", default="0"),
 	]
-
 
 class SeasonSubSubject(BaseModel):
 	table_name = "season_sub_subject"
@@ -1049,7 +973,6 @@ class SeasonSubSubject(BaseModel):
 		Column("ref", "VARCHAR(255)", default=None),
 		Column("id_prod", "INT(11)", default=None)
 	]
-
 class SeasonSubSubjectAudit(BaseModel):
 	table_name = "SeasonSubSubject_audit"
 	columns = [
@@ -1062,6 +985,137 @@ class SeasonSubSubjectAudit(BaseModel):
 	]
 
 
+# ----------------------------------- SECTION Models -----------------------------------
+class SectionConfigModel(BaseModel):
+	table_name = "section_config"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("name", "VARCHAR(255)", nullable=False),
+		Column("description", "LONGTEXT"),
+		Column("status", "TINYINT(1)", nullable=False, default="1"),
+		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
+		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("updated_at", "DATETIME"),
+	]
+
+class AccountSectionModel(BaseModel):
+	table_name = "account_section"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("account_id", "INT(11)"),
+		Column("section_config_id", "INT(11)"),
+		Column("status", "TINYINT(1)", nullable=False, default="1"),
+		Column("description", "LONGTEXT"),
+		Column("other_section", "VARCHAR(255)"),
+		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
+		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("updated_at", "DATETIME"),
+		Column("id_prod", "INT(11)", default=None)
+	]
+class AccountSectionAuditModel(BaseModel):
+	table_name = "account_section_audit"
+	columns = [
+		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("action_type", "VARCHAR(10)", nullable=False),
+		Column("record_id", "INT(11)", nullable=False),
+		Column("old_data", "LONGTEXT"),
+		Column("new_data", "LONGTEXT"),
+		Column("changed_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("is_synced", "TINYINT(1)", nullable=False, default="0"),
+	]
+
+
+# ----------------------------------- LOCAL SPECIAL Models -----------------------------------
+class AssociationAuditModel(BaseModel):
+	table_name = "association_audit"
+	collate = "utf8mb4_general_ci"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("user_id", "INT(11)", nullable=False),
+		Column("folder_id", "INT(11)", nullable=False),
+		Column("calander_id", "INT(11)", nullable=False),
+		Column("is_synced", "INT(11)", default="0"),
+		Column("created_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("synced_at", "TIMESTAMP"),
+	]
+
+class NotificationModel(BaseModel):
+	table_name = "notification"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("user_id", "INT(11)", nullable=False),
+		Column("title", "VARCHAR(255)", nullable=False),
+		Column("message", "TEXT", nullable=False),
+		Column("type", "VARCHAR(50)"),
+		Column("is_read", "TINYINT(1)", default="0"),
+		Column("created_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("notif_data", "LONGTEXT"),
+		Column("enabled", "INT(11)", default="1"),
+	]
+
+class PushedRecordsTrackingModel(BaseModel):
+	table_name = "pushed_records_tracking"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("table_name", "VARCHAR(255)", nullable=False),
+		Column("audit_id", "INT(11)", nullable=False),
+		Column("pushed_at", "DATETIME", default="current_timestamp()"),
+	]
+
+class SpecialTableModel(BaseModel):
+	table_name = "special_table"
+	columns = [
+		Column("id_slc", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("mac_slc", "VARCHAR(30)", nullable=False),
+		Column("pass", "VARCHAR(100)", nullable=False),
+	]
+
+class SyncImagesModel(BaseModel):
+	table_name = "sync_images"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("user_id", "INT(11)"),
+		Column("images_path", "TEXT"),
+		Column("calendar_id", "INT(11)"),
+		Column("is_synced", "INT(11)", default="0"),
+		Column("created_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("synced_at", "TIMESTAMP"),
+	]
+
+class SyncStatusModel(BaseModel):
+	table_name = "sync_status"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("last_sync_time", "DATETIME"),
+		Column("created_at", "DATETIME", default="current_timestamp()"),
+		Column("is_sync", "INT(11)", default="0"),
+	]
+
+class SyncStatusAuditModel(BaseModel):
+	table_name = "sync_status_audit"
+	columns = [
+		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
+		Column("old_data", "LONGTEXT"),
+		Column("new_data", "LONGTEXT"),
+		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("is_synced", "TINYINT(1)", default="0"),
+	]
+
+class YourTableModel(BaseModel):
+	table_name = "your_table"
+	collate = "utf8mb4_general_ci"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("data", "LONGTEXT"),  # JSON-validated in SQL (CHECK json_valid)
+		Column("settings", "LONGTEXT"),  # JSON-validated in SQL
+		Column("metadata", "LONGTEXT"),  # JSON-validated in SQL
+	]
+
+
+# ============================================================= CREATION OF THE MODELS =============================================================
 ALL_MODELS = [
 	AccountModel,
 	AccountAuditModel,
@@ -1126,5 +1180,11 @@ ALL_MODELS = [
 	Season,
 	SeasonAudit,
 	SeasonSubSubject,
-	SeasonSubSubjectAudit
+	SeasonSubSubjectAudit,
+	RelationLocalSession,
+	RelationLocalSessionAudit,
+	RelationTeacherAccount,
+	RelationTeacherAccountAudit,
+	RelationCompletionTag,
+	RelationCompletionTagAudit
 ]

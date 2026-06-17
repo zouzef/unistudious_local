@@ -4,10 +4,10 @@ Handles inserting and updating completion_tag_account records in the database
 """
 import sys
 import os
+from utils.helpers import format_date
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from utils.helpers import format_date
 
 
 def insert_completion_tag_account(db, tag_data):

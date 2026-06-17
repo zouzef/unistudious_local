@@ -344,21 +344,48 @@ def process_sync_data(db, data, settings):
             logger.info("Processing Completion Tags...")
             processor_completion_tag(db, n)
 
+    if 'relationCompletionTag' in data:
+        n = normalize(data['relationCompletionTag'])
+        if has_records(n):
+            from sync.processors.relationCompletionTag_processor import processor_relationCompletionTag
+            logger.info("Processing RelationCompletionTag...")
+            processor_relationCompletionTag(db, n)
+
+
     if 'season' in data:
         n = normalize(data['season'])
         if has_records(n):
             from sync.processors.season_processor import process_season
             logger.info("Processing Season ...")
-            process_season(db,n)
+            process_season(db, n)
 
     if 'seasonSubSubject' in data:
         n = normalize(data['seasonSubSubject'])
         if has_records(n):
             from sync.processors.subsubject_processor import process_subsubject
             logger.info("Processing Subsubject")
-            process_subsubject(db,n)
+            process_subsubject(db, n)
 
+    if 'relationLocalSession' in data:
+        n = normalize(data['relationLocalSession'])
+        if has_records(n):
+            from sync.processors.relationLocalSession_processor import process_relation_local_session
+            logger.info("Processing relationLocalSession")
+            process_relation_local_session(db, n)
 
+    if 'relationTeacherAccount' in data:
+        n= normalize(data['relationTeacherAccount'])
+        if has_records(n):
+            from sync.processors.relationTeacherAccount_processor import process_relation_teacher_account
+            logger.info("Processing relationTeacherAccount")
+            process_relation_teacher_account(db, n)
+
+    if 'completionTagUser' in data:
+        n = normalize(data['completionTagUser'])
+        if has_records(n):
+            from sync.processors.completionTagUser_processor import process_completionTaguser
+            logger.info("Processing completionTagUser")
+            process_completionTaguser(db, n)
 
 # ---------------------------------------------------------------------------
 # Sync runners
