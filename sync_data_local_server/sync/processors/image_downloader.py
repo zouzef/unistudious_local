@@ -127,3 +127,94 @@ def download_academie_image(account_id,img_filename,token):
 	except Exception as e:
 		print(f"     Could not download image for academie :{account_id}: {e}")
 		return False
+
+
+# ─────────────────────────────────────────────
+# Reference student images config (same API as old standalone script)
+# ─────────────────────────────────────────────
+REFERENCE_API_BASE_URL   = "https://www.unistudious.com"
+REFERENCE_GET_REF_PATH   = "/slc/get-reference-student/"
+REFERENCE_READ_FILE_PATH = "/slc/google-cloud/read-file"
+
+# Download the reference images of the student (used for face recognition)
+def download_student_reference_images(user_id, token):
+	"""
+	Fetch the list of reference images for a student from the remote server,
+	then download any that don't already exist locally.
+
+	Folder structure created:
+		uploads/user_img/user_{user_id}/ref_img/{filename}
+
+	args:
+		user_id : The user's ID
+		token   : Auth token (Bearer)
+
+	returns:
+		dict with counts: {"found": int, "downloaded": int, "skipped": int}
+	"""
+	import base64
+
+	result = {"found": 0, "downloaded": 0, "skipped": 0}
+
+	headers = {"Authorization": f"Bearer {token}"}
+
+	try:
+		list_url = f"{REFERENCE_API_BASE_URL}{REFERENCE_GET_REF_PATH}{user_id}"
+		response = requests.post(list_url, headers=headers, timeout=15)
+		response.raise_for_status()
+
+		data = response.json()
+		file_list = data.get("fileList", [])
+
+		if not file_list:
+			print(f"      No reference images found for user {user_id}")
+			return result
+
+		result["found"] = len(file_list)
+
+	except requests.exceptions.ConnectionError:
+		print(f"      ⚠️  Connection error fetching reference list for user {user_id}")
+		return result
+	except Exception as e:
+		print(f"     Could not fetch reference list for user {user_id}: {e}")
+		return result
+
+	local_dir = os.path.join(LOCAL_IMAGE_BASE_DIR, f"user_{user_id}", "ref_img")
+	os.makedirs(local_dir, exist_ok=True)
+
+	for file_path in file_list:
+		file_name = os.path.basename(file_path)
+		local_path = os.path.join(local_dir, file_name)
+
+		if os.path.exists(local_path):
+			print(f"      Image already exists - skipped ({local_path})")
+			result["skipped"] += 1
+			continue
+
+		try:
+			read_url = f"{REFERENCE_API_BASE_URL}{REFERENCE_READ_FILE_PATH}"
+			payload = {"fileName": file_path}
+			print(f"     Downloading: {file_path}")
+
+			response = requests.post(read_url, headers=headers, json=payload, timeout=15)
+			response.raise_for_status()
+
+			data = response.json()
+			content = data.get("content")
+			if not content:
+				print(f"    No 'content' field in response for: {file_path}")
+				continue
+
+			image_data = base64.b64decode(content)
+			with open(local_path, "wb") as f:
+				f.write(image_data)
+
+			print(f"    Saved to: {local_path}")
+			result["downloaded"] += 1
+
+		except requests.exceptions.ConnectionError:
+			print(f"      ⚠️  Connection error downloading {file_path} for user {user_id}")
+		except Exception as e:
+			print(f"     Could not download {file_path} for user {user_id}: {e}")
+
+	return result

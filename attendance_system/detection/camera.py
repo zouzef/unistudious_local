@@ -1,19 +1,38 @@
 # detection/camera.py
 
 import os
+import json
 import cv2
 import time
 import torch
 import numpy as np
 from datetime import datetime
 from ultralytics import YOLO
-from insightface.app import FaceAnalysis    # ← ADD THIS
+from insightface.app import FaceAnalysis
 from utils.logger import logger
 from detection.session import create_dataset_folders
 
-MODEL_PATH = "best.pt"
-PADDING_PERCENT = 0.20
-QUALITY_THRESHOLD = 0.20
+# --- Load config ---
+with open("configurations.json") as f:
+    _config = json.load(f)
+
+_yolo   = _config["yolo_config"]
+_cam    = _config["camera_config"]
+
+MODEL_PATH        = _yolo["model_path"]
+CONF_THRESHOLD    = _yolo["conf_threshold"]
+MIN_CONF          = _yolo["min_conf"]
+
+PADDING_PERCENT   = _cam["padding_percent"]
+QUALITY_THRESHOLD = _cam["quality_threshold"]
+BLUR_THRESHOLD    = _cam["blur_threshold"]
+BRIGHTNESS_MIN    = _cam["brightness_min"]
+BRIGHTNESS_MAX    = _cam["brightness_max"]
+POSE_ANGLE_MAX    = _cam["pose_angle_max"]
+RES_WIDTH         = _cam["resolution_width"]
+RES_HEIGHT        = _cam["resolution_height"]
+FPS               = _cam["fps"]
+RTSP_PORT         = _cam["rtsp_port"]
 
 
 # --- InsightFace quality checker (initialized once) ---
@@ -23,11 +42,22 @@ def _get_quality_app():
     """Initialize InsightFace model once on GPU and reuse it."""
     global _quality_app
     if _quality_app is None:
-        logger.info("Initializing InsightFace quality checker on GPU...")
-        _quality_app = FaceAnalysis(name="buffalo_l")
-        _quality_app.prepare(ctx_id=0, det_size=(640, 640))  # ctx_id=0 = GPU
-        logger.info("InsightFace quality checker ready on GPU.")
+        logger.info("Initializing InsightFace quality checker...")
+        try:
+            _quality_app = FaceAnalysis(name="buffalo_l")
+            _quality_app.prepare(ctx_id=0, det_size=(640, 640))
+            logger.info("InsightFace ready on GPU.")
+        except Exception as e:
+            logger.warning(f"GPU init failed: {e}. Trying CPU...")
+            try:
+                _quality_app = FaceAnalysis(name="buffalo_l")
+                _quality_app.prepare(ctx_id=-1, det_size=(640, 640))
+                logger.info("InsightFace ready on CPU.")
+            except Exception as e2:
+                logger.error(f"InsightFace init failed completely: {e2}")
+                _quality_app = None
     return _quality_app
+
 
 def check_face_quality(image, quality_threshold: float = QUALITY_THRESHOLD) -> tuple:
     """
@@ -44,15 +74,15 @@ def check_face_quality(image, quality_threshold: float = QUALITY_THRESHOLD) -> t
             return False, 0.0
 
         # --- CHECK 1: Blur ---
-        gray         = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        blur_score   = cv2.Laplacian(gray, cv2.CV_64F).var()
-        if blur_score < 30.0:
+        gray       = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        blur_score = cv2.Laplacian(gray, cv2.CV_64F).var()
+        if blur_score < BLUR_THRESHOLD:
             logger.debug(f"Rejected — too blurry (blur score: {blur_score:.1f})")
             return False, 0.0
 
         # --- CHECK 2: Brightness ---
         brightness = np.mean(gray)
-        if brightness < 40 or brightness > 230:
+        if brightness < BRIGHTNESS_MIN or brightness > BRIGHTNESS_MAX:
             logger.debug(f"Rejected — bad brightness ({brightness:.1f})")
             return False, 0.0
 
@@ -69,9 +99,9 @@ def check_face_quality(image, quality_threshold: float = QUALITY_THRESHOLD) -> t
 
         # --- CHECK 4: Pose angle (yaw and pitch) ---
         if hasattr(face, 'pose'):
-            yaw   = abs(face.pose[1])  # left/right rotation
-            pitch = abs(face.pose[0])  # up/down rotation
-            if yaw > 35 or pitch > 35:
+            yaw   = abs(face.pose[1])
+            pitch = abs(face.pose[0])
+            if yaw > POSE_ANGLE_MAX or pitch > POSE_ANGLE_MAX:
                 logger.debug(f"Rejected — bad angle (yaw: {yaw:.1f}, pitch: {pitch:.1f})")
                 return False, round(score, 3)
 
@@ -130,7 +160,7 @@ def open_camera_stream(camera_config: dict, stop_event, calendar_id: int):
         if not all([ip, username, password]):
             logger.error("Missing IP camera credentials.")
             return
-        capture_source  = f"rtsp://{username}:{password}@{ip}:554/Stream1"
+        capture_source  = f"rtsp://{username}:{password}@{ip}:{RTSP_PORT}/Stream1"
         capture_backend = cv2.CAP_FFMPEG
         os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;tcp"
         logger.info(f"Connecting to IP camera: {capture_source}")
@@ -156,10 +186,10 @@ def open_camera_stream(camera_config: dict, stop_event, calendar_id: int):
     # --- Main capture loop ---
     while not stop_event.is_set():
         cap = cv2.VideoCapture(capture_source, capture_backend)
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, RES_WIDTH)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, RES_HEIGHT)
         if cam_type == "webcam":
-            cap.set(cv2.CAP_PROP_FPS, 30)
+            cap.set(cv2.CAP_PROP_FPS, FPS)
         else:
             cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
 
@@ -189,7 +219,7 @@ def open_camera_stream(camera_config: dict, stop_event, calendar_id: int):
                 results = model.predict(
                     source=frame,
                     show=False,
-                    conf=0.4,
+                    conf=CONF_THRESHOLD,
                     device='cuda' if use_cuda else 'cpu'
                 )
             except Exception as e:
@@ -198,32 +228,30 @@ def open_camera_stream(camera_config: dict, stop_event, calendar_id: int):
 
             for box in results[0].boxes:
                 conf = float(box.conf[0])
-                if conf < 0.70:
+                if conf < MIN_CONF:
                     continue
 
                 x1, y1, x2, y2 = box.xyxy[0].cpu().numpy().astype(int)
 
                 # Add padding
-                w, h = frame.shape[1], frame.shape[0]
+                w, h  = frame.shape[1], frame.shape[0]
                 x_pad = int((x2 - x1) * PADDING_PERCENT)
                 y_pad = int((y2 - y1) * PADDING_PERCENT)
-                x1 = max(0, x1 - x_pad)
-                y1 = max(0, y1 - y_pad)
-                x2 = min(w, x2 + x_pad)
-                y2 = min(h, y2 + y_pad)
+                x1    = max(0, x1 - x_pad)
+                y1    = max(0, y1 - y_pad)
+                x2    = min(w, x2 + x_pad)
+                y2    = min(h, y2 + y_pad)
 
                 face_crop = frame[y1:y2, x1:x2]
                 if face_crop.size == 0:
                     continue
 
                 is_good, score = check_face_quality(face_crop, QUALITY_THRESHOLD)
-
-                # ← ADD THIS LINE
                 logger.info(f"Face detected — YOLO conf: {conf:.3f} — quality score: {score} — good: {is_good}")
 
                 if is_good:
-                    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
-                    face_path = os.path.join(face_crops_dir, f"face_{timestamp}.jpg")
+                    timestamp  = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
+                    face_path  = os.path.join(face_crops_dir, f"face_{timestamp}.jpg")
                     frame_path = os.path.join(full_frames_dir, f"frame_{timestamp}.jpg")
 
                     cv2.imwrite(face_path, face_crop, [cv2.IMWRITE_JPEG_QUALITY, 100])

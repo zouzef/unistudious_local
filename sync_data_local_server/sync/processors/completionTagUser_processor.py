@@ -13,7 +13,7 @@ def insert_completionTagUser(db, completionTag):
 		"total_processed": 0
 	}
 	try:
-		created_records = tag_data.get("created", [])
+		created_records = completionTag.get("created", [])
 		result["total_processed"] = len(created_records)
 		if not created_records:
 			print("   ℹ️  No completionTagUser records in 'created'")
@@ -62,7 +62,7 @@ def process_completionTaguser(db, completionTag):
 
 	Args:
 	    db: Database instance
-	    tag_data: Dictionary with 'created' and/or 'updated' keys
+	    completionTag: Dictionary with 'created' and/or 'updated' keys
 
 	Returns:
 	    dict: Combined statistics
@@ -77,11 +77,11 @@ def process_completionTaguser(db, completionTag):
 	}
 
 	if completionTag.get("created"):
-		print(f"\n✨ Processing 'created' section ({len(tag_data['created'])} records)...")
+		print(f"\n✨ Processing 'created' section ({len(completionTag['created'])} records)...")
 		results["created_section"] = insert_completionTagUser(db, completionTag)
 
 	if completionTag.get("updated"):
-		print(f"\n🔄 Processing 'updated' section ({len(tag_data['updated'])} records)...")
+		print(f"\n🔄 Processing 'updated' section ({len(completionTag['updated'])} records)...")
 		results["updated_section"] = update_completionTagUser(db, completionTag)
 
 	total_inserted = results["created_section"]["inserted"] + results["updated_section"]["inserted"]

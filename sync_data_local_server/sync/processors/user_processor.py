@@ -6,7 +6,7 @@ import sys
 import os
 import json
 
-from processors.image_downloader import download_user_image
+from processors.image_downloader import download_user_image, download_student_reference_images
 
 # Add parent directories to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -169,6 +169,8 @@ def insert_users(db, user_data, token):
 
                     # download image after UPDATE
                     download_user_image(user_id, new_data["img_link"], token)
+                    if new_data["ref_slc"]:
+                        download_student_reference_images(user_id, token)
 
                 else:
                     print(f"      ✨ New user - inserting...")
@@ -270,6 +272,8 @@ def insert_users(db, user_data, token):
 
                     # download image after INSERT
                     download_user_image(user_id, new_data["img_link"], token)
+                    if new_data["ref_slc"]:
+                        download_student_reference_images(user_id, token)
 
             except Exception as err:
                 print(f"      ❌ Error processing user ID {user.get('userId', 'unknown')}: {err}")
@@ -426,6 +430,8 @@ def update_users(db, user_data, token):
 
                     # download image after UPDATE
                     download_user_image(user_id, new_data["img_link"], token)
+                    if new_data["ref_slc"]:
+                        download_student_reference_images(user_id, token)
 
                 else:
                     print(f"      ⚠️  User not found in DB - inserting...")
@@ -527,6 +533,8 @@ def update_users(db, user_data, token):
 
                     # FIX: replaced get_student_references with download_user_image
                     download_user_image(user_id, new_data["img_link"], token)
+                    if new_data["ref_slc"]:
+                        download_student_reference_images(user_id, token)
 
             except Exception as err:
                 print(f"      ❌ Error processing user ID {user.get('userId', 'unknown')}: {err}")
@@ -549,6 +557,10 @@ def insert_admins(db, admin_data, token):
     Logic:
     - If user exists in DB → UPDATE it
     - If user does NOT exist → INSERT it
+
+    NOTE: Admins never have reference images (no facial-recognition ref_slc
+    use case for them), so download_student_reference_images is intentionally
+    NOT called anywhere in this function.
     """
     result = {
         "inserted": 0,

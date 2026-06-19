@@ -8,8 +8,10 @@ from services.client import FlaskClient
 from services.calendar_service import get_all_calendars
 from services.student_service import get_list_students
 from services.camera_service import get_all_camera
-from detection.detector import start_detection_for_calendar, stop_detection_for_calendar  # ← NEW
 from utils.logger import logger
+from detection.detector import start_detection_for_calendar, stop_detection_for_calendar
+from detection.classification import classify_faces
+from detection.recognition import enroll_students, unenroll_students, recognize_persons
 
 PATH_CONFIG = "configurations.json"
 with open(PATH_CONFIG) as f:
@@ -89,6 +91,9 @@ def main():
                         logger.warning(f"No students for calendar {calendar['id']} — skipping.")
                         continue
 
+                    logger.info(f"Enrolling students for calendar {calendar['id']}...")
+                    enroll_students(attendances)
+
                     # ✅ START CAMERA DETECTION
                     processes, stop_event = start_detection_for_calendar(
                         calendar_id=calendar["id"],
@@ -124,6 +129,19 @@ def main():
                         processes=active["processes"],
                         stop_event=active["stop_event"]
                     )
+
+                    # ✅ CLASSIFY FACES
+                    classify_faces(active["calendar_id"])
+
+                    # ✅ RECOGNIZE PERSONS
+                    logger.info(f"Recognizing persons for calendar {active['calendar_id']}...")
+                    recognized = recognize_persons(active["calendar_id"])
+                    logger.info(f"Recognized students: {recognized}")
+
+                    # ✅ UNENROLL STUDENTS FROM COMPREFACE
+                    logger.info(f"Unenrolling students for calendar {active['calendar_id']}...")
+                    unenroll_students(active["attendances"])
+
 
                     finished.append(active["calendar_id"])
                     logger.info(f"Calendar {active['calendar_id']} completed.")

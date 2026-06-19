@@ -12,14 +12,15 @@ DATE_FORMATS = [
 ]
 
 def parse_datetime(value: str) -> datetime | None:
-	"""Try multiple date formats and return a datetime or None."""
-	for fmt in DATE_FORMATS:
-		try:
-			return datetime.strptime(value, fmt)
-		except ValueError:
-			continue
-		logger.warning(f"Could not parse datetime: '{value}'")
-		return None
+    for fmt in DATE_FORMATS:
+        try:
+            return datetime.strptime(value, fmt)
+        except ValueError:
+            continue
+    # ← fixed: was inside the loop before, never executed
+    logger.warning(f"Could not parse datetime: '{value}'")
+    return None
+
 
 def get_all_calendars(client: FlaskClient) -> list:
 	"""Fetch and parse all calendar sessions from Flask server """

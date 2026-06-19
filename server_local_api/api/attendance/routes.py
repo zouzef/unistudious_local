@@ -37,6 +37,7 @@ def log_attendance_audit(action_type, old_data=None, new_data=None, id_attendanc
 # ========================================
 @attendance_bp.route('/get-attendance/<int:calendar_id>', methods=['GET'])
 def get_todays_attendance(calendar_id):
+
     try:
         query = """
             SELECT 
