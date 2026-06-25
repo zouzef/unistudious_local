@@ -32,8 +32,10 @@ POSE_ANGLE_MAX    = _cam["pose_angle_max"]
 RES_WIDTH         = _cam["resolution_width"]
 RES_HEIGHT        = _cam["resolution_height"]
 FPS               = _cam["fps"]
-RTSP_PORT         = _cam["rtsp_port"]
 
+RTSP_PORT         = _cam["rtsp_port"]
+FRAME_SKIP        = _cam.get("frame_skip", 5)
+PROCESS_WIDTH     = _cam.get("process_width", 640)
 
 # --- InsightFace quality checker (initialized once) ---
 _quality_app = None
@@ -204,6 +206,8 @@ def open_camera_stream(camera_config: dict, stop_event, calendar_id: int):
 
         logger.info(f"Connected to {cam_type} — running face detection...")
 
+        frame_count = 0  # ← moved outside inner loop
+
         while not stop_event.is_set():
             ret, frame = cap.read()
             if not ret:
@@ -213,6 +217,17 @@ def open_camera_stream(camera_config: dict, stop_event, calendar_id: int):
                 else:
                     cap.release()
                     return
+
+            # ✅ Frame skip — process 1 every FRAME_SKIP frames
+            frame_count += 1
+            if frame_count % FRAME_SKIP != 0:
+                continue
+
+            # ✅ Resize frame before YOLO to reduce CPU/GPU load
+            if frame.shape[1] != PROCESS_WIDTH:
+                scale  = PROCESS_WIDTH / frame.shape[1]
+                height = int(frame.shape[0] * scale)
+                frame  = cv2.resize(frame, (PROCESS_WIDTH, height))
 
             # --- YOLO detection ---
             try:

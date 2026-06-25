@@ -1,0 +1,43 @@
+{
+  "slc_config": {
+    "BASE_URL": "https://192.168.1.249:5004/scl",
+    "MAC": "f4:4d:30:ee:c9:1d",
+    "PASSWORD": "Khalilacademie123"
+  },
+  "compre_face": {
+    "compreface_api_key": "f4f55b20-75fb-4f84-8233-81ec60c63bad",
+    "compreface_url": "http://localhost:8000",
+    "similarity_threshold": 0.95,
+    "recognition_api_key": "eb19cf1e-77bb-4790-a1ab-533ddd5fafac",
+    "max_enroll_images": 7,
+    "recognition_threshold": 0.85,
+    "det_prob_threshold": 0.8
+  },
+  "yolo_config": {
+    "model_path": "best.pt",
+    "conf_threshold": 0.4,
+    "min_conf": 0.7
+  },
+  "camera_config": {
+    "resolution_width": 1280,
+    "resolution_height": 720,
+    "fps": 30,
+    "rtsp_port": 554,
+    "padding_percent": 0.2,
+    "quality_threshold": 0.2,
+    "blur_threshold": 30.0,
+    "brightness_min": 40,
+    "brightness_max": 230,
+    "pose_angle_max": 35,
+    "frame_skip":  5,
+    "process_width": 640
+  },
+  "endpoints": {
+    "calendars": "/scl/calendars",
+    "cameras": "/scl/rooms/{room_id}/cameras",
+    "students": "/scl/sessions/{session_id}/students",
+    "recordings": "/scl/recordings",
+    "post_treatment": "/scl/sessions/{session_id}/post-treatment"
+  },
+  "user_imgs_path": "../server_local_api/uploads/user_img"
+}

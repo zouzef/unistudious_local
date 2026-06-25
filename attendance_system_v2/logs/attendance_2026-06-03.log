@@ -1,0 +1,206 @@
+2026-06-03 10:11:51  INFO      [main.py:24]  Server is starting...
+2026-06-03 10:11:51  INFO      [auth_service.py:23]  Login successful.
+2026-06-03 10:11:51  INFO      [main.py:44]  Checking calendars at 10:11:51
+2026-06-03 10:11:51  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:11:51  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-06-03 10:11:51  INFO      [main.py:50]  No calendars found for today.
+2026-06-03 10:12:01  INFO      [main.py:44]  Checking calendars at 10:12:01
+2026-06-03 10:12:01  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:12:01  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-06-03 10:12:01  INFO      [main.py:50]  No calendars found for today.
+2026-06-03 10:12:11  INFO      [main.py:44]  Checking calendars at 10:12:11
+2026-06-03 10:12:11  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:12:11  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-06-03 10:12:11  INFO      [main.py:50]  No calendars found for today.
+2026-06-03 10:12:21  INFO      [main.py:44]  Checking calendars at 10:12:21
+2026-06-03 10:12:21  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:12:21  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-06-03 10:12:21  INFO      [main.py:50]  No calendars found for today.
+2026-06-03 10:12:31  INFO      [main.py:44]  Checking calendars at 10:12:31
+2026-06-03 10:12:31  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:12:31  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-06-03 10:12:31  INFO      [main.py:50]  No calendars found for today.
+2026-06-03 10:12:41  INFO      [main.py:44]  Checking calendars at 10:12:41
+2026-06-03 10:12:41  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:12:41  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-06-03 10:12:41  INFO      [main.py:50]  No calendars found for today.
+2026-06-03 10:12:51  INFO      [main.py:44]  Checking calendars at 10:12:51
+2026-06-03 10:12:51  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:12:51  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-06-03 10:12:51  INFO      [main.py:50]  No calendars found for today.
+2026-06-03 10:13:01  INFO      [main.py:44]  Checking calendars at 10:13:01
+2026-06-03 10:13:01  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:13:01  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-06-03 10:13:01  INFO      [main.py:50]  No calendars found for today.
+2026-06-03 10:13:11  INFO      [main.py:44]  Checking calendars at 10:13:11
+2026-06-03 10:13:11  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:13:11  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-06-03 10:13:11  INFO      [main.py:50]  No calendars found for today.
+2026-06-03 10:13:21  INFO      [main.py:44]  Checking calendars at 10:13:21
+2026-06-03 10:13:21  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:13:21  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-06-03 10:13:21  INFO      [main.py:50]  No calendars found for today.
+2026-06-03 10:13:31  INFO      [main.py:44]  Checking calendars at 10:13:31
+2026-06-03 10:13:31  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:13:31  INFO      [calendar_service.py:43]  Fetched 0 valid session(s).
+2026-06-03 10:13:31  INFO      [main.py:50]  No calendars found for today.
+2026-06-03 10:13:41  INFO      [main.py:44]  Checking calendars at 10:13:41
+2026-06-03 10:13:41  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:13:41  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:13:41  INFO      [main.py:79]  Processing calendar 2014 in room 7...
+2026-06-03 10:13:41  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-camera-room/7
+2026-06-03 10:13:41  INFO      [camera_service.py:11]  Fond 1 camera(s) in room7.
+2026-06-03 10:13:41  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2014
+2026-06-03 10:13:41  INFO      [student_service.py:11]  Found 3 student(s) for calendar 2014
+2026-06-03 10:13:41  INFO      [detector.py:15]  Starting detection for calendar 2014 in room 7...
+2026-06-03 10:13:41  INFO      [detector.py:72]  Starting webcam process — device: /dev/video0
+2026-06-03 10:13:41  INFO      [detector.py:89]  Started 1 detection process(es) for calendar 2014.
+2026-06-03 10:13:41  INFO      [main.py:113]  Calendar 2014 started — 1 camera(s) running.
+2026-06-03 10:13:41  INFO      [main.py:132]  Calendar 2014 still running (731m 18s remaining).
+2026-06-03 10:13:41  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:13:44  INFO      [camera.py:94]  CUDA is available — using GPU.
+2026-06-03 10:13:44  INFO      [camera.py:103]  YOLO model loaded successfully.
+2026-06-03 10:13:44  INFO      [session.py:29]  Created dataset folders for calendar 2014.
+2026-06-03 10:13:44  INFO      [camera.py:150]  Connecting to webcam: /dev/video0
+2026-06-03 10:13:44  ERROR     [camera.py:172]  Cannot open webcam: /dev/video0
+2026-06-03 10:13:51  INFO      [main.py:44]  Checking calendars at 10:13:51
+2026-06-03 10:13:51  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:13:51  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:13:51  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:13:51  INFO      [main.py:132]  Calendar 2014 still running (731m 8s remaining).
+2026-06-03 10:13:51  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:14:01  INFO      [main.py:44]  Checking calendars at 10:14:01
+2026-06-03 10:14:01  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:14:01  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:14:01  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:14:01  INFO      [main.py:132]  Calendar 2014 still running (730m 58s remaining).
+2026-06-03 10:14:01  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:15:28  INFO      [main.py:24]  Server is starting...
+2026-06-03 10:15:28  INFO      [auth_service.py:23]  Login successful.
+2026-06-03 10:15:28  INFO      [main.py:44]  Checking calendars at 10:15:28
+2026-06-03 10:15:28  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:15:28  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:15:28  INFO      [main.py:79]  Processing calendar 2014 in room 7...
+2026-06-03 10:15:28  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-camera-room/7
+2026-06-03 10:15:28  INFO      [camera_service.py:11]  Fond 1 camera(s) in room7.
+2026-06-03 10:15:28  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2014
+2026-06-03 10:15:28  INFO      [student_service.py:11]  Found 3 student(s) for calendar 2014
+2026-06-03 10:15:28  INFO      [detector.py:15]  Starting detection for calendar 2014 in room 7...
+2026-06-03 10:15:28  INFO      [detector.py:72]  Starting webcam process — device: /dev/video0
+2026-06-03 10:15:28  INFO      [detector.py:89]  Started 1 detection process(es) for calendar 2014.
+2026-06-03 10:15:28  INFO      [main.py:113]  Calendar 2014 started — 1 camera(s) running.
+2026-06-03 10:15:28  INFO      [main.py:132]  Calendar 2014 still running (729m 31s remaining).
+2026-06-03 10:15:28  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:15:30  INFO      [camera.py:94]  CUDA is available — using GPU.
+2026-06-03 10:15:30  INFO      [camera.py:103]  YOLO model loaded successfully.
+2026-06-03 10:15:30  INFO      [session.py:29]  Created dataset folders for calendar 2014.
+2026-06-03 10:15:30  INFO      [camera.py:150]  Connecting to webcam: /dev/video0
+2026-06-03 10:15:30  ERROR     [camera.py:172]  Cannot open webcam: /dev/video0
+2026-06-03 10:15:38  INFO      [main.py:44]  Checking calendars at 10:15:38
+2026-06-03 10:15:38  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:15:38  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:15:38  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:15:38  INFO      [main.py:132]  Calendar 2014 still running (729m 21s remaining).
+2026-06-03 10:15:38  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:15:48  INFO      [main.py:44]  Checking calendars at 10:15:48
+2026-06-03 10:15:48  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:15:48  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:15:48  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:15:48  INFO      [main.py:132]  Calendar 2014 still running (729m 11s remaining).
+2026-06-03 10:15:48  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:15:58  INFO      [main.py:44]  Checking calendars at 10:15:58
+2026-06-03 10:15:58  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:15:58  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:15:58  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:15:58  INFO      [main.py:132]  Calendar 2014 still running (729m 1s remaining).
+2026-06-03 10:15:58  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:16:08  INFO      [main.py:44]  Checking calendars at 10:16:08
+2026-06-03 10:16:08  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:16:08  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:16:08  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:16:08  INFO      [main.py:132]  Calendar 2014 still running (728m 51s remaining).
+2026-06-03 10:16:08  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:16:18  INFO      [main.py:44]  Checking calendars at 10:16:18
+2026-06-03 10:16:18  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:16:18  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:16:18  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:16:18  INFO      [main.py:132]  Calendar 2014 still running (728m 41s remaining).
+2026-06-03 10:16:18  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:16:28  INFO      [main.py:44]  Checking calendars at 10:16:28
+2026-06-03 10:16:28  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:16:28  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:16:28  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:16:28  INFO      [main.py:132]  Calendar 2014 still running (728m 31s remaining).
+2026-06-03 10:16:28  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:16:38  INFO      [main.py:44]  Checking calendars at 10:16:38
+2026-06-03 10:16:38  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:16:38  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:16:38  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:16:38  INFO      [main.py:132]  Calendar 2014 still running (728m 21s remaining).
+2026-06-03 10:16:38  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:16:48  INFO      [main.py:44]  Checking calendars at 10:16:48
+2026-06-03 10:16:48  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:16:48  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:16:48  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:16:48  INFO      [main.py:132]  Calendar 2014 still running (728m 11s remaining).
+2026-06-03 10:16:48  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:16:58  INFO      [main.py:44]  Checking calendars at 10:16:58
+2026-06-03 10:16:58  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:16:58  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:16:58  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:16:58  INFO      [main.py:132]  Calendar 2014 still running (728m 1s remaining).
+2026-06-03 10:16:58  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:17:08  INFO      [main.py:44]  Checking calendars at 10:17:08
+2026-06-03 10:17:08  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:17:08  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:17:08  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:17:08  INFO      [main.py:132]  Calendar 2014 still running (727m 51s remaining).
+2026-06-03 10:17:08  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:17:18  INFO      [main.py:44]  Checking calendars at 10:17:18
+2026-06-03 10:17:18  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:17:18  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:17:18  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:17:18  INFO      [main.py:132]  Calendar 2014 still running (727m 41s remaining).
+2026-06-03 10:17:18  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:17:28  INFO      [main.py:44]  Checking calendars at 10:17:28
+2026-06-03 10:17:28  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:17:28  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:17:28  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:17:28  INFO      [main.py:132]  Calendar 2014 still running (727m 31s remaining).
+2026-06-03 10:17:28  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:17:38  INFO      [main.py:44]  Checking calendars at 10:17:38
+2026-06-03 10:17:38  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:17:38  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:17:38  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:17:38  INFO      [main.py:132]  Calendar 2014 still running (727m 21s remaining).
+2026-06-03 10:17:38  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:17:48  INFO      [main.py:44]  Checking calendars at 10:17:48
+2026-06-03 10:17:48  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:17:48  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:17:48  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:17:48  INFO      [main.py:132]  Calendar 2014 still running (727m 11s remaining).
+2026-06-03 10:17:48  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:17:58  INFO      [main.py:44]  Checking calendars at 10:17:58
+2026-06-03 10:17:58  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:17:58  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:17:58  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:17:58  INFO      [main.py:132]  Calendar 2014 still running (727m 1s remaining).
+2026-06-03 10:17:58  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:18:08  INFO      [main.py:44]  Checking calendars at 10:18:08
+2026-06-03 10:18:08  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:18:09  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:18:09  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:18:09  INFO      [main.py:132]  Calendar 2014 still running (726m 51s remaining).
+2026-06-03 10:18:09  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:18:19  INFO      [main.py:44]  Checking calendars at 10:18:19
+2026-06-03 10:18:19  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:18:19  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:18:19  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:18:19  INFO      [main.py:132]  Calendar 2014 still running (726m 40s remaining).
+2026-06-03 10:18:19  INFO      [main.py:144]  Active calendars: [2014]
+2026-06-03 10:18:29  INFO      [main.py:44]  Checking calendars at 10:18:29
+2026-06-03 10:18:29  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-all-calender
+2026-06-03 10:18:29  INFO      [calendar_service.py:43]  Fetched 1 valid session(s).
+2026-06-03 10:18:29  INFO      [main.py:76]  Calendar 2014 already started — skipping.
+2026-06-03 10:18:29  INFO      [main.py:132]  Calendar 2014 still running (726m 30s remaining).
+2026-06-03 10:18:29  INFO      [main.py:144]  Active calendars: [2014]

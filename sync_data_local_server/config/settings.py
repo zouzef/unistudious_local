@@ -99,6 +99,10 @@ class Settings:
     def network_check_timeout(self):
         return self.config['network']['check_timeout']
 
+    @property
+    def uploads_path(self):
+        return self.config['api'].get('uploads_path', '../server_local_api/uploads/user_img')
+
     def get_token(self):
         """Get current token from config"""
         return self.config.get('token')

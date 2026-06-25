@@ -6,10 +6,11 @@ NOTE: Table schema was not provided for this entity. Columns below were
 inferred directly from the API payload (see fields in `new_data`). Please
 verify column names/types against the real `relation_teacher_account` table
 (e.g. via `DESCRIBE relation_teacher_account;`) and adjust if needed —
-especially:
   - access_permissions: assumed JSON/TEXT column (stores JSON-encoded list)
   - status / enabled: assumed TINYINT(1)
   - release_token: assumed TINYINT(1)
+  - account_id: assumed INT, mapped from API field "accountId"
+  - door_id: assumed INT/VARCHAR, mapped from API field "doorId"
 """
 
 import sys
@@ -27,13 +28,6 @@ def insert_relation_teacher_account(db, relation_data):
     - Check if id_prod already exists (avoid duplicates from local pushes)
     - If record exists in DB by id → UPDATE it
     - If record does NOT exist → INSERT it
-
-    Args:
-        db: Database instance
-        relation_data: Dictionary with 'created' key
-
-    Returns:
-        dict: Statistics (inserted, updated, skipped, errors)
     """
     result = {
         "inserted": 0,
@@ -68,8 +62,6 @@ def insert_relation_teacher_account(db, relation_data):
                     result["skipped"] += 1
                     continue
 
-                # Prepare new data with safe defaults — snake_case DB columns
-                # TODO: confirm column names/types against `DESCRIBE relation_teacher_account;`
                 access_permissions = record.get("accessPermissions")
                 new_data = {
                     "id_prod": record.get("id"),
@@ -80,13 +72,14 @@ def insert_relation_teacher_account(db, relation_data):
                     "invitation_relation_teacher_account_id": record.get("invitationRelationTeacherAccountId"),
                     "cloud_path": record.get("cloudPath"),
                     "user_id": record.get("teacherId"),
+                    "account_id": record.get("accountId"),
+                    "door_id": record.get("doorId"),  # ✅ ADDED
                     "release_token": 1 if record.get("releaseToken", False) else 0,
                     "use_token": record.get("useToken"),
                     "created_at": format_date(record.get("createdAt")),
                     "updated_at": format_date(record.get("updatedAt")),
                 }
 
-                # Check if record exists by id
                 select_query = "SELECT * FROM relation_teacher_account WHERE id = %s"
                 existing_records = db.fetch_query(select_query, (record_id,))
 
@@ -120,6 +113,8 @@ def insert_relation_teacher_account(db, relation_data):
                             invitation_relation_teacher_account_id = %s,
                             cloud_path = %s,
                             user_id = %s,
+                            account_id = %s,
+                            door_id = %s,
                             release_token = %s,
                             use_token = %s,
                             created_at = %s,
@@ -136,6 +131,8 @@ def insert_relation_teacher_account(db, relation_data):
                         new_data["invitation_relation_teacher_account_id"],
                         new_data["cloud_path"],
                         new_data["user_id"],
+                        new_data["account_id"],
+                        new_data["door_id"],
                         new_data["release_token"],
                         new_data["use_token"],
                         new_data["created_at"],
@@ -153,10 +150,10 @@ def insert_relation_teacher_account(db, relation_data):
                         INSERT INTO relation_teacher_account (
                             id, id_prod, uuid, status, access_permissions,
                             access_session, invitation_relation_teacher_account_id,
-                            cloud_path, user_id, release_token, use_token,
-                            created_at, updated_at
+                            cloud_path, user_id, account_id, door_id,
+                            release_token, use_token, created_at, updated_at
                         ) VALUES (
-                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
                         )
                     """
 
@@ -170,6 +167,8 @@ def insert_relation_teacher_account(db, relation_data):
                         new_data["invitation_relation_teacher_account_id"],
                         new_data["cloud_path"],
                         new_data["user_id"],
+                        new_data["account_id"],
+                        new_data["door_id"],
                         new_data["release_token"],
                         new_data["use_token"],
                         new_data["created_at"],
@@ -201,13 +200,6 @@ def update_relation_teacher_account(db, relation_data):
     - Look up by id_prod first, then by id
     - If exists → UPDATE (using local id)
     - If not → INSERT (don't skip!)
-
-    Args:
-        db: Database instance
-        relation_data: Dictionary with 'updated' key
-
-    Returns:
-        dict: Statistics (inserted, updated, skipped, errors)
     """
     result = {
         "inserted": 0,
@@ -243,6 +235,8 @@ def update_relation_teacher_account(db, relation_data):
                     "invitation_relation_teacher_account_id": record.get("invitationRelationTeacherAccountId"),
                     "cloud_path": record.get("cloudPath"),
                     "user_id": record.get("teacherId"),
+                    "account_id": record.get("accountId"),
+                    "door_id": record.get("doorId"),  # ✅ ADDED
                     "release_token": 1 if record.get("releaseToken", False) else 0,
                     "use_token": record.get("useToken"),
                     "updated_at": format_date(record.get("updatedAt")),
@@ -285,6 +279,8 @@ def update_relation_teacher_account(db, relation_data):
                             invitation_relation_teacher_account_id = %s,
                             cloud_path = %s,
                             user_id = %s,
+                            account_id = %s,
+                            door_id = %s,
                             release_token = %s,
                             use_token = %s,
                             updated_at = %s
@@ -300,6 +296,8 @@ def update_relation_teacher_account(db, relation_data):
                         new_data["invitation_relation_teacher_account_id"],
                         new_data["cloud_path"],
                         new_data["user_id"],
+                        new_data["account_id"],
+                        new_data["door_id"],
                         new_data["release_token"],
                         new_data["use_token"],
                         new_data["updated_at"],
@@ -316,10 +314,10 @@ def update_relation_teacher_account(db, relation_data):
                         INSERT INTO relation_teacher_account (
                             id, id_prod, uuid, status, access_permissions,
                             access_session, invitation_relation_teacher_account_id,
-                            cloud_path, user_id, release_token, use_token,
-                            created_at, updated_at
+                            cloud_path, user_id, account_id, door_id,
+                            release_token, use_token, created_at, updated_at
                         ) VALUES (
-                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
                         )
                     """
 
@@ -333,6 +331,8 @@ def update_relation_teacher_account(db, relation_data):
                         new_data["invitation_relation_teacher_account_id"],
                         new_data["cloud_path"],
                         new_data["user_id"],
+                        new_data["account_id"],
+                        new_data["door_id"],
                         new_data["release_token"],
                         new_data["use_token"],
                         new_data["updated_at"],  # used as created_at too

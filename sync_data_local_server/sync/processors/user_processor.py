@@ -78,6 +78,7 @@ def insert_users(db, user_data, token):
                     "created_at": format_date(user.get("createdAt")),
                     "updated_at": format_date(user.get("updatedAt")),
                     "isvirtual": user.get("isVirtual"),
+                    "door_id": user.get("doorId"),
                     "password": user.get("password", "TEMP_PASSWORD_NEEDS_RESET"),
                 }
 
@@ -106,6 +107,8 @@ def insert_users(db, user_data, token):
                         "timestamp": "timestamp",
                         "updated_at": "updated_at",
                         "isvirtual": "isvirtual",
+                        "door_id": "door_id",
+                        "password": "password",  # ✅ FIXED
                     }
 
                     has_changes = False
@@ -140,7 +143,9 @@ def insert_users(db, user_data, token):
                             ref_slc = %s,
                             timestamp = %s,
                             updated_at = %s,
-                            isvirtual = %s
+                            isvirtual = %s,
+                            door_id = %s,
+                            password = %s
                         WHERE id = %s
                     """
 
@@ -161,13 +166,14 @@ def insert_users(db, user_data, token):
                         new_data["timestamp"],
                         new_data["updated_at"],
                         new_data["isvirtual"],
+                        new_data["door_id"],
+                        new_data["password"],  # ✅ FIXED
                         user_id
                     ))
 
                     result["updated"] += 1
                     print(f"      ✅ Updated successfully")
 
-                    # download image after UPDATE
                     download_user_image(user_id, new_data["img_link"], token)
                     if new_data["ref_slc"]:
                         download_student_reference_images(user_id, token)
@@ -210,7 +216,7 @@ def insert_users(db, user_data, token):
                             calendar_notification, sms_notification, login_notification,
                             horsline, ref_slc, apple_id, open_source_user_name,
                             rocket_chat_user_id, fcm_web, fcm_android, fcm_ios, releaseToken, useToken,
-                            isvirtual
+                            isvirtual, door_id
                         ) VALUES (
                             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
@@ -218,7 +224,7 @@ def insert_users(db, user_data, token):
                             %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
-                            %s
+                            %s, %s
                         )
                     """
 
@@ -233,7 +239,7 @@ def insert_users(db, user_data, token):
                         default_values["reset_token"],
                         new_data["status"],
                         default_values["created_by"],
-                        new_data["password"],              # ← from API now
+                        new_data["password"],
                         default_values["birth_date"],
                         default_values["birth_place"],
                         new_data["phone"],
@@ -264,13 +270,13 @@ def insert_users(db, user_data, token):
                         default_values["fcm_ios"],
                         new_data["release_token"],
                         new_data["use_token"],
-                        new_data["isvirtual"]
+                        new_data["isvirtual"],
+                        new_data["door_id"]
                     ))
 
                     result["inserted"] += 1
                     print(f"      ✅ Inserted successfully")
 
-                    # download image after INSERT
                     download_user_image(user_id, new_data["img_link"], token)
                     if new_data["ref_slc"]:
                         download_student_reference_images(user_id, token)
@@ -339,7 +345,8 @@ def update_users(db, user_data, token):
                     "timestamp": format_date(user.get("timestamp")),
                     "updated_at": format_date(user.get("updatedAt")),
                     "isvirtual": user.get("isVirtual"),
-                    "password": user.get("password", "TEMP_PASSWORD_NEEDS_RESET"),  # ← from API
+                    "door_id": user.get("doorId"),
+                    "password": user.get("password", "TEMP_PASSWORD_NEEDS_RESET"),
                 }
 
                 select_query = "SELECT * FROM user WHERE id = %s"
@@ -367,6 +374,8 @@ def update_users(db, user_data, token):
                         "timestamp": "timestamp",
                         "updated_at": "updated_at",
                         "isvirtual": "isvirtual",
+                        "door_id": "door_id",
+                        "password": "password",  # ✅ FIXED
                     }
 
                     has_changes = False
@@ -401,7 +410,9 @@ def update_users(db, user_data, token):
                             ref_slc = %s,
                             timestamp = %s,
                             updated_at = %s,
-                            isvirtual = %s
+                            isvirtual = %s,
+                            door_id = %s,
+                            password = %s
                         WHERE id = %s
                     """
 
@@ -422,13 +433,14 @@ def update_users(db, user_data, token):
                         new_data["timestamp"],
                         new_data["updated_at"],
                         new_data["isvirtual"],
+                        new_data["door_id"],
+                        new_data["password"],  # ✅ FIXED
                         user_id
                     ))
 
                     result["updated"] += 1
                     print(f"      ✅ Updated successfully")
 
-                    # download image after UPDATE
                     download_user_image(user_id, new_data["img_link"], token)
                     if new_data["ref_slc"]:
                         download_student_reference_images(user_id, token)
@@ -471,7 +483,7 @@ def update_users(db, user_data, token):
                             calendar_notification, sms_notification, login_notification,
                             horsline, ref_slc, apple_id, open_source_user_name,
                             rocket_chat_user_id, fcm_web, fcm_android, fcm_ios, releaseToken, useToken,
-                            isvirtual
+                            isvirtual, door_id
                         ) VALUES (
                             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
@@ -479,7 +491,7 @@ def update_users(db, user_data, token):
                             %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
-                            %s
+                            %s, %s
                         )
                     """
 
@@ -494,7 +506,7 @@ def update_users(db, user_data, token):
                         default_values["reset_token"],
                         new_data["status"],
                         default_values["created_by"],
-                        new_data["password"],              # ← from API now
+                        new_data["password"],
                         default_values["birth_date"],
                         default_values["birth_place"],
                         new_data["phone"],
@@ -503,7 +515,7 @@ def update_users(db, user_data, token):
                         default_values["access_type"],
                         default_values["access_type_date"],
                         new_data["enabled"],
-                        new_data["updated_at"],  # Use updated_at as created_at
+                        new_data["updated_at"],  # used as created_at
                         new_data["timestamp"],
                         new_data["updated_at"],
                         new_data["uuid"],
@@ -525,13 +537,13 @@ def update_users(db, user_data, token):
                         default_values["fcm_ios"],
                         new_data["release_token"],
                         new_data["use_token"],
-                        new_data["isvirtual"]
+                        new_data["isvirtual"],
+                        new_data["door_id"]
                     ))
 
                     result["inserted"] += 1
                     print(f"      ✅ Inserted successfully")
 
-                    # FIX: replaced get_student_references with download_user_image
                     download_user_image(user_id, new_data["img_link"], token)
                     if new_data["ref_slc"]:
                         download_student_reference_images(user_id, token)
@@ -605,7 +617,8 @@ def insert_admins(db, admin_data, token):
                     "created_at": format_date(user.get("createdAt")),
                     "updated_at": format_date(user.get("updatedAt")),
                     "isvirtual": user.get("isVirtual"),
-                    "password": user.get("password", "TEMP_PASSWORD_NEEDS_RESET"),  # ← from API
+                    "door_id": user.get("doorId"),
+                    "password": user.get("password", "TEMP_PASSWORD_NEEDS_RESET"),
                 }
 
                 select_query = "SELECT * FROM user WHERE id = %s"
@@ -633,6 +646,8 @@ def insert_admins(db, admin_data, token):
                         "timestamp": "timestamp",
                         "updated_at": "updated_at",
                         "isvirtual": "isvirtual",
+                        "door_id": "door_id",
+                        "password": "password",  # ✅ FIXED
                     }
 
                     has_changes = False
@@ -667,7 +682,9 @@ def insert_admins(db, admin_data, token):
                             ref_slc = %s,
                             timestamp = %s,
                             updated_at = %s,
-                            isvirtual = %s
+                            isvirtual = %s,
+                            door_id = %s,
+                            password = %s
                         WHERE id = %s
                     """
 
@@ -688,13 +705,14 @@ def insert_admins(db, admin_data, token):
                         new_data["timestamp"],
                         new_data["updated_at"],
                         new_data["isvirtual"],
+                        new_data["door_id"],
+                        new_data["password"],  # ✅ FIXED
                         user_id
                     ))
 
                     result["updated"] += 1
                     print(f"      ✅ Updated successfully")
 
-                    # download image after UPDATE
                     download_user_image(user_id, new_data["img_link"], token)
 
                 else:
@@ -735,7 +753,7 @@ def insert_admins(db, admin_data, token):
                             calendar_notification, sms_notification, login_notification,
                             horsline, ref_slc, apple_id, open_source_user_name,
                             rocket_chat_user_id, fcm_web, fcm_android, fcm_ios, releaseToken, useToken,
-                            isvirtual
+                            isvirtual, door_id
                         ) VALUES (
                             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
@@ -743,7 +761,7 @@ def insert_admins(db, admin_data, token):
                             %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
-                            %s
+                            %s, %s
                         )
                     """
 
@@ -758,7 +776,7 @@ def insert_admins(db, admin_data, token):
                         default_values["reset_token"],
                         new_data["status"],
                         default_values["created_by"],
-                        new_data["password"],              # ← from API now
+                        new_data["password"],
                         default_values["birth_date"],
                         default_values["birth_place"],
                         new_data["phone"],
@@ -789,13 +807,13 @@ def insert_admins(db, admin_data, token):
                         default_values["fcm_ios"],
                         new_data["release_token"],
                         new_data["use_token"],
-                        new_data["isvirtual"]
+                        new_data["isvirtual"],
+                        new_data["door_id"]
                     ))
 
                     result["inserted"] += 1
                     print(f"      ✅ Inserted successfully")
 
-                    # download image after INSERT
                     download_user_image(user_id, new_data["img_link"], token)
 
             except Exception as err:

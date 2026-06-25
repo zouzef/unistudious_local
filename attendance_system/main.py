@@ -2,16 +2,22 @@
 
 import json
 import time
-from datetime import datetime
+from datetime import datetime,timedelta
+
 from services.auth_service import login_slc
 from services.client import FlaskClient
 from services.calendar_service import get_all_calendars
-from services.student_service import get_list_students
+from services.student_service import get_list_students, store_classified_folders
 from services.camera_service import get_all_camera
-from utils.logger import logger
+from services.attendance_service import update_attendance
+
 from detection.detector import start_detection_for_calendar, stop_detection_for_calendar
 from detection.classification import classify_faces
 from detection.recognition import enroll_students, unenroll_students, recognize_persons
+
+from utils.logger import logger
+from utils.dataset_cleaner import cleanup_session_dataset
+
 
 PATH_CONFIG = "configurations.json"
 with open(PATH_CONFIG) as f:
@@ -109,7 +115,7 @@ def main():
                     active_calendars.append({
                         "calendar_id": calendar["id"],
                         "room_id":     calendar["roomId"],
-                        "end_time":    calendar["endTime"],
+                        "end_time":    calendar["startTime"] + timedelta(minutes=2),
                         "cameras":     cameras,
                         "attendances": attendances,
                         "processes":   processes,    # ✅ store processes
@@ -138,10 +144,33 @@ def main():
                     recognized = recognize_persons(active["calendar_id"])
                     logger.info(f"Recognized students: {recognized}")
 
+                    # ✅ STORE CLASSIFIED FOLDERS + IMAGE PATHS IN DB
+                    store_classified_folders(client, active["calendar_id"])
+
+                    # ✅ BUILD userId → attendance id map
+                    attendance_map = {
+                        str(student.get("userId")): student.get("id")
+                        for student in active["attendances"]
+                    }
+
+                    # ✅ UPDATE ATTENDANCE
+                    for student in active["attendances"]:
+                        user_id = str(student.get("userId"))
+                        attendance_id = attendance_map.get(user_id)
+                        is_present = user_id in recognized  # recognized = {"3": 0.92}
+
+                        if attendance_id is None:
+                            logger.warning(f"No attendance id found for userId={user_id} — skipping.")
+                            continue
+
+                        update_attendance(client, attendance_id, is_present)
+
                     # ✅ UNENROLL STUDENTS FROM COMPREFACE
                     logger.info(f"Unenrolling students for calendar {active['calendar_id']}...")
                     unenroll_students(active["attendances"])
 
+                    # ✅ CLEANUP face_crops, keep unknown classified folders
+                    cleanup_session_dataset(active["calendar_id"])
 
                     finished.append(active["calendar_id"])
                     logger.info(f"Calendar {active['calendar_id']} completed.")
@@ -162,7 +191,6 @@ def main():
                 logger.info(f"Active calendars: {[a['calendar_id'] for a in active_calendars]}")
 
             time.sleep(10)
-
         except Exception as e:
             logger.error(f"Error in main loop: {e}")
             time.sleep(10)

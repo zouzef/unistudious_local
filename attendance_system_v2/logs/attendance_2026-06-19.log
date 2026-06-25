@@ -1,0 +1,1358 @@
+2026-06-19 14:31:37  ERROR     [auth_service.py:28]  Cannot connect to Flask server at https://192.168.1.249:5004/scl/login_slc
+2026-06-19 14:31:37  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 14:31:37  ERROR     [client.py:36]  Cannot connect to Flask server at https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 14:31:37  ERROR     [student_service.py:14]  Failed to fetch students for calendar 2107: HTTPSConnectionPool(host='192.168.1.249', port=5004): Max retries exceeded with url: /scl/get-attendance/2107 (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x71799ec2add0>: Failed to establish a new connection: [Errno 111] Connection refused'))
+2026-06-19 14:31:37  INFO      [recognition.py:80]  Enrollment complete — 0/0 student(s) enrolled.
+2026-06-19 14:32:03  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 14:32:03  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 14:32:03  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 14:32:05  INFO      [recognition.py:72]  Enrolled student 3 successfully.
+2026-06-19 14:32:05  WARNING   [recognition.py:38]  Student 683 has no reference photo (userRefRlc is null) — skipping.
+2026-06-19 14:32:05  INFO      [recognition.py:80]  Enrollment complete — 1/2 student(s) enrolled.
+2026-06-19 14:44:08  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 14:44:08  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 14:44:08  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 14:45:06  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 14:45:06  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 14:45:06  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 14:45:08  INFO      [recognition.py:72]  Enrolled image face_20260107_095726_913.jpg for student 3.
+2026-06-19 14:45:08  INFO      [recognition.py:72]  Enrolled image face_20260107_095605_990.jpg for student 3.
+2026-06-19 14:45:08  INFO      [recognition.py:72]  Enrolled image face_20260107_095724_366.jpg for student 3.
+2026-06-19 14:45:08  INFO      [recognition.py:72]  Enrolled image face_20260107_100121_984.jpg for student 3.
+2026-06-19 14:45:08  INFO      [recognition.py:72]  Enrolled image face_20250722_113315.jpg for student 3.
+2026-06-19 14:45:08  WARNING   [recognition.py:39]  Student 683 has no reference photo (userRefRlc is null) — skipping.
+2026-06-19 14:45:08  INFO      [recognition.py:80]  Enrollment complete — 1/2 student(s) enrolled.
+2026-06-19 14:57:52  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 14:57:52  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 14:57:52  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 14:57:52  INFO      [recognition.py:72]  Enrolled image face_20260107_095726_913.jpg for student 3.
+2026-06-19 14:57:52  INFO      [recognition.py:72]  Enrolled image face_20260107_095605_990.jpg for student 3.
+2026-06-19 14:57:52  INFO      [recognition.py:72]  Enrolled image face_20260107_095724_366.jpg for student 3.
+2026-06-19 14:57:52  INFO      [recognition.py:72]  Enrolled image face_20260107_100121_984.jpg for student 3.
+2026-06-19 14:57:52  INFO      [recognition.py:72]  Enrolled image face_20250722_113315.jpg for student 3.
+2026-06-19 14:57:52  WARNING   [recognition.py:39]  Student 683 has no reference photo (userRefRlc is null) — skipping.
+2026-06-19 14:57:52  INFO      [recognition.py:80]  Enrollment complete — 1/2 student(s) enrolled.
+2026-06-19 15:18:33  INFO      [classification.py:78]  Starting classification for calendar 2107 — 216 image(s) found.
+2026-06-19 15:18:33  INFO      [classification.py:91]  Created person_1 — reference: face_20260618_141525_609.jpg
+2026-06-19 15:18:33  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141525_122.jpg → similarity: 0.9999
+2026-06-19 15:18:33  INFO      [classification.py:110]    ✔ Copied face_20260618_141525_122.jpg → person_1 (2/5)
+2026-06-19 15:18:34  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_511.jpg → similarity: 0.9993
+2026-06-19 15:18:34  INFO      [classification.py:110]    ✔ Copied face_20260618_141527_511.jpg → person_1 (3/5)
+2026-06-19 15:18:34  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141658_344.jpg → similarity: 0.9998
+2026-06-19 15:18:34  INFO      [classification.py:110]    ✔ Copied face_20260618_141658_344.jpg → person_1 (4/5)
+2026-06-19 15:18:34  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141653_362.jpg → similarity: 0.9993
+2026-06-19 15:18:34  INFO      [classification.py:110]    ✔ Copied face_20260618_141653_362.jpg → person_1 (5/5)
+2026-06-19 15:18:34  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141656_937.jpg → similarity: 0.9998
+2026-06-19 15:18:34  INFO      [classification.py:112]    ⏭ Matched face_20260618_141656_937.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:34  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141525_506.jpg → similarity: 1.0000
+2026-06-19 15:18:34  INFO      [classification.py:112]    ⏭ Matched face_20260618_141525_506.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:34  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141658_743.jpg → similarity: 0.9999
+2026-06-19 15:18:34  INFO      [classification.py:112]    ⏭ Matched face_20260618_141658_743.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:35  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141602_286.jpg → similarity: 0.9999
+2026-06-19 15:18:35  INFO      [classification.py:112]    ⏭ Matched face_20260618_141602_286.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:35  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_408.jpg → similarity: 0.9977
+2026-06-19 15:18:35  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_408.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:35  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_942.jpg → similarity: 0.9999
+2026-06-19 15:18:35  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_942.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:35  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_820.jpg → similarity: 0.9996
+2026-06-19 15:18:35  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_820.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:35  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_719.jpg → similarity: 0.9998
+2026-06-19 15:18:35  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_719.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:36  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141654_940.jpg → similarity: 0.9986
+2026-06-19 15:18:36  INFO      [classification.py:112]    ⏭ Matched face_20260618_141654_940.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:36  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141658_245.jpg → similarity: 0.9998
+2026-06-19 15:18:36  INFO      [classification.py:112]    ⏭ Matched face_20260618_141658_245.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:36  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141704_156.jpg → similarity: 0.9974
+2026-06-19 15:18:36  INFO      [classification.py:112]    ⏭ Matched face_20260618_141704_156.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:36  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_096.jpg → similarity: 0.9997
+2026-06-19 15:18:36  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_096.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:36  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141658_143.jpg → similarity: 0.9999
+2026-06-19 15:18:36  INFO      [classification.py:112]    ⏭ Matched face_20260618_141658_143.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:37  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141705_131.jpg → similarity: 0.9997
+2026-06-19 15:18:37  INFO      [classification.py:112]    ⏭ Matched face_20260618_141705_131.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:37  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141602_085.jpg → similarity: 0.9999
+2026-06-19 15:18:37  INFO      [classification.py:112]    ⏭ Matched face_20260618_141602_085.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:37  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141704_342.jpg → similarity: 0.9991
+2026-06-19 15:18:37  INFO      [classification.py:112]    ⏭ Matched face_20260618_141704_342.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:37  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_412.jpg → similarity: 0.9999
+2026-06-19 15:18:37  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_412.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:37  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_612.jpg → similarity: 0.9999
+2026-06-19 15:18:37  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_612.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:37  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_527.jpg → similarity: 0.9997
+2026-06-19 15:18:37  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_527.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:38  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141530_615.jpg → similarity: 0.9999
+2026-06-19 15:18:38  INFO      [classification.py:112]    ⏭ Matched face_20260618_141530_615.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:38  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141601_497.jpg → similarity: 0.9998
+2026-06-19 15:18:38  INFO      [classification.py:112]    ⏭ Matched face_20260618_141601_497.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:38  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141522_316.jpg → similarity: 0.9998
+2026-06-19 15:18:38  INFO      [classification.py:112]    ⏭ Matched face_20260618_141522_316.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:38  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141530_805.jpg → similarity: 0.9989
+2026-06-19 15:18:38  INFO      [classification.py:112]    ⏭ Matched face_20260618_141530_805.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:38  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141712_239.jpg → similarity: 0.9998
+2026-06-19 15:18:38  INFO      [classification.py:112]    ⏭ Matched face_20260618_141712_239.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:39  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_389.jpg → similarity: 0.9998
+2026-06-19 15:18:39  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_389.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:39  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_292.jpg → similarity: 0.9998
+2026-06-19 15:18:39  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_292.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:39  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_818.jpg → similarity: 1.0000
+2026-06-19 15:18:39  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_818.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:39  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141522_713.jpg → similarity: 0.9998
+2026-06-19 15:18:39  INFO      [classification.py:112]    ⏭ Matched face_20260618_141522_713.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:39  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_995.jpg → similarity: 0.9998
+2026-06-19 15:18:39  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_995.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:39  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_190.jpg → similarity: 0.9997
+2026-06-19 15:18:39  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_190.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:40  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141517_814.jpg → similarity: 0.9999
+2026-06-19 15:18:40  INFO      [classification.py:112]    ⏭ Matched face_20260618_141517_814.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:40  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141526_808.jpg → similarity: 1.0000
+2026-06-19 15:18:40  INFO      [classification.py:112]    ⏭ Matched face_20260618_141526_808.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:40  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141522_412.jpg → similarity: 0.9999
+2026-06-19 15:18:40  INFO      [classification.py:112]    ⏭ Matched face_20260618_141522_412.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:40  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_312.jpg → similarity: 0.9999
+2026-06-19 15:18:40  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_312.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:40  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141712_129.jpg → similarity: 0.9998
+2026-06-19 15:18:40  INFO      [classification.py:112]    ⏭ Matched face_20260618_141712_129.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:40  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_792.jpg → similarity: 0.9998
+2026-06-19 15:18:40  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_792.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:41  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_115.jpg → similarity: 0.9999
+2026-06-19 15:18:41  INFO      [classification.py:112]    ⏭ Matched face_20260618_141527_115.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:41  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141658_647.jpg → similarity: 0.9998
+2026-06-19 15:18:41  INFO      [classification.py:112]    ⏭ Matched face_20260618_141658_647.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:41  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_138.jpg → similarity: 0.9998
+2026-06-19 15:18:41  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_138.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:41  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_214.jpg → similarity: 0.9999
+2026-06-19 15:18:41  INFO      [classification.py:112]    ⏭ Matched face_20260618_141527_214.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:41  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141601_586.jpg → similarity: 0.9998
+2026-06-19 15:18:41  INFO      [classification.py:112]    ⏭ Matched face_20260618_141601_586.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:42  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141530_510.jpg → similarity: 1.0000
+2026-06-19 15:18:42  INFO      [classification.py:112]    ⏭ Matched face_20260618_141530_510.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:42  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_719.jpg → similarity: 0.9999
+2026-06-19 15:18:42  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_719.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:42  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141546_299.jpg → similarity: 0.9993
+2026-06-19 15:18:42  INFO      [classification.py:112]    ⏭ Matched face_20260618_141546_299.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:42  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_346.jpg → similarity: 0.9998
+2026-06-19 15:18:42  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_346.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:42  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_612.jpg → similarity: 0.9999
+2026-06-19 15:18:42  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_612.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:42  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_909.jpg → similarity: 0.9986
+2026-06-19 15:18:42  INFO      [classification.py:112]    ⏭ Matched face_20260618_141527_909.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:43  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_892.jpg → similarity: 0.9998
+2026-06-19 15:18:43  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_892.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:43  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141525_027.jpg → similarity: 0.9997
+2026-06-19 15:18:43  INFO      [classification.py:112]    ⏭ Matched face_20260618_141525_027.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:43  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_312.jpg → similarity: 0.9990
+2026-06-19 15:18:43  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_312.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:43  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_214.jpg → similarity: 0.9980
+2026-06-19 15:18:43  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_214.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:43  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141602_387.jpg → similarity: 0.9999
+2026-06-19 15:18:43  INFO      [classification.py:112]    ⏭ Matched face_20260618_141602_387.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:44  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_613.jpg → similarity: 0.9997
+2026-06-19 15:18:44  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_613.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:44  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_920.jpg → similarity: 0.9998
+2026-06-19 15:18:44  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_920.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:44  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141701_341.jpg → similarity: 0.9998
+2026-06-19 15:18:44  INFO      [classification.py:112]    ⏭ Matched face_20260618_141701_341.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:44  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141701_241.jpg → similarity: 0.9999
+2026-06-19 15:18:44  INFO      [classification.py:112]    ⏭ Matched face_20260618_141701_241.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:44  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_109.jpg → similarity: 0.9986
+2026-06-19 15:18:44  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_109.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:44  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4441
+2026-06-19 15:18:45  DEBUG     [classification.py:45]  face_20260618_141525_122.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4569
+2026-06-19 15:18:45  DEBUG     [classification.py:45]  face_20260618_141527_511.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7233
+2026-06-19 15:18:45  DEBUG     [classification.py:45]  face_20260618_141658_344.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4055
+2026-06-19 15:18:45  DEBUG     [classification.py:45]  face_20260618_141653_362.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7266
+2026-06-19 15:18:45  DEBUG     [classification.py:45]  face_20260618_141656_937.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4147
+2026-06-19 15:18:46  DEBUG     [classification.py:45]  face_20260618_141525_506.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.3917
+2026-06-19 15:18:46  DEBUG     [classification.py:45]  face_20260618_141658_743.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4804
+2026-06-19 15:18:46  DEBUG     [classification.py:45]  face_20260618_141602_286.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5522
+2026-06-19 15:18:46  DEBUG     [classification.py:45]  face_20260618_141528_408.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7171
+2026-06-19 15:18:46  DEBUG     [classification.py:45]  face_20260618_141657_942.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5057
+2026-06-19 15:18:47  DEBUG     [classification.py:45]  face_20260618_141520_820.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4413
+2026-06-19 15:18:47  DEBUG     [classification.py:45]  face_20260618_141521_719.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.2970
+2026-06-19 15:18:47  DEBUG     [classification.py:45]  face_20260618_141654_940.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.6480
+2026-06-19 15:18:47  DEBUG     [classification.py:45]  face_20260618_141658_245.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4512
+2026-06-19 15:18:47  DEBUG     [classification.py:45]  face_20260618_141704_156.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7926
+2026-06-19 15:18:47  DEBUG     [classification.py:45]  face_20260618_141545_096.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4228
+2026-06-19 15:18:48  DEBUG     [classification.py:45]  face_20260618_141658_143.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4006
+2026-06-19 15:18:48  DEBUG     [classification.py:45]  face_20260618_141705_131.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5027
+2026-06-19 15:18:48  DEBUG     [classification.py:45]  face_20260618_141602_085.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5422
+2026-06-19 15:18:48  DEBUG     [classification.py:45]  face_20260618_141704_342.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5285
+2026-06-19 15:18:48  DEBUG     [classification.py:45]  face_20260618_141520_412.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5069
+2026-06-19 15:18:49  DEBUG     [classification.py:45]  face_20260618_141518_612.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.6146
+2026-06-19 15:18:49  DEBUG     [classification.py:45]  face_20260618_141711_527.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5696
+2026-06-19 15:18:49  DEBUG     [classification.py:45]  face_20260618_141530_615.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.6858
+2026-06-19 15:18:49  DEBUG     [classification.py:45]  face_20260618_141601_497.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.6950
+2026-06-19 15:18:49  DEBUG     [classification.py:45]  face_20260618_141522_316.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.3481
+2026-06-19 15:18:50  DEBUG     [classification.py:45]  face_20260618_141530_805.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.8347
+2026-06-19 15:18:50  DEBUG     [classification.py:45]  face_20260618_141712_239.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7508
+2026-06-19 15:18:50  DEBUG     [classification.py:45]  face_20260618_141545_389.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4304
+2026-06-19 15:18:50  DEBUG     [classification.py:45]  face_20260618_141545_292.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4233
+2026-06-19 15:18:50  DEBUG     [classification.py:45]  face_20260618_141518_818.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5735
+2026-06-19 15:18:50  DEBUG     [classification.py:45]  face_20260618_141522_713.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7286
+2026-06-19 15:18:51  DEBUG     [classification.py:45]  face_20260618_141545_995.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.3847
+2026-06-19 15:18:51  DEBUG     [classification.py:45]  face_20260618_141545_190.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4137
+2026-06-19 15:18:51  DEBUG     [classification.py:45]  face_20260618_141517_814.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.6164
+2026-06-19 15:18:51  DEBUG     [classification.py:45]  face_20260618_141526_808.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4253
+2026-06-19 15:18:51  DEBUG     [classification.py:45]  face_20260618_141522_412.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.3773
+2026-06-19 15:18:52  DEBUG     [classification.py:45]  face_20260618_141520_312.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5648
+2026-06-19 15:18:52  DEBUG     [classification.py:45]  face_20260618_141712_129.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7600
+2026-06-19 15:18:52  DEBUG     [classification.py:45]  face_20260618_141545_792.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4437
+2026-06-19 15:18:52  DEBUG     [classification.py:45]  face_20260618_141527_115.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4668
+2026-06-19 15:18:52  DEBUG     [classification.py:45]  face_20260618_141658_647.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4503
+2026-06-19 15:18:52  DEBUG     [classification.py:45]  face_20260618_141657_138.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.3721
+2026-06-19 15:18:53  DEBUG     [classification.py:45]  face_20260618_141527_214.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5696
+2026-06-19 15:18:53  DEBUG     [classification.py:45]  face_20260618_141601_586.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.6925
+2026-06-19 15:18:53  DEBUG     [classification.py:45]  face_20260618_141530_510.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4826
+2026-06-19 15:18:53  DEBUG     [classification.py:45]  face_20260618_141518_719.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.6466
+2026-06-19 15:18:53  DEBUG     [classification.py:45]  face_20260618_141546_299.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5899
+2026-06-19 15:18:54  DEBUG     [classification.py:45]  face_20260618_141657_346.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4079
+2026-06-19 15:18:54  DEBUG     [classification.py:45]  face_20260618_141520_612.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.3991
+2026-06-19 15:18:54  DEBUG     [classification.py:45]  face_20260618_141527_909.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7024
+2026-06-19 15:18:54  DEBUG     [classification.py:45]  face_20260618_141545_892.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4536
+2026-06-19 15:18:54  DEBUG     [classification.py:45]  face_20260618_141525_027.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5212
+2026-06-19 15:18:54  DEBUG     [classification.py:45]  face_20260618_141528_312.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.6464
+2026-06-19 15:18:55  DEBUG     [classification.py:45]  face_20260618_141528_214.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7461
+2026-06-19 15:18:55  DEBUG     [classification.py:45]  face_20260618_141602_387.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5593
+2026-06-19 15:18:55  DEBUG     [classification.py:45]  face_20260618_141528_613.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7137
+2026-06-19 15:18:55  DEBUG     [classification.py:45]  face_20260618_141520_920.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.3831
+2026-06-19 15:18:55  DEBUG     [classification.py:45]  face_20260618_141701_341.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4634
+2026-06-19 15:18:56  DEBUG     [classification.py:45]  face_20260618_141701_241.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5047
+2026-06-19 15:18:56  DEBUG     [classification.py:45]  face_20260618_141528_109.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.6741
+2026-06-19 15:18:56  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141710_838.jpg → similarity: 0.9917
+2026-06-19 15:18:56  INFO      [classification.py:112]    ⏭ Matched face_20260618_141710_838.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:56  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141530_104.jpg → similarity: 0.9999
+2026-06-19 15:18:56  INFO      [classification.py:112]    ⏭ Matched face_20260618_141530_104.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:56  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_502.jpg → similarity: 0.9995
+2026-06-19 15:18:56  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_502.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:56  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_520.jpg → similarity: 1.0000
+2026-06-19 15:18:56  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_520.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:57  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141701_139.jpg → similarity: 0.9998
+2026-06-19 15:18:57  INFO      [classification.py:112]    ⏭ Matched face_20260618_141701_139.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:57  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141704_747.jpg → similarity: 0.9993
+2026-06-19 15:18:57  INFO      [classification.py:112]    ⏭ Matched face_20260618_141704_747.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:57  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141530_704.jpg → similarity: 0.9998
+2026-06-19 15:18:57  INFO      [classification.py:112]    ⏭ Matched face_20260618_141530_704.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:57  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141704_835.jpg → similarity: 0.9997
+2026-06-19 15:18:57  INFO      [classification.py:112]    ⏭ Matched face_20260618_141704_835.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:57  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141602_587.jpg → similarity: 0.9999
+2026-06-19 15:18:57  INFO      [classification.py:112]    ⏭ Matched face_20260618_141602_587.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:58  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141656_739.jpg → similarity: 0.9998
+2026-06-19 15:18:58  INFO      [classification.py:112]    ⏭ Matched face_20260618_141656_739.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:58  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141653_944.jpg → similarity: 0.9990
+2026-06-19 15:18:58  INFO      [classification.py:112]    ⏭ Matched face_20260618_141653_944.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:58  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_918.jpg → similarity: 0.9997
+2026-06-19 15:18:58  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_918.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:58  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_310.jpg → similarity: 0.9989
+2026-06-19 15:18:58  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_310.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:58  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_419.jpg → similarity: 1.0000
+2026-06-19 15:18:58  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_419.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:58  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141655_143.jpg → similarity: 0.9987
+2026-06-19 15:18:58  INFO      [classification.py:112]    ⏭ Matched face_20260618_141655_143.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:59  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141712_333.jpg → similarity: 0.9998
+2026-06-19 15:18:59  INFO      [classification.py:112]    ⏭ Matched face_20260618_141712_333.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:59  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141522_619.jpg → similarity: 0.9998
+2026-06-19 15:18:59  INFO      [classification.py:112]    ⏭ Matched face_20260618_141522_619.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:59  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141522_017.jpg → similarity: 0.9997
+2026-06-19 15:18:59  INFO      [classification.py:112]    ⏭ Matched face_20260618_141522_017.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:59  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_714.jpg → similarity: 0.9995
+2026-06-19 15:18:59  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_714.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:59  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141546_198.jpg → similarity: 0.9996
+2026-06-19 15:18:59  INFO      [classification.py:112]    ⏭ Matched face_20260618_141546_198.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:18:59  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141659_438.jpg → similarity: 0.9999
+2026-06-19 15:18:59  INFO      [classification.py:112]    ⏭ Matched face_20260618_141659_438.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:00  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_904.jpg → similarity: 0.9999
+2026-06-19 15:19:00  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_904.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:00  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141601_985.jpg → similarity: 0.9999
+2026-06-19 15:19:00  INFO      [classification.py:112]    ⏭ Matched face_20260618_141601_985.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:00  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141525_220.jpg → similarity: 1.0000
+2026-06-19 15:19:00  INFO      [classification.py:112]    ⏭ Matched face_20260618_141525_220.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:00  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_105.jpg → similarity: 0.9984
+2026-06-19 15:19:00  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_105.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:00  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_310.jpg → similarity: 0.9998
+2026-06-19 15:19:00  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_310.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:01  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141704_938.jpg → similarity: 0.9997
+2026-06-19 15:19:01  INFO      [classification.py:112]    ⏭ Matched face_20260618_141704_938.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:01  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_715.jpg → similarity: 0.9996
+2026-06-19 15:19:01  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_715.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:01  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141658_844.jpg → similarity: 0.9999
+2026-06-19 15:19:01  INFO      [classification.py:112]    ⏭ Matched face_20260618_141658_844.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:01  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141525_409.jpg → similarity: 1.0000
+2026-06-19 15:19:01  INFO      [classification.py:112]    ⏭ Matched face_20260618_141525_409.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:01  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141530_905.jpg → similarity: 0.9829
+2026-06-19 15:19:01  INFO      [classification.py:112]    ⏭ Matched face_20260618_141530_905.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:01  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_416.jpg → similarity: 0.9992
+2026-06-19 15:19:01  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_416.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:02  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_203.jpg → similarity: 0.9983
+2026-06-19 15:19:02  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_203.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:02  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141525_714.jpg → similarity: 1.0000
+2026-06-19 15:19:02  INFO      [classification.py:112]    ⏭ Matched face_20260618_141525_714.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:02  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141526_107.jpg → similarity: 1.0000
+2026-06-19 15:19:02  INFO      [classification.py:112]    ⏭ Matched face_20260618_141526_107.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:02  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_710.jpg → similarity: 0.9977
+2026-06-19 15:19:02  INFO      [classification.py:112]    ⏭ Matched face_20260618_141527_710.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:02  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141712_029.jpg → similarity: 0.9997
+2026-06-19 15:19:02  INFO      [classification.py:112]    ⏭ Matched face_20260618_141712_029.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:03  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141546_100.jpg → similarity: 0.9998
+2026-06-19 15:19:03  INFO      [classification.py:112]    ⏭ Matched face_20260618_141546_100.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:03  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141656_838.jpg → similarity: 0.9998
+2026-06-19 15:19:03  INFO      [classification.py:112]    ⏭ Matched face_20260618_141656_838.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:03  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141525_914.jpg → similarity: 1.0000
+2026-06-19 15:19:03  INFO      [classification.py:112]    ⏭ Matched face_20260618_141525_914.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:03  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141659_245.jpg → similarity: 0.9999
+2026-06-19 15:19:03  INFO      [classification.py:112]    ⏭ Matched face_20260618_141659_245.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:03  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_804.jpg → similarity: 0.9999
+2026-06-19 15:19:03  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_804.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:03  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141659_147.jpg → similarity: 0.9999
+2026-06-19 15:19:03  INFO      [classification.py:112]    ⏭ Matched face_20260618_141659_147.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:04  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_501.jpg → similarity: 0.9998
+2026-06-19 15:19:04  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_501.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:04  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141656_539.jpg → similarity: 0.9997
+2026-06-19 15:19:04  INFO      [classification.py:112]    ⏭ Matched face_20260618_141656_539.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:04  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141530_409.jpg → similarity: 1.0000
+2026-06-19 15:19:04  INFO      [classification.py:112]    ⏭ Matched face_20260618_141530_409.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:04  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141602_479.jpg → similarity: 0.9999
+2026-06-19 15:19:04  INFO      [classification.py:112]    ⏭ Matched face_20260618_141602_479.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:04  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_817.jpg → similarity: 0.9998
+2026-06-19 15:19:04  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_817.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:04  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141601_692.jpg → similarity: 0.9998
+2026-06-19 15:19:04  INFO      [classification.py:112]    ⏭ Matched face_20260618_141601_692.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:05  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_692.jpg → similarity: 0.9998
+2026-06-19 15:19:05  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_692.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:05  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_512.jpg → similarity: 1.0000
+2026-06-19 15:19:05  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_512.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:05  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141530_203.jpg → similarity: 0.9999
+2026-06-19 15:19:05  INFO      [classification.py:112]    ⏭ Matched face_20260618_141530_203.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:05  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_629.jpg → similarity: 0.9998
+2026-06-19 15:19:05  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_629.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:05  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141526_708.jpg → similarity: 1.0000
+2026-06-19 15:19:05  INFO      [classification.py:112]    ⏭ Matched face_20260618_141526_708.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:05  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141654_637.jpg → similarity: 0.9958
+2026-06-19 15:19:05  INFO      [classification.py:112]    ⏭ Matched face_20260618_141654_637.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:06  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_639.jpg → similarity: 0.9997
+2026-06-19 15:19:06  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_639.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:06  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_332.jpg → similarity: 0.9995
+2026-06-19 15:19:06  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_332.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:06  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141704_543.jpg → similarity: 0.9996
+2026-06-19 15:19:06  INFO      [classification.py:112]    ⏭ Matched face_20260618_141704_543.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:06  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_242.jpg → similarity: 0.9997
+2026-06-19 15:19:06  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_242.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:06  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141658_946.jpg → similarity: 0.9998
+2026-06-19 15:19:06  INFO      [classification.py:112]    ⏭ Matched face_20260618_141658_946.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:07  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141705_037.jpg → similarity: 0.9997
+2026-06-19 15:19:07  INFO      [classification.py:112]    ⏭ Matched face_20260618_141705_037.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:07  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141704_642.jpg → similarity: 0.9993
+2026-06-19 15:19:07  INFO      [classification.py:112]    ⏭ Matched face_20260618_141704_642.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:07  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141526_609.jpg → similarity: 1.0000
+2026-06-19 15:19:07  INFO      [classification.py:112]    ⏭ Matched face_20260618_141526_609.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:07  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141656_641.jpg → similarity: 0.9997
+2026-06-19 15:19:07  INFO      [classification.py:112]    ⏭ Matched face_20260618_141656_641.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:07  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_028.jpg → similarity: 0.9954
+2026-06-19 15:19:07  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_028.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:07  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_211.jpg → similarity: 0.9999
+2026-06-19 15:19:07  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_211.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:08  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141658_537.jpg → similarity: 0.9998
+2026-06-19 15:19:08  INFO      [classification.py:112]    ⏭ Matched face_20260618_141658_537.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:08  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_019.jpg → similarity: 1.0000
+2026-06-19 15:19:08  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_019.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:08  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_005.jpg → similarity: 0.9997
+2026-06-19 15:19:08  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_005.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:08  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_210.jpg → similarity: 0.9998
+2026-06-19 15:19:08  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_210.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:08  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_211.jpg → similarity: 0.9999
+2026-06-19 15:19:08  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_211.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:09  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141659_534.jpg → similarity: 0.9998
+2026-06-19 15:19:09  INFO      [classification.py:112]    ⏭ Matched face_20260618_141659_534.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:09  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_011.jpg → similarity: 0.9998
+2026-06-19 15:19:09  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_011.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:09  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_613.jpg → similarity: 0.9999
+2026-06-19 15:19:09  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_613.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:09  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141659_038.jpg → similarity: 0.9998
+2026-06-19 15:19:09  INFO      [classification.py:112]    ⏭ Matched face_20260618_141659_038.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:09  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_818.jpg → similarity: 1.0000
+2026-06-19 15:19:09  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_818.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:09  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_412.jpg → similarity: 0.9997
+2026-06-19 15:19:09  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_412.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:10  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141710_155.jpg → similarity: 0.9607
+2026-06-19 15:19:10  INFO      [classification.py:112]    ⏭ Matched face_20260618_141710_155.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:10  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_810.jpg → similarity: 0.9972
+2026-06-19 15:19:10  INFO      [classification.py:112]    ⏭ Matched face_20260618_141527_810.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:10  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_905.jpg → similarity: 0.9982
+2026-06-19 15:19:10  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_905.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:10  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141522_819.jpg → similarity: 0.9992
+2026-06-19 15:19:10  INFO      [classification.py:112]    ⏭ Matched face_20260618_141522_819.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:10  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_230.jpg → similarity: 0.9991
+2026-06-19 15:19:10  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_230.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:11  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141517_914.jpg → similarity: 0.9999
+2026-06-19 15:19:11  INFO      [classification.py:112]    ⏭ Matched face_20260618_141517_914.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:11  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141602_683.jpg → similarity: 0.9998
+2026-06-19 15:19:11  INFO      [classification.py:112]    ⏭ Matched face_20260618_141602_683.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:11  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_826.jpg → similarity: 0.9998
+2026-06-19 15:19:11  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_826.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:11  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141526_014.jpg → similarity: 1.0000
+2026-06-19 15:19:11  INFO      [classification.py:112]    ⏭ Matched face_20260618_141526_014.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:11  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141704_441.jpg → similarity: 0.9995
+2026-06-19 15:19:11  INFO      [classification.py:112]    ⏭ Matched face_20260618_141704_441.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:11  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141602_186.jpg → similarity: 0.9999
+2026-06-19 15:19:11  INFO      [classification.py:112]    ⏭ Matched face_20260618_141602_186.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:12  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141655_042.jpg → similarity: 0.9990
+2026-06-19 15:19:12  INFO      [classification.py:112]    ⏭ Matched face_20260618_141655_042.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:12  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_918.jpg → similarity: 0.9999
+2026-06-19 15:19:12  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_918.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:12  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_038.jpg → similarity: 0.9998
+2026-06-19 15:19:12  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_038.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:12  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141522_119.jpg → similarity: 0.9997
+2026-06-19 15:19:12  INFO      [classification.py:112]    ⏭ Matched face_20260618_141522_119.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:12  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_603.jpg → similarity: 0.9999
+2026-06-19 15:19:12  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_603.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:13  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141705_337.jpg → similarity: 0.9995
+2026-06-19 15:19:13  INFO      [classification.py:112]    ⏭ Matched face_20260618_141705_337.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:13  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141544_905.jpg → similarity: 0.9996
+2026-06-19 15:19:13  INFO      [classification.py:112]    ⏭ Matched face_20260618_141544_905.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:13  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141656_438.jpg → similarity: 0.9997
+2026-06-19 15:19:13  INFO      [classification.py:112]    ⏭ Matched face_20260618_141656_438.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:13  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141659_635.jpg → similarity: 0.9997
+2026-06-19 15:19:13  INFO      [classification.py:112]    ⏭ Matched face_20260618_141659_635.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:13  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_516.jpg → similarity: 0.9983
+2026-06-19 15:19:13  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_516.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:13  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141704_248.jpg → similarity: 0.9991
+2026-06-19 15:19:13  INFO      [classification.py:112]    ⏭ Matched face_20260618_141704_248.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:14  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141601_782.jpg → similarity: 0.9998
+2026-06-19 15:19:14  INFO      [classification.py:112]    ⏭ Matched face_20260618_141601_782.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:14  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141526_409.jpg → similarity: 1.0000
+2026-06-19 15:19:14  INFO      [classification.py:112]    ⏭ Matched face_20260618_141526_409.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:14  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141525_814.jpg → similarity: 1.0000
+2026-06-19 15:19:14  INFO      [classification.py:112]    ⏭ Matched face_20260618_141525_814.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:14  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_738.jpg → similarity: 0.9998
+2026-06-19 15:19:14  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_738.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:14  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_010.jpg → similarity: 0.9982
+2026-06-19 15:19:14  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_010.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:15  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141659_346.jpg → similarity: 0.9999
+2026-06-19 15:19:15  INFO      [classification.py:112]    ⏭ Matched face_20260618_141659_346.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:15  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_918.jpg → similarity: 1.0000
+2026-06-19 15:19:15  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_918.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:15  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141705_234.jpg → similarity: 0.9996
+2026-06-19 15:19:15  INFO      [classification.py:112]    ⏭ Matched face_20260618_141705_234.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:15  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_510.jpg → similarity: 0.9998
+2026-06-19 15:19:15  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_510.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:15  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_618.jpg → similarity: 0.9998
+2026-06-19 15:19:15  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_618.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:15  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141517_636.jpg → similarity: 0.9894
+2026-06-19 15:19:15  INFO      [classification.py:112]    ⏭ Matched face_20260618_141517_636.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:16  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141526_209.jpg → similarity: 1.0000
+2026-06-19 15:19:16  INFO      [classification.py:112]    ⏭ Matched face_20260618_141526_209.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:16  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141601_885.jpg → similarity: 0.9998
+2026-06-19 15:19:16  INFO      [classification.py:112]    ⏭ Matched face_20260618_141601_885.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:16  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141526_307.jpg → similarity: 1.0000
+2026-06-19 15:19:16  INFO      [classification.py:112]    ⏭ Matched face_20260618_141526_307.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:16  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_518.jpg → similarity: 0.9995
+2026-06-19 15:19:16  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_518.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:16  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_116.jpg → similarity: 1.0000
+2026-06-19 15:19:16  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_116.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:16  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_119.jpg → similarity: 0.9999
+2026-06-19 15:19:16  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_119.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:17  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_537.jpg → similarity: 0.9998
+2026-06-19 15:19:17  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_537.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:17  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_406.jpg → similarity: 0.9999
+2026-06-19 15:19:17  INFO      [classification.py:112]    ⏭ Matched face_20260618_141527_406.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:17  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_015.jpg → similarity: 0.9989
+2026-06-19 15:19:17  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_015.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:17  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_926.jpg → similarity: 0.9998
+2026-06-19 15:19:17  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_926.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:17  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_813.jpg → similarity: 0.9994
+2026-06-19 15:19:17  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_813.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:17  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_849.jpg → similarity: 0.9998
+2026-06-19 15:19:17  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_849.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:18  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_216.jpg → similarity: 1.0000
+2026-06-19 15:19:18  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_216.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:18  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_310.jpg → similarity: 0.9999
+2026-06-19 15:19:18  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_310.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:18  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_440.jpg → similarity: 0.9998
+2026-06-19 15:19:18  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_440.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:18  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_314.jpg → similarity: 1.0000
+2026-06-19 15:19:18  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_314.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:18  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141522_218.jpg → similarity: 0.9997
+2026-06-19 15:19:18  INFO      [classification.py:112]    ⏭ Matched face_20260618_141522_218.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:19  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141701_044.jpg → similarity: 0.9997
+2026-06-19 15:19:19  INFO      [classification.py:112]    ⏭ Matched face_20260618_141701_044.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:19  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141654_242.jpg → similarity: 0.9964
+2026-06-19 15:19:19  INFO      [classification.py:112]    ⏭ Matched face_20260618_141654_242.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:19  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_006.jpg → similarity: 1.0000
+2026-06-19 15:19:19  INFO      [classification.py:112]    ⏭ Matched face_20260618_141527_006.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:19  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141710_940.jpg → similarity: 0.9959
+2026-06-19 15:19:19  INFO      [classification.py:112]    ⏭ Matched face_20260618_141710_940.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:19  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141656_154.jpg → similarity: 0.9992
+2026-06-19 15:19:19  INFO      [classification.py:112]    ⏭ Matched face_20260618_141656_154.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:19  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141653_454.jpg → similarity: 0.9990
+2026-06-19 15:19:19  INFO      [classification.py:112]    ⏭ Matched face_20260618_141653_454.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:20  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141710_748.jpg → similarity: 0.9731
+2026-06-19 15:19:20  INFO      [classification.py:112]    ⏭ Matched face_20260618_141710_748.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:20  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_310.jpg → similarity: 0.9999
+2026-06-19 15:19:20  INFO      [classification.py:112]    ⏭ Matched face_20260618_141527_310.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:20  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_129.jpg → similarity: 0.9983
+2026-06-19 15:19:20  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_129.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:20  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_719.jpg → similarity: 1.0000
+2026-06-19 15:19:20  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_719.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:20  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141525_309.jpg → similarity: 1.0000
+2026-06-19 15:19:20  INFO      [classification.py:112]    ⏭ Matched face_20260618_141525_309.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:20  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_431.jpg → similarity: 0.9995
+2026-06-19 15:19:20  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_431.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:21  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_026.jpg → similarity: 0.9999
+2026-06-19 15:19:21  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_026.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:21  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_726.jpg → similarity: 0.9999
+2026-06-19 15:19:21  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_726.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:21  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141658_446.jpg → similarity: 0.9998
+2026-06-19 15:19:21  INFO      [classification.py:112]    ⏭ Matched face_20260618_141658_446.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:21  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_021.jpg → similarity: 0.9999
+2026-06-19 15:19:21  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_021.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:21  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_110.jpg → similarity: 1.0000
+2026-06-19 15:19:21  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_110.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:21  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141522_519.jpg → similarity: 0.9999
+2026-06-19 15:19:21  INFO      [classification.py:112]    ⏭ Matched face_20260618_141522_519.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:22  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_410.jpg → similarity: 0.9999
+2026-06-19 15:19:22  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_410.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:22  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_609.jpg → similarity: 0.9976
+2026-06-19 15:19:22  INFO      [classification.py:112]    ⏭ Matched face_20260618_141527_609.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:22  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_703.jpg → similarity: 1.0000
+2026-06-19 15:19:22  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_703.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:22  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141653_644.jpg → similarity: 0.9992
+2026-06-19 15:19:22  INFO      [classification.py:112]    ⏭ Matched face_20260618_141653_644.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:22  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_110.jpg → similarity: 0.9998
+2026-06-19 15:19:22  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_110.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:23  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141526_905.jpg → similarity: 1.0000
+2026-06-19 15:19:23  INFO      [classification.py:112]    ⏭ Matched face_20260618_141526_905.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:23  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141659_734.jpg → similarity: 0.9996
+2026-06-19 15:19:23  INFO      [classification.py:112]    ⏭ Matched face_20260618_141659_734.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:23  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141530_309.jpg → similarity: 0.9999
+2026-06-19 15:19:23  INFO      [classification.py:112]    ⏭ Matched face_20260618_141530_309.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:19:23  INFO      [classification.py:91]  Created person_2 — reference: face_20260618_141708_743.jpg
+2026-06-19 15:19:23  INFO      [classification.py:119]  Classification complete — 2 person(s) found for calendar 2107.
+2026-06-19 15:21:24  INFO      [classification.py:78]  Starting classification for calendar 2107 — 216 image(s) found.
+2026-06-19 15:21:24  INFO      [classification.py:91]  Created person_1 — reference: face_20260618_141525_609.jpg
+2026-06-19 15:21:25  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141525_122.jpg → similarity: 0.9999
+2026-06-19 15:21:25  INFO      [classification.py:110]    ✔ Copied face_20260618_141525_122.jpg → person_1 (2/7)
+2026-06-19 15:21:25  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_511.jpg → similarity: 0.9993
+2026-06-19 15:21:25  INFO      [classification.py:110]    ✔ Copied face_20260618_141527_511.jpg → person_1 (3/7)
+2026-06-19 15:21:25  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141658_344.jpg → similarity: 0.9998
+2026-06-19 15:21:25  INFO      [classification.py:110]    ✔ Copied face_20260618_141658_344.jpg → person_1 (4/7)
+2026-06-19 15:21:25  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141653_362.jpg → similarity: 0.9993
+2026-06-19 15:21:25  INFO      [classification.py:110]    ✔ Copied face_20260618_141653_362.jpg → person_1 (5/7)
+2026-06-19 15:21:25  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141656_937.jpg → similarity: 0.9998
+2026-06-19 15:21:25  INFO      [classification.py:110]    ✔ Copied face_20260618_141656_937.jpg → person_1 (6/7)
+2026-06-19 15:21:25  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141525_506.jpg → similarity: 1.0000
+2026-06-19 15:21:25  INFO      [classification.py:110]    ✔ Copied face_20260618_141525_506.jpg → person_1 (7/7)
+2026-06-19 15:21:26  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141658_743.jpg → similarity: 0.9999
+2026-06-19 15:21:26  INFO      [classification.py:112]    ⏭ Matched face_20260618_141658_743.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:26  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141602_286.jpg → similarity: 0.9999
+2026-06-19 15:21:26  INFO      [classification.py:112]    ⏭ Matched face_20260618_141602_286.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:26  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_408.jpg → similarity: 0.9977
+2026-06-19 15:21:26  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_408.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:26  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_942.jpg → similarity: 0.9999
+2026-06-19 15:21:26  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_942.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:26  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_820.jpg → similarity: 0.9996
+2026-06-19 15:21:26  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_820.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:27  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_719.jpg → similarity: 0.9998
+2026-06-19 15:21:27  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_719.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:27  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141654_940.jpg → similarity: 0.9986
+2026-06-19 15:21:27  INFO      [classification.py:112]    ⏭ Matched face_20260618_141654_940.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:27  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141658_245.jpg → similarity: 0.9998
+2026-06-19 15:21:27  INFO      [classification.py:112]    ⏭ Matched face_20260618_141658_245.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:27  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141704_156.jpg → similarity: 0.9974
+2026-06-19 15:21:27  INFO      [classification.py:112]    ⏭ Matched face_20260618_141704_156.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:27  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_096.jpg → similarity: 0.9997
+2026-06-19 15:21:27  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_096.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:27  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141658_143.jpg → similarity: 0.9999
+2026-06-19 15:21:27  INFO      [classification.py:112]    ⏭ Matched face_20260618_141658_143.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:28  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141705_131.jpg → similarity: 0.9997
+2026-06-19 15:21:28  INFO      [classification.py:112]    ⏭ Matched face_20260618_141705_131.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:28  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141602_085.jpg → similarity: 0.9999
+2026-06-19 15:21:28  INFO      [classification.py:112]    ⏭ Matched face_20260618_141602_085.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:28  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141704_342.jpg → similarity: 0.9991
+2026-06-19 15:21:28  INFO      [classification.py:112]    ⏭ Matched face_20260618_141704_342.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:28  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_412.jpg → similarity: 0.9999
+2026-06-19 15:21:28  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_412.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:28  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_612.jpg → similarity: 0.9999
+2026-06-19 15:21:28  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_612.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:28  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_527.jpg → similarity: 0.9997
+2026-06-19 15:21:28  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_527.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:29  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141530_615.jpg → similarity: 0.9999
+2026-06-19 15:21:29  INFO      [classification.py:112]    ⏭ Matched face_20260618_141530_615.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:29  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141601_497.jpg → similarity: 0.9998
+2026-06-19 15:21:29  INFO      [classification.py:112]    ⏭ Matched face_20260618_141601_497.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:29  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141522_316.jpg → similarity: 0.9998
+2026-06-19 15:21:29  INFO      [classification.py:112]    ⏭ Matched face_20260618_141522_316.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:29  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141530_805.jpg → similarity: 0.9989
+2026-06-19 15:21:29  INFO      [classification.py:112]    ⏭ Matched face_20260618_141530_805.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:29  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141712_239.jpg → similarity: 0.9998
+2026-06-19 15:21:29  INFO      [classification.py:112]    ⏭ Matched face_20260618_141712_239.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:29  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_389.jpg → similarity: 0.9998
+2026-06-19 15:21:29  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_389.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:30  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_292.jpg → similarity: 0.9998
+2026-06-19 15:21:30  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_292.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:30  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_818.jpg → similarity: 1.0000
+2026-06-19 15:21:30  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_818.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:30  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141522_713.jpg → similarity: 0.9998
+2026-06-19 15:21:30  INFO      [classification.py:112]    ⏭ Matched face_20260618_141522_713.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:30  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_995.jpg → similarity: 0.9998
+2026-06-19 15:21:30  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_995.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:30  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_190.jpg → similarity: 0.9997
+2026-06-19 15:21:30  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_190.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:30  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141517_814.jpg → similarity: 0.9999
+2026-06-19 15:21:30  INFO      [classification.py:112]    ⏭ Matched face_20260618_141517_814.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:31  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141526_808.jpg → similarity: 1.0000
+2026-06-19 15:21:31  INFO      [classification.py:112]    ⏭ Matched face_20260618_141526_808.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:31  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141522_412.jpg → similarity: 0.9999
+2026-06-19 15:21:31  INFO      [classification.py:112]    ⏭ Matched face_20260618_141522_412.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:31  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_312.jpg → similarity: 0.9999
+2026-06-19 15:21:31  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_312.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:31  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141712_129.jpg → similarity: 0.9998
+2026-06-19 15:21:31  INFO      [classification.py:112]    ⏭ Matched face_20260618_141712_129.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:31  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_792.jpg → similarity: 0.9998
+2026-06-19 15:21:31  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_792.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:32  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_115.jpg → similarity: 0.9999
+2026-06-19 15:21:32  INFO      [classification.py:112]    ⏭ Matched face_20260618_141527_115.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:32  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141658_647.jpg → similarity: 0.9998
+2026-06-19 15:21:32  INFO      [classification.py:112]    ⏭ Matched face_20260618_141658_647.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:32  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_138.jpg → similarity: 0.9998
+2026-06-19 15:21:32  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_138.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:32  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_214.jpg → similarity: 0.9999
+2026-06-19 15:21:32  INFO      [classification.py:112]    ⏭ Matched face_20260618_141527_214.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:32  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141601_586.jpg → similarity: 0.9998
+2026-06-19 15:21:32  INFO      [classification.py:112]    ⏭ Matched face_20260618_141601_586.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:32  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141530_510.jpg → similarity: 1.0000
+2026-06-19 15:21:32  INFO      [classification.py:112]    ⏭ Matched face_20260618_141530_510.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:33  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_719.jpg → similarity: 0.9999
+2026-06-19 15:21:33  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_719.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:33  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141546_299.jpg → similarity: 0.9993
+2026-06-19 15:21:33  INFO      [classification.py:112]    ⏭ Matched face_20260618_141546_299.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:33  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_346.jpg → similarity: 0.9998
+2026-06-19 15:21:33  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_346.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:33  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_612.jpg → similarity: 0.9999
+2026-06-19 15:21:33  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_612.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:33  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_909.jpg → similarity: 0.9986
+2026-06-19 15:21:33  INFO      [classification.py:112]    ⏭ Matched face_20260618_141527_909.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:33  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_892.jpg → similarity: 0.9998
+2026-06-19 15:21:33  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_892.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:34  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141525_027.jpg → similarity: 0.9997
+2026-06-19 15:21:34  INFO      [classification.py:112]    ⏭ Matched face_20260618_141525_027.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:34  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_312.jpg → similarity: 0.9990
+2026-06-19 15:21:34  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_312.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:34  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_214.jpg → similarity: 0.9980
+2026-06-19 15:21:34  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_214.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:34  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141602_387.jpg → similarity: 0.9999
+2026-06-19 15:21:34  INFO      [classification.py:112]    ⏭ Matched face_20260618_141602_387.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:34  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_613.jpg → similarity: 0.9997
+2026-06-19 15:21:34  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_613.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:34  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_920.jpg → similarity: 0.9998
+2026-06-19 15:21:34  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_920.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:35  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141701_341.jpg → similarity: 0.9998
+2026-06-19 15:21:35  INFO      [classification.py:112]    ⏭ Matched face_20260618_141701_341.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:35  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141701_241.jpg → similarity: 0.9999
+2026-06-19 15:21:35  INFO      [classification.py:112]    ⏭ Matched face_20260618_141701_241.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:35  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_109.jpg → similarity: 0.9986
+2026-06-19 15:21:35  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_109.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:35  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4441
+2026-06-19 15:21:35  DEBUG     [classification.py:45]  face_20260618_141525_122.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4569
+2026-06-19 15:21:36  DEBUG     [classification.py:45]  face_20260618_141527_511.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7233
+2026-06-19 15:21:36  DEBUG     [classification.py:45]  face_20260618_141658_344.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4055
+2026-06-19 15:21:36  DEBUG     [classification.py:45]  face_20260618_141653_362.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7266
+2026-06-19 15:21:36  DEBUG     [classification.py:45]  face_20260618_141656_937.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4147
+2026-06-19 15:21:36  DEBUG     [classification.py:45]  face_20260618_141525_506.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.3917
+2026-06-19 15:21:36  DEBUG     [classification.py:45]  face_20260618_141658_743.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4804
+2026-06-19 15:21:37  DEBUG     [classification.py:45]  face_20260618_141602_286.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5522
+2026-06-19 15:21:37  DEBUG     [classification.py:45]  face_20260618_141528_408.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7171
+2026-06-19 15:21:37  DEBUG     [classification.py:45]  face_20260618_141657_942.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5057
+2026-06-19 15:21:37  DEBUG     [classification.py:45]  face_20260618_141520_820.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4413
+2026-06-19 15:21:37  DEBUG     [classification.py:45]  face_20260618_141521_719.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.2970
+2026-06-19 15:21:38  DEBUG     [classification.py:45]  face_20260618_141654_940.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.6480
+2026-06-19 15:21:38  DEBUG     [classification.py:45]  face_20260618_141658_245.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4512
+2026-06-19 15:21:38  DEBUG     [classification.py:45]  face_20260618_141704_156.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7926
+2026-06-19 15:21:38  DEBUG     [classification.py:45]  face_20260618_141545_096.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4228
+2026-06-19 15:21:38  DEBUG     [classification.py:45]  face_20260618_141658_143.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4006
+2026-06-19 15:21:38  DEBUG     [classification.py:45]  face_20260618_141705_131.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5027
+2026-06-19 15:21:39  DEBUG     [classification.py:45]  face_20260618_141602_085.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5422
+2026-06-19 15:21:39  DEBUG     [classification.py:45]  face_20260618_141704_342.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5285
+2026-06-19 15:21:39  DEBUG     [classification.py:45]  face_20260618_141520_412.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5069
+2026-06-19 15:21:39  DEBUG     [classification.py:45]  face_20260618_141518_612.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.6146
+2026-06-19 15:21:39  DEBUG     [classification.py:45]  face_20260618_141711_527.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5696
+2026-06-19 15:21:40  DEBUG     [classification.py:45]  face_20260618_141530_615.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.6858
+2026-06-19 15:21:40  DEBUG     [classification.py:45]  face_20260618_141601_497.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.6950
+2026-06-19 15:21:40  DEBUG     [classification.py:45]  face_20260618_141522_316.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.3481
+2026-06-19 15:21:40  DEBUG     [classification.py:45]  face_20260618_141530_805.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.8347
+2026-06-19 15:21:40  DEBUG     [classification.py:45]  face_20260618_141712_239.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7508
+2026-06-19 15:21:40  DEBUG     [classification.py:45]  face_20260618_141545_389.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4304
+2026-06-19 15:21:41  DEBUG     [classification.py:45]  face_20260618_141545_292.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4233
+2026-06-19 15:21:41  DEBUG     [classification.py:45]  face_20260618_141518_818.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5735
+2026-06-19 15:21:41  DEBUG     [classification.py:45]  face_20260618_141522_713.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7286
+2026-06-19 15:21:41  DEBUG     [classification.py:45]  face_20260618_141545_995.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.3847
+2026-06-19 15:21:41  DEBUG     [classification.py:45]  face_20260618_141545_190.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4137
+2026-06-19 15:21:41  DEBUG     [classification.py:45]  face_20260618_141517_814.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.6164
+2026-06-19 15:21:42  DEBUG     [classification.py:45]  face_20260618_141526_808.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4253
+2026-06-19 15:21:42  DEBUG     [classification.py:45]  face_20260618_141522_412.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.3773
+2026-06-19 15:21:42  DEBUG     [classification.py:45]  face_20260618_141520_312.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5648
+2026-06-19 15:21:42  DEBUG     [classification.py:45]  face_20260618_141712_129.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7600
+2026-06-19 15:21:42  DEBUG     [classification.py:45]  face_20260618_141545_792.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4437
+2026-06-19 15:21:43  DEBUG     [classification.py:45]  face_20260618_141527_115.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4668
+2026-06-19 15:21:43  DEBUG     [classification.py:45]  face_20260618_141658_647.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4503
+2026-06-19 15:21:43  DEBUG     [classification.py:45]  face_20260618_141657_138.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.3721
+2026-06-19 15:21:43  DEBUG     [classification.py:45]  face_20260618_141527_214.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5696
+2026-06-19 15:21:43  DEBUG     [classification.py:45]  face_20260618_141601_586.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.6925
+2026-06-19 15:21:43  DEBUG     [classification.py:45]  face_20260618_141530_510.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4826
+2026-06-19 15:21:44  DEBUG     [classification.py:45]  face_20260618_141518_719.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.6466
+2026-06-19 15:21:44  DEBUG     [classification.py:45]  face_20260618_141546_299.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5899
+2026-06-19 15:21:44  DEBUG     [classification.py:45]  face_20260618_141657_346.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4079
+2026-06-19 15:21:44  DEBUG     [classification.py:45]  face_20260618_141520_612.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.3991
+2026-06-19 15:21:44  DEBUG     [classification.py:45]  face_20260618_141527_909.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7024
+2026-06-19 15:21:45  DEBUG     [classification.py:45]  face_20260618_141545_892.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4536
+2026-06-19 15:21:45  DEBUG     [classification.py:45]  face_20260618_141525_027.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5212
+2026-06-19 15:21:45  DEBUG     [classification.py:45]  face_20260618_141528_312.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.6464
+2026-06-19 15:21:45  DEBUG     [classification.py:45]  face_20260618_141528_214.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7461
+2026-06-19 15:21:45  DEBUG     [classification.py:45]  face_20260618_141602_387.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5593
+2026-06-19 15:21:45  DEBUG     [classification.py:45]  face_20260618_141528_613.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.7137
+2026-06-19 15:21:46  DEBUG     [classification.py:45]  face_20260618_141520_920.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.3831
+2026-06-19 15:21:46  DEBUG     [classification.py:45]  face_20260618_141701_341.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.4634
+2026-06-19 15:21:46  DEBUG     [classification.py:45]  face_20260618_141701_241.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.5047
+2026-06-19 15:21:46  DEBUG     [classification.py:45]  face_20260618_141528_109.jpg ↔ face_20260618_141708_743.jpg → similarity: 0.6741
+2026-06-19 15:21:46  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141710_838.jpg → similarity: 0.9917
+2026-06-19 15:21:46  INFO      [classification.py:112]    ⏭ Matched face_20260618_141710_838.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:46  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141530_104.jpg → similarity: 0.9999
+2026-06-19 15:21:46  INFO      [classification.py:112]    ⏭ Matched face_20260618_141530_104.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:47  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_502.jpg → similarity: 0.9995
+2026-06-19 15:21:47  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_502.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:47  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_520.jpg → similarity: 1.0000
+2026-06-19 15:21:47  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_520.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:47  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141701_139.jpg → similarity: 0.9998
+2026-06-19 15:21:47  INFO      [classification.py:112]    ⏭ Matched face_20260618_141701_139.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:47  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141704_747.jpg → similarity: 0.9993
+2026-06-19 15:21:47  INFO      [classification.py:112]    ⏭ Matched face_20260618_141704_747.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:47  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141530_704.jpg → similarity: 0.9998
+2026-06-19 15:21:47  INFO      [classification.py:112]    ⏭ Matched face_20260618_141530_704.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:48  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141704_835.jpg → similarity: 0.9997
+2026-06-19 15:21:48  INFO      [classification.py:112]    ⏭ Matched face_20260618_141704_835.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:48  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141602_587.jpg → similarity: 0.9999
+2026-06-19 15:21:48  INFO      [classification.py:112]    ⏭ Matched face_20260618_141602_587.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:48  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141656_739.jpg → similarity: 0.9998
+2026-06-19 15:21:48  INFO      [classification.py:112]    ⏭ Matched face_20260618_141656_739.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:48  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141653_944.jpg → similarity: 0.9990
+2026-06-19 15:21:48  INFO      [classification.py:112]    ⏭ Matched face_20260618_141653_944.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:48  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_918.jpg → similarity: 0.9997
+2026-06-19 15:21:48  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_918.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:48  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_310.jpg → similarity: 0.9989
+2026-06-19 15:21:48  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_310.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:49  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_419.jpg → similarity: 1.0000
+2026-06-19 15:21:49  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_419.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:49  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141655_143.jpg → similarity: 0.9987
+2026-06-19 15:21:49  INFO      [classification.py:112]    ⏭ Matched face_20260618_141655_143.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:49  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141712_333.jpg → similarity: 0.9998
+2026-06-19 15:21:49  INFO      [classification.py:112]    ⏭ Matched face_20260618_141712_333.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:49  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141522_619.jpg → similarity: 0.9998
+2026-06-19 15:21:49  INFO      [classification.py:112]    ⏭ Matched face_20260618_141522_619.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:49  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141522_017.jpg → similarity: 0.9997
+2026-06-19 15:21:49  INFO      [classification.py:112]    ⏭ Matched face_20260618_141522_017.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:49  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_714.jpg → similarity: 0.9995
+2026-06-19 15:21:49  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_714.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:50  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141546_198.jpg → similarity: 0.9996
+2026-06-19 15:21:50  INFO      [classification.py:112]    ⏭ Matched face_20260618_141546_198.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:50  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141659_438.jpg → similarity: 0.9999
+2026-06-19 15:21:50  INFO      [classification.py:112]    ⏭ Matched face_20260618_141659_438.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:50  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_904.jpg → similarity: 0.9999
+2026-06-19 15:21:50  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_904.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:50  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141601_985.jpg → similarity: 0.9999
+2026-06-19 15:21:50  INFO      [classification.py:112]    ⏭ Matched face_20260618_141601_985.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:50  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141525_220.jpg → similarity: 1.0000
+2026-06-19 15:21:50  INFO      [classification.py:112]    ⏭ Matched face_20260618_141525_220.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:51  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_105.jpg → similarity: 0.9984
+2026-06-19 15:21:51  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_105.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:51  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_310.jpg → similarity: 0.9998
+2026-06-19 15:21:51  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_310.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:51  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141704_938.jpg → similarity: 0.9997
+2026-06-19 15:21:51  INFO      [classification.py:112]    ⏭ Matched face_20260618_141704_938.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:51  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_715.jpg → similarity: 0.9996
+2026-06-19 15:21:51  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_715.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:51  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141658_844.jpg → similarity: 0.9999
+2026-06-19 15:21:51  INFO      [classification.py:112]    ⏭ Matched face_20260618_141658_844.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:51  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141525_409.jpg → similarity: 1.0000
+2026-06-19 15:21:51  INFO      [classification.py:112]    ⏭ Matched face_20260618_141525_409.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:52  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141530_905.jpg → similarity: 0.9829
+2026-06-19 15:21:52  INFO      [classification.py:112]    ⏭ Matched face_20260618_141530_905.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:52  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_416.jpg → similarity: 0.9992
+2026-06-19 15:21:52  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_416.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:52  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_203.jpg → similarity: 0.9983
+2026-06-19 15:21:52  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_203.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:52  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141525_714.jpg → similarity: 1.0000
+2026-06-19 15:21:52  INFO      [classification.py:112]    ⏭ Matched face_20260618_141525_714.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:52  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141526_107.jpg → similarity: 1.0000
+2026-06-19 15:21:52  INFO      [classification.py:112]    ⏭ Matched face_20260618_141526_107.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:52  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_710.jpg → similarity: 0.9977
+2026-06-19 15:21:52  INFO      [classification.py:112]    ⏭ Matched face_20260618_141527_710.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:53  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141712_029.jpg → similarity: 0.9997
+2026-06-19 15:21:53  INFO      [classification.py:112]    ⏭ Matched face_20260618_141712_029.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:53  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141546_100.jpg → similarity: 0.9998
+2026-06-19 15:21:53  INFO      [classification.py:112]    ⏭ Matched face_20260618_141546_100.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:53  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141656_838.jpg → similarity: 0.9998
+2026-06-19 15:21:53  INFO      [classification.py:112]    ⏭ Matched face_20260618_141656_838.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:53  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141525_914.jpg → similarity: 1.0000
+2026-06-19 15:21:53  INFO      [classification.py:112]    ⏭ Matched face_20260618_141525_914.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:53  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141659_245.jpg → similarity: 0.9999
+2026-06-19 15:21:53  INFO      [classification.py:112]    ⏭ Matched face_20260618_141659_245.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:54  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_804.jpg → similarity: 0.9999
+2026-06-19 15:21:54  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_804.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:54  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141659_147.jpg → similarity: 0.9999
+2026-06-19 15:21:54  INFO      [classification.py:112]    ⏭ Matched face_20260618_141659_147.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:54  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_501.jpg → similarity: 0.9998
+2026-06-19 15:21:54  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_501.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:54  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141656_539.jpg → similarity: 0.9997
+2026-06-19 15:21:54  INFO      [classification.py:112]    ⏭ Matched face_20260618_141656_539.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:54  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141530_409.jpg → similarity: 1.0000
+2026-06-19 15:21:54  INFO      [classification.py:112]    ⏭ Matched face_20260618_141530_409.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:54  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141602_479.jpg → similarity: 0.9999
+2026-06-19 15:21:54  INFO      [classification.py:112]    ⏭ Matched face_20260618_141602_479.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:55  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_817.jpg → similarity: 0.9998
+2026-06-19 15:21:55  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_817.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:55  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141601_692.jpg → similarity: 0.9998
+2026-06-19 15:21:55  INFO      [classification.py:112]    ⏭ Matched face_20260618_141601_692.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:55  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_692.jpg → similarity: 0.9998
+2026-06-19 15:21:55  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_692.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:55  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_512.jpg → similarity: 1.0000
+2026-06-19 15:21:55  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_512.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:55  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141530_203.jpg → similarity: 0.9999
+2026-06-19 15:21:55  INFO      [classification.py:112]    ⏭ Matched face_20260618_141530_203.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:55  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_629.jpg → similarity: 0.9998
+2026-06-19 15:21:55  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_629.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:56  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141526_708.jpg → similarity: 1.0000
+2026-06-19 15:21:56  INFO      [classification.py:112]    ⏭ Matched face_20260618_141526_708.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:56  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141654_637.jpg → similarity: 0.9958
+2026-06-19 15:21:56  INFO      [classification.py:112]    ⏭ Matched face_20260618_141654_637.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:56  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_639.jpg → similarity: 0.9997
+2026-06-19 15:21:56  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_639.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:56  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_332.jpg → similarity: 0.9995
+2026-06-19 15:21:56  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_332.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:56  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141704_543.jpg → similarity: 0.9996
+2026-06-19 15:21:56  INFO      [classification.py:112]    ⏭ Matched face_20260618_141704_543.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:57  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_242.jpg → similarity: 0.9997
+2026-06-19 15:21:57  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_242.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:57  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141658_946.jpg → similarity: 0.9998
+2026-06-19 15:21:57  INFO      [classification.py:112]    ⏭ Matched face_20260618_141658_946.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:57  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141705_037.jpg → similarity: 0.9997
+2026-06-19 15:21:57  INFO      [classification.py:112]    ⏭ Matched face_20260618_141705_037.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:57  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141704_642.jpg → similarity: 0.9993
+2026-06-19 15:21:57  INFO      [classification.py:112]    ⏭ Matched face_20260618_141704_642.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:57  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141526_609.jpg → similarity: 1.0000
+2026-06-19 15:21:57  INFO      [classification.py:112]    ⏭ Matched face_20260618_141526_609.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:57  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141656_641.jpg → similarity: 0.9997
+2026-06-19 15:21:57  INFO      [classification.py:112]    ⏭ Matched face_20260618_141656_641.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:58  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_028.jpg → similarity: 0.9954
+2026-06-19 15:21:58  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_028.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:58  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_211.jpg → similarity: 0.9999
+2026-06-19 15:21:58  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_211.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:58  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141658_537.jpg → similarity: 0.9998
+2026-06-19 15:21:58  INFO      [classification.py:112]    ⏭ Matched face_20260618_141658_537.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:58  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_019.jpg → similarity: 1.0000
+2026-06-19 15:21:58  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_019.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:58  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141545_005.jpg → similarity: 0.9997
+2026-06-19 15:21:58  INFO      [classification.py:112]    ⏭ Matched face_20260618_141545_005.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:58  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_210.jpg → similarity: 0.9998
+2026-06-19 15:21:58  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_210.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:59  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_211.jpg → similarity: 0.9999
+2026-06-19 15:21:59  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_211.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:59  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141659_534.jpg → similarity: 0.9998
+2026-06-19 15:21:59  INFO      [classification.py:112]    ⏭ Matched face_20260618_141659_534.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:59  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_011.jpg → similarity: 0.9998
+2026-06-19 15:21:59  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_011.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:59  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_613.jpg → similarity: 0.9999
+2026-06-19 15:21:59  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_613.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:59  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141659_038.jpg → similarity: 0.9998
+2026-06-19 15:21:59  INFO      [classification.py:112]    ⏭ Matched face_20260618_141659_038.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:21:59  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_818.jpg → similarity: 1.0000
+2026-06-19 15:21:59  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_818.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:00  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_412.jpg → similarity: 0.9997
+2026-06-19 15:22:00  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_412.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:00  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141710_155.jpg → similarity: 0.9607
+2026-06-19 15:22:00  INFO      [classification.py:112]    ⏭ Matched face_20260618_141710_155.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:00  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_810.jpg → similarity: 0.9972
+2026-06-19 15:22:00  INFO      [classification.py:112]    ⏭ Matched face_20260618_141527_810.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:00  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_905.jpg → similarity: 0.9982
+2026-06-19 15:22:00  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_905.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:00  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141522_819.jpg → similarity: 0.9992
+2026-06-19 15:22:00  INFO      [classification.py:112]    ⏭ Matched face_20260618_141522_819.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:01  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_230.jpg → similarity: 0.9991
+2026-06-19 15:22:01  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_230.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:01  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141517_914.jpg → similarity: 0.9999
+2026-06-19 15:22:01  INFO      [classification.py:112]    ⏭ Matched face_20260618_141517_914.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:01  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141602_683.jpg → similarity: 0.9998
+2026-06-19 15:22:01  INFO      [classification.py:112]    ⏭ Matched face_20260618_141602_683.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:01  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_826.jpg → similarity: 0.9998
+2026-06-19 15:22:01  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_826.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:01  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141526_014.jpg → similarity: 1.0000
+2026-06-19 15:22:01  INFO      [classification.py:112]    ⏭ Matched face_20260618_141526_014.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:01  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141704_441.jpg → similarity: 0.9995
+2026-06-19 15:22:01  INFO      [classification.py:112]    ⏭ Matched face_20260618_141704_441.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:02  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141602_186.jpg → similarity: 0.9999
+2026-06-19 15:22:02  INFO      [classification.py:112]    ⏭ Matched face_20260618_141602_186.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:02  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141655_042.jpg → similarity: 0.9990
+2026-06-19 15:22:02  INFO      [classification.py:112]    ⏭ Matched face_20260618_141655_042.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:02  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_918.jpg → similarity: 0.9999
+2026-06-19 15:22:02  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_918.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:02  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_038.jpg → similarity: 0.9998
+2026-06-19 15:22:02  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_038.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:02  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141522_119.jpg → similarity: 0.9997
+2026-06-19 15:22:02  INFO      [classification.py:112]    ⏭ Matched face_20260618_141522_119.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:02  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_603.jpg → similarity: 0.9999
+2026-06-19 15:22:02  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_603.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:03  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141705_337.jpg → similarity: 0.9995
+2026-06-19 15:22:03  INFO      [classification.py:112]    ⏭ Matched face_20260618_141705_337.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:03  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141544_905.jpg → similarity: 0.9996
+2026-06-19 15:22:03  INFO      [classification.py:112]    ⏭ Matched face_20260618_141544_905.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:03  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141656_438.jpg → similarity: 0.9997
+2026-06-19 15:22:03  INFO      [classification.py:112]    ⏭ Matched face_20260618_141656_438.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:03  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141659_635.jpg → similarity: 0.9997
+2026-06-19 15:22:03  INFO      [classification.py:112]    ⏭ Matched face_20260618_141659_635.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:03  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_516.jpg → similarity: 0.9983
+2026-06-19 15:22:03  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_516.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:04  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141704_248.jpg → similarity: 0.9991
+2026-06-19 15:22:04  INFO      [classification.py:112]    ⏭ Matched face_20260618_141704_248.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:04  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141601_782.jpg → similarity: 0.9998
+2026-06-19 15:22:04  INFO      [classification.py:112]    ⏭ Matched face_20260618_141601_782.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:04  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141526_409.jpg → similarity: 1.0000
+2026-06-19 15:22:04  INFO      [classification.py:112]    ⏭ Matched face_20260618_141526_409.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:04  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141525_814.jpg → similarity: 1.0000
+2026-06-19 15:22:04  INFO      [classification.py:112]    ⏭ Matched face_20260618_141525_814.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:04  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_738.jpg → similarity: 0.9998
+2026-06-19 15:22:04  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_738.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:04  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_010.jpg → similarity: 0.9982
+2026-06-19 15:22:04  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_010.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:05  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141659_346.jpg → similarity: 0.9999
+2026-06-19 15:22:05  INFO      [classification.py:112]    ⏭ Matched face_20260618_141659_346.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:05  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_918.jpg → similarity: 1.0000
+2026-06-19 15:22:05  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_918.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:05  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141705_234.jpg → similarity: 0.9996
+2026-06-19 15:22:05  INFO      [classification.py:112]    ⏭ Matched face_20260618_141705_234.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:05  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_510.jpg → similarity: 0.9998
+2026-06-19 15:22:05  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_510.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:05  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_618.jpg → similarity: 0.9998
+2026-06-19 15:22:05  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_618.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:05  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141517_636.jpg → similarity: 0.9894
+2026-06-19 15:22:05  INFO      [classification.py:112]    ⏭ Matched face_20260618_141517_636.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:06  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141526_209.jpg → similarity: 1.0000
+2026-06-19 15:22:06  INFO      [classification.py:112]    ⏭ Matched face_20260618_141526_209.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:06  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141601_885.jpg → similarity: 0.9998
+2026-06-19 15:22:06  INFO      [classification.py:112]    ⏭ Matched face_20260618_141601_885.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:06  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141526_307.jpg → similarity: 1.0000
+2026-06-19 15:22:06  INFO      [classification.py:112]    ⏭ Matched face_20260618_141526_307.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:06  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_518.jpg → similarity: 0.9995
+2026-06-19 15:22:06  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_518.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:06  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_116.jpg → similarity: 1.0000
+2026-06-19 15:22:06  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_116.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:06  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_119.jpg → similarity: 0.9999
+2026-06-19 15:22:06  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_119.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:07  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_537.jpg → similarity: 0.9998
+2026-06-19 15:22:07  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_537.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:07  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_406.jpg → similarity: 0.9999
+2026-06-19 15:22:07  INFO      [classification.py:112]    ⏭ Matched face_20260618_141527_406.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:07  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_015.jpg → similarity: 0.9989
+2026-06-19 15:22:07  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_015.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:07  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_926.jpg → similarity: 0.9998
+2026-06-19 15:22:07  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_926.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:07  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141528_813.jpg → similarity: 0.9994
+2026-06-19 15:22:07  INFO      [classification.py:112]    ⏭ Matched face_20260618_141528_813.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:07  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_849.jpg → similarity: 0.9998
+2026-06-19 15:22:07  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_849.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:08  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_216.jpg → similarity: 1.0000
+2026-06-19 15:22:08  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_216.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:08  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_310.jpg → similarity: 0.9999
+2026-06-19 15:22:08  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_310.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:08  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141657_440.jpg → similarity: 0.9998
+2026-06-19 15:22:08  INFO      [classification.py:112]    ⏭ Matched face_20260618_141657_440.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:08  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_314.jpg → similarity: 1.0000
+2026-06-19 15:22:08  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_314.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:08  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141522_218.jpg → similarity: 0.9997
+2026-06-19 15:22:08  INFO      [classification.py:112]    ⏭ Matched face_20260618_141522_218.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:08  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141701_044.jpg → similarity: 0.9997
+2026-06-19 15:22:08  INFO      [classification.py:112]    ⏭ Matched face_20260618_141701_044.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:09  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141654_242.jpg → similarity: 0.9964
+2026-06-19 15:22:09  INFO      [classification.py:112]    ⏭ Matched face_20260618_141654_242.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:09  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_006.jpg → similarity: 1.0000
+2026-06-19 15:22:09  INFO      [classification.py:112]    ⏭ Matched face_20260618_141527_006.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:09  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141710_940.jpg → similarity: 0.9959
+2026-06-19 15:22:09  INFO      [classification.py:112]    ⏭ Matched face_20260618_141710_940.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:09  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141656_154.jpg → similarity: 0.9992
+2026-06-19 15:22:09  INFO      [classification.py:112]    ⏭ Matched face_20260618_141656_154.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:09  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141653_454.jpg → similarity: 0.9990
+2026-06-19 15:22:09  INFO      [classification.py:112]    ⏭ Matched face_20260618_141653_454.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:09  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141710_748.jpg → similarity: 0.9731
+2026-06-19 15:22:09  INFO      [classification.py:112]    ⏭ Matched face_20260618_141710_748.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:10  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_310.jpg → similarity: 0.9999
+2026-06-19 15:22:10  INFO      [classification.py:112]    ⏭ Matched face_20260618_141527_310.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:10  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_129.jpg → similarity: 0.9983
+2026-06-19 15:22:10  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_129.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:10  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141519_719.jpg → similarity: 1.0000
+2026-06-19 15:22:10  INFO      [classification.py:112]    ⏭ Matched face_20260618_141519_719.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:10  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141525_309.jpg → similarity: 1.0000
+2026-06-19 15:22:10  INFO      [classification.py:112]    ⏭ Matched face_20260618_141525_309.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:10  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_431.jpg → similarity: 0.9995
+2026-06-19 15:22:10  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_431.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:11  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_026.jpg → similarity: 0.9999
+2026-06-19 15:22:11  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_026.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:11  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141711_726.jpg → similarity: 0.9999
+2026-06-19 15:22:11  INFO      [classification.py:112]    ⏭ Matched face_20260618_141711_726.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:11  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141658_446.jpg → similarity: 0.9998
+2026-06-19 15:22:11  INFO      [classification.py:112]    ⏭ Matched face_20260618_141658_446.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:11  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_021.jpg → similarity: 0.9999
+2026-06-19 15:22:11  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_021.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:11  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141520_110.jpg → similarity: 1.0000
+2026-06-19 15:22:11  INFO      [classification.py:112]    ⏭ Matched face_20260618_141520_110.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:11  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141522_519.jpg → similarity: 0.9999
+2026-06-19 15:22:11  INFO      [classification.py:112]    ⏭ Matched face_20260618_141522_519.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:12  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141518_410.jpg → similarity: 0.9999
+2026-06-19 15:22:12  INFO      [classification.py:112]    ⏭ Matched face_20260618_141518_410.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:12  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141527_609.jpg → similarity: 0.9976
+2026-06-19 15:22:12  INFO      [classification.py:112]    ⏭ Matched face_20260618_141527_609.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:12  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141529_703.jpg → similarity: 1.0000
+2026-06-19 15:22:12  INFO      [classification.py:112]    ⏭ Matched face_20260618_141529_703.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:12  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141653_644.jpg → similarity: 0.9992
+2026-06-19 15:22:12  INFO      [classification.py:112]    ⏭ Matched face_20260618_141653_644.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:12  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141521_110.jpg → similarity: 0.9998
+2026-06-19 15:22:12  INFO      [classification.py:112]    ⏭ Matched face_20260618_141521_110.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:12  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141526_905.jpg → similarity: 1.0000
+2026-06-19 15:22:12  INFO      [classification.py:112]    ⏭ Matched face_20260618_141526_905.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:13  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141659_734.jpg → similarity: 0.9996
+2026-06-19 15:22:13  INFO      [classification.py:112]    ⏭ Matched face_20260618_141659_734.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:13  DEBUG     [classification.py:45]  face_20260618_141525_609.jpg ↔ face_20260618_141530_309.jpg → similarity: 0.9999
+2026-06-19 15:22:13  INFO      [classification.py:112]    ⏭ Matched face_20260618_141530_309.jpg → person_1 (limit reached, skipped copy)
+2026-06-19 15:22:13  INFO      [classification.py:91]  Created person_2 — reference: face_20260618_141708_743.jpg
+2026-06-19 15:22:13  INFO      [classification.py:119]  Classification complete — 2 person(s) found for calendar 2107.
+2026-06-19 15:44:01  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 15:44:01  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 15:44:01  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 15:44:01  INFO      [recognition.py:99]  Unenrolled student 3 from CompreFace.
+2026-06-19 15:44:01  INFO      [recognition.py:99]  Unenrolled student 683 from CompreFace.
+2026-06-19 15:51:01  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 15:51:01  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 15:51:01  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 15:51:01  INFO      [recognition.py:72]  Enrolled image face_20260107_095726_913.jpg for student 3.
+2026-06-19 15:51:01  INFO      [recognition.py:72]  Enrolled image face_20260107_095605_990.jpg for student 3.
+2026-06-19 15:51:01  INFO      [recognition.py:72]  Enrolled image face_20260107_095724_366.jpg for student 3.
+2026-06-19 15:51:01  INFO      [recognition.py:72]  Enrolled image face_20260107_100121_984.jpg for student 3.
+2026-06-19 15:51:01  INFO      [recognition.py:72]  Enrolled image face_20250722_113315.jpg for student 3.
+2026-06-19 15:51:02  INFO      [recognition.py:72]  Enrolled image face_20250715_133750.jpg for student 3.
+2026-06-19 15:51:02  INFO      [recognition.py:72]  Enrolled image face_20260107_095703_836.jpg for student 3.
+2026-06-19 15:51:02  WARNING   [recognition.py:39]  Student 683 has no reference photo (userRefRlc is null) — skipping.
+2026-06-19 15:51:02  INFO      [recognition.py:80]  Enrollment complete — 1/2 student(s) enrolled.
+2026-06-19 15:55:03  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 15:55:03  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 15:55:03  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 15:55:03  INFO      [recognition.py:72]  Enrolled image face_20260107_095726_913.jpg for student 3.
+2026-06-19 15:55:03  INFO      [recognition.py:72]  Enrolled image face_20260107_095605_990.jpg for student 3.
+2026-06-19 15:55:03  INFO      [recognition.py:72]  Enrolled image face_20260107_095724_366.jpg for student 3.
+2026-06-19 15:55:03  INFO      [recognition.py:72]  Enrolled image face_20260107_100121_984.jpg for student 3.
+2026-06-19 15:55:03  INFO      [recognition.py:72]  Enrolled image face_20250722_113315.jpg for student 3.
+2026-06-19 15:55:03  INFO      [recognition.py:72]  Enrolled image face_20250715_133750.jpg for student 3.
+2026-06-19 15:55:03  INFO      [recognition.py:72]  Enrolled image face_20260107_095703_836.jpg for student 3.
+2026-06-19 15:55:03  WARNING   [recognition.py:39]  Student 683 has no reference photo (userRefRlc is null) — skipping.
+2026-06-19 15:55:03  INFO      [recognition.py:80]  Enrollment complete — 1/2 student(s) enrolled.
+2026-06-19 15:55:03  INFO      [recognition.py:131]  Recognizing 2 person(s) for calendar 2107...
+2026-06-19 15:55:04  DEBUG     [recognition.py:184]  person_1/face_20260618_141525_609.jpg → userId=3 (similarity=0.6431)
+2026-06-19 15:55:04  DEBUG     [recognition.py:184]  person_1/face_20260618_141525_122.jpg → userId=3 (similarity=0.6764)
+2026-06-19 15:55:04  DEBUG     [recognition.py:184]  person_1/face_20260618_141527_511.jpg → userId=3 (similarity=0.6969)
+2026-06-19 15:55:04  DEBUG     [recognition.py:184]  person_1/face_20260618_141658_344.jpg → userId=3 (similarity=0.7768)
+2026-06-19 15:55:04  DEBUG     [recognition.py:184]  person_1/face_20260618_141653_362.jpg → userId=3 (similarity=0.7467)
+2026-06-19 15:55:04  DEBUG     [recognition.py:184]  person_1/face_20260618_141656_937.jpg → userId=3 (similarity=0.7619)
+2026-06-19 15:55:04  DEBUG     [recognition.py:184]  person_1/face_20260618_141525_506.jpg → userId=3 (similarity=0.6394)
+2026-06-19 15:55:04  INFO      [recognition.py:200]  person_1 → userId=3 (7 votes, avg similarity=0.7059)
+2026-06-19 15:55:04  DEBUG     [recognition.py:184]  person_2/face_20260618_141708_743.jpg → userId=3 (similarity=0.2154)
+2026-06-19 15:55:04  INFO      [recognition.py:200]  person_2 → userId=3 (1 votes, avg similarity=0.2154)
+2026-06-19 15:55:04  INFO      [recognition.py:203]  Recognition complete — 1 student(s) identified.
+2026-06-19 16:00:23  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 16:00:23  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 16:00:23  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 16:00:23  INFO      [recognition.py:72]  Enrolled image face_20260107_095726_913.jpg for student 3.
+2026-06-19 16:00:23  INFO      [recognition.py:72]  Enrolled image face_20260107_095605_990.jpg for student 3.
+2026-06-19 16:00:23  INFO      [recognition.py:72]  Enrolled image face_20260107_095724_366.jpg for student 3.
+2026-06-19 16:00:23  INFO      [recognition.py:72]  Enrolled image face_20260107_100121_984.jpg for student 3.
+2026-06-19 16:00:23  INFO      [recognition.py:72]  Enrolled image face_20250722_113315.jpg for student 3.
+2026-06-19 16:00:23  INFO      [recognition.py:72]  Enrolled image face_20250715_133750.jpg for student 3.
+2026-06-19 16:00:23  INFO      [recognition.py:72]  Enrolled image face_20260107_095703_836.jpg for student 3.
+2026-06-19 16:00:23  WARNING   [recognition.py:42]  Student 683 has no reference photo (userRefRlc is null) — skipping.
+2026-06-19 16:00:23  INFO      [recognition.py:80]  Enrollment complete — 1/2 student(s) enrolled.
+2026-06-19 16:00:23  INFO      [recognition.py:134]  Recognizing 2 person(s) for calendar 2107...
+2026-06-19 16:00:23  DEBUG     [recognition.py:187]  person_1/face_20260618_141525_609.jpg → userId=3 (similarity=0.6431)
+2026-06-19 16:00:23  DEBUG     [recognition.py:187]  person_1/face_20260618_141525_122.jpg → userId=3 (similarity=0.6764)
+2026-06-19 16:00:23  DEBUG     [recognition.py:187]  person_1/face_20260618_141527_511.jpg → userId=3 (similarity=0.6969)
+2026-06-19 16:00:23  DEBUG     [recognition.py:187]  person_1/face_20260618_141658_344.jpg → userId=3 (similarity=0.7768)
+2026-06-19 16:00:23  DEBUG     [recognition.py:187]  person_1/face_20260618_141653_362.jpg → userId=3 (similarity=0.7467)
+2026-06-19 16:00:24  DEBUG     [recognition.py:187]  person_1/face_20260618_141656_937.jpg → userId=3 (similarity=0.7619)
+2026-06-19 16:00:24  DEBUG     [recognition.py:187]  person_1/face_20260618_141525_506.jpg → userId=3 (similarity=0.6394)
+2026-06-19 16:00:24  WARNING   [recognition.py:204]  person_1 → rejected (avg similarity=0.7059 < threshold=0.85)
+2026-06-19 16:00:24  DEBUG     [recognition.py:187]  person_2/face_20260618_141708_743.jpg → userId=3 (similarity=0.2154)
+2026-06-19 16:00:24  WARNING   [recognition.py:204]  person_2 → rejected (avg similarity=0.2154 < threshold=0.85)
+2026-06-19 16:00:24  INFO      [recognition.py:216]  Recognition complete — 0 student(s) identified.
+2026-06-19 16:10:43  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 16:10:43  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 16:10:43  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 16:10:43  INFO      [recognition.py:72]  Enrolled image face_20260107_095726_913.jpg for student 3.
+2026-06-19 16:10:43  INFO      [recognition.py:72]  Enrolled image face_20260107_095605_990.jpg for student 3.
+2026-06-19 16:10:43  INFO      [recognition.py:72]  Enrolled image face_20260107_095724_366.jpg for student 3.
+2026-06-19 16:10:43  INFO      [recognition.py:72]  Enrolled image face_20260107_100121_984.jpg for student 3.
+2026-06-19 16:10:43  INFO      [recognition.py:72]  Enrolled image face_20250722_113315.jpg for student 3.
+2026-06-19 16:10:43  INFO      [recognition.py:72]  Enrolled image face_20250715_133750.jpg for student 3.
+2026-06-19 16:10:43  INFO      [recognition.py:72]  Enrolled image face_20260107_095703_836.jpg for student 3.
+2026-06-19 16:10:43  WARNING   [recognition.py:42]  Student 683 has no reference photo (userRefRlc is null) — skipping.
+2026-06-19 16:10:43  INFO      [recognition.py:80]  Enrollment complete — 1/2 student(s) enrolled.
+2026-06-19 16:10:43  INFO      [recognition.py:134]  Recognizing 2 person(s) for calendar 2107...
+2026-06-19 16:10:43  DEBUG     [recognition.py:187]  person_1/face_20260618_141525_609.jpg → userId=3 (similarity=0.6431)
+2026-06-19 16:10:43  DEBUG     [recognition.py:187]  person_1/face_20260618_141525_122.jpg → userId=3 (similarity=0.6764)
+2026-06-19 16:10:43  DEBUG     [recognition.py:187]  person_1/face_20260618_141527_511.jpg → userId=3 (similarity=0.6969)
+2026-06-19 16:10:43  DEBUG     [recognition.py:187]  person_1/face_20260618_141658_344.jpg → userId=3 (similarity=0.7768)
+2026-06-19 16:10:43  DEBUG     [recognition.py:187]  person_1/face_20260618_141653_362.jpg → userId=3 (similarity=0.7467)
+2026-06-19 16:10:43  DEBUG     [recognition.py:187]  person_1/face_20260618_141656_937.jpg → userId=3 (similarity=0.7619)
+2026-06-19 16:10:44  DEBUG     [recognition.py:187]  person_1/face_20260618_141525_506.jpg → userId=3 (similarity=0.6394)
+2026-06-19 16:10:44  WARNING   [recognition.py:204]  person_1 → rejected (avg similarity=0.7059 < threshold=0.85)
+2026-06-19 16:10:44  DEBUG     [recognition.py:187]  person_2/face_20260618_141708_743.jpg → userId=3 (similarity=0.2154)
+2026-06-19 16:10:44  WARNING   [recognition.py:204]  person_2 → rejected (avg similarity=0.2154 < threshold=0.85)
+2026-06-19 16:10:44  INFO      [recognition.py:216]  Recognition complete — 0 student(s) identified.
+2026-06-19 16:19:49  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 16:19:49  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 16:19:49  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 16:19:49  INFO      [recognition.py:72]  Enrolled image face_20260107_095726_913.jpg for student 3.
+2026-06-19 16:19:49  INFO      [recognition.py:72]  Enrolled image face_20260107_095605_990.jpg for student 3.
+2026-06-19 16:19:49  INFO      [recognition.py:72]  Enrolled image face_20260107_095724_366.jpg for student 3.
+2026-06-19 16:19:49  INFO      [recognition.py:72]  Enrolled image face_20260107_100121_984.jpg for student 3.
+2026-06-19 16:19:49  INFO      [recognition.py:72]  Enrolled image face_20250722_113315.jpg for student 3.
+2026-06-19 16:19:49  INFO      [recognition.py:72]  Enrolled image face_20250715_133750.jpg for student 3.
+2026-06-19 16:19:49  INFO      [recognition.py:72]  Enrolled image face_20260107_095703_836.jpg for student 3.
+2026-06-19 16:19:49  WARNING   [recognition.py:42]  Student 683 has no reference photo (userRefRlc is null) — skipping.
+2026-06-19 16:19:49  INFO      [recognition.py:80]  Enrollment complete — 1/2 student(s) enrolled.
+2026-06-19 16:19:49  INFO      [recognition.py:134]  Recognizing 2 person(s) for calendar 2107...
+2026-06-19 16:19:49  DEBUG     [recognition.py:187]  person_1/face_20260618_141525_609.jpg → userId=3 (similarity=0.6431)
+2026-06-19 16:19:49  DEBUG     [recognition.py:187]  person_1/face_20260618_141525_122.jpg → userId=3 (similarity=0.6764)
+2026-06-19 16:19:50  DEBUG     [recognition.py:187]  person_1/face_20260618_141527_511.jpg → userId=3 (similarity=0.6969)
+2026-06-19 16:19:50  DEBUG     [recognition.py:187]  person_1/face_20260618_141658_344.jpg → userId=3 (similarity=0.7768)
+2026-06-19 16:19:50  DEBUG     [recognition.py:187]  person_1/face_20260618_141653_362.jpg → userId=3 (similarity=0.7467)
+2026-06-19 16:19:50  DEBUG     [recognition.py:187]  person_1/face_20260618_141656_937.jpg → userId=3 (similarity=0.7619)
+2026-06-19 16:19:50  DEBUG     [recognition.py:187]  person_1/face_20260618_141525_506.jpg → userId=3 (similarity=0.6394)
+2026-06-19 16:19:50  WARNING   [recognition.py:204]  person_1 → rejected (avg similarity=0.7059 < threshold=0.85)
+2026-06-19 16:19:50  DEBUG     [recognition.py:187]  person_2/face_20260618_141708_743.jpg → userId=3 (similarity=0.2154)
+2026-06-19 16:19:50  WARNING   [recognition.py:204]  person_2 → rejected (avg similarity=0.2154 < threshold=0.85)
+2026-06-19 16:19:50  INFO      [recognition.py:216]  Recognition complete — 0 student(s) identified.
+2026-06-19 16:20:26  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 16:20:26  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 16:20:26  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 16:20:26  INFO      [recognition.py:72]  Enrolled image face_20260107_095726_913.jpg for student 3.
+2026-06-19 16:20:26  INFO      [recognition.py:72]  Enrolled image face_20260107_095605_990.jpg for student 3.
+2026-06-19 16:20:26  INFO      [recognition.py:72]  Enrolled image face_20260107_095724_366.jpg for student 3.
+2026-06-19 16:20:26  INFO      [recognition.py:72]  Enrolled image face_20260107_100121_984.jpg for student 3.
+2026-06-19 16:20:26  INFO      [recognition.py:72]  Enrolled image face_20250722_113315.jpg for student 3.
+2026-06-19 16:20:26  INFO      [recognition.py:72]  Enrolled image face_20250715_133750.jpg for student 3.
+2026-06-19 16:20:26  INFO      [recognition.py:72]  Enrolled image face_20260107_095703_836.jpg for student 3.
+2026-06-19 16:20:26  WARNING   [recognition.py:42]  Student 683 has no reference photo (userRefRlc is null) — skipping.
+2026-06-19 16:20:26  INFO      [recognition.py:80]  Enrollment complete — 1/2 student(s) enrolled.
+2026-06-19 16:20:26  INFO      [recognition.py:134]  Recognizing 2 person(s) for calendar 2107...
+2026-06-19 16:20:26  DEBUG     [recognition.py:187]  person_1/face_20260618_141525_609.jpg → userId=3 (similarity=0.6431)
+2026-06-19 16:20:26  DEBUG     [recognition.py:187]  person_1/face_20260618_141525_122.jpg → userId=3 (similarity=0.6764)
+2026-06-19 16:20:26  DEBUG     [recognition.py:187]  person_1/face_20260618_141527_511.jpg → userId=3 (similarity=0.6969)
+2026-06-19 16:20:26  DEBUG     [recognition.py:187]  person_1/face_20260618_141658_344.jpg → userId=3 (similarity=0.7768)
+2026-06-19 16:20:26  DEBUG     [recognition.py:187]  person_1/face_20260618_141653_362.jpg → userId=3 (similarity=0.7467)
+2026-06-19 16:20:26  DEBUG     [recognition.py:187]  person_1/face_20260618_141656_937.jpg → userId=3 (similarity=0.7619)
+2026-06-19 16:20:27  DEBUG     [recognition.py:187]  person_1/face_20260618_141525_506.jpg → userId=3 (similarity=0.6394)
+2026-06-19 16:20:27  WARNING   [recognition.py:204]  person_1 → rejected (avg similarity=0.7059 < threshold=0.85)
+2026-06-19 16:20:27  DEBUG     [recognition.py:187]  person_2/face_20260618_141708_743.jpg → userId=3 (similarity=0.2154)
+2026-06-19 16:20:27  WARNING   [recognition.py:204]  person_2 → rejected (avg similarity=0.2154 < threshold=0.85)
+2026-06-19 16:20:27  INFO      [recognition.py:216]  Recognition complete — 0 student(s) identified.
+2026-06-19 16:23:29  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 16:23:29  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 16:23:29  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 16:23:29  INFO      [recognition.py:72]  Enrolled image face_20260107_095726_913.jpg for student 3.
+2026-06-19 16:23:29  INFO      [recognition.py:72]  Enrolled image face_20260107_095605_990.jpg for student 3.
+2026-06-19 16:23:29  INFO      [recognition.py:72]  Enrolled image face_20260107_095724_366.jpg for student 3.
+2026-06-19 16:23:29  INFO      [recognition.py:72]  Enrolled image face_20260107_100121_984.jpg for student 3.
+2026-06-19 16:23:29  INFO      [recognition.py:72]  Enrolled image face_20250722_113315.jpg for student 3.
+2026-06-19 16:23:29  INFO      [recognition.py:72]  Enrolled image face_20250715_133750.jpg for student 3.
+2026-06-19 16:23:29  INFO      [recognition.py:72]  Enrolled image face_20260107_095703_836.jpg for student 3.
+2026-06-19 16:23:29  WARNING   [recognition.py:42]  Student 683 has no reference photo (userRefRlc is null) — skipping.
+2026-06-19 16:23:29  INFO      [recognition.py:80]  Enrollment complete — 1/2 student(s) enrolled.
+2026-06-19 16:23:29  INFO      [recognition.py:134]  Recognizing 2 person(s) for calendar 2107...
+2026-06-19 16:23:29  DEBUG     [recognition.py:187]  person_1/face_20260618_141525_609.jpg → userId=3 (similarity=0.6431)
+2026-06-19 16:23:29  DEBUG     [recognition.py:187]  person_1/face_20260618_141525_122.jpg → userId=3 (similarity=0.6764)
+2026-06-19 16:23:30  DEBUG     [recognition.py:187]  person_1/face_20260618_141527_511.jpg → userId=3 (similarity=0.6969)
+2026-06-19 16:23:30  DEBUG     [recognition.py:187]  person_1/face_20260618_141658_344.jpg → userId=3 (similarity=0.7768)
+2026-06-19 16:23:30  DEBUG     [recognition.py:187]  person_1/face_20260618_141653_362.jpg → userId=3 (similarity=0.7467)
+2026-06-19 16:23:30  DEBUG     [recognition.py:187]  person_1/face_20260618_141656_937.jpg → userId=3 (similarity=0.7619)
+2026-06-19 16:23:30  DEBUG     [recognition.py:187]  person_1/face_20260618_141525_506.jpg → userId=3 (similarity=0.6394)
+2026-06-19 16:23:30  WARNING   [recognition.py:204]  person_1 → rejected (avg similarity=0.7059 < threshold=0.85)
+2026-06-19 16:23:30  DEBUG     [recognition.py:187]  person_2/face_20260618_141708_743.jpg → userId=3 (similarity=0.2154)
+2026-06-19 16:23:30  WARNING   [recognition.py:204]  person_2 → rejected (avg similarity=0.2154 < threshold=0.85)
+2026-06-19 16:23:30  INFO      [recognition.py:216]  Recognition complete — 0 student(s) identified.
+2026-06-19 16:24:49  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 16:24:49  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 16:24:49  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 16:24:49  INFO      [recognition.py:72]  Enrolled image face_20260107_095726_913.jpg for student 3.
+2026-06-19 16:24:50  INFO      [recognition.py:72]  Enrolled image face_20260107_095605_990.jpg for student 3.
+2026-06-19 16:24:50  INFO      [recognition.py:72]  Enrolled image face_20260107_095724_366.jpg for student 3.
+2026-06-19 16:24:50  INFO      [recognition.py:72]  Enrolled image face_20260107_100121_984.jpg for student 3.
+2026-06-19 16:24:50  INFO      [recognition.py:72]  Enrolled image face_20250722_113315.jpg for student 3.
+2026-06-19 16:24:50  INFO      [recognition.py:72]  Enrolled image face_20250715_133750.jpg for student 3.
+2026-06-19 16:24:50  INFO      [recognition.py:72]  Enrolled image face_20260107_095703_836.jpg for student 3.
+2026-06-19 16:24:50  WARNING   [recognition.py:42]  Student 683 has no reference photo (userRefRlc is null) — skipping.
+2026-06-19 16:24:50  INFO      [recognition.py:80]  Enrollment complete — 1/2 student(s) enrolled.
+2026-06-19 16:24:50  INFO      [recognition.py:134]  Recognizing 2 person(s) for calendar 2107...
+2026-06-19 16:24:50  DEBUG     [recognition.py:187]  person_1/face_20260618_141525_609.jpg → userId=3 (similarity=0.6431)
+2026-06-19 16:24:50  DEBUG     [recognition.py:187]  person_1/face_20260618_141525_122.jpg → userId=3 (similarity=0.6764)
+2026-06-19 16:24:50  DEBUG     [recognition.py:187]  person_1/face_20260618_141527_511.jpg → userId=3 (similarity=0.6969)
+2026-06-19 16:24:50  DEBUG     [recognition.py:187]  person_1/face_20260618_141658_344.jpg → userId=3 (similarity=0.7768)
+2026-06-19 16:24:50  DEBUG     [recognition.py:187]  person_1/face_20260618_141653_362.jpg → userId=3 (similarity=0.7467)
+2026-06-19 16:24:50  DEBUG     [recognition.py:187]  person_1/face_20260618_141656_937.jpg → userId=3 (similarity=0.7619)
+2026-06-19 16:24:50  DEBUG     [recognition.py:187]  person_1/face_20260618_141525_506.jpg → userId=3 (similarity=0.6394)
+2026-06-19 16:24:50  WARNING   [recognition.py:204]  person_1 → rejected (avg similarity=0.7059 < threshold=0.85)
+2026-06-19 16:24:51  DEBUG     [recognition.py:187]  person_2/face_20260618_141708_743.jpg → userId=3 (similarity=0.2154)
+2026-06-19 16:24:51  WARNING   [recognition.py:204]  person_2 → rejected (avg similarity=0.2154 < threshold=0.85)
+2026-06-19 16:24:51  INFO      [recognition.py:216]  Recognition complete — 0 student(s) identified.
+2026-06-19 16:32:18  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 16:32:18  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 16:32:18  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 16:32:18  ERROR     [recognition.py:41]  Error fetching enrolled subjects: name 'SUBJECTS_ENDPOINT' is not defined
+2026-06-19 16:32:18  INFO      [recognition.py:58]  Found 0 subject(s) already enrolled in CompreFace.
+2026-06-19 16:32:18  INFO      [recognition.py:104]  Enrolled image face_20260107_095726_913.jpg for student 3.
+2026-06-19 16:32:18  INFO      [recognition.py:104]  Enrolled image face_20260107_095605_990.jpg for student 3.
+2026-06-19 16:32:18  INFO      [recognition.py:104]  Enrolled image face_20260107_095724_366.jpg for student 3.
+2026-06-19 16:32:18  INFO      [recognition.py:104]  Enrolled image face_20260107_100121_984.jpg for student 3.
+2026-06-19 16:32:18  INFO      [recognition.py:104]  Enrolled image face_20250722_113315.jpg for student 3.
+2026-06-19 16:32:19  INFO      [recognition.py:104]  Enrolled image face_20250715_133750.jpg for student 3.
+2026-06-19 16:32:19  INFO      [recognition.py:104]  Enrolled image face_20260107_095703_836.jpg for student 3.
+2026-06-19 16:32:19  WARNING   [recognition.py:69]  Student 683 has no reference photo (userRefRlc is null) — skipping.
+2026-06-19 16:32:19  INFO      [recognition.py:112]  Enrollment complete — 1/2 student(s) enrolled.
+2026-06-19 16:32:19  INFO      [recognition.py:166]  Recognizing 2 person(s) for calendar 2107...
+2026-06-19 16:32:19  DEBUG     [recognition.py:219]  person_1/face_20260618_141525_609.jpg → userId=3 (similarity=0.6431)
+2026-06-19 16:32:19  DEBUG     [recognition.py:219]  person_1/face_20260618_141525_122.jpg → userId=3 (similarity=0.6764)
+2026-06-19 16:32:19  DEBUG     [recognition.py:219]  person_1/face_20260618_141527_511.jpg → userId=3 (similarity=0.6969)
+2026-06-19 16:32:19  DEBUG     [recognition.py:219]  person_1/face_20260618_141658_344.jpg → userId=3 (similarity=0.7768)
+2026-06-19 16:32:19  DEBUG     [recognition.py:219]  person_1/face_20260618_141653_362.jpg → userId=3 (similarity=0.7467)
+2026-06-19 16:32:19  DEBUG     [recognition.py:219]  person_1/face_20260618_141656_937.jpg → userId=3 (similarity=0.7619)
+2026-06-19 16:32:19  DEBUG     [recognition.py:219]  person_1/face_20260618_141525_506.jpg → userId=3 (similarity=0.6394)
+2026-06-19 16:32:19  WARNING   [recognition.py:236]  person_1 → rejected (avg similarity=0.7059 < threshold=0.85)
+2026-06-19 16:32:19  DEBUG     [recognition.py:219]  person_2/face_20260618_141708_743.jpg → userId=3 (similarity=0.2154)
+2026-06-19 16:32:19  WARNING   [recognition.py:236]  person_2 → rejected (avg similarity=0.2154 < threshold=0.85)
+2026-06-19 16:32:19  INFO      [recognition.py:248]  Recognition complete — 0 student(s) identified.
+2026-06-19 16:32:29  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 16:32:29  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 16:32:29  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 16:32:29  ERROR     [recognition.py:41]  Error fetching enrolled subjects: name 'SUBJECTS_ENDPOINT' is not defined
+2026-06-19 16:32:29  INFO      [recognition.py:58]  Found 0 subject(s) already enrolled in CompreFace.
+2026-06-19 16:32:29  INFO      [recognition.py:104]  Enrolled image face_20260107_095726_913.jpg for student 3.
+2026-06-19 16:32:29  INFO      [recognition.py:104]  Enrolled image face_20260107_095605_990.jpg for student 3.
+2026-06-19 16:32:29  INFO      [recognition.py:104]  Enrolled image face_20260107_095724_366.jpg for student 3.
+2026-06-19 16:32:29  INFO      [recognition.py:104]  Enrolled image face_20260107_100121_984.jpg for student 3.
+2026-06-19 16:32:29  INFO      [recognition.py:104]  Enrolled image face_20250722_113315.jpg for student 3.
+2026-06-19 16:32:29  INFO      [recognition.py:104]  Enrolled image face_20250715_133750.jpg for student 3.
+2026-06-19 16:32:29  INFO      [recognition.py:104]  Enrolled image face_20260107_095703_836.jpg for student 3.
+2026-06-19 16:32:29  WARNING   [recognition.py:69]  Student 683 has no reference photo (userRefRlc is null) — skipping.
+2026-06-19 16:32:29  INFO      [recognition.py:112]  Enrollment complete — 1/2 student(s) enrolled.
+2026-06-19 16:32:29  INFO      [recognition.py:166]  Recognizing 2 person(s) for calendar 2107...
+2026-06-19 16:32:29  DEBUG     [recognition.py:219]  person_1/face_20260618_141525_609.jpg → userId=3 (similarity=0.6431)
+2026-06-19 16:32:29  DEBUG     [recognition.py:219]  person_1/face_20260618_141525_122.jpg → userId=3 (similarity=0.6764)
+2026-06-19 16:32:29  DEBUG     [recognition.py:219]  person_1/face_20260618_141527_511.jpg → userId=3 (similarity=0.6969)
+2026-06-19 16:32:29  DEBUG     [recognition.py:219]  person_1/face_20260618_141658_344.jpg → userId=3 (similarity=0.7768)
+2026-06-19 16:32:29  DEBUG     [recognition.py:219]  person_1/face_20260618_141653_362.jpg → userId=3 (similarity=0.7467)
+2026-06-19 16:32:29  DEBUG     [recognition.py:219]  person_1/face_20260618_141656_937.jpg → userId=3 (similarity=0.7619)
+2026-06-19 16:32:30  DEBUG     [recognition.py:219]  person_1/face_20260618_141525_506.jpg → userId=3 (similarity=0.6394)
+2026-06-19 16:32:30  WARNING   [recognition.py:236]  person_1 → rejected (avg similarity=0.7059 < threshold=0.85)
+2026-06-19 16:32:30  DEBUG     [recognition.py:219]  person_2/face_20260618_141708_743.jpg → userId=3 (similarity=0.2154)
+2026-06-19 16:32:30  WARNING   [recognition.py:236]  person_2 → rejected (avg similarity=0.2154 < threshold=0.85)
+2026-06-19 16:32:30  INFO      [recognition.py:248]  Recognition complete — 0 student(s) identified.
+2026-06-19 16:32:38  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 16:32:39  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 16:32:39  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 16:32:39  ERROR     [recognition.py:41]  Error fetching enrolled subjects: name 'SUBJECTS_ENDPOINT' is not defined
+2026-06-19 16:32:39  INFO      [recognition.py:58]  Found 0 subject(s) already enrolled in CompreFace.
+2026-06-19 16:32:39  INFO      [recognition.py:104]  Enrolled image face_20260107_095726_913.jpg for student 3.
+2026-06-19 16:32:39  INFO      [recognition.py:104]  Enrolled image face_20260107_095605_990.jpg for student 3.
+2026-06-19 16:32:39  INFO      [recognition.py:104]  Enrolled image face_20260107_095724_366.jpg for student 3.
+2026-06-19 16:32:39  INFO      [recognition.py:104]  Enrolled image face_20260107_100121_984.jpg for student 3.
+2026-06-19 16:32:39  INFO      [recognition.py:104]  Enrolled image face_20250722_113315.jpg for student 3.
+2026-06-19 16:32:39  INFO      [recognition.py:104]  Enrolled image face_20250715_133750.jpg for student 3.
+2026-06-19 16:32:39  INFO      [recognition.py:104]  Enrolled image face_20260107_095703_836.jpg for student 3.
+2026-06-19 16:32:39  WARNING   [recognition.py:69]  Student 683 has no reference photo (userRefRlc is null) — skipping.
+2026-06-19 16:32:39  INFO      [recognition.py:112]  Enrollment complete — 1/2 student(s) enrolled.
+2026-06-19 16:32:39  INFO      [recognition.py:166]  Recognizing 2 person(s) for calendar 2107...
+2026-06-19 16:32:39  DEBUG     [recognition.py:219]  person_1/face_20260618_141525_609.jpg → userId=3 (similarity=0.6431)
+2026-06-19 16:32:39  DEBUG     [recognition.py:219]  person_1/face_20260618_141525_122.jpg → userId=3 (similarity=0.6764)
+2026-06-19 16:32:39  DEBUG     [recognition.py:219]  person_1/face_20260618_141527_511.jpg → userId=3 (similarity=0.6969)
+2026-06-19 16:32:39  DEBUG     [recognition.py:219]  person_1/face_20260618_141658_344.jpg → userId=3 (similarity=0.7768)
+2026-06-19 16:32:39  DEBUG     [recognition.py:219]  person_1/face_20260618_141653_362.jpg → userId=3 (similarity=0.7467)
+2026-06-19 16:32:39  DEBUG     [recognition.py:219]  person_1/face_20260618_141656_937.jpg → userId=3 (similarity=0.7619)
+2026-06-19 16:32:39  DEBUG     [recognition.py:219]  person_1/face_20260618_141525_506.jpg → userId=3 (similarity=0.6394)
+2026-06-19 16:32:39  WARNING   [recognition.py:236]  person_1 → rejected (avg similarity=0.7059 < threshold=0.85)
+2026-06-19 16:32:40  DEBUG     [recognition.py:219]  person_2/face_20260618_141708_743.jpg → userId=3 (similarity=0.2154)
+2026-06-19 16:32:40  WARNING   [recognition.py:236]  person_2 → rejected (avg similarity=0.2154 < threshold=0.85)
+2026-06-19 16:32:40  INFO      [recognition.py:248]  Recognition complete — 0 student(s) identified.
+2026-06-19 16:34:26  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 16:34:26  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 16:34:26  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 16:34:26  WARNING   [recognition.py:39]  Failed to fetch enrolled subjects — 404: {
+  "message" : "Request method 'GET' not supported",
+  "code" : 0
+}
+2026-06-19 16:34:26  INFO      [recognition.py:59]  Found 0 subject(s) already enrolled in CompreFace.
+2026-06-19 16:34:27  INFO      [recognition.py:105]  Enrolled image face_20260107_095726_913.jpg for student 3.
+2026-06-19 16:34:27  INFO      [recognition.py:105]  Enrolled image face_20260107_095605_990.jpg for student 3.
+2026-06-19 16:34:27  INFO      [recognition.py:105]  Enrolled image face_20260107_095724_366.jpg for student 3.
+2026-06-19 16:34:27  INFO      [recognition.py:105]  Enrolled image face_20260107_100121_984.jpg for student 3.
+2026-06-19 16:34:27  INFO      [recognition.py:105]  Enrolled image face_20250722_113315.jpg for student 3.
+2026-06-19 16:34:27  INFO      [recognition.py:105]  Enrolled image face_20250715_133750.jpg for student 3.
+2026-06-19 16:34:27  INFO      [recognition.py:105]  Enrolled image face_20260107_095703_836.jpg for student 3.
+2026-06-19 16:34:27  WARNING   [recognition.py:70]  Student 683 has no reference photo (userRefRlc is null) — skipping.
+2026-06-19 16:34:27  INFO      [recognition.py:113]  Enrollment complete — 1/2 student(s) enrolled.
+2026-06-19 16:34:27  INFO      [recognition.py:167]  Recognizing 2 person(s) for calendar 2107...
+2026-06-19 16:34:27  DEBUG     [recognition.py:220]  person_1/face_20260618_141525_609.jpg → userId=3 (similarity=0.6431)
+2026-06-19 16:34:27  DEBUG     [recognition.py:220]  person_1/face_20260618_141525_122.jpg → userId=3 (similarity=0.6764)
+2026-06-19 16:34:27  DEBUG     [recognition.py:220]  person_1/face_20260618_141527_511.jpg → userId=3 (similarity=0.6969)
+2026-06-19 16:34:27  DEBUG     [recognition.py:220]  person_1/face_20260618_141658_344.jpg → userId=3 (similarity=0.7768)
+2026-06-19 16:34:27  DEBUG     [recognition.py:220]  person_1/face_20260618_141653_362.jpg → userId=3 (similarity=0.7467)
+2026-06-19 16:34:27  DEBUG     [recognition.py:220]  person_1/face_20260618_141656_937.jpg → userId=3 (similarity=0.7619)
+2026-06-19 16:34:27  DEBUG     [recognition.py:220]  person_1/face_20260618_141525_506.jpg → userId=3 (similarity=0.6394)
+2026-06-19 16:34:27  WARNING   [recognition.py:237]  person_1 → rejected (avg similarity=0.7059 < threshold=0.85)
+2026-06-19 16:34:28  DEBUG     [recognition.py:220]  person_2/face_20260618_141708_743.jpg → userId=3 (similarity=0.2154)
+2026-06-19 16:34:28  WARNING   [recognition.py:237]  person_2 → rejected (avg similarity=0.2154 < threshold=0.85)
+2026-06-19 16:34:28  INFO      [recognition.py:249]  Recognition complete — 0 student(s) identified.
+2026-06-19 16:35:01  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 16:35:01  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 16:35:01  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 16:35:01  INFO      [recognition.py:59]  Found 0 subject(s) already enrolled in CompreFace.
+2026-06-19 16:35:01  INFO      [recognition.py:105]  Enrolled image face_20260107_095726_913.jpg for student 3.
+2026-06-19 16:35:01  INFO      [recognition.py:105]  Enrolled image face_20260107_095605_990.jpg for student 3.
+2026-06-19 16:35:01  INFO      [recognition.py:105]  Enrolled image face_20260107_095724_366.jpg for student 3.
+2026-06-19 16:35:01  INFO      [recognition.py:105]  Enrolled image face_20260107_100121_984.jpg for student 3.
+2026-06-19 16:35:01  INFO      [recognition.py:105]  Enrolled image face_20250722_113315.jpg for student 3.
+2026-06-19 16:35:01  INFO      [recognition.py:105]  Enrolled image face_20250715_133750.jpg for student 3.
+2026-06-19 16:35:01  INFO      [recognition.py:105]  Enrolled image face_20260107_095703_836.jpg for student 3.
+2026-06-19 16:35:01  WARNING   [recognition.py:70]  Student 683 has no reference photo (userRefRlc is null) — skipping.
+2026-06-19 16:35:01  INFO      [recognition.py:113]  Enrollment complete — 1/2 student(s) enrolled.
+2026-06-19 16:35:01  INFO      [recognition.py:167]  Recognizing 2 person(s) for calendar 2107...
+2026-06-19 16:35:02  DEBUG     [recognition.py:220]  person_1/face_20260618_141525_609.jpg → userId=3 (similarity=0.6431)
+2026-06-19 16:35:02  DEBUG     [recognition.py:220]  person_1/face_20260618_141525_122.jpg → userId=3 (similarity=0.6764)
+2026-06-19 16:35:02  DEBUG     [recognition.py:220]  person_1/face_20260618_141527_511.jpg → userId=3 (similarity=0.6969)
+2026-06-19 16:35:02  DEBUG     [recognition.py:220]  person_1/face_20260618_141658_344.jpg → userId=3 (similarity=0.7768)
+2026-06-19 16:35:02  DEBUG     [recognition.py:220]  person_1/face_20260618_141653_362.jpg → userId=3 (similarity=0.7467)
+2026-06-19 16:35:02  DEBUG     [recognition.py:220]  person_1/face_20260618_141656_937.jpg → userId=3 (similarity=0.7619)
+2026-06-19 16:35:02  DEBUG     [recognition.py:220]  person_1/face_20260618_141525_506.jpg → userId=3 (similarity=0.6394)
+2026-06-19 16:35:02  WARNING   [recognition.py:237]  person_1 → rejected (avg similarity=0.7059 < threshold=0.85)
+2026-06-19 16:35:02  DEBUG     [recognition.py:220]  person_2/face_20260618_141708_743.jpg → userId=3 (similarity=0.2154)
+2026-06-19 16:35:02  WARNING   [recognition.py:237]  person_2 → rejected (avg similarity=0.2154 < threshold=0.85)
+2026-06-19 16:35:02  INFO      [recognition.py:249]  Recognition complete — 0 student(s) identified.
+2026-06-19 16:35:11  INFO      [auth_service.py:23]  Login successful.
+2026-06-19 16:35:11  DEBUG     [client.py:31]  GET https://192.168.1.249:5004/scl/get-attendance/2107
+2026-06-19 16:35:11  INFO      [student_service.py:11]  Found 2 student(s) for calendar 2107
+2026-06-19 16:35:11  INFO      [recognition.py:59]  Found 1 subject(s) already enrolled in CompreFace.
+2026-06-19 16:35:11  INFO      [recognition.py:75]  Student 3 already enrolled in CompreFace — skipping.
+2026-06-19 16:35:11  WARNING   [recognition.py:70]  Student 683 has no reference photo (userRefRlc is null) — skipping.
+2026-06-19 16:35:11  INFO      [recognition.py:113]  Enrollment complete — 0/2 student(s) enrolled.
+2026-06-19 16:35:11  INFO      [recognition.py:167]  Recognizing 2 person(s) for calendar 2107...
+2026-06-19 16:35:11  DEBUG     [recognition.py:220]  person_1/face_20260618_141525_609.jpg → userId=3 (similarity=0.6431)
+2026-06-19 16:35:11  DEBUG     [recognition.py:220]  person_1/face_20260618_141525_122.jpg → userId=3 (similarity=0.6764)
+2026-06-19 16:35:11  DEBUG     [recognition.py:220]  person_1/face_20260618_141527_511.jpg → userId=3 (similarity=0.6969)
+2026-06-19 16:35:11  DEBUG     [recognition.py:220]  person_1/face_20260618_141658_344.jpg → userId=3 (similarity=0.7768)
+2026-06-19 16:35:11  DEBUG     [recognition.py:220]  person_1/face_20260618_141653_362.jpg → userId=3 (similarity=0.7467)
+2026-06-19 16:35:11  DEBUG     [recognition.py:220]  person_1/face_20260618_141656_937.jpg → userId=3 (similarity=0.7619)
+2026-06-19 16:35:12  DEBUG     [recognition.py:220]  person_1/face_20260618_141525_506.jpg → userId=3 (similarity=0.6394)
+2026-06-19 16:35:12  WARNING   [recognition.py:237]  person_1 → rejected (avg similarity=0.7059 < threshold=0.85)
+2026-06-19 16:35:12  DEBUG     [recognition.py:220]  person_2/face_20260618_141708_743.jpg → userId=3 (similarity=0.2154)
+2026-06-19 16:35:12  WARNING   [recognition.py:237]  person_2 → rejected (avg similarity=0.2154 < threshold=0.85)
+2026-06-19 16:35:12  INFO      [recognition.py:249]  Recognition complete — 0 student(s) identified.

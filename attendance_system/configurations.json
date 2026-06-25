@@ -10,7 +10,8 @@
     "similarity_threshold": 0.95,
     "recognition_api_key": "eb19cf1e-77bb-4790-a1ab-533ddd5fafac",
     "max_enroll_images": 7,
-    "recognition_threshold": 0.85
+    "recognition_threshold": 0.85,
+    "det_prob_threshold": 0.8
   },
   "yolo_config": {
     "model_path": "best.pt",
@@ -27,7 +28,9 @@
     "blur_threshold": 30.0,
     "brightness_min": 40,
     "brightness_max": 230,
-    "pose_angle_max": 35
+    "pose_angle_max": 35,
+    "frame_skip": 5,
+    "process_width": 640
   },
   "endpoints": {
     "calendars": "/scl/calendars",

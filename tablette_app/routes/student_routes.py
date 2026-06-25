@@ -10,7 +10,8 @@ from services.student_service import (
     add_student_to_attendance,
     delete_unknown_student,
     delete_image_from_folder,
-    get_student_current_group
+    get_student_current_group,
+    get_unknown_image
 )
 
 student_bp = Blueprint('student', __name__)
@@ -29,25 +30,22 @@ def show_attendance_unknown(calendar_id):
 
 @student_bp.route('/scl/unknown-image/<int:session_id>/<string:person_folder>/<string:filename>', methods=['GET'])
 def serve_unknown_image(session_id, person_folder, filename):
-    """Serve image files from the classified_unknown directory."""
+    """Proxy image request to remote server."""
     try:
-        BASE_SESSIONS_DIR = "/home/khalil/Desktop/all_unistudious_project/academie_attendance_system/dataset"
+        from flask import Response
+        response = get_unknown_image(session_id, person_folder, filename)
 
-        directory = os.path.join(
-            BASE_SESSIONS_DIR,
-            f"session_{session_id}",
-            "face_crops",
-            "classified_unknown",
-            person_folder
-        )
+        if response is None:
+            return jsonify({"error": "Failed to fetch image"}), 500
 
-        file_path = os.path.join(directory, filename)
-        if not os.path.exists(file_path):
-            print(f"File not found: {file_path}")
+        if response.status_code == 404:
             return jsonify({"error": "Image not found"}), 404
 
-        return send_from_directory(directory, filename)
-
+        return Response(
+            response.content,
+            status=response.status_code,
+            content_type=response.headers.get('Content-Type', 'image/jpeg')
+        )
     except Exception as e:
         print(f"Error serving image: {str(e)}")
         return jsonify({"error": str(e)}), 500

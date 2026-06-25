@@ -516,7 +516,7 @@ def get_tablets_by_room(room_id):
 # @token_required
 def view_tablet_by_id(id_tablette):
     try:
-        print(id_tablette)
+
         query = """
             SELECT t.id, t.name, t.mac_id, t.password, r.id, r.name, t.created_at, s.username
             FROM tablet t, room r,slc s
@@ -552,3 +552,285 @@ def view_tablet_by_id(id_tablette):
             "status": "error",
             "message": str(e)
         }), 500
+
+
+@devices_bp.route('/create_door', methods=['POST'])
+def create_door():
+    try:
+        data = request.get_json()
+        required_fields = ['slc_id', 'room_id', 'mac_id', 'password', 'name']
+        missing_fields = [field for field in required_fields if field not in data or data[field] == '']
+        if missing_fields:
+            return jsonify({
+                "Message": f"Missing required fields: {', '.join(missing_fields)}"
+            }), 400
+
+        query = """
+            INSERT INTO slc_door (slc_id, room_id, mac_id, password, name)
+            VALUES (%s, %s, %s, %s, %s)
+        """
+        values = (data.get('slc_id'), data.get('room_id'), data.get('mac_id'), data.get('password'), data.get('name'))
+        Database.execute_query(query, values, fetch=False)
+
+        new_record = Database.execute_query(
+            "SELECT * FROM slc_door WHERE slc_id = %s AND mac_id = %s AND enabled = 1 ORDER BY id DESC LIMIT 1",
+            (data.get('slc_id'), data.get('mac_id')),
+            fetch=True
+        )
+        log_audit(
+            table_name="slc_door_audit",
+            action_type="INSERT",
+            old_data=None,
+            new_data=new_record[0] if new_record else None,
+        )
+
+        return jsonify({
+            "Message": "slc_door created successfully"
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
+
+
+@devices_bp.route('/delete_door/<int:door_id>', methods=['POST'])
+def delete_door(door_id):
+    try:
+        query_test = """
+            SELECT count(*) AS nbr
+            FROM slc_door
+            WHERE id = %s AND enabled = 1
+        """
+        result = Database.execute_query(query_test, (door_id,), fetch=True)
+        if result[0]['nbr'] == 0:
+            return jsonify({
+                "Message": f"There is no Door with id: {door_id}"
+            }), 404
+
+        old_record = Database.execute_query(
+            "SELECT * FROM slc_door WHERE id = %s AND enabled = 1",
+            (door_id,),
+            fetch=True
+        )
+
+        query = """
+            UPDATE slc_door SET enabled = 0 WHERE id = %s AND enabled = 1
+        """
+        result = Database.execute_query(query, (door_id,), fetch=False)
+        if result:
+            log_audit(
+                table_name="slc_door_audit",
+                action_type="DELETE",
+                old_data=old_record[0] if old_record else None,
+                new_data=None,
+            )
+            return jsonify({
+                "Message": "Door deleted with Success"
+            }), 200
+        else:
+            return jsonify({
+                "Message": "Error in deleting Door"
+            }), 500
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
+
+
+@devices_bp.route('/update_door/<int:door_id>', methods=['POST'])
+def update_door(door_id):
+    try:
+        data = request.get_json()
+
+        query = """
+            SELECT count(*) as nbr
+            FROM slc_door
+            WHERE id = %s
+        """
+        result = Database.execute_query(query, (door_id,), fetch=True)
+
+        if result[0]['nbr'] == 0:
+            return jsonify({
+                "Message": "There is no door with this id"
+            }), 404
+
+        allowed_fields = {
+            "name": "name",
+            "status": "status",
+            "mac_id": "mac_id",
+            "password": "password",
+            "room_id": "room_id"
+        }
+
+        fields_to_update = []
+        values_to_update = []
+
+        for key, column in allowed_fields.items():
+            if key in data:
+                fields_to_update.append(f"{column} = %s")
+                values_to_update.append(data[key])
+
+        if not fields_to_update:
+            return jsonify({
+                "Message": "No valid fields provided to update"
+            }), 400
+
+        old_record = Database.execute_query(
+            "SELECT * FROM slc_door WHERE id = %s AND enabled = 1",
+            (door_id,),
+            fetch=True
+        )
+        if not old_record:
+            return jsonify({"Message": "slc_door not found"}), 404
+
+        values_to_update.append(door_id)
+
+        query = f"""
+            UPDATE slc_door
+            SET {', '.join(fields_to_update)}
+            WHERE id = %s 
+        """
+
+        result = Database.execute_query(query, tuple(values_to_update), fetch=False)
+        if result:
+            new_record = Database.execute_query(
+                "SELECT * FROM slc_door WHERE id = %s",
+                (door_id,),
+                fetch=True
+            )
+            log_audit(
+                table_name="slc_door_audit",
+                action_type="UPDATE",
+                old_data=old_record[0],
+                new_data=new_record[0] if new_record else None
+            )
+        return jsonify({
+            "Message": "door updated successfully"
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
+
+
+@devices_bp.route('/get_all_door/<int:local_id>', methods=['GET'])
+def get_all_door(local_id):
+    try:
+        query = """
+            SELECT
+                id,
+                slc_id,
+                name,
+                mac_id AS mac,
+                status,
+                room_id AS roomId
+            FROM slc_door
+            WHERE enabled = 1 AND local_id = %s
+        """
+        rows = Database.execute_query(query, (local_id,))
+
+        formatted_data = []
+        for row in rows:
+            formatted_data.append({
+                "id": row["id"],
+                "name": row["name"],
+                "mac": row["mac"],
+                "status": row["status"],
+                "roomId": row["roomId"],
+            })
+
+        return jsonify(formatted_data), 200
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Erreur: {e} coming from server"
+        }), 500
+
+
+@devices_bp.route('/view_detail_door/<int:door_id>', methods=['GET'])
+def view_detail_door(door_id):
+    try:
+        query = """
+            SELECT d.id, d.slc_id, d.password, d.mac_id, r.name, d.created_at
+            FROM slc_door d, room r          -- was: tablet t (wrong table + missing alias)
+            WHERE d.room_id = r.id
+              AND d.enabled = 1
+              AND r.enabled = 1
+              AND d.id = %s
+        """
+        rows = Database.execute_query(query, (door_id,))
+
+        if not rows:
+            return jsonify({
+                "status": "error",
+                "message": "door not found"
+            }), 404
+
+        formatted_data = []
+        for row in rows:
+            formatted_data.append({
+                "id": row["id"],
+                "name": row["name"],
+                "mac": row["mac_id"],
+                "password": row["password"],
+                "slc_id": row["slc_id"],      # was: row["username"] (undefined)
+                "created_at": row["created_at"]
+            })
+
+        return jsonify(formatted_data), 200
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
+
+
+
+# ================================== Change Status door ==================================
+def check_door_exist(mac_id):
+    try:
+        query = """
+            SELECT * 
+            FROM slc_door
+            WHERE mac_id = %s AND enabled = 1
+        """
+        result = Database.execute_query(query,(mac_id,))
+        return len(result)>0
+    except Exception as e:
+        return False
+
+@devices_bp.route('/change_staus_door/<string:mac_id>', methods=['POST'])
+def change_etat_door(mac_id):
+    try:
+        data = request.get_json(silent=True)
+        if not data:
+            return jsonify({"Message": "Missing or invalid JSON body"}), 400
+
+        status = data.get('status')
+
+        if not(check_door_exist(mac_id)):
+            return jsonify({
+                "Message":"There is no Door with this mac_id"
+            }),404
+
+        query = """
+            UPDATE slc_door
+            SET oc = %s
+            WHERE mac_id = %s AND enabled = 1
+        """
+
+        result = Database.execute_query(query, (status, mac_id), fetch=False)
+
+
+        return jsonify({
+            "Message": "Status updated with success"
+        }),200
+
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "Message":f"Error: {e} coming from server"
+        }),500

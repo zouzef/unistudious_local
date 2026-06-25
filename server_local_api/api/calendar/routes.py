@@ -1828,8 +1828,6 @@ def create_calander_special_group():
 # =======================================
 # ENDPOINT 19: cron job
 # =======================================
-
-
 def test_special_group(calander_id):
     try:
         query = """
@@ -1918,3 +1916,153 @@ def get_calendar_id_prod(calendar_id):
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
+
+
+# =======================================
+# ENDPOINT 20: get access to calender
+# =======================================
+@calendar_bp.route('/get_TeacherId_calander/<int:calender_id>', methods=['GET'])
+def get_TeacherCalender(calender_id):
+    try:
+        query = """
+            SELECT u.username, u.id
+             FROM relation_calander_group_session rcgs, user u
+            WHERE 
+                rcgs.teacher_id = u.id AND
+                rcgs.enabled = 1 AND
+                u.enabled = 1 AND
+                rcgs.id = %s
+                
+        """
+        result = Database.execute_query(query,(calender_id,))
+        if result:
+            return jsonify(result)
+        else:
+            return jsonify({
+                "Message":"There is no calander with this id"
+            }),404
+
+    except Exception as e:
+        return jsonify({
+            "Message":f"Error: {e} coming from server "
+        }),500
+
+
+# =======================================
+# ENDPOINT 21: get calender_with time
+# =======================================
+@calendar_bp.route('/get_calander_now/<string:date>/<string:time>')
+def get_calander_now(date, time):
+    try:
+        query = """
+            SELECT 
+                rcgs.subject_id,
+                rcgs.status,
+                rcgs.description,
+                rcgs.start_time,
+                rcgs.end_time,
+                rcgs.title,
+                rcgs.teacher_id,
+                u.id
+            FROM relation_calander_group_session rcgs, user u
+            WHERE DATE(rcgs.start_time) = %s 
+            AND TIME(%s) BETWEEN TIME(rcgs.start_time) AND TIME(rcgs.end_time)
+            AND u.id = rcgs.teacher_id
+            AND rcgs.enabled = 1 AND u.enabled = 1
+            
+        """
+        result = Database.execute_query(query, (date, time))
+
+        if result:
+            return jsonify(result)
+        else:
+            return jsonify({
+                "Message": "There is no calendar for this date and time"
+            }), 404
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from get_calander_now"
+        }), 500
+
+
+# =======================================
+# ENDPOINT 21: get calander with door_id
+# =======================================
+def check_door_id(door_id):
+    try:
+        query = """
+            SELECT id
+            FROM slc_door
+            WHERE mac_id = %s AND enabled = 1
+        """
+        result = Database.execute_query(query, (door_id,))
+        print(result)
+        return result is not None and len(result) > 0
+    except Exception as e:
+        return False
+
+def get_room_id(door_id):
+    try:
+        query = """
+            SELECT d.room_id
+            FROM slc_door d, room r
+            WHERE r.id = d.room_id
+            AND d.mac_id = %s
+            AND r.enabled = 1
+            AND d.enabled = 1
+        """
+        result = Database.execute_query(query, (door_id,))
+        if result is not None and len(result) > 0:
+            return result[0]['room_id']  # ✅ just return the value directly
+        return None
+    except Exception as e:
+        print(f"Error in get_room_id: {e}")
+        return None
+
+
+@calendar_bp.route('/get-calendar-door/<string:door_id>', methods=['GET'])
+def get_calendar_door(door_id):
+    try:
+        if not check_door_id(door_id):
+            return jsonify({"Message": "Door not found"}), 404
+
+        room_id = get_room_id(door_id)
+        if room_id is None:
+            return jsonify({"Message": "No room linked to this door"}), 404
+
+        query = """
+            SELECT r.*, u.username
+            FROM relation_calander_group_session r, session s, user u
+            WHERE r.room_id = %s
+            AND r.enabled = 1
+            AND r.session_id = s.id
+            AND r.teacher_id = u.id AND u.enabled = 1
+            AND s.enabled = 1
+            AND r.end_time >= NOW()
+            AND r.start_time >= DATE_SUB(NOW(), INTERVAL 30 MINUTE)
+            ORDER BY r.start_time ASC
+        """
+        values = (room_id,)
+        result = Database.execute_query(query, values)
+        if result and len(result) > 0:
+            for item in result:
+                if 'start_time' in item and item['start_time']:
+                    item['start_time'] = item['start_time'].isoformat()
+                if 'end_time' in item and item['end_time']:
+                    item['end_time'] = item['end_time'].isoformat()
+                if 'created_at' in item and item['created_at']:
+                    item['created_at'] = item['created_at'].isoformat()
+                if 'updated_at' in item and item['updated_at']:
+                    item['updated_at'] = item['updated_at'].isoformat()
+                if 'timestamp' in item and item['timestamp']:
+                    item['timestamp'] = item['timestamp'].isoformat()
+
+            return jsonify({"Message": "Successfully got calendar door", "Data": result}), 200
+        else:
+            return jsonify({"Message": "No calendar data found for this door"}), 404
+
+    except Exception as e:
+        print(f"Error in get_calendar_door: {e}")
+        return jsonify({"Message": f"Error: {e} coming from get calendar door"}), 500
+

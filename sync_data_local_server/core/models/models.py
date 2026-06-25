@@ -83,6 +83,7 @@ class RelationTeacherAccount(BaseModel):
         Column("invitation_relation_teacher_account_id", "INT(11)", default=None),
         Column("cloud_path", "VARCHAR(255)", default=None),
         Column("access_session", "LONGTEXT", default=None),
+		Column("door_id", "INT(11)", default=None),
 		Column("id_prod", "INT(11)", default=None)
 	]
 class RelationTeacherAccountAudit(BaseModel):
@@ -532,6 +533,34 @@ class TabletAuditModel(BaseModel):
 		Column("is_synced", "TINYINT(1)", default="0"),
 	]
 
+class SlcDoorModel(BaseModel):
+	table_name = "slc_door"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("slc_id", "INT(11)"),
+		Column("room_id", "INT(11)"),
+		Column("local_id", "INT(11)"),
+		Column("mac_id", "VARCHAR(255)", nullable=False),
+		Column("name", "VARCHAR(255)", nullable=False),
+		Column("password", "VARCHAR(255)", nullable=False),
+		Column("status", "VARCHAR(50)", nullable=False, default="'False'"),
+		Column("oc", "BOOLEAN", nullable=False, default="0"),
+		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("updated_at", "DATETIME"),
+		Column("id_prod","TINYINT(1)", default="0")
+	]
+class SlcDoorAuditModel(BaseModel):
+	table_name = "slc_door_audit"
+	columns = [
+		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
+		Column("old_data", "LONGTEXT"),
+		Column("new_data", "LONGTEXT"),
+		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("is_synced", "TINYINT(1)", default="0"),
+	]
 
 # ------------------------------------ SESSION Models -----------------------------------
 class RelationUserSessionModel(BaseModel):
@@ -881,6 +910,7 @@ class UserModel(BaseModel):
 		Column("useToken", "VARCHAR(255)"),
 		Column("slc_use", "INT(11)", default="0"),
 		Column("isvirtual", "TINYINT(1)", default="0"),
+		Column("door_id", "INT(11)", default = "0"),
 		Column("slc_edit", "INT(11)", default="0"),
 		Column("id_user", "INT(11)"),
 	]
@@ -1075,14 +1105,15 @@ class SpecialTableModel(BaseModel):
 class SyncImagesModel(BaseModel):
 	table_name = "sync_images"
 	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("user_id", "INT(11)"),
-		Column("images_path", "TEXT"),
-		Column("calendar_id", "INT(11)"),
-		Column("is_synced", "INT(11)", default="0"),
-		Column("created_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
-		Column("synced_at", "TIMESTAMP"),
-	]
+       Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),  # ← rename id to audit_id
+       Column("user_id", "INT(11)"),
+       Column("images_path", "TEXT"),
+       Column("calendar_id", "INT(11)"),
+       Column("action_type", "VARCHAR(20)", default="'INSERT'"),  # ← add action column
+       Column("is_synced", "INT(11)", default="0"),
+       Column("created_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+       Column("synced_at", "TIMESTAMP"),
+    ]
 
 class SyncStatusModel(BaseModel):
 	table_name = "sync_status"
@@ -1112,6 +1143,21 @@ class YourTableModel(BaseModel):
 		Column("data", "LONGTEXT"),  # JSON-validated in SQL (CHECK json_valid)
 		Column("settings", "LONGTEXT"),  # JSON-validated in SQL
 		Column("metadata", "LONGTEXT"),  # JSON-validated in SQL
+	]
+
+class SyncFoldersModel(BaseModel):
+	table_name = "sync_folders"
+	collate = "utf8mb4_general_ci"
+	columns = [
+        Column("audit_id",          "INT(11)",      primary_key=True, auto_increment=True, nullable=False),
+        Column("folder_name", "VARCHAR(255)", nullable=False),
+        Column("images_path", "LONGTEXT",     nullable=False),   # JSON array of image paths
+        Column("calendar_id", "INT(11)",      nullable=False),
+        Column("is_synced",   "INT(11)",      default=0),
+        Column("created_at",  "TIMESTAMP",    default="current_timestamp()"),
+        Column("synced_at",   "TIMESTAMP",    nullable=True),
+		Column("action_type", "VARCHAR(20)", default="'INSERT'"),
+
 	]
 
 
@@ -1186,5 +1232,8 @@ ALL_MODELS = [
 	RelationTeacherAccount,
 	RelationTeacherAccountAudit,
 	RelationCompletionTag,
-	RelationCompletionTagAudit
+	RelationCompletionTagAudit,
+	SyncFoldersModel,
+	SlcDoorModel,
+	SlcDoorAuditModel
 ]

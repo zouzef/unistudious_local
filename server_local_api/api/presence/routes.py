@@ -16,14 +16,17 @@ presence_bp = Blueprint('presence', __name__, url_prefix='/scl')
 
 # Get absolute path relative to this file - pointing to academie_attendance_system
 CURRENT_FILE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 BASE_SESSIONS_DIR = os.path.abspath(os.path.join(
     CURRENT_FILE_DIR,
-    "../../../../academie_attendance_system/dataset"
+    "../../../../unistudious_local/attendance_system/dataset"
 ))
+
 DESTINATION = os.path.abspath(os.path.join(
     CURRENT_FILE_DIR,
-    "../../../../academie_attendance_system/user_students"
+    "../../../../unistudious_local/server_local_api/uploads/user_img"
 ))
+
 # Maximum images to return per folder
 MAX_IMAGES_PER_FOLDER = 6
 
@@ -40,21 +43,22 @@ def get_file_type(filename):
 
 
 def update_attendance(attendance_id):
-    conn = mysql.connector.connect(
-        host=Config.DB_HOST,
-        port=Config.DB_PORT,
-        user=Config.DB_USER,
-        password=Config.DB_PASSWORD,
-        database=Config.DB_NAME,
-        charset=Config.DB_CHARSET,
-        autocommit=True
-    )
-    cursor = conn.cursor(dictionary=True)
+    conn   = None
+    cursor = None
     try:
+        conn = mysql.connector.connect(
+            host=Config.DB_HOST,
+            port=Config.DB_PORT,
+            user=Config.DB_USER,
+            password=Config.DB_PASSWORD,
+            database=Config.DB_NAME,
+            charset=Config.DB_CHARSET,
+            autocommit=True
+        )
+        cursor = conn.cursor(dictionary=True)
         cursor.execute("""
-            UPDATE attendance SET is_present = 1 , slc_edit=1 WHERE id = %s 
+            UPDATE attendance SET is_present = 1, slc_edit=1 WHERE id = %s
         """, (attendance_id,))
-
         if cursor.rowcount > 0:
             conn.commit()
             print(f"✓ Attendance updated for ID: {attendance_id}")
@@ -70,7 +74,10 @@ def update_attendance(attendance_id):
 
 
 def checking_params(user_id, calendar_id, attendance_id):
+    conn   = None
+    cursor = None
     try:
+
         conn = mysql.connector.connect(
             host=Config.DB_HOST,
             port=Config.DB_PORT,
@@ -111,7 +118,9 @@ def checking_params(user_id, calendar_id, attendance_id):
             conn.close()
 
 
-def add_to_audit_image(list_path, user_id, calander_id):
+def add_to_audit_image(list_path, user_id, calander_id, action="INSERT"):
+    conn   = None
+    cursor = None
     try:
         conn = mysql.connector.connect(
             host=Config.DB_HOST,
@@ -125,11 +134,11 @@ def add_to_audit_image(list_path, user_id, calander_id):
         cursor = conn.cursor(dictionary=True)
         cursor.execute("""
             INSERT INTO sync_images
-             ( user_id, images_path, calendar_id)
-             VALUES(%s,%s,%s)
-        """, (user_id, json.dumps(list_path), calander_id))
+            (user_id, images_path, calendar_id, action_type)
+            VALUES(%s, %s, %s, %s)
+        """, (user_id, json.dumps(list_path), calander_id, action))
         conn.commit()
-        print(f"✓ Audit log added for user ID: {user_id}")
+        print(f"✓ Audit log added for user ID: {user_id} — action: {action}")
 
     except Exception as e:
         print(f"❌ ERROR connecting to database for audit log: {str(e)}")
@@ -140,7 +149,9 @@ def add_to_audit_image(list_path, user_id, calander_id):
             conn.close()
 
 
-def add_audit_association(calander_id, user_id, folder_id):
+def add_to_sync_folders(folder_name, images_path, calendar_id, action="INSERT"):
+    conn   = None
+    cursor = None
     try:
         conn = mysql.connector.connect(
             host=Config.DB_HOST,
@@ -153,21 +164,15 @@ def add_audit_association(calander_id, user_id, folder_id):
         )
         cursor = conn.cursor(dictionary=True)
         cursor.execute("""
-            INSERT INTO association_audit
-            (user_id, folder_id, calander_id)
-            VALUES(%s,%s,%s)
-        """, (user_id, folder_id, calander_id))
+            INSERT INTO sync_folders
+            (folder_name, images_path, calendar_id,action_type)
+            VALUES (%s, %s, %s, %s)
+        """, (folder_name, json.dumps(images_path), calendar_id, action))
         conn.commit()
-        if cursor.rowcount > 0:
-            print(" INSERT successfully")
-            return True
-        else:
-            return False
+        print(f"✓ sync_folders inserted — folder={folder_name}, images={len(images_path)}")
 
     except Exception as e:
-        print(f" DEBUG: ERROR from add_audit_association! {e}")
-        if conn:
-            conn.rollback()
+        print(f"❌ ERROR inserting into sync_folders: {str(e)}")
     finally:
         if cursor:
             cursor.close()
@@ -186,8 +191,7 @@ def associate_image_to_user(session_id):
         directory = os.path.join(
             BASE_SESSIONS_DIR,
             f"session_{session_id}",
-            "face_crops",
-            "classified_unknown",
+            "classified",
         )
 
         data = request.get_json()
@@ -214,7 +218,7 @@ def associate_image_to_user(session_id):
             err_msg = f'Invalid parameters provided'
             return jsonify({'error': err_msg}), 400
 
-        user_folder = Path(DESTINATION) / str(user_id)
+        user_folder = Path(DESTINATION) / f"user_{user_id}" / "ref_img"
 
         # Create user folder if it doesn't exist, or use existing one
         if user_folder.exists():
@@ -243,7 +247,8 @@ def associate_image_to_user(session_id):
                     print(f"  ⚠️  File exists, renaming to: {dest_file.name}")
 
                 shutil.move(str(file), str(dest_file))
-                moved_files.append(str(dest_file))
+                relative_path = os.path.join(f"user_{user_id}", "ref_img", file.name)
+                moved_files.append(relative_path)
                 moved_count += 1
 
         print(f"✓ Moved {moved_count} files")
@@ -257,7 +262,6 @@ def associate_image_to_user(session_id):
 
         update_attendance(attendance_id)
         add_to_audit_image(moved_files, user_id, calendar_id)
-        add_audit_association(calendar_id, user_id, folder_name)
         return jsonify({
             'success': True,
             'message': f'Successfully moved {moved_count} files from {folder_name} to user {user_id}',
@@ -281,8 +285,7 @@ def delete_folder_user_function(calander_id):
         directory_path = os.path.join(
             BASE_SESSIONS_DIR,
             f"session_{calander_id}",
-            "face_crops",
-            "classified_unknown"
+            "classified"
         )
         data = request.get_json()
         if not (data):
@@ -317,8 +320,7 @@ def delete_image_from_folder(calander_id):
         image_path = os.path.join(
             BASE_SESSIONS_DIR,
             f"session_{calander_id}",
-            "face_crops",
-            "classified_unknown",
+            "classified",
             f"{folder}",
             f"{file_name}"
         )
@@ -376,8 +378,7 @@ def serve_unknown_image(session_id, person_folder, filename):
         directory = os.path.join(
             BASE_SESSIONS_DIR,
             f"session_{session_id}",
-            "face_crops",
-            "classified_unknown",
+            "classified",
             person_folder
         )
 
@@ -409,8 +410,7 @@ def show_attendance_unknown(calender_id):
         unknown_dir = os.path.join(
             BASE_SESSIONS_DIR,
             f"session_{calender_id}",
-            "face_crops",
-            "classified_unknown"
+            "classified"
         )
         print(f"Unknown directory: {unknown_dir}")
 
@@ -464,3 +464,50 @@ def show_attendance_unknown(calender_id):
         import traceback
         traceback.print_exc()
         return jsonify({"message": str(e)}), 500
+
+
+# ========================================
+# ENDPOINT: Store classified folders + image paths after recognition
+# ========================================
+@presence_bp.route('/store-classified-folders/<int:calendar_id>', methods=['POST'])
+def store_classified_folders(calendar_id):
+    try:
+        classified_dir = os.path.join(
+            BASE_SESSIONS_DIR,
+            f"session_{calendar_id}",
+            "classified"
+        )
+
+        if not os.path.exists(classified_dir):
+            print("hiiii")
+            return jsonify({'error': f'Classified dir not found'}), 404
+
+        stored = []
+
+        for person_folder in os.listdir(classified_dir):
+            person_path = os.path.join(classified_dir, person_folder)
+
+            if not os.path.isdir(person_path):
+                continue
+
+            # Collect all image paths in this folder
+            images_path = []
+            for fname in sorted(os.listdir(person_path)):
+                if fname.lower().endswith(('.jpg', '.jpeg', '.png', '.webp', '.bmp')):
+                    relative_path = os.path.join(
+                        f"session_{calendar_id}", "classified", person_folder, fname
+                    )
+                    images_path.append(relative_path)
+
+            if not images_path:
+                continue
+
+            add_to_sync_folders(person_folder, images_path, calendar_id)
+            stored.append({'folder': person_folder, 'images_count': len(images_path)})
+
+        return jsonify({'success': True, 'stored': stored}), 200
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': str(e)}), 500

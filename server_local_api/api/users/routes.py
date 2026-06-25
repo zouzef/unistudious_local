@@ -908,3 +908,106 @@ def create_teacher():
 		return jsonify({
 			"Message":f"Error:{e} coming from server"
 		})
+
+
+# =============================================
+# ENDPOINT 15: check Teacher open door
+# =============================================
+def get_account_id(doorId):
+	try:
+
+		query = """
+			SELECT s.account_id
+			FROM slc_local s, slc_door d 
+			WHERE d.slc_id = s.slc_id
+			AND d.mac_id = %s
+			AND d.enabled = 1
+			AND s.enabled = 1
+		"""
+		accountId = Database.execute_query(query,(doorId,),fetch=True)[0]['account_id']
+
+		return accountId
+
+	except Exception as e:
+		return None
+
+def check_role_user(rfid, account_id):
+	query = """
+       SELECT roles
+       FROM user 
+       WHERE account_id = %s AND door_id = %s AND enabled = 1
+    """
+
+	result = Database.execute_query(query, (account_id, rfid))
+	if not result:
+		return False
+
+	roles_raw = result[0]['roles']
+	if not roles_raw:
+		return False
+
+	roles = json.loads(roles_raw) if isinstance(roles_raw, str) else roles_raw
+	allowed = {"ROLE_ADMIN", "ROLE_MANAGER_ADMINISTRATIVE", "ROLE_MANAGER_CONFIG"}
+
+	# ✅ Has an allowed role → return True directly
+	if any(role in allowed for role in roles):
+		return True
+
+	# ❌ No allowed role → check relation_teacher_account by account_id + door_id
+	relation_query = """
+        SELECT user_id
+        FROM relation_teacher_account
+        WHERE account_id = %s AND door_id = %s AND enabled = 1 AND status = 1
+    """
+	relation_result = Database.execute_query(relation_query, (account_id, rfid))
+	if not relation_result:
+		return False
+
+	teacher_id = relation_result[0]['user_id']
+	return teacher_id
+
+def check_calander_teacher(teacher_id, time, date):
+	try:
+		print(teacher_id)
+		query = """
+            SELECT teacher_id
+            FROM relation_calander_group_session
+            WHERE teacher_id = %s 
+            AND DATE(start_time) = %s 
+            AND TIME(%s) BETWEEN TIME(start_time) AND TIME(end_time)
+            AND enabled = 1
+        """
+		values = (teacher_id, date, time)  # ✅ date first, time second
+		result = Database.execute_query(query, values)  # ✅ fixed typo
+		return len(result) > 0
+
+	except Exception as e:
+		return False
+
+@users_bp.route('/check_teacher_access/<int:rfid>', methods=['POST'])
+def check_teacher_access(rfid):
+	try:
+		data = request.get_json()
+		date = data.get("date")
+		time = data.get("time")
+		doorId = data.get("Door_Mac_Id")
+		print(data)
+		account_id = get_account_id(doorId)
+		if not account_id:
+			return jsonify({"Message": "There is no door id in this local"}), 404
+
+		role_result = check_role_user(rfid, account_id)
+		if role_result is False:
+			return jsonify({"Message": "Access denied"}), 403
+
+		if role_result is True:
+			return jsonify({"Message": f"Access for user with id: {rfid}","Status": True}), 200
+		else:
+			teacher_id = role_result
+			if check_calander_teacher(teacher_id, time, date):
+				return jsonify({"Message": "Teacher have access", "Status": True}), 200
+			else:
+				return jsonify({"Message": "Teacher doesn't have access", "Status": False}), 403
+
+	except Exception as e:
+		return jsonify({"Message": f"Error: {e}"}), 500

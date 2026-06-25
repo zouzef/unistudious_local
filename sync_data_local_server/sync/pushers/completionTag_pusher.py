@@ -88,7 +88,6 @@ def _send_delete_completionTag_api(settings,completionTagId):
         return False
 
 
-
 def push_completionTagAdd(db, settings, row):
     try:
         new_data = json.loads(row.get('new_data', '{}'))

@@ -232,3 +232,16 @@ def get_student_current_group(calendar_id, user_id):
     except Exception as e:
         print("DEBUG: Exception in get_student_current_group:", e)
         return None
+
+
+def get_unknown_image(session_id, person_folder, filename):
+    """Proxy image request to remote server."""
+    try:
+        headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
+        url = f"{base_url}/unknown-image/{session_id}/{person_folder}/{filename}"
+
+        response = requests.get(url, headers=headers, verify=False, stream=True)
+        return response
+    except Exception as e:
+        print(f"Error proxying image: {str(e)}")
+        return None

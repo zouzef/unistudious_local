@@ -387,6 +387,16 @@ def process_sync_data(db, data, settings):
     #         logger.info("Processing completionTagUser")
     #         process_completionTaguser(db, n)
 
+    if 'slcDoor' in data:
+        n = normalize(data['slcDoor'])
+        if has_records(n):
+            from sync.processors.door_processor import process_slc_door
+            logger.info("Processing Slc_Door")
+            process_slc_door(db,n)
+
+
+
+
 # ---------------------------------------------------------------------------
 # Sync runners
 # ---------------------------------------------------------------------------

@@ -7,7 +7,8 @@
     "base_url": "https://unistudious.com",
     "login_endpoint": "/api_slc/login_check",
     "whats_new_endpoint": "/slc/get-whats-news",
-    "timeout": 30
+    "timeout": 30,
+    "uploads_path": "./../../../server_local_api/uploads/user_img"
   },
   "sync": {
     "interval_minutes": 1,
@@ -25,5 +26,5 @@
     "check_url": "https://www.google.com",
     "check_timeout": 5
   },
-  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3ODE1MzMyNDgsImV4cCI6MTc4MjEzODA0OCwicm9sZXMiOlsiUk9MRV9TTEMiXSwidXNlcm5hbWUiOiJmNDo0ZDozMDplZTpjOToxZCJ9.NausnXcQ2KZIibVUXHLj3D2LDg-N9m3BsB0ZC6UIkP0AIO4MokSpL4lLFwmYa8xcHxlrMWjJ_xd9GhhRF9kAFbnwPgPO0YcjMji4tiMZ4xmb5t3gvcMVagftpYEf35399l39AgXvZm8wq2t0ceudlO_lRIYUTLo-YgWJvCkW2BQexmYDLq1xKjma44B3ccyGIZxKjPC_rm9FRo7WciMMmdIgzTue8Z59Ak4PN5w0g9YFn2zb0tVGx-qYN468Ie8l5jKtISuuhGhte0w2rsJ7klGZjpSDFCJhwyl6H5YwO_WNZPI3xkFbCH5eg_186nTx-Mher9AHPNIIGfZszpk_2g"
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3ODIzODE5MjIsImV4cCI6MTc4Mjk4NjcyMiwicm9sZXMiOlsiUk9MRV9TTEMiXSwidXNlcm5hbWUiOiJmNDo0ZDozMDplZTpjOToxZCJ9.IsqevE3ngEedB0zZ5zLbPJiccJGXRBotu3mP0GTtP3E21Z1cCj0PyyezkibPyTRk-Q0G_v5pw5VIAmbsKx7B_dQ0xrwM3QoMk1qnkGCV-ySCgmvLdSAXiUpNHqSVZepgn2hyDz9F0u76LLbn4h2tMhpUyfmzXaEi3oqCJElzUSOS23KuqKYlJh3XyiBj3R12L4yeuQpMqjXOnCTHQXDSd0d5cydtCaft-0fy1iJJzaYximX8kow5JMtP0MWlj4PU0cGWyrWSfdUavSeBwezR0WaGU9RFxGtR9Gnf-eMBOGdRAbCedYaw6bJ0rgJon_qHZLfHwJTDq324oTseTSxRYQ"
 }

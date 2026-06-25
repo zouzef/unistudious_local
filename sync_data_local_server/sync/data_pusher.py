@@ -11,6 +11,8 @@ from sync.pushers.accountSection_pusher import push_accountSectionAdd, push_acco
 from sync.pushers.accountSubject_pusher import push_accountSubjectAdd, push_accountSubjectUpdate, push_accountSubjectDelete
 from sync.pushers.accountTag_pusher import push_accountTagAdd, push_accountTagUpdate, push_accountTagDelete
 from sync.pushers.completionTag_pusher import push_completionTagAdd, push_completionTagUpdate, push_completionTagDelete
+from sync.pushers.association_pusher import push_AssociationAdd, push_AssociationUpdate, push_AssociationDelete,push_FolderNotAssociated
+from sync.pushers.slcdoor_pusher import push_doorAdd, push_doorUpdate, push_doorDelete
 logger = logging.getLogger(__name__)
 
 
@@ -187,11 +189,10 @@ class DataPusher:
                     }
                 )
 
-            # --- Compltetion_Tag
-            cursor.execute(
-                """SELECT * FROM completion_tag_account_audit
+            # --- Compltetion_Tag ---
+            cursor.execute("""SELECT * FROM completion_tag_account_audit
                 WHERE is_synced = 0
-                ORDER BY audit_id ASC 
+                ORDER BY audit_id ASC
             """)
             completion_tag_rows = cursor.fetchall()
             if not completion_tag_rows:
@@ -209,14 +210,76 @@ class DataPusher:
                     }
                 )
 
+            # --- Association Folder ---
+            cursor.execute("""
+                SELECT * FROM sync_folders
+                WHERE is_synced = 0
+                ORDER BY audit_id ASC
+            """)
+            folder_not_associated = cursor.fetchall()
+            if not folder_not_associated:
+                logger.debug("No pending Association Folder changes to push")
+            else:
+                logger.debug("Found %s Assocication Folder change(s)", len(folder_not_associated))
+                self._process_audit_rows(
+                    cursor,conn,
+                    "sync_folders",
+                    folder_not_associated,
+                    {
+                        "INSERT": lambda row: push_FolderNotAssociated(db, self.settings, row),
+                        # "UPDATE": lambda row: push_AssociationUpdate(db, self.settings, row),
+                        # "DELETE": lambda row: push_AssociationDelete(db, self.settings, row)
+                    }
+                )
 
 
+            # --- Association_Sync ---
+            cursor.execute("""
+                SELECT * FROM sync_images
+                WHERE is_synced = 0
+                ORDER BY audit_id ASC
+            """)
+            assocation_rows = cursor.fetchall()
+            if not assocation_rows:
+                logger.debug("No pending Association changes to push")
+            else:
+                logger.debug("Found %s PENDING Associaion change(s)", len(assocation_rows))
+                self._process_audit_rows(
+                    cursor, conn,
+                    "sync_images",
+                    assocation_rows,
+                    {
+                        "INSERT": lambda row: push_AssociationAdd(db, self.settings, row),
+                        "UPDATE": lambda row: push_AssociationUpdate(db, self.settings, row),
+                        "DELETE": lambda row: push_AssociationDelete(db, self.settings, row)
+                    }
+                )
 
+            # --- slc_door ---
+            cursor.execute("""
+                SELECT * FROM slc_door_audit
+                WHERE is_synced = 0
+                ORDER BY audit_id ASC
+                """)
+            slcdoor_rows = cursor.fetchall()
+            if not slcdoor_rows:
+                logger.debug("No pending SlcDoor changes to push")
+            else:
+                logger.debug("Found %s PENDING door change(s)", len(slcdoor_rows))
+                self._process_audit_rows(
+                    cursor, conn,
+                    "slc_door_audit",
+                    slcdoor_rows,
+                    {
+                        'INSERT': lambda row: push_doorAdd(db, self.settings, row),
+                        'UPDATE': lambda row: push_doorUpdate(db, self.settings, row),
+                        'DELETE': lambda row: push_doorDelete(db, self.settings, row)
+                    }
+                )
 
 
         except Exception as e:
             logger.exception("Fatal error in data_pusher: %s", e)
-
         finally:
             if cursor:
                 cursor.close()
