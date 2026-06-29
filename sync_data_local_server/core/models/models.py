@@ -521,6 +521,7 @@ class TabletModel(BaseModel):
 		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
 		Column("updated_at", "DATETIME"),
 		Column("slc_edit", "TINYINT(1)", default="0"),
+		Column("id_prod", "INT(11)", default=None)
 	]
 class TabletAuditModel(BaseModel):
 	table_name = "tablet_audit"
@@ -864,66 +865,66 @@ class RelationTeacherToSubjectGroupAuditModel(BaseModel):
 
 # ----------------------------------- USER Models -----------------------------------
 class UserModel(BaseModel):
-	table_name = "user"
-	columns = [
-		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("account_id", "INT(11)"),
-		Column("username", "VARCHAR(180)", nullable=False),
-		Column("email", "VARCHAR(255)", nullable=False),
-		Column("full_name", "VARCHAR(255)"),
-		Column("roles", "LONGTEXT", nullable=False),
-		Column("img_link", "VARCHAR(255)"),
-		Column("reset_token", "VARCHAR(255)"),
-		Column("status", "TINYINT(1)", nullable=False, default="0"),
-		Column("created_by", "INT(11)", nullable=False),
-		Column("password", "VARCHAR(255)", nullable=False),
-		Column("birth_date", "DATETIME"),
-		Column("birth_place", "VARCHAR(255)"),
-		Column("phone", "VARCHAR(255)"),
-		Column("address", "VARCHAR(255)"),
-		Column("grand", "VARCHAR(255)"),
-		Column("access_type", "VARCHAR(255)"),
-		Column("access_type_date", "DATETIME"),
-		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
-		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("updated_at", "DATETIME"),
-		Column("uuid", "VARCHAR(255)", nullable=False),
-		Column("facebook_id", "VARCHAR(255)"),
-		Column("google_id", "VARCHAR(255)"),
-		Column("mastodon_access_token", "VARCHAR(255)"),
-		Column("general_notification", "TINYINT(1)", nullable=False, default="1"),
-		Column("message_notification", "TINYINT(1)", nullable=False, default="1"),
-		Column("calendar_notification", "TINYINT(1)", nullable=False, default="1"),
-		Column("push_notification", "TINYINT(1)", nullable=False, default="1"),
-		Column("sms_notification", "TINYINT(1)", nullable=False, default="1"),
-		Column("login_notification", "TINYINT(1)", nullable=False, default="1"),
-		Column("horsline", "TINYINT(1)", nullable=False, default="0"),
-		Column("ref_slc", "VARCHAR(255)"),
-		Column("apple_id", "VARCHAR(255)"),
-		Column("open_source_user_name", "VARCHAR(255)"),
-		Column("rocket_chat_user_id", "VARCHAR(255)"),
-		Column("fcm_web", "VARCHAR(255)"),
-		Column("fcm_android", "VARCHAR(255)"),
-		Column("fcm_ios", "VARCHAR(255)"),
-		Column("releaseToken", "TINYINT(1)"),
-		Column("useToken", "VARCHAR(255)"),
-		Column("slc_use", "INT(11)", default="0"),
-		Column("isvirtual", "TINYINT(1)", default="0"),
-		Column("door_id", "VARCHAR(255)", default = "0"),
-		Column("slc_edit", "INT(11)", default="0"),
-		Column("id_user", "INT(11)"),
-	]
+    table_name = "user"
+    columns = [
+        Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+        Column("account_id", "INT(11)"),
+        Column("username", "VARCHAR(180)", nullable=False),
+        Column("email", "VARCHAR(255)", nullable=False),
+        Column("full_name", "VARCHAR(255)"),
+        Column("roles", "LONGTEXT", nullable=False),
+        Column("img_link", "VARCHAR(255)"),
+        Column("reset_token", "VARCHAR(255)"),
+        Column("status", "TINYINT(1)", nullable=False, default="1"),  # ✅ was "0", string "Active" caused error
+        Column("created_by", "INT(11)", nullable=False, default="0"), # ✅ added default
+        Column("password", "VARCHAR(255)", nullable=False),
+        Column("birth_date", "DATE"),                                  # ✅ was DATETIME, birth date doesn't need time
+        Column("birth_place", "VARCHAR(255)"),
+        Column("phone", "VARCHAR(255)"),
+        Column("address", "VARCHAR(255)"),
+        Column("grand", "TINYINT(1)", default="0"),                   # ✅ was VARCHAR(255), semantically a flag
+        Column("access_type", "VARCHAR(255)"),
+        Column("access_type_date", "DATETIME"),
+        Column("enabled", "TINYINT(1)", nullable=False, default="1"),
+        Column("created_at", "DATETIME", nullable=True, default="current_timestamp()"),
+        Column("timestamp", "DATETIME", nullable=True, default="current_timestamp()"),
+        Column("updated_at", "DATETIME"),
+        Column("uuid", "VARCHAR(255)", nullable=True),
+        Column("facebook_id", "VARCHAR(255)"),
+        Column("google_id", "VARCHAR(255)"),
+        Column("mastodon_access_token", "VARCHAR(255)"),
+        Column("general_notification", "TINYINT(1)", nullable=False, default="1"),
+        Column("message_notification", "TINYINT(1)", nullable=False, default="1"),
+        Column("calendar_notification", "TINYINT(1)", nullable=False, default="1"),
+        Column("push_notification", "TINYINT(1)", nullable=False, default="1"),
+        Column("sms_notification", "TINYINT(1)", nullable=False, default="1"),
+        Column("login_notification", "TINYINT(1)", nullable=False, default="1"),
+        Column("horsline", "TINYINT(1)", nullable=False, default="0"),
+        Column("ref_slc", "VARCHAR(255)"),
+        Column("apple_id", "VARCHAR(255)"),
+        Column("open_source_user_name", "VARCHAR(255)"),
+        Column("rocket_chat_user_id", "VARCHAR(255)"),
+        Column("fcm_web", "VARCHAR(255)"),
+        Column("fcm_android", "VARCHAR(255)"),
+        Column("fcm_ios", "VARCHAR(255)"),
+        Column("releaseToken", "TINYINT(1)", default="0"),            # ✅ added default
+        Column("useToken", "VARCHAR(255)"),
+        Column("slc_use", "INT(11)", default="0"),
+        Column("isvirtual", "TINYINT(1)", default="0"),
+        Column("door_id", "VARCHAR(255)", default="0"),
+        Column("slc_edit", "INT(11)", default="0"),
+        Column("id_user", "INT(11)"),
+    ]
 class UserAuditModel(BaseModel):
 	table_name = "user_audit"
 	columns = [
-		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("action_type", "VARCHAR(10)", nullable=False),
-		Column("record_id", "INT(11)", nullable=False),
-		Column("old_data", "LONGTEXT"),
-		Column("new_data", "LONGTEXT"),
-		Column("changed_at", "DATETIME", nullable=False, default="current_timestamp()"),
-		Column("is_synced", "TINYINT(1)", nullable=False, default="0"),
+		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True),
+		Column("user_id", "INT(11)", nullable=False),  # FK to user.id
+		Column("role", "VARCHAR(255)", nullable=False),  # e.g. ROLE_TEACHER, ROLE_MANAGER_ADMINISTRATIVE
+		Column("action_type", "VARCHAR(50)", nullable=False),  # CREATE, UPDATE, DELETE
+		Column("payload", "LONGTEXT"),  # JSON snapshot of the user data
+		Column("is_synced", "TINYINT(1)", default="0"),  # 0 = pending, 1 = pushed
+		Column("created_at", "DATETIME", default="current_timestamp()"),
 	]
 
 class VirtualUserModel(BaseModel):

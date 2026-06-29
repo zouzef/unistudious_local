@@ -14,7 +14,6 @@ def _send_create_camera_api(settings, payload):
 		token = get_token()
 		headers = {"Authorization": f"Bearer {token}"}
 		url = f"{settings.api_base_url}/slc/create-camera"
-
 		logger.debug("POST %s | payload: %s", url, payload)
 		response = requests.post(url, data=payload, headers=headers, verify=False, timeout=10)
 		if response.status_code == 200:
@@ -31,17 +30,51 @@ def _send_create_camera_api(settings, payload):
 		else:
 			logger.error("Unexpected status %s: %s", response.status_code,response.text)
 			return False, None
-
 	except Exception as e:
 		logger.exception("Remote API error in create camera: %s", e)
 		return False,None
 
 def _send_update_camera_api(settings,payload,cameraId):
-	pass
+	try:
+		token = get_token()
+		headers = {"Authorization": f"Bearer {token}"}
+		url = f"{settings.api_base_url}/slc/update-camera/{cameraId}"
+		response = requests.post(url, data=payload, headers=headers,timeout=10)
+		if response.status_code == 200:
+			try:
+				response_data = response.json()
+				logger.info("Slc_camera updated - %s", response_data)
+				return True
+			except Exception :
+				logger.error("Invalid JSON response: %s", response.text)
+				return False
+		else:
+			logger.error("Remote API returned %s: %s", response.status_code, response.text)
+			return False
+	except Exception as e:
+		logger.exception("Remote API error in update camera: %s", e)
+		return False
 
 def _send_delete_camera_api(settings, cameraId):
-	pass
-
+	try:
+		token = get_token()
+		headers = {"Authorization": f"Bearer {token}"}
+		url = f"{settings.api_base_url}/slc/delete-camera/{cameraId}"
+		response = requests.post(url, headers=headers, timeout=10)
+		if response.status_code == 200:
+			try:
+				response_data = response.json()
+				logger.info("Camera deleted - %s", response_data)
+				return True
+			except Exception:
+				logger.error("Invalid JSON response: %s", response.text)
+				return False
+		else:
+			logger.error("Remote API returned %s: %s", response.status_code, response.text)
+			return False
+	except Exception as e:
+		logger.exception("Remote API error in _send_delte_camera: %s", e)
+		return False
 
 def push_cameraAdd(db, settings, row):
 	try:
@@ -49,15 +82,15 @@ def push_cameraAdd(db, settings, row):
 		idLocal = new_data.get('id')
 		name = new_data.get('name')
 		mac = new_data.get("mac_id")
-		status = new_data.get("active")
+		statuss = new_data.get("active")
 		roomId = new_data.get("room_id")
 		username = new_data.get("username")
-		password = new_data.get("dfdf")
+		password = new_data.get("password")
 		type = new_data.get("type")
 		payload = {
 			"name":name,
 			"mac":mac,
-			"status":status,
+			"status":statuss,
 			"roomId": roomId,
 			"username":username,
 			"password": password,
@@ -84,15 +117,15 @@ def push_cameraUpdate(db, settings, row):
 		idLocal = new_data.get('id')
 		name = new_data.get('name')
 		mac = new_data.get("mac_id")
-		status = new_data.get("active")
+		statuss = new_data.get("active")
 		roomId = new_data.get("room_id")
 		username = new_data.get("username")
-		password = new_data.get("dfdf")
+		password = new_data.get("password")
 		type = new_data.get("type")
 		payload = {
 			"name": name,
 			"mac": mac,
-			"status": status,
+			"status": statuss,
 			"roomId": roomId,
 			"username": username,
 			"password": password,
@@ -103,6 +136,10 @@ def push_cameraUpdate(db, settings, row):
 			SELECT id_prod FROM camera WHERE id = %s
 		""",(idLocal,))
 		result = cursor.fetchone()
+		cursor.close()
+		if not result:
+			logger.error("Camera not found locally for id %s", idLocal)
+			return False
 		id_prod = result['id_prod']
 		success = _send_update_camera_api(settings, payload, id_prod)
 		return success
@@ -119,6 +156,10 @@ def push_cameraDelete(db, settings, row):
 			"""SELECT id_prod FROM camera WHERE id = %s""",(localId,)
 		)
 		result = cursor.fetchone()
+		cursor.close()
+		if not result:
+			logger.error("Camera not found locally for id %s", localId)
+			return False
 		id_prod = result['id_prod']
 		status = _send_delete_camera_api(settings,id_prod)
 		return status

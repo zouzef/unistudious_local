@@ -316,18 +316,13 @@ def update_camera(camera_id):
         }), 500
 
 
-# ========================================
-# TABLET ENDPOINTS
-# ========================================
-
-# ENDPOINT 1: Create tablet
+# ENDPOINT 1: Create Tablet
 @devices_bp.route('/create_tablet', methods=['POST'])
 def create_tablet():
     try:
         data = request.get_json()
-        required_fields = ['name', 'mac_id', 'password','slc_id','room_id']
+        required_fields = ['name', 'mac_id', 'password', 'slc_id', 'room_id']
 
-        # Check for missing fields
         missing_fields = [field for field in required_fields if field not in data or data[field] == '']
         if missing_fields:
             return jsonify({
@@ -335,8 +330,8 @@ def create_tablet():
             }), 400
 
         query = """
-            INSERT INTO tablet (slc_id, room_id, name, mac_id, password, enabled, created_at,slc_edit)
-            VALUES (%s, %s, %s, %s, %s, 1, NOW(),1)
+            INSERT INTO tablet (slc_id, room_id, name, mac_id, password, enabled, created_at, slc_edit)
+            VALUES (%s, %s, %s, %s, %s, 1, NOW(), 1)
         """
         values = (
             data.get('slc_id', None),
@@ -346,11 +341,28 @@ def create_tablet():
             data['password']
         )
 
-        Database.execute_query(query, values, fetch=False)
-
-        return jsonify({
-            "Message": "Tablet created successfully"
-        }), 200
+        result = Database.execute_query(query, values, fetch=False)
+        if result:
+            inserted_id = result
+            new_record = Database.execute_query(
+                "SELECT * FROM tablet WHERE id = %s",
+                (inserted_id,),
+                fetch=True
+            )
+            new_rec = new_record[0] if new_record else None
+            log_audit(
+                table_name="tablet_audit",
+                action_type="INSERT",
+                old_data=None,
+                new_data=new_rec
+            )
+            return jsonify({
+                "Message": "Tablet created successfully"
+            }), 200
+        else:
+            return jsonify({
+                "Message": "Failed to create tablet"
+            }), 400
 
     except Exception as e:
         return jsonify({
@@ -358,66 +370,99 @@ def create_tablet():
         }), 500
 
 
-# ENDPOINT 2: Delete tablet
-@devices_bp.route('/delete_tablet/<int:tablet_id>',methods=['POST'])
+# ENDPOINT 2: Delete Tablet
+@devices_bp.route('/delete_tablet/<int:tablet_id>', methods=['POST'])
 def delete_tablet(tablet_id):
     try:
-        query_test = """
-            SELECT count(*) AS nbr
-            FROM tablet 
-            WHERE id=%s AND enabled = 1
-        """
-        values=(tablet_id,)
-        result = Database.execute_query(query_test,values,fetch=True)
-        if result[0]['nbr']==0:
+        old_record = Database.execute_query(
+            "SELECT * FROM tablet WHERE id = %s",
+            (tablet_id,),
+            fetch=True
+        )
+
+        result = Database.execute_query(
+            "SELECT count(*) AS nbr FROM tablet WHERE id = %s AND enabled = 1",
+            (tablet_id,),
+            fetch=True
+        )[0]['nbr']
+
+        if result == 0:
             return jsonify({
-                "Message":f"There is no Tablet with id: {tablet_id}"
-            }),404
+                "Message": f"There is no Tablet with id: {tablet_id}"
+            }), 404
+
+        update_result = Database.execute_query(
+            "UPDATE tablet SET enabled = 0, slc_edit = 1 WHERE id = %s AND enabled = 1",
+            (tablet_id,),
+            fetch=False
+        )
+        if update_result:
+            log_audit(
+                table_name="tablet_audit",
+                action_type="DELETE",
+                old_data=old_record[0] if old_record else None,
+                new_data=None
+            )
+            return jsonify({
+                "Message": "Tablet deleted with Success"
+            }), 200
         else:
-            query = """
-                UPDATE tablet set enabled = 0 AND slc_edit = 1 WHERE id = %s AND enabled = 1
-            """
-            values=(tablet_id,)
-            result = Database.execute_query(query,values,fetch=False)
-            if result:
-                return jsonify({
-                    "Message":"Tablet deleted with Success"
-                }),200
-            else:
-                return jsonify({
-                    "Message":"Error in deleting tablet"
-                })
+            return jsonify({
+                "Message": "Error in deleting tablet"
+            }), 400
+
     except Exception as e:
         return jsonify({
-            "Message":f"Error: {e} coming from server"
-        }),500
+            "Message": f"Error: {e} coming from server"
+        }), 500
 
 
-# ENDPOINT 3: Update table
+# ENDPOINT 3: Update Tablet
 @devices_bp.route('/update_tablet/<int:tablet_id>', methods=['POST'])
 def update_tablet(tablet_id):
     try:
         data = request.get_json()
 
         allowed_fields = ['name', 'mac_id', 'password']
-
-        # Filter only the fields that were actually sent
         fields_to_update = {key: data[key] for key in allowed_fields if key in data and data[key] != ''}
 
-        # Nothing to update
         if not fields_to_update:
             return jsonify({
                 "Message": "No valid fields provided to update"
             }), 400
 
-        # Build query dynamically
+        # Check tablet exists and is enabled
+        old_record = Database.execute_query(
+            "SELECT * FROM tablet WHERE id = %s AND enabled = 1",
+            (tablet_id,),
+            fetch=True
+        )
+        if not old_record:
+            return jsonify({
+                "Message": "There is no tablet with this id"
+            }), 404
+
         set_clause = ", ".join([f"{key} = %s" for key in fields_to_update])
         values = list(fields_to_update.values())
         values.append(tablet_id)
 
-        query = f"UPDATE tablet SET {set_clause} WHERE id = %s"
-
-        Database.execute_query(query, tuple(values), fetch=False)
+        result = Database.execute_query(
+            f"UPDATE tablet SET {set_clause} WHERE id = %s",
+            tuple(values),
+            fetch=False
+        )
+        if result:
+            new_record = Database.execute_query(
+                "SELECT * FROM tablet WHERE id = %s",
+                (tablet_id,),
+                fetch=True
+            )
+            log_audit(
+                table_name="tablet_audit",
+                action_type="UPDATE",
+                old_data=old_record[0],
+                new_data=new_record[0] if new_record else None
+            )
 
         return jsonify({
             "Message": "Tablet updated successfully"

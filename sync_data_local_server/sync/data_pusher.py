@@ -15,7 +15,7 @@ from sync.pushers.association_pusher import push_AssociationAdd, push_Associatio
 from sync.pushers.slcdoor_pusher import push_doorAdd, push_doorUpdate, push_doorDelete
 from sync.pushers.camera_pusher import push_cameraAdd, push_cameraUpdate, push_cameraDelete
 from sync.pushers.tablet_pusher import push_tabletAdd, push_tabletUpdate, push_tabletDelete
-
+from sync.pushers.user_pusher import push_userAdd, push_userUpdate, push_userDelete
 logger = logging.getLogger(__name__)
 
 
@@ -304,29 +304,50 @@ class DataPusher:
                     }
                 )
 
-                # --- tablet ---
-                cursor.execute("""
-                    SELECT * FROM tablet_audit
-                    WHERE is_synced = 0
-                    ORDER BY audit_id ASC
-                """)
-                tablet_rows = cursor.fetchall()
-                if not camera_rows:
-                    logger.debug("No pending tablet changes to push")
-                else:
-                    logger.debug("Found %s PENDING tablet change(s)", len(tablet_rows))
-                    self._process_audit_rows(
-                        cursor, conn,
-                        "tablet_audit",
-                        tablet_rows,
-                        {
-                            'INSERT': lambda row: push_tabletAdd(db, self.settings, row),
-                            'UPDATE': lambda row: push_tabletUpdate(db, self.settings, row),
-                            'DELETE': lambda row: push_tabletDelete(db, self.settings, row)
-                        }
-                    )
+            # --- tablet ---
+            cursor.execute("""
+                SELECT * FROM tablet_audit
+                WHERE is_synced = 0
+                ORDER BY audit_id ASC
+            """)
+            tablet_rows = cursor.fetchall()
+            if not tablet_rows:
+                logger.debug("No pending tablet changes to push")
+            else:
+                logger.debug("Found %s PENDING tablet change(s)", len(tablet_rows))
+                self._process_audit_rows(
+                    cursor, conn,
+                    "tablet_audit",
+                    tablet_rows,
+                    {
+                        'INSERT': lambda row: push_tabletAdd(db, self.settings, row),
+                        'UPDATE': lambda row: push_tabletUpdate(db, self.settings, row),
+                        'DELETE': lambda row: push_tabletDelete(db, self.settings, row)
+                    }
+                )
 
-
+            # ============================================ USER ============================================
+            # --- User ---
+            cursor.execute("""
+                SELECT * FROM user_audit
+                WHERE is_synced = 0
+                ORDER BY audit_id ASC
+            """)
+            user_rows = cursor.fetchall()
+            if not user_rows:
+                logger.debug("No pending User changes to push")
+            else:
+                logger.info("Found %d pending User change(s)", len(user_rows))
+                self._process_audit_rows(
+                    cursor, conn,
+                    "user_audit",
+                    user_rows,
+                    {
+                        "CREATE": lambda row: push_userAdd(db, self.settings, row),
+                        "UPDATE": lambda row: push_userUpdate(db, self.settings, row),
+                        "DELETE": lambda row: push_userDelete(db, self.settings, row),
+                    }
+                )
 
         except Exception as e:
             logger.exception("Fatal error in data_pusher: %s", e)

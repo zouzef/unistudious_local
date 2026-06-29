@@ -845,14 +845,15 @@ def get_user_info(user_id):
 # =============================================
 @users_bp.route('/create_user', methods=['POST'])
 def create_user():
-    try:
-        data = request.get_json()
-        if not data:
-            return jsonify({
+	try:
+		data = request.get_json()
+		print(data)
+		if not data:
+			return jsonify({
                 "Message": "There is no data to create user"
             }), 400
 
-        valid_columns = {
+		valid_columns = {
             "account_id", "username", "email", "full_name", "roles",
             "img_link", "reset_token", "status", "created_by", "password",
             "birth_date", "birth_place", "phone", "address", "grand",
@@ -863,33 +864,60 @@ def create_user():
             "horsline", "ref_slc", "apple_id", "open_source_user_name",
             "rocket_chat_user_id", "fcm_web", "fcm_android", "fcm_ios",
             "releaseToken", "useToken", "slc_use", "isvirtual", "slc_edit", "id_user"
-        }
+		}
 
-        filtered_data = {k: v for k, v in data.items() if k in valid_columns}
+		filtered_data = {k: v for k, v in data.items() if k in valid_columns}
 
-        if not filtered_data:
-            return jsonify({
+		if not filtered_data:
+			return jsonify({
                 "Message": "No valid fields provided to create user"
             }), 400
 
-        columns = ", ".join(filtered_data.keys())
-        placeholders = ", ".join(["%s"] * len(filtered_data))
-        values = list(filtered_data.values())
+		status_map = {"active": 1, "inactive": 0, "banned": 2}
+		if "status" in filtered_data:
+			val = filtered_data["status"]
+			if isinstance(val, str):
+				filtered_data["status"] = status_map.get(val.lower(), 1)
 
-        query = f"INSERT INTO user ({columns}) VALUES ({placeholders})"
+		columns = ", ".join(filtered_data.keys())
+		placeholders = ", ".join(["%s"] * len(filtered_data))
+		values = list(filtered_data.values())
 
-        result = Database.execute_query(query, values, fetch=False)
-        if result:
-            return jsonify({
-                "Message": "User created successfully"
-            }), 200
+		query = f"INSERT INTO user ({columns}) VALUES ({placeholders})"
 
-        return jsonify({
+		result = Database.execute_query(query, values, fetch=False)
+		print("result: ",result)
+		if result:
+
+
+			# Determine primary role
+			role = filtered_data.get("roles", "ROLE_USER")
+
+			if isinstance(role, list):
+				role = role[0] if role else "ROLE_USER"
+
+
+			# Write audit record
+			audit_query = """
+			        INSERT INTO user_audit (user_id, role, action_type, payload, is_synced)
+			        VALUES (%s, %s, %s, %s, %s)
+			    """
+
+			Database.execute_query(
+				audit_query,
+				[result, role, "CREATE", json.dumps(filtered_data), 0],
+				fetch=False
+			)
+			return jsonify({
+				"Message": "User created successfully"
+			}), 200
+
+		return jsonify({
             "Message": "User not created"
-        }), 400
+		}), 400
 
-    except Exception as e:
-        return jsonify({
+	except Exception as e:
+		return jsonify({
             "Message": f"Error: {e} coming from server"
         }), 500
 
