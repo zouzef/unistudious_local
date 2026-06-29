@@ -5,13 +5,15 @@ from app.slc.service import(
 	get_slc_info_service,
 	get_list_camera_service,
 	create_camera_service,
+	update_camera_service,
 	create_tablet_service,
 	update_tablet_service,
 	delete_tablet_service,
 	fetch_all_tablet_service,
 	fetch_room_service,
 	view_tablet_service,
-	delete_camera_service
+	delete_camera_service,
+
 
 )
 
@@ -81,6 +83,7 @@ def update_camera(camera_id):
 		else:
 			return jsonify(response),400
 	except Exception as e:
+		print(e)
 		return jsonify({
 			"Message":f"Error: {e} coming from backend"
 		}),500

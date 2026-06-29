@@ -984,7 +984,7 @@ def check_calander_teacher(teacher_id, time, date):
 	except Exception as e:
 		return False
 
-@users_bp.route('/check_teacher_access/<int:rfid>', methods=['POST'])
+@users_bp.route('/check_teacher_access/<string:rfid>', methods=['POST'])
 def check_teacher_access(rfid):
 	try:
 		data = request.get_json()

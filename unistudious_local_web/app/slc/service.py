@@ -43,7 +43,7 @@ def create_camera_service(data:dict) -> tuple:
 
 def update_camera_service(data: dict, camera_id: int) -> tuple:
 	try:
-		url = f"{current_app.config['BASE_URL']}update_tablet/<int:tablet_id>"
+		url = f"{current_app.config['BASE_URL']}update_camera/{camera_id}"
 		response = requests.post(url,json=data,verify=False,timeout=10)
 		if response.status_code == 200:
 			return True,response.json()

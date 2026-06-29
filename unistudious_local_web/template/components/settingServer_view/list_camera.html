@@ -241,16 +241,13 @@
 
 <script>
     // ─── Load Locals ─────────────────────────────────────────────────────────
-
     function loadCameraLocals() {
         const accountId = document.getElementById('account-id').value;
-
         fetch(`/api/get_slc_info/${accountId}`)
             .then(res => res.json())
             .then(json => {
                 const select = document.getElementById('cameraSlcLocal');
                 select.innerHTML = '<option value="">Select Local</option>';
-
                 json.data.forEach(local => {
                     const option = document.createElement('option');
                     option.value = local.id;
@@ -262,14 +259,12 @@
     }
 
     // ─── Load Rooms ──────────────────────────────────────────────────────────
-
     function loadCameraRooms() {
         fetch('/api/get_room')
             .then(res => res.json())
             .then(json => {
                 const select = document.getElementById('cameraRoomId');
                 select.innerHTML = '<option value="">Select Room</option>';
-
                 json.data.forEach(room => {
                     const option = document.createElement('option');
                     option.value = room.id;
@@ -281,7 +276,6 @@
     }
 
     // ─── Load Camera List ─────────────────────────────────────────────────────
-
     function loadCameraList() {
         fetch('/api/get_list_camera')
             .then(res => res.json())
@@ -289,10 +283,7 @@
                 const container = document.getElementById('cameras-container');
 
                 if (!data || data.length === 0) {
-                    container.innerHTML = `
-                        <div class="col-xl-12 text-center">
-                            <p>No cameras found</p>
-                        </div>`;
+                    container.innerHTML = `<div class="col-xl-12 text-center"><p>No cameras found</p></div>`;
                     return;
                 }
 
@@ -317,7 +308,7 @@
                                             </svg>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
-                                            <a data-id="${camera.id}" class="dropdown-item delete-slc-camera">Delete</a>
+                                            <a data-id="${camera.id}" class="dropdown-item delete-slc-camera" href="javascript:void(0);">Delete</a>
                                             <a href="#"
                                                class="dropdown-item open-edit-slc-camera-modal"
                                                data-bs-toggle="modal"
@@ -325,21 +316,18 @@
                                                data-id="${camera.id}"
                                                data-name="${camera.name}"
                                                data-mac="${camera.mac}"
-                                               data-username="${camera.username}"
-                                               data-password="${camera.password}"
+                                               data-username="${camera.username ?? ''}"
+                                               data-password="${camera.password ?? ''}"
                                                data-type="${camera.type}">
                                                Edit
                                             </a>
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Type badge + Local badge -->
                                 <div class="contact-icon">
                                     <span class="badge badge-primary light">Type : ${camera.type}</span>
                                     <span class="badge badge-success light ms-1">Local : ${camera.localName ?? 'No Local'}</span>
                                 </div>
-
                                 <div class="d-flex align-items-center mt-2">
                                     <a href="#" class="btn btn-primary btn-sm w-50 me-2"
                                         data-bs-toggle="modal"
@@ -354,8 +342,8 @@
                                         data-id="${camera.id}"
                                         data-name="${camera.name}"
                                         data-mac="${camera.mac}"
-                                        data-username="${camera.username}"
-                                        data-password="${camera.password}"
+                                        data-username="${camera.username ?? ''}"
+                                        data-password="${camera.password ?? ''}"
                                         data-room="${camera.roomName ?? ''}"
                                         data-created-at="${camera.created_at}"
                                         data-type="${camera.type}">
@@ -370,10 +358,12 @@
             .catch(err => console.error('Error loading cameras:', err));
     }
 
+    // ─── DOMContentLoaded ─────────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', function () {
+
         loadCameraList();
 
-        // ── Reload selects every time the create modal opens ──────────────────
+        // ── Create modal: reload selects on open ──────────────────────────────
         document.getElementById('adminNewSlcCameraModal').addEventListener('show.bs.modal', function () {
             loadCameraRooms();
             loadCameraLocals();
@@ -395,7 +385,6 @@
         // ── Details modal ─────────────────────────────────────────────────────
         document.getElementById('showSlcCameraModal').addEventListener('show.bs.modal', function (event) {
             const button = event.relatedTarget;
-
             document.getElementById('showCameraDetailId').value  = button.getAttribute('data-id');
             document.getElementById('showCameraType').value      = button.getAttribute('data-type');
             document.getElementById('showCameraName').value      = button.getAttribute('data-name');
@@ -404,133 +393,191 @@
             document.getElementById('showCameraPassword').value  = button.getAttribute('data-password');
             document.getElementById('showCameraRoom').value      = button.getAttribute('data-room');
             document.getElementById('showCameraCreatedAt').value = button.getAttribute('data-created-at');
-
             const isIpCam = button.getAttribute('data-type') === 'ipcam';
             document.getElementById('showIpCameraFields').style.display = isIpCam ? 'block' : 'none';
         });
-    });
 
-    // ─── Camera Form Submit ───────────────────────────────────────────────────────
-
-    document.getElementById('slcCameraForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const type     = document.getElementById('cameraType').value;
-        const macId    = document.getElementById('cameraMacId').value;
-        const name     = document.getElementById('cameraName').value;
-        const username = document.getElementById('cameraUsername').value;
-        const password = document.getElementById('cameraPassword').value;
-        const slcId    = document.getElementById('cameraSlcLocal').value;
-        const roomId   = document.getElementById('cameraRoomId').value;
-
-        const payload = {
-            type:     type,
-            mac_id:   macId,
-            name:     name,
-            username: username,
-            password: password,
-            slc_id:   parseInt(slcId),
-            room_id:  parseInt(roomId),
-            status:   'active'          // default status required by backend
-        };
-
-        fetch('/api/create_camera', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        })
-        .then(res => {
-            const status = res.status;
-            return res.json().then(data => ({ status, data }));
-        })
-        .then(({ status, data }) => {
-            if (status === 200) {
-                bootstrap.Modal.getInstance(
-                    document.getElementById('adminNewSlcCameraModal')
-                ).hide();
-                document.getElementById('slcCameraForm').reset();
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Camera created successfully!',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'OK'
-                }).then(() => loadCameraList());
-
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: data.Message || 'Something went wrong.',
-                    confirmButtonColor: '#d33'
-                });
-            }
-        })
-        .catch(err => {
-            console.error('Error submitting camera form:', err);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: 'Failed to connect to server.',
-                confirmButtonColor: '#d33'
-            });
+        // ── Edit modal: populate fields on open ───────────────────────────────
+        document.getElementById('editSlcCameraModal').addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            if (!button) return;
+            const type = button.getAttribute('data-type');
+            document.getElementById('editCameraId').value       = button.getAttribute('data-id');
+            document.getElementById('editCameraType').value     = type;
+            document.getElementById('editCameraName').value     = button.getAttribute('data-name');
+            document.getElementById('editCameraMac').value      = button.getAttribute('data-mac');
+            document.getElementById('editCameraUsername').value = button.getAttribute('data-username') ?? '';
+            document.getElementById('editCameraPassword').value = button.getAttribute('data-password') ?? '';
+            document.getElementById('editIpCameraFields').style.display = type === 'ipcam' ? 'block' : 'none';
         });
-    });
 
-    // ─── Delete Camera ────────────────────────────────────────────────────────────
-    document.addEventListener('click', function (e) {
-        const deleteBtn = e.target.closest('.delete-slc-camera');
-        if (!deleteBtn) return;
+        // ── Edit form submit ──────────────────────────────────────────────────
+        document.getElementById('editSlcCameraForm').addEventListener('submit', function (e) {
+            e.preventDefault();
 
-        e.preventDefault();
-        const cameraId = deleteBtn.dataset.id;
+            const cameraId = document.getElementById('editCameraId').value;
+            const type     = document.getElementById('editCameraType').value;
 
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'This camera will be permanently deleted.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Yes, delete it!'
-        }).then(result => {
-            if (!result.isConfirmed) return;
+            const payload = {
+                name:   document.getElementById('editCameraName').value,
+                mac_id: document.getElementById('editCameraMac').value,
+                type:   type,
+            };
 
-            fetch(`/api/delete_camera/${cameraId}`, { method: 'POST' })
-                .then(res => {
-                    const status = res.status;
-                    return res.json().then(data => ({ status, data }));
-                })
-                .then(({ status, data }) => {
-                    if (status === 200) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Deleted!',
-                            text: 'Camera deleted successfully.',
-                            confirmButtonColor: '#3085d6'
-                        }).then(() => loadCameraList());
+            if (type === 'ipcam') {
+                payload.username = document.getElementById('editCameraUsername').value;
+                payload.password = document.getElementById('editCameraPassword').value;
+            }
 
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: data.Message || 'Failed to delete camera.',
-                            confirmButtonColor: '#d33'
-                        });
-                    }
-                })
-                .catch(err => {
-                    console.error('Delete error:', err);
+            fetch(`/api/update_camera/${cameraId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(res => {
+                const status = res.status;
+                return res.json().then(data => ({ status, data }));
+            })
+            .then(({ status, data }) => {
+                if (status === 200) {
+                    bootstrap.Modal.getInstance(
+                        document.getElementById('editSlcCameraModal')
+                    ).hide();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Updated!',
+                        text: 'Camera updated successfully!',
+                        confirmButtonColor: '#3085d6'
+                    }).then(() => loadCameraList());
+                } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error!',
-                        text: 'Failed to connect to server.',
+                        text: data.Message || 'Something went wrong.',
                         confirmButtonColor: '#d33'
                     });
+                }
+            })
+            .catch(err => {
+                console.error('Update camera error:', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Failed to connect to server.',
+                    confirmButtonColor: '#d33'
                 });
+            });
         });
-    });
 
+        // ── Create form submit ────────────────────────────────────────────────
+        document.getElementById('slcCameraForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const payload = {
+                type:     document.getElementById('cameraType').value,
+                mac_id:   document.getElementById('cameraMacId').value,
+                name:     document.getElementById('cameraName').value,
+                username: document.getElementById('cameraUsername').value,
+                password: document.getElementById('cameraPassword').value,
+                slc_id:   parseInt(document.getElementById('cameraSlcLocal').value),
+                room_id:  parseInt(document.getElementById('cameraRoomId').value),
+                status:   'active'
+            };
+
+            fetch('/api/create_camera', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(res => {
+                const status = res.status;
+                return res.json().then(data => ({ status, data }));
+            })
+            .then(({ status, data }) => {
+                if (status === 200) {
+                    bootstrap.Modal.getInstance(
+                        document.getElementById('adminNewSlcCameraModal')
+                    ).hide();
+                    document.getElementById('slcCameraForm').reset();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Camera created successfully!',
+                        confirmButtonColor: '#3085d6'
+                    }).then(() => loadCameraList());
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: data.Message || 'Something went wrong.',
+                        confirmButtonColor: '#d33'
+                    });
+                }
+            })
+            .catch(err => {
+                console.error('Error submitting camera form:', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Failed to connect to server.',
+                    confirmButtonColor: '#d33'
+                });
+            });
+        });
+
+        // ── Delete camera ─────────────────────────────────────────────────────
+        document.addEventListener('click', function (e) {
+            const deleteBtn = e.target.closest('.delete-slc-camera');
+            if (!deleteBtn) return;
+
+            e.preventDefault();
+            const cameraId = deleteBtn.dataset.id;
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'This camera will be permanently deleted.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete it!'
+            }).then(result => {
+                if (!result.isConfirmed) return;
+
+                fetch(`/api/delete_camera/${cameraId}`, { method: 'POST' })
+                    .then(res => {
+                        const status = res.status;
+                        return res.json().then(data => ({ status, data }));
+                    })
+                    .then(({ status, data }) => {
+                        if (status === 200) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Deleted!',
+                                text: 'Camera deleted successfully.',
+                                confirmButtonColor: '#3085d6'
+                            }).then(() => loadCameraList());
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: data.Message || 'Failed to delete camera.',
+                                confirmButtonColor: '#d33'
+                            });
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Delete error:', err);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'Failed to connect to server.',
+                            confirmButtonColor: '#d33'
+                        });
+                    });
+            });
+        });
+
+    }); // end DOMContentLoaded
 </script>
