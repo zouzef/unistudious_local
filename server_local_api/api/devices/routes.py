@@ -556,7 +556,7 @@ def view_tablet_by_id(id_tablette):
 
 
 
-@devices_bp.route('/create_door', methods=['POST'])
+@devices_bp.route('/create_door/<int:account_id>', methods=['POST'])
 def create_door():
     try:
         data = request.get_json()
@@ -724,14 +724,21 @@ def get_all_door():
     try:
         query = """
             SELECT
-                id,
-                slc_id,
-                name,
-                mac_id AS mac,
-                status,
-                room_id AS roomId
-            FROM slc_door
-            WHERE enabled = 1
+                d.id,
+                d.slc_id,
+                d.name,
+                d.mac_id AS mac,
+                d.status,
+                d.oc,
+                d.room_id AS roomId,
+                l.name as local_name
+                
+            FROM slc_door d,slc_local sl,local l
+            
+            WHERE d.enabled = 1 AND
+            d.slc_id = sl.slc_id AND
+            sl.local_id = l.id
+            
         """
         rows = Database.execute_query(query)
 
@@ -743,6 +750,8 @@ def get_all_door():
                 "mac": row["mac"],
                 "status": row["status"],
                 "roomId": row["roomId"],
+                "oc": row["oc"],
+                "local_name":row["local_name"]
             })
 
         return jsonify(formatted_data), 200

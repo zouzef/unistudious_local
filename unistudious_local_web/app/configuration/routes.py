@@ -613,7 +613,7 @@ def get_all_doors():
 			"Message":f"Error: {e} coming from backend"
 		}),500
 
-@configuration_bp.route('/api_update_door/<int:door_id>', methods=['POST'])
+@configuration_bp.route('/api/update_door/<int:door_id>', methods=['POST'])
 def api_update_door(door_id):
 	try:
 

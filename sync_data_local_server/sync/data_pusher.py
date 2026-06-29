@@ -13,6 +13,9 @@ from sync.pushers.accountTag_pusher import push_accountTagAdd, push_accountTagUp
 from sync.pushers.completionTag_pusher import push_completionTagAdd, push_completionTagUpdate, push_completionTagDelete
 from sync.pushers.association_pusher import push_AssociationAdd, push_AssociationUpdate, push_AssociationDelete,push_FolderNotAssociated
 from sync.pushers.slcdoor_pusher import push_doorAdd, push_doorUpdate, push_doorDelete
+from sync.pushers.camera_pusher import push_cameraAdd, push_cameraUpdate, push_cameraDelete
+from sync.pushers.tablet_pusher import push_tabletAdd, push_tabletUpdate, push_tabletDelete
+
 logger = logging.getLogger(__name__)
 
 
@@ -255,6 +258,8 @@ class DataPusher:
                     }
                 )
 
+
+            # ============================================ SLC DEVICES ============================================
             # --- slc_door ---
             cursor.execute("""
                 SELECT * FROM slc_door_audit
@@ -276,6 +281,51 @@ class DataPusher:
                         'DELETE': lambda row: push_doorDelete(db, self.settings, row)
                     }
                 )
+
+            # --- camera ---
+            cursor.execute("""
+                SELECT * FROM camera_audit
+                WHERE is_synced = 0
+                ORDER BY audit_id ASC
+            """)
+            camera_rows = cursor.fetchall()
+            if not camera_rows:
+                logger.debug("No pending camera changes to push")
+            else:
+                logger.debug("Found %s PENDING camera change(s)", len(camera_rows))
+                self._process_audit_rows(
+                    cursor, conn,
+                    "camera_audit",
+                    camera_rows,
+                    {
+                        'INSERT': lambda row: push_cameraAdd(db, self.settings, row),
+                        'UPDATE': lambda row: push_cameraUpdate(db, self.settings, row),
+                        'DELETE': lambda row: push_cameraDelete(db, self.settings, row)
+                    }
+                )
+
+                # --- tablet ---
+                cursor.execute("""
+                    SELECT * FROM tablet_audit
+                    WHERE is_synced = 0
+                    ORDER BY audit_id ASC
+                """)
+                tablet_rows = cursor.fetchall()
+                if not camera_rows:
+                    logger.debug("No pending tablet changes to push")
+                else:
+                    logger.debug("Found %s PENDING tablet change(s)", len(tablet_rows))
+                    self._process_audit_rows(
+                        cursor, conn,
+                        "tablet_audit",
+                        tablet_rows,
+                        {
+                            'INSERT': lambda row: push_tabletAdd(db, self.settings, row),
+                            'UPDATE': lambda row: push_tabletUpdate(db, self.settings, row),
+                            'DELETE': lambda row: push_tabletDelete(db, self.settings, row)
+                        }
+                    )
+
 
 
         except Exception as e:

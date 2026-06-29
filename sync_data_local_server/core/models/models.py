@@ -910,7 +910,7 @@ class UserModel(BaseModel):
 		Column("useToken", "VARCHAR(255)"),
 		Column("slc_use", "INT(11)", default="0"),
 		Column("isvirtual", "TINYINT(1)", default="0"),
-		Column("door_id", "INT(11)", default = "0"),
+		Column("door_id", "VARCHAR(255)", default = "0"),
 		Column("slc_edit", "INT(11)", default="0"),
 		Column("id_user", "INT(11)"),
 	]
