@@ -554,6 +554,8 @@ def view_tablet_by_id(id_tablette):
         }), 500
 
 
+
+
 @devices_bp.route('/create_door', methods=['POST'])
 def create_door():
     try:
@@ -589,6 +591,7 @@ def create_door():
         }), 200
 
     except Exception as e:
+        print(e)
         return jsonify({
             "Message": f"Error: {e} coming from server"
         }), 500
@@ -716,8 +719,8 @@ def update_door(door_id):
         }), 500
 
 
-@devices_bp.route('/get_all_door/<int:local_id>', methods=['GET'])
-def get_all_door(local_id):
+@devices_bp.route('/get_all_door', methods=['GET'])
+def get_all_door():
     try:
         query = """
             SELECT
@@ -728,9 +731,9 @@ def get_all_door(local_id):
                 status,
                 room_id AS roomId
             FROM slc_door
-            WHERE enabled = 1 AND local_id = %s
+            WHERE enabled = 1
         """
-        rows = Database.execute_query(query, (local_id,))
+        rows = Database.execute_query(query)
 
         formatted_data = []
         for row in rows:

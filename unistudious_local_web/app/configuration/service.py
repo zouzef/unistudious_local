@@ -297,3 +297,44 @@ def delete_completion_tag_service(completionTagId):
 		return response.status_code == 200,response
 	except Exception as e:
 		return False,None
+
+
+# =================================================== DOOR SERVICES ===================================================
+def get_all_door_service():
+	try:
+		url = f"{current_app.config['BASE_URL']}get_all_door"
+		response = requests.get(url, verify=False, timeout=10)
+		return response.status_code == 200, response
+	except Exception as e:
+		return False,None
+
+def create_door_service(data):
+	try:
+		url = f"{current_app.config['BASE_URL']}create_door"
+		response = requests.post(url,json=data, verify=False, timeout=10)
+		return response.status_code == 200, response
+	except Exception as e:
+		return False,None
+def delete_door_service(door_id):
+	try:
+		url = f"{current_app.config['BASE_URL']}delete_door/{door_id}"
+		response = requests.post(url,verify=False, timeout=10)
+		return response.status_code == 200, response
+	except Exception as e:
+		return False,None
+
+def update_door_service(door_id, payload):
+	try:
+		url = f"{current_app.config['BASE_URL']}update_door/{door_id}"
+		response = requests.post(url,json=payload,verify=False,timeout=10)
+		return response.status_code == 200, response
+	except Exception as e:
+		return False,None
+
+def view_door_service(door_id):
+	try:
+		url = f"{current_app.config['BASE_URL']}view_detail_door/{door_id}"
+		response = requests.get(url,verify=False,timeout=10)
+		return response.status_code == 200, response
+	except Exception as e:
+		return False,None

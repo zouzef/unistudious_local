@@ -182,3 +182,14 @@ def view_completion_tag(completionTag_id):
     return render_page('view_completion_tag',
         account_id=session.get('account_id'),
         completionTag_id=completionTag_id)
+
+
+
+# =========================================== SLC DOOR ===========================================
+@configuration_view_bp.route('/dashboard/list-slc-door')
+def show_slc_door():
+    guard = login_required()
+    if guard: return guard
+
+    return render_page('show_slc_door',
+        account_id=session.get('account_id'))

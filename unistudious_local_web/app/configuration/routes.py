@@ -39,7 +39,14 @@ from app.configuration.service import (
 	view_completion_tag_service,
 	update_completion_tag_service,
 	create_account_tag_service,
-	delete_completion_tag_service
+	delete_completion_tag_service,
+	get_all_door_service,
+	delete_door_service,
+	update_door_service,
+	view_door_service,
+	create_door_service
+
+
 )
 
 
@@ -569,3 +576,90 @@ def create_completion_tag(account_id):
 		return jsonify({
 			"Message":f"Error: {e} coming from server"
 		}),500
+
+
+# =============================================== DOORS ENDPOINTS ===============================================
+@configuration_bp.route('/api/create_door', methods=['POST'])
+def create_door():
+	try:
+		data = request.get_json()
+		status,response = create_door_service(data)
+		if status:
+			return jsonify({
+				"Message":"Succes in creating door"
+			}),response.status_code
+		else:
+			return jsonify({
+				"Message":"Error in creating door"
+			}),response.status_code
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error {e} coming from backend"
+		}),500
+
+@configuration_bp.route('/api/get_all_doors', methods=['GET'])
+def get_all_doors():
+	try:
+		status,response = get_all_door_service()
+		if status:
+			return jsonify(response.json()),response.status_code
+		else:
+			return jsonify({
+				"Message":"Error in getting all door"
+			}),404
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from backend"
+		}),500
+
+@configuration_bp.route('/api_update_door/<int:door_id>', methods=['POST'])
+def api_update_door(door_id):
+	try:
+
+		payload = request.get_json()
+		if not payload :
+			return jsonify({
+				"Message":"There is no data"
+			}),500
+		status,response = update_door_service(door_id,payload)
+		if status:
+			return jsonify({
+				"Message":"Success in updating door"
+			}),response.status_code
+		else:
+			return jsonify({
+				"Message":"Error in updating door"
+			}),response.status_code
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} in updating door"
+		})
+
+@configuration_bp.route('/api/delete_door/<int:door_id>',methods=['POST'])
+def delete_door(door_id):
+	try:
+		status,response = delete_door_service(door_id)
+		if status:
+			return jsonify(response.json(), response.status_code)
+		else:
+			return jsonify({
+				"Message":"Error in deliting door"
+			}),500
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from backend"
+		}),500
+
+@configuration_bp.route('/api/view_door/<int:door_id>', methods=['GET'])
+def view_door(door_id):
+	try:
+		status, response = view_door_service(door_id)
+		if status:
+			return jsonify(response.json()), 200
+		else:
+			return jsonify({"Message": "There is no data for this door"}), 404
+	except Exception as e:
+		return jsonify({
+			"Message": f"Error: {e} in view_door"
+		}), 500

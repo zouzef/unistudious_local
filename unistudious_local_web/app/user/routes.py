@@ -234,7 +234,6 @@ def get_account_image(account_id):
 
 # ── UPDATE account ─────────────────────────────────────────────────────────────
 @user_bp.route('/api/update_account/<int:account_id>', methods=['POST'])
-@user_bp.route('/api/update_account/<int:account_id>', methods=['POST'])
 def update_account(account_id):
     try:
         data_account = request.get_json(force=True)

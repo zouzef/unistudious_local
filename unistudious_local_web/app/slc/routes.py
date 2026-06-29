@@ -31,6 +31,8 @@ def get_slc_info(account_id):
 			"Message":f"Error: {e} coming from server"
 		}),500
 
+
+
 # ================================================ CAMERA backend endpoints ================================================
 @slc_bp.route('/api/get_list_camera',methods=['GET'])
 def get_list_camera():
@@ -97,6 +99,8 @@ def delete_camera(camera_id):
 			"Message":f"Error: {e} coming from backend "
 		})
 
+
+
 # ================================================ TABLET backend endpoints ================================================
 @slc_bp.route('/api/create_tablet',methods=['POST'])
 def create_tablet():
@@ -112,7 +116,6 @@ def create_tablet():
 			"Message":f"Error: {e} coming from backend"
 		})
 
-
 @slc_bp.route('/api/update_tablet/<int:tablet_id>',methods=['POST'])
 def update_tablet(tablet_id):
 	try:
@@ -127,7 +130,6 @@ def update_tablet(tablet_id):
 			"Message":f"Error: {e} coming from backend"
 		})
 
-
 @slc_bp.route('/api/delete_tablet/<int:tablet_id>',methods=['POST'])
 def delete_tablet(tablet_id):
 	try:
@@ -140,7 +142,6 @@ def delete_tablet(tablet_id):
 		return jsonify({
 			"Message":f"Error: {e} coming from backend"
 		}),500
-
 
 @slc_bp.route('/api/get_all_tablet',methods=['GET'])
 def get_all_tablet():
@@ -169,6 +170,8 @@ def view_tablet_info(tablet_id):
 		return jsonify({
 			"Message":f"Error: {e} coming from backend "
 		})
+
+
 # ================================================ Room backend endpoints ================================================
 @slc_bp.route('/api/get_room',methods=['GET'])
 def get_room():
