@@ -83,7 +83,7 @@ class RelationTeacherAccount(BaseModel):
         Column("invitation_relation_teacher_account_id", "INT(11)", default=None),
         Column("cloud_path", "VARCHAR(255)", default=None),
         Column("access_session", "LONGTEXT", default=None),
-		Column("door_id", "INT(11)", default=None),
+		Column("door_id", "VARCHAR(255)", default=None),
 		Column("id_prod", "INT(11)", default=None)
 	]
 class RelationTeacherAccountAudit(BaseModel):
