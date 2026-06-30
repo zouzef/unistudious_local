@@ -380,12 +380,12 @@ def process_sync_data(db, data, settings):
             logger.info("Processing relationTeacherAccount")
             process_relation_teacher_account(db, n)
 
-    if 'completionTagUser' in data:
-        n = normalize(data['completionTagUser'])
-        if has_records(n):
-            from sync.processors.completionTagUser_processor import process_completionTaguser
-            logger.info("Processing completionTagUser")
-            process_completionTaguser(db, n)
+    # if 'completionTagUser' in data:
+    #     n = normalize(data['completionTagUser'])
+    #     if has_records(n):
+    #         from sync.processors.completionTagUser_processor import process_completionTaguser
+    #         logger.info("Processing completionTagUser")
+    #         process_completionTaguser(db, n)
 
     if 'slcDoor' in data:
         n = normalize(data['slcDoor'])

@@ -28,6 +28,24 @@ def normalize_roles(roles):
     return json.dumps([])
 
 
+def safe_int(value, default=None):
+    """
+    Safely convert a value to int. Returns `default` if the value is None,
+    empty, or cannot be converted (e.g. non-numeric strings like 'M').
+
+    This guards against MySQL error 1366 (Incorrect integer value) when the
+    remote API sends non-numeric data for columns typed as INT, such as
+    'grand', 'door_id', 'isvirtual', or 'use_token'.
+    """
+    if value is None or value == "":
+        return default
+    try:
+        return int(value)
+    except (ValueError, TypeError):
+        print(f"      ⚠️  Could not convert value '{value}' to int - using default ({default})")
+        return default
+
+
 def insert_users(db, user_data, token):
     """
     Handle 'created' users from API
@@ -82,14 +100,14 @@ def insert_users(db, user_data, token):
                     "img_link": user.get("image"),
                     "status": 1 if user.get("status") else 0,
                     "enabled": 1 if user.get("enabled", True) else 0,
-                    "grand": user.get("grand"),
+                    "grand": safe_int(user.get("grand")),
                     "release_token": 1 if user.get("releaseToken", False) else 0,
                     "use_token": user.get("useToken"),
                     "ref_slc": user.get("refSlc"),
                     "timestamp": format_date(user.get("timestamp")),
                     "created_at": format_date(user.get("createdAt")),
                     "updated_at": format_date(user.get("updatedAt")),
-                    "isvirtual": user.get("isVirtual"),
+                    "isvirtual": safe_int(user.get("isVirtual")),
                     "door_id": user.get("doorId"),
                     "password": user.get("password", "TEMP_PASSWORD_NEEDS_RESET"),
                 }
@@ -403,13 +421,13 @@ def update_users(db, user_data, token):
                     "img_link": user.get("image"),
                     "status": 1 if user.get("status") else 0,
                     "enabled": 1 if user.get("enabled", True) else 0,
-                    "grand": user.get("grand"),
+                    "grand": safe_int(user.get("grand")),
                     "release_token": 1 if user.get("releaseToken", False) else 0,
                     "use_token": user.get("useToken"),
                     "ref_slc": user.get("refSlc"),
                     "timestamp": format_date(user.get("timestamp")),
                     "updated_at": format_date(user.get("updatedAt")),
-                    "isvirtual": user.get("isVirtual"),
+                    "isvirtual": safe_int(user.get("isVirtual")),
                     "door_id": user.get("doorId"),
                     "password": user.get("password", "TEMP_PASSWORD_NEEDS_RESET"),
                 }
@@ -697,14 +715,14 @@ def insert_admins(db, admin_data, token):
                     "img_link": user.get("image"),
                     "status": 1 if user.get("status") else 0,
                     "enabled": 1 if user.get("enabled", True) else 0,
-                    "grand": user.get("grand"),
+                    "grand": safe_int(user.get("grand")),
                     "release_token": 1 if user.get("releaseToken", False) else 0,
                     "use_token": user.get("useToken"),
                     "ref_slc": user.get("refSlc"),
                     "timestamp": format_date(user.get("timestamp")),
                     "created_at": format_date(user.get("createdAt")),
                     "updated_at": format_date(user.get("updatedAt")),
-                    "isvirtual": user.get("isVirtual"),
+                    "isvirtual": safe_int(user.get("isVirtual")),
                     "door_id": user.get("doorId"),
                     "password": user.get("password", "TEMP_PASSWORD_NEEDS_RESET"),
                 }
