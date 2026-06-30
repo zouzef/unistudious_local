@@ -5,3 +5,4 @@ sync_data_local_server/data/*
 *.pyc
 attendance_system/dataset/*
 attendance_system_v2/dataset/*
+sync_data_local_server/logs/sync_manager.log
