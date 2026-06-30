@@ -121,36 +121,14 @@ class DataFetcher:
                 raise
 
     def has_new_data(self, data):
-        """
-        Check if the API response contains any new data
-
-        Args:
-            data: API response dictionary
-
-        Returns:
-            bool: True if there's new data, False otherwise
-        """
         if not data:
             return False
 
-        # List of all data sections to check
-        data_keys = [
-            "user", "account", "local_with_room", "subject", "accountSubject",
-            "attendance", "session", "relationUserSession", "calendar", "group",
-            "relationTeacherAndSubjectData", "admin", "slcTablet", "slcLocal",
-            "slc", "slcCamera", "formation"
-        ]
-
-        for key in data_keys:
-            section = data.get(key, {})
-
-            # Check if section is a dict with created/updated
+        for key, section in data.items():
             if isinstance(section, dict):
                 if section.get("created") or section.get("updated"):
                     print(f"✅ Found new data in: {key}")
                     return True
-
-            # Check if section is a non-empty list
             elif isinstance(section, list) and section:
                 print(f"✅ Found new data in: {key} (list)")
                 return True

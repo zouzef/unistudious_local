@@ -93,9 +93,17 @@ def sync_data_once(settings):
         logger.debug("Current sync started at: %s", sync_start_time)
 
         # Step 5: Fetch data from remote server
-        logger.info("Fetching data from remote server...")
+        since_date = None
+        if last_sync:
+            if isinstance(last_sync, str):
+                # parse if it's stored as ISO string
+                last_sync = datetime.fromisoformat(last_sync)
+            # truncate to minute precision (drop seconds + microseconds)
+            since_date = last_sync.replace(second=0, microsecond=0)
+
+        logger.info("Requesting data since: %s", since_date)
         fetcher = DataFetcher(settings)
-        data = fetcher.fetch_data(since_date=last_sync)
+        data = fetcher.fetch_data(since_date=since_date)
 
         # Step 6: Check if there's new data
         if not data:
@@ -375,6 +383,7 @@ def process_sync_data(db, data, settings):
 
     if 'relationTeacherAccount' in data:
         n= normalize(data['relationTeacherAccount'])
+        print(n)
         if has_records(n):
             from sync.processors.relationTeacherAccount_processor import process_relation_teacher_account
             logger.info("Processing relationTeacherAccount")
