@@ -62732,3 +62732,299 @@ AttributeError: 'str' object has no attribute 'strftime'
 2026-06-30 13:35:51 [DEBUG] __main__ - Closing database connection...
 2026-06-30 13:35:51 [INFO] __main__ - Sync #22 completed successfully.
 2026-06-30 13:35:51 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-06-30 13:35:51)...
+2026-06-30 13:36:51 [INFO] __main__ - ############################################################
+2026-06-30 13:36:51 [INFO] __main__ - SYNC #23 - 2026-06-30 13:36:51.645391
+2026-06-30 13:36:51 [INFO] __main__ - ############################################################
+2026-06-30 13:36:51 [INFO] __main__ - ============================================================
+2026-06-30 13:36:51 [INFO] __main__ - STARTING SYNC AT 2026-06-30 13:36:51.645838
+2026-06-30 13:36:51 [INFO] __main__ - ============================================================
+2026-06-30 13:36:51 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-06-30 13:36:51 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-06-30 13:36:51 [INFO] __main__ - Checking last sync time...
+2026-06-30 13:36:51 [INFO] __main__ - Last sync was at: 2026-06-30 12:35:50.523752
+2026-06-30 13:36:51 [DEBUG] __main__ - Current sync started at: 2026-06-30 12:36:51.950259
+2026-06-30 13:36:51 [INFO] __main__ - Requesting data since: 2026-06-30 12:35:00
+2026-06-30 13:36:51 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-06-30 13:36:53 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-06-30 13:36:53 [INFO] __main__ - No new data to sync. Database is up to date.
+2026-06-30 13:36:53 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:36:53 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-06-30 13:36:53 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:36:53 [DEBUG] sync.data_pusher - No pending calendar changes to push
+2026-06-30 13:36:53 [DEBUG] sync.data_pusher - No pending attendance changes to push
+2026-06-30 13:36:53 [DEBUG] sync.data_pusher - No pending AccountLevel changes to push
+2026-06-30 13:36:53 [DEBUG] sync.data_pusher - No pending AccountSection changes to push 
+2026-06-30 13:36:53 [DEBUG] sync.data_pusher - No pending AccountSubject changes to push 
+2026-06-30 13:36:53 [DEBUG] sync.data_pusher - No pending AccountTag changes to push
+2026-06-30 13:36:53 [DEBUG] sync.data_pusher - No pending CompletionTag changes to push
+2026-06-30 13:36:53 [DEBUG] sync.data_pusher - No pending Association Folder changes to push
+2026-06-30 13:36:53 [DEBUG] sync.data_pusher - No pending Association changes to push
+2026-06-30 13:36:53 [DEBUG] sync.data_pusher - No pending SlcDoor changes to push
+2026-06-30 13:36:53 [DEBUG] sync.data_pusher - No pending camera changes to push
+2026-06-30 13:36:53 [DEBUG] sync.data_pusher - No pending tablet changes to push
+2026-06-30 13:36:53 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-06-30 13:36:53 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:36:53 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-06-30 13:36:53 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:36:53 [DEBUG] __main__ - Closing database connection...
+2026-06-30 13:36:53 [INFO] __main__ - Sync #23 completed successfully.
+2026-06-30 13:36:53 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-06-30 13:36:53)...
+2026-06-30 13:37:53 [INFO] __main__ - ############################################################
+2026-06-30 13:37:53 [INFO] __main__ - SYNC #24 - 2026-06-30 13:37:53.246643
+2026-06-30 13:37:53 [INFO] __main__ - ############################################################
+2026-06-30 13:37:53 [INFO] __main__ - ============================================================
+2026-06-30 13:37:53 [INFO] __main__ - STARTING SYNC AT 2026-06-30 13:37:53.247115
+2026-06-30 13:37:53 [INFO] __main__ - ============================================================
+2026-06-30 13:37:53 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-06-30 13:37:53 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-06-30 13:37:53 [INFO] __main__ - Checking last sync time...
+2026-06-30 13:37:53 [INFO] __main__ - Last sync was at: 2026-06-30 12:36:51.950259
+2026-06-30 13:37:53 [DEBUG] __main__ - Current sync started at: 2026-06-30 12:37:53.664124
+2026-06-30 13:37:53 [INFO] __main__ - Requesting data since: 2026-06-30 12:36:00
+2026-06-30 13:37:53 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-06-30 13:37:54 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-06-30 13:37:54 [INFO] __main__ - No new data to sync. Database is up to date.
+2026-06-30 13:37:54 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:37:54 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-06-30 13:37:54 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:37:54 [DEBUG] sync.data_pusher - No pending calendar changes to push
+2026-06-30 13:37:54 [DEBUG] sync.data_pusher - No pending attendance changes to push
+2026-06-30 13:37:54 [DEBUG] sync.data_pusher - No pending AccountLevel changes to push
+2026-06-30 13:37:54 [DEBUG] sync.data_pusher - No pending AccountSection changes to push 
+2026-06-30 13:37:54 [DEBUG] sync.data_pusher - No pending AccountSubject changes to push 
+2026-06-30 13:37:54 [DEBUG] sync.data_pusher - No pending AccountTag changes to push
+2026-06-30 13:37:54 [DEBUG] sync.data_pusher - No pending CompletionTag changes to push
+2026-06-30 13:37:54 [DEBUG] sync.data_pusher - No pending Association Folder changes to push
+2026-06-30 13:37:54 [DEBUG] sync.data_pusher - No pending Association changes to push
+2026-06-30 13:37:54 [DEBUG] sync.data_pusher - No pending SlcDoor changes to push
+2026-06-30 13:37:54 [DEBUG] sync.data_pusher - No pending camera changes to push
+2026-06-30 13:37:54 [DEBUG] sync.data_pusher - No pending tablet changes to push
+2026-06-30 13:37:54 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-06-30 13:37:54 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:37:54 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-06-30 13:37:54 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:37:54 [DEBUG] __main__ - Closing database connection...
+2026-06-30 13:37:54 [INFO] __main__ - Sync #24 completed successfully.
+2026-06-30 13:37:54 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-06-30 13:37:54)...
+2026-06-30 13:38:54 [INFO] __main__ - ############################################################
+2026-06-30 13:38:54 [INFO] __main__ - SYNC #25 - 2026-06-30 13:38:54.961665
+2026-06-30 13:38:54 [INFO] __main__ - ############################################################
+2026-06-30 13:38:54 [INFO] __main__ - ============================================================
+2026-06-30 13:38:54 [INFO] __main__ - STARTING SYNC AT 2026-06-30 13:38:54.962027
+2026-06-30 13:38:54 [INFO] __main__ - ============================================================
+2026-06-30 13:38:54 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-06-30 13:38:55 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-06-30 13:38:55 [INFO] __main__ - Checking last sync time...
+2026-06-30 13:38:55 [INFO] __main__ - Last sync was at: 2026-06-30 12:37:53.664124
+2026-06-30 13:38:55 [DEBUG] __main__ - Current sync started at: 2026-06-30 12:38:55.378256
+2026-06-30 13:38:55 [INFO] __main__ - Requesting data since: 2026-06-30 12:37:00
+2026-06-30 13:38:55 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-06-30 13:38:56 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-06-30 13:38:56 [INFO] __main__ - No new data to sync. Database is up to date.
+2026-06-30 13:38:56 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:38:56 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-06-30 13:38:56 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:38:56 [DEBUG] sync.data_pusher - No pending calendar changes to push
+2026-06-30 13:38:56 [DEBUG] sync.data_pusher - No pending attendance changes to push
+2026-06-30 13:38:56 [DEBUG] sync.data_pusher - No pending AccountLevel changes to push
+2026-06-30 13:38:56 [DEBUG] sync.data_pusher - No pending AccountSection changes to push 
+2026-06-30 13:38:56 [DEBUG] sync.data_pusher - No pending AccountSubject changes to push 
+2026-06-30 13:38:56 [DEBUG] sync.data_pusher - No pending AccountTag changes to push
+2026-06-30 13:38:56 [DEBUG] sync.data_pusher - No pending CompletionTag changes to push
+2026-06-30 13:38:56 [DEBUG] sync.data_pusher - No pending Association Folder changes to push
+2026-06-30 13:38:56 [DEBUG] sync.data_pusher - No pending Association changes to push
+2026-06-30 13:38:56 [DEBUG] sync.data_pusher - No pending SlcDoor changes to push
+2026-06-30 13:38:56 [DEBUG] sync.data_pusher - No pending camera changes to push
+2026-06-30 13:38:56 [DEBUG] sync.data_pusher - No pending tablet changes to push
+2026-06-30 13:38:56 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-06-30 13:38:56 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:38:56 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-06-30 13:38:56 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:38:56 [DEBUG] __main__ - Closing database connection...
+2026-06-30 13:38:56 [INFO] __main__ - Sync #25 completed successfully.
+2026-06-30 13:38:56 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-06-30 13:38:56)...
+2026-06-30 13:39:56 [INFO] __main__ - ############################################################
+2026-06-30 13:39:56 [INFO] __main__ - SYNC #26 - 2026-06-30 13:39:56.620413
+2026-06-30 13:39:56 [INFO] __main__ - ############################################################
+2026-06-30 13:39:56 [INFO] __main__ - ============================================================
+2026-06-30 13:39:56 [INFO] __main__ - STARTING SYNC AT 2026-06-30 13:39:56.620546
+2026-06-30 13:39:56 [INFO] __main__ - ============================================================
+2026-06-30 13:39:56 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-06-30 13:39:56 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-06-30 13:39:56 [INFO] __main__ - Checking last sync time...
+2026-06-30 13:39:56 [INFO] __main__ - Last sync was at: 2026-06-30 12:38:55.378256
+2026-06-30 13:39:56 [DEBUG] __main__ - Current sync started at: 2026-06-30 12:39:56.915563
+2026-06-30 13:39:56 [INFO] __main__ - Requesting data since: 2026-06-30 12:38:00
+2026-06-30 13:39:56 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-06-30 13:39:57 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-06-30 13:39:57 [INFO] __main__ - No new data to sync. Database is up to date.
+2026-06-30 13:39:57 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:39:57 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-06-30 13:39:57 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:39:57 [DEBUG] sync.data_pusher - No pending calendar changes to push
+2026-06-30 13:39:57 [DEBUG] sync.data_pusher - No pending attendance changes to push
+2026-06-30 13:39:57 [DEBUG] sync.data_pusher - No pending AccountLevel changes to push
+2026-06-30 13:39:57 [DEBUG] sync.data_pusher - No pending AccountSection changes to push 
+2026-06-30 13:39:57 [DEBUG] sync.data_pusher - No pending AccountSubject changes to push 
+2026-06-30 13:39:57 [DEBUG] sync.data_pusher - No pending AccountTag changes to push
+2026-06-30 13:39:57 [DEBUG] sync.data_pusher - No pending CompletionTag changes to push
+2026-06-30 13:39:57 [DEBUG] sync.data_pusher - No pending Association Folder changes to push
+2026-06-30 13:39:57 [DEBUG] sync.data_pusher - No pending Association changes to push
+2026-06-30 13:39:57 [DEBUG] sync.data_pusher - No pending SlcDoor changes to push
+2026-06-30 13:39:57 [DEBUG] sync.data_pusher - No pending camera changes to push
+2026-06-30 13:39:57 [DEBUG] sync.data_pusher - No pending tablet changes to push
+2026-06-30 13:39:57 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-06-30 13:39:57 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:39:57 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-06-30 13:39:57 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:39:57 [DEBUG] __main__ - Closing database connection...
+2026-06-30 13:39:57 [INFO] __main__ - Sync #26 completed successfully.
+2026-06-30 13:39:57 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-06-30 13:39:57)...
+2026-06-30 13:40:57 [INFO] __main__ - ############################################################
+2026-06-30 13:40:57 [INFO] __main__ - SYNC #27 - 2026-06-30 13:40:57.931270
+2026-06-30 13:40:57 [INFO] __main__ - ############################################################
+2026-06-30 13:40:57 [INFO] __main__ - ============================================================
+2026-06-30 13:40:57 [INFO] __main__ - STARTING SYNC AT 2026-06-30 13:40:57.931759
+2026-06-30 13:40:57 [INFO] __main__ - ============================================================
+2026-06-30 13:40:57 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-06-30 13:40:58 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-06-30 13:40:58 [INFO] __main__ - Checking last sync time...
+2026-06-30 13:40:58 [INFO] __main__ - Last sync was at: 2026-06-30 12:39:56.915563
+2026-06-30 13:40:58 [DEBUG] __main__ - Current sync started at: 2026-06-30 12:40:58.351845
+2026-06-30 13:40:58 [INFO] __main__ - Requesting data since: 2026-06-30 12:39:00
+2026-06-30 13:40:58 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-06-30 13:40:59 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-06-30 13:40:59 [INFO] __main__ - No new data to sync. Database is up to date.
+2026-06-30 13:40:59 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:40:59 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-06-30 13:40:59 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:40:59 [DEBUG] sync.data_pusher - No pending calendar changes to push
+2026-06-30 13:40:59 [DEBUG] sync.data_pusher - No pending attendance changes to push
+2026-06-30 13:40:59 [DEBUG] sync.data_pusher - No pending AccountLevel changes to push
+2026-06-30 13:40:59 [DEBUG] sync.data_pusher - No pending AccountSection changes to push 
+2026-06-30 13:40:59 [DEBUG] sync.data_pusher - No pending AccountSubject changes to push 
+2026-06-30 13:40:59 [DEBUG] sync.data_pusher - No pending AccountTag changes to push
+2026-06-30 13:40:59 [DEBUG] sync.data_pusher - No pending CompletionTag changes to push
+2026-06-30 13:40:59 [DEBUG] sync.data_pusher - No pending Association Folder changes to push
+2026-06-30 13:40:59 [DEBUG] sync.data_pusher - No pending Association changes to push
+2026-06-30 13:40:59 [DEBUG] sync.data_pusher - No pending SlcDoor changes to push
+2026-06-30 13:40:59 [DEBUG] sync.data_pusher - No pending camera changes to push
+2026-06-30 13:40:59 [DEBUG] sync.data_pusher - No pending tablet changes to push
+2026-06-30 13:40:59 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-06-30 13:40:59 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:40:59 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-06-30 13:40:59 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:40:59 [DEBUG] __main__ - Closing database connection...
+2026-06-30 13:40:59 [INFO] __main__ - Sync #27 completed successfully.
+2026-06-30 13:40:59 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-06-30 13:40:59)...
+2026-06-30 13:41:59 [INFO] __main__ - ############################################################
+2026-06-30 13:41:59 [INFO] __main__ - SYNC #28 - 2026-06-30 13:41:59.609373
+2026-06-30 13:41:59 [INFO] __main__ - ############################################################
+2026-06-30 13:41:59 [INFO] __main__ - ============================================================
+2026-06-30 13:41:59 [INFO] __main__ - STARTING SYNC AT 2026-06-30 13:41:59.609733
+2026-06-30 13:41:59 [INFO] __main__ - ============================================================
+2026-06-30 13:41:59 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-06-30 13:41:59 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-06-30 13:41:59 [INFO] __main__ - Checking last sync time...
+2026-06-30 13:41:59 [INFO] __main__ - Last sync was at: 2026-06-30 12:40:58.351845
+2026-06-30 13:41:59 [DEBUG] __main__ - Current sync started at: 2026-06-30 12:41:59.929305
+2026-06-30 13:41:59 [INFO] __main__ - Requesting data since: 2026-06-30 12:40:00
+2026-06-30 13:41:59 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-06-30 13:42:01 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-06-30 13:42:01 [INFO] __main__ - No new data to sync. Database is up to date.
+2026-06-30 13:42:01 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:42:01 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-06-30 13:42:01 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:42:01 [DEBUG] sync.data_pusher - No pending calendar changes to push
+2026-06-30 13:42:01 [DEBUG] sync.data_pusher - No pending attendance changes to push
+2026-06-30 13:42:01 [DEBUG] sync.data_pusher - No pending AccountLevel changes to push
+2026-06-30 13:42:01 [DEBUG] sync.data_pusher - No pending AccountSection changes to push 
+2026-06-30 13:42:01 [DEBUG] sync.data_pusher - No pending AccountSubject changes to push 
+2026-06-30 13:42:01 [DEBUG] sync.data_pusher - No pending AccountTag changes to push
+2026-06-30 13:42:01 [DEBUG] sync.data_pusher - No pending CompletionTag changes to push
+2026-06-30 13:42:01 [DEBUG] sync.data_pusher - No pending Association Folder changes to push
+2026-06-30 13:42:01 [DEBUG] sync.data_pusher - No pending Association changes to push
+2026-06-30 13:42:01 [DEBUG] sync.data_pusher - No pending SlcDoor changes to push
+2026-06-30 13:42:01 [DEBUG] sync.data_pusher - No pending camera changes to push
+2026-06-30 13:42:01 [DEBUG] sync.data_pusher - No pending tablet changes to push
+2026-06-30 13:42:01 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-06-30 13:42:01 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:42:01 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-06-30 13:42:01 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:42:01 [DEBUG] __main__ - Closing database connection...
+2026-06-30 13:42:01 [INFO] __main__ - Sync #28 completed successfully.
+2026-06-30 13:42:01 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-06-30 13:42:01)...
+2026-06-30 13:43:01 [INFO] __main__ - ############################################################
+2026-06-30 13:43:01 [INFO] __main__ - SYNC #29 - 2026-06-30 13:43:01.862626
+2026-06-30 13:43:01 [INFO] __main__ - ############################################################
+2026-06-30 13:43:01 [INFO] __main__ - ============================================================
+2026-06-30 13:43:01 [INFO] __main__ - STARTING SYNC AT 2026-06-30 13:43:01.863067
+2026-06-30 13:43:01 [INFO] __main__ - ============================================================
+2026-06-30 13:43:01 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-06-30 13:43:02 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-06-30 13:43:02 [INFO] __main__ - Checking last sync time...
+2026-06-30 13:43:02 [INFO] __main__ - Last sync was at: 2026-06-30 12:41:59.929305
+2026-06-30 13:43:02 [DEBUG] __main__ - Current sync started at: 2026-06-30 12:43:02.343766
+2026-06-30 13:43:02 [INFO] __main__ - Requesting data since: 2026-06-30 12:41:00
+2026-06-30 13:43:02 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-06-30 13:43:04 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-06-30 13:43:04 [INFO] __main__ - No new data to sync. Database is up to date.
+2026-06-30 13:43:04 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:43:04 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-06-30 13:43:04 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:43:04 [DEBUG] sync.data_pusher - No pending calendar changes to push
+2026-06-30 13:43:04 [DEBUG] sync.data_pusher - No pending attendance changes to push
+2026-06-30 13:43:04 [DEBUG] sync.data_pusher - No pending AccountLevel changes to push
+2026-06-30 13:43:04 [DEBUG] sync.data_pusher - No pending AccountSection changes to push 
+2026-06-30 13:43:04 [DEBUG] sync.data_pusher - No pending AccountSubject changes to push 
+2026-06-30 13:43:04 [DEBUG] sync.data_pusher - No pending AccountTag changes to push
+2026-06-30 13:43:04 [DEBUG] sync.data_pusher - No pending CompletionTag changes to push
+2026-06-30 13:43:04 [DEBUG] sync.data_pusher - No pending Association Folder changes to push
+2026-06-30 13:43:04 [DEBUG] sync.data_pusher - No pending Association changes to push
+2026-06-30 13:43:04 [DEBUG] sync.data_pusher - No pending SlcDoor changes to push
+2026-06-30 13:43:04 [DEBUG] sync.data_pusher - No pending camera changes to push
+2026-06-30 13:43:04 [DEBUG] sync.data_pusher - No pending tablet changes to push
+2026-06-30 13:43:04 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-06-30 13:43:04 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:43:04 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-06-30 13:43:04 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:43:04 [DEBUG] __main__ - Closing database connection...
+2026-06-30 13:43:04 [INFO] __main__ - Sync #29 completed successfully.
+2026-06-30 13:43:04 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-06-30 13:43:04)...
+2026-06-30 13:44:04 [INFO] __main__ - ############################################################
+2026-06-30 13:44:04 [INFO] __main__ - SYNC #30 - 2026-06-30 13:44:04.213316
+2026-06-30 13:44:04 [INFO] __main__ - ############################################################
+2026-06-30 13:44:04 [INFO] __main__ - ============================================================
+2026-06-30 13:44:04 [INFO] __main__ - STARTING SYNC AT 2026-06-30 13:44:04.213655
+2026-06-30 13:44:04 [INFO] __main__ - ============================================================
+2026-06-30 13:44:04 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-06-30 13:44:04 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-06-30 13:44:04 [INFO] __main__ - Checking last sync time...
+2026-06-30 13:44:04 [INFO] __main__ - Last sync was at: 2026-06-30 12:43:02.343766
+2026-06-30 13:44:04 [DEBUG] __main__ - Current sync started at: 2026-06-30 12:44:04.540294
+2026-06-30 13:44:04 [INFO] __main__ - Requesting data since: 2026-06-30 12:43:00
+2026-06-30 13:44:04 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-06-30 13:44:06 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-06-30 13:44:06 [INFO] __main__ - No new data to sync. Database is up to date.
+2026-06-30 13:44:06 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:44:06 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-06-30 13:44:06 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:44:06 [DEBUG] sync.data_pusher - No pending calendar changes to push
+2026-06-30 13:44:06 [DEBUG] sync.data_pusher - No pending attendance changes to push
+2026-06-30 13:44:06 [DEBUG] sync.data_pusher - No pending AccountLevel changes to push
+2026-06-30 13:44:06 [DEBUG] sync.data_pusher - No pending AccountSection changes to push 
+2026-06-30 13:44:06 [DEBUG] sync.data_pusher - No pending AccountSubject changes to push 
+2026-06-30 13:44:06 [DEBUG] sync.data_pusher - No pending AccountTag changes to push
+2026-06-30 13:44:06 [DEBUG] sync.data_pusher - No pending CompletionTag changes to push
+2026-06-30 13:44:06 [DEBUG] sync.data_pusher - No pending Association Folder changes to push
+2026-06-30 13:44:06 [DEBUG] sync.data_pusher - No pending Association changes to push
+2026-06-30 13:44:06 [DEBUG] sync.data_pusher - No pending SlcDoor changes to push
+2026-06-30 13:44:06 [DEBUG] sync.data_pusher - No pending camera changes to push
+2026-06-30 13:44:06 [DEBUG] sync.data_pusher - No pending tablet changes to push
+2026-06-30 13:44:06 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-06-30 13:44:06 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:44:06 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-06-30 13:44:06 [INFO] sync.data_pusher - ============================================================
+2026-06-30 13:44:06 [DEBUG] __main__ - Closing database connection...
+2026-06-30 13:44:06 [INFO] __main__ - Sync #30 completed successfully.
+2026-06-30 13:44:06 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-06-30 13:44:06)...
