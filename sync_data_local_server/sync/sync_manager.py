@@ -155,110 +155,110 @@ def process_sync_data(db, data, settings):
             for v in normalized.values()
         )
 
-    if 'account' in data:
-        n = normalize(data['account'])
-        if has_records(n):
-            from sync.processors.account_processor import process_accounts
-            logger.info("Processing ACCOUNTS...")
-            process_accounts(db, n, token)
-
-    if 'accountSubject' in data:
-        n = normalize(data['accountSubject'])
-        if has_records(n):
-            from sync.processors.account_subject_processor import process_account_subjects
-            logger.info("Processing Account Subjects...")
-            process_account_subjects(db, n)
-
-    if 'calendar' in data:
-        n = normalize(data['calendar'])
-        if has_records(n):
-            from sync.processors.calendar_processor import process_calendars
-            logger.info("Processing Calendars...")
-            process_calendars(db, n)
-
-    if 'group' in data:
-        n = normalize(data['group'])
-        if has_records(n):
-            from sync.processors.group_local_session_processor import process_groups
-            logger.info("Processing Groups...")
-            process_groups(db, n)
-
-    if 'attendance' in data:
-        n = normalize(data['attendance'])
-        if has_records(n):
-            from sync.processors.attendance_processor import process_attendances
-            logger.info("Processing Attendances...")
-            process_attendances(db, n, settings)
-
-    if 'slcCamera' in data:
-        n = normalize(data['slcCamera'])
-        if has_records(n):
-            from sync.processors.camera_processor import process_cameras
-            logger.info("Processing Cameras...")
-            process_cameras(db, n)
-
-    if 'formation' in data:
-        n = normalize(data['formation'])
-        if has_records(n):
-            from sync.processors.formation_processor import process_formations
-            logger.info("Processing Formations...")
-            process_formations(db, n)
-
-    if 'slcLocal' in data:
-        n = normalize(data['slcLocal'])
-        if has_records(n):
-            from sync.processors.slc_local_processor import process_slc_local
-            logger.info("Processing SLC Locals...")
-            process_slc_local(db, n)
-
-    if 'relationTeacherAndSubjectData' in data:
-        n = normalize(data['relationTeacherAndSubjectData'])
-        if has_records(n):
-            from sync.processors.relation_teacher_subject_processor import process_teacher_subject_relations
-            logger.info("Processing Teacher-Subject Relations...")
-            process_teacher_subject_relations(db, n)
-
-    if 'relationUserSession' in data:
-        n = normalize(data['relationUserSession'])
-        if has_records(n):
-            from sync.processors.user_session_processor import process_user_session_relations
-            logger.info("Processing User-Session Relations...")
-            process_user_session_relations(db, n)
-
-    if 'local_with_room' in data:
-        n = normalize(data['local_with_room'])
-        if has_records(n):
-            from sync.processors.local_room_processor import process_local_and_rooms
-            logger.info("Processing Locals and Rooms...")
-            process_local_and_rooms(db, n)
-
-    if 'session' in data:
-        n = normalize(data['session'])
-        if has_records(n):
-            from sync.processors.session_processor import process_sessions
-            logger.info("Processing Sessions...")
-            process_sessions(db, n, token)
-
-    if 'slc' in data:
-        n = normalize(data['slc'])
-        if has_records(n):
-            from sync.processors.slc_processor import process_slcs
-            logger.info("Processing SLCs...")
-            process_slcs(db, n)
-
-    if 'subject' in data:
-        n = normalize(data['subject'])
-        if has_records(n):
-            from sync.processors.subject_config_processor import process_subjects
-            logger.info("Processing Subjects...")
-            process_subjects(db, n)
-
-    if 'slcTablet' in data:
-        n = normalize(data['slcTablet'])
-        if has_records(n):
-            from sync.processors.tablet_processor import process_tablets
-            logger.info("Processing Tablets...")
-            process_tablets(db, n)
+    # if 'account' in data:
+    #     n = normalize(data['account'])
+    #     if has_records(n):
+    #         from sync.processors.account_processor import process_accounts
+    #         logger.info("Processing ACCOUNTS...")
+    #         process_accounts(db, n, token)
+    #
+    # if 'accountSubject' in data:
+    #     n = normalize(data['accountSubject'])
+    #     if has_records(n):
+    #         from sync.processors.account_subject_processor import process_account_subjects
+    #         logger.info("Processing Account Subjects...")
+    #         process_account_subjects(db, n)
+    #
+    # if 'calendar' in data:
+    #     n = normalize(data['calendar'])
+    #     if has_records(n):
+    #         from sync.processors.calendar_processor import process_calendars
+    #         logger.info("Processing Calendars...")
+    #         process_calendars(db, n)
+    #
+    # if 'group' in data:
+    #     n = normalize(data['group'])
+    #     if has_records(n):
+    #         from sync.processors.group_local_session_processor import process_groups
+    #         logger.info("Processing Groups...")
+    #         process_groups(db, n)
+    #
+    # if 'attendance' in data:
+    #     n = normalize(data['attendance'])
+    #     if has_records(n):
+    #         from sync.processors.attendance_processor import process_attendances
+    #         logger.info("Processing Attendances...")
+    #         process_attendances(db, n, settings)
+    #
+    # if 'slcCamera' in data:
+    #     n = normalize(data['slcCamera'])
+    #     if has_records(n):
+    #         from sync.processors.camera_processor import process_cameras
+    #         logger.info("Processing Cameras...")
+    #         process_cameras(db, n)
+    #
+    # if 'formation' in data:
+    #     n = normalize(data['formation'])
+    #     if has_records(n):
+    #         from sync.processors.formation_processor import process_formations
+    #         logger.info("Processing Formations...")
+    #         process_formations(db, n)
+    #
+    # if 'slcLocal' in data:
+    #     n = normalize(data['slcLocal'])
+    #     if has_records(n):
+    #         from sync.processors.slc_local_processor import process_slc_local
+    #         logger.info("Processing SLC Locals...")
+    #         process_slc_local(db, n)
+    #
+    # if 'relationTeacherAndSubjectData' in data:
+    #     n = normalize(data['relationTeacherAndSubjectData'])
+    #     if has_records(n):
+    #         from sync.processors.relation_teacher_subject_processor import process_teacher_subject_relations
+    #         logger.info("Processing Teacher-Subject Relations...")
+    #         process_teacher_subject_relations(db, n)
+    #
+    # if 'relationUserSession' in data:
+    #     n = normalize(data['relationUserSession'])
+    #     if has_records(n):
+    #         from sync.processors.user_session_processor import process_user_session_relations
+    #         logger.info("Processing User-Session Relations...")
+    #         process_user_session_relations(db, n)
+    #
+    # if 'local_with_room' in data:
+    #     n = normalize(data['local_with_room'])
+    #     if has_records(n):
+    #         from sync.processors.local_room_processor import process_local_and_rooms
+    #         logger.info("Processing Locals and Rooms...")
+    #         process_local_and_rooms(db, n)
+    #
+    # if 'session' in data:
+    #     n = normalize(data['session'])
+    #     if has_records(n):
+    #         from sync.processors.session_processor import process_sessions
+    #         logger.info("Processing Sessions...")
+    #         process_sessions(db, n, token)
+    #
+    # if 'slc' in data:
+    #     n = normalize(data['slc'])
+    #     if has_records(n):
+    #         from sync.processors.slc_processor import process_slcs
+    #         logger.info("Processing SLCs...")
+    #         process_slcs(db, n)
+    #
+    # if 'subject' in data:
+    #     n = normalize(data['subject'])
+    #     if has_records(n):
+    #         from sync.processors.subject_config_processor import process_subjects
+    #         logger.info("Processing Subjects...")
+    #         process_subjects(db, n)
+    #
+    # if 'slcTablet' in data:
+    #     n = normalize(data['slcTablet'])
+    #     if has_records(n):
+    #         from sync.processors.tablet_processor import process_tablets
+    #         logger.info("Processing Tablets...")
+    #         process_tablets(db, n)
 
     if 'user' in data:
         n = normalize(data['user'])
@@ -267,118 +267,118 @@ def process_sync_data(db, data, settings):
             logger.info("Processing Users...")
             process_users(db, n, token)
 
-    if 'admin' in data:
-        n = normalize(data['admin'])
-        if has_records(n):
-            from sync.processors.user_processor import process_admins
-            logger.info("Processing Admins...")
-            process_admins(db, n, token)
-
-    if 'virtualUser' in data:
-        n = normalize(data['virtualUser'])
-        if has_records(n):
-            from sync.processors.VirtuelUser_processor import process_virtuelUser
-            logger.info("Processing Virtual Users...")
-            process_virtuelUser(db, n, token)
-
-    if 'paymentSessions' in data:
-        n = normalize(data['paymentSessions'])
-        if has_records(n):
-            from sync.processors.payment_processor import process_payment_sessions
-            logger.info("Processing Payment Sessions...")
-            process_payment_sessions(db, n)
-
-    if 'invoices' in data:
-        n = normalize(data['invoices'])
-        if has_records(n):
-            from sync.processors.invoice_processor import process_invoice_session
-            logger.info("Processing Invoices...")
-            process_invoice_session(db, n)
-
-    if 'level' in data:
-        n = normalize(data['level'])
-        if has_records(n):
-            from sync.processors.level_processor import processor_level_session
-            logger.info("Processing Levels...")
-            processor_level_session(db, n)
-
-    if 'accountLevel' in data:
-        n = normalize(data['accountLevel'])
-        if has_records(n):
-            from sync.processors.accountLevel_processor import processor_account_level
-            logger.info("Processing Account Levels...")
-            processor_account_level(db, n)
-
-    if 'section' in data:
-        n = normalize(data['section'])
-        if has_records(n):
-            from sync.processors.section_processor import processor_section
-            logger.info("Processing Sections...")
-            processor_section(db, n)
-
-    if 'accountSection' in data:
-        n = normalize(data['accountSection'])
-        if has_records(n):
-            from sync.processors.account_section_processor import processor_account_section
-            logger.info("Processing Account Sections...")
-            processor_account_section(db, n)
-
-    if 'tag' in data:
-        n = normalize(data['tag'])
-        if has_records(n):
-            from sync.processors.tag_config_processor import processor_tag_config
-            logger.info("Processing Tag Configs...")
-            processor_tag_config(db, n)
-
-    if 'accountTag' in data:
-        n = normalize(data['accountTag'])
-        if has_records(n):
-            from sync.processors.account_tag_processor import processor_account_tag
-            logger.info("Processing Account Tags...")
-            processor_account_tag(db, n)
-
-    if 'completionTagAccount' in data:
-        n = normalize(data['completionTagAccount'])
-        if has_records(n):
-            from sync.processors.completion_tag_account_processor import processor_completion_tag
-            logger.info("Processing Completion Tags...")
-            processor_completion_tag(db, n)
-
-    if 'relationCompletionTag' in data:
-        n = normalize(data['relationCompletionTag'])
-        if has_records(n):
-            from sync.processors.relationCompletionTag_processor import processor_relationCompletionTag
-            logger.info("Processing RelationCompletionTag...")
-            processor_relationCompletionTag(db, n)
-
-
-    if 'season' in data:
-        n = normalize(data['season'])
-        if has_records(n):
-            from sync.processors.season_processor import process_season
-            logger.info("Processing Season ...")
-            process_season(db, n)
-
-    if 'seasonSubSubject' in data:
-        n = normalize(data['seasonSubSubject'])
-        if has_records(n):
-            from sync.processors.subsubject_processor import process_subsubject
-            logger.info("Processing Subsubject")
-            process_subsubject(db, n)
-
-    if 'relationLocalSession' in data:
-        n = normalize(data['relationLocalSession'])
-        if has_records(n):
-            from sync.processors.relationLocalSession_processor import process_relation_local_session
-            logger.info("Processing relationLocalSession")
-            process_relation_local_session(db, n)
-
-    if 'relationTeacherAccount' in data:
-        n= normalize(data['relationTeacherAccount'])
-        if has_records(n):
-            from sync.processors.relationTeacherAccount_processor import process_relation_teacher_account
-            logger.info("Processing relationTeacherAccount")
-            process_relation_teacher_account(db, n)
+    # if 'admin' in data:
+    #     n = normalize(data['admin'])
+    #     if has_records(n):
+    #         from sync.processors.user_processor import process_admins
+    #         logger.info("Processing Admins...")
+    #         process_admins(db, n, token)
+    #
+    # if 'virtualUser' in data:
+    #     n = normalize(data['virtualUser'])
+    #     if has_records(n):
+    #         from sync.processors.VirtuelUser_processor import process_virtuelUser
+    #         logger.info("Processing Virtual Users...")
+    #         process_virtuelUser(db, n, token)
+    #
+    # if 'paymentSessions' in data:
+    #     n = normalize(data['paymentSessions'])
+    #     if has_records(n):
+    #         from sync.processors.payment_processor import process_payment_sessions
+    #         logger.info("Processing Payment Sessions...")
+    #         process_payment_sessions(db, n)
+    #
+    # if 'invoices' in data:
+    #     n = normalize(data['invoices'])
+    #     if has_records(n):
+    #         from sync.processors.invoice_processor import process_invoice_session
+    #         logger.info("Processing Invoices...")
+    #         process_invoice_session(db, n)
+    #
+    # if 'level' in data:
+    #     n = normalize(data['level'])
+    #     if has_records(n):
+    #         from sync.processors.level_processor import processor_level_session
+    #         logger.info("Processing Levels...")
+    #         processor_level_session(db, n)
+    #
+    # if 'accountLevel' in data:
+    #     n = normalize(data['accountLevel'])
+    #     if has_records(n):
+    #         from sync.processors.accountLevel_processor import processor_account_level
+    #         logger.info("Processing Account Levels...")
+    #         processor_account_level(db, n)
+    #
+    # if 'section' in data:
+    #     n = normalize(data['section'])
+    #     if has_records(n):
+    #         from sync.processors.section_processor import processor_section
+    #         logger.info("Processing Sections...")
+    #         processor_section(db, n)
+    #
+    # if 'accountSection' in data:
+    #     n = normalize(data['accountSection'])
+    #     if has_records(n):
+    #         from sync.processors.account_section_processor import processor_account_section
+    #         logger.info("Processing Account Sections...")
+    #         processor_account_section(db, n)
+    #
+    # if 'tag' in data:
+    #     n = normalize(data['tag'])
+    #     if has_records(n):
+    #         from sync.processors.tag_config_processor import processor_tag_config
+    #         logger.info("Processing Tag Configs...")
+    #         processor_tag_config(db, n)
+    #
+    # if 'accountTag' in data:
+    #     n = normalize(data['accountTag'])
+    #     if has_records(n):
+    #         from sync.processors.account_tag_processor import processor_account_tag
+    #         logger.info("Processing Account Tags...")
+    #         processor_account_tag(db, n)
+    #
+    # if 'completionTagAccount' in data:
+    #     n = normalize(data['completionTagAccount'])
+    #     if has_records(n):
+    #         from sync.processors.completion_tag_account_processor import processor_completion_tag
+    #         logger.info("Processing Completion Tags...")
+    #         processor_completion_tag(db, n)
+    #
+    # if 'relationCompletionTag' in data:
+    #     n = normalize(data['relationCompletionTag'])
+    #     if has_records(n):
+    #         from sync.processors.relationCompletionTag_processor import processor_relationCompletionTag
+    #         logger.info("Processing RelationCompletionTag...")
+    #         processor_relationCompletionTag(db, n)
+    #
+    #
+    # if 'season' in data:
+    #     n = normalize(data['season'])
+    #     if has_records(n):
+    #         from sync.processors.season_processor import process_season
+    #         logger.info("Processing Season ...")
+    #         process_season(db, n)
+    #
+    # if 'seasonSubSubject' in data:
+    #     n = normalize(data['seasonSubSubject'])
+    #     if has_records(n):
+    #         from sync.processors.subsubject_processor import process_subsubject
+    #         logger.info("Processing Subsubject")
+    #         process_subsubject(db, n)
+    #
+    # if 'relationLocalSession' in data:
+    #     n = normalize(data['relationLocalSession'])
+    #     if has_records(n):
+    #         from sync.processors.relationLocalSession_processor import process_relation_local_session
+    #         logger.info("Processing relationLocalSession")
+    #         process_relation_local_session(db, n)
+    #
+    # if 'relationTeacherAccount' in data:
+    #     n= normalize(data['relationTeacherAccount'])
+    #     if has_records(n):
+    #         from sync.processors.relationTeacherAccount_processor import process_relation_teacher_account
+    #         logger.info("Processing relationTeacherAccount")
+    #         process_relation_teacher_account(db, n)
 
     # if 'completionTagUser' in data:
     #     n = normalize(data['completionTagUser'])
@@ -387,12 +387,12 @@ def process_sync_data(db, data, settings):
     #         logger.info("Processing completionTagUser")
     #         process_completionTaguser(db, n)
 
-    if 'slcDoor' in data:
-        n = normalize(data['slcDoor'])
-        if has_records(n):
-            from sync.processors.door_processor import process_slc_door
-            logger.info("Processing Slc_Door")
-            process_slc_door(db,n)
+    # if 'slcDoor' in data:
+    #     n = normalize(data['slcDoor'])
+    #     if has_records(n):
+    #         from sync.processors.door_processor import process_slc_door
+    #         logger.info("Processing Slc_Door")
+    #         process_slc_door(db,n)
 
 
 

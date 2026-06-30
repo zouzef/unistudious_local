@@ -913,7 +913,7 @@ class UserModel(BaseModel):
         Column("isvirtual", "TINYINT(1)", default="0"),
         Column("door_id", "VARCHAR(255)", default="0"),
         Column("slc_edit", "INT(11)", default="0"),
-        Column("id_user", "INT(11)"),
+		Column("id_prod", "INT(11)",default=None)
     ]
 class UserAuditModel(BaseModel):
 	table_name = "user_audit"

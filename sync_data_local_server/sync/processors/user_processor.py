@@ -32,6 +32,7 @@ def insert_users(db, user_data, token):
     """
     Handle 'created' users from API
     Logic:
+    - Check if id_prod already exists (avoid duplicates from local pushes)
     - If user exists in DB → UPDATE it
     - If user does NOT exist → INSERT it
     """
@@ -59,7 +60,18 @@ def insert_users(db, user_data, token):
                 if not user_id:
                     raise ValueError("Missing required field: userId")
 
+                # ✅ FIRST: Check if this remote ID already exists as id_prod (from local push)
+                check_prod_query = "SELECT id FROM user WHERE id_prod = %s"
+                existing_by_prod = db.fetch_query(check_prod_query, (user_id,))
+
+                if existing_by_prod:
+                    print(f"   [{i}/{len(created_users)}] User ID {user_id} already exists as id_prod "
+                          f"(local id: {existing_by_prod[0]['id']}) - skipped to avoid duplicate")
+                    result["skipped"] += 1
+                    continue
+
                 new_data = {
+                    "id_prod": user.get("userId"),
                     "uuid": user.get("uuid"),
                     "username": user.get("username", ""),
                     "full_name": user.get("fullName"),
@@ -91,6 +103,7 @@ def insert_users(db, user_data, token):
                     existing = existing_records[0]
 
                     field_mapping = {
+                        "id_prod": "id_prod",
                         "username": "username",
                         "full_name": "full_name",
                         "email": "email",
@@ -128,6 +141,7 @@ def insert_users(db, user_data, token):
 
                     update_query = """
                         UPDATE user SET
+                            id_prod = %s,
                             username = %s,
                             full_name = %s,
                             email = %s,
@@ -150,6 +164,7 @@ def insert_users(db, user_data, token):
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["username"],
                         new_data["full_name"],
                         new_data["email"],
@@ -206,9 +221,54 @@ def insert_users(db, user_data, token):
                         "fcm_ios": None
                     }
 
+                    # Columns (44 total):
+                    #  1 id
+                    #  2 id_prod
+                    #  3 account_id
+                    #  4 username
+                    #  5 email
+                    #  6 full_name
+                    #  7 roles
+                    #  8 img_link
+                    #  9 reset_token
+                    # 10 status
+                    # 11 created_by
+                    # 12 password
+                    # 13 birth_date
+                    # 14 birth_place
+                    # 15 phone
+                    # 16 address
+                    # 17 grand
+                    # 18 access_type
+                    # 19 access_type_date
+                    # 20 enabled
+                    # 21 created_at
+                    # 22 timestamp
+                    # 23 updated_at
+                    # 24 uuid
+                    # 25 facebook_id
+                    # 26 google_id
+                    # 27 mastodon_access_token
+                    # 28 general_notification
+                    # 29 message_notification
+                    # 30 calendar_notification
+                    # 31 sms_notification
+                    # 32 login_notification
+                    # 33 horsline
+                    # 34 ref_slc
+                    # 35 apple_id
+                    # 36 open_source_user_name
+                    # 37 rocket_chat_user_id
+                    # 38 fcm_web
+                    # 39 fcm_android
+                    # 40 fcm_ios
+                    # 41 releaseToken
+                    # 42 useToken
+                    # 43 isvirtual
+                    # 44 door_id
                     insert_query = """
                         INSERT INTO user (
-                            id, account_id, username, email, full_name, roles, img_link,
+                            id, id_prod, account_id, username, email, full_name, roles, img_link,
                             reset_token, status, created_by, password, birth_date, birth_place,
                             phone, address, grand, access_type, access_type_date, enabled,
                             created_at, timestamp, updated_at, uuid, facebook_id, google_id,
@@ -218,60 +278,63 @@ def insert_users(db, user_data, token):
                             rocket_chat_user_id, fcm_web, fcm_android, fcm_ios, releaseToken, useToken,
                             isvirtual, door_id
                         ) VALUES (
-                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
-                            %s, %s, %s, %s, %s,
-                            %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s, %s,
+                            %s, %s, %s,
+                            %s, %s, %s,
+                            %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
                             %s, %s
                         )
                     """
 
                     db.execute_query(insert_query, (
-                        user_id,
-                        default_values["account_id"],
-                        new_data["username"],
-                        new_data["email"],
-                        new_data["full_name"],
-                        new_data["roles"],
-                        new_data["img_link"],
-                        default_values["reset_token"],
-                        new_data["status"],
-                        default_values["created_by"],
-                        new_data["password"],
-                        default_values["birth_date"],
-                        default_values["birth_place"],
-                        new_data["phone"],
-                        new_data["address"],
-                        new_data["grand"],
-                        default_values["access_type"],
-                        default_values["access_type_date"],
-                        new_data["enabled"],
-                        new_data["created_at"],
-                        new_data["timestamp"],
-                        new_data["updated_at"],
-                        new_data["uuid"],
-                        default_values["facebook_id"],
-                        default_values["google_id"],
-                        default_values["mastodon_access_token"],
-                        default_values["general_notification"],
-                        default_values["message_notification"],
-                        default_values["calendar_notification"],
-                        default_values["sms_notification"],
-                        default_values["login_notification"],
-                        default_values["horsline"],
-                        new_data["ref_slc"],
-                        default_values["apple_id"],
-                        default_values["open_source_user_name"],
-                        default_values["rocket_chat_user_id"],
-                        default_values["fcm_web"],
-                        default_values["fcm_android"],
-                        default_values["fcm_ios"],
-                        new_data["release_token"],
-                        new_data["use_token"],
-                        new_data["isvirtual"],
-                        new_data["door_id"]
+                        user_id,                                      # 1 id
+                        new_data["id_prod"],                          # 2 id_prod
+                        default_values["account_id"],                 # 3 account_id
+                        new_data["username"],                         # 4 username
+                        new_data["email"],                            # 5 email
+                        new_data["full_name"],                        # 6 full_name
+                        new_data["roles"],                            # 7 roles
+                        new_data["img_link"],                         # 8 img_link
+                        default_values["reset_token"],                # 9 reset_token
+                        new_data["status"],                           # 10 status
+                        default_values["created_by"],                 # 11 created_by
+                        new_data["password"],                         # 12 password
+                        default_values["birth_date"],                 # 13 birth_date
+                        default_values["birth_place"],                # 14 birth_place
+                        new_data["phone"],                            # 15 phone
+                        new_data["address"],                          # 16 address
+                        new_data["grand"],                            # 17 grand
+                        default_values["access_type"],                # 18 access_type
+                        default_values["access_type_date"],           # 19 access_type_date
+                        new_data["enabled"],                          # 20 enabled
+                        new_data["created_at"],                       # 21 created_at
+                        new_data["timestamp"],                        # 22 timestamp
+                        new_data["updated_at"],                       # 23 updated_at
+                        new_data["uuid"],                             # 24 uuid
+                        default_values["facebook_id"],                # 25 facebook_id
+                        default_values["google_id"],                  # 26 google_id
+                        default_values["mastodon_access_token"],      # 27 mastodon_access_token
+                        default_values["general_notification"],       # 28 general_notification
+                        default_values["message_notification"],       # 29 message_notification
+                        default_values["calendar_notification"],      # 30 calendar_notification
+                        default_values["sms_notification"],           # 31 sms_notification
+                        default_values["login_notification"],         # 32 login_notification
+                        default_values["horsline"],                   # 33 horsline
+                        new_data["ref_slc"],                          # 34 ref_slc
+                        default_values["apple_id"],                   # 35 apple_id
+                        default_values["open_source_user_name"],      # 36 open_source_user_name
+                        default_values["rocket_chat_user_id"],        # 37 rocket_chat_user_id
+                        default_values["fcm_web"],                    # 38 fcm_web
+                        default_values["fcm_android"],                # 39 fcm_android
+                        default_values["fcm_ios"],                    # 40 fcm_ios
+                        new_data["release_token"],                    # 41 releaseToken
+                        new_data["use_token"],                        # 42 useToken
+                        new_data["isvirtual"],                        # 43 isvirtual
+                        new_data["door_id"]                           # 44 door_id
                     ))
 
                     result["inserted"] += 1
@@ -300,6 +363,7 @@ def update_users(db, user_data, token):
     """
     Handle 'updated' users from API
     Logic:
+    - Check by id_prod first, then fall back to id
     - If user exists in DB → UPDATE it
     - If user does NOT exist → INSERT it (don't skip!)
     """
@@ -328,6 +392,7 @@ def update_users(db, user_data, token):
                     raise ValueError("Missing required field: userId")
 
                 new_data = {
+                    "id_prod": user.get("userId"),
                     "uuid": user.get("uuid"),
                     "username": user.get("username"),
                     "full_name": user.get("fullName"),
@@ -349,8 +414,13 @@ def update_users(db, user_data, token):
                     "password": user.get("password", "TEMP_PASSWORD_NEEDS_RESET"),
                 }
 
-                select_query = "SELECT * FROM user WHERE id = %s"
-                existing_records = db.fetch_query(select_query, (user_id,))
+                # ✅ Check by id_prod first, then fall back to id
+                check_prod_query = "SELECT * FROM user WHERE id_prod = %s"
+                existing_records = db.fetch_query(check_prod_query, (user_id,))
+
+                if not existing_records:
+                    select_query = "SELECT * FROM user WHERE id = %s"
+                    existing_records = db.fetch_query(select_query, (user_id,))
 
                 print(f"   [{i}/{len(updated_users)}] User ID {user_id}...")
 
@@ -358,6 +428,7 @@ def update_users(db, user_data, token):
                     existing = existing_records[0]
 
                     field_mapping = {
+                        "id_prod": "id_prod",
                         "username": "username",
                         "full_name": "full_name",
                         "email": "email",
@@ -395,6 +466,7 @@ def update_users(db, user_data, token):
 
                     update_query = """
                         UPDATE user SET
+                            id_prod = %s,
                             username = %s,
                             full_name = %s,
                             email = %s,
@@ -417,6 +489,7 @@ def update_users(db, user_data, token):
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["username"],
                         new_data["full_name"],
                         new_data["email"],
@@ -435,7 +508,7 @@ def update_users(db, user_data, token):
                         new_data["isvirtual"],
                         new_data["door_id"],
                         new_data["password"],  # ✅ FIXED
-                        user_id
+                        existing["id"]  # ← use actual local id (handles both id and id_prod lookup)
                     ))
 
                     result["updated"] += 1
@@ -475,7 +548,7 @@ def update_users(db, user_data, token):
 
                     insert_query = """
                         INSERT INTO user (
-                            id, account_id, username, email, full_name, roles, img_link,
+                            id, id_prod, account_id, username, email, full_name, roles, img_link,
                             reset_token, status, created_by, password, birth_date, birth_place,
                             phone, address, grand, access_type, access_type_date, enabled,
                             created_at, timestamp, updated_at, uuid, facebook_id, google_id,
@@ -485,60 +558,63 @@ def update_users(db, user_data, token):
                             rocket_chat_user_id, fcm_web, fcm_android, fcm_ios, releaseToken, useToken,
                             isvirtual, door_id
                         ) VALUES (
-                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
-                            %s, %s, %s, %s, %s,
-                            %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s, %s,
+                            %s, %s, %s,
+                            %s, %s, %s,
+                            %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
                             %s, %s
                         )
                     """
 
                     db.execute_query(insert_query, (
-                        user_id,
-                        default_values["account_id"],
-                        new_data["username"],
-                        new_data["email"],
-                        new_data["full_name"],
-                        new_data["roles"],
-                        new_data["img_link"],
-                        default_values["reset_token"],
-                        new_data["status"],
-                        default_values["created_by"],
-                        new_data["password"],
-                        default_values["birth_date"],
-                        default_values["birth_place"],
-                        new_data["phone"],
-                        new_data["address"],
-                        new_data["grand"],
-                        default_values["access_type"],
-                        default_values["access_type_date"],
-                        new_data["enabled"],
-                        new_data["updated_at"],  # used as created_at
-                        new_data["timestamp"],
-                        new_data["updated_at"],
-                        new_data["uuid"],
-                        default_values["facebook_id"],
-                        default_values["google_id"],
-                        default_values["mastodon_access_token"],
-                        default_values["general_notification"],
-                        default_values["message_notification"],
-                        default_values["calendar_notification"],
-                        default_values["sms_notification"],
-                        default_values["login_notification"],
-                        default_values["horsline"],
-                        new_data["ref_slc"],
-                        default_values["apple_id"],
-                        default_values["open_source_user_name"],
-                        default_values["rocket_chat_user_id"],
-                        default_values["fcm_web"],
-                        default_values["fcm_android"],
-                        default_values["fcm_ios"],
-                        new_data["release_token"],
-                        new_data["use_token"],
-                        new_data["isvirtual"],
-                        new_data["door_id"]
+                        user_id,                                      # 1 id
+                        new_data["id_prod"],                          # 2 id_prod
+                        default_values["account_id"],                 # 3 account_id
+                        new_data["username"],                         # 4 username
+                        new_data["email"],                            # 5 email
+                        new_data["full_name"],                        # 6 full_name
+                        new_data["roles"],                            # 7 roles
+                        new_data["img_link"],                         # 8 img_link
+                        default_values["reset_token"],                # 9 reset_token
+                        new_data["status"],                           # 10 status
+                        default_values["created_by"],                 # 11 created_by
+                        new_data["password"],                         # 12 password
+                        default_values["birth_date"],                 # 13 birth_date
+                        default_values["birth_place"],                # 14 birth_place
+                        new_data["phone"],                            # 15 phone
+                        new_data["address"],                          # 16 address
+                        new_data["grand"],                            # 17 grand
+                        default_values["access_type"],                # 18 access_type
+                        default_values["access_type_date"],           # 19 access_type_date
+                        new_data["enabled"],                          # 20 enabled
+                        new_data["updated_at"],                       # 21 created_at (fallback)
+                        new_data["timestamp"],                        # 22 timestamp
+                        new_data["updated_at"],                       # 23 updated_at
+                        new_data["uuid"],                             # 24 uuid
+                        default_values["facebook_id"],                # 25 facebook_id
+                        default_values["google_id"],                  # 26 google_id
+                        default_values["mastodon_access_token"],      # 27 mastodon_access_token
+                        default_values["general_notification"],       # 28 general_notification
+                        default_values["message_notification"],       # 29 message_notification
+                        default_values["calendar_notification"],      # 30 calendar_notification
+                        default_values["sms_notification"],           # 31 sms_notification
+                        default_values["login_notification"],         # 32 login_notification
+                        default_values["horsline"],                   # 33 horsline
+                        new_data["ref_slc"],                          # 34 ref_slc
+                        default_values["apple_id"],                   # 35 apple_id
+                        default_values["open_source_user_name"],      # 36 open_source_user_name
+                        default_values["rocket_chat_user_id"],        # 37 rocket_chat_user_id
+                        default_values["fcm_web"],                    # 38 fcm_web
+                        default_values["fcm_android"],                # 39 fcm_android
+                        default_values["fcm_ios"],                    # 40 fcm_ios
+                        new_data["release_token"],                    # 41 releaseToken
+                        new_data["use_token"],                        # 42 useToken
+                        new_data["isvirtual"],                        # 43 isvirtual
+                        new_data["door_id"]                           # 44 door_id
                     ))
 
                     result["inserted"] += 1
@@ -567,6 +643,7 @@ def insert_admins(db, admin_data, token):
     """
     Handle admins from API → push into user table
     Logic:
+    - Check if id_prod already exists (avoid duplicates from local pushes)
     - If user exists in DB → UPDATE it
     - If user does NOT exist → INSERT it
 
@@ -598,7 +675,18 @@ def insert_admins(db, admin_data, token):
                 if not user_id:
                     raise ValueError("Missing required field: userId")
 
+                # ✅ FIRST: Check if this remote ID already exists as id_prod (from local push)
+                check_prod_query = "SELECT id FROM user WHERE id_prod = %s"
+                existing_by_prod = db.fetch_query(check_prod_query, (user_id,))
+
+                if existing_by_prod:
+                    print(f"   [{i}/{len(admins)}] Admin ID {user_id} already exists as id_prod "
+                          f"(local id: {existing_by_prod[0]['id']}) - skipped to avoid duplicate")
+                    result["skipped"] += 1
+                    continue
+
                 new_data = {
+                    "id_prod": user.get("userId"),
                     "uuid": user.get("uuid"),
                     "username": user.get("username", ""),
                     "full_name": user.get("fullName"),
@@ -630,6 +718,7 @@ def insert_admins(db, admin_data, token):
                     existing = existing_records[0]
 
                     field_mapping = {
+                        "id_prod": "id_prod",
                         "username": "username",
                         "full_name": "full_name",
                         "email": "email",
@@ -667,6 +756,7 @@ def insert_admins(db, admin_data, token):
 
                     update_query = """
                         UPDATE user SET
+                            id_prod = %s,
                             username = %s,
                             full_name = %s,
                             email = %s,
@@ -689,6 +779,7 @@ def insert_admins(db, admin_data, token):
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["username"],
                         new_data["full_name"],
                         new_data["email"],
@@ -745,7 +836,7 @@ def insert_admins(db, admin_data, token):
 
                     insert_query = """
                         INSERT INTO user (
-                            id, account_id, username, email, full_name, roles, img_link,
+                            id, id_prod, account_id, username, email, full_name, roles, img_link,
                             reset_token, status, created_by, password, birth_date, birth_place,
                             phone, address, grand, access_type, access_type_date, enabled,
                             created_at, timestamp, updated_at, uuid, facebook_id, google_id,
@@ -755,60 +846,63 @@ def insert_admins(db, admin_data, token):
                             rocket_chat_user_id, fcm_web, fcm_android, fcm_ios, releaseToken, useToken,
                             isvirtual, door_id
                         ) VALUES (
-                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
-                            %s, %s, %s, %s, %s,
-                            %s, %s, %s, %s, %s,
+                            %s, %s, %s, %s, %s, %s,
+                            %s, %s, %s,
+                            %s, %s, %s,
+                            %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s,
                             %s, %s
                         )
                     """
 
                     db.execute_query(insert_query, (
-                        user_id,
-                        3,
-                        new_data["username"],
-                        new_data["email"],
-                        new_data["full_name"],
-                        new_data["roles"],
-                        new_data["img_link"],
-                        default_values["reset_token"],
-                        new_data["status"],
-                        default_values["created_by"],
-                        new_data["password"],
-                        default_values["birth_date"],
-                        default_values["birth_place"],
-                        new_data["phone"],
-                        new_data["address"],
-                        new_data["grand"],
-                        default_values["access_type"],
-                        default_values["access_type_date"],
-                        new_data["enabled"],
-                        new_data["created_at"],
-                        new_data["timestamp"],
-                        new_data["updated_at"],
-                        new_data["uuid"],
-                        default_values["facebook_id"],
-                        default_values["google_id"],
-                        default_values["mastodon_access_token"],
-                        default_values["general_notification"],
-                        default_values["message_notification"],
-                        default_values["calendar_notification"],
-                        default_values["sms_notification"],
-                        default_values["login_notification"],
-                        default_values["horsline"],
-                        new_data["ref_slc"],
-                        default_values["apple_id"],
-                        default_values["open_source_user_name"],
-                        default_values["rocket_chat_user_id"],
-                        default_values["fcm_web"],
-                        default_values["fcm_android"],
-                        default_values["fcm_ios"],
-                        new_data["release_token"],
-                        new_data["use_token"],
-                        new_data["isvirtual"],
-                        new_data["door_id"]
+                        user_id,                                      # 1 id
+                        new_data["id_prod"],                          # 2 id_prod
+                        3,                                             # 3 account_id
+                        new_data["username"],                         # 4 username
+                        new_data["email"],                            # 5 email
+                        new_data["full_name"],                        # 6 full_name
+                        new_data["roles"],                            # 7 roles
+                        new_data["img_link"],                         # 8 img_link
+                        default_values["reset_token"],                # 9 reset_token
+                        new_data["status"],                           # 10 status
+                        default_values["created_by"],                 # 11 created_by
+                        new_data["password"],                         # 12 password
+                        default_values["birth_date"],                 # 13 birth_date
+                        default_values["birth_place"],                # 14 birth_place
+                        new_data["phone"],                            # 15 phone
+                        new_data["address"],                          # 16 address
+                        new_data["grand"],                            # 17 grand
+                        default_values["access_type"],                # 18 access_type
+                        default_values["access_type_date"],           # 19 access_type_date
+                        new_data["enabled"],                          # 20 enabled
+                        new_data["created_at"],                       # 21 created_at
+                        new_data["timestamp"],                        # 22 timestamp
+                        new_data["updated_at"],                       # 23 updated_at
+                        new_data["uuid"],                             # 24 uuid
+                        default_values["facebook_id"],                # 25 facebook_id
+                        default_values["google_id"],                  # 26 google_id
+                        default_values["mastodon_access_token"],      # 27 mastodon_access_token
+                        default_values["general_notification"],       # 28 general_notification
+                        default_values["message_notification"],       # 29 message_notification
+                        default_values["calendar_notification"],      # 30 calendar_notification
+                        default_values["sms_notification"],           # 31 sms_notification
+                        default_values["login_notification"],         # 32 login_notification
+                        default_values["horsline"],                   # 33 horsline
+                        new_data["ref_slc"],                          # 34 ref_slc
+                        default_values["apple_id"],                   # 35 apple_id
+                        default_values["open_source_user_name"],      # 36 open_source_user_name
+                        default_values["rocket_chat_user_id"],        # 37 rocket_chat_user_id
+                        default_values["fcm_web"],                    # 38 fcm_web
+                        default_values["fcm_android"],                # 39 fcm_android
+                        default_values["fcm_ios"],                    # 40 fcm_ios
+                        new_data["release_token"],                    # 41 releaseToken
+                        new_data["use_token"],                        # 42 useToken
+                        new_data["isvirtual"],                        # 43 isvirtual
+                        new_data["door_id"]                           # 44 door_id
                     ))
 
                     result["inserted"] += 1
