@@ -749,8 +749,6 @@ def get_profile_file(user_id):
 # =============================================
 # ENDPOINT 11: User authetificate
 # =============================================
-
-
 @users_bp.route('/Authentificate-Teacher', methods=['POST'])
 def authentification_teacher():
 	try:
@@ -1188,35 +1186,35 @@ def create_manager(account_id):
 # =============================================
 @users_bp.route('/create_student/<int:account_id>', methods=['POST'])
 def create_student(account_id):
-	try:
-		data = request.form.to_dict()
-		files = request.files
+    try:
+       data = request.form.to_dict()
+       files = request.files
 
-		selected_sessions = request.form.getlist("allowedAccessSession[]")
-		full_name = data.get("fullName")
-		username = data.get("username")
-		email = data.get("email")
-		password = data.get("password")
+       selected_sessions = request.form.getlist("allowedAccessSession[]")
+       full_name = data.get("fullName")
+       username = data.get("username")
+       email = data.get("email")
+       password = data.get("password")
 
-		if not full_name or not username or not email or not password:
-			return jsonify({
+       if not full_name or not username or not email or not password:
+          return jsonify({
                 "Message": "fullName, username, email and password are required"
             }), 400
 
-		location = data.get("location")
-		phone_number = data.get("phone_number")
+       location = data.get("location")
+       phone_number = data.get("phone_number")
 
-		img_link = None
-		image_file = files.get("image")
-		if image_file and image_file.filename:
-			filename = secure_filename(image_file.filename)
-			upload_folder = os.path.join(current_app.root_path, "static", "uploads", "students")
-			os.makedirs(upload_folder, exist_ok=True)
-			save_path = os.path.join(upload_folder, filename)
-			image_file.save(save_path)
-			img_link = f"/static/uploads/students/{filename}"
+       img_link = None
+       image_file = files.get("image")
+       if image_file and image_file.filename:
+          filename = secure_filename(image_file.filename)
+          upload_folder = os.path.join(current_app.root_path, "static", "uploads", "students")
+          os.makedirs(upload_folder, exist_ok=True)
+          save_path = os.path.join(upload_folder, filename)
+          image_file.save(save_path)
+          img_link = f"/static/uploads/students/{filename}"
 
-		user_data = {
+       user_data = {
             "account_id": account_id,
             "username": username,
             "email": email,
@@ -1227,81 +1225,132 @@ def create_student(account_id):
             "address": location,
             "status": 1,
             "enabled": 1,
-		}
-		if img_link:
-			user_data["img_link"] = img_link
+       }
+       if img_link:
+          user_data["img_link"] = img_link
 
-		filtered_data = {k: v for k, v in user_data.items() if v is not None}
+       filtered_data = {k: v for k, v in user_data.items() if v is not None}
 
-		columns = ", ".join(filtered_data.keys())
-		placeholders = ", ".join(["%s"] * len(filtered_data))
-		values = list(filtered_data.values())
+       columns = ", ".join(filtered_data.keys())
+       placeholders = ", ".join(["%s"] * len(filtered_data))
+       values = list(filtered_data.values())
 
-		query = f"INSERT INTO user ({columns}) VALUES ({placeholders})"
-		result = Database.execute_query(query, values, fetch=False)
+       query = f"INSERT INTO user ({columns}) VALUES ({placeholders})"
+       result = Database.execute_query(query, values, fetch=False)
 
-		if not result:
-			return jsonify({"Message": "Student not created"}), 400
+       if not result:
+          return jsonify({"Message": "Student not created"}), 400
 
 
-		session_change_groups = []
-		if selected_sessions:
-			placeholders_sessions = ", ".join(["%s"] * len(selected_sessions))
-			query_relation = f"""
-		       SELECT id, max_group_change
-		       FROM session
-		       WHERE id IN({placeholders_sessions}) AND enabled = 1 AND account_id = %s
-		    """
-			# append account_id to the params list — it must match the extra %s in the query
-			session_change_groups = Database.execute_query(
-				query_relation,
-				selected_sessions + [account_id],
-				fetch=True
-			)
+       session_change_groups = []
+       if selected_sessions:
+          placeholders_sessions = ", ".join(["%s"] * len(selected_sessions))
+          query_relation = f"""
+              SELECT id, max_group_change
+              FROM session
+              WHERE id IN({placeholders_sessions}) AND enabled = 1 AND account_id = %s
+           """
+          session_change_groups = Database.execute_query(
+             query_relation,
+             selected_sessions + [account_id],
+             fetch=True
+          )
 
-			insert_relation_query = """
-		        INSERT INTO relation_user_session
-		            (user_id, session_id, relation_group_local_session_id, ref, enabled, created_at, timestamp)
-		        VALUES
-		            (%s, %s, %s, %s, %s, NOW(), NOW())
-		    """
+          insert_relation_query = """
+               INSERT INTO relation_user_session
+                   (user_id, session_id, relation_group_local_session_id, ref, enabled, created_at, timestamp)
+               VALUES
+                   (%s, %s, %s, %s, %s, NOW(), NOW())
+           """
 
-			for session_row in session_change_groups:
-				session_id = session_row["id"]
-				try:
-					max_group_change = int(session_row["max_group_change"])
-				except (TypeError, ValueError):
-					max_group_change = 0
+          for session_row in session_change_groups:
+             session_id = session_row["id"]
+             try:
+                max_group_change = int(session_row["max_group_change"])
+             except (TypeError, ValueError):
+                max_group_change = 0
 
-				for _ in range(max_group_change):
-					Database.execute_query(
-						insert_relation_query,
-						[result, session_id, None, None, 1],
-						fetch=False
-					)
+             for _ in range(max_group_change):
+                Database.execute_query(
+                   insert_relation_query,
+                   [result, session_id, None, None, 1],
+                   fetch=False
+                )
 
-		# ── Audit log ──────────────────────────────────────────────────
-		audit_payload = dict(filtered_data)
-		audit_payload["id"] = result
-		audit_payload["sessions"] = selected_sessions
+       # ── Create linked VirtualUser (mirrors remote createStudent) ────
+       virtual_result = None
+       existing_virtual = Database.execute_query(
+          "SELECT id FROM virtual_user WHERE user_id = %s AND account_id = %s",
+          (result, account_id),
+          fetch=True
+       )
 
-		audit_query = """
-		    INSERT INTO user_audit (user_id, role, action_type, payload, is_synced)
-		    VALUES (%s, %s, %s, %s, %s)
-		"""
-		Database.execute_query(
-			audit_query,
-			[result, "ROLE_USER", "CREATE", json.dumps(audit_payload), 0],
-			fetch=False
-		)
+       if not existing_virtual:
+          virtual_uuid = str(uuid.uuid4())
 
-		return jsonify({
+          virtual_user_data = {
+             "account_id": account_id,
+             "user_id": result,
+             "created_by_id": 0,  # TODO: replace with real admin user id if available
+             "name": full_name,
+             "phone": phone_number,
+             "email": email,
+             "status": 1,
+             "enabled": 1,
+             "uuid": virtual_uuid,
+          }
+
+          filtered_virtual_data = {k: v for k, v in virtual_user_data.items() if v is not None}
+
+          v_columns = ", ".join(filtered_virtual_data.keys())
+          v_placeholders = ", ".join(["%s"] * len(filtered_virtual_data))
+          v_values = list(filtered_virtual_data.values())
+
+          virtual_query = f"INSERT INTO virtual_user ({v_columns}) VALUES ({v_placeholders})"
+          virtual_result = Database.execute_query(virtual_query, v_values, fetch=False)
+
+          if not virtual_result:
+             return jsonify({"Message": "Student created but virtual user not created"}), 400
+
+          # ── Audit log for virtual_user creation ─────────────────
+          virtual_audit_payload = dict(filtered_virtual_data)
+          virtual_audit_payload["id"] = virtual_result
+
+          virtual_audit_query = """
+              INSERT INTO virtual_user_audit (action_type, record_id, old_data, new_data, is_synced)
+              VALUES (%s, %s, %s, %s, %s)
+          """
+          Database.execute_query(
+             virtual_audit_query,
+             ["CREATE", virtual_result, None, json.dumps(virtual_audit_payload, default=str), 0],
+             fetch=False
+          )
+       else:
+          virtual_result = existing_virtual[0]["id"]
+
+       # ── Audit log for user creation ──────────────────────────────────
+       audit_payload = dict(filtered_data)
+       audit_payload["id"] = result
+       audit_payload["sessions"] = selected_sessions
+
+       audit_query = """
+           INSERT INTO user_audit (user_id, role, action_type, payload, is_synced)
+           VALUES (%s, %s, %s, %s, %s)
+       """
+       Database.execute_query(
+          audit_query,
+          [result, "ROLE_USER", "CREATE", json.dumps(audit_payload, default=str), 0],
+          fetch=False
+       )
+
+       return jsonify({
             "Message": "Student created successfully",
-            "user_id": result
+            "user_id": result,
+            "virtual_user_id": virtual_result
         }), 200
 
-	except Exception as e:
-		return jsonify({
+    except Exception as e:
+       return jsonify({
             "Message": f"Error: {e} coming from server"
         }), 500
 

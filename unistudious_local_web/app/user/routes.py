@@ -140,7 +140,7 @@ def api_update_virtual_user(user_id):
         return jsonify({"Message": message}), 200
     return jsonify({"Message": message}), 500
 
-
+# ── GET account image ──────────────────────────────────────────────────────────
 @user_bp.route('/api/delete-virtuel-user/<int:user_id>', methods=['POST'])
 def api_delete_virtual_user(user_id):
     """Delete virtual user"""
@@ -149,7 +149,7 @@ def api_delete_virtual_user(user_id):
         return jsonify({"Message": message}), 200
     return jsonify({"Message": message}), 404
 
-
+# ── GET manager info ──────────────────────────────────────────────────────────
 @user_bp.route('/api/get-manager-info', methods=['GET'])
 def get_manager_info():
     try:
@@ -162,6 +162,7 @@ def get_manager_info():
         print(e)
         return jsonify({"Message": "Error coming from server"}), 500
 
+# ── GET teacher data ──────────────────────────────────────────────────────────
 
 @user_bp.route('/api/get_teacher',methods=['GET'])
 def get_teacher():
