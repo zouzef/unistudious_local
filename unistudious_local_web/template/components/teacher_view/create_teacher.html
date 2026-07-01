@@ -162,7 +162,7 @@
 </div>
 
 <script>
-    const accountId = {{ account_id }};  // ✅ must be at the top, outside DOMContentLoaded
+    const accountId = {{ account_id }};
 
     document.addEventListener("DOMContentLoaded", function () {
 
@@ -221,6 +221,16 @@
         document.getElementById("teacher-form").addEventListener("submit", function (e) {
             e.preventDefault();
 
+            const submitBtn = document.querySelector('#teacher-form button[type="submit"]');
+
+            const password = document.getElementById("teacher_password_first").value;
+            const confirmPassword = document.getElementById("teacher_password_second").value;
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match");
+                return;
+            }
+
             const selectedPermissions = Array.from(
                 document.querySelectorAll('input[name="teacher[access_permission][]"]:checked')
             ).map(cb => cb.value);
@@ -229,23 +239,48 @@
                 document.querySelectorAll('input[name="teacher[access_session][]"]:not([disabled])')
             ).map(input => input.value);
 
-            const payload = {
-                username:          document.getElementById("teacher_username").value,
-                email:             document.getElementById("teacher_email").value,
-                full_name:         document.getElementById("teacher_fullName").value,
-                phone:             document.getElementById("teacher_phone").value,
-                address:           document.getElementById("teacher_address").value,
-                password:          document.getElementById("teacher_password_first").value,
-                confirm_password:  document.getElementById("teacher_password_second").value,
-                access_permission: selectedPermissions,
-                access_session:    selectedSessions,
-                account_id:        accountId,
-            };
+            const formData = new FormData();
+            formData.append("fullName", document.getElementById("teacher_fullName").value);
+            formData.append("username", document.getElementById("teacher_username").value);
+            formData.append("email", document.getElementById("teacher_email").value);
+            formData.append("phone_number", document.getElementById("teacher_phone").value);
+            formData.append("location", document.getElementById("teacher_address").value);
+            formData.append("password", password);
+            formData.append("account_id", accountId);
 
-            console.log("📋 Teacher Form Data:");
-            console.table([payload]);
-            console.log("✅ Access Permissions:", selectedPermissions);
-            console.log("✅ Access Sessions:", selectedSessions);
+            const imageFile = document.getElementById("teacher_imgFile").files[0];
+            if (imageFile) {
+                formData.append("image", imageFile);
+            }
+
+            selectedPermissions.forEach(p => formData.append("allowedPermissionAccess[]", p));
+            selectedSessions.forEach(s => formData.append("allowedAccessSession[]", s));
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Creating...";
+
+            fetch("/api/create_teacher", {
+                method: "POST",
+                body: formData
+                // Don't set Content-Type manually — browser sets multipart boundary automatically
+            })
+            .then(res => res.json())
+            .then(result => {
+                console.log("Response:", result);
+                if (result.Message === "success") {
+                    window.location.href = "/dashboard/show-teacher";
+                } else {
+                    alert("Error creating teacher: " + JSON.stringify(result.Response || result.Message));
+                }
+            })
+            .catch(err => {
+                console.error("❌ Request failed:", err);
+                alert("Network error while creating teacher");
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Create";
+            });
         });
     });
 

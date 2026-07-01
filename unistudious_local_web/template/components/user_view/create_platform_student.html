@@ -4,42 +4,45 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5>Create New Student</h5>
+                        <h5 class="mb-0">Create New Student</h5>
                     </div>
                     <div class="card-body">
-                        <form id="student-form" method="post">
+                        <form name="student" method="post" id="student-form" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col-xl-6 col-sm-6">
                                     <div class="mb-3">
-                                        <label for="student_username">Username <span class="required">*</span></label>
-                                        <input type="text" id="student_username" name="student[username]" required
-                                               class="form-control">
+                                        <label class="form-label text-primary">Username <span class="required">*</span></label>
+                                        <input type="text" id="student_username" name="student[username]"
+                                               required class="form-control">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="student_email">Email <span class="required">*</span></label>
-                                        <input type="email" id="student_email" name="student[email]" required
-                                               class="form-control">
+                                        <label class="form-label text-primary">Email <span
+                                                class="required">*</span></label>
+                                        <input type="email" id="student_email" name="student[email]"
+                                               required class="form-control">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="student_Address">Address</label>
-                                        <textarea id="student_Address" name="student[Address]" class="form-control"
-                                                  rows="7"></textarea>
+                                        <label class="form-label text-primary">Address</label>
+                                        <textarea id="student_address" name="student[address]"
+                                                  class="form-control" rows="7"></textarea>
                                     </div>
                                 </div>
+
                                 <div class="col-xl-6 col-sm-6">
                                     <div class="mb-3">
-                                        <label for="student_fullName">First Name And Last Name <span
+                                        <label class="form-label text-primary">First Name And Last Name <span
                                                 class="required">*</span></label>
-                                        <input type="text" id="student_fullName" name="student[fullName]" required
-                                               class="form-control">
+                                        <input type="text" id="student_fullName" name="student[fullName]"
+                                               required class="form-control">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="student_phone">Phone</label>
-                                        <input type="tel" id="student_phone" name="student[phone]" class="form-control"
-                                               minlength="8" maxlength="16">
+                                        <label class="form-label text-primary">Phone</label>
+                                        <input type="tel" id="student_phone" name="student[phone]"
+                                               class="form-control" minlength="8" maxlength="16">
                                     </div>
+
                                     <div class="mb-3">
-                                        <label for="student_grand">Gender</label>
+                                        <label class="form-label text-primary">Gender</label>
                                         <select id="student_grand" name="student[grand]" class="form-control">
                                             <option value="">Select gender...</option>
                                             <option value="M">Male</option>
@@ -47,20 +50,22 @@
                                             <option value="O">Other</option>
                                         </select>
                                     </div>
+
                                     <div class="mb-3">
-                                        <label for="multi-value-select">Session</label>
-                                        <select id="multi-value-select" name="sessions[]" multiple class="form-control">
-                                            <option value="12">SESSION TEST</option>
-                                            <option value="25">Révision Math bac info 2026</option>
-                                            <option value="26">heithem session</option>
-                                        </select>
+                                        <label class="form-label text-primary">Access Session</label>
+                                        <div class="border rounded p-2" style="max-height: 200px; overflow-y: auto;">
+                                            <div id="session-list">
+                                                <p class="text-muted text-center mb-0">Loading sessions...</p>
+                                            </div>
+                                        </div>
                                     </div>
+
                                     <div class="mb-3">
                                         <label class="form-label text-primary">Photo</label>
                                         <div class="avatar-upload">
                                             <div class="avatar-preview">
                                                 <div id="imagePreview"
-                                                     style="background-image: url(../static/assets/admin/images/no-img-avatar.png);"></div>
+                                                     style="background-image: url(/static/assets/images/no-img-avatar.png);"></div>
                                             </div>
                                         </div>
                                         <div class="change-btn mt-1">
@@ -69,28 +74,34 @@
                                             <label for="student_imgFile"
                                                    class="dlab-upload mb-0 btn btn-primary btn-sm">Choose File</label>
                                             <a href="javascript:void(0);"
-                                               class="btn btn-danger light remove-img ms-2 btn-sm" id="remove-img">Remove</a>
+                                               class="btn btn-danger light remove-img ms-2 btn-sm"
+                                               id="remove-img">Remove</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="row mb-5">
                                 <div class="col-xl-6 mb-3">
-                                    <label for="student_password_first">Password <span class="required">*</span></label>
+                                    <label class="form-label text-primary">Password <span
+                                            class="required">*</span></label>
                                     <input type="password" id="student_password_first" name="student[password][first]"
                                            required class="form-control" minlength="4" maxlength="25">
                                 </div>
                                 <div class="col-xl-6 mb-3">
-                                    <label for="student_password_second">Re-Enter Password <span
+                                    <label class="form-label text-primary">Re-Enter Password <span
                                             class="required">*</span></label>
                                     <input type="password" id="student_password_second" name="student[password][second]"
                                            required class="form-control" minlength="4" maxlength="25">
                                 </div>
                             </div>
+
                             <div class="float-end">
-                                <button type="submit" id="create_student" class="btn btn-outline-primary me-3">Create</button>
+                                <button class="btn btn-outline-primary me-3" type="submit">Create</button>
                                 <a href="/dashboard/show-platform-student" class="btn btn-outline-danger">Close</a>
                             </div>
+
+                            <input type="hidden" id="student__token" name="student[_token]" value="">
                         </form>
                     </div>
                 </div>
@@ -98,3 +109,166 @@
         </div>
     </div>
 </div>
+
+<script>
+    const accountId = {{ account_id }};
+
+// ─── Image Preview ────────────────────────────────────────────────
+document.addEventListener("change", function (e) {
+    if (e.target && e.target.id === "student_imgFile") {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+            const preview = document.getElementById("imagePreview");
+            if (preview) preview.style.backgroundImage = `url(${ev.target.result})`;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// ─── Remove Image ─────────────────────────────────────────────────
+document.addEventListener("click", function (e) {
+    if (e.target && e.target.id === "remove-img") {
+        const fileInput = document.getElementById("student_imgFile");
+        const preview = document.getElementById("imagePreview");
+        if (fileInput) fileInput.value = "";
+        if (preview) preview.style.backgroundImage = `url(/static/assets/images/no-img-avatar.png)`;
+    }
+});
+
+// ─── Load Sessions ────────────────────────────────────────────────
+function loadStudentSessions() {
+    const sessionList = document.getElementById("session-list");
+    if (!sessionList) return;
+
+    fetch(`/api/get-sessions/${accountId}`)
+        .then(res => res.json())
+        .then(sessions => {
+            if (!sessions || sessions.length === 0) {
+                sessionList.innerHTML = `<p class="text-muted text-center mb-0">No sessions available</p>`;
+                return;
+            }
+
+            sessionList.innerHTML = sessions.map(session => `
+                <div class="session-item d-flex align-items-center justify-content-between p-2 rounded mb-1"
+                     style="cursor:pointer; transition: background 0.2s;"
+                     onclick="toggleSession(this, '${session.id}')"
+                     onmouseover="this.style.background='#f0f4ff'"
+                     onmouseout="if(!this.classList.contains('selected')) this.style.background='transparent'">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-primary"></i>
+                        <div class="fw-semibold" style="font-size:0.9rem;">${session.name}</div>
+                    </div>
+                    <i class="fa-solid fa-circle-check text-success tick-icon" style="display:none; font-size:1.1rem;"></i>
+                    <input type="hidden" name="student[access_session][]" value="${session.id}" disabled>
+                </div>
+            `).join("");
+        })
+        .catch(err => {
+            console.error("❌ Failed to load sessions:", err);
+            sessionList.innerHTML = `<p class="text-danger text-center mb-0">Error loading sessions</p>`;
+        });
+}
+
+if (document.getElementById("session-list")) {
+    loadStudentSessions();
+}
+
+// ─── Toggle Session ───────────────────────────────────────────────────────
+function toggleSession(el, sessionId) {
+    const isSelected = el.classList.contains("selected");
+    const tick = el.querySelector(".tick-icon");
+    const hiddenInput = el.querySelector("input[type='hidden']");
+
+    if (isSelected) {
+        el.classList.remove("selected");
+        el.style.background = "transparent";
+        tick.style.display = "none";
+        hiddenInput.disabled = true;
+    } else {
+        el.classList.add("selected");
+        el.style.background = "#e8f0fe";
+        tick.style.display = "inline-block";
+        hiddenInput.disabled = false;
+    }
+}
+
+// ─── Form Submit ──────────────────────────────────────────────────
+document.addEventListener("submit", function (e) {
+    if (!e.target || e.target.id !== "student-form") return;
+
+    e.preventDefault();
+
+    const form = e.target;
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    const password = document.getElementById("student_password_first").value;
+    const confirmPassword = document.getElementById("student_password_second").value;
+
+    if (password !== confirmPassword) {
+        alert("Passwords do not match");
+        return;
+    }
+
+    const username = document.getElementById("student_username").value;
+    const email = document.getElementById("student_email").value;
+    const fullName = document.getElementById("student_fullName").value;
+
+    if (!username || !email || !fullName || !password) {
+        alert("Username, Email, Full Name and Password are required.");
+        return;
+    }
+
+    // Scope the query to inputs inside #session-list, not just the document,
+    // to avoid collisions if similar-named inputs exist elsewhere on the page
+    const selectedSessions = Array.from(
+        document.querySelectorAll('#session-list input[name="student[access_session][]"]:not([disabled])')
+    ).map(input => input.value);
+
+    console.log("Selected sessions being sent:", selectedSessions);
+
+    const formData = new FormData();
+    formData.append("fullName", fullName);
+    formData.append("username", username);
+    formData.append("email", email);
+    formData.append("phone_number", document.getElementById("student_phone").value);
+    formData.append("location", document.getElementById("student_address").value);
+    formData.append("password", password);
+    formData.append("account_id", accountId);
+
+    const imageFile = document.getElementById("student_imgFile").files[0];
+    if (imageFile) {
+        formData.append("image", imageFile);
+    }
+
+    // This key MUST match request.form.getlist("allowedAccessSession[]") on the backend
+    selectedSessions.forEach(s => formData.append("allowedAccessSession[]", s));
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Creating...";
+
+    fetch(`/api/create_student/${accountId}`, {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(result => {
+        console.log("Response:", result);
+        if (result.Message === "success") {
+            window.location.href = "/dashboard/my-student";
+        } else {
+            alert("Error creating student: " + JSON.stringify(result.Response || result.Message));
+        }
+    })
+    .catch(err => {
+        console.error("❌ Request failed:", err);
+        alert("Network error while creating student");
+    })
+    .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Create";
+    });
+});
+</script>

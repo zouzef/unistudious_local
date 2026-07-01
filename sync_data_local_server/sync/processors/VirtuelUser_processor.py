@@ -25,7 +25,8 @@ def insert_virtuelUsers(db, virtualUser_data):
     """
     Handle 'created' VirtualUsers from API
     Logic:
-    - If VirtualUser exists in DB → UPDATE it
+    - If this remote ID already exists as id_prod (pushed from local) → SKIP (avoid duplicate)
+    - If VirtualUser exists in DB by local id → UPDATE it
     - If VirtualUser does NOT exist → INSERT it
 
     Args:
@@ -59,8 +60,19 @@ def insert_virtuelUsers(db, virtualUser_data):
                 if not user_id:
                     raise ValueError("Missing required field: id")
 
+                # ✅ FIRST: Check if this remote ID already exists as id_prod (from local push)
+                check_prod_query = "SELECT id FROM virtual_user WHERE id_prod = %s"
+                existing_by_prod = db.fetch_query(check_prod_query, (user_id,))
+
+                if existing_by_prod:
+                    print(f"   [{i}/{len(created_users)}] VirtualUser ID {user_id} already exists as id_prod "
+                          f"(local id: {existing_by_prod[0]['id']}) - skipped to avoid duplicate")
+                    result["skipped"] += 1
+                    continue
+
                 # Prepare new data
                 new_data = {
+                    "id_prod": user.get("id"),
                     "account_id": user.get("accountId"),
                     "user_id": user.get("userId"),
                     "created_by_id": user.get("createdById"),
@@ -78,7 +90,7 @@ def insert_virtuelUsers(db, virtualUser_data):
                     "updated_at": format_date(user.get("updatedAt")),
                 }
 
-                # Check if VirtualUser exists
+                # Check if VirtualUser exists by local id
                 select_query = "SELECT * FROM virtual_user WHERE id = %s"
                 existing_records = db.fetch_query(select_query, (user_id,))
 
@@ -107,6 +119,7 @@ def insert_virtuelUsers(db, virtualUser_data):
 
                     update_query = """
                         UPDATE virtual_user SET
+                            id_prod = %s,
                             account_id = %s,
                             user_id = %s,
                             created_by_id = %s,
@@ -126,6 +139,7 @@ def insert_virtuelUsers(db, virtualUser_data):
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["user_id"],
                         new_data["created_by_id"],
@@ -153,14 +167,15 @@ def insert_virtuelUsers(db, virtualUser_data):
 
                     insert_query = """
                         INSERT INTO virtual_user (
-                            id, account_id, user_id, created_by_id, name, email, phone,
+                            id, id_prod, account_id, user_id, created_by_id, name, email, phone,
                             data, status, enabled, release_token, use_token,
                             uuid, timestamp, created_at, updated_at
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """
 
                     db.execute_query(insert_query, (
                         user_id,
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["user_id"],
                         new_data["created_by_id"],
@@ -200,6 +215,7 @@ def update_virtuelUsers(db, virtualUser_data):
     """
     Handle 'updated' VirtualUsers from API
     Logic:
+    - Look up by id_prod first, then fall back to local id
     - If VirtualUser exists in DB → UPDATE it
     - If VirtualUser does NOT exist → INSERT it (don't skip!)
 
@@ -236,6 +252,7 @@ def update_virtuelUsers(db, virtualUser_data):
 
                 # Prepare new data
                 new_data = {
+                    "id_prod": user.get("id"),
                     "account_id": user.get("accountId"),
                     "user_id": user.get("userId"),
                     "created_by_id": user.get("createdById"),
@@ -252,9 +269,13 @@ def update_virtuelUsers(db, virtualUser_data):
                     "updated_at": format_date(user.get("updatedAt")),
                 }
 
-                # Check if VirtualUser exists
-                select_query = "SELECT * FROM virtual_user WHERE id = %s"
-                existing_records = db.fetch_query(select_query, (user_id,))
+                # Look up by id_prod first, then fall back to id
+                check_prod_query = "SELECT * FROM virtual_user WHERE id_prod = %s"
+                existing_records = db.fetch_query(check_prod_query, (user_id,))
+
+                if not existing_records:
+                    select_query = "SELECT * FROM virtual_user WHERE id = %s"
+                    existing_records = db.fetch_query(select_query, (user_id,))
 
                 print(f"   [{i}/{len(updated_users)}] VirtualUser ID {user_id}...")
 
@@ -281,6 +302,7 @@ def update_virtuelUsers(db, virtualUser_data):
 
                     update_query = """
                         UPDATE virtual_user SET
+                            id_prod = %s,
                             account_id = %s,
                             user_id = %s,
                             created_by_id = %s,
@@ -299,6 +321,7 @@ def update_virtuelUsers(db, virtualUser_data):
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["user_id"],
                         new_data["created_by_id"],
@@ -313,7 +336,7 @@ def update_virtuelUsers(db, virtualUser_data):
                         new_data["uuid"],
                         new_data["timestamp"],
                         new_data["updated_at"],
-                        user_id
+                        existing["id"]
                     ))
 
                     result["updated"] += 1
@@ -325,15 +348,16 @@ def update_virtuelUsers(db, virtualUser_data):
 
                     insert_query = """
                         INSERT INTO virtual_user (
-                            id, account_id, user_id, created_by_id, name, email, phone,
+                            id, id_prod, account_id, user_id, created_by_id, name, email, phone,
                             data, status, enabled, release_token, use_token,
                             uuid, timestamp, created_at, updated_at
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """
 
                     # For records in 'updated' that don't exist, use updated_at as created_at
                     db.execute_query(insert_query, (
                         user_id,
+                        new_data["id_prod"],
                         new_data["account_id"],
                         new_data["user_id"],
                         new_data["created_by_id"],

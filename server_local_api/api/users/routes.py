@@ -7,10 +7,15 @@ from datetime import datetime, timedelta
 import bcrypt
 import mysql.connector
 from flask import Blueprint, request,jsonify
+import uuid
+import random
+import string
+
 
 # from server_local_api.api.calendar.test import result
 
 # Add parent directories to path
+import uuid as uuid_lib
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from config import Config
 from core.database import Database
@@ -95,9 +100,6 @@ def get_group(account_id, session_id):
 
 		# Convert dictionary to list
 		groups_list = list(groups.values())
-
-		print(f"Found {len(groups_list)} groups")
-
 		return jsonify({
 			"success": True,
 			"data": groups_list,
@@ -246,7 +248,7 @@ def get_all_teachers():
 # ========================================
 # ENDPOINT 3: Affect user to group
 # ========================================
-@users_bp.route('/affect_user_group/<int:session_id>', methods=['POST'])
+@users_bp.route('/affect_u+ser_group/<int:session_id>', methods=['POST'])
 # @token_required
 def affect_user_group_endpoint(session_id):
 	try:
@@ -538,10 +540,19 @@ def get_all_user(account_id):
 @users_bp.route('/update-user/<int:id>', methods=['POST'])
 def update_user(id):
     try:
-        # Check user exists
-        result = Database.execute_query("SELECT COUNT(*) as nbr FROM user WHERE id = %s", (id,))
-        if result[0]['nbr'] == 0:
+        # Check user exists + grab current role for audit purposes
+        result = Database.execute_query(
+            "SELECT COUNT(*) as nbr, roles FROM user WHERE id = %s",
+            (id,)
+        )
+        # NOTE: COUNT(*) + roles in the same row only works if there's exactly
+        # one match — safer as two separate lookups:
+        exists = Database.execute_query("SELECT COUNT(*) as nbr FROM user WHERE id = %s", (id,))
+        if exists[0]['nbr'] == 0:
             return jsonify({"Message": "User not found"}), 404
+
+        user_row = Database.execute_query("SELECT roles FROM user WHERE id = %s", (id,))
+        current_roles = user_row[0]['roles'] if user_row else None
 
         data = request.get_json()
 
@@ -562,6 +573,7 @@ def update_user(id):
         # ── Build SET clause only from fields present in request ─
         set_clauses = []
         values = []
+        updated_payload = {}  # for audit — only the fields actually changed
 
         for payload_key, db_column in allowed_fields.items():
             if payload_key in data:
@@ -573,6 +585,7 @@ def update_user(id):
 
                 set_clauses.append(f"{db_column} = %s")
                 values.append(value)
+                updated_payload[db_column] = value
 
         if not set_clauses:
             return jsonify({"Message": "No fields to update"}), 400
@@ -586,6 +599,24 @@ def update_user(id):
         query = f"UPDATE user SET {', '.join(set_clauses)} WHERE id = %s"
 
         Database.execute_query(query, tuple(values), fetch=False)
+
+        # ── Audit log ──────────────────────────────────────────────
+        # Use the new role from this update if roles was changed, otherwise fall back
+        # to the role the user already had.
+        audit_role = updated_payload.get('roles', current_roles)
+
+        audit_payload = dict(updated_payload)
+        audit_payload["id"] = id
+
+        audit_query = """
+            INSERT INTO user_audit (user_id, role, action_type, payload, is_synced)
+            VALUES (%s, %s, %s, %s, %s)
+        """
+        Database.execute_query(
+            audit_query,
+            [id, audit_role, "UPDATE", json.dumps(audit_payload), 0],
+            fetch=False
+        )
 
         return jsonify({"Message": "user updated successfully"})
 
@@ -847,7 +878,6 @@ def get_user_info(user_id):
 def create_user():
 	try:
 		data = request.get_json()
-		print(data)
 		if not data:
 			return jsonify({
                 "Message": "There is no data to create user"
@@ -886,7 +916,6 @@ def create_user():
 		query = f"INSERT INTO user ({columns}) VALUES ({placeholders})"
 
 		result = Database.execute_query(query, values, fetch=False)
-		print("result: ",result)
 		if result:
 
 
@@ -925,17 +954,469 @@ def create_user():
 # =============================================
 # ENDPOINT 14: CREATE Teacher
 # =============================================
-@users_bp.route('/create_teacher',methods=['POST'])
-def create_teacher():
+@users_bp.route('/create_teacher/<int:account_id>', methods=['POST'])
+def create_teacher(account_id):
+    try:
+        data = request.form.to_dict()
+        files = request.files
+
+        full_name = data.get("fullName")
+        username = data.get("username")
+        email = data.get("email")
+        password = data.get("password")
+
+        if not full_name or not username or not email or not password:
+            return jsonify({
+                "Message": "fullName, username, email and password are required"
+            }), 400
+
+        location = data.get("location")
+        phone_number = data.get("phone_number")
+
+        allowed_permission_access = request.form.getlist("allowedPermissionAccess[]")
+        allowed_access_session = request.form.getlist("allowedAccessSession[]")
+
+        img_link = None
+        image_file = files.get("image")
+        if image_file and image_file.filename:
+            filename = secure_filename(image_file.filename)
+            upload_folder = os.path.join(current_app.root_path, "static", "uploads", "teachers")
+            os.makedirs(upload_folder, exist_ok=True)
+            save_path = os.path.join(upload_folder, filename)
+            image_file.save(save_path)
+            img_link = f"/static/uploads/teachers/{filename}"
+
+        user_data = {
+            "account_id": account_id,
+            "username": username,
+            "email": email,
+            "full_name": full_name,
+            "roles": json.dumps(["ROLE_TEACHER"]),
+            "password": password,
+            "phone": phone_number,
+            "address": location,
+            "status": 1,
+            "enabled": 1,
+        }
+        if img_link:
+            user_data["img_link"] = img_link
+
+        filtered_data = {k: v for k, v in user_data.items() if v is not None}
+
+        columns = ", ".join(filtered_data.keys())
+        placeholders = ", ".join(["%s"] * len(filtered_data))
+        values = list(filtered_data.values())
+
+        query = f"INSERT INTO user ({columns}) VALUES ({placeholders})"
+        result = Database.execute_query(query, values, fetch=False)
+
+        if not result:
+            return jsonify({"Message": "Teacher not created"}), 400
+
+        # ── Insert into relation_teacher_account ─────────────────────────
+        relation_uuid = str(uuid_lib.uuid4())
+
+        relation_data = {
+            "account_id": account_id,
+            "user_id": result,           # id_user of the just-created teacher
+            "status": 1,
+            "enabled": 1,
+            "uuid": relation_uuid,
+            "release_token": 0,
+            "access_permissions": json.dumps(allowed_permission_access),
+            "access_session": json.dumps(allowed_access_session),
+        }
+
+        relation_columns = ", ".join(relation_data.keys())
+        relation_placeholders = ", ".join(["%s"] * len(relation_data))
+        relation_values = list(relation_data.values())
+
+        relation_query = f"INSERT INTO relation_teacher_account ({relation_columns}) VALUES ({relation_placeholders})"
+        relation_result = Database.execute_query(relation_query, relation_values, fetch=False)
+
+        if not relation_result:
+            # user row was created but the relation failed — log it, don't hard-fail the whole request
+            logger.error("Teacher user_id=%s created but relation_teacher_account insert failed", result)
+
+        # ── Audit log ──────────────────────────────────────────────────
+        audit_query = """
+            INSERT INTO user_audit (user_id, role, action_type, payload, is_synced)
+            VALUES (%s, %s, %s, %s, %s)
+        """
+        audit_payload = dict(filtered_data)
+        audit_payload["allowedPermissionAccess"] = allowed_permission_access
+        audit_payload["allowedAccessSession"] = allowed_access_session
+        audit_payload["relation_teacher_account_id"] = relation_result
+
+        Database.execute_query(
+            audit_query,
+            [result, "ROLE_TEACHER", "CREATE", json.dumps(audit_payload), 0],
+            fetch=False
+        )
+
+        return jsonify({
+            "Message": "Teacher created successfully",
+            "user_id": result,
+            "relation_teacher_account_id": relation_result
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
+
+
+# =============================================
+# ENDPOINT 15: CREATE Manager
+# =============================================
+ALLOWED_MANAGER_ROLES = {
+    "ROLE_MANAGER_CONFIG",
+    "ROLE_MANAGER_FINANCE",
+    "ROLE_MANAGER_HR",
+    "ROLE_MANAGER_IT",
+    "ROLE_MANAGER_MARKETING",
+    "ROLE_CUSTOMER_MANAGER_SERVICE",
+    "ROLE_MANAGER_ADMINISTRATIVE",
+}
+@users_bp.route('/create_manager/<int:account_id>', methods=['POST'])
+def create_manager(account_id):
+    try:
+        data = request.form.to_dict()
+        files = request.files
+
+        full_name = data.get("fullName")
+        username = data.get("username")
+        email = data.get("email")
+        password = data.get("password")
+
+        if not full_name or not username or not email or not password:
+            return jsonify({
+                "Message": "fullName, username, email and password are required"
+            }), 400
+
+        location = data.get("location")
+        phone_number = data.get("phone_number")
+
+        # roles can arrive either as a single field "roles" or repeated "roles[]"
+        roles = request.form.getlist("roles[]")
+        if not roles:
+            single_role = data.get("roles")
+            if single_role:
+                roles = [single_role]
+
+        if not roles:
+            return jsonify({
+                "Message": "roles is required"
+            }), 400
+
+        # Validate every role against the allowed manager roles
+        invalid_roles = [r for r in roles if r not in ALLOWED_MANAGER_ROLES]
+        if invalid_roles:
+            return jsonify({
+                "Message": f"Invalid role(s): {', '.join(invalid_roles)}"
+            }), 400
+
+        img_link = None
+        image_file = files.get("image")
+        if image_file and image_file.filename:
+            filename = secure_filename(image_file.filename)
+            upload_folder = os.path.join(current_app.root_path, "static", "uploads", "managers")
+            os.makedirs(upload_folder, exist_ok=True)
+            save_path = os.path.join(upload_folder, filename)
+            image_file.save(save_path)
+            img_link = f"/static/uploads/managers/{filename}"
+
+        user_data = {
+            "account_id": account_id,
+            "username": username,
+            "email": email,
+            "full_name": full_name,
+            "roles": json.dumps(roles),
+            "password": password,
+            "phone": phone_number,
+            "address": location,
+            "status": 1,
+            "enabled": 1,
+        }
+        if img_link:
+            user_data["img_link"] = img_link
+
+        filtered_data = {k: v for k, v in user_data.items() if v is not None}
+
+        columns = ", ".join(filtered_data.keys())
+        placeholders = ", ".join(["%s"] * len(filtered_data))
+        values = list(filtered_data.values())
+
+        query = f"INSERT INTO user ({columns}) VALUES ({placeholders})"
+        result = Database.execute_query(query, values, fetch=False)
+
+        if not result:
+            return jsonify({"Message": "Manager not created"}), 400
+
+        # ── Audit log ──────────────────────────────────────────────────
+        # role column stores the primary/first role for routing purposes
+        # (same pattern as ROLE_TEACHER in create_teacher)
+        primary_role = roles[0]
+
+        audit_payload = dict(filtered_data)
+        audit_payload["id"] = result
+        audit_payload["roles"] = roles  # store as list in the JSON payload too
+
+        audit_query = """
+            INSERT INTO user_audit (user_id, role, action_type, payload, is_synced)
+            VALUES (%s, %s, %s, %s, %s)
+        """
+        Database.execute_query(
+            audit_query,
+            [result, primary_role, "CREATE", json.dumps(audit_payload), 0],
+            fetch=False
+        )
+
+        return jsonify({
+            "Message": "Manager created successfully",
+            "user_id": result
+        }), 200
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
+
+
+# =============================================
+# ENDPOINT 16: CREATE User
+# =============================================
+@users_bp.route('/create_student/<int:account_id>', methods=['POST'])
+def create_student(account_id):
 	try:
-		print("this endpoint not created yet")
+		data = request.form.to_dict()
+		files = request.files
+
+		selected_sessions = request.form.getlist("allowedAccessSession[]")
+		full_name = data.get("fullName")
+		username = data.get("username")
+		email = data.get("email")
+		password = data.get("password")
+
+		if not full_name or not username or not email or not password:
+			return jsonify({
+                "Message": "fullName, username, email and password are required"
+            }), 400
+
+		location = data.get("location")
+		phone_number = data.get("phone_number")
+
+		img_link = None
+		image_file = files.get("image")
+		if image_file and image_file.filename:
+			filename = secure_filename(image_file.filename)
+			upload_folder = os.path.join(current_app.root_path, "static", "uploads", "students")
+			os.makedirs(upload_folder, exist_ok=True)
+			save_path = os.path.join(upload_folder, filename)
+			image_file.save(save_path)
+			img_link = f"/static/uploads/students/{filename}"
+
+		user_data = {
+            "account_id": account_id,
+            "username": username,
+            "email": email,
+            "full_name": full_name,
+            "roles": json.dumps(["ROLE_USER"]),
+            "password": password,
+            "phone": phone_number,
+            "address": location,
+            "status": 1,
+            "enabled": 1,
+		}
+		if img_link:
+			user_data["img_link"] = img_link
+
+		filtered_data = {k: v for k, v in user_data.items() if v is not None}
+
+		columns = ", ".join(filtered_data.keys())
+		placeholders = ", ".join(["%s"] * len(filtered_data))
+		values = list(filtered_data.values())
+
+		query = f"INSERT INTO user ({columns}) VALUES ({placeholders})"
+		result = Database.execute_query(query, values, fetch=False)
+
+		if not result:
+			return jsonify({"Message": "Student not created"}), 400
+
+
+		session_change_groups = []
+		if selected_sessions:
+			placeholders_sessions = ", ".join(["%s"] * len(selected_sessions))
+			query_relation = f"""
+		       SELECT id, max_group_change
+		       FROM session
+		       WHERE id IN({placeholders_sessions}) AND enabled = 1 AND account_id = %s
+		    """
+			# append account_id to the params list — it must match the extra %s in the query
+			session_change_groups = Database.execute_query(
+				query_relation,
+				selected_sessions + [account_id],
+				fetch=True
+			)
+
+			insert_relation_query = """
+		        INSERT INTO relation_user_session
+		            (user_id, session_id, relation_group_local_session_id, ref, enabled, created_at, timestamp)
+		        VALUES
+		            (%s, %s, %s, %s, %s, NOW(), NOW())
+		    """
+
+			for session_row in session_change_groups:
+				session_id = session_row["id"]
+				try:
+					max_group_change = int(session_row["max_group_change"])
+				except (TypeError, ValueError):
+					max_group_change = 0
+
+				for _ in range(max_group_change):
+					Database.execute_query(
+						insert_relation_query,
+						[result, session_id, None, None, 1],
+						fetch=False
+					)
+
+		# ── Audit log ──────────────────────────────────────────────────
+		audit_payload = dict(filtered_data)
+		audit_payload["id"] = result
+		audit_payload["sessions"] = selected_sessions
+
+		audit_query = """
+		    INSERT INTO user_audit (user_id, role, action_type, payload, is_synced)
+		    VALUES (%s, %s, %s, %s, %s)
+		"""
+		Database.execute_query(
+			audit_query,
+			[result, "ROLE_USER", "CREATE", json.dumps(audit_payload), 0],
+			fetch=False
+		)
+
 		return jsonify({
-			"Message":"this endpoint not created yet ! "
-		}),200
+            "Message": "Student created successfully",
+            "user_id": result
+        }), 200
+
 	except Exception as e:
 		return jsonify({
-			"Message":f"Error:{e} coming from server"
-		})
+            "Message": f"Error: {e} coming from server"
+        }), 500
+
+
+# =============================================
+# ENDPOINT 17: CREATE VirtuelUser
+# =============================================
+@users_bp.route('/create_virtuel_user/<int:account_id>',methods=['POST'])
+def create_virtuel_user(account_id):
+	try:
+		data = request.form.to_dict()
+		files = request.files
+
+		full_name = data.get("fullName")
+		email = data.get("email")
+		phone = data.get("phone")
+		status = data.get("status") or 1
+
+		if not full_name or not email:
+			return jsonify({
+				"Message": "full_name, email are required"
+			}), 400
+
+		# ── Generate username (adjust pattern to match your real username generator) ──
+		base_username = "".join(c for c in full_name.lower() if c.isalnum())[:20] or "user"
+		suffix = "".join(random.choices(string.digits, k=4))
+		generated_username = f"{base_username}{suffix}"
+
+		virtual_email = f"{generated_username}@virtual-unistudious.com"
+
+		# ── 1. Create the User row ────────────────────────────────────
+		user_data = {
+			"account_id": account_id,
+			"username": generated_username,
+			"email": virtual_email,
+			"full_name": full_name,
+			"roles": json.dumps(["ROLE_USER"]),
+			"password": generated_username,  # plain text, matching current local pattern — flag if this needs hashing
+			"phone": phone,
+			"status": 1 if str(status) in ("1", "true", "True") else 0,
+			"enabled": 1,
+			"isvirtual": 1,
+			"created_by": 0,  # TODO: replace with real admin user id if available
+		}
+
+		filtered_user_data = {k: v for k, v in user_data.items() if v is not None}
+
+		columns = ", ".join(filtered_user_data.keys())
+		placeholders = ", ".join(["%s"] * len(filtered_user_data))
+		values = list(filtered_user_data.values())
+
+		query = f"INSERT INTO user ({columns}) VALUES ({placeholders})"
+		user_result = Database.execute_query(query, values, fetch=False)
+
+		if not user_result:
+			return jsonify({"Message": "User not created"}), 400
+
+		# ── 2. Create the VirtualUser row, linked via user_id ─────────
+		virtual_uuid = str(uuid.uuid4())
+
+		virtual_user_data = {
+			"account_id": account_id,
+			"user_id": user_result,
+			"created_by_id": 0,  # TODO: replace with real admin user id if available
+			"name": full_name,
+			"phone": phone,
+			"email": email,
+			"status": 1 if str(status) in ("1", "true", "True") else 0,
+			"enabled": 1,
+			"uuid": virtual_uuid,
+		}
+
+		filtered_virtual_data = {k: v for k, v in virtual_user_data.items() if v is not None}
+
+		v_columns = ", ".join(filtered_virtual_data.keys())
+		v_placeholders = ", ".join(["%s"] * len(filtered_virtual_data))
+		v_values = list(filtered_virtual_data.values())
+
+		virtual_query = f"INSERT INTO virtual_user ({v_columns}) VALUES ({v_placeholders})"
+		virtual_result = Database.execute_query(virtual_query, v_values, fetch=False)
+
+		if not virtual_result:
+			return jsonify({"Message": "Virtual user not created"}), 400
+
+		# ── Audit log ──────────────────────────────────────────────────
+		audit_payload = dict(filtered_user_data)
+		audit_payload["id"] = user_result
+		audit_payload["virtual_user_id"] = virtual_result
+
+		audit_query = """
+		    INSERT INTO virtual_user_audit (action_type, record_id, old_data, new_data, is_synced)
+		    VALUES (%s, %s, %s, %s, %s)
+		"""
+		Database.execute_query(
+			audit_query,
+			[
+				"CREATE",
+				virtual_result,  # record_id → the virtual_user's PK
+				None,  # old_data → nothing before creation
+				json.dumps(audit_payload),  # new_data → the created record
+				0
+			],
+			fetch=False
+		)
+
+		return jsonify({
+			"Message": "Virtual student created successfully",
+			"user_id": user_result,
+			"virtual_user_id": virtual_result
+		}), 200
+
+	except Exception as e:
+		return jsonify({
+			"Message": f"Error: {e} coming from server"
+		}), 500
 
 
 # =============================================
@@ -968,7 +1449,6 @@ def check_role_user(rfid, account_id):
     """
 
 	result = Database.execute_query(query, (account_id, rfid))
-	print("result role",result)
 	if not result:
 		# ❌ No allowed role → check relation_teacher_account by account_id + door_id
 
@@ -978,7 +1458,6 @@ def check_role_user(rfid, account_id):
 		        WHERE account_id = %s AND door_id = %s AND enabled = 1 AND status = 1
 		    """
 		relation_result = Database.execute_query(relation_query, (account_id, rfid))
-		print(relation_result)
 		if not relation_result:
 			return False
 
@@ -997,12 +1476,8 @@ def check_role_user(rfid, account_id):
 	if any(role in allowed for role in roles):
 		return True
 
-
-
-
 def check_calander_teacher(teacher_id, time, date):
 	try:
-		print(teacher_id)
 		query = """
             SELECT teacher_id
             FROM relation_calander_group_session
@@ -1026,7 +1501,6 @@ def check_teacher_access(rfid):
 		date = data.get("date")
 		time = data.get("time")
 		doorId = data.get("Door_Mac_Id")
-		print(data)
 		account_id = get_account_id(doorId)
 		if not account_id:
 			return jsonify({"Message": "There is no door id in this local"}), 404
@@ -1040,7 +1514,6 @@ def check_teacher_access(rfid):
 			return jsonify({"Message": f"Access for user with id: {rfid}","Status": True}), 200
 		else:
 			teacher_id = role_result
-			print(teacher_id)
 			if check_calander_teacher(teacher_id, time, date):
 				return jsonify({"Message": "Teacher have access", "Status": True}), 200
 			else:

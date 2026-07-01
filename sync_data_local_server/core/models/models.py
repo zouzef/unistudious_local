@@ -579,6 +579,7 @@ class RelationUserSessionModel(BaseModel):
 		Column("releaseToken", "TINYINT(1)"),
 		Column("useToken", "VARCHAR(255)"),
 		Column("slc_use", "INT(11)", default="0"),
+		Column("id_prod", "INT(11)", default=None)
 	]
 class RelationUserSessionAuditModel(BaseModel):
 	table_name = "relation_user_session_audit"
@@ -947,6 +948,7 @@ class VirtualUserModel(BaseModel):
 		Column("release_token", "TINYINT(1)", nullable=False, default="0"),
 		Column("use_token", "VARCHAR(255)"),
 		Column("slc_edit", "INT(11)", default="0"),
+		Column("id_prod", "INT(11)", default=None)
 	]
 class VirtualUserAuditModel(BaseModel):
 	table_name = "virtual_user_audit"

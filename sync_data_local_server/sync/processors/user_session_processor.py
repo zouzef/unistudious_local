@@ -15,7 +15,8 @@ def insert_user_session_relations(db, relation_data):
     """
     Handle 'created' user-session relations from API
     Logic:
-    - If record exists in DB → UPDATE it
+    - Check if id_prod already exists (avoid duplicates from local pushes)
+    - If record exists in DB by id → UPDATE it
     - If record does NOT exist → INSERT it
 
     Args:
@@ -49,8 +50,19 @@ def insert_user_session_relations(db, relation_data):
                 if not relation_id:
                     raise ValueError("Missing required field: id")
 
+                # ✅ FIRST: Check if this remote ID already exists as id_prod (from local push)
+                check_prod_query = "SELECT id FROM relation_user_session WHERE id_prod = %s"
+                existing_by_prod = db.fetch_query(check_prod_query, (relation_id,))
+
+                if existing_by_prod:
+                    print(f"   [{i}/{len(created_relations)}] Relation ID {relation_id} already exists as id_prod "
+                          f"(local id: {existing_by_prod[0]['id']}) - skipped to avoid duplicate")
+                    result["skipped"] += 1
+                    continue
+
                 # Prepare new data
                 new_data = {
+                    "id_prod": relation.get("id"),
                     "user_id": relation.get("userId"),
                     "session_id": relation.get("sessionId"),
                     "relation_group": relation.get("relationGroup"),
@@ -63,7 +75,7 @@ def insert_user_session_relations(db, relation_data):
                     "updated_at": format_date(relation.get("updatedAt"))
                 }
 
-                # Check if record exists
+                # Check if record exists by id
                 select_query = "SELECT * FROM relation_user_session WHERE id = %s"
                 existing_records = db.fetch_query(select_query, (relation_id,))
 
@@ -92,6 +104,7 @@ def insert_user_session_relations(db, relation_data):
 
                     update_query = """
                         UPDATE relation_user_session SET
+                            id_prod = %s,
                             user_id = %s,
                             session_id = %s,
                             relation_group_local_session_id = %s,
@@ -107,6 +120,7 @@ def insert_user_session_relations(db, relation_data):
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["user_id"],
                         new_data["session_id"],
                         new_data["relation_group"],
@@ -129,13 +143,14 @@ def insert_user_session_relations(db, relation_data):
 
                     insert_query = """
                         INSERT INTO relation_user_session (
-                            id, user_id, session_id, relation_group_local_session_id, ref,
+                            id, id_prod, user_id, session_id, relation_group_local_session_id, ref,
                             enabled, releaseToken, useToken, timestamp, created_at, updated_at
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """
 
                     db.execute_query(insert_query, (
                         relation_id,
+                        new_data["id_prod"],
                         new_data["user_id"],
                         new_data["session_id"],
                         new_data["relation_group"],
@@ -170,6 +185,7 @@ def update_user_session_relations(db, relation_data):
     """
     Handle 'updated' user-session relations from API
     Logic:
+    - Check by id_prod first, then fall back to id
     - If record exists in DB → UPDATE it
     - If record does NOT exist → INSERT it (don't skip!)
 
@@ -206,6 +222,7 @@ def update_user_session_relations(db, relation_data):
 
                 # Prepare new data
                 new_data = {
+                    "id_prod": relation.get("id"),
                     "user_id": relation.get("userId"),
                     "session_id": relation.get("sessionId"),
                     "relation_group": relation.get("relationGroup"),  # This is the field name from API
@@ -217,9 +234,13 @@ def update_user_session_relations(db, relation_data):
                     "updated_at": format_date(relation.get("updatedAt"))
                 }
 
-                # Check if record exists
-                select_query = "SELECT * FROM relation_user_session WHERE id = %s"
-                existing_records = db.fetch_query(select_query, (relation_id,))
+                # ✅ Check by id_prod first, then fall back to id
+                check_prod_query = "SELECT * FROM relation_user_session WHERE id_prod = %s"
+                existing_records = db.fetch_query(check_prod_query, (relation_id,))
+
+                if not existing_records:
+                    select_query = "SELECT * FROM relation_user_session WHERE id = %s"
+                    existing_records = db.fetch_query(select_query, (relation_id,))
 
                 print(f"   [{i}/{len(updated_relations)}] Relation ID {relation_id}...")
 
@@ -227,13 +248,9 @@ def update_user_session_relations(db, relation_data):
                     # EXISTS → Compare and UPDATE if different
                     existing = existing_records[0]
 
-                    # Compare data
-                    has_changes = False
-                    compare_fields = ["user_id", "session_id", "relation_group_local_session_id", "ref",
-                                      "enabled", "releaseToken", "useToken", "timestamp", "updated_at"]
-
                     # Map our new_data keys to database column names
                     field_mapping = {
+                        "id_prod": "id_prod",
                         "user_id": "user_id",
                         "session_id": "session_id",
                         "relation_group": "relation_group_local_session_id",  # This is the mapping!
@@ -245,6 +262,7 @@ def update_user_session_relations(db, relation_data):
                         "updated_at": "updated_at"
                     }
 
+                    has_changes = False
                     for new_key, db_key in field_mapping.items():
                         old_value = str(existing.get(db_key)) if existing.get(db_key) is not None else None
                         new_value = str(new_data.get(new_key)) if new_data.get(new_key) is not None else None
@@ -262,6 +280,7 @@ def update_user_session_relations(db, relation_data):
 
                     update_query = """
                         UPDATE relation_user_session SET
+                            id_prod = %s,
                             user_id = %s,
                             session_id = %s,
                             relation_group_local_session_id = %s,
@@ -275,6 +294,7 @@ def update_user_session_relations(db, relation_data):
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["user_id"],
                         new_data["session_id"],
                         new_data["relation_group"],  # This maps to relation_group_local_session_id
@@ -284,7 +304,7 @@ def update_user_session_relations(db, relation_data):
                         new_data["use_token"],  # This maps to useToken
                         new_data["timestamp"],
                         new_data["updated_at"],
-                        relation_id
+                        existing["id"]  # ← use actual local id (handles both id and id_prod lookup)
                     ))
 
                     result["updated"] += 1
@@ -296,14 +316,15 @@ def update_user_session_relations(db, relation_data):
 
                     insert_query = """
                         INSERT INTO relation_user_session (
-                            id, user_id, session_id, relation_group_local_session_id, ref,
+                            id, id_prod, user_id, session_id, relation_group_local_session_id, ref,
                             enabled, releaseToken, useToken, timestamp, created_at, updated_at
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """
 
                     # For records in 'updated' that don't exist, use updated_at as created_at
                     db.execute_query(insert_query, (
                         relation_id,
+                        new_data["id_prod"],
                         new_data["user_id"],
                         new_data["session_id"],
                         new_data["relation_group"],  # This maps to relation_group_local_session_id
@@ -332,6 +353,7 @@ def update_user_session_relations(db, relation_data):
         print(f"   💥 Unexpected error in update_user_session_relations: {err}")
 
     return result
+
 
 def process_user_session_relations(db, relation_data):
     """

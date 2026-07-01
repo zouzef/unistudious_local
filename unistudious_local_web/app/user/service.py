@@ -114,7 +114,7 @@ def get_user_info_service(user_id: int) -> tuple:
     except Exception as e:
         print(f"Error: {e} coming from get_user_info_service")
         return False, None
-#================================ END CRUD User  ======================
+#================================ END CRUD User  ================================
 
 def update_virtual_user(user_id: int, data: dict) -> tuple:
     """Update virtual user data"""
@@ -166,14 +166,115 @@ def get_all_teacher_service() -> tuple:
         print(f"Error: {e} coming from server")
         return False,None
 
-def create_teacher_service(data:dict) -> tuple:
-    url = f"{current_app.config['BASE_URL']}create_teacher"
+
+
+
+# ================================ Teacher Crud ================================
+def create_teacher_service(account_id: int, form_items: list, files: dict) -> tuple:
+    url = f"{current_app.config['BASE_URL']}create_teacher/{account_id}"
     try:
-        response = requests.post(url,json=data,verify=False,timeout=10)
+        upload_files = {}
+        image_file = files.get("image")
+        if image_file and image_file.filename:
+            upload_files["image"] = (
+                image_file.filename,
+                image_file.stream,
+                image_file.mimetype
+            )
+
+        response = requests.post(
+            url,
+            data=form_items,
+            files=upload_files if upload_files else None,
+            verify=False,
+            timeout=10
+        )
+
         if response.status_code == 200:
-            return True,response.json()
+            return True, response.json()
         else:
-            return False,response.json()
+            return False, response.json()
+
     except Exception as e:
-        print(f"Error: {e} coming from create_teacher")
-        return False,None
+        print(f"Error: {e} coming from create_teacher_service")
+        return False, None
+
+
+# ================================ Manager Crud ================================
+def create_manager_service(account_id: int, form_items: list, files: dict) -> tuple:
+    url = f"{current_app.config['BASE_URL']}create_manager/{account_id}"
+    try:
+        upload_files = {}
+        image_file = files.get("image")
+        if image_file and image_file.filename:
+            upload_files["image"] = (
+                image_file.filename,
+                image_file.stream,
+                image_file.mimetype
+            )
+
+        response = requests.post(
+            url,
+            data=form_items,
+            files=upload_files if upload_files else None,
+            verify=False,
+            timeout=10
+        )
+
+        if response.status_code == 200:
+            return True, response.json()
+        else:
+            return False, response.json()
+
+    except Exception as e:
+        print(f"Error: {e} coming from create_manager_service")
+        return False, None
+
+
+# ================================ Student Crud ================================
+def create_student_service(account_id: int, form_items: list, files: dict) -> tuple:
+    url = f"{current_app.config['BASE_URL']}create_student/{account_id}"
+    try:
+        upload_files = {}
+        image_file = files.get("image")
+        if image_file and image_file.filename:
+            upload_files["image"] = (
+                image_file.filename,
+                image_file.stream,
+                image_file.mimetype
+            )
+
+        response = requests.post(
+            url,
+            data=form_items,
+            files=upload_files if upload_files else None,
+            verify=False,
+            timeout=10
+        )
+        if response.status_code == 200:
+            return True, response.json()
+        else:
+            return False, response.json()
+    except Exception as e:
+        print(f"Error: {e} coming from create_student_service")
+        return False, None
+
+# ================================ virtuelStudent Crud ================================
+def create_virtuel_user_service(account_id: int, form_items: list) -> tuple:
+    url = f"{current_app.config['BASE_URL']}create_virtuel_user/{account_id}"
+    try:
+        response = requests.post(
+            url,
+            data=form_items,
+            verify=False,
+            timeout=10
+        )
+
+        if response.status_code == 200:
+            return True, response.json()
+        else:
+            return False, response.json()
+
+    except Exception as e:
+        print(f"Error: {e} coming from create_virtuel_user_service")
+        return False, None

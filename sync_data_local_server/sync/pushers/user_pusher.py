@@ -14,20 +14,38 @@ logger = logging.getLogger(__name__)
 # Internal API calls
 # ─────────────────────────────────────────────
 
-def _send_create_student_api(settings, new_data):
+def _send_create_student_api(db, settings, new_data, account_id):
     try:
         token = get_token()
         headers = {"Authorization": f"Bearer {token}"}
         url = f"{settings.api_base_url}/slc/create-platform-student"
 
-        payload = {
-            "fullName":     new_data.get("full_name"),
-            "username":     new_data.get("username"),
-            "email":        new_data.get("email"),
-            "password":     new_data.get("password"),
-            "phone_number": new_data.get("phone"),
-            "location":     new_data.get("address"),
-        }
+        local_session_ids = new_data.get("sessions", [])
+
+        session_ids = []
+        if local_session_ids:
+            placeholders = ", ".join(["%s"] * len(local_session_ids))
+            session_query = f"""
+                SELECT id_prod
+                FROM session
+                WHERE id IN ({placeholders})
+                  AND enabled = 1
+                  AND account_id = %s
+            """
+            session_rows = db.fetch_query(session_query, local_session_ids + [account_id])
+            session_ids = [row["id_prod"] for row in session_rows if row.get("id_prod")]
+
+        payload = [
+            ("fullName",     new_data.get("full_name")),
+            ("username",     new_data.get("username")),
+            ("email",        new_data.get("email")),
+            ("password",     new_data.get("password")),
+            ("phone_number", new_data.get("phone")),
+            ("location",     new_data.get("address")),
+        ]
+
+        for i, session_id in enumerate(session_ids):
+            payload.append((f"sessions[{i}]", session_id))
 
         logger.debug("POST %s | payload: %s", url, payload)
         response = requests.post(url, data=payload, headers=headers, verify=False, timeout=10)
@@ -35,6 +53,7 @@ def _send_create_student_api(settings, new_data):
         if response.status_code == 200:
             try:
                 response_data = response.json()
+                print("\n \n \n \n \n \n \n \n ", response_data)
                 remote_id = response_data.get("data", {}).get("id")
                 return True, remote_id
             except Exception:
@@ -61,30 +80,46 @@ def _send_create_manager_api(settings, new_data):
                 roles = json.loads(roles)  # parse if stored as JSON string
             except Exception:
                 roles = [roles]
+        elif not isinstance(roles, list):
+            roles = [roles]
 
-        # form-data supports repeated keys for arrays
-        payload = {
-            "fullName":     new_data.get("full_name"),
-            "username":     new_data.get("username"),
-            "email":        new_data.get("email"),
-            "password":     new_data.get("password"),
-            "phone_number": new_data.get("phone"),
-            "location":     new_data.get("address"),
-        }
+        payload = [
+            ("fullName",     new_data.get("full_name")),
+            ("username",     new_data.get("username")),
+            ("email",        new_data.get("email")),
+            ("password",     new_data.get("password")),
+            ("phone_number", new_data.get("phone")),
+            ("location",     new_data.get("address")),
+        ]
 
         # Send roles as repeated form keys: roles[0], roles[1]...
-        files = []
         for i, role in enumerate(roles):
-            files.append((f"roles[{i}]", (None, role)))
+            payload.append((f"roles[{i}]", role))
+
+        # Optional image upload
+        files = {}
+        img_link = new_data.get("img_link")
+        image_fp = None
+        if img_link:
+            local_path = os.path.join(settings.upload_root, img_link.lstrip("/"))
+            if os.path.exists(local_path):
+                image_fp = open(local_path, "rb")
+                files["image"] = (os.path.basename(local_path), image_fp, "image/jpeg")
 
         logger.debug("POST %s | payload: %s | roles: %s", url, payload, roles)
-        response = requests.post(url, data=payload, files=files, headers=headers, verify=False, timeout=10)
+
+        response = requests.post(
+            url, data=payload, files=files if files else None,
+            headers=headers, verify=False, timeout=(5, 30)
+        )
+
+        if image_fp:
+            image_fp.close()
 
         if response.status_code == 200:
             try:
                 response_data = response.json()
-                remote_id = response_data.get("data", {}).get("id")
-                return True, remote_id
+                return True, response_data.get("data", {})
             except Exception:
                 logger.error("Invalid JSON response: %s", response.text)
                 return False, None
@@ -102,24 +137,47 @@ def _send_create_teacher_api(settings, new_data):
         headers = {"Authorization": f"Bearer {token}"}
         url = f"{settings.api_base_url}/slc/create-teacher"
 
-        payload = {
-            "fullName":     new_data.get("full_name"),
-            "username":     new_data.get("username"),
-            "email":        new_data.get("email"),
-            "password":     new_data.get("password"),
-            "phone_number": new_data.get("phone"),
-            "location":     new_data.get("address"),
-        }
+        payload = [
+            ("fullName",     new_data.get("full_name")),
+            ("username",     new_data.get("username")),
+            ("email",        new_data.get("email")),
+            ("password",     new_data.get("password")),
+            ("phone_number", new_data.get("phone")),
+            ("location",     new_data.get("address")),
+            ("account_id",   new_data.get("account_id")),
+        ]
+
+        permissions = new_data.get("allowedPermissionAccess", []) or []
+        sessions = new_data.get("allowedAccessSession", []) or []
+
+        for i, perm in enumerate(permissions):
+            payload.append((f"allowedPermissionAccess[{i}]", perm))
+        for i, sess in enumerate(sessions):
+            payload.append((f"allowedAccessSession[{i}]", sess))
+
+        files = {}
+        img_link = new_data.get("img_link")
+        image_fp = None
+        if img_link:
+            local_path = os.path.join(settings.upload_root, img_link.lstrip("/"))
+            if os.path.exists(local_path):
+                image_fp = open(local_path, "rb")
+                files["image"] = (os.path.basename(local_path), image_fp, "image/jpeg")
 
         logger.debug("POST %s | payload: %s", url, payload)
-        response = requests.post(url, data=payload, headers=headers, verify=False, timeout=10)
+
+        response = requests.post(
+            url, data=payload, files=files if files else None,
+            headers=headers, verify=False, timeout=10
+        )
+
+        if image_fp:
+            image_fp.close()
 
         if response.status_code == 200:
             try:
                 response_data = response.json()
-                # Teacher response is nested under data.teacher
-                remote_id = response_data.get("data", {}).get("teacher", {}).get("id")
-                return True, remote_id
+                return True, response_data.get("data", {})
             except Exception:
                 logger.error("Invalid JSON response: %s", response.text)
                 return False, None
@@ -145,37 +203,69 @@ MANAGER_ROLES = {
     "ROLE_MANAGER_ADMINISTRATIVE",
 }
 
-def _route_create(role, settings, new_data):
-	"""Route to the correct remote create API based on role."""
-	print("\n \n \n ",role)
-	if role == "ROLE_TEACHER":
-		print("\n \n \n \n processing techer add")
-		return _send_create_teacher_api(settings, new_data)
-	elif role in MANAGER_ROLES:
-		return _send_create_manager_api(settings, new_data)
-	else:
-		# Default: ROLE_USER / student
-		return _send_create_student_api(settings, new_data)
+def _route_create(role, settings, new_data, db):
+    if role == "ROLE_TEACHER":
+        print("\n \n \n \n processing techer add")
+        return _send_create_teacher_api(settings, new_data)
+    elif role in MANAGER_ROLES:
+        return _send_create_manager_api(settings, new_data)
+    else:
+        account_id = new_data.get("account_id")
+        return _send_create_student_api(db, settings, new_data, account_id)
 
 
 def push_userAdd(db, settings, row):
     try:
-        new_data = json.loads(row.get('new_data', '{}'))
+        new_data = json.loads(row.get('payload', '{}'))
         role     = row.get('role', 'ROLE_USER')
         local_id = new_data.get('id')
+        status, result = _route_create(role, settings, new_data, db)
 
-        status, remote_id = _route_create(role, settings, new_data)
+        if not status:
+            return False
 
-        if status and remote_id:
-            cursor = db.connection.cursor(dictionary=True)
-            cursor.execute(
-                "UPDATE user SET id_prod = %s WHERE id = %s",
-                (remote_id, local_id)
-            )
+        cursor = db.connection.cursor(dictionary=True)
+
+        if role == "ROLE_TEACHER":
+            teacher_remote_id = result.get("teacher", {}).get("id") if isinstance(result, dict) else None
+            relation_remote_id = result.get("relationTeacherAccount", {}).get("id") if isinstance(result, dict) else None
+
+            if teacher_remote_id:
+                cursor.execute(
+                    "UPDATE user SET id_prod = %s WHERE id = %s",
+                    (teacher_remote_id, local_id)
+                )
+            if relation_remote_id:
+                cursor.execute(
+                    "UPDATE relation_teacher_account SET id_prod = %s WHERE user_id = %s",
+                    (relation_remote_id, local_id)
+                )
             db.connection.commit()
-            cursor.close()
-            logger.info("✅ User synced: local=%s remote=%s role=%s", local_id, remote_id, role)
+            logger.info("✅ Teacher synced: local=%s remote=%s relation_id_prod=%s",
+                        local_id, teacher_remote_id, relation_remote_id)
 
+        elif role in MANAGER_ROLES:
+            manager_remote_id = result.get("id") if isinstance(result, dict) else None
+            if manager_remote_id:
+                cursor.execute(
+                    "UPDATE user SET id_prod = %s WHERE id = %s",
+                    (manager_remote_id, local_id)
+                )
+                db.connection.commit()
+                logger.info("✅ Manager synced: local=%s remote=%s", local_id, manager_remote_id)
+
+        else:
+            remote_id = result  # student pusher still returns a flat id
+            if remote_id:
+
+                cursor.execute(
+                    "UPDATE user SET id_prod = %s WHERE id = %s",
+                    (remote_id, local_id)
+                )
+                db.connection.commit()
+                logger.info("✅ User synced: local=%s remote=%s role=%s", local_id, remote_id, role)
+
+        cursor.close()
         return status
     except Exception as e:
         logger.exception("Error in push_userAdd: %s", e)

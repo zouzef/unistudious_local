@@ -76,6 +76,8 @@ def _send_delete_camera_api(settings, cameraId):
 		logger.exception("Remote API error in _send_delte_camera: %s", e)
 		return False
 
+
+
 def push_cameraAdd(db, settings, row):
 	try:
 		new_data =json.loads(row.get('new_data','{}'))

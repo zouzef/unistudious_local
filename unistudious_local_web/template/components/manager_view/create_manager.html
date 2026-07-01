@@ -42,17 +42,15 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="roles" class="form-label text-primary">Roles <span class="required">*</span></label>
-                                        <select id="roless" name="manager[grand]"
-                                                class="form-control no-selectpicker">
-                                            <option value="support">Support</option>
-                                            <option value="financial">Financial</option>
-                                            <option value="human resources">Human resources</option>
-                                            <option value="It support and infrastructure">IT support and infrastructure</option>
-                                            <option value="Marketing">Marketing</option>
-                                            <option value="Customer service">Customer service</option>
-                                            <option value="Administrative">Administrative</option>
+                                        <select id="roless" name="manager[roles]" class="form-control no-selectpicker">
+                                            <option value="ROLE_MANAGER_CONFIG">Support / Configuration</option>
+                                            <option value="ROLE_MANAGER_FINANCE">Financial</option>
+                                            <option value="ROLE_MANAGER_HR">Human Resources</option>
+                                            <option value="ROLE_MANAGER_IT">IT Support and Infrastructure</option>
+                                            <option value="ROLE_MANAGER_MARKETING">Marketing</option>
+                                            <option value="ROLE_CUSTOMER_MANAGER_SERVICE">Customer Service</option>
+                                            <option value="ROLE_MANAGER_ADMINISTRATIVE">Administrative</option>
                                         </select>
-
                                     </div>
                                     <br>
                                     <div class="mb-3">
@@ -101,43 +99,90 @@
     </div>
 </div>
 <script>
-document.getElementById('manager-form').addEventListener('submit', async function (e) {
-    e.preventDefault();
+    const accountId = {{ account_id }};
 
-    // ── Collect form data ─────────────────────────────────────
-    const formData = {
-        username:         document.getElementById('manager_username').value,
-        full_name:        document.getElementById('manager_fullName').value,
-        email:            document.getElementById('manager_email').value,
-        phone:            document.getElementById('manager_phone').value,
-        address:          document.getElementById('manager_Address').value,
-        roles:            JSON.stringify([document.getElementById('roless').value]), // ✅ wrap in array
-        password:         document.getElementById('manager_password_first').value,
-        password_confirm: document.getElementById('manager_password_second').value,
-        image:            document.getElementById('manager_imgFile').files[0]?.name || 'No image selected'
-    };
+    document.addEventListener("DOMContentLoaded", function () {
 
-    // ── Send to endpoint ──────────────────────────────────────
-    try {
-        const response = await fetch('/api/create-user', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
+        // ─── Image Preview ────────────────────────────────────────────────
+        document.getElementById("manager_imgFile").addEventListener("change", function () {
+            const file = this.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById("imagePreview").style.backgroundImage = `url(${e.target.result})`;
+            };
+            reader.readAsDataURL(file);
         });
 
-        const result = await response.json();
-        console.log('✅ Response:', result);
+        // ─── Remove Image ─────────────────────────────────────────────────
+        document.getElementById("remove-img").addEventListener("click", function () {
+            document.getElementById("manager_imgFile").value = "";
+            document.getElementById("imagePreview").style.backgroundImage =
+                `url(/static/assets/images/no-img-avatar.png)`;
+        });
 
-        if (response.ok) {
-            alert('User created successfully!');
-        } else {
-            alert('Error: ' + result.Message);
-        }
+        // ─── Form Submit ──────────────────────────────────────────────────
+        document.getElementById("manager-form").addEventListener("submit", function (e) {
+            e.preventDefault();
 
-    } catch (error) {
-        console.error('❌ Request failed:', error);
-    }
-});
+            const submitBtn = document.querySelector('#manager-form button[type="submit"]');
+
+            const password = document.getElementById("manager_password_first").value;
+            const confirmPassword = document.getElementById("manager_password_second").value;
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match");
+                return;
+            }
+
+            const selectedRole = document.getElementById("roless").value;
+            if (!selectedRole) {
+                alert("Please select a role");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("fullName", document.getElementById("manager_fullName").value);
+            formData.append("username", document.getElementById("manager_username").value);
+            formData.append("email", document.getElementById("manager_email").value);
+            formData.append("phone_number", document.getElementById("manager_phone").value);
+            formData.append("location", document.getElementById("manager_Address").value);
+            formData.append("password", password);
+
+            // roles sent as repeated roles[] keys — matches backend's request.form.getlist("roles[]")
+            formData.append("roles[]", selectedRole);
+
+            const imageFile = document.getElementById("manager_imgFile").files[0];
+            if (imageFile) {
+                formData.append("image", imageFile);
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Creating...";
+
+            fetch(`/api/create_manager/${accountId}`, {
+                method: "POST",
+                body: formData
+                // No Content-Type header — browser sets multipart boundary automatically
+            })
+            .then(res => res.json())
+            .then(result => {
+                console.log("Response:", result);
+                if (result.Message === "success") {
+                    window.location.href = "/dashboard/show-manager";
+                } else {
+                    alert("Error creating manager: " + JSON.stringify(result.Response || result.Message));
+                }
+            })
+            .catch(err => {
+                console.error("❌ Request failed:", err);
+                alert("Network error while creating manager");
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Create";
+            });
+        });
+    });
 </script>

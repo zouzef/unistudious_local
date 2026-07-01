@@ -647,19 +647,73 @@ document.getElementById('manageSessionsForm').addEventListener('submit', functio
 });
 
 // ==================== ADD STUDENT ====================
+// ==================== ADD STUDENT ====================
 document.getElementById('createVirtualStudentForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
-    const payload = {
-        name:   document.getElementById('studentFullName').value.trim(),
-        email:  document.getElementById('studentEmail').value.trim(),
-        phone:  document.getElementById('studentPhone').value.trim(),
-        status: document.getElementById('studentStatus').value
-    };
+    const form = this;
+    const saveBtn = document.querySelector('#addStudentModal .btn-primary[form="createVirtualStudentForm"]');
 
-    alert('📋 New Student Data:\n' + JSON.stringify(payload, null, 2));
+    const fullName = document.getElementById('studentFullName').value.trim();
+    const email    = document.getElementById('studentEmail').value.trim();
+    const phone    = document.getElementById('studentPhone').value.trim();
+    const status   = document.getElementById('studentStatus').value;
+
+    if (!fullName || !email) {
+        alert('❌ Full name and email are required');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('account_id', state.accountId);
+    formData.append('fullName', fullName);
+    formData.append('email', email);
+    formData.append('phone', phone);
+    formData.append('status', status);
+
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Saving...';
+
+    fetch('/api/create_virtuel_user', {
+        method: 'POST',
+        body: formData
+    })
+    .then(async res => {
+        const data = await res.json();
+        if (!res.ok) {
+            throw new Error(data.Message || 'Failed to create student');
+        }
+        return data;
+    })
+    .then(data => {
+        // Push the new user into local state so the table updates without a refetch
+        state.allUsers.unshift({
+            id: data.user_id,
+            full_name: fullName,
+            email: email,
+            phone: phone,
+            status: status ? parseInt(status) : 1,
+            isvirtual: 1
+        });
+
+        state.currentPage = 1;
+        renderTable(state.allUsers, state.currentPage);
+
+        // Close modal + reset form
+        bootstrap.Modal.getInstance(document.getElementById('addStudentModal')).hide();
+        form.reset();
+
+        alert('✅ Virtual student created successfully');
+    })
+    .catch(err => {
+        console.error('❌ Error creating student:', err);
+        alert(`❌ ${err.message}`);
+    })
+    .finally(() => {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save Student';
+    });
 });
-
 
 // ==================== INIT ====================
 function initPage() {
