@@ -77,17 +77,24 @@ def create_user_service(data: dict) -> tuple:
         return False,None
 
 def update_user(user_id: int, data: dict) -> tuple:
-    """Update user data"""
+    """Update a real user on the remote server"""
     url = f"{current_app.config['BASE_URL']}update-user/{user_id}"
     try:
         response = requests.post(url, json=data, verify=False, timeout=10)
         response.raise_for_status()
-        if response.status_code == 200:
-            return True, "User updated successfully"
-        return False, response.json()
+        return True, "User updated successfully"
+    except requests.exceptions.HTTPError as e:
+        try:
+            err_body = response.json()
+        except Exception:
+            err_body = response.text
+        print(f"[USER ERROR] update_user HTTP error: {e} - {err_body}")
+        return False, err_body
     except Exception as e:
         print(f"[USER ERROR] update_user: {e}")
         return False, "Connection error"
+
+
 
 def delete_user(user_id: int) -> tuple:
     """Delete user"""
@@ -166,6 +173,40 @@ def get_all_teacher_service() -> tuple:
         print(f"Error: {e} coming from server")
         return False,None
 
+def update_virtual_student(vu_id: int, user_id: int, data: dict) -> tuple:
+    """Update (or create) a virtual student on the remote server.
+
+    NOTE: the remote Symfony endpoint reads via $request->request->get(),
+    i.e. form-encoded POST data — NOT JSON.
+    """
+    url = f"{current_app.config['BASE_URL']}update-virtual-student"
+
+    payload = {
+        'userId': user_id,   # linked REAL user id
+        'id':     vu_id,     # virtual_user row id
+        'name':   data.get('name'),
+        'phone':  data.get('phone'),
+        'email':  data.get('email'),
+        'status': data.get('status'),
+    }
+
+    try:
+        response = requests.post(url, data=payload, verify=False, timeout=10)
+        response.raise_for_status()
+        result = response.json()
+        if result.get('success'):
+            return True, result.get('student')
+        return False, result.get('message', 'Update failed')
+    except requests.exceptions.HTTPError as e:
+        try:
+            err_body = response.json()
+        except Exception:
+            err_body = response.text
+        print(f"[USER ERROR] update_virtual_student HTTP error: {e} - {err_body}")
+        return False, err_body
+    except Exception as e:
+        print(f"[USER ERROR] update_virtual_student: {e}")
+        return False, "Connection error"
 
 
 

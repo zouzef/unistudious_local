@@ -286,11 +286,20 @@ function renderTable(users, page) {
   const start = (page - 1) * CONFIG.USERS_PER_PAGE;
   const end = start + CONFIG.USERS_PER_PAGE;
   const pageUsers = users.slice(start, end);
-      tbody.innerHTML = pageUsers.map(user => `
+
+  tbody.innerHTML = pageUsers.map(user => {
+    const isVirtual = user.type === 'virtual';
+    const name = user.fullName ?? user.full_name ?? '-';
+
+    // For virtual rows: user.id = virtual_user row id, user.userId = linked real user id
+    // For real rows: user.id IS the real user id
+    const realUserId = isVirtual ? user.userId : user.id;
+
+    return `
       <tr id="student-row-${user.id}" class="selected">
         <td class="student-name">
           <div class="trans-list">
-            <h4>${user.full_name ?? '-'}</h4>
+            <h4>${name}</h4>
           </div>
         </td>
         <td class="student-phone">
@@ -304,7 +313,7 @@ function renderTable(users, page) {
           </div>
         </td>
         <td class="student-type">
-          ${user.isvirtual
+          ${isVirtual
               ? `<span class="badge light badge-warning">
                    <i class="fa fa-circle text-warning me-1"></i>
                    Virtual
@@ -316,39 +325,32 @@ function renderTable(users, page) {
           }
         </td>
         <td>
-          ${user.isvirtual
-              ? `<a data-user-id="${user.id}"
+          ${isVirtual
+              ? `<a data-user-id="${realUserId}"
                     data-id="${user.id}"
                     data-account-id="${state.accountId}"
                     class="btn btn-sm btn-success btn-associate-virtual-user">
                      Associate Student
                    </a>
-                   <a data-user-id="${user.id}"
+                   <a data-user-id="${realUserId}"
                       class="btn btn-sm btn-info btn-manage-sessions-virtual-user">
                      Manage Sessions
                    </a>
-                   <a data-user-id="${user.id}"
+                   <a data-user-id="${realUserId}"
                       data-id="${user.id}"
-                      data-name="${user.full_name ?? ''}"
+                      data-name="${name}"
                       data-account-id="${state.accountId}"
                       class="btn btn-sm btn-primary btn-edit-virtual-user">
                      Edit
                    </a>
-                   <a data-user-id="${user.id}"
+                   <a data-user-id="${realUserId}"
                       data-id="${user.id}"
                       data-account-id="${state.accountId}"
                       class="btn btn-sm btn-danger btn-delete-virtual-user">
                      Delete
                    </a>`
-              : `<a data-user-id="${user.id}"
-                    data-id="${user.id}"
-                    data-name="${user.full_name ?? ''}"
-                    data-account-id="${state.accountId}"
-                    class="btn btn-sm btn-primary btn-edit-virtual-user">
-                     Edit
-                   </a>
-                   <a data-user-id="${user.id}"
-                      class="btn btn-sm btn-info btn-manage-sessions-virtual-user">
+              : `<a data-user-id="${realUserId}"
+                    class="btn btn-sm btn-info btn-manage-sessions-virtual-user">
                      Manage Sessions
                    </a>
                    <a href="/dashboard/show-profile/${user.id}"
@@ -358,7 +360,8 @@ function renderTable(users, page) {
           }
         </td>
       </tr>
-    `).join('');
+    `;
+  }).join('');
 
   renderPagination(users.length, page);
 }
@@ -443,26 +446,26 @@ function attachPaginationEvents(totalPages) {
   }
 }
 
-// ==================== EDIT MODAL ====================
+// ==================== EDIT MODAL (virtual students only) ====================
 document.addEventListener('click', function (e) {
     const btn = e.target.closest('.btn-edit-virtual-user');
     if (!btn) return;
 
-    const userId   = btn.dataset.userId;
-    const userName = btn.dataset.name;
+    const userId = btn.dataset.userId; // real user id
+    const rowId  = btn.dataset.id;     // virtual_user row id
 
     // Find user from state
-    const user = state.allUsers.find(u => u.id == userId);
+    const user = state.allUsers.find(u => u.id == rowId);
     if (!user) return;
 
     // Populate modal fields
-    document.getElementById('editUserId').value    = user.id;
-    document.getElementById('editId').value        = user.id;
+    document.getElementById('editUserId').value    = userId;
+    document.getElementById('editId').value        = rowId;
     document.getElementById('editAccountId').value = state.accountId;
-    document.getElementById('editName').value      = user.full_name  ?? '';
-    document.getElementById('editEmail').value     = user.email      ?? '';
-    document.getElementById('editPhone').value     = user.phone      ?? '';
-    document.getElementById('editStatus').value    = user.status     ?? 1;
+    document.getElementById('editName').value       = user.fullName ?? user.full_name ?? '';
+    document.getElementById('editEmail').value      = user.email    ?? '';
+    document.getElementById('editPhone').value      = user.phone    ?? '';
+    document.getElementById('editStatus').value     = user.status   ?? 1;
 
     // Open modal
     const modal = new bootstrap.Modal(document.getElementById('editStudentModal'));
@@ -476,7 +479,7 @@ document.addEventListener('click', function (e) {
 
     const userId = btn.dataset.id;
     const userName = btn.closest('tr').querySelector('.student-name h4').textContent.trim();
-    alert(userId);
+
     if (!confirm(`Are you sure you want to delete "${userName}" ?`)) return;
 
     fetch(`/api/delete-user/${userId}`, {
@@ -499,12 +502,16 @@ document.addEventListener('click', function (e) {
     });
 });
 
-// ==================== SAVE EDIT VIRTUAL USER ====================
+// ==================== SAVE EDIT VIRTUAL STUDENT ====================
 document.getElementById('editStudentForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
-    const id     = document.getElementById('editId').value;
+    const id     = document.getElementById('editId').value;     // virtual_user row id
+    const userId = document.getElementById('editUserId').value; // linked real user id
+
     const payload = {
+        id:     id,
+        userId: userId,
         name:   document.getElementById('editName').value.trim()  || null,
         email:  document.getElementById('editEmail').value.trim() || null,
         phone:  document.getElementById('editPhone').value.trim() || null,
@@ -516,7 +523,7 @@ document.getElementById('editStudentForm').addEventListener('submit', function (
     saveBtn.disabled = true;
     saveBtn.textContent = 'Saving...';
 
-    fetch(`/api/update-user/${id}`, {
+    fetch(`/api/update-virtual-student`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -526,10 +533,10 @@ document.getElementById('editStudentForm').addEventListener('submit', function (
         // Update user in state
         const index = state.allUsers.findIndex(u => u.id == id);
         if (index !== -1) {
-            state.allUsers[index].full_name = document.getElementById('editName').value.trim();
-            state.allUsers[index].email     = document.getElementById('editEmail').value.trim();
-            state.allUsers[index].phone     = document.getElementById('editPhone').value.trim();
-            state.allUsers[index].status    = parseInt(document.getElementById('editStatus').value);
+            state.allUsers[index].fullName = document.getElementById('editName').value.trim();
+            state.allUsers[index].email    = document.getElementById('editEmail').value.trim();
+            state.allUsers[index].phone    = document.getElementById('editPhone').value.trim();
+            state.allUsers[index].status   = parseInt(document.getElementById('editStatus').value);
         }
 
         // Close modal
@@ -549,6 +556,7 @@ document.getElementById('editStudentForm').addEventListener('submit', function (
         saveBtn.textContent = 'Save';
     });
 });
+
 // ==================== SESSIONS ====================
 let cachedSessions = [];
 
@@ -568,8 +576,6 @@ async function fetchSessions() {
         } else {
             cachedSessions = [];
         }
-
-
 
         return cachedSessions;
     } catch (err) {
@@ -647,7 +653,6 @@ document.getElementById('manageSessionsForm').addEventListener('submit', functio
 });
 
 // ==================== ADD STUDENT ====================
-// ==================== ADD STUDENT ====================
 document.getElementById('createVirtualStudentForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -689,11 +694,11 @@ document.getElementById('createVirtualStudentForm').addEventListener('submit', f
         // Push the new user into local state so the table updates without a refetch
         state.allUsers.unshift({
             id: data.user_id,
-            full_name: fullName,
+            fullName: fullName,
             email: email,
             phone: phone,
             status: status ? parseInt(status) : 1,
-            isvirtual: 1
+            type: 'virtual'
         });
 
         state.currentPage = 1;

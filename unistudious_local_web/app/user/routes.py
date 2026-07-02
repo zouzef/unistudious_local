@@ -22,7 +22,7 @@ from app.user.service import (
     update_account_service,
     create_manager_service,
     create_student_service,
-    create_virtuel_user_service
+    create_virtuel_user_service,update_virtual_student
 )
 
 user_bp = Blueprint('user', __name__)
@@ -95,16 +95,22 @@ def create_user():
 
 @user_bp.route('/api/update-user/<int:user_id>', methods=['POST'])
 def api_update_user(user_id):
-    """Update user"""
+    """Update user (real or virtual, routed based on payload type)"""
     try:
         data = request.get_json()
-        success, message = update_user(user_id, data)
+        user_type = data.get('type', 'real')
+
+        if user_type == 'virtual':
+            success, message = update_virtual_student(user_id, data)
+        else:
+            success, message = update_user(user_id, data)
+
         if success:
             return jsonify({"Message": message}), 200
         else:
-            return jsonify({"Message":message}),400
+            return jsonify({"Message": message}), 400
     except Exception as e:
-        return jsonify({"Message": e}), 500
+        return jsonify({"Message": str(e)}), 500
 
 
 @user_bp.route('/api/delete-user/<int:user_id>', methods=['POST'])
@@ -129,16 +135,33 @@ def api_get_user_info(user_id):
         return jsonify({
             "Message": f"Error: {e} coming from backend"
         }), 500
+
+
+
+
 #  ================================= END CRUD API USER =================================
 
-@user_bp.route('/api/update-virtuel-user/<int:user_id>', methods=['POST'])
-def api_update_virtual_user(user_id):
-    """Update virtual user"""
-    data = request.get_json()
-    success, message = update_virtual_user(user_id, data)
-    if success:
-        return jsonify({"Message": message}), 200
-    return jsonify({"Message": message}), 500
+@user_bp.route('/api/update-virtual-student', methods=['POST'])
+def api_update_virtual_student():
+    """Update (or create) a virtual student"""
+    try:
+        data = request.get_json()
+
+        vu_id   = data.get('id')
+        user_id = data.get('userId')
+        acccount_id = data.get('accountId')
+
+        if not vu_id or not user_id:
+            return jsonify({"Message": "id and userId are required"}), 400
+
+        success, result = update_virtual_student(vu_id, user_id, data)
+
+        if success:
+            return jsonify({"Message": "Virtual student updated successfully", "student": result}), 200
+        else:
+            return jsonify({"Message": result}), 400
+    except Exception as e:
+        return jsonify({"Message": str(e)}), 500
 
 # ── GET account image ──────────────────────────────────────────────────────────
 @user_bp.route('/api/delete-virtuel-user/<int:user_id>', methods=['POST'])
@@ -161,6 +184,9 @@ def get_manager_info():
     except Exception as e:
         print(e)
         return jsonify({"Message": "Error coming from server"}), 500
+
+
+
 
 # ── GET teacher data ──────────────────────────────────────────────────────────
 

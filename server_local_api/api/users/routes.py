@@ -248,7 +248,7 @@ def get_all_teachers():
 # ========================================
 # ENDPOINT 3: Affect user to group
 # ========================================
-@users_bp.route('/affect_u+ser_group/<int:session_id>', methods=['POST'])
+@users_bp.route('/affect_user_group/<int:session_id>', methods=['POST'])
 # @token_required
 def affect_user_group_endpoint(session_id):
 	try:
@@ -512,26 +512,83 @@ def create_group(session_id):
 @users_bp.route('/get-all-users/<int:account_id>', methods=['GET'])
 def get_all_user(account_id):
 	try:
-
-		query = """
-            SELECT DISTINCT
-                u.username, u.full_name,u.email,u.phone, u.img_link, u.id,u.isvirtual, rus.session_id
-            FROM user u, relation_user_session rus
-            WHERE u.enabled = 1 
-            AND rus.session_id IN (SELECT s.id FROM session s WHERE s.account_id = %s)
-            AND rus.user_id = u.id 
-            ORDER BY u.created_at DESC
+		# --- Real users ---
+		base_real_query = """
+            SELECT DISTINCT u.id, u.full_name, u.phone, u.email, u.status, u.account_id
+            FROM user u
+            JOIN relation_user_session rus ON rus.user_id = u.id AND rus.enabled = 1
+            JOIN session s ON s.id = rus.session_id AND s.enabled = 1
+            WHERE u.isvirtual = 0
         """
-		response = Database.execute_query(query, (account_id,), fetch=True)
+
+		real_users = Database.execute_query(
+            base_real_query + " AND s.account_id = %s", (account_id,), fetch=True
+		)
+
+		users = []
+		real_user_ids = set()
+
+		for u in real_users:
+			uid = u['id']
+			if uid in real_user_ids:
+				continue
+			real_user_ids.add(uid)
+			users.append({
+                'id': uid,
+                'fullName': u['full_name'],
+                'phone': u['phone'],
+                'email': u['email'],
+                'status': u['status'],
+                'account': u['account_id'],
+                'type': 'real',
+                'action': 'edit_real',
+            })
+
+		# --- Virtual users ---
+		base_virtual_query = """
+            SELECT DISTINCT vu.id, vu.name, vu.phone, vu.email, vu.status, vu.account_id,
+                   u.id AS real_id, u.full_name AS real_full_name, u.email AS real_email
+            FROM virtual_user vu
+            JOIN user u ON u.id = vu.user_id
+            WHERE vu.enabled = 1
+        """
+
+		virtual_users = Database.execute_query(
+    		base_virtual_query + " AND vu.account_id = %s", (account_id,), fetch=True
+		)
+
+		for vu in virtual_users:
+			real_id = vu['real_id']
+			if real_id in real_user_ids:
+				continue
+			real_user_ids.add(real_id)
+			users.append({
+    			'id': vu['id'],
+                'userId': real_id,
+                'fullName': vu['name'],
+                'phone': vu['phone'],
+                'email': vu['email'],
+                'status': vu['status'],
+                'account': vu['account_id'],
+                'type': 'virtual',
+                'action': 'edit_virtual',
+                'realUser': {
+                    'id': real_id,
+                    'fullName': vu['real_full_name'],
+                    'email': vu['real_email'],
+                },
+            })
+		users.sort(key=lambda x: (x['fullName'] or '').strip().lower())
 		return jsonify({
-			"Message": "Success",
-			"data": response
+            "Message": "Success",
+            "data": users
 		}), 200
 
 	except Exception as e:
+		print(e)
 		return jsonify({
-			"Message": f"Error: {e} coming from get_all_users"
-		}), 500
+            "Message": f"Error: {e} coming from get_all_users"
+        }), 500
 
 
 # =============================================
@@ -622,6 +679,96 @@ def update_user(id):
 
     except Exception as e:
         return jsonify({"Message": f"Error: {e} coming from update_user"}), 500
+
+
+# =============================================
+# ENDPOINT 8: Update Virtuel User
+# =============================================
+@users_bp.route('/update-virtual-student/<int:account_id>', methods=['POST'])
+def update_virtual_student(account_id):
+    try:
+
+        data = request.get_json() if request.is_json else request.form
+
+        user_id = data.get('userId')
+        vu_id   = data.get('id')
+        name    = data.get('name')
+        phone   = data.get('phone')
+        email   = data.get('email')
+        status  = data.get('status')
+
+        if not user_id or not vu_id:
+            return jsonify({"message": "UserId and Id are required."}), 400
+
+        user_row = Database.execute_query(
+            "SELECT id FROM user WHERE id = %s AND enabled = 1", (user_id,)
+        )
+        if not user_row:
+            return jsonify({"success": False, "message": "Student not found"}), 400
+
+        vu_row = Database.execute_query(
+            "SELECT id FROM virtual_user WHERE user_id = %s AND account_id = %s AND enabled = 1 AND id = %s",
+            (user_id, account_id, vu_id)
+        )
+        print(vu_row)
+
+
+        if not vu_row:
+            # create
+            insert_query = """
+                INSERT INTO virtual_user (name, phone, email, status, user_id, account_id)
+                VALUES (%s, %s, %s, %s, %s, %s)
+            """
+            result= Database.execute_query(
+                insert_query,
+                (name, phone, email, bool(status), user_id, account_id),
+                fetch=False
+            )
+            vu_id = result
+        else:
+            # partial update — matches Symfony's !empty() gate exactly,
+            # including the quirk that status="0" will NOT update status (falsy in PHP empty())
+            set_clauses = []
+            values = []
+            if name:
+                set_clauses.append("name = %s"); values.append(name)
+            if phone:
+                set_clauses.append("phone = %s"); values.append(phone)
+            if email:
+                set_clauses.append("email = %s"); values.append(email)
+            if status:
+                set_clauses.append("status = %s"); values.append(bool(status))
+
+            if set_clauses:
+                values.append(vu_id)
+                query = f"UPDATE virtual_user SET {', '.join(set_clauses)} WHERE id = %s"
+                Database.execute_query(query, tuple(values), fetch=False)
+
+        result = Database.execute_query(
+            "SELECT id, user_id, name, email, phone, status, account_id FROM virtual_user WHERE id = %s",
+            (vu_id,)
+        )
+        vu = result[0]
+
+        return jsonify({
+            "success": True,
+            "message": "Virtual student updated successfully",
+            # "student": {
+            #     "id": vu['id'],
+            #     "userId": vu['user_id'],
+            #     "fullName": vu['name'],
+            #     "email": vu['email'],
+            #     "phone": vu['phone'],
+            #     "status": "Active" if vu['status'] else "Inactive",
+            #     "account": vu['account_id'],
+            #     "type": "Virtual",
+            # }
+        }), 200
+
+    except Exception as e:
+        # Symfony returns a generic message on 500 (no exception detail leaked to client)
+        print(e)
+        return jsonify({"success": False, "message": "Error updating virtual student"}), 500
 
 # =============================================
 # ENDPOINT 9: Delete user
