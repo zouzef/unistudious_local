@@ -250,7 +250,7 @@ async function loadTableUsers(accountId) {
       </tr>`;
 
     const users = await API.fetchUsers(accountId);
-
+    console.log('Sample user object:', JSON.stringify(users[0], null, 2));
     state.allUsers = users;
     state.currentPage = 1;
 
@@ -356,6 +356,13 @@ function renderTable(users, page) {
                    <a href="/dashboard/show-profile/${user.id}"
                       class="btn btn-sm btn-warning">
                      Show Profile
+                   </a>
+                   <a data-user-id="${realUserId}"
+                      data-id="${user.id}"
+                      data-name="${name}"
+                      data-account-id="${state.accountId}"
+                      class="btn btn-sm btn-primary btn-edit-virtual-user">
+                     Edit
                    </a>`
           }
         </td>
@@ -510,15 +517,15 @@ document.getElementById('editStudentForm').addEventListener('submit', function (
     const userId = document.getElementById('editUserId').value; // linked real user id
 
     const payload = {
-        id:     id,
-        userId: userId,
+        id:        id,
+        userId:    userId,
+        accountId: state.accountId,   // 👈 added
         name:   document.getElementById('editName').value.trim()  || null,
         email:  document.getElementById('editEmail').value.trim() || null,
         phone:  document.getElementById('editPhone').value.trim() || null,
         status: parseInt(document.getElementById('editStatus').value)
     };
 
-    // Disable save button to prevent double submit
     const saveBtn = this.querySelector('button[type="submit"]');
     saveBtn.disabled = true;
     saveBtn.textContent = 'Saving...';
@@ -530,7 +537,6 @@ document.getElementById('editStudentForm').addEventListener('submit', function (
     })
     .then(res => res.json())
     .then(data => {
-        // Update user in state
         const index = state.allUsers.findIndex(u => u.id == id);
         if (index !== -1) {
             state.allUsers[index].fullName = document.getElementById('editName').value.trim();
@@ -539,10 +545,7 @@ document.getElementById('editStudentForm').addEventListener('submit', function (
             state.allUsers[index].status   = parseInt(document.getElementById('editStatus').value);
         }
 
-        // Close modal
         bootstrap.Modal.getInstance(document.getElementById('editStudentModal')).hide();
-
-        // Re-render table
         renderTable(state.allUsers, state.currentPage);
 
         alert('✅ User updated successfully');

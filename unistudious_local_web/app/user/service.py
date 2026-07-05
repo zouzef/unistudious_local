@@ -173,13 +173,13 @@ def get_all_teacher_service() -> tuple:
         print(f"Error: {e} coming from server")
         return False,None
 
-def update_virtual_student(vu_id: int, user_id: int, data: dict) -> tuple:
+def update_virtual_student(vu_id: int, user_id: int, data: dict, account_id: int) -> tuple:
     """Update (or create) a virtual student on the remote server.
 
     NOTE: the remote Symfony endpoint reads via $request->request->get(),
     i.e. form-encoded POST data — NOT JSON.
     """
-    url = f"{current_app.config['BASE_URL']}update-virtual-student"
+    url = f"{current_app.config['BASE_URL']}update-virtual-student/{account_id}"
 
     payload = {
         'userId': user_id,   # linked REAL user id

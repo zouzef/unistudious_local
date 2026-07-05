@@ -687,7 +687,6 @@ def update_user(id):
 @users_bp.route('/update-virtual-student/<int:account_id>', methods=['POST'])
 def update_virtual_student(account_id):
     try:
-
         data = request.get_json() if request.is_json else request.form
 
         user_id = data.get('userId')
@@ -707,11 +706,9 @@ def update_virtual_student(account_id):
             return jsonify({"success": False, "message": "Student not found"}), 400
 
         vu_row = Database.execute_query(
-            "SELECT id FROM virtual_user WHERE user_id = %s AND account_id = %s AND enabled = 1 AND id = %s",
+            "SELECT id, name, phone, email, status, user_id, account_id FROM virtual_user WHERE user_id = %s AND account_id = %s AND enabled = 1 AND id = %s",
             (user_id, account_id, vu_id)
         )
-        print(vu_row)
-
 
         if not vu_row:
             # create
@@ -719,15 +716,31 @@ def update_virtual_student(account_id):
                 INSERT INTO virtual_user (name, phone, email, status, user_id, account_id)
                 VALUES (%s, %s, %s, %s, %s, %s)
             """
-            result= Database.execute_query(
+            result = Database.execute_query(
                 insert_query,
                 (name, phone, email, bool(status), user_id, account_id),
                 fetch=False
             )
             vu_id = result
+
+            new_row = Database.execute_query(
+                "SELECT id, name, phone, email, status, user_id, account_id FROM virtual_user WHERE id = %s",
+                (vu_id,)
+            )[0]
+
+            # audit: creation (old_data null, new_data = full new row)
+            Database.execute_query(
+                """
+                INSERT INTO virtual_user_audit (action_type, record_id, old_data, new_data)
+                VALUES (%s, %s, %s, %s)
+                """,
+                ('create', vu_id, None, json.dumps(new_row, default=str)),
+                fetch=False
+            )
+
         else:
-            # partial update — matches Symfony's !empty() gate exactly,
-            # including the quirk that status="0" will NOT update status (falsy in PHP empty())
+            old_row = vu_row[0]
+
             set_clauses = []
             values = []
             if name:
@@ -744,6 +757,21 @@ def update_virtual_student(account_id):
                 query = f"UPDATE virtual_user SET {', '.join(set_clauses)} WHERE id = %s"
                 Database.execute_query(query, tuple(values), fetch=False)
 
+                new_row = Database.execute_query(
+                    "SELECT id, name, phone, email, status, user_id, account_id FROM virtual_user WHERE id = %s",
+                    (vu_id,)
+                )[0]
+
+                # audit: update (old_data = row before, new_data = row after)
+                Database.execute_query(
+                    """
+                    INSERT INTO virtual_user_audit (action_type, record_id, old_data, new_data)
+                    VALUES (%s, %s, %s, %s)
+                    """,
+                    ('update', vu_id, json.dumps(old_row, default=str), json.dumps(new_row, default=str)),
+                    fetch=False
+                )
+
         result = Database.execute_query(
             "SELECT id, user_id, name, email, phone, status, account_id FROM virtual_user WHERE id = %s",
             (vu_id,)
@@ -753,20 +781,19 @@ def update_virtual_student(account_id):
         return jsonify({
             "success": True,
             "message": "Virtual student updated successfully",
-            # "student": {
-            #     "id": vu['id'],
-            #     "userId": vu['user_id'],
-            #     "fullName": vu['name'],
-            #     "email": vu['email'],
-            #     "phone": vu['phone'],
-            #     "status": "Active" if vu['status'] else "Inactive",
-            #     "account": vu['account_id'],
-            #     "type": "Virtual",
-            # }
+            "student": {
+                "id": vu['id'],
+                "userId": vu['user_id'],
+                "fullName": vu['name'],
+                "email": vu['email'],
+                "phone": vu['phone'],
+                "status": "Active" if vu['status'] else "Inactive",
+                "account": vu['account_id'],
+                "type": "Virtual",
+            }
         }), 200
 
     except Exception as e:
-        # Symfony returns a generic message on 500 (no exception detail leaked to client)
         print(e)
         return jsonify({"success": False, "message": "Error updating virtual student"}), 500
 

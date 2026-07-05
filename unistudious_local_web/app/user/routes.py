@@ -149,18 +149,19 @@ def api_update_virtual_student():
 
         vu_id   = data.get('id')
         user_id = data.get('userId')
-        acccount_id = data.get('accountId')
+        account_id = data.get('accountId')
 
         if not vu_id or not user_id:
             return jsonify({"Message": "id and userId are required"}), 400
 
-        success, result = update_virtual_student(vu_id, user_id, data)
+        success, result = update_virtual_student(vu_id, user_id, data,account_id)
 
         if success:
             return jsonify({"Message": "Virtual student updated successfully", "student": result}), 200
         else:
             return jsonify({"Message": result}), 400
     except Exception as e:
+        print(e)
         return jsonify({"Message": str(e)}), 500
 
 # ── GET account image ──────────────────────────────────────────────────────────
