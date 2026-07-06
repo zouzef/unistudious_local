@@ -689,7 +689,6 @@ def get_assignedSession_user(user_id):
 # ENDPOINT 12: assign user to session
 @sessions_bp.route('/associate_user_session/<int:user_id>', methods=['POST'])
 def associate_user_session(user_id):
-	print(user_id)
 	try:
 		data = request.get_json(silent=True) or {}
 

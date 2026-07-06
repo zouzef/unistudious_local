@@ -688,7 +688,7 @@ document.addEventListener('click', async function (e) {
         document.getElementById('sessionUserId').value = id;
         document.getElementById('manageSessionsModal').dataset.currentId = id;
         document.getElementById('manageSessionsModal').dataset.isVirtual = isVirtual;
-
+        alert(id);
         const container = document.getElementById('relationsContainer');
         container.innerHTML = `
             <div class="text-center py-3">
@@ -769,8 +769,8 @@ document.getElementById('manageSessionsForm').addEventListener('submit', functio
 
     const modalEl  = document.getElementById('manageSessionsModal');
     const userId   = document.getElementById('sessionUserId').value;
-    const accountId = state.accountId;
 
+    alert(userId);
     // Only take NEW (not-yet-assigned) selects — assigned ones are plain divs, not selects
     const selects = document.querySelectorAll('#relationsContainer .sessionSelect');
     const sessionIds = Array.from(selects)
