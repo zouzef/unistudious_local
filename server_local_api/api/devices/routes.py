@@ -891,3 +891,16 @@ def change_etat_door(mac_id):
         return jsonify({
             "Message":f"Error: {e} coming from server"
         }),500
+
+
+# check slc_open_close
+@devices_bp.route('/check_slc_open',methods=['GET'])
+def check_slc_open():
+    try:
+        return jsonify({
+            "Message":"Server is open"
+        }),200
+
+
+    except Exception as e:
+        return jsonify({"Message":f"Error coming from server"}),500

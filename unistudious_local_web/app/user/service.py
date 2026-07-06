@@ -94,21 +94,6 @@ def update_user(user_id: int, data: dict) -> tuple:
         print(f"[USER ERROR] update_user: {e}")
         return False, "Connection error"
 
-
-
-def delete_user(user_id: int) -> tuple:
-    """Delete user"""
-    url = f"{current_app.config['BASE_URL']}delete-user/{user_id}"
-    try:
-        response = requests.post(url, verify=False, timeout=10)
-        response.raise_for_status()
-        if response.status_code == 200:
-            return True, "User deleted successfully"
-        return False, "User not deleted"
-    except Exception as e:
-        print(f"[USER ERROR] delete_user: {e}")
-        return False, "Connection error"
-
 def get_user_info_service(user_id: int) -> tuple:
     url = f"{current_app.config['BASE_URL']}get_user_info/{user_id}"
     try:

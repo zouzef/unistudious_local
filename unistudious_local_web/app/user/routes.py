@@ -9,7 +9,6 @@ from app.user.service import (
     get_all_users,
     get_profile_image,
     update_user,
-    delete_user,
     update_virtual_user,
     delete_virtual_user,
     get_manager_info_service,
@@ -92,7 +91,6 @@ def create_user():
             "Message": f"Error: {e} coming from backend"
         }), 500
 
-
 @user_bp.route('/api/update-user/<int:user_id>', methods=['POST'])
 def api_update_user(user_id):
     """Update user (real or virtual, routed based on payload type)"""
@@ -111,16 +109,6 @@ def api_update_user(user_id):
             return jsonify({"Message": message}), 400
     except Exception as e:
         return jsonify({"Message": str(e)}), 500
-
-
-@user_bp.route('/api/delete-user/<int:user_id>', methods=['POST'])
-def api_delete_user(user_id):
-    """Delete user"""
-    success, message = delete_user(user_id)
-    if success:
-        return jsonify({"Message": message}), 200
-    return jsonify({"Message": message}), 404
-
 
 @user_bp.route('/api/get-user-info/<int:user_id>', methods=['GET'])
 def api_get_user_info(user_id):

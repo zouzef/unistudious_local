@@ -83,6 +83,10 @@ def create_app():
     from api.season.routes import season_bp
     app.register_blueprint(season_bp)
 
+    # Group
+    from api.groups.routes import Group_bp
+    app.register_blueprint(Group_bp)
+
     # ========================================
     # HOME ROUTE
     # ========================================

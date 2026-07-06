@@ -549,7 +549,6 @@ def get_all_user_sesssion(session_id):
 # ENDPOINT 8: GET all_group_session
 
 @sessions_bp.route('/get_all_group_session/<int:session_id>', methods=['GET'])
-@token_required
 def get_all_group_session(session_id):
 	try:
 		query = """
@@ -639,3 +638,25 @@ def delete_relation_user_session(user_id, session_id):
 		return jsonify({
 			"Message": f"Error coming from server: {e}"
 		}), 500
+
+
+# ENDPOINT 11: GET student Session assigned
+@sessions_bp.route('/get_assignedSession_user/<int:user_id>', methods=['GET'])
+def get_assignedSession_user(user_id):
+	try:
+		data = request.get_json()
+		if 'is_virtual' not in data:
+			return jsonify({"Message":"is_virtual is required"}),400
+
+		is_virtuel = data.get('is_virtual')
+
+
+
+		return jsonify({"Message":"Succes"}),200
+
+
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from server"
+		}),500

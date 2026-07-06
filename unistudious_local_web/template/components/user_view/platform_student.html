@@ -353,8 +353,8 @@ function renderTable(users, page) {
                     class="btn btn-sm btn-info btn-manage-sessions-virtual-user">
                      Manage Sessions
                    </a>
-                   <a href="/dashboard/show-profile/${user.id}"
-                      class="btn btn-sm btn-warning">
+                   <a href="javascript:void(0);"
+                      class="btn btn-sm btn-warning btn-show-profile-local">
                      Show Profile
                    </a>
                    <a data-user-id="${realUserId}"
@@ -479,6 +479,19 @@ document.addEventListener('click', function (e) {
     modal.show();
 });
 
+// ==================== SHOW PROFILE (local restriction notice) ====================
+document.addEventListener('click', function (e) {
+    const btn = e.target.closest('.btn-show-profile-local');
+    if (!btn) return;
+
+    Swal.fire({
+        icon: 'info',
+        title: 'Not available locally',
+        text: 'You can only view the student profile on the website, not on the local server.',
+        confirmButtonColor: '#4c4b9e'
+    });
+});
+
 // ==================== DELETE VIRTUAL USER ====================
 document.addEventListener('click', function (e) {
     const btn = e.target.closest('.btn-delete-virtual-user');
@@ -487,25 +500,46 @@ document.addEventListener('click', function (e) {
     const userId = btn.dataset.id;
     const userName = btn.closest('tr').querySelector('.student-name h4').textContent.trim();
 
-    if (!confirm(`Are you sure you want to delete "${userName}" ?`)) return;
+    Swal.fire({
+        title: 'Are you sure?',
+        text: `Do you really want to delete "${userName}"? This action cannot be undone.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#4c4b9e',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (!result.isConfirmed) return;
 
-    fetch(`/api/delete-user/${userId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-    })
-    .then(res => res.json())
-    .then(data => {
-        // Remove row from state
-        state.allUsers = state.allUsers.filter(u => u.id != userId);
+        fetch(`/api/delete-virtuel-user/${userId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            // Remove row from state
+            state.allUsers = state.allUsers.filter(u => u.id != userId);
 
-        // Re-render table
-        renderTable(state.allUsers, state.currentPage);
+            // Re-render table
+            renderTable(state.allUsers, state.currentPage);
 
-        alert('✅ User deleted successfully');
-    })
-    .catch(err => {
-        console.error('❌ Error deleting user:', err);
-        alert('❌ Failed to delete user. Please try again.');
+            Swal.fire({
+                title: 'Deleted!',
+                text: 'User deleted successfully.',
+                icon: 'success',
+                confirmButtonColor: '#4c4b9e'
+            });
+        })
+        .catch(err => {
+            console.error('❌ Error deleting user:', err);
+            Swal.fire({
+                title: 'Error',
+                text: 'Failed to delete user. Please try again.',
+                icon: 'error',
+                confirmButtonColor: '#4c4b9e'
+            });
+        });
     });
 });
 
