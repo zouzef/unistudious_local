@@ -170,3 +170,28 @@ def delete_user_session_service(session_id, user_id):
             return False, response.json()
     except Exception as e:
         return False, None
+
+
+def get_assignedSession_user_service(user_id: int, payload: dict):
+    try:
+        url = f"{current_app.config['BASE_URL']}get_assignedSession_user/{user_id}"
+        response = requests.post(url, json=payload, verify=False, timeout=10)
+        if response.status_code == 200:
+            return True, response.json()
+        else:
+            return False, response.json()
+    except Exception as e:
+        return Fasle,None
+
+
+def assign_user_session_service(user_id: int, payload):
+    url = f"{current_app.config['BASE_URL']}associate_user_session/{user_id}"
+    try:
+        response = requests.post(url, json=payload, verify=False, timeout=10)
+        try:
+            body = response.json()
+        except ValueError:
+            body = {"Message": "Invalid JSON response from upstream service"}
+        return response.status_code, body
+    except requests.exceptions.RequestException as e:
+        return 500, {"Message": f"Error contacting session service: {e}"}

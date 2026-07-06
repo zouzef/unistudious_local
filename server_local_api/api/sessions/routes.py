@@ -641,22 +641,102 @@ def delete_relation_user_session(user_id, session_id):
 
 
 # ENDPOINT 11: GET student Session assigned
-@sessions_bp.route('/get_assignedSession_user/<int:user_id>', methods=['GET'])
+def get_sessions_for_user(real_user_id):
+	print(real_user_id)
+	query = """
+        SELECT DISTINCT s.id, s.name
+        FROM relation_user_session rus
+        JOIN session s ON s.id = rus.session_id AND s.enabled = 1
+        WHERE rus.user_id = %s AND rus.enabled = 1
+    """
+	result = Database.execute_query(query, (real_user_id,))
+	return [{"id": row['id'], "name": row['name']} for row in result]
+
+@sessions_bp.route('/get_assignedSession_user/<int:user_id>', methods=['POST'])
 def get_assignedSession_user(user_id):
 	try:
 		data = request.get_json()
-		if 'is_virtual' not in data:
-			return jsonify({"Message":"is_virtual is required"}),400
+
+		if not data or 'is_virtual' not in data:
+			return jsonify({"Message": "is_virtual is required"}), 400
 
 		is_virtuel = data.get('is_virtual')
 
+		if not is_virtuel:
+			sessions = get_sessions_for_user(user_id)
+			return jsonify({"Message": "Success", "data": sessions}), 200
 
+		# virtual path — resolve real user id first
+		query = """
+            SELECT user_id
+            FROM virtual_user
+            WHERE id = %s AND enabled = 1
+        """
+		result = Database.execute_query(query, (user_id,))
+		if not result:
+			return jsonify({"Message": "Virtual user not found"}), 404
 
-		return jsonify({"Message":"Succes"}),200
-
-
+		real_user_id = result[0]['user_id']
+		sessions = get_sessions_for_user(real_user_id)
+		print(sessions)
+		return jsonify({"Message": "Success", "data": sessions}), 200
 
 	except Exception as e:
-		return jsonify({
-			"Message":f"Error: {e} coming from server"
-		}),500
+		print(e)
+		return jsonify({"Message": f"Error: {e} coming from server"}), 500
+
+
+# ENDPOINT 12: assign user to session
+@sessions_bp.route('/associate_user_session/<int:user_id>', methods=['POST'])
+def associate_user_session(user_id):
+	print(user_id)
+	try:
+		data = request.get_json(silent=True) or {}
+
+		if 'account_id' not in data:
+			return jsonify({"Message": "Missing account_id in the data"}), 400
+
+		if 'session_id' not in data:
+			return jsonify({"Message": "Missing session_id in the data"}), 400
+
+		account_id = data.get('account_id')
+		session_id = data.get('session_id')
+
+		query_relation = """
+            SELECT id, max_group_change
+            FROM session
+            WHERE id = %s AND enabled = 1 AND account_id = %s
+        """
+		result = Database.execute_query(
+            query_relation,
+            (session_id, account_id),
+            fetch=True
+        )
+
+		if not result:
+			return jsonify({"Message": "There is no session with this id for this account"}), 404
+
+		session_row = result[0]
+		try:
+			max_group_change = int(session_row["max_group_change"])
+		except (TypeError, ValueError):
+			max_group_change = 0
+
+		insert_relation_query = """
+            INSERT INTO relation_user_session
+                (user_id, session_id, relation_group_local_session_id, ref, enabled, created_at, timestamp)
+            VALUES
+                (%s, %s, %s, %s, %s, NOW(), NOW())
+        """
+
+		for _ in range(max_group_change):
+			Database.execute_query(
+                insert_relation_query,
+                [user_id, session_id, None, None, 1],
+                fetch=False
+            )
+
+		return jsonify({"Message": "User associated with session successfully"}), 200
+
+	except Exception as e:
+		return jsonify({"Message": "An error occurred", "Error": str(e)}), 500

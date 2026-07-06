@@ -14,7 +14,9 @@ from app.session.service import (
     get_all_group_session_service,
     get_all_user_service,
     get_user_info_session_service,
-    delete_user_session_service
+    delete_user_session_service,
+    get_assignedSession_user_service,
+    assign_user_session_service
 
 )
 
@@ -235,3 +237,41 @@ def delete_user_session(user_id, session_id):
         return jsonify({
             "Message":"Error coming from the server"
         }),500
+
+
+@session_bp.route('/api/get_assigned_session_user/<int:user_id>', methods=['POST'])
+def get_assigned_session_user(user_id):
+    try:
+        data = request.get_json()
+        if not data or 'is_virtual' not in data:
+            return jsonify({"Message": "is_virtual is required"}), 400
+
+        status, response = get_assignedSession_user_service(user_id, data)
+        print(response)
+        if status:
+            return jsonify(response), 200
+        else:
+            return jsonify(response), 400
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "Message": f"Error: {e} coming from backend"
+        }), 500
+
+
+@session_bp.route('/api/assign_user_session/<int:user_id>', methods=['POST'])
+def assign_user_session(user_id: int):
+    try:
+        data = request.get_json(silent=True) or {}
+        if 'account_id' not in data:
+            return jsonify({"Message": "Missing account_id in the data"}), 400
+        if 'session_id' not in data:
+            return jsonify({"Message": "Missing session_id in the data"}), 400
+
+        status_code, response = assign_user_session_service(user_id, data)
+        return jsonify(response), status_code
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "Message": f"Error: {e} coming from backend"
+        }), 500

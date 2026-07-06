@@ -202,6 +202,7 @@
     </div>
 </div>
 
+
 <script>
     /* ===============================================
    USER MANAGEMENT - TABLE PAGE
@@ -239,7 +240,6 @@ async function loadTableUsers(accountId) {
   }
 
   try {
-    // Show spinner
     tbody.innerHTML = `
       <tr>
         <td colspan="5" class="text-center py-4">
@@ -282,7 +282,6 @@ function renderTable(users, page) {
     return;
   }
 
-  // Slice for current page
   const start = (page - 1) * CONFIG.USERS_PER_PAGE;
   const end = start + CONFIG.USERS_PER_PAGE;
   const pageUsers = users.slice(start, end);
@@ -326,13 +325,14 @@ function renderTable(users, page) {
         </td>
         <td>
           ${isVirtual
-              ? `<a data-user-id="${realUserId}"
-                    data-id="${user.id}"
-                    data-account-id="${state.accountId}"
-                    class="btn btn-sm btn-success btn-associate-virtual-user">
+            ? `<a data-user-id="${realUserId}"
+                  data-id="${user.id}"
+                  data-account-id="${state.accountId}"
+                  class="btn btn-sm btn-success btn-associate-virtual-user">
                      Associate Student
                    </a>
-                   <a data-user-id="${realUserId}"
+                   <a data-id="${user.id}"
+                      data-is-virtual="true"
                       class="btn btn-sm btn-info btn-manage-sessions-virtual-user">
                      Manage Sessions
                    </a>
@@ -349,7 +349,8 @@ function renderTable(users, page) {
                       class="btn btn-sm btn-danger btn-delete-virtual-user">
                      Delete
                    </a>`
-              : `<a data-user-id="${realUserId}"
+              : `<a data-id="${user.id}"
+                    data-is-virtual="false"
                     class="btn btn-sm btn-info btn-manage-sessions-virtual-user">
                      Manage Sessions
                    </a>
@@ -383,7 +384,6 @@ function renderPagination(totalUsers, page) {
     return;
   }
 
-  // Build page numbers with dots
   let pages = new Set([1, totalPages, page]);
   if (page - 1 > 0) pages.add(page - 1);
   if (page + 1 <= totalPages) pages.add(page + 1);
@@ -422,7 +422,6 @@ function renderPagination(totalUsers, page) {
 function attachPaginationEvents(totalPages) {
   const controls = document.getElementById("pagination-controls");
 
-  // Page number clicks
   controls.querySelectorAll('[data-page]').forEach(btn => {
     btn.addEventListener('click', function () {
       state.currentPage = parseInt(this.dataset.page);
@@ -430,7 +429,6 @@ function attachPaginationEvents(totalPages) {
     });
   });
 
-  // Previous button
   const prevBtn = document.getElementById("prev-page");
   if (prevBtn) {
     prevBtn.addEventListener('click', function () {
@@ -441,7 +439,6 @@ function attachPaginationEvents(totalPages) {
     });
   }
 
-  // Next button
   const nextBtn = document.getElementById("next-page");
   if (nextBtn) {
     nextBtn.addEventListener('click', function () {
@@ -461,11 +458,9 @@ document.addEventListener('click', function (e) {
     const userId = btn.dataset.userId; // real user id
     const rowId  = btn.dataset.id;     // virtual_user row id
 
-    // Find user from state
     const user = state.allUsers.find(u => u.id == rowId);
     if (!user) return;
 
-    // Populate modal fields
     document.getElementById('editUserId').value    = userId;
     document.getElementById('editId').value        = rowId;
     document.getElementById('editAccountId').value = state.accountId;
@@ -474,7 +469,6 @@ document.addEventListener('click', function (e) {
     document.getElementById('editPhone').value      = user.phone    ?? '';
     document.getElementById('editStatus').value     = user.status   ?? 1;
 
-    // Open modal
     const modal = new bootstrap.Modal(document.getElementById('editStudentModal'));
     modal.show();
 });
@@ -518,10 +512,7 @@ document.addEventListener('click', function (e) {
         })
         .then(res => res.json())
         .then(data => {
-            // Remove row from state
             state.allUsers = state.allUsers.filter(u => u.id != userId);
-
-            // Re-render table
             renderTable(state.allUsers, state.currentPage);
 
             Swal.fire({
@@ -553,7 +544,7 @@ document.getElementById('editStudentForm').addEventListener('submit', function (
     const payload = {
         id:        id,
         userId:    userId,
-        accountId: state.accountId,   // 👈 added
+        accountId: state.accountId,
         name:   document.getElementById('editName').value.trim()  || null,
         email:  document.getElementById('editEmail').value.trim() || null,
         phone:  document.getElementById('editPhone').value.trim() || null,
@@ -594,7 +585,7 @@ document.getElementById('editStudentForm').addEventListener('submit', function (
     });
 });
 
-// ==================== SESSIONS ====================
+// ==================== SESSIONS (all sessions for dropdown) ====================
 let cachedSessions = [];
 
 async function fetchSessions() {
@@ -603,7 +594,6 @@ async function fetchSessions() {
         const response = await fetch(`/api/get-sessions/${state.accountId}`);
         const result   = await response.json();
 
-        // Handle all possible response shapes
         if (Array.isArray(result)) {
             cachedSessions = result;
         } else if (Array.isArray(result.data)) {
@@ -622,14 +612,15 @@ async function fetchSessions() {
 }
 
 function buildSessionOptions(sessions) {
-    return sessions.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+    return `<option value="" disabled selected>-- Select a session --</option>` +
+        sessions.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
 }
 
 function buildSessionCard(index, sessions) {
     return `
         <div class="relation-block border rounded p-3 mb-3" data-index="${index}">
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <h6 class="mb-0">Relation #${index}</h6>
+                <h6 class="mb-0">New Relation #${index}</h6>
                 <button type="button" class="btn btn-sm btn-danger removeRelationBtn">Remove</button>
             </div>
             <div class="mb-3">
@@ -641,39 +632,131 @@ function buildSessionCard(index, sessions) {
         </div>`;
 }
 
+// ==================== ASSIGNED SESSIONS ====================
+async function fetchAssignedSessions(id, isVirtual) {
+    try {
+        const response = await fetch(`/api/get_assigned_session_user/${id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ is_virtual: isVirtual })
+        });
+        const result = await response.json();
+        return result.data ?? [];
+    } catch (err) {
+        console.error('❌ Error fetching assigned sessions:', err);
+        return [];
+    }
+}
+
+function buildAssignedSessionCard(session) {
+    return `
+        <div class="relation-block border rounded p-3 mb-3" data-session-id="${session.id}" data-assigned="true">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="mb-1">${session.name}</h6>
+                    <span class="badge bg-success">Assigned</span>
+                </div>
+                <button type="button" class="btn btn-sm btn-danger removeAssignedSessionBtn" data-session-id="${session.id}">
+                    Delete
+                </button>
+            </div>
+        </div>`;
+}
+
+function renderSessionRelations(assignedSessions, allSessions) {
+    const container = document.getElementById('relationsContainer');
+    const assignedIds = new Set(assignedSessions.map(s => s.id));
+    const availableSessions = allSessions.filter(s => !assignedIds.has(s.id));
+
+    const assignedHtml = assignedSessions.map(buildAssignedSessionCard).join('');
+    const newRelationHtml = buildSessionCard(assignedSessions.length + 1, availableSessions);
+
+    container.innerHTML = assignedHtml + newRelationHtml;
+}
+
 // ==================== MANAGE SESSIONS MODAL ====================
 document.addEventListener('click', async function (e) {
 
     // Open modal
     const openBtn = e.target.closest('.btn-manage-sessions-virtual-user');
     if (openBtn) {
-        const userId = openBtn.dataset.userId;
-        document.getElementById('sessionUserId').value = userId;
+        const id = openBtn.dataset.id;
+        const isVirtual = openBtn.dataset.isVirtual === 'true';
 
-        // Load sessions and populate existing card
-        const sessions = await fetchSessions();
+        document.getElementById('sessionUserId').value = id;
+        document.getElementById('manageSessionsModal').dataset.currentId = id;
+        document.getElementById('manageSessionsModal').dataset.isVirtual = isVirtual;
+
         const container = document.getElementById('relationsContainer');
-
-        // Reset container with one fresh card
-        container.innerHTML = buildSessionCard(1, sessions);
+        container.innerHTML = `
+            <div class="text-center py-3">
+                <div class="spinner-border text-primary" role="status"></div>
+            </div>`;
 
         const modal = new bootstrap.Modal(document.getElementById('manageSessionsModal'));
         modal.show();
+
+        try {
+            const [assignedSessions, allSessions] = await Promise.all([
+                fetchAssignedSessions(id, isVirtual),
+                fetchSessions()
+            ]);
+            renderSessionRelations(assignedSessions, allSessions);
+        } catch (err) {
+            console.error('❌ Error loading assigned sessions:', err);
+            container.innerHTML = `<div class="alert alert-danger">Failed to load sessions.</div>`;
+        }
+        return;
     }
 
-    // Remove relation card
+    // Remove a "new relation" select card
     const removeBtn = e.target.closest('.removeRelationBtn');
     if (removeBtn) {
         removeBtn.closest('.relation-block').remove();
     }
 
+    // Delete an already-assigned session
+    const deleteAssignedBtn = e.target.closest('.removeAssignedSessionBtn');
+    if (deleteAssignedBtn) {
+        const sessionId = deleteAssignedBtn.dataset.sessionId;
+
+        const result = await Swal.fire({
+            title: 'Remove this session?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, remove it',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: '#4c4b9e',
+            cancelButtonColor: '#d33'
+        });
+        if (!result.isConfirmed) return;
+
+        // TODO: call your delete-relation endpoint here, e.g.
+        // const modalEl = document.getElementById('manageSessionsModal');
+        // await fetch('/api/delete-session-relation', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({
+        //         session_id: sessionId,
+        //         id: modalEl.dataset.currentId,
+        //         is_virtual: modalEl.dataset.isVirtual === 'true'
+        //     })
+        // });
+
+        deleteAssignedBtn.closest('.relation-block').remove();
+    }
+
     // Add new relation card
-    const addBtn = e.target.closest('#addRelationBtn');
+const addBtn = e.target.closest('#addRelationBtn');
     if (addBtn) {
         const container = document.getElementById('relationsContainer');
-        const index     = container.querySelectorAll('.relation-block').length + 1;
-        const sessions  = await fetchSessions();
-        container.insertAdjacentHTML('beforeend', buildSessionCard(index, sessions));
+        const assignedIds = new Set(
+            [...container.querySelectorAll('[data-assigned="true"]')].map(el => el.dataset.sessionId)
+        );
+        const allSessions = await fetchSessions();
+        const availableSessions = allSessions.filter(s => !assignedIds.has(String(s.id)));
+        const index = container.querySelectorAll('.relation-block').length + 1;
+        container.insertAdjacentHTML('beforeend', buildSessionCard(index, availableSessions));
     }
 
 });
@@ -682,78 +765,75 @@ document.addEventListener('click', async function (e) {
 document.getElementById('manageSessionsForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
+    const modalEl  = document.getElementById('manageSessionsModal');
     const userId   = document.getElementById('sessionUserId').value;
-    const selects  = document.querySelectorAll('#relationsContainer .sessionSelect');
-    const sessionIds = Array.from(selects).map(s => s.value);
+    const accountId = state.accountId;
 
-    alert('User ID: ' + userId + '\nSession IDs: ' + sessionIds.join(', '));
-});
+    // Only take NEW (not-yet-assigned) selects — assigned ones are plain divs, not selects
+    const selects = document.querySelectorAll('#relationsContainer .sessionSelect');
+    const sessionIds = Array.from(selects)
+        .map(s => s.value)
+        .filter(Boolean);
 
-// ==================== ADD STUDENT ====================
-document.getElementById('createVirtualStudentForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const form = this;
-    const saveBtn = document.querySelector('#addStudentModal .btn-primary[form="createVirtualStudentForm"]');
-
-    const fullName = document.getElementById('studentFullName').value.trim();
-    const email    = document.getElementById('studentEmail').value.trim();
-    const phone    = document.getElementById('studentPhone').value.trim();
-    const status   = document.getElementById('studentStatus').value;
-
-    if (!fullName || !email) {
-        alert('❌ Full name and email are required');
+    if (sessionIds.length === 0) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'No session selected',
+            text: 'Please select at least one session before saving.',
+            confirmButtonColor: '#4c4b9e'
+        });
         return;
     }
 
-    const formData = new FormData();
-    formData.append('account_id', state.accountId);
-    formData.append('fullName', fullName);
-    formData.append('email', email);
-    formData.append('phone', phone);
-    formData.append('status', status);
-
+    const saveBtn = document.querySelector('#manageSessionsModal .btn-primary[form="manageSessionsForm"]');
     saveBtn.disabled = true;
     saveBtn.textContent = 'Saving...';
 
-    fetch('/api/create_virtuel_user', {
-        method: 'POST',
-        body: formData
-    })
-    .then(async res => {
-        const data = await res.json();
-        if (!res.ok) {
-            throw new Error(data.Message || 'Failed to create student');
+    // Fire one request per selected session, sequentially
+    (async () => {
+        const results = [];
+        for (const sessionId of sessionIds) {
+            try {
+                const res = await fetch(`/api/assign_user_session/${userId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        account_id: accountId,
+                        session_id: parseInt(sessionId)
+                    })
+                });
+                const data = await res.json();
+                results.push({ sessionId, ok: res.ok, data });
+            } catch (err) {
+                results.push({ sessionId, ok: false, data: { Message: err.message } });
+            }
         }
-        return data;
-    })
-    .then(data => {
-        // Push the new user into local state so the table updates without a refetch
-        state.allUsers.unshift({
-            id: data.user_id,
-            fullName: fullName,
-            email: email,
-            phone: phone,
-            status: status ? parseInt(status) : 1,
-            type: 'virtual'
-        });
+        return results;
+    })()
+    .then(results => {
+        const failed = results.filter(r => !r.ok);
 
-        state.currentPage = 1;
-        renderTable(state.allUsers, state.currentPage);
-
-        // Close modal + reset form
-        bootstrap.Modal.getInstance(document.getElementById('addStudentModal')).hide();
-        form.reset();
-
-        alert('✅ Virtual student created successfully');
-    })
-    .catch(err => {
-        console.error('❌ Error creating student:', err);
-        alert(`❌ ${err.message}`);
+        if (failed.length === 0) {
+            bootstrap.Modal.getInstance(modalEl).hide();
+            Swal.fire({
+                icon: 'success',
+                title: 'Sessions assigned',
+                text: 'All selected sessions were assigned successfully.',
+                confirmButtonColor: '#4c4b9e'
+            });
+        } else {
+            const failedMsgs = failed.map(r => `Session ${r.sessionId}: ${r.data.Message || 'Failed'}`).join('\n');
+            Swal.fire({
+                icon: 'error',
+                title: 'Some sessions failed',
+                text: failedMsgs,
+                confirmButtonColor: '#4c4b9e'
+            });
+        }
     })
     .finally(() => {
         saveBtn.disabled = false;
-        saveBtn.textContent = 'Save Student';
+        saveBtn.textContent = 'Save';
     });
 });
 

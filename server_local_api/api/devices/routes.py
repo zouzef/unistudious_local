@@ -894,6 +894,7 @@ def change_etat_door(mac_id):
 
 
 # check slc_open_close
+""" API TO TEST WITH ADN DELETE IT AFTER TEST """
 @devices_bp.route('/check_slc_open',methods=['GET'])
 def check_slc_open():
     try:
