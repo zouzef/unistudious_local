@@ -20,7 +20,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 from config import Config
 from core.database import Database
 from core.middleware import token_required
-
+from core.checks import *
 # ========================================
 # GROUP/USER MANAGEMENT ENDPOINTS
 # ========================================
@@ -840,15 +840,15 @@ def get_all_user(account_id):
 	try:
 		# --- Real users ---
 		base_real_query = """
-            SELECT DISTINCT u.id, u.full_name, u.phone, u.email, u.status, u.account_id
-            FROM user u
-            JOIN relation_user_session rus ON rus.user_id = u.id AND rus.enabled = 1
-            JOIN session s ON s.id = rus.session_id AND s.enabled = 1
-            WHERE u.isvirtual = 0
-        """
+             SELECT DISTINCT u.id, u.full_name, u.phone, u.email, u.status, u.account_id
+             FROM user u
+             JOIN relation_user_session rus ON rus.user_id = u.id AND rus.enabled = 1
+             JOIN session s ON s.id = rus.session_id AND s.enabled = 1
+             WHERE u.isvirtual = 0
+         """
 
 		real_users = Database.execute_query(
-            base_real_query + " AND s.account_id = %s", (account_id,), fetch=True
+			base_real_query + " AND s.account_id = %s", (account_id,), fetch=True
 		)
 
 		users = []
@@ -859,28 +859,46 @@ def get_all_user(account_id):
 			if uid in real_user_ids:
 				continue
 			real_user_ids.add(uid)
+
+			# ── Attach linked VirtualUser (if any) for this real user + account ──
+			virtual_query = """
+                SELECT id, name, phone, email, status, account_id
+                FROM virtual_user
+                WHERE user_id = %s AND account_id = %s AND enabled = 1
+            """
+			virtual_result = Database.execute_query(virtual_query, (uid, account_id), fetch=True)
+			virtual = virtual_result[0] if virtual_result else None
+
 			users.append({
-                'id': uid,
-                'fullName': u['full_name'],
-                'phone': u['phone'],
-                'email': u['email'],
-                'status': u['status'],
-                'account': u['account_id'],
-                'type': 'real',
-                'action': 'edit_real',
-            })
+				'id': uid,
+				'fullName': u['full_name'],
+				'phone': u['phone'],
+				'email': u['email'],
+				'status': u['status'],
+				'account': u['account_id'],
+				'type': 'real',
+				'action': 'edit_real',
+				'virtualUser': {
+					'id': virtual['id'],
+					'fullName': virtual['name'],
+					'phone': virtual['phone'],
+					'email': virtual['email'],
+					'status': virtual['status'],
+					'account': virtual['account_id'],
+				} if virtual else None,
+			})
 
 		# --- Virtual users ---
 		base_virtual_query = """
-            SELECT DISTINCT vu.id, vu.name, vu.phone, vu.email, vu.status, vu.account_id,
-                   u.id AS real_id, u.full_name AS real_full_name, u.email AS real_email
-            FROM virtual_user vu
-            JOIN user u ON u.id = vu.user_id
-            WHERE vu.enabled = 1
-        """
+             SELECT DISTINCT vu.id, vu.name, vu.phone, vu.email, vu.status, vu.account_id,
+                    u.id AS real_id, u.full_name AS real_full_name, u.email AS real_email
+             FROM virtual_user vu
+             JOIN user u ON u.id = vu.user_id
+             WHERE vu.enabled = 1
+         """
 
 		virtual_users = Database.execute_query(
-    		base_virtual_query + " AND vu.account_id = %s", (account_id,), fetch=True
+			base_virtual_query + " AND vu.account_id = %s", (account_id,), fetch=True
 		)
 
 		for vu in virtual_users:
@@ -889,32 +907,33 @@ def get_all_user(account_id):
 				continue
 			real_user_ids.add(real_id)
 			users.append({
-    			'id': vu['id'],
-                'userId': real_id,
-                'fullName': vu['name'],
-                'phone': vu['phone'],
-                'email': vu['email'],
-                'status': vu['status'],
-                'account': vu['account_id'],
-                'type': 'virtual',
-                'action': 'edit_virtual',
-                'realUser': {
-                    'id': real_id,
-                    'fullName': vu['real_full_name'],
-                    'email': vu['real_email'],
-                },
-            })
+				'id': vu['id'],
+				'userId': real_id,
+				'fullName': vu['name'],
+				'phone': vu['phone'],
+				'email': vu['email'],
+				'status': vu['status'],
+				'account': vu['account_id'],
+				'type': 'virtual',
+				'action': 'edit_virtual',
+				'realUser': {
+					'id': real_id,
+					'fullName': vu['real_full_name'],
+					'email': vu['real_email'],
+				},
+			})
+
 		users.sort(key=lambda x: (x['fullName'] or '').strip().lower())
 		return jsonify({
-            "Message": "Success",
-            "data": users
+			"Message": "Success",
+			"data": users
 		}), 200
 
 	except Exception as e:
 		print(e)
 		return jsonify({
-            "Message": f"Error: {e} coming from get_all_users"
-        }), 500
+			"Message": f"Error: {e} coming from get_all_users"
+		}), 500
 
 
 # =============================================
@@ -1089,3 +1108,68 @@ def create_student(account_id):
        return jsonify({
             "Message": f"Error: {e} coming from server"
         }), 500
+
+
+# =============================================
+# ENDPOINT 8: GET user in session
+# =============================================
+@users_bp.route('/get_students_with_sessions', methods=['GET'])
+def get_student_with_session():
+	try:
+		query_get_student = """
+			SELECT DISTINCT u.id,u.username,u.email
+			FROM user u, relation_user_session rus,session s
+			WHERE u.id = rus.user_id AND 
+			u.enabled = 1 AND 
+			rus.enabled = 1 AND rus.session_id = s.id
+		"""
+		result = Database.execute_query(query_get_student, fetch=True)
+
+		if result:
+			return jsonify({"Success": True, "data":result}),200
+		else:
+			return jsonify({"Success": False, "Data":[]}),200
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from server"
+		}),500
+
+
+@users_bp.route('/associate-virtual-user/<int:account_id>', methods=['POST'])
+def associate_virtual_user(account_id):
+	try:
+		data = request.get_json(silent=True) or request.form
+		virtual_id = data.get('id')
+		real_user_id = data.get('realUserId')
+
+		if not virtual_id or not real_user_id:
+			return jsonify({
+				"Success": False,
+				"Message": "Virtual or real user not found."
+			}),400
+
+		query_get_real_user = """
+			SELECT user_id 
+			FROM virtual_user
+			WHERE id = %s AND enabled = 1 AND account_id = %s
+		"""
+		values =(virtual_id,account_id)
+		real_user = Database.execute_query(query_get_real_user, values, fetch=True)[0]['user_id']
+		print(real_user)
+		if not real_user:
+			return jsonify({
+				"Message":f"There is no real_user for this virtual_user"
+			}),404
+
+
+
+		return jsonify(
+			real_user
+		),200
+
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from server"
+		}),500

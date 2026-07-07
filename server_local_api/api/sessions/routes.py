@@ -3,11 +3,13 @@ from datetime import datetime
 import sys
 import os
 
+
 # Add parent directories to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from config import Config
 from core.database import Database
 from core.middleware import token_required
+from core.checks import *
 import uuid
 import json
 
@@ -601,19 +603,19 @@ def get_user_session_info(session_id):
 @sessions_bp.route('/delete_relation_user_session/<int:user_id>/<int:session_id>', methods=['POST'])
 def delete_relation_user_session(user_id, session_id):
 	try:
-
-		query = """
-                SELECT id
-                FROM relation_user_session 
-                WHERE session_id = %s AND user_id = %s AND enabled = 1
-        """
-
-		values = (session_id, user_id)
-		result = Database.execute_query(query, values, fetch=True)
-		if not (result):
+		if not(session_exists(session_id)):
 			return jsonify({
-				"Message": "Error: There is no Relation between user and session "
-			}), 404
+				"Message":"There is no session with this id"
+			}),400
+
+		if not(user_exists(user_id)):
+			return jsonify({"Message": "There is no user with this id"}),400
+
+
+		if not(relation_user_session_exists(session_id,user_id)):
+			return jsonify({
+				"Message":"There is no relation user_session"
+			}),400
 
 		query = """
             UPDATE relation_user_session
@@ -642,7 +644,6 @@ def delete_relation_user_session(user_id, session_id):
 
 # ENDPOINT 11: GET student Session assigned
 def get_sessions_for_user(real_user_id):
-	print(real_user_id)
 	query = """
         SELECT DISTINCT s.id, s.name
         FROM relation_user_session rus
@@ -652,33 +653,38 @@ def get_sessions_for_user(real_user_id):
 	result = Database.execute_query(query, (real_user_id,))
 	return [{"id": row['id'], "name": row['name']} for row in result]
 
+from core.checks import get_virtual_user, user_exists
+
 @sessions_bp.route('/get_assignedSession_user/<int:user_id>', methods=['POST'])
 def get_assignedSession_user(user_id):
 	try:
 		data = request.get_json()
-
 		if not data or 'is_virtual' not in data:
 			return jsonify({"Message": "is_virtual is required"}), 400
+		if not data or 'account_id' not in data:
+			return jsonify({"Message": "account_id is required"}), 400
 
 		is_virtuel = data.get('is_virtual')
+		account_id = data.get('account_id')
+
+		if not(account_exists(account_id)):
+			return jsonify({
+				"Message":"Account_id dosent exists"
+			}),400
+
 
 		if not is_virtuel:
+			if not user_exists(user_id):
+				return jsonify({"Message": "User not found"}), 404
 			sessions = get_sessions_for_user(user_id)
 			return jsonify({"Message": "Success", "data": sessions}), 200
 
-		# virtual path — resolve real user id first
-		query = """
-            SELECT user_id
-            FROM virtual_user
-            WHERE id = %s AND enabled = 1
-        """
-		result = Database.execute_query(query, (user_id,))
-		if not result:
+		virtual_user = get_virtual_user(user_id, account_id)
+		if not virtual_user:
 			return jsonify({"Message": "Virtual user not found"}), 404
 
-		real_user_id = result[0]['user_id']
+		real_user_id = virtual_user['user_id']
 		sessions = get_sessions_for_user(real_user_id)
-		print(sessions)
 		return jsonify({"Message": "Success", "data": sessions}), 200
 
 	except Exception as e:
@@ -700,6 +706,12 @@ def associate_user_session(user_id):
 
 		account_id = data.get('account_id')
 		session_id = data.get('session_id')
+
+		if not(account_exists(account_id)):
+			return jsonify({"Message":"account_id dosen't exist"}),400
+
+		if not(session_exists(session_id,account_id)):
+			return jsonify({"Message": "session dosen't exist"}),400
 
 		query_relation = """
             SELECT id, max_group_change

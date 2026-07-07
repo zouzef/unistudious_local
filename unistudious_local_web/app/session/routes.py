@@ -217,6 +217,7 @@ def get_user_session_info(session_id):
 @session_bp.route('/api/delete_user_session/<int:user_id>/<int:session_id>', methods=['POST'])
 def delete_user_session(user_id, session_id):
     try:
+        print(user_id)
         result,data= delete_user_session_service(session_id,user_id)
         if result:
             return jsonify({
@@ -243,8 +244,13 @@ def delete_user_session(user_id, session_id):
 def get_assigned_session_user(user_id):
     try:
         data = request.get_json()
+        print(data)
         if not data or 'is_virtual' not in data:
             return jsonify({"Message": "is_virtual is required"}), 400
+
+        if not data or 'account_id' not in data:
+            return jsonify({"Message": "account_id is required"}), 400
+
 
         status, response = get_assignedSession_user_service(user_id, data)
         print(response)

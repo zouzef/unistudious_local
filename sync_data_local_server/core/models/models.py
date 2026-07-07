@@ -941,7 +941,7 @@ class VirtualUserModel(BaseModel):
 		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
 		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
 		Column("updated_at", "DATETIME"),
-		Column("uuid", "VARCHAR(255)", nullable=False),
+		Column("uuid", "VARCHAR(255)", nullable=True),
 		Column("phone", "VARCHAR(255)"),
 		Column("email", "VARCHAR(255)"),
 		Column("status", "TINYINT(1)", default="1"),

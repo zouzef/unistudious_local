@@ -3,11 +3,13 @@ import uuid
 import os
 import sys
 import json
+import random
+import string
 from datetime import datetime
 from config import Config
 from core.database import Database
 from core.middleware import token_required
-
+from core.checks import *
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 
@@ -59,25 +61,72 @@ def get_all_virtuel_user(account_id):
 # ========================================
 # ENDPOINT 2: Delete virtual user by id
 # ========================================
-@Vusers_bp.route('/delete-virtuel-user/<int:id>',methods=['POST'])
+@Vusers_bp.route('/delete-virtuel-user/<int:id>', methods=['POST'])
 def delete_virtuel_user(id):
 	try:
-		query = """
-			UPDATE virtual_user
-			 set enabled = 0 , slc_edit = 1
-			 where id = %s
-			 
-		"""
-		values = (id,)
-		result = Database.execute_query(query,values,fetch=False)
+		data = request.get_json(silent=True) or request.form
+		user_id = data.get('userId')
+		account_id = data.get('account_id')
+		virtual_id = data.get('id')
+
+		if not user_id or not account_id or not virtual_id:
+			return jsonify({"success": False, "Message": "userId, account and id are required"}), 400
+
+		if not (account_exists(account_id)):
+			return jsonify({"success": False, "Message": "account_id dosen't exist"}), 400
+
+		if not (virtuel_user_exists(id, account_id)):
+			return jsonify({"Message": "There is no user with this id"}), 400
+
+		# ── Fetch old_data BEFORE disabling anything (for audit) ──────────
+		old_data_query = """
+            SELECT vu.*, u.*
+            FROM virtual_user vu
+            JOIN user u ON u.id = vu.user_id
+            WHERE vu.id = %s AND vu.enabled = 1
+        """
+		old_data_result = Database.execute_query(old_data_query, (virtual_id,), fetch=True)
+		old_data = old_data_result[0] if old_data_result else None
+
+		disabled_virtual_query = "UPDATE virtual_user SET enabled = 0 WHERE id = %s"
+		Database.execute_query(disabled_virtual_query, (virtual_id,), fetch=False)
+
+		disable_user_query = "UPDATE user SET enabled = 0 WHERE id = %s AND isvirtual = 1"
+		Database.execute_query(disable_user_query, (user_id,), fetch=False)
+
+		disable_sessions_query = """
+            UPDATE relation_user_session
+            SET enabled = 0
+            WHERE user_id = %s AND enabled = 1
+        """
+		Database.execute_query(disable_sessions_query, (user_id,), fetch=False)
+
+		# ── Audit log ──────────────────────────────────────────────────
+		audit_query = """
+            INSERT INTO virtual_user_audit (action_type, record_id, old_data, new_data, is_synced)
+            VALUES (%s, %s, %s, %s, %s)
+        """
+		Database.execute_query(
+			audit_query,
+			[
+				"DELETE",
+				virtual_id,                                       # record_id → the virtual_user's PK
+				json.dumps(old_data, default=str) if old_data else None,  # old_data → state before deletion
+				None,                                              # new_data → nothing after deletion
+				0
+			],
+			fetch=False
+		)
+
 		return jsonify({
-			"Message":"Virtuel_user deleted "
-		}),200
+			"success": True,
+			"message": "Student and all related sessions have been deleted successfully"
+		}), 200
 
 	except Exception as e:
 		return jsonify({
-			"Message":f"Error : {e} coming from delete virtuel user"
-		}),500
+			"Message": f"Error : {e} coming from delete virtuel user"
+		}), 500
 
 
 # =============================================
@@ -304,6 +353,7 @@ def create_virtuel_user(account_id):
 		}), 200
 
 	except Exception as e:
+		print(e)
 		return jsonify({
 			"Message": f"Error: {e} coming from server"
 		}), 500

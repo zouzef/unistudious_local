@@ -26,6 +26,10 @@ def create_app():
     from app.payments.routes import payment_bp
     from app.slc.routes import slc_bp
     from app.configuration.routes import configuration_bp
+    from app.VirtualUser.routes import Virtual_user
+    from app.account.routes import account_bp
+    from app.manager.routes import manager_bp
+    from app.teacher.routes import teacher_bp
 
 
     # VIEWS imports
@@ -48,7 +52,10 @@ def create_app():
     app.register_blueprint(payment_bp)
     app.register_blueprint(slc_bp)
     app.register_blueprint(configuration_bp)
-
+    app.register_blueprint(Virtual_user)
+    app.register_blueprint(account_bp)
+    app.register_blueprint(manager_bp)
+    app.register_blueprint(teacher_bp)
     # view Blueprint
     app.register_blueprint(user_views_bp)
     app.register_blueprint(session_view_bp)
