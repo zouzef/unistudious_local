@@ -43,8 +43,6 @@ def insert_attendance_audit(attendance_id, userId, calendarId, groupId,
 def add_student_api():
     try:
         data = request.get_json()
-        print("Incoming request:", data)
-
         # Extract and validate required fields
         userId = data.get('userId')
         calendarId = data.get('calendarId')

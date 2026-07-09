@@ -573,18 +573,19 @@ document.getElementById('associateVirtualUserForm').addEventListener('submit', f
         return;
     }
 
+    // ✅ Alert showing the selected virtual id and real user id
+    alert(`Virtual ID: ${virtualId}\nSelected Real User ID: ${realUserId}`);
+
     const payload = {
         id: virtualId,
-        virtualUserId: virtualUserId,
-        realUserId: realUserId,
-        accountId: state.accountId
+        realUserId: realUserId
     };
 
     const saveBtn = document.querySelector('#associateVirtualUserModal .btn-outline-primary[form="associateVirtualUserForm"]');
     saveBtn.disabled = true;
     saveBtn.textContent = 'Saving...';
 
-    fetch(`/api/associate-virtual-user`, {
+    fetch(`/api/associate_virtueluser/${state.accountId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -595,7 +596,7 @@ document.getElementById('associateVirtualUserForm').addEventListener('submit', f
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: data.Message || 'Failed to associate student.',
+                text: data.Message || data.message || 'Failed to associate student.',
                 confirmButtonColor: '#4c4b9e'
             });
             return;
@@ -606,7 +607,7 @@ document.getElementById('associateVirtualUserForm').addEventListener('submit', f
         Swal.fire({
             icon: 'success',
             title: 'Associated!',
-            text: data.Message || 'Student associated successfully.',
+            text: data.Message || data.message || 'Student associated successfully.',
             confirmButtonColor: '#4c4b9e'
         }).then(() => {
             window.location.reload();

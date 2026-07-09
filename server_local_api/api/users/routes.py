@@ -21,7 +21,7 @@ from config import Config
 from core.database import Database
 from core.middleware import token_required
 from core.checks import *
-# ========================================
+from core.association_service import associate_virtual_user as accociate_virtual_user_service# ========================================
 # GROUP/USER MANAGEMENT ENDPOINTS
 # ========================================
 
@@ -1117,11 +1117,15 @@ def create_student(account_id):
 def get_student_with_session():
 	try:
 		query_get_student = """
-			SELECT DISTINCT u.id,u.username,u.email
-			FROM user u, relation_user_session rus,session s
-			WHERE u.id = rus.user_id AND 
-			u.enabled = 1 AND 
-			rus.enabled = 1 AND rus.session_id = s.id
+			SELECT DISTINCT u.id, u.full_name AS username, u.email
+			FROM user u, relation_user_session rus, session s
+			WHERE u.id = rus.user_id 
+			  AND u.enabled = 1 
+			  AND u.isvirtual = 0
+			  AND JSON_CONTAINS(u.roles, '"ROLE_USER"')
+			  AND rus.enabled = 1 
+			  AND rus.session_id = s.id
+			ORDER BY u.created_at DESC 
 		"""
 		result = Database.execute_query(query_get_student, fetch=True)
 
@@ -1139,37 +1143,26 @@ def get_student_with_session():
 @users_bp.route('/associate-virtual-user/<int:account_id>', methods=['POST'])
 def associate_virtual_user(account_id):
 	try:
-		data = request.get_json(silent=True) or request.form
+		data = request.get_json(silent=True)
 		virtual_id = data.get('id')
 		real_user_id = data.get('realUserId')
 
 		if not virtual_id or not real_user_id:
 			return jsonify({
-				"Success": False,
-				"Message": "Virtual or real user not found."
-			}),400
+				"success": False,
+				"message": "Virtual or real user not found."
+			}), 400
 
-		query_get_real_user = """
-			SELECT user_id 
-			FROM virtual_user
-			WHERE id = %s AND enabled = 1 AND account_id = %s
-		"""
-		values =(virtual_id,account_id)
-		real_user = Database.execute_query(query_get_real_user, values, fetch=True)[0]['user_id']
-		print(real_user)
-		if not real_user:
-			return jsonify({
-				"Message":f"There is no real_user for this virtual_user"
-			}),404
-
-
-
-		return jsonify(
-			real_user
-		),200
-
+		result = accociate_virtual_user_service(account_id, virtual_id, real_user_id)
+		return jsonify(result), result.get("status_code", 200)
 
 	except Exception as e:
 		return jsonify({
-			"Message":f"Error: {e} coming from server"
-		}),500
+			"success": False,
+			"message": f"Error: {e} coming from server"
+		}), 500
+
+	except Exception as e:
+		return jsonify({
+          "Message": f"Error: {e} coming from server"
+       }), 500

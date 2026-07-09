@@ -117,3 +117,55 @@ class Database:
 	def delete(query, params=None):
 		"""Execute DELETE and return number of affected rows"""
 		return Database.execute_query(query, params, fetch=False)
+
+	@staticmethod
+	def execute_transaction(queries):
+		"""
+		Execute multiple queries in a single transaction.
+		- queries: list of (query, params) tuples
+		- Commits once at the end if all succeed
+		- Rolls back everything if any query fails
+		- Returns a list of results, one per query:
+			- for SELECT: list of rows
+			- for INSERT/UPDATE/DELETE: lastrowid or rowcount
+		"""
+		pool = Database.get_pool()
+		connection = None
+		cursor = None
+
+		try:
+			connection = pool.get_connection()
+			cursor = connection.cursor(dictionary=True)
+
+			results = []
+			for query, params in queries:
+				cursor.execute(query, params or ())
+
+				if query.strip().upper().startswith("SELECT"):
+					results.append(cursor.fetchall())
+				else:
+					if cursor.lastrowid > 0:
+						results.append(cursor.lastrowid)
+					else:
+						results.append(cursor.rowcount)
+
+			connection.commit()
+			return results
+
+		except Error as e:
+			print(f"❌ Transaction error: {e}")
+			if connection:
+				connection.rollback()
+			raise e
+
+		finally:
+			if cursor:
+				try:
+					cursor.close()
+				except Exception as e:
+					print(f"Error closing cursor: {e}")
+			if connection:
+				try:
+					connection.close()
+				except Exception as e:
+					print(f"Error closing connection: {e}")

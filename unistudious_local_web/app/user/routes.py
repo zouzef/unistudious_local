@@ -11,7 +11,8 @@ from app.user.service import (
     update_user,
     get_user_info_service,
     create_student_service,
-    get_student_with_session_service
+    get_student_with_session_service,
+    associate_virtuel_user_service
 )
 
 user_bp = Blueprint('user', __name__)
@@ -101,7 +102,7 @@ def create_student(account_id):
 @user_bp.route('/api/get_students_with_sessions', methods=['GET'])
 def get_student_with_session():
     try:
-        success, response = get_student_with_session_service()  # <-- call it
+        success, response = get_student_with_session_service()
         if success:
             return jsonify(response), 200  # <-- fixed typo, response is just data (a list), not a Flask response
         else:
@@ -110,4 +111,34 @@ def get_student_with_session():
         print(e)
         return jsonify({
             "Message": f"Error: {e} coming from backend"
+        }), 500
+
+# ── Associate VirtuelUser To User ──────────────────────────────────────────────────────────
+@user_bp.route('/api/associate_virtueluser/<int:account_id>', methods=['POST'])
+def associate_virtuel_user(account_id):
+    try:
+        data = request.get_json()
+        virtuel_id = data.get('id')
+        real_user_id = data.get('realUserId')
+
+        if not virtuel_id or not real_user_id:
+            return jsonify({
+                "success": False,
+                "message": "Virtuel or real user not found."
+            }), 400
+
+        success, response = associate_virtuel_user_service(account_id, data)
+
+        # response is a `requests.Response` (from calling the remote Symfony API),
+        # not a flask.Response — convert it manually
+        try:
+            body = response.json()
+        except ValueError:
+            body = {"message": response.text}
+
+        return jsonify(body), response.status_code
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
         }), 500

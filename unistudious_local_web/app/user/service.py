@@ -94,3 +94,15 @@ def get_student_with_session_service():
     except Exception as e:
         print(e)
         return False,None
+
+def associate_virtuel_user_service(account_id: int, data:dict) -> tuple:
+    url = f"{current_app.config['BASE_URL']}associate-virtual-user/{account_id}"
+    try:
+        response = requests.post(url, json=data,verify=False,timeout=10)
+        if response.status_code == 200:
+            return  True,response
+        else:
+            return False,response
+    except Exception as e:
+        print(f"Error: {e} coming from server")
+        return False,None
