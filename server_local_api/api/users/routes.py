@@ -840,7 +840,7 @@ def get_all_user(account_id):
 	try:
 		# --- Real users ---
 		base_real_query = """
-             SELECT DISTINCT u.id, u.full_name, u.phone, u.email, u.status, u.account_id
+             SELECT DISTINCT u.id,u.username , u.full_name, u.phone, u.email, u.status, u.account_id
              FROM user u
              JOIN relation_user_session rus ON rus.user_id = u.id AND rus.enabled = 1
              JOIN session s ON s.id = rus.session_id AND s.enabled = 1
@@ -1140,6 +1140,9 @@ def get_student_with_session():
 		}),500
 
 
+# =============================================
+# ENDPOINT 9: Associate virtuel user with user
+# =============================================
 @users_bp.route('/associate-virtual-user/<int:account_id>', methods=['POST'])
 def associate_virtual_user(account_id):
 	try:
@@ -1166,3 +1169,31 @@ def associate_virtual_user(account_id):
 		return jsonify({
           "Message": f"Error: {e} coming from server"
        }), 500
+
+
+# =============================================
+# ENDPOINT 10: Get All User
+# =============================================
+@users_bp.route('/get_all_real_user', methods=['GET'])
+def get_real_user():
+
+	try:
+		query_user = """
+			SELECT u.id, u.full_name, u.username, u.email
+			FROM user u
+			WHERE 
+			u.enabled = 1 
+			AND JSON_CONTAINS(u.roles, '"ROLE_USER"')
+			AND u.isvirtual = 0
+			ORDER BY u.created_at DESC
+		"""
+		result = Database.execute_query(query_user,fetch=True)
+		if result:
+			return jsonify(result),200
+		else:
+			return jsonify({"Message": "There is no user data"}),200
+
+	except Exception as e:
+		return jsonify({
+			"Message":f"Error: {e} coming from server"
+		}),500

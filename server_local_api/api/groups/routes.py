@@ -20,6 +20,7 @@ Group_bp = Blueprint('groups', __name__, url_prefix='/scl')
 @Group_bp.route('/get-group/<int:account_id>/<int:session_id>', methods=['GET'])
 def get_group(account_id, session_id):
 	try:
+		print("session_id \n \n \n \n \n ",session_id)
 		# Get groups with students in one query
 		query = """
                     SELECT 
@@ -46,6 +47,7 @@ def get_group(account_id, session_id):
                         AND g.account_id = %s 
                         AND g.enabled = 1 
                         AND g.special_group IS NULL
+                        AND r.enabled = 1
                     ORDER BY g.id, u.username
                     LIMIT 1000  -- Add reasonable limit
                 """

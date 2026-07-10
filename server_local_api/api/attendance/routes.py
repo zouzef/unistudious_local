@@ -809,6 +809,34 @@ def update_attendance_status(id_attendance):
             WHERE id = %s
         """, (status, mac_address, id_attendance), fetch=False)
 
+        calander_id = Database.execute_query("""SELECT calander_id FROM attendance WHERE id = %s AND enabled = 1 """,(id_attendance,),fetch=True)[0]['calander_id']
+        if calander_id:
+            attendance = Database.execute_query(
+                """SELECT user_id, account_id, session_id FROM attendance WHERE id = %s AND enabled = 1""",
+                (id_attendance,),
+                fetch=True
+            )
+
+            if not attendance:
+                raise ValueError(f"No enabled attendance found for id {id_attendance}")
+
+            user_id = attendance[0]['user_id']
+            account_id = attendance[0]['account_id']
+            session_id = attendance[0]['session_id']
+            if compltetion_tag_id:
+                query ="""
+                    INSERT INTO completion_tag_user 
+                        (user_id, tag_id, session_id, account_id, group_calander_id)
+                    VALUE (%s, %s, %s, %s, %s)
+                """
+                values = (user_id, compltetion_tag_id, session_id, account_id, calander_id)
+                result = Database.execute_query(query, values, fetch=False)
+
+        else:
+            return jsonify({
+                "Message":f"Error coming from updating completion_tag_user"
+            }),400
+
         log_attendance_audit(
             action_type   = "UPDATE",
             old_data      = old_data,

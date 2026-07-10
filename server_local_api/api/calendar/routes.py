@@ -17,6 +17,8 @@ import requests
 import json
 import jwt
 from util.audit import log_audit
+from datetime import datetime, timedelta
+
 
 # Create blueprint
 calendar_bp = Blueprint('calendar', __name__, url_prefix='/scl')
@@ -433,18 +435,312 @@ def get_name_group(id):
         return None
 
 
-# Create calendar api
-@calendar_bp.route('/create_calender',methods=['POST'])
+def create_completion_tag(data, calender_id):
+    try:
+        completion_tags = data.get('completionTags')
+        account_id = data.get('account_id')
+
+        # Nothing to insert if no tags were selected
+        if not completion_tags:
+            return True
+
+        query = """
+            INSERT INTO relation_completion_tag
+                (tag_id, account_id, calander_group_id)
+            VALUES (%s, %s, %s)
+        """
+
+        for tag_id in completion_tags:
+            values = (tag_id, account_id, calender_id)
+            Database.execute_query(query, values, fetch=False)
+
+        return True
+
+    except Exception as e:
+        print(f"Error from Server (create_completion_tag): {e}")
+        return False
+
+def _combine_date_time(base_dt_str, new_date):
+    """
+    Takes an original 'YYYY-MM-DD HH:MM:SS' string and a new date, and
+    returns a new 'YYYY-MM-DD HH:MM:SS' string on new_date but keeping the
+    same time-of-day as base_dt_str. Used to shift start_time/end_time onto
+    each recurrence date while preserving the hour/minute the user picked.
+    """
+    base_dt = datetime.strptime(base_dt_str, '%Y-%m-%d %H:%M:%S')
+    return datetime.combine(new_date, base_dt.time()).strftime('%Y-%m-%d %H:%M:%S')
+
+def _build_occurrence_dates(start_dt, duplicate_type, end_date):
+    """
+    Returns the list of date objects on which a calendar row should be
+    created, given the original start date, the duplicate/recurrence type,
+    and the end date of the interval (inclusive).
+
+    - 'none' / falsy / missing end_date -> just the original start date.
+    - 'daily'    -> every day from start_dt.date() to end_date inclusive.
+    - 'weekly'   -> every 7 days from start_dt.date() to end_date inclusive.
+    - 'biweekly' -> every 14 days from start_dt.date() to end_date inclusive.
+    """
+    occurrence_dates = [start_dt.date()]
+
+    step_days_by_type = {
+        'daily': 1,
+        'weekly': 7,
+        'biweekly': 14,
+    }
+
+    step_days = step_days_by_type.get(duplicate_type)
+    if step_days and end_date:
+        current_date = start_dt.date() + timedelta(days=step_days)
+        while current_date <= end_date:
+            occurrence_dates.append(current_date)
+            current_date += timedelta(days=step_days)
+
+    return occurrence_dates
+
+def _create_single_calendar_row(
+    session_id, account_id, local_id, group_id, room_id, teacher_id,
+    subject_id, description, start_time, end_time, title, type_val,
+    start_date, data
+):
+    """
+    Runs the conflict checks + insert + audit + completion tags + attendance
+    creation for exactly one calendar row (one occurrence). Returns a dict:
+      {"ok": True, "calander_id": ..., "ref": ..., "color": ..., "attendance_created": ...}
+    or
+      {"ok": False, "Message": ..., "Error": ..., "status": <http status>}
+    on conflict / failure, so the caller can decide whether to keep going or
+    stop the recurrence loop.
+    """
+    # Conflict checks — same as the original single-entry logic, run per
+    # occurrence date so a recurring series can't double-book a room/group/
+    # teacher on any one of its dates.
+    if isRoomReserved(room_id, start_date, start_time, end_time):
+        return {
+            "ok": False,
+            "Message": f"Room already reserved on {start_date}!",
+            "Error": "Room-Conflict",
+            "status": 402
+        }
+
+    if isGroupTypeConflit(group_id, start_date, start_time, end_time):
+        return {
+            "ok": False,
+            "Message": f"Group not available on {start_date}",
+            "Error": "Group-Conflict",
+            "status": 402
+        }
+
+    if isSubjectTeacherConflit(teacher_id, start_date, start_time, end_time):
+        return {
+            "ok": False,
+            "Message": f"Teacher not available on {start_date}",
+            "Error": "Teacher-Conflict",
+            "status": 402
+        }
+
+    # Generate unique color
+    color = generate_random_color()
+    attempts = 0
+    max_attempts = 50
+    while check_color(color) and attempts < max_attempts:
+        color = generate_random_color()
+        attempts += 1
+
+    if attempts >= max_attempts:
+        return {
+            "ok": False,
+            "Message": "Could not find unique color",
+            "Error": "Warning: Could not find unique color after 50 attempts",
+            "status": 402
+        }
+
+    # Generate additional fields
+    status = 1
+    ref = generate_unique_ref(group_id, session_id, local_id, account_id)
+    enabled = 1
+    create_time = datetime.now()
+    timestamp = create_time
+    teacher_present = 0
+    force_teacher_present = 0
+
+    query = """
+        INSERT INTO relation_calander_group_session
+        (session_id, account_id, local_id, group_session_id, room_id, teacher_id, subject_id, color, status, description, start_time, end_time, ref, refresh, title, enabled, created_at, timestamp, updated_at, type, teacher_present, force_teacher_present, slc_use)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """
+
+    values = (
+        session_id,
+        account_id,
+        local_id,
+        group_id,
+        room_id,
+        teacher_id,
+        subject_id,
+        color,
+        status,
+        description,
+        start_time,
+        end_time,
+        ref,
+        0,
+        title,
+        enabled,
+        create_time,
+        timestamp,
+        None,
+        type_val,
+        teacher_present,
+        force_teacher_present,
+        1
+    )
+
+    calander_id = Database.execute_query(query, values, fetch=False)
+    attendance_created = 0
+
+    if calander_id:
+        # Audit: log the new calendar entry
+        new_data = {
+            "session_id": session_id,
+            "account_id": account_id,
+            "local_id": local_id,
+            "group_id": group_id,
+            "room_id": room_id,
+            "teacher_id": teacher_id,
+            "subject_id": subject_id,
+            "color": color,
+            "status": status,
+            "description": description,
+            "start_time": start_time,
+            "end_time": end_time,
+            "ref": ref,
+            "title": title,
+            "type": type_val,
+            "created_at": create_time.isoformat(),
+        }
+        audit_query = """
+            INSERT INTO relation_calander_group_audit
+                (action_type, old_data, new_data, is_synced, id_calander)
+            VALUES (%s, %s, %s, %s, %s)
+        """
+        Database.execute_query(audit_query, (
+            "INSERT",
+            None,
+            json.dumps(new_data),
+            0,
+            calander_id
+        ), fetch=False)
+
+        # Completion tags for this occurrence
+        create_completion_tag(data, calander_id)
+
+        # Attendance rows for every user enrolled in this group
+        query = """
+            SELECT DISTINCT user_id
+            FROM relation_user_session
+            WHERE relation_group_local_session_id = %s
+        """
+        user_result = Database.execute_query(query, (group_id,), fetch=True)
+        user_ids = [row['user_id'] for row in user_result]
+
+        for user_id in user_ids:
+            attendance_query = """
+                INSERT INTO attendance 
+                (
+                    user_id,
+                    session_id,
+                    account_id,
+                    group_session_id,
+                    calander_id,
+                    is_present,
+                    day,
+                    note,
+                    is_editable,
+                    enabled,
+                    created_at,
+                    timestamp,
+                    slc_edit
+                )
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """
+            attendance_values = (
+                user_id,
+                session_id,
+                account_id,
+                group_id,  # group_session_id
+                calander_id,
+                0,  # is_present: 0 = absent by default
+                start_date,  # day: extracted earlier from start_time
+                None,  # note: empty by default
+                1,  # is_editable: 1 = editable
+                1,  # enabled
+                create_time,
+                timestamp,
+                1  # slc_edit
+            )
+            attendance_id = Database.execute_query(attendance_query, attendance_values, fetch=False)
+            if attendance_id:
+                attendance_created += 1
+                audit_query = """
+                    INSERT INTO attendance_audit(
+                        action_type,
+                        old_data,
+                        new_data,
+                        is_synced,
+                        id_attendance,
+                        id_calander
+                    )
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                """
+                attendance_new_data = {
+                    "user_id": user_id,
+                    "session_id": session_id,
+                    "account_id": account_id,
+                    "group_session_id": group_id,
+                    "calander_id": calander_id,
+                    "is_present": 0,
+                    # FIX: start_date is a date object (occurrence_date from
+                    # the recurrence loop) — json.dumps can't serialize it
+                    # directly, causing "Object of type date is not JSON
+                    # serializable". Convert to string only for this audit
+                    # payload; the actual DB insert above still uses the raw
+                    # date object in attendance_values, which is fine.
+                    "day": start_date.isoformat() if hasattr(start_date, 'isoformat') else start_date,
+                    "note": None,
+                    "is_editable": 1,
+                    "enabled": 1
+                }
+                audit_values = (
+                    "INSERT_attendance",
+                    None,
+                    json.dumps(attendance_new_data),
+                    0,
+                    attendance_id,
+                    calander_id
+                )
+                Database.execute_query(audit_query, audit_values, fetch=False)
+
+    return {
+        "ok": True,
+        "calander_id": calander_id,
+        "ref": ref,
+        "color": color,
+        "attendance_created": attendance_created
+    }
+
+@calendar_bp.route('/create_calender', methods=['POST'])
 def create_calander():
     try:
-
         data = request.get_json() or {}
+
         if not data:
             return jsonify({"Message": "No data from the request"}), 400
+
         # Required fields
         required_keys = [
             'session_id', 'account_id', 'local_id', 'group_id',
-            'room_id', 'teacher_id', 'subject_id', 'description',
+            'room_id', 'teacher_id', 'subject_id',
             'start_time', 'end_time', 'title', 'type'
         ]
 
@@ -479,209 +775,85 @@ def create_calander():
         room_id = data['room_id']
         teacher_id = data['teacher_id']
         subject_id = data['subject_id']
-        description = data['description']
-        start_time = data['start_time']
-        end_time = data['end_time']
+        description = data.get('description') or ''
+        start_time_str = data['start_time']
+        end_time_str = data['end_time']
         title = get_name_group(group_id) or "Unknown Group"
         type_val = data['type']
 
-        start_date = start_time
+        # FIX: recurrence support. duplicate_type comes from the JS
+        # 'duplicate' field: 'none' | 'daily' | 'weekly' | 'biweekly' (or
+        # missing/empty, treated the same as 'none'). endDate is only
+        # required when duplicate_type isn't 'none'.
+        duplicate_type = (data.get('duplicate') or 'none').strip().lower()
+        end_date_str = data.get('endDate')
 
-        # Conflict checks
-        if isRoomReserved(room_id, start_date, start_time, end_time):
-            return jsonify({
-                "Message": "Room already reserved!",
-                "Error": "Room-Conflict",
-            }), 402
+        start_dt = datetime.strptime(start_time_str, '%Y-%m-%d %H:%M:%S')
 
-        if isGroupTypeConflit(group_id, start_date, start_time, end_time):
-            return jsonify({
-                "Message": "Group not available in this time",
-                "Error": "Group-Conflict"
-            }), 402
+        if duplicate_type in ('daily', 'weekly', 'biweekly'):
+            if not end_date_str:
+                return jsonify({
+                    "Message": "endDate is required when duplicate is not 'none'",
+                    "Error": "Missing-EndDate"
+                }), 400
+            try:
+                end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+            except ValueError:
+                return jsonify({
+                    "Message": "endDate must be in YYYY-MM-DD format",
+                    "Error": "Invalid-EndDate"
+                }), 400
 
-        if isSubjectTeacherConflit(teacher_id, start_date, start_time, end_time):
-            return jsonify({
-                "Message": "Teacher not available in this time",
-                "Error": "Teacher-Conflict"
-            }), 402
+            if end_date < start_dt.date():
+                return jsonify({
+                    "Message": "endDate cannot be before the event's start date",
+                    "Error": "Invalid-EndDate"
+                }), 400
+        else:
+            end_date = None
 
-        # Generate unique color
-        color = generate_random_color()
-        attempts = 0
-        max_attempts = 50
-        while check_color(color) and attempts < max_attempts:
-            color = generate_random_color()
-            attempts += 1
+        occurrence_dates = _build_occurrence_dates(start_dt, duplicate_type, end_date)
 
-        if attempts >= max_attempts:
-            return jsonify({
-                "Message": "Could not find unique color",
-                "Error": "Warning: Could not find unique color after 50 attempts"
-            }), 402
+        created_entries = []
+        total_attendance_created = 0
 
-        # Generate additional fields
-        status = 1
-        ref = generate_unique_ref(group_id, session_id, local_id, account_id)
-        enabled = 1
-        create_time = datetime.now()
-        timestamp = create_time
-        teacher_present = 0
-        force_teacher_present = 0
+        for occurrence_date in occurrence_dates:
+            occurrence_start_time = _combine_date_time(start_time_str, occurrence_date)
+            occurrence_end_time = _combine_date_time(end_time_str, occurrence_date)
 
-        query = """
-            INSERT INTO relation_calander_group_session
-            (session_id, account_id, local_id, group_session_id, room_id, teacher_id, subject_id, color, status, description, start_time, end_time, ref, refresh, title, enabled, created_at, timestamp, updated_at, type, teacher_present, force_teacher_present, slc_use)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """
+            result = _create_single_calendar_row(
+                session_id, account_id, local_id, group_id, room_id,
+                teacher_id, subject_id, description,
+                occurrence_start_time, occurrence_end_time, title, type_val,
+                occurrence_date, data
+            )
 
+            if not result["ok"]:
+                # Stop at the first conflict/failure. Anything already
+                # created earlier in the loop stays created (no automatic
+                # rollback here — see note below if you need all-or-nothing).
+                return jsonify({
+                    "Message": result["Message"],
+                    "Error": result["Error"],
+                    "occurrence_date": occurrence_date.isoformat(),
+                    "created_before_failure": created_entries
+                }), result["status"]
 
-        values = (
-            session_id,
-            account_id,
-            local_id,
-            group_id,
-            room_id,
-            teacher_id,
-            subject_id,
-            color,
-            status,
-            description,
-            start_time,
-            end_time,
-            ref,
-            0,
-            title,
-            enabled,
-            create_time,
-            timestamp,
-            None,
-            type_val,
-            teacher_present,
-            force_teacher_present,
-            1
-        )
-
-        # Execute insert query using Database helper
-        calander_id = Database.execute_query(query, values, fetch=False)
-        if calander_id:
-            # Audit: log the new calendar entry
-            new_data = {
-                "session_id": session_id,
-                "account_id": account_id,
-                "local_id": local_id,
-                "group_id": group_id,
-                "room_id": room_id,
-                "teacher_id": teacher_id,
-                "subject_id": subject_id,
-                "color": color,
-                "status": status,
-                "description": description,
-                "start_time": start_time,
-                "end_time": end_time,
-                "ref": ref,
-                "title": title,
-                "type": type_val,
-                "created_at": create_time.isoformat(),
-            }
-            audit_query = """
-                INSERT INTO relation_calander_group_audit
-                    (action_type, old_data, new_data, is_synced, id_calander)
-                VALUES (%s, %s, %s, %s, %s)
-            """
-            Database.execute_query(audit_query, (
-                "INSERT",
-                None,
-                json.dumps(new_data),
-                0,
-                calander_id
-            ), fetch=False)
-            query = """
-                SELECT DISTINCT user_id
-                FROM relation_user_session
-                WHERE relation_group_local_session_id = %s
-            """
-            values = (group_id,)
-            result = Database.execute_query(query, values, fetch=True)
-            user_ids = [row['user_id'] for row in result]
-
-            if user_ids:
-                for user_id in user_ids:
-                    attendance_query = """
-                        INSERT INTO attendance 
-                        (
-                            user_id,
-                            session_id,
-                            account_id,
-                            group_session_id,
-                            calander_id,
-                            is_present,
-                            day,
-                            note,
-                            is_editable,
-                            enabled,
-                            created_at,
-                            timestamp,
-                            slc_edit
-                        )
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                    """
-                    attendance_values = (
-                        user_id,
-                        session_id,
-                        account_id,
-                        group_id,  # group_session_id
-                        calander_id,
-                        0,  # is_present: 0 = absent by default
-                        start_date,  # day: extracted earlier from start_time
-                        None,  # note: empty by default
-                        1,  # is_editable: 1 = editable
-                        1,  # enabled
-                        create_time,
-                        timestamp,
-                        1  # slc_edit
-                    )
-                    attendance_id = Database.execute_query(attendance_query, attendance_values, fetch=False)
-                    if attendance_id:
-                        audit_query = """
-                            INSERT INTO attendance_audit(
-                                action_type,
-                                old_data,
-                                new_data,
-                                is_synced,
-                                id_attendance,
-                                id_calander
-                            )
-                            VALUES (%s, %s, %s, %s, %s, %s)
-                        """
-                        new_data = {
-                            "user_id": user_id,
-                            "session_id": session_id,
-                            "account_id": account_id,
-                            "group_session_id": group_id,
-                            "calander_id":calander_id,
-                            "is_present":0,
-                            "day": start_date,
-                            "note": None,
-                            "is_editable": 1,
-                            "enabled": 1
-                        }
-                        audit_values = (
-                            "INSERT_attendance",
-                            None,
-                            json.dumps(new_data),
-                            0,
-                            attendance_id,
-                            calander_id
-                        )
-                        Database.execute_query(audit_query,audit_values,fetch=False)
+            created_entries.append({
+                "calander_id": result["calander_id"],
+                "date": occurrence_date.isoformat(),
+                "ref": result["ref"],
+                "color": result["color"],
+                "attendance_created": result["attendance_created"]
+            })
+            total_attendance_created += result["attendance_created"]
 
         return jsonify({
-            "Message": "Calendar entry created successfully",
-            "calander_id": calander_id,
-            "attendance_created": len(user_ids) if user_ids else 0,
-            "ref": ref,
-            "color": color
+            "Message": "Calendar entry created successfully"
+            if len(created_entries) == 1
+            else f"{len(created_entries)} calendar entries created successfully",
+            "entries": created_entries,
+            "attendance_created": total_attendance_created
         }), 200
 
     except Exception as e:
@@ -846,10 +1018,6 @@ def check_subject(subject_id):
 
     except Exception :
         return False
-
-
-
-
 
 
 # ================================ NOTIFICATION PART ================================
