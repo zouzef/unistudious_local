@@ -106,3 +106,13 @@ def associate_virtuel_user_service(account_id: int, data:dict) -> tuple:
     except Exception as e:
         print(f"Error: {e} coming from server")
         return False,None
+
+def get_all_real_user_service() -> tuple:
+    url= f"{current_app.config['BASE_URL']}get_all_real_user"
+    try:
+        response = requests.get(url, verify=False, timeout=10)
+
+        return response.status_code ==200, response
+    except Exception as e:
+        print(f"Error: {e} in service real_user")
+        return False,None

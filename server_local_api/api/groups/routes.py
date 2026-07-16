@@ -6,6 +6,10 @@ from datetime import datetime
 from config import Config
 from core.database import Database
 from core.middleware import token_required
+from core.checks import *
+from util.audit import log_audit
+
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 # ========================================
@@ -20,36 +24,34 @@ Group_bp = Blueprint('groups', __name__, url_prefix='/scl')
 @Group_bp.route('/get-group/<int:account_id>/<int:session_id>', methods=['GET'])
 def get_group(account_id, session_id):
 	try:
-		print("session_id \n \n \n \n \n ",session_id)
 		# Get groups with students in one query
 		query = """
-                    SELECT 
-                        g.id,
-                        g.session_id,
-                        g.local_id,
-                        g.name,
-                        g.capacity,
-                        g.status,
-                        u.id as user_id,
-                        u.username,
-                        u.full_name,
-                        u.email,
-                        u.phone,
-                        r.id as relation_id
-                    FROM relation_group_local_session g
-                    LEFT JOIN relation_user_session r 
-                        ON r.relation_group_local_session_id = g.id 
-                        AND r.enabled = 1
-                    LEFT JOIN user u 
-                        ON u.id = r.user_id 
-                        AND u.enabled = 1
-                    WHERE g.session_id = %s 
-                        AND g.account_id = %s 
-                        AND g.enabled = 1 
-                        AND g.special_group IS NULL
-                        AND r.enabled = 1
-                    ORDER BY g.id, u.username
-                    LIMIT 1000  -- Add reasonable limit
+			SELECT 
+				g.id,
+				g.session_id,
+				g.local_id,
+				g.name,
+				g.capacity,
+				g.status,
+				u.id as user_id,
+				u.username,
+				u.full_name,
+				u.email,
+				u.phone,
+				r.id as relation_id
+			FROM relation_group_local_session g
+			LEFT JOIN relation_user_session r 
+				ON r.relation_group_local_session_id = g.id 
+				AND r.enabled = 1
+			LEFT JOIN user u 
+				ON u.id = r.user_id 
+				AND u.enabled = 1
+			WHERE g.session_id = %s 
+				AND g.account_id = %s 
+				AND g.enabled = 1 
+				AND g.special_group IS NULL
+			ORDER BY g.id, u.username
+			LIMIT 1000
                 """
 		results = Database.execute_query(query, (session_id, account_id))
 
@@ -108,14 +110,10 @@ def affect_user_group_endpoint(session_id):
 	try:
 		# Get JSON data from request
 		data = request.get_json()
-		print(f"Received data: {data}")
-		print(f"Session ID: {session_id}")
 
 		# Extract specific fields
 		user_id = data.get('user_id')
 		group_id = data.get('group_id')
-
-		print(f"User ID: {user_id}, Group ID: {group_id}")
 
 		# Validate
 		if not user_id or not group_id:
@@ -131,13 +129,10 @@ def affect_user_group_endpoint(session_id):
 		result = Database.execute_query(query, (user_id,))
 
 		if not result or result[0]['nbr'] == 0:
-			print(f"User {user_id} not found")
 			return jsonify({
 				"status": "error",
 				"message": "User not found"
 			}), 404
-
-		print(f"User {user_id} exists")
 
 		# Check if group exists
 		query = """
@@ -147,13 +142,11 @@ def affect_user_group_endpoint(session_id):
 		result = Database.execute_query(query, (group_id,))
 
 		if not result or result[0]['nbr'] == 0:
-			print(f"Group {group_id} not found")
 			return jsonify({
 				"status": "error",
 				"message": "Group not found"
 			}), 404
 
-		print(f"Group {group_id} exists")
 
 		# Update user's group assignment
 		query = """
@@ -168,7 +161,6 @@ def affect_user_group_endpoint(session_id):
         """
 		Database.execute_query(query, (group_id, user_id, session_id), fetch=False)
 
-		print(f"User assigned to group successfully")
 		return jsonify({
 			"status": "success",
 			"message": f"User assigned to group successfully",
@@ -185,6 +177,77 @@ def affect_user_group_endpoint(session_id):
 			"status": "error",
 			"message": f"Error: {str(e)}"
 		}), 500
+
+
+# ========================================
+# ENDPOINT3 : Disaffect user group
+# ========================================
+@Group_bp.route('/disaffect_user_group/<int:session_id>', methods=['POST'])
+def disaffect_user_group(session_id):
+    try:
+        if not session_exists(session_id):
+            return jsonify({"Message": "There is not session with this id"}), 404
+
+        data = request.get_json(silent=True)
+        if not data:
+            return jsonify({"Message": "Invalid or missing JSON body"}), 400
+
+        group_id = data.get('group_id')
+        user_id = data.get('user_id')
+        if not group_id or not user_id:
+            return jsonify({"Message": "group_id or user_id are required"}), 400
+
+        # equivalent of $doctrine->getRepository(User::class)->find($userId)
+        user_query = "SELECT * FROM user WHERE id = %s"
+        user = Database.execute_query(user_query, (user_id,), fetch=True)
+
+        # equivalent of findOneBy(['id' => $groupId, 'account' => $account])
+        # (dropped the account scoping since you said skip the admin/role logic)
+        group_query = """
+            SELECT * FROM relation_group_local_session
+            WHERE id = %s AND session_id = %s
+        """
+        group = Database.execute_query(group_query, (group_id, session_id), fetch=True)
+
+        if not user or not group:
+            return jsonify({"Message": "User or Group not found"}), 404
+
+        # equivalent of findOneBy(['user' => ..., 'relationGroupLocalSession' => ..., 'enabled' => 1])
+        relation_query = """
+            SELECT * FROM relation_user_session
+            WHERE user_id = %s AND
+                  session_id = %s AND
+                  relation_group_local_session_id = %s AND
+                  enabled = 1
+        """
+        relation = Database.execute_query(
+            relation_query, (user_id, session_id, group_id), fetch=True
+        )
+
+        if not relation:
+            return jsonify({"Message": "User is not part of this group"}), 404
+
+        # equivalent of $relation->setRelationGroupLocalSession(null); flush();
+        update_query = """
+            UPDATE relation_user_session
+            SET relation_group_local_session_id = NULL
+            WHERE user_id = %s AND
+                  session_id = %s AND
+                  relation_group_local_session_id = %s AND
+                  enabled = 1
+        """
+        Database.execute_query(
+            update_query, (user_id, session_id, group_id), fetch=False
+        )
+
+        return jsonify({"Message": "User removed from group successfully."}), 200
+
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "status": False,
+            "Message": f"Error deleting group user: {e}"
+        }), 500
 
 
 # =============================================
@@ -245,7 +308,6 @@ def get_user_not_affected(session_id, account_id):
 		# Convert to list
 		students = list(users.values())
 
-		print(f"Users not affected to groups: {students}")
 
 		return jsonify({"students": students}), 200
 
@@ -260,9 +322,20 @@ def get_user_not_affected(session_id, account_id):
 # =============================================
 # ENDPOINT 4: Delete group
 # =============================================
+from util.audit import log_audit
+
 @Group_bp.route('/delete-group/<int:group_id>', methods=['POST'])
 def delete_group(group_id):
 	try:
+		# Fetch old data before disabling, for the audit log
+		old_query = "SELECT * FROM relation_group_local_session WHERE id = %s"
+		old_result = Database.execute_query(old_query, (group_id,), fetch=True)
+
+		if not old_result:
+			return jsonify({"Message": "Group not found"}), 404
+
+		old_data = old_result[0] if isinstance(old_result, list) else old_result
+
 		print(group_id)
 		# Disable the group
 		query = """ 
@@ -271,7 +344,7 @@ def delete_group(group_id):
             WHERE id = %s     
         """
 		values = (group_id,)
-		result = Database.execute_query(query, values)
+		result = Database.execute_query(query, values,fetch=False)
 		# Check if any rows were affected
 		if result == 0 or (isinstance(result, dict) and result.get('rowcount', 0) == 0):
 			return jsonify({"Message": "Group not found"}), 404
@@ -284,12 +357,16 @@ def delete_group(group_id):
         """
 		Database.execute_query(query2, values, fetch=False)
 
+		# Log the disable action to the audit table
+		new_data = dict(old_data)
+		new_data['enabled'] = 0
+		log_audit("relation_group_local_session_audit", "DELETE", old_data=old_data, new_data=new_data)
+
 		return jsonify({"Message": "Group deleted successfully"}), 200
 
 	except Exception as e:
 		print(f"Error: {e} coming from delete group")
 		return jsonify({"Message": f"Error: {str(e)}"}), 500
-
 
 # =============================================
 # ENDPOINT 5: Create group
@@ -299,13 +376,11 @@ def create_group(session_id):
 	try:
 		data = request.get_json()
 
-		# Validate required fields
 		if (not data.get('group_name') or not data.get('capacity')
 				or not data.get('subject_id') or not data.get('teacher_id')
 				or not data.get('account_id') or not data.get('local_id')):
 			return jsonify({"Message": "Missing required fields"}), 400
 
-		# Extract data
 		local_id = data['local_id']
 		account_id = data['account_id']
 		name = data['group_name']
@@ -314,13 +389,11 @@ def create_group(session_id):
 		teacher_id = data['teacher_id']
 		status = 1
 		enabled = 1
-		special_group = data.get('special_group', None)  # Will be None if not provided
+		special_group = data.get('special_group', None)
 		access_type = data.get('access_type', 0)
 
 		current_time = datetime.now()
-		print(f"Creating group at: {current_time}")
 
-		# Insert group
 		query = """
             INSERT INTO relation_group_local_session 
             (session_id, local_id, account_id, name, capacity, status, enabled, created_at, timestamp, special_group, access_type, slc_use)
@@ -330,7 +403,6 @@ def create_group(session_id):
 
 		result = Database.execute_query(query, values, fetch=False)
 
-		# Get the last inserted ID
 		if isinstance(result, int):
 			group_id = result
 		elif isinstance(result, dict) and 'lastrowid' in result:
@@ -340,7 +412,6 @@ def create_group(session_id):
 		else:
 			group_id = None
 
-		# Insert teacher-subject relationship
 		query2 = """
             INSERT INTO relation_teacher_to_subject_group
             (relation_group_local_session_id, subject_id, user_id, enabled, created_at, timestamp, slc_use)
@@ -349,6 +420,23 @@ def create_group(session_id):
 		values2 = (group_id, subject_id, teacher_id)
 		Database.execute_query(query2, values2, fetch=False)
 
+		# Log the new group to the audit table
+		new_data = {
+			"id": group_id,
+			"session_id": session_id,
+			"local_id": local_id,
+			"account_id": account_id,
+			"name": name,
+			"capacity": capacity,
+			"status": status,
+			"enabled": enabled,
+			"special_group": special_group,
+			"access_type": access_type,
+			"subject_id": subject_id,
+			"teacher_id": teacher_id
+		}
+		log_audit("relation_group_local_session_audit", "INSERT", new_data=new_data)
+
 		return jsonify({
 			"Message": "Group created successfully",
 			"group_id": group_id
@@ -356,4 +444,80 @@ def create_group(session_id):
 
 	except Exception as e:
 		print(f"Error: {e} coming from create-group")
+		return jsonify({"Message": f"Error: {str(e)}"}), 500
+
+
+@Group_bp.route('/update_group/<int:group_id>', methods=['POST'])
+def update_group(group_id):
+	try:
+		data = request.get_json()
+
+		if not data:
+			return jsonify({"Message": "No data provided"}), 400
+
+		# Fetch old data before updating, for the audit log
+		old_query = "SELECT * FROM relation_group_local_session WHERE id = %s AND enabled = 1"
+		old_result = Database.execute_query(old_query, (group_id,), fetch=True)
+
+		if not old_result:
+			return jsonify({"Message": "Group not found"}), 404
+
+		old_data = old_result[0] if isinstance(old_result, list) else old_result
+
+		group_name = data.get('group_name')
+		capacity = data.get('capacity')
+		relations = data.get('relations', [])
+
+		if not group_name or not capacity:
+			return jsonify({"Message": "group_name and capacity are required"}), 400
+
+		# Update the group
+		query = """
+            UPDATE relation_group_local_session
+            SET name = %s, capacity = %s, timestamp = NOW()
+            WHERE id = %s AND enabled = 1
+        """
+		values = (group_name, capacity, group_id)
+		result = Database.execute_query(query, values, fetch=False)
+
+		if result == 0 or (isinstance(result, dict) and result.get('rowcount', 0) == 0):
+			return jsonify({"Message": "Group not found"}), 404
+
+		# Replace teacher/subject relations: disable old ones, insert new ones
+		disable_relations_query = """
+            UPDATE relation_teacher_to_subject_group
+            SET enabled = 0
+            WHERE relation_group_local_session_id = %s
+        """
+		Database.execute_query(disable_relations_query, (group_id,), fetch=False)
+
+		for relation in relations:
+			subject_id = relation.get('subject_id')
+			teacher_id = relation.get('teacher_id')
+
+			if not subject_id or not teacher_id:
+				continue
+
+			insert_relation_query = """
+                INSERT INTO relation_teacher_to_subject_group
+                (relation_group_local_session_id, subject_id, user_id, enabled, created_at, timestamp, slc_use)
+                VALUES (%s, %s, %s, 1, NOW(), NOW(), 1)
+            """
+			Database.execute_query(
+                insert_relation_query,
+                (group_id, subject_id, teacher_id),
+                fetch=False
+            )
+
+		# Log the update to the audit table
+		new_data = dict(old_data)
+		new_data['name'] = group_name
+		new_data['capacity'] = capacity
+		new_data['relations'] = relations
+		log_audit("relation_group_local_session_audit", "UPDATE", old_data=old_data, new_data=new_data)
+
+		return jsonify({"Message": "Group updated successfully"}), 200
+
+	except Exception as e:
+		print(f"Error: {e} coming from update-group")
 		return jsonify({"Message": f"Error: {str(e)}"}), 500

@@ -98,3 +98,4 @@ def api_get_notification(account_id):
     """Get notifications"""
     result = get_notification(account_id)
     return jsonify(result), 200
+

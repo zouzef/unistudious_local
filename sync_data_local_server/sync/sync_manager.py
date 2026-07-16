@@ -389,12 +389,12 @@ def process_sync_data(db, data, settings):
             logger.info("Processing relationTeacherAccount")
             process_relation_teacher_account(db, n)
 
-    # if 'completionTagUser' in data:
-    #     n = normalize(data['completionTagUser'])
-    #     if has_records(n):
-    #         from sync.processors.completionTagUser_processor import process_completionTaguser
-    #         logger.info("Processing completionTagUser")
-    #         process_completionTaguser(db, n)
+    if 'completionTagUser' in data:
+        n = normalize(data['completionTagUser'])
+        if has_records(n):
+            from sync.processors.completionTagUser_processor import process_completionTaguser
+            logger.info("Processing completionTagUser")
+            process_completionTaguser(db, n)
 
     if 'slcDoor' in data:
         n = normalize(data['slcDoor'])
@@ -404,12 +404,9 @@ def process_sync_data(db, data, settings):
             process_slc_door(db,n)
 
 
-
-
 # ---------------------------------------------------------------------------
 # Sync runners
 # ---------------------------------------------------------------------------
-
 def run_continuous_sync(settings):
     """Run sync continuously at the interval defined in settings."""
     interval_minutes = settings.sync_interval_minutes

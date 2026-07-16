@@ -4,14 +4,16 @@ from app.utils import render_page, login_required
 calendar_view = Blueprint('calendar_view', __name__)
 
 
-@calendar_view.route('/dashboard/create-session-calendar/<int:id_session>')
-def show_create_session_calendar(id_session):
+@calendar_view.route('/dashboard/create-session-calendar/<int:id_session>/<int:local_id>')
+def show_create_session_calendar(id_session,local_id):
+    print("view_id_session: ",id_session)
     guard = login_required()
     if guard: return guard
 
     return render_page('session_calander',
         account_id=session.get('account_id'),
         id_session=id_session,
+        local_id = local_id
     )
 
 

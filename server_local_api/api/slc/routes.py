@@ -146,7 +146,6 @@ def get_slc_id():
 @slc_bp.route('/get_academie_info/<tablet_id>', methods=['GET'])
 def get_academie_info(tablet_id):
     try:
-        print(f"\n \n {tablet_id}")
         query = """
             SELECT a.name, t.id 
             FROM tablet t, account a, slc s 
@@ -196,7 +195,6 @@ def get_academie_image(tablet_id):
             }), 404
 
         account_id = rows[0]["id"]
-        print(account_id)
         file_link = rows[0]["file_link"]
 
         if not file_link:

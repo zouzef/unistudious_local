@@ -1238,5 +1238,7 @@ ALL_MODELS = [
 	RelationCompletionTagAudit,
 	SyncFoldersModel,
 	SlcDoorModel,
-	SlcDoorAuditModel
+	SlcDoorAuditModel,
+	CompletionTagUser,
+	CompletionTagUserAudit
 ]

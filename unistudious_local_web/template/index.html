@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="/static/vendor/swiper/css/swiper-bundle.min.css">
     <link rel="stylesheet" href="/static/icons/flaticon-1/font/flaticon-1.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/static/vendor/jquery-ui/css/jquery-ui.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
@@ -76,10 +76,12 @@
 </div>
 
 <!-- Scripts -->
+<script src="/static/vendor/jquery/jquery.min.js"></script>
 <script src="/static/js/socket.io.min.js"></script>
 <script src="/static/vendor/global/global.min.js"></script>
 <script src="/static/vendor/moment/moment.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+<script src="/static/vendor/jquery-ui/js/jquery-ui.min.js"></script>
 <script src="/static/vendor/datatables/js/jquery.dataTables.min.js"></script>
 <script src="/static/js/plugins-init/datatables.init.js"></script>
 <script src="/static/vendor/peity/jquery.peity.min.js"></script>
@@ -97,8 +99,8 @@
 <script src="/static/js/demo.js"></script>
 <script src="/static/js/styleSwitcher.js"></script>
 <script src="/static/js/calendar.js"></script>
-<script src="/static/js/dashboard/groups-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/static/js/dashboard/group_config.js"></script>
 
 {% if page == 'home' %}
 <script src="/static/js/dashboard/dashboard-1.js"></script>

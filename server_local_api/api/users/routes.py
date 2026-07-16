@@ -257,7 +257,6 @@ def get_teacher_session(session_id):
         """
 
 		teachers = Database.execute_query(query, (session_id,))
-		print("result: ", teachers)
 		return jsonify({"Message": "Success", "data": teachers}), 200
 
 	except Exception as e:
@@ -720,7 +719,6 @@ def get_profile_file(user_id):
 
 		# If image file doesn't exist, return default
 		if not os.path.exists(img_path):
-			print(f"⚠️ Image not found at {img_path}, returning default")
 			default_img_path = os.path.join(
 				os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
 				'static/assets/images/user-profile.png'

@@ -80,7 +80,6 @@ def api_get_session_img(session_id):
 def create_session_route():  # 👈 rename this
     try:
         session_data = request.get_json()
-        print(session_data)
         status, code = create_session_local(session_data)  # this calls the service
         if status and code == 200:
             return jsonify({"Message": "Session created with success"}), 200
@@ -109,7 +108,6 @@ def get_session_info(session_id):
         result,session_info = get_session_info_service(session_id)
         if result:
             return jsonify(session_info), 200
-        print(session_info)
     except Exception as e:
         print(f"Error: {e} coming from server")
         return jsonify({
@@ -170,7 +168,7 @@ def get_nbr_group_session(session_id):
     try:
         status,response = get_all_group_session_service(session_id)
         if status:
-            print(response)
+
             return jsonify(response),200
         else:
             return jsonify(response),400
@@ -217,7 +215,7 @@ def get_user_session_info(session_id):
 @session_bp.route('/api/delete_user_session/<int:user_id>/<int:session_id>', methods=['POST'])
 def delete_user_session(user_id, session_id):
     try:
-        print(user_id)
+
         result,data= delete_user_session_service(session_id,user_id)
         if result:
             return jsonify({
@@ -244,7 +242,7 @@ def delete_user_session(user_id, session_id):
 def get_assigned_session_user(user_id):
     try:
         data = request.get_json()
-        print(data)
+
         if not data or 'is_virtual' not in data:
             return jsonify({"Message": "is_virtual is required"}), 400
 
@@ -253,7 +251,7 @@ def get_assigned_session_user(user_id):
 
 
         status, response = get_assignedSession_user_service(user_id, data)
-        print(response)
+
         if status:
             return jsonify(response), 200
         else:
@@ -277,7 +275,7 @@ def assign_user_session(user_id: int):
         status_code, response = assign_user_session_service(user_id, data)
         return jsonify(response), status_code
     except Exception as e:
-        print(e)
+
         return jsonify({
             "Message": f"Error: {e} coming from backend"
         }), 500

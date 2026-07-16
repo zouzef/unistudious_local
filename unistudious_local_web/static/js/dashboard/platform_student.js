@@ -1,0 +1,264 @@
+/* ===============================================
+   USER MANAGEMENT - CARDS PAGE
+   =============================================== */
+
+// ==================== CONFIGURATION ====================
+const CONFIG = {
+  USERS_PER_PAGE: 12
+};
+
+// ==================== STATE ====================
+const state = {
+  accountId: window.ACCOUNT_ID,
+  allUsers: [],
+  currentUsers: [],
+  currentPage: 1
+};
+
+// ==================== API ====================
+const API = {
+  async fetchSessions(accountId) {
+    const response = await fetch(`/api/get-sessions/${accountId}`);
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    const result = await response.json();
+    return Array.isArray(result) ? result : (result.data ?? []);
+  },
+
+    async fetchUsers(accountId) {
+      const response = await fetch(`/api/get-real-user`);
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const result = await response.json();
+      console.log('parsed result:', result);
+      return Array.isArray(result) ? result : (result.data?.data ?? result.data ?? []);  },
+
+  async fetchProfileImage(userId) {
+    const response = await fetch(`/api/get_profile_img/${userId}`);
+    if (!response.ok) throw new Error('Failed to load profile image');
+    return await response.blob();
+  }
+};
+
+// ==================== SESSIONS ====================
+async function loadSessions(accountId) {
+  const select = document.getElementById("session-select");
+
+  try {
+    const sessions = await API.fetchSessions(accountId);
+    select.innerHTML = `<option value="" disabled selected>Select Session</option>`;
+
+    if (!sessions.length) {
+      select.innerHTML += `<option disabled>No sessions available</option>`;
+      return;
+    }
+
+    sessions.forEach(session => {
+      const option = document.createElement("option");
+      option.value = session.id;
+      option.textContent = session.name ?? `Session ${session.id}`;
+      select.appendChild(option);
+    });
+  } catch (error) {
+    console.error("❌ Error loading sessions:", error);
+  }
+}
+
+// ==================== USER CARDS ====================
+async function loadUsers(accountId) {
+  const container = document.getElementById("user-container");
+
+  try {
+    container.innerHTML = `
+      <div class="col-12 text-center py-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>`;
+
+    const users = await API.fetchUsers(accountId);
+
+    state.allUsers = users;
+    console.table(users);
+    state.currentUsers = users;
+    state.currentPage = 1;
+
+    renderUsers(state.currentUsers, state.currentPage);
+
+  } catch (error) {
+    console.error("❌ Error loading users:", error);
+    container.innerHTML = `
+      <div class="col-12">
+        <div class="alert alert-danger" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          Failed to load users. Please try again.
+        </div>
+      </div>`;
+  }
+}
+
+async function loadUserProfileImages() {
+  const userImages = document.querySelectorAll('.user-img img');
+
+  userImages.forEach(async (img) => {
+    const userId = img.dataset.userId;
+    if (!userId) return;
+
+    try {
+      const blob = await API.fetchProfileImage(userId);
+      img.src = URL.createObjectURL(blob);
+    } catch (error) {
+      console.error(`Error loading image for user ${userId}:`, error);
+    }
+  });
+}
+
+function renderUsers(users, page) {
+  const container = document.getElementById("user-container");
+
+  if (!users.length) {
+    container.innerHTML = `
+      <div class="col-12 text-center py-4 text-muted">
+        <i class="bi bi-people fs-1"></i>
+        <p class="mt-2">No users found.</p>
+      </div>`;
+    renderPagination(0, page);
+    return;
+  }
+
+  const start = (page - 1) * CONFIG.USERS_PER_PAGE;
+  const end = start + CONFIG.USERS_PER_PAGE;
+  const pageUsers = users.slice(start, end);
+
+  container.innerHTML = pageUsers.map(user => `
+    <div class="col-xl-3 col-lg-4 col-sm-6 user-card" data-name="${user.full_name}" data-sessions="${user.session_id}">
+      <div class="card contact_list text-center">
+        <div class="card-body">
+          <div class="user-content">
+            <div class="user-info">
+              <div class="user-img">
+                <img
+                  src="../static/assets/images/profile.svg"
+                  alt="${user.full_name}"
+                  class="avatar avatar-xl"
+                  data-user-id="${user.id}"
+                  onerror="this.src=''"
+                >
+              </div>
+              <div class="user-details">
+                <h4 class="user-name mb-0">${user.full_name}</h4>
+                <p>Platform Student</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  renderPagination(users.length, page);
+  loadUserProfileImages();
+}
+
+// ==================== PAGINATION ====================
+function renderPagination(totalUsers, page) {
+  const controls = document.getElementById("pagination-controls");
+  const totalPages = Math.ceil(totalUsers / CONFIG.USERS_PER_PAGE);
+
+  if (totalPages <= 1) {
+    controls.innerHTML = '';
+    return;
+  }
+
+  let pages = new Set([1, totalPages, page]);
+  if (page - 1 > 0) pages.add(page - 1);
+  if (page + 1 <= totalPages) pages.add(page + 1);
+  pages = [...pages].sort((a, b) => a - b);
+
+  let paginationHTML = `
+    <li class="page-item ${page === 1 ? 'disabled' : ''}">
+      <a class="page-link" id="prev-page" href="javascript:void(0);">
+        <i class="fa-solid fa-chevron-left"></i>
+      </a>
+    </li>`;
+
+  let prev = null;
+  pages.forEach(p => {
+    if (prev && p - prev > 1) {
+      paginationHTML += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+    }
+    paginationHTML += `
+      <li class="page-item ${p === page ? 'active' : ''}">
+        <a class="page-link" href="javascript:void(0);" data-page="${p}">${p}</a>
+      </li>`;
+    prev = p;
+  });
+
+  paginationHTML += `
+    <li class="page-item ${page === totalPages ? 'disabled' : ''}">
+      <a class="page-link" id="next-page" href="javascript:void(0);">
+        <i class="fa-solid fa-chevron-right"></i>
+      </a>
+    </li>`;
+
+  controls.innerHTML = paginationHTML;
+  attachPaginationEvents(totalPages);
+}
+
+function attachPaginationEvents(totalPages) {
+  const controls = document.getElementById("pagination-controls");
+
+  controls.querySelectorAll('[data-page]').forEach(btn => {
+    btn.addEventListener('click', function () {
+      state.currentPage = parseInt(this.dataset.page);
+      renderUsers(state.currentUsers, state.currentPage);
+    });
+  });
+
+  const prevBtn = document.getElementById("prev-page");
+  if (prevBtn) {
+    prevBtn.addEventListener('click', function () {
+      if (state.currentPage > 1) {
+        state.currentPage--;
+        renderUsers(state.currentUsers, state.currentPage);
+      }
+    });
+  }
+
+  const nextBtn = document.getElementById("next-page");
+  if (nextBtn) {
+    nextBtn.addEventListener('click', function () {
+      if (state.currentPage < totalPages) {
+        state.currentPage++;
+        renderUsers(state.currentUsers, state.currentPage);
+      }
+    });
+  }
+}
+
+// ==================== SESSION FILTER ====================
+function initSessionFilter() {
+  const select = document.getElementById("session-select");
+
+  select.addEventListener("change", function () {
+    const selectedSessionId = this.value;
+    state.currentPage = 1;
+
+    state.currentUsers = !selectedSessionId
+      ? state.allUsers
+      : state.allUsers.filter(user => String(user.session_id) === String(selectedSessionId));
+
+    renderUsers(state.currentUsers, state.currentPage);
+  });
+}
+
+// ==================== INIT ====================
+function initPage() {
+  loadSessions(state.accountId);
+  loadUsers(state.accountId);
+  initSessionFilter();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initPage);
+} else {
+  initPage();
+}

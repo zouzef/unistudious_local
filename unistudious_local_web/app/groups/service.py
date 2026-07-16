@@ -95,3 +95,26 @@ def create_group(session_id: int, data: dict) -> tuple:
     except Exception as e:
         print(f"[GROUP ERROR] create_group: {e}")
         return {"Message": "Connection error"}, 500
+
+
+def update_group(group_id, data):
+    try:
+        response = requests.post(
+			f"{current_app.config['BASE_URL']}update_group/{group_id}",
+			json=data,verify=False,timeout=10
+		)
+        try:
+            body = response.json()
+        except ValueError:
+            body = {"Message": "Invalid response from server"}
+        return body, response.status_code
+    except Exception as e:
+        return {"Message": f"Error: {e} coming from update_group service"}, 500
+
+def disaffect_user_session_service(session_id: int, data: dict) -> tuple:
+    url = f"{current_app.config['BASE_URL']}disaffect_user_group/{session_id}"
+    try:
+        response = requests.post(url, json=data, verify=False, timeout=10)
+        return response.status_code==200 ,response
+    except Exception as e:
+        return False,None

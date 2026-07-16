@@ -823,15 +823,29 @@ def update_attendance_status(id_attendance):
             user_id = attendance[0]['user_id']
             account_id = attendance[0]['account_id']
             session_id = attendance[0]['session_id']
-            if compltetion_tag_id:
-                query ="""
+
+            completion_tag_rows = Database.execute_query(
+                """SELECT tag_id as id FROM relation_completion_tag WHERE calander_group_id = %s""",
+                (calander_id,), fetch=True
+            )
+
+            if not completion_tag_rows:
+                return jsonify({
+                    "error": f"No completion tag configured for calander_group_id {calander_id}"
+                }), 400
+
+            completion_tag_id = completion_tag_rows[0]['id']
+
+            if completion_tag_id:
+                query = """
                     INSERT INTO completion_tag_user 
                         (user_id, tag_id, session_id, account_id, group_calander_id)
                     VALUE (%s, %s, %s, %s, %s)
                 """
-                values = (user_id, compltetion_tag_id, session_id, account_id, calander_id)
+                values = (user_id, completion_tag_id, session_id, account_id, calander_id)
                 result = Database.execute_query(query, values, fetch=False)
-
+                if result:
+                    return jsonify({"Message": "success in updating attendance"}), 200
         else:
             return jsonify({
                 "Message":f"Error coming from updating completion_tag_user"

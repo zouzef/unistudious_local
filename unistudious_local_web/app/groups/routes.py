@@ -7,7 +7,8 @@ from app.groups.service import (
     get_users_not_affected,
     affect_user,
     get_subject_group,
-    create_group
+    create_group,
+    disaffect_user_session_service
 )
 from app.session.service import get_locals
 
@@ -79,10 +80,33 @@ def api_get_subject_group(account_id):
 @groups_bp.route('/api/create_group/<int:session_id>', methods=['POST'])
 def api_create_group(session_id):
     """Create a new group"""
-    data = request.get_json()
 
-    if not data:
-        return jsonify({"Message": "No data provided"}), 400
+    try:
+        data = request.get_json()
 
-    result, status_code = create_group(session_id, data)
-    return jsonify(result), status_code
+        if not data:
+            return jsonify({"Message": "No data provided"}), 400
+        print(data)
+        result, status_code = create_group(session_id, data)
+        return jsonify(result), status_code
+    except Exception as e:
+        return jsonify({
+            "Message":f"Error: {e} coming from backend"
+        }),500
+
+
+@groups_bp.route('/api/update-group/<int:group_id>', methods=['POST'])
+def api_update_group(group_id):
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"Message": "No data provided "}), 400
+
+        result, status_code = update_group_service(group_id, data)
+        return jsonify(result), status_code
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from backend"
+        })
+

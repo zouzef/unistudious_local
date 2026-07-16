@@ -48,6 +48,18 @@ document.addEventListener('DOMContentLoaded', function() {
         return date;
     }
 
+    // FIX: formats a Date object as "YYYY-MM-DD" using its LOCAL date
+    // components (year/month/day), instead of date.toISOString().split('T')[0]
+    // which converts to UTC first. For timezones ahead of UTC (e.g. UTC+1),
+    // toISOString() can roll local midnight back to the previous day's date,
+    // which was causing dropped-on-day-13 events to be created on day-12.
+    function formatLocalDate(date) {
+        var year = date.getFullYear();
+        var month = String(date.getMonth() + 1).padStart(2, '0');
+        var day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
     // Initialize the calendar
     var calendar = new Calendar(calendarEl, {
       headerToolbar: {
@@ -116,55 +128,61 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // OPEN MODAL WHEN GROUP IS DROPPED
       drop: function(info) {
-    console.log('=== GROUP DROPPED ===');
-    console.log('Dropped event:', info);
+        console.log('=== GROUP DROPPED ===');
+        console.log('Dropped event:', info);
 
-    const droppedDate = info.date;
-    const groupName = info.draggedEl.innerText.trim();
-    const groupId = info.draggedEl.getAttribute('data-group-id');
-    const groupCapacity = info.draggedEl.getAttribute('data-group-capacity');
+        const droppedDate = info.date;
+        const groupName = info.draggedEl.innerText.trim();
+        const groupId = info.draggedEl.getAttribute('data-group-id');
+        const groupCapacity = info.draggedEl.getAttribute('data-group-capacity');
 
-    console.log('Group Name:', groupName);
-    console.log('Group ID:', groupId);
-    console.log('Group Capacity:', groupCapacity);
-    console.log('Dropped Date:', droppedDate);
+        console.log('Group Name:', groupName);
+        console.log('Group ID:', groupId);
+        console.log('Group Capacity:', groupCapacity);
+        console.log('Dropped Date:', droppedDate);
+        // FIX: log the local-formatted date too, to make it obvious in the
+        // console which one matches the day you actually dropped onto.
+        console.log('Dropped Date (local, what gets saved):', formatLocalDate(droppedDate));
 
-    // Open the modal first - NEW ID
-    const modalElement = document.getElementById('createEventModal');
-    if (!modalElement) {
-        console.error('Modal element not found: createEventModal');
-        return;
-    }
+        // Open the modal first - NEW ID
+        const modalElement = document.getElementById('createEventModal');
+        if (!modalElement) {
+            console.error('Modal element not found: createEventModal');
+            return;
+        }
 
-    const eventModal = new bootstrap.Modal(modalElement);
-    eventModal.show();
+        const eventModal = new bootstrap.Modal(modalElement);
+        eventModal.show();
 
-    // Wait for modal to be shown, then populate the form
-    modalElement.addEventListener('shown.bs.modal', function() {
-        // Safely populate the form with dropped group info - NEW IDs
-        const eventTitle = document.getElementById('createEventTitle');
-        const eventDate = document.getElementById('createEventDate');
-        const eventGroupId = document.getElementById('createEventGroupId');
-        const eventGroupCapacity = document.getElementById('createEventGroupCapacity');
-        const eventSessionId = document.getElementById('createEventSessionId');
-        const eventAccountId = document.getElementById('createEventAccountId');
+        // Wait for modal to be shown, then populate the form
+        modalElement.addEventListener('shown.bs.modal', function() {
+            // Safely populate the form with dropped group info - NEW IDs
+            const eventTitle = document.getElementById('createEventTitle');
+            const eventDate = document.getElementById('createEventDate');
+            const eventGroupId = document.getElementById('createEventGroupId');
+            const eventGroupCapacity = document.getElementById('createEventGroupCapacity');
+            const eventSessionId = document.getElementById('createEventSessionId');
+            const eventAccountId = document.getElementById('createEventAccountId');
 
-        if (eventTitle) eventTitle.value = groupName;
-        if (eventDate) eventDate.value = droppedDate.toISOString().split('T')[0];
-        if (eventGroupId) eventGroupId.value = groupId;
-        if (eventGroupCapacity) eventGroupCapacity.value = groupCapacity;
-        if (eventSessionId) eventSessionId.value = sessionId;
-        if (eventAccountId) eventAccountId.value = accountId;
+            if (eventTitle) eventTitle.value = groupName;
+            // FIX: was droppedDate.toISOString().split('T')[0], which
+            // converts to UTC first and can roll the date back by one day.
+            // formatLocalDate() reads the local year/month/day directly.
+            if (eventDate) eventDate.value = formatLocalDate(droppedDate);
+            if (eventGroupId) eventGroupId.value = groupId;
+            if (eventGroupCapacity) eventGroupCapacity.value = groupCapacity;
+            if (eventSessionId) eventSessionId.value = sessionId;
+            if (eventAccountId) eventAccountId.value = accountId;
 
-        // Log which elements were found/not found
-        console.log('createEventTitle found:', !!eventTitle);
-        console.log('createEventDate found:', !!eventDate);
-        console.log('createEventGroupId found:', !!eventGroupId);
-        console.log('createEventGroupCapacity found:', !!eventGroupCapacity);
-        console.log('createEventSessionId found:', !!eventSessionId);
-        console.log('createEventAccountId found:', !!eventAccountId);
-        }, { once: true });
-    },
+            // Log which elements were found/not found
+            console.log('createEventTitle found:', !!eventTitle);
+            console.log('createEventDate found:', !!eventDate);
+            console.log('createEventGroupId found:', !!eventGroupId);
+            console.log('createEventGroupCapacity found:', !!eventGroupCapacity);
+            console.log('createEventSessionId found:', !!eventSessionId);
+            console.log('createEventAccountId found:', !!eventAccountId);
+            }, { once: true });
+      },
 
       // Redirect to attendance page when event is clicked
       eventClick: function(info) {

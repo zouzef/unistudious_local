@@ -12,7 +12,8 @@ from app.user.service import (
     get_user_info_service,
     create_student_service,
     get_student_with_session_service,
-    associate_virtuel_user_service
+    associate_virtuel_user_service,
+    get_all_real_user_service
 )
 
 user_bp = Blueprint('user', __name__)
@@ -142,3 +143,19 @@ def associate_virtuel_user(account_id):
         return jsonify({
             "Message": f"Error: {e} coming from server"
         }), 500
+
+# ── GET Real Studen  ──────────────────────────────────────────────────────────
+@user_bp.route('/api/get-real-user', methods=['GET'])
+def get_real_user():
+    try:
+        success, response = get_all_real_user_service()
+
+        if success:
+            return jsonify(response.json()), response.status_code
+        else:
+            return jsonify(response.json()), response.status_code
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "Message":f"Error: {e} in backend"
+        }),500

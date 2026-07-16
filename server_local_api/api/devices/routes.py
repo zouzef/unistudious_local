@@ -117,7 +117,6 @@ def view_camera_by_id(camera_id):
 def create_camera():
     try:
         data = request.get_json()
-        print(data)
         if not data:
             return jsonify({
                 "Message": "There is no data to create camera"

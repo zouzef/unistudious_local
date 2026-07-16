@@ -57,11 +57,11 @@ def delete_calendar_interval(session_id: int, start_date: str, end_date: str) ->
 
 def create_calendar(data: dict) -> tuple:
     """Create a new calendar"""
-    url = f"{current_app.config['BASE_URL']}create_calander"
+    url = f"{current_app.config['BASE_URL']}create_calender"
     try:
         response = requests.post(url, json=data, verify=False, timeout=10)
 
-        if response.status_code == 201:
+        if response.status_code == 200:
             return True, "Calendar created successfully"
         elif response.status_code == 402:
             return False, response.json()

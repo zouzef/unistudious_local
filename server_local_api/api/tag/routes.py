@@ -210,7 +210,7 @@ def update_account_tag(account_tag_id):
 def create_account_tag(account_id):
     try:
         data = request.get_json()
-        print(data)
+
         if not data:
             return jsonify({"Message": "There is no data to insert it"}), 400
 
@@ -219,7 +219,6 @@ def create_account_tag(account_id):
         other_tag   = data.get('otherTag') or None
         public      = data.get('public')
         if not check_exist_tag(tag_id):
-            print("There is no ta_id")
             return jsonify({"Message": "Error in tag_id"}), 404
 
         query = """

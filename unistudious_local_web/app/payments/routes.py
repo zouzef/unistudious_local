@@ -32,7 +32,6 @@ def get_payment_session(session_id):
 def get_payment_user_info(session_id,user_id):
 	try:
 		status,response = get_payment_user_info_service(user_id,session_id)
-		print(response)
 		if status :
 			return jsonify(response),200
 		else:
@@ -59,8 +58,7 @@ def update_payment_user(payment_id,session_id,user_id):
 	try:
 		data = request.get_json()
 		status,response = update_payment_user_service(payment_id,session_id,user_id,data)
-		print("status coming from the server: ",status)
-		print("response coming from the server: ",response)
+
 		return jsonify({
 			"Message":data
 		})

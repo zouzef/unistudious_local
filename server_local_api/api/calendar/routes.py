@@ -37,10 +37,8 @@ def delete_calendar(session_id):
             return jsonify({"message": "No data provided"}), 400
 
         start_date_str = data.get('start_date')
-        print("start_date", start_date_str)
 
         end_date_str = data.get('end_date')
-        print("end_date", end_date_str)
 
         # Validate
         if not start_date_str or not end_date_str:
@@ -145,8 +143,6 @@ def get_next_session(calendarId):
         if not selected_time:
             return jsonify({"error": "Calendar not found"}), 404
 
-        print(selected_time)
-
         # Get the next session after this time
         query = """
             SELECT start_time, id 
@@ -247,7 +243,6 @@ def data_account_api(id):
         """
         rows = Database.execute_query(query, (id,))
 
-        print(rows)
         return jsonify({"status": "ok", "data": rows}), 200
 
     except Exception as e:
@@ -263,8 +258,7 @@ def data_account_api(id):
 @calendar_bp.route('/get_calendar_session/<int:id_session>/<int:id_account>', methods=['GET'])
 def get_calendar_session(id_session, id_account):
     try:
-        print("\n \n \n \n \n \n session_id:",id_session)
-        print("\n \n \n \n \n \n account_id:",id_account)
+
         query = """
             SELECT * FROM relation_calander_group_session 
             WHERE enabled = 1 AND session_id = %s AND account_id = %s
@@ -379,8 +373,6 @@ def isSubjectTeacherConflit(teacher_id, start_date, start_time, end_time):
         """
         values = (teacher_id, start_date, end_time, start_time)
 
-        print(f"DEBUG Teacher -> teacher_id:{teacher_id} start_date:{start_date} start_time:{start_time} end_time:{end_time}")
-        print(f"DEBUG Teacher -> values sent to query: {values}")
         result = Database.execute_query(query, values)
         print(f"DEBUG Teacher -> result: {result}")
 
@@ -781,7 +773,6 @@ def create_calander():
         title = get_name_group(group_id) or "Unknown Group"
         type_val = data['type']
 
-        # FIX: recurrence support. duplicate_type comes from the JS
         # 'duplicate' field: 'none' | 'daily' | 'weekly' | 'biweekly' (or
         # missing/empty, treated the same as 'none'). endDate is only
         # required when duplicate_type isn't 'none'.

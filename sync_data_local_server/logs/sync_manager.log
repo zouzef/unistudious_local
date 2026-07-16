@@ -83883,3 +83883,864 @@ IndexError: bytearray index out of range
 2026-07-09 15:02:38 [DEBUG] __main__ - Current sync started at: 2026-07-09 14:02:38.743856
 2026-07-09 15:02:38 [INFO] __main__ - Requesting data since: 2026-07-09 14:01:00
 2026-07-09 15:02:38 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-09 15:02:56 [ERROR] __main__ - SYNC FAILED: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 700, in urlopen
+    httplib_response = self._make_request(
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 383, in _make_request
+    self._validate_conn(conn)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 1017, in _validate_conn
+    conn.connect()
+  File "/usr/lib/python3/dist-packages/urllib3/connection.py", line 411, in connect
+    self.sock = ssl_wrap_socket(
+  File "/usr/lib/python3/dist-packages/urllib3/util/ssl_.py", line 449, in ssl_wrap_socket
+    ssl_sock = _ssl_wrap_socket_impl(
+  File "/usr/lib/python3/dist-packages/urllib3/util/ssl_.py", line 493, in _ssl_wrap_socket_impl
+    return ssl_context.wrap_socket(sock, server_hostname=server_hostname)
+  File "/usr/lib/python3.10/ssl.py", line 513, in wrap_socket
+    return self.sslsocket_class._create(
+  File "/usr/lib/python3.10/ssl.py", line 1100, in _create
+    self.do_handshake()
+  File "/usr/lib/python3.10/ssl.py", line 1371, in do_handshake
+    self._sslobj.do_handshake()
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 439, in send
+    resp = conn.urlopen(
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 756, in urlopen
+    retries = retries.increment(
+  File "/usr/lib/python3/dist-packages/urllib3/util/retry.py", line 534, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/usr/lib/python3/dist-packages/six.py", line 718, in reraise
+    raise value.with_traceback(tb)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 700, in urlopen
+    httplib_response = self._make_request(
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 383, in _make_request
+    self._validate_conn(conn)
+  File "/usr/lib/python3/dist-packages/urllib3/connectionpool.py", line 1017, in _validate_conn
+    conn.connect()
+  File "/usr/lib/python3/dist-packages/urllib3/connection.py", line 411, in connect
+    self.sock = ssl_wrap_socket(
+  File "/usr/lib/python3/dist-packages/urllib3/util/ssl_.py", line 449, in ssl_wrap_socket
+    ssl_sock = _ssl_wrap_socket_impl(
+  File "/usr/lib/python3/dist-packages/urllib3/util/ssl_.py", line 493, in _ssl_wrap_socket_impl
+    return ssl_context.wrap_socket(sock, server_hostname=server_hostname)
+  File "/usr/lib/python3.10/ssl.py", line 513, in wrap_socket
+    return self.sslsocket_class._create(
+  File "/usr/lib/python3.10/ssl.py", line 1100, in _create
+    self.do_handshake()
+  File "/usr/lib/python3.10/ssl.py", line 1371, in do_handshake
+    self._sslobj.do_handshake()
+urllib3.exceptions.ProtocolError: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/sync_manager.py", line 106, in sync_data_once
+    data = fetcher.fetch_data(since_date=since_date)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/data_fetcher.py", line 55, in fetch_data
+    data = self._post_with_form_data(self.whats_new_endpoint, payload)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/data_fetcher.py", line 93, in _post_with_form_data
+    response = requests.post(
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 119, in post
+    return request('post', url, data=data, json=json, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/api.py", line 61, in request
+    return session.request(method=method, url=url, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 544, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/usr/lib/python3/dist-packages/requests/sessions.py", line 657, in send
+    r = adapter.send(request, **kwargs)
+  File "/usr/lib/python3/dist-packages/requests/adapters.py", line 498, in send
+    raise ConnectionError(err, request=request)
+requests.exceptions.ConnectionError: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+2026-07-09 15:02:56 [DEBUG] __main__ - Closing database connection...
+2026-07-09 15:02:56 [ERROR] __main__ - Sync #77 failed.
+2026-07-09 15:02:56 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-07-09 15:02:56)...
+2026-07-09 15:03:56 [INFO] __main__ - ############################################################
+2026-07-09 15:03:56 [INFO] __main__ - SYNC #78 - 2026-07-09 15:03:56.402912
+2026-07-09 15:03:56 [INFO] __main__ - ############################################################
+2026-07-09 15:03:56 [INFO] __main__ - ============================================================
+2026-07-09 15:03:56 [INFO] __main__ - STARTING SYNC AT 2026-07-09 15:03:56.403299
+2026-07-09 15:03:56 [INFO] __main__ - ============================================================
+2026-07-09 15:03:56 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-07-09 15:03:56 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-07-09 15:03:56 [INFO] __main__ - Checking last sync time...
+2026-07-09 15:03:56 [INFO] __main__ - Last sync was at: 2026-07-09 14:01:27.352485
+2026-07-09 15:03:56 [DEBUG] __main__ - Current sync started at: 2026-07-09 14:03:56.860012
+2026-07-09 15:03:56 [INFO] __main__ - Requesting data since: 2026-07-09 14:01:00
+2026-07-09 15:03:56 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-09 15:04:11 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-07-09 15:04:11 [INFO] __main__ - No new data to sync. Database is up to date.
+2026-07-09 15:04:11 [INFO] sync.data_pusher - ============================================================
+2026-07-09 15:04:11 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-07-09 15:04:11 [INFO] sync.data_pusher - ============================================================
+2026-07-09 15:04:11 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-07-09 15:04:11 [DEBUG] sync.data_pusher - No pending VirtuelUser changes to push
+2026-07-09 15:04:11 [INFO] sync.data_pusher - ============================================================
+2026-07-09 15:04:11 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-07-09 15:04:11 [INFO] sync.data_pusher - ============================================================
+2026-07-09 15:04:11 [DEBUG] __main__ - Closing database connection...
+2026-07-09 15:04:11 [INFO] __main__ - Sync #78 completed successfully.
+2026-07-09 15:04:11 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-07-09 15:04:11)...
+2026-07-10 14:07:53 [INFO] __main__ - ============================================================
+2026-07-10 14:07:53 [INFO] __main__ - SYNC MANAGER - STARTING
+2026-07-10 14:07:53 [INFO] __main__ - ============================================================
+2026-07-10 14:07:53 [INFO] __main__ - Loading configuration...
+2026-07-10 14:07:53 [INFO] __main__ - Initializing authentication...
+2026-07-10 14:07:53 [INFO] __main__ - Starting token auto-refresh...
+2026-07-10 14:07:54 [INFO] __main__ - ============================================================
+2026-07-10 14:07:54 [INFO] __main__ - CONTINUOUS SYNC MODE
+2026-07-10 14:07:54 [INFO] __main__ - Sync interval: 1 minute(s) | Press Ctrl+C to stop
+2026-07-10 14:07:54 [INFO] __main__ - ============================================================
+2026-07-10 14:07:54 [INFO] __main__ - ############################################################
+2026-07-10 14:07:54 [INFO] __main__ - SYNC #1 - 2026-07-10 14:07:54.414876
+2026-07-10 14:07:54 [INFO] __main__ - ############################################################
+2026-07-10 14:07:54 [INFO] __main__ - ============================================================
+2026-07-10 14:07:54 [INFO] __main__ - STARTING SYNC AT 2026-07-10 14:07:54.415202
+2026-07-10 14:07:54 [INFO] __main__ - ============================================================
+2026-07-10 14:07:54 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-07-10 14:07:54 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-07-10 14:07:54 [INFO] __main__ - Checking last sync time...
+2026-07-10 14:07:54 [INFO] __main__ - No previous sync found - performing full sync.
+2026-07-10 14:07:54 [DEBUG] __main__ - Current sync started at: 2026-07-10 13:07:54.900181
+2026-07-10 14:07:54 [INFO] __main__ - Requesting data since: None
+2026-07-10 14:07:54 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:07:58 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-07-10 14:07:58 [INFO] __main__ - New data found! Processing...
+2026-07-10 14:07:58 [INFO] __main__ - ============================================================
+2026-07-10 14:07:58 [INFO] __main__ - Processing SYNC DATA
+2026-07-10 14:07:58 [INFO] __main__ - ============================================================
+2026-07-10 14:07:58 [INFO] __main__ - Processing ACCOUNTS...
+2026-07-10 14:07:58 [INFO] __main__ - Processing Account Subjects...
+2026-07-10 14:07:58 [INFO] __main__ - Processing Calendars...
+2026-07-10 14:08:00 [INFO] __main__ - Processing Groups...
+2026-07-10 14:08:00 [INFO] __main__ - Processing Attendances...
+2026-07-10 14:08:01 [INFO] __main__ - Processing Cameras...
+2026-07-10 14:08:01 [INFO] __main__ - Processing Formations...
+2026-07-10 14:08:01 [INFO] __main__ - Processing SLC Locals...
+2026-07-10 14:08:01 [INFO] __main__ - Processing Teacher-Subject Relations...
+2026-07-10 14:08:02 [INFO] __main__ - Processing User-Session Relations...
+2026-07-10 14:08:03 [INFO] __main__ - Processing Locals and Rooms...
+2026-07-10 14:08:03 [INFO] __main__ - Processing Sessions...
+2026-07-10 14:08:03 [INFO] __main__ - Processing SLCs...
+2026-07-10 14:08:03 [INFO] __main__ - Processing Subjects...
+2026-07-10 14:08:03 [INFO] __main__ - Processing Tablets...
+2026-07-10 14:08:03 [INFO] __main__ - Processing Users...
+2026-07-10 14:08:03 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.unistudious.com:443
+2026-07-10 14:08:04 [DEBUG] urllib3.connectionpool - https://www.unistudious.com:443 "POST /slc/get-reference-student/3 HTTP/1.1" 200 None
+2026-07-10 14:08:04 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.unistudious.com:443
+2026-07-10 14:08:04 [DEBUG] urllib3.connectionpool - https://www.unistudious.com:443 "POST /slc/get-reference-student/416 HTTP/1.1" 200 244
+2026-07-10 14:08:04 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.unistudious.com:443
+2026-07-10 14:08:05 [DEBUG] urllib3.connectionpool - https://www.unistudious.com:443 "POST /slc/get-reference-student/438 HTTP/1.1" 200 187
+2026-07-10 14:08:05 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.unistudious.com:443
+2026-07-10 14:08:06 [DEBUG] urllib3.connectionpool - https://www.unistudious.com:443 "POST /slc/get-reference-student/484 HTTP/1.1" 200 187
+2026-07-10 14:08:06 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.unistudious.com:443
+2026-07-10 14:08:07 [DEBUG] urllib3.connectionpool - https://www.unistudious.com:443 "POST /slc/get-reference-student/370 HTTP/1.1" 200 None
+2026-07-10 14:08:07 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.unistudious.com:443
+2026-07-10 14:08:07 [DEBUG] urllib3.connectionpool - https://www.unistudious.com:443 "POST /slc/get-reference-student/407 HTTP/1.1" 200 187
+2026-07-10 14:08:07 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.unistudious.com:443
+2026-07-10 14:08:08 [DEBUG] urllib3.connectionpool - https://www.unistudious.com:443 "POST /slc/get-reference-student/409 HTTP/1.1" 200 187
+2026-07-10 14:08:08 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.unistudious.com:443
+2026-07-10 14:08:09 [DEBUG] urllib3.connectionpool - https://www.unistudious.com:443 "POST /slc/get-reference-student/683 HTTP/1.1" 200 161
+2026-07-10 14:08:09 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.unistudious.com:443
+2026-07-10 14:08:10 [DEBUG] urllib3.connectionpool - https://www.unistudious.com:443 "POST /slc/get-reference-student/416 HTTP/1.1" 200 244
+2026-07-10 14:08:10 [INFO] __main__ - Processing Admins...
+2026-07-10 14:08:10 [INFO] __main__ - Processing Virtual Users...
+2026-07-10 14:08:11 [INFO] __main__ - Processing Payment Sessions...
+2026-07-10 14:08:14 [INFO] __main__ - Processing Invoices...
+2026-07-10 14:08:14 [INFO] __main__ - Processing Levels...
+2026-07-10 14:08:14 [INFO] __main__ - Processing Account Levels...
+2026-07-10 14:08:14 [INFO] __main__ - Processing Sections...
+2026-07-10 14:08:14 [INFO] __main__ - Processing Account Sections...
+2026-07-10 14:08:14 [INFO] __main__ - Processing Tag Configs...
+2026-07-10 14:08:14 [INFO] __main__ - Processing Account Tags...
+2026-07-10 14:08:14 [INFO] __main__ - Processing Completion Tags...
+2026-07-10 14:08:15 [INFO] __main__ - Processing RelationCompletionTag...
+2026-07-10 14:08:15 [INFO] __main__ - Processing Season ...
+2026-07-10 14:08:15 [INFO] __main__ - Processing Subsubject
+2026-07-10 14:08:15 [INFO] __main__ - Processing relationLocalSession
+2026-07-10 14:08:15 [INFO] __main__ - Processing relationTeacherAccount
+2026-07-10 14:08:15 [INFO] __main__ - Processing Slc_Door
+2026-07-10 14:08:15 [INFO] __main__ - Pushing local changes to remote...
+2026-07-10 14:08:15 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:08:15 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-07-10 14:08:15 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:08:15 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-07-10 14:08:15 [DEBUG] sync.data_pusher - No pending VirtuelUser changes to push
+2026-07-10 14:08:15 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:08:15 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-07-10 14:08:15 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:08:15 [INFO] __main__ - Saving sync status...
+2026-07-10 14:08:15 [INFO] __main__ - ============================================================
+2026-07-10 14:08:15 [INFO] __main__ - SYNC COMPLETED SUCCESSFULLY!
+2026-07-10 14:08:15 [INFO] __main__ - ============================================================
+2026-07-10 14:08:15 [DEBUG] __main__ - Closing database connection...
+2026-07-10 14:08:15 [INFO] __main__ - Sync #1 completed successfully.
+2026-07-10 14:08:15 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-07-10 14:08:15)...
+2026-07-10 14:09:15 [INFO] __main__ - ############################################################
+2026-07-10 14:09:15 [INFO] __main__ - SYNC #2 - 2026-07-10 14:09:15.254533
+2026-07-10 14:09:15 [INFO] __main__ - ############################################################
+2026-07-10 14:09:15 [INFO] __main__ - ============================================================
+2026-07-10 14:09:15 [INFO] __main__ - STARTING SYNC AT 2026-07-10 14:09:15.254877
+2026-07-10 14:09:15 [INFO] __main__ - ============================================================
+2026-07-10 14:09:15 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-07-10 14:09:15 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-07-10 14:09:15 [INFO] __main__ - Checking last sync time...
+2026-07-10 14:09:15 [INFO] __main__ - Last sync was at: 2026-07-10 13:07:54.900181
+2026-07-10 14:09:15 [DEBUG] __main__ - Current sync started at: 2026-07-10 13:09:15.723153
+2026-07-10 14:09:15 [INFO] __main__ - Requesting data since: 2026-07-10 13:07:00
+2026-07-10 14:09:15 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:09:16 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-07-10 14:09:16 [INFO] __main__ - No new data to sync. Database is up to date.
+2026-07-10 14:09:16 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:09:16 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-07-10 14:09:16 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:09:16 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-07-10 14:09:16 [DEBUG] sync.data_pusher - No pending VirtuelUser changes to push
+2026-07-10 14:09:16 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:09:16 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-07-10 14:09:16 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:09:16 [DEBUG] __main__ - Closing database connection...
+2026-07-10 14:09:16 [INFO] __main__ - Sync #2 completed successfully.
+2026-07-10 14:09:16 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-07-10 14:09:16)...
+2026-07-10 14:10:16 [INFO] __main__ - ############################################################
+2026-07-10 14:10:16 [INFO] __main__ - SYNC #3 - 2026-07-10 14:10:16.574031
+2026-07-10 14:10:16 [INFO] __main__ - ############################################################
+2026-07-10 14:10:16 [INFO] __main__ - ============================================================
+2026-07-10 14:10:16 [INFO] __main__ - STARTING SYNC AT 2026-07-10 14:10:16.574408
+2026-07-10 14:10:16 [INFO] __main__ - ============================================================
+2026-07-10 14:10:16 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-07-10 14:10:16 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-07-10 14:10:17 [INFO] __main__ - Checking last sync time...
+2026-07-10 14:10:17 [INFO] __main__ - Last sync was at: 2026-07-10 13:09:15.723153
+2026-07-10 14:10:17 [DEBUG] __main__ - Current sync started at: 2026-07-10 13:10:17.005954
+2026-07-10 14:10:17 [INFO] __main__ - Requesting data since: 2026-07-10 13:09:00
+2026-07-10 14:10:17 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:10:17 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-07-10 14:10:17 [INFO] __main__ - No new data to sync. Database is up to date.
+2026-07-10 14:10:17 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:10:17 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-07-10 14:10:17 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:10:17 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-07-10 14:10:17 [DEBUG] sync.data_pusher - No pending VirtuelUser changes to push
+2026-07-10 14:10:17 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:10:17 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-07-10 14:10:17 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:10:17 [DEBUG] __main__ - Closing database connection...
+2026-07-10 14:10:17 [INFO] __main__ - Sync #3 completed successfully.
+2026-07-10 14:10:17 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-07-10 14:10:17)...
+2026-07-10 14:11:17 [INFO] __main__ - ############################################################
+2026-07-10 14:11:17 [INFO] __main__ - SYNC #4 - 2026-07-10 14:11:17.926632
+2026-07-10 14:11:17 [INFO] __main__ - ############################################################
+2026-07-10 14:11:17 [INFO] __main__ - ============================================================
+2026-07-10 14:11:17 [INFO] __main__ - STARTING SYNC AT 2026-07-10 14:11:17.926981
+2026-07-10 14:11:17 [INFO] __main__ - ============================================================
+2026-07-10 14:11:17 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-07-10 14:11:18 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-07-10 14:11:18 [INFO] __main__ - Checking last sync time...
+2026-07-10 14:11:18 [INFO] __main__ - Last sync was at: 2026-07-10 13:10:17.005954
+2026-07-10 14:11:18 [DEBUG] __main__ - Current sync started at: 2026-07-10 13:11:18.319927
+2026-07-10 14:11:18 [INFO] __main__ - Requesting data since: 2026-07-10 13:10:00
+2026-07-10 14:11:18 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:11:19 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-07-10 14:11:19 [INFO] __main__ - No new data to sync. Database is up to date.
+2026-07-10 14:11:19 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:11:19 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-07-10 14:11:19 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:11:19 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-07-10 14:11:19 [DEBUG] sync.data_pusher - No pending VirtuelUser changes to push
+2026-07-10 14:11:19 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:11:19 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-07-10 14:11:19 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:11:19 [DEBUG] __main__ - Closing database connection...
+2026-07-10 14:11:19 [INFO] __main__ - Sync #4 completed successfully.
+2026-07-10 14:11:19 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-07-10 14:11:19)...
+2026-07-10 14:12:19 [INFO] __main__ - ############################################################
+2026-07-10 14:12:19 [INFO] __main__ - SYNC #5 - 2026-07-10 14:12:19.253470
+2026-07-10 14:12:19 [INFO] __main__ - ############################################################
+2026-07-10 14:12:19 [INFO] __main__ - ============================================================
+2026-07-10 14:12:19 [INFO] __main__ - STARTING SYNC AT 2026-07-10 14:12:19.253824
+2026-07-10 14:12:19 [INFO] __main__ - ============================================================
+2026-07-10 14:12:19 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-07-10 14:12:19 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-07-10 14:12:19 [INFO] __main__ - Checking last sync time...
+2026-07-10 14:12:19 [INFO] __main__ - Last sync was at: 2026-07-10 13:11:18.319927
+2026-07-10 14:12:19 [DEBUG] __main__ - Current sync started at: 2026-07-10 13:12:19.743702
+2026-07-10 14:12:19 [INFO] __main__ - Requesting data since: 2026-07-10 13:11:00
+2026-07-10 14:12:19 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:12:20 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-07-10 14:12:20 [INFO] __main__ - No new data to sync. Database is up to date.
+2026-07-10 14:12:20 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:12:20 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-07-10 14:12:20 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:12:20 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-07-10 14:12:20 [DEBUG] sync.data_pusher - No pending VirtuelUser changes to push
+2026-07-10 14:12:20 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:12:20 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-07-10 14:12:20 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:12:20 [DEBUG] __main__ - Closing database connection...
+2026-07-10 14:12:20 [INFO] __main__ - Sync #5 completed successfully.
+2026-07-10 14:12:20 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-07-10 14:12:20)...
+2026-07-10 14:13:20 [INFO] __main__ - ############################################################
+2026-07-10 14:13:20 [INFO] __main__ - SYNC #6 - 2026-07-10 14:13:20.741609
+2026-07-10 14:13:20 [INFO] __main__ - ############################################################
+2026-07-10 14:13:20 [INFO] __main__ - ============================================================
+2026-07-10 14:13:20 [INFO] __main__ - STARTING SYNC AT 2026-07-10 14:13:20.741734
+2026-07-10 14:13:20 [INFO] __main__ - ============================================================
+2026-07-10 14:13:20 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-07-10 14:13:21 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-07-10 14:13:21 [INFO] __main__ - Checking last sync time...
+2026-07-10 14:13:21 [INFO] __main__ - Last sync was at: 2026-07-10 13:12:19.743702
+2026-07-10 14:13:21 [DEBUG] __main__ - Current sync started at: 2026-07-10 13:13:21.190079
+2026-07-10 14:13:21 [INFO] __main__ - Requesting data since: 2026-07-10 13:12:00
+2026-07-10 14:13:21 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:13:21 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-07-10 14:13:21 [INFO] __main__ - No new data to sync. Database is up to date.
+2026-07-10 14:13:21 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:13:21 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-07-10 14:13:21 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:13:21 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-07-10 14:13:21 [DEBUG] sync.data_pusher - No pending VirtuelUser changes to push
+2026-07-10 14:13:21 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:13:21 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-07-10 14:13:21 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:13:21 [DEBUG] __main__ - Closing database connection...
+2026-07-10 14:13:21 [INFO] __main__ - Sync #6 completed successfully.
+2026-07-10 14:13:21 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-07-10 14:13:21)...
+2026-07-10 14:13:51 [INFO] __main__ - ============================================================
+2026-07-10 14:13:51 [INFO] __main__ - CONTINUOUS SYNC STOPPED BY USER. Total syncs: 6
+2026-07-10 14:13:51 [INFO] __main__ - ============================================================
+2026-07-10 14:13:52 [INFO] __main__ - ============================================================
+2026-07-10 14:13:52 [INFO] __main__ - SYNC MANAGER - STARTING
+2026-07-10 14:13:52 [INFO] __main__ - ============================================================
+2026-07-10 14:13:52 [INFO] __main__ - Loading configuration...
+2026-07-10 14:13:52 [INFO] __main__ - Initializing authentication...
+2026-07-10 14:13:52 [INFO] __main__ - Starting token auto-refresh...
+2026-07-10 14:13:53 [INFO] __main__ - ============================================================
+2026-07-10 14:13:53 [INFO] __main__ - CONTINUOUS SYNC MODE
+2026-07-10 14:13:53 [INFO] __main__ - Sync interval: 1 minute(s) | Press Ctrl+C to stop
+2026-07-10 14:13:53 [INFO] __main__ - ============================================================
+2026-07-10 14:13:53 [INFO] __main__ - ############################################################
+2026-07-10 14:13:53 [INFO] __main__ - SYNC #1 - 2026-07-10 14:13:53.513481
+2026-07-10 14:13:53 [INFO] __main__ - ############################################################
+2026-07-10 14:13:53 [INFO] __main__ - ============================================================
+2026-07-10 14:13:53 [INFO] __main__ - STARTING SYNC AT 2026-07-10 14:13:53.513936
+2026-07-10 14:13:53 [INFO] __main__ - ============================================================
+2026-07-10 14:13:53 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-07-10 14:13:53 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-07-10 14:13:53 [INFO] __main__ - Checking last sync time...
+2026-07-10 14:13:53 [INFO] __main__ - No previous sync found - performing full sync.
+2026-07-10 14:13:53 [DEBUG] __main__ - Current sync started at: 2026-07-10 13:13:53.887632
+2026-07-10 14:13:53 [INFO] __main__ - Requesting data since: None
+2026-07-10 14:13:53 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:13:57 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-07-10 14:13:58 [INFO] __main__ - New data found! Processing...
+2026-07-10 14:13:58 [INFO] __main__ - ============================================================
+2026-07-10 14:13:58 [INFO] __main__ - Processing SYNC DATA
+2026-07-10 14:13:58 [INFO] __main__ - ============================================================
+2026-07-10 14:13:58 [INFO] __main__ - Processing ACCOUNTS...
+2026-07-10 14:13:58 [INFO] __main__ - Processing Account Subjects...
+2026-07-10 14:13:58 [INFO] __main__ - Processing Calendars...
+2026-07-10 14:13:58 [INFO] __main__ - Processing Groups...
+2026-07-10 14:13:58 [INFO] __main__ - Processing Attendances...
+2026-07-10 14:13:58 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:13:59 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/reset-special-slc-token-detail-by-id HTTP/1.1" 404 75
+2026-07-10 14:13:59 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:14:00 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/reset-special-slc-token-detail-by-id HTTP/1.1" 404 75
+2026-07-10 14:14:00 [INFO] __main__ - Processing Cameras...
+2026-07-10 14:14:00 [INFO] __main__ - Processing Formations...
+2026-07-10 14:14:00 [INFO] __main__ - Processing SLC Locals...
+2026-07-10 14:14:00 [INFO] __main__ - Processing Teacher-Subject Relations...
+2026-07-10 14:14:00 [INFO] __main__ - Processing User-Session Relations...
+2026-07-10 14:14:00 [INFO] __main__ - Processing Locals and Rooms...
+2026-07-10 14:14:00 [INFO] __main__ - Processing Sessions...
+2026-07-10 14:14:00 [INFO] __main__ - Processing SLCs...
+2026-07-10 14:14:00 [INFO] __main__ - Processing Subjects...
+2026-07-10 14:14:00 [INFO] __main__ - Processing Tablets...
+2026-07-10 14:14:00 [INFO] __main__ - Processing Users...
+2026-07-10 14:14:00 [INFO] __main__ - Processing Admins...
+2026-07-10 14:14:00 [INFO] __main__ - Processing Virtual Users...
+2026-07-10 14:14:00 [INFO] __main__ - Processing Payment Sessions...
+2026-07-10 14:14:01 [INFO] __main__ - Processing Invoices...
+2026-07-10 14:14:01 [INFO] __main__ - Processing Levels...
+2026-07-10 14:14:01 [INFO] __main__ - Processing Account Levels...
+2026-07-10 14:14:01 [INFO] __main__ - Processing Sections...
+2026-07-10 14:14:01 [INFO] __main__ - Processing Account Sections...
+2026-07-10 14:14:01 [INFO] __main__ - Processing Tag Configs...
+2026-07-10 14:14:01 [INFO] __main__ - Processing Account Tags...
+2026-07-10 14:14:01 [INFO] __main__ - Processing Completion Tags...
+2026-07-10 14:14:01 [INFO] __main__ - Processing RelationCompletionTag...
+2026-07-10 14:14:01 [INFO] __main__ - Processing Season ...
+2026-07-10 14:14:01 [INFO] __main__ - Processing Subsubject
+2026-07-10 14:14:01 [INFO] __main__ - Processing relationLocalSession
+2026-07-10 14:14:01 [INFO] __main__ - Processing relationTeacherAccount
+2026-07-10 14:14:01 [INFO] __main__ - Processing completionTagUser
+2026-07-10 14:14:01 [ERROR] __main__ - SYNC FAILED: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/sync_manager.py", line 122, in sync_data_once
+    process_sync_data(db, data, settings)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/sync_manager.py", line 397, in process_sync_data
+    process_completionTaguser(db, n)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/processors/completionTagUser_processor.py", line 87, in process_completionTaguser
+    total_inserted = results["created_section"]["inserted"] + results["updated_section"]["inserted"]
+TypeError: 'NoneType' object is not subscriptable
+2026-07-10 14:14:01 [DEBUG] __main__ - Closing database connection...
+2026-07-10 14:14:01 [ERROR] __main__ - Sync #1 failed.
+2026-07-10 14:14:01 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-07-10 14:14:01)...
+2026-07-10 14:14:03 [INFO] __main__ - ============================================================
+2026-07-10 14:14:03 [INFO] __main__ - CONTINUOUS SYNC STOPPED BY USER. Total syncs: 1
+2026-07-10 14:14:03 [INFO] __main__ - ============================================================
+2026-07-10 14:20:58 [INFO] __main__ - ============================================================
+2026-07-10 14:20:58 [INFO] __main__ - SYNC MANAGER - STARTING
+2026-07-10 14:20:58 [INFO] __main__ - ============================================================
+2026-07-10 14:20:58 [INFO] __main__ - Loading configuration...
+2026-07-10 14:20:58 [INFO] __main__ - Initializing authentication...
+2026-07-10 14:20:58 [INFO] __main__ - Starting token auto-refresh...
+2026-07-10 14:20:59 [INFO] __main__ - ============================================================
+2026-07-10 14:20:59 [INFO] __main__ - CONTINUOUS SYNC MODE
+2026-07-10 14:20:59 [INFO] __main__ - Sync interval: 1 minute(s) | Press Ctrl+C to stop
+2026-07-10 14:20:59 [INFO] __main__ - ============================================================
+2026-07-10 14:20:59 [INFO] __main__ - ############################################################
+2026-07-10 14:20:59 [INFO] __main__ - SYNC #1 - 2026-07-10 14:20:59.980176
+2026-07-10 14:20:59 [INFO] __main__ - ############################################################
+2026-07-10 14:20:59 [INFO] __main__ - ============================================================
+2026-07-10 14:20:59 [INFO] __main__ - STARTING SYNC AT 2026-07-10 14:20:59.980477
+2026-07-10 14:20:59 [INFO] __main__ - ============================================================
+2026-07-10 14:20:59 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-07-10 14:21:00 [INFO] __main__ - ============================================================
+2026-07-10 14:21:00 [INFO] __main__ - CONTINUOUS SYNC STOPPED BY USER. Total syncs: 1
+2026-07-10 14:21:00 [INFO] __main__ - ============================================================
+2026-07-10 14:21:10 [INFO] __main__ - ============================================================
+2026-07-10 14:21:10 [INFO] __main__ - SYNC MANAGER - STARTING
+2026-07-10 14:21:10 [INFO] __main__ - ============================================================
+2026-07-10 14:21:10 [INFO] __main__ - Loading configuration...
+2026-07-10 14:21:10 [INFO] __main__ - Initializing authentication...
+2026-07-10 14:21:10 [INFO] __main__ - Starting token auto-refresh...
+2026-07-10 14:21:11 [INFO] __main__ - ============================================================
+2026-07-10 14:21:11 [INFO] __main__ - CONTINUOUS SYNC MODE
+2026-07-10 14:21:11 [INFO] __main__ - Sync interval: 1 minute(s) | Press Ctrl+C to stop
+2026-07-10 14:21:11 [INFO] __main__ - ============================================================
+2026-07-10 14:21:11 [INFO] __main__ - ############################################################
+2026-07-10 14:21:11 [INFO] __main__ - SYNC #1 - 2026-07-10 14:21:11.652239
+2026-07-10 14:21:11 [INFO] __main__ - ############################################################
+2026-07-10 14:21:11 [INFO] __main__ - ============================================================
+2026-07-10 14:21:11 [INFO] __main__ - STARTING SYNC AT 2026-07-10 14:21:11.652558
+2026-07-10 14:21:11 [INFO] __main__ - ============================================================
+2026-07-10 14:21:11 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-07-10 14:21:12 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-07-10 14:21:12 [INFO] __main__ - Checking last sync time...
+2026-07-10 14:21:12 [INFO] __main__ - No previous sync found - performing full sync.
+2026-07-10 14:21:12 [DEBUG] __main__ - Current sync started at: 2026-07-10 13:21:12.055521
+2026-07-10 14:21:12 [INFO] __main__ - Requesting data since: None
+2026-07-10 14:21:12 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:21:16 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-07-10 14:21:17 [INFO] __main__ - New data found! Processing...
+2026-07-10 14:21:17 [INFO] __main__ - ============================================================
+2026-07-10 14:21:17 [INFO] __main__ - Processing SYNC DATA
+2026-07-10 14:21:17 [INFO] __main__ - ============================================================
+2026-07-10 14:21:17 [INFO] __main__ - Processing ACCOUNTS...
+2026-07-10 14:21:17 [INFO] __main__ - Processing Account Subjects...
+2026-07-10 14:21:17 [INFO] __main__ - Processing Calendars...
+2026-07-10 14:21:17 [INFO] __main__ - Processing Groups...
+2026-07-10 14:21:17 [INFO] __main__ - Processing Attendances...
+2026-07-10 14:21:17 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:21:18 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/reset-special-slc-token-detail-by-id HTTP/1.1" 404 75
+2026-07-10 14:21:18 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:21:19 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/reset-special-slc-token-detail-by-id HTTP/1.1" 404 75
+2026-07-10 14:21:19 [INFO] __main__ - Processing Cameras...
+2026-07-10 14:21:19 [INFO] __main__ - Processing Formations...
+2026-07-10 14:21:19 [INFO] __main__ - Processing SLC Locals...
+2026-07-10 14:21:19 [INFO] __main__ - Processing Teacher-Subject Relations...
+2026-07-10 14:21:19 [INFO] __main__ - Processing User-Session Relations...
+2026-07-10 14:21:19 [INFO] __main__ - Processing Locals and Rooms...
+2026-07-10 14:21:19 [INFO] __main__ - Processing Sessions...
+2026-07-10 14:21:19 [INFO] __main__ - Processing SLCs...
+2026-07-10 14:21:19 [INFO] __main__ - Processing Subjects...
+2026-07-10 14:21:19 [INFO] __main__ - Processing Tablets...
+2026-07-10 14:21:19 [INFO] __main__ - Processing Users...
+2026-07-10 14:21:19 [INFO] __main__ - Processing Admins...
+2026-07-10 14:21:19 [INFO] __main__ - Processing Virtual Users...
+2026-07-10 14:21:19 [INFO] __main__ - Processing Payment Sessions...
+2026-07-10 14:21:20 [INFO] __main__ - Processing Invoices...
+2026-07-10 14:21:20 [INFO] __main__ - Processing Levels...
+2026-07-10 14:21:20 [INFO] __main__ - Processing Account Levels...
+2026-07-10 14:21:20 [INFO] __main__ - Processing Sections...
+2026-07-10 14:21:20 [INFO] __main__ - Processing Account Sections...
+2026-07-10 14:21:20 [INFO] __main__ - Processing Tag Configs...
+2026-07-10 14:21:20 [INFO] __main__ - Processing Account Tags...
+2026-07-10 14:21:20 [INFO] __main__ - Processing Completion Tags...
+2026-07-10 14:21:20 [INFO] __main__ - Processing RelationCompletionTag...
+2026-07-10 14:21:20 [INFO] __main__ - Processing Season ...
+2026-07-10 14:21:20 [INFO] __main__ - Processing Subsubject
+2026-07-10 14:21:20 [INFO] __main__ - Processing relationLocalSession
+2026-07-10 14:21:20 [INFO] __main__ - Processing relationTeacherAccount
+2026-07-10 14:21:20 [INFO] __main__ - Processing completionTagUser
+2026-07-10 14:21:20 [INFO] __main__ - Processing Slc_Door
+2026-07-10 14:21:20 [INFO] __main__ - Pushing local changes to remote...
+2026-07-10 14:21:20 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:21:20 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-07-10 14:21:20 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:21:20 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-07-10 14:21:20 [DEBUG] sync.data_pusher - No pending VirtuelUser changes to push
+2026-07-10 14:21:20 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:21:20 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-07-10 14:21:20 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:21:20 [INFO] __main__ - Saving sync status...
+2026-07-10 14:21:20 [INFO] __main__ - ============================================================
+2026-07-10 14:21:20 [INFO] __main__ - SYNC COMPLETED SUCCESSFULLY!
+2026-07-10 14:21:20 [INFO] __main__ - ============================================================
+2026-07-10 14:21:20 [DEBUG] __main__ - Closing database connection...
+2026-07-10 14:21:20 [INFO] __main__ - Sync #1 completed successfully.
+2026-07-10 14:21:20 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-07-10 14:21:20)...
+2026-07-10 14:22:20 [INFO] __main__ - ############################################################
+2026-07-10 14:22:20 [INFO] __main__ - SYNC #2 - 2026-07-10 14:22:20.448582
+2026-07-10 14:22:20 [INFO] __main__ - ############################################################
+2026-07-10 14:22:20 [INFO] __main__ - ============================================================
+2026-07-10 14:22:20 [INFO] __main__ - STARTING SYNC AT 2026-07-10 14:22:20.449073
+2026-07-10 14:22:20 [INFO] __main__ - ============================================================
+2026-07-10 14:22:20 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-07-10 14:22:20 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-07-10 14:22:21 [INFO] __main__ - Checking last sync time...
+2026-07-10 14:22:21 [INFO] __main__ - Last sync was at: 2026-07-10 13:21:12.055521
+2026-07-10 14:22:21 [DEBUG] __main__ - Current sync started at: 2026-07-10 13:22:21.156669
+2026-07-10 14:22:21 [INFO] __main__ - Requesting data since: 2026-07-10 13:21:00
+2026-07-10 14:22:21 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:22:22 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-07-10 14:22:22 [INFO] __main__ - No new data to sync. Database is up to date.
+2026-07-10 14:22:22 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:22:22 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-07-10 14:22:22 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:22:22 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-07-10 14:22:22 [DEBUG] sync.data_pusher - No pending VirtuelUser changes to push
+2026-07-10 14:22:22 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:22:22 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-07-10 14:22:22 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:22:22 [DEBUG] __main__ - Closing database connection...
+2026-07-10 14:22:22 [INFO] __main__ - Sync #2 completed successfully.
+2026-07-10 14:22:22 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-07-10 14:22:22)...
+2026-07-10 14:23:22 [INFO] __main__ - ############################################################
+2026-07-10 14:23:22 [INFO] __main__ - SYNC #3 - 2026-07-10 14:23:22.681424
+2026-07-10 14:23:22 [INFO] __main__ - ############################################################
+2026-07-10 14:23:22 [INFO] __main__ - ============================================================
+2026-07-10 14:23:22 [INFO] __main__ - STARTING SYNC AT 2026-07-10 14:23:22.681507
+2026-07-10 14:23:22 [INFO] __main__ - ============================================================
+2026-07-10 14:23:22 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-07-10 14:23:23 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-07-10 14:23:23 [INFO] __main__ - Checking last sync time...
+2026-07-10 14:23:23 [INFO] __main__ - Last sync was at: 2026-07-10 13:22:21.156669
+2026-07-10 14:23:23 [DEBUG] __main__ - Current sync started at: 2026-07-10 13:23:23.071732
+2026-07-10 14:23:23 [INFO] __main__ - Requesting data since: 2026-07-10 13:22:00
+2026-07-10 14:23:23 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:23:24 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-07-10 14:23:24 [INFO] __main__ - No new data to sync. Database is up to date.
+2026-07-10 14:23:24 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:23:24 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-07-10 14:23:24 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:23:24 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-07-10 14:23:24 [DEBUG] sync.data_pusher - No pending VirtuelUser changes to push
+2026-07-10 14:23:24 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:23:24 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-07-10 14:23:24 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:23:24 [DEBUG] __main__ - Closing database connection...
+2026-07-10 14:23:24 [INFO] __main__ - Sync #3 completed successfully.
+2026-07-10 14:23:24 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-07-10 14:23:24)...
+2026-07-10 14:23:52 [INFO] __main__ - ============================================================
+2026-07-10 14:23:52 [INFO] __main__ - CONTINUOUS SYNC STOPPED BY USER. Total syncs: 3
+2026-07-10 14:23:52 [INFO] __main__ - ============================================================
+2026-07-10 14:23:55 [INFO] __main__ - ============================================================
+2026-07-10 14:23:55 [INFO] __main__ - SYNC MANAGER - STARTING
+2026-07-10 14:23:55 [INFO] __main__ - ============================================================
+2026-07-10 14:23:55 [INFO] __main__ - Loading configuration...
+2026-07-10 14:23:55 [INFO] __main__ - Initializing authentication...
+2026-07-10 14:23:55 [INFO] __main__ - Starting token auto-refresh...
+2026-07-10 14:23:56 [INFO] __main__ - ============================================================
+2026-07-10 14:23:56 [INFO] __main__ - CONTINUOUS SYNC MODE
+2026-07-10 14:23:56 [INFO] __main__ - Sync interval: 1 minute(s) | Press Ctrl+C to stop
+2026-07-10 14:23:56 [INFO] __main__ - ============================================================
+2026-07-10 14:23:56 [INFO] __main__ - ############################################################
+2026-07-10 14:23:56 [INFO] __main__ - SYNC #1 - 2026-07-10 14:23:56.805178
+2026-07-10 14:23:56 [INFO] __main__ - ############################################################
+2026-07-10 14:23:56 [INFO] __main__ - ============================================================
+2026-07-10 14:23:56 [INFO] __main__ - STARTING SYNC AT 2026-07-10 14:23:56.805483
+2026-07-10 14:23:56 [INFO] __main__ - ============================================================
+2026-07-10 14:23:56 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-07-10 14:23:57 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-07-10 14:23:57 [INFO] __main__ - Checking last sync time...
+2026-07-10 14:23:57 [INFO] __main__ - No previous sync found - performing full sync.
+2026-07-10 14:23:57 [DEBUG] __main__ - Current sync started at: 2026-07-10 13:23:57.233966
+2026-07-10 14:23:57 [INFO] __main__ - Requesting data since: None
+2026-07-10 14:23:57 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:24:00 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-07-10 14:24:01 [INFO] __main__ - New data found! Processing...
+2026-07-10 14:24:01 [INFO] __main__ - ============================================================
+2026-07-10 14:24:01 [INFO] __main__ - Processing SYNC DATA
+2026-07-10 14:24:01 [INFO] __main__ - ============================================================
+2026-07-10 14:24:01 [INFO] __main__ - Processing ACCOUNTS...
+2026-07-10 14:24:01 [INFO] __main__ - Processing Account Subjects...
+2026-07-10 14:24:01 [INFO] __main__ - Processing Calendars...
+2026-07-10 14:24:01 [INFO] __main__ - Processing Groups...
+2026-07-10 14:24:02 [INFO] __main__ - Processing Attendances...
+2026-07-10 14:24:02 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:24:02 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/reset-special-slc-token-detail-by-id HTTP/1.1" 404 75
+2026-07-10 14:24:03 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:24:03 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/reset-special-slc-token-detail-by-id HTTP/1.1" 404 75
+2026-07-10 14:24:03 [INFO] __main__ - Processing Cameras...
+2026-07-10 14:24:03 [INFO] __main__ - Processing Formations...
+2026-07-10 14:24:03 [INFO] __main__ - Processing SLC Locals...
+2026-07-10 14:24:03 [INFO] __main__ - Processing Teacher-Subject Relations...
+2026-07-10 14:24:03 [INFO] __main__ - Processing User-Session Relations...
+2026-07-10 14:24:03 [INFO] __main__ - Processing Locals and Rooms...
+2026-07-10 14:24:03 [INFO] __main__ - Processing Sessions...
+2026-07-10 14:24:03 [INFO] __main__ - Processing SLCs...
+2026-07-10 14:24:03 [INFO] __main__ - Processing Subjects...
+2026-07-10 14:24:03 [INFO] __main__ - Processing Tablets...
+2026-07-10 14:24:04 [INFO] __main__ - Processing Users...
+2026-07-10 14:24:04 [INFO] __main__ - Processing Admins...
+2026-07-10 14:24:04 [INFO] __main__ - Processing Virtual Users...
+2026-07-10 14:24:04 [INFO] __main__ - Processing Payment Sessions...
+2026-07-10 14:24:04 [INFO] __main__ - Processing Invoices...
+2026-07-10 14:24:04 [INFO] __main__ - Processing Levels...
+2026-07-10 14:24:04 [INFO] __main__ - Processing Account Levels...
+2026-07-10 14:24:04 [INFO] __main__ - Processing Sections...
+2026-07-10 14:24:04 [INFO] __main__ - Processing Account Sections...
+2026-07-10 14:24:04 [INFO] __main__ - Processing Tag Configs...
+2026-07-10 14:24:04 [INFO] __main__ - Processing Account Tags...
+2026-07-10 14:24:04 [INFO] __main__ - Processing Completion Tags...
+2026-07-10 14:24:04 [INFO] __main__ - Processing RelationCompletionTag...
+2026-07-10 14:24:04 [INFO] __main__ - Processing Season ...
+2026-07-10 14:24:04 [INFO] __main__ - Processing Subsubject
+2026-07-10 14:24:04 [INFO] __main__ - Processing relationLocalSession
+2026-07-10 14:24:04 [INFO] __main__ - Processing relationTeacherAccount
+2026-07-10 14:24:04 [INFO] __main__ - Processing completionTagUser
+2026-07-10 14:24:04 [INFO] __main__ - Processing Slc_Door
+2026-07-10 14:24:04 [INFO] __main__ - Pushing local changes to remote...
+2026-07-10 14:24:04 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:24:04 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-07-10 14:24:04 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:24:04 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-07-10 14:24:04 [DEBUG] sync.data_pusher - No pending VirtuelUser changes to push
+2026-07-10 14:24:04 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:24:04 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-07-10 14:24:04 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:24:04 [INFO] __main__ - Saving sync status...
+2026-07-10 14:24:04 [INFO] __main__ - ============================================================
+2026-07-10 14:24:04 [INFO] __main__ - SYNC COMPLETED SUCCESSFULLY!
+2026-07-10 14:24:04 [INFO] __main__ - ============================================================
+2026-07-10 14:24:04 [DEBUG] __main__ - Closing database connection...
+2026-07-10 14:24:04 [INFO] __main__ - Sync #1 completed successfully.
+2026-07-10 14:24:04 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-07-10 14:24:04)...
+2026-07-10 14:24:33 [INFO] __main__ - ============================================================
+2026-07-10 14:24:33 [INFO] __main__ - CONTINUOUS SYNC STOPPED BY USER. Total syncs: 1
+2026-07-10 14:24:33 [INFO] __main__ - ============================================================
+2026-07-10 14:25:13 [INFO] __main__ - ============================================================
+2026-07-10 14:25:13 [INFO] __main__ - SYNC MANAGER - STARTING
+2026-07-10 14:25:13 [INFO] __main__ - ============================================================
+2026-07-10 14:25:13 [INFO] __main__ - Loading configuration...
+2026-07-10 14:25:14 [INFO] __main__ - Initializing authentication...
+2026-07-10 14:25:14 [INFO] __main__ - Starting token auto-refresh...
+2026-07-10 14:25:15 [INFO] __main__ - ============================================================
+2026-07-10 14:25:15 [INFO] __main__ - CONTINUOUS SYNC MODE
+2026-07-10 14:25:15 [INFO] __main__ - Sync interval: 1 minute(s) | Press Ctrl+C to stop
+2026-07-10 14:25:15 [INFO] __main__ - ============================================================
+2026-07-10 14:25:15 [INFO] __main__ - ############################################################
+2026-07-10 14:25:15 [INFO] __main__ - SYNC #1 - 2026-07-10 14:25:15.027921
+2026-07-10 14:25:15 [INFO] __main__ - ############################################################
+2026-07-10 14:25:15 [INFO] __main__ - ============================================================
+2026-07-10 14:25:15 [INFO] __main__ - STARTING SYNC AT 2026-07-10 14:25:15.028339
+2026-07-10 14:25:15 [INFO] __main__ - ============================================================
+2026-07-10 14:25:15 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-07-10 14:25:15 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-07-10 14:25:15 [INFO] __main__ - Checking last sync time...
+2026-07-10 14:25:15 [INFO] __main__ - No previous sync found - performing full sync.
+2026-07-10 14:25:15 [DEBUG] __main__ - Current sync started at: 2026-07-10 13:25:15.613870
+2026-07-10 14:25:15 [INFO] __main__ - Requesting data since: None
+2026-07-10 14:25:15 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:25:19 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-07-10 14:25:22 [INFO] __main__ - New data found! Processing...
+2026-07-10 14:25:22 [INFO] __main__ - ============================================================
+2026-07-10 14:25:22 [INFO] __main__ - Processing SYNC DATA
+2026-07-10 14:25:22 [INFO] __main__ - ============================================================
+2026-07-10 14:25:22 [INFO] __main__ - Processing completionTagUser
+2026-07-10 14:25:22 [INFO] __main__ - Pushing local changes to remote...
+2026-07-10 14:25:22 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:25:22 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-07-10 14:25:22 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:25:22 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-07-10 14:25:22 [DEBUG] sync.data_pusher - No pending VirtuelUser changes to push
+2026-07-10 14:25:22 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:25:22 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-07-10 14:25:22 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:25:22 [INFO] __main__ - Saving sync status...
+2026-07-10 14:25:22 [INFO] __main__ - ============================================================
+2026-07-10 14:25:22 [INFO] __main__ - SYNC COMPLETED SUCCESSFULLY!
+2026-07-10 14:25:22 [INFO] __main__ - ============================================================
+2026-07-10 14:25:22 [DEBUG] __main__ - Closing database connection...
+2026-07-10 14:25:22 [INFO] __main__ - Sync #1 completed successfully.
+2026-07-10 14:25:22 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-07-10 14:25:22)...
+2026-07-10 14:25:24 [INFO] __main__ - ============================================================
+2026-07-10 14:25:24 [INFO] __main__ - CONTINUOUS SYNC STOPPED BY USER. Total syncs: 1
+2026-07-10 14:25:24 [INFO] __main__ - ============================================================
+2026-07-10 14:29:21 [INFO] __main__ - ============================================================
+2026-07-10 14:29:21 [INFO] __main__ - SYNC MANAGER - STARTING
+2026-07-10 14:29:21 [INFO] __main__ - ============================================================
+2026-07-10 14:29:21 [INFO] __main__ - Loading configuration...
+2026-07-10 14:29:21 [INFO] __main__ - Initializing authentication...
+2026-07-10 14:29:21 [INFO] __main__ - Starting token auto-refresh...
+2026-07-10 14:29:22 [INFO] __main__ - ============================================================
+2026-07-10 14:29:22 [INFO] __main__ - CONTINUOUS SYNC MODE
+2026-07-10 14:29:22 [INFO] __main__ - Sync interval: 1 minute(s) | Press Ctrl+C to stop
+2026-07-10 14:29:22 [INFO] __main__ - ============================================================
+2026-07-10 14:29:22 [INFO] __main__ - ############################################################
+2026-07-10 14:29:22 [INFO] __main__ - SYNC #1 - 2026-07-10 14:29:22.944871
+2026-07-10 14:29:22 [INFO] __main__ - ############################################################
+2026-07-10 14:29:22 [INFO] __main__ - ============================================================
+2026-07-10 14:29:22 [INFO] __main__ - STARTING SYNC AT 2026-07-10 14:29:22.945199
+2026-07-10 14:29:22 [INFO] __main__ - ============================================================
+2026-07-10 14:29:22 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-07-10 14:29:23 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-07-10 14:29:23 [INFO] __main__ - Checking last sync time...
+2026-07-10 14:29:23 [INFO] __main__ - Last sync was at: 2026-07-10 13:25:15.613870
+2026-07-10 14:29:23 [DEBUG] __main__ - Current sync started at: 2026-07-10 13:29:23.401718
+2026-07-10 14:29:23 [INFO] __main__ - Requesting data since: 2026-07-10 13:25:00
+2026-07-10 14:29:23 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:29:24 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-07-10 14:29:24 [INFO] __main__ - No new data to sync. Database is up to date.
+2026-07-10 14:29:24 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:29:24 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-07-10 14:29:24 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:29:24 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-07-10 14:29:24 [DEBUG] sync.data_pusher - No pending VirtuelUser changes to push
+2026-07-10 14:29:24 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:29:24 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-07-10 14:29:24 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:29:24 [DEBUG] __main__ - Closing database connection...
+2026-07-10 14:29:24 [INFO] __main__ - Sync #1 completed successfully.
+2026-07-10 14:29:24 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-07-10 14:29:24)...
+2026-07-10 14:29:31 [INFO] __main__ - ============================================================
+2026-07-10 14:29:31 [INFO] __main__ - CONTINUOUS SYNC STOPPED BY USER. Total syncs: 1
+2026-07-10 14:29:31 [INFO] __main__ - ============================================================
+2026-07-10 14:29:40 [INFO] __main__ - ============================================================
+2026-07-10 14:29:40 [INFO] __main__ - SYNC MANAGER - STARTING
+2026-07-10 14:29:40 [INFO] __main__ - ============================================================
+2026-07-10 14:29:40 [INFO] __main__ - Loading configuration...
+2026-07-10 14:29:40 [INFO] __main__ - Initializing authentication...
+2026-07-10 14:29:40 [INFO] __main__ - Starting token auto-refresh...
+2026-07-10 14:29:41 [INFO] __main__ - ============================================================
+2026-07-10 14:29:41 [INFO] __main__ - CONTINUOUS SYNC MODE
+2026-07-10 14:29:41 [INFO] __main__ - Sync interval: 1 minute(s) | Press Ctrl+C to stop
+2026-07-10 14:29:41 [INFO] __main__ - ============================================================
+2026-07-10 14:29:41 [INFO] __main__ - ############################################################
+2026-07-10 14:29:41 [INFO] __main__ - SYNC #1 - 2026-07-10 14:29:41.925425
+2026-07-10 14:29:41 [INFO] __main__ - ############################################################
+2026-07-10 14:29:41 [INFO] __main__ - ============================================================
+2026-07-10 14:29:41 [INFO] __main__ - STARTING SYNC AT 2026-07-10 14:29:41.925733
+2026-07-10 14:29:41 [INFO] __main__ - ============================================================
+2026-07-10 14:29:41 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-07-10 14:29:42 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-07-10 14:29:42 [INFO] __main__ - Checking last sync time...
+2026-07-10 14:29:42 [INFO] __main__ - No previous sync found - performing full sync.
+2026-07-10 14:29:42 [DEBUG] __main__ - Current sync started at: 2026-07-10 13:29:42.422106
+2026-07-10 14:29:42 [INFO] __main__ - Requesting data since: None
+2026-07-10 14:29:42 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:29:45 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-07-10 14:29:46 [INFO] __main__ - New data found! Processing...
+2026-07-10 14:29:46 [INFO] __main__ - ============================================================
+2026-07-10 14:29:46 [INFO] __main__ - Processing SYNC DATA
+2026-07-10 14:29:46 [INFO] __main__ - ============================================================
+2026-07-10 14:29:46 [INFO] __main__ - Processing completionTagUser
+2026-07-10 14:29:46 [INFO] __main__ - Pushing local changes to remote...
+2026-07-10 14:29:46 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:29:46 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-07-10 14:29:46 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:29:46 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-07-10 14:29:46 [DEBUG] sync.data_pusher - No pending VirtuelUser changes to push
+2026-07-10 14:29:46 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:29:46 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-07-10 14:29:46 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:29:46 [INFO] __main__ - Saving sync status...
+2026-07-10 14:29:46 [INFO] __main__ - ============================================================
+2026-07-10 14:29:46 [INFO] __main__ - SYNC COMPLETED SUCCESSFULLY!
+2026-07-10 14:29:46 [INFO] __main__ - ============================================================
+2026-07-10 14:29:46 [DEBUG] __main__ - Closing database connection...
+2026-07-10 14:29:46 [INFO] __main__ - Sync #1 completed successfully.
+2026-07-10 14:29:46 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-07-10 14:29:46)...
+2026-07-10 14:30:24 [INFO] __main__ - ============================================================
+2026-07-10 14:30:24 [INFO] __main__ - CONTINUOUS SYNC STOPPED BY USER. Total syncs: 1
+2026-07-10 14:30:24 [INFO] __main__ - ============================================================
+2026-07-10 14:30:35 [INFO] __main__ - ============================================================
+2026-07-10 14:30:35 [INFO] __main__ - SYNC MANAGER - STARTING
+2026-07-10 14:30:35 [INFO] __main__ - ============================================================
+2026-07-10 14:30:35 [INFO] __main__ - Loading configuration...
+2026-07-10 14:30:35 [INFO] __main__ - Initializing authentication...
+2026-07-10 14:30:35 [INFO] __main__ - Starting token auto-refresh...
+2026-07-10 14:30:36 [INFO] __main__ - ============================================================
+2026-07-10 14:30:36 [INFO] __main__ - CONTINUOUS SYNC MODE
+2026-07-10 14:30:36 [INFO] __main__ - Sync interval: 1 minute(s) | Press Ctrl+C to stop
+2026-07-10 14:30:36 [INFO] __main__ - ============================================================
+2026-07-10 14:30:36 [INFO] __main__ - ############################################################
+2026-07-10 14:30:36 [INFO] __main__ - SYNC #1 - 2026-07-10 14:30:36.409166
+2026-07-10 14:30:36 [INFO] __main__ - ############################################################
+2026-07-10 14:30:36 [INFO] __main__ - ============================================================
+2026-07-10 14:30:36 [INFO] __main__ - STARTING SYNC AT 2026-07-10 14:30:36.409480
+2026-07-10 14:30:36 [INFO] __main__ - ============================================================
+2026-07-10 14:30:36 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-07-10 14:30:36 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-07-10 14:30:36 [INFO] __main__ - Checking last sync time...
+2026-07-10 14:30:36 [INFO] __main__ - No previous sync found - performing full sync.
+2026-07-10 14:30:36 [DEBUG] __main__ - Current sync started at: 2026-07-10 13:30:36.820009
+2026-07-10 14:30:36 [INFO] __main__ - Requesting data since: None
+2026-07-10 14:30:36 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:30:40 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-07-10 14:30:41 [INFO] __main__ - New data found! Processing...
+2026-07-10 14:30:41 [INFO] __main__ - ============================================================
+2026-07-10 14:30:41 [INFO] __main__ - Processing SYNC DATA
+2026-07-10 14:30:41 [INFO] __main__ - ============================================================
+2026-07-10 14:30:41 [INFO] __main__ - Processing completionTagUser
+2026-07-10 14:30:41 [INFO] __main__ - Pushing local changes to remote...
+2026-07-10 14:30:41 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:30:41 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-07-10 14:30:41 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:30:41 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-07-10 14:30:41 [DEBUG] sync.data_pusher - No pending VirtuelUser changes to push
+2026-07-10 14:30:41 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:30:41 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-07-10 14:30:41 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:30:41 [INFO] __main__ - Saving sync status...
+2026-07-10 14:30:41 [INFO] __main__ - ============================================================
+2026-07-10 14:30:41 [INFO] __main__ - SYNC COMPLETED SUCCESSFULLY!
+2026-07-10 14:30:41 [INFO] __main__ - ============================================================
+2026-07-10 14:30:41 [DEBUG] __main__ - Closing database connection...
+2026-07-10 14:30:41 [INFO] __main__ - Sync #1 completed successfully.
+2026-07-10 14:30:41 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-07-10 14:30:41)...
+2026-07-10 14:31:41 [INFO] __main__ - ############################################################
+2026-07-10 14:31:41 [INFO] __main__ - SYNC #2 - 2026-07-10 14:31:41.455712
+2026-07-10 14:31:41 [INFO] __main__ - ############################################################
+2026-07-10 14:31:41 [INFO] __main__ - ============================================================
+2026-07-10 14:31:41 [INFO] __main__ - STARTING SYNC AT 2026-07-10 14:31:41.456200
+2026-07-10 14:31:41 [INFO] __main__ - ============================================================
+2026-07-10 14:31:41 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): www.google.com:443
+2026-07-10 14:31:41 [DEBUG] urllib3.connectionpool - https://www.google.com:443 "GET / HTTP/1.1" 200 None
+2026-07-10 14:31:41 [INFO] __main__ - Checking last sync time...
+2026-07-10 14:31:41 [INFO] __main__ - Last sync was at: 2026-07-10 13:30:36.820009
+2026-07-10 14:31:41 [DEBUG] __main__ - Current sync started at: 2026-07-10 13:31:41.954908
+2026-07-10 14:31:41 [INFO] __main__ - Requesting data since: 2026-07-10 13:30:00
+2026-07-10 14:31:41 [DEBUG] urllib3.connectionpool - Starting new HTTPS connection (1): unistudious.com:443
+2026-07-10 14:31:42 [DEBUG] urllib3.connectionpool - https://unistudious.com:443 "POST /slc/get-whats-news HTTP/1.1" 200 None
+2026-07-10 14:31:42 [INFO] __main__ - No new data to sync. Database is up to date.
+2026-07-10 14:31:42 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:31:42 [INFO] sync.data_pusher - STARTING PUSH LOCAL CHANGES TO REMOTE
+2026-07-10 14:31:42 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:31:42 [DEBUG] sync.data_pusher - No pending User changes to push
+2026-07-10 14:31:42 [DEBUG] sync.data_pusher - No pending VirtuelUser changes to push
+2026-07-10 14:31:42 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:31:42 [INFO] sync.data_pusher - PUSH LOCAL CHANGES COMPLETED
+2026-07-10 14:31:42 [INFO] sync.data_pusher - ============================================================
+2026-07-10 14:31:42 [DEBUG] __main__ - Closing database connection...
+2026-07-10 14:31:42 [INFO] __main__ - Sync #2 completed successfully.
+2026-07-10 14:31:42 [INFO] __main__ - Waiting 1 minute(s) until next sync (next at 2026-07-10 14:31:42)...
+2026-07-10 14:32:33 [INFO] __main__ - ============================================================
+2026-07-10 14:32:33 [INFO] __main__ - CONTINUOUS SYNC STOPPED BY USER. Total syncs: 2
+2026-07-10 14:32:33 [INFO] __main__ - ============================================================

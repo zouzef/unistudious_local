@@ -53,13 +53,8 @@ def get_account_image(account_id):
 def update_account(account_id):
     try:
         data_account = request.get_json(force=True)
-
-        print(f"📋 Received data: {data_account}")
-        print(f"📋 Account ID: {account_id}")
-
         if not data_account:
             return jsonify({"Message": "No data received"}), 400
-
         # ── Fix: account_id first, data second ────────────────
         status, response = update_account_service(account_id, data_account)
 
