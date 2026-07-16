@@ -97,7 +97,7 @@ def create_group(session_id: int, data: dict) -> tuple:
         return {"Message": "Connection error"}, 500
 
 
-def update_group(group_id, data):
+def update_group_service(group_id, data):
     try:
         response = requests.post(
 			f"{current_app.config['BASE_URL']}update_group/{group_id}",

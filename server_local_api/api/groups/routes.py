@@ -479,35 +479,35 @@ def update_group(group_id):
         """
 		values = (group_name, capacity, group_id)
 		result = Database.execute_query(query, values, fetch=False)
-
+		print(result)
 		if result == 0 or (isinstance(result, dict) and result.get('rowcount', 0) == 0):
 			return jsonify({"Message": "Group not found"}), 404
 
-		# Replace teacher/subject relations: disable old ones, insert new ones
-		disable_relations_query = """
-            UPDATE relation_teacher_to_subject_group
-            SET enabled = 0
-            WHERE relation_group_local_session_id = %s
-        """
-		Database.execute_query(disable_relations_query, (group_id,), fetch=False)
-
-		for relation in relations:
-			subject_id = relation.get('subject_id')
-			teacher_id = relation.get('teacher_id')
-
-			if not subject_id or not teacher_id:
-				continue
-
-			insert_relation_query = """
-                INSERT INTO relation_teacher_to_subject_group
-                (relation_group_local_session_id, subject_id, user_id, enabled, created_at, timestamp, slc_use)
-                VALUES (%s, %s, %s, 1, NOW(), NOW(), 1)
-            """
-			Database.execute_query(
-                insert_relation_query,
-                (group_id, subject_id, teacher_id),
-                fetch=False
-            )
+		# # Replace teacher/subject relations: disable old ones, insert new ones
+		# disable_relations_query = """
+        #     UPDATE relation_teacher_to_subject_group
+        #     SET enabled = 0
+        #     WHERE relation_group_local_session_id = %s
+        # """
+		# Database.execute_query(disable_relations_query, (group_id,), fetch=False)
+		#
+		# for relation in relations:
+		# 	subject_id = relation.get('subject_id')
+		# 	teacher_id = relation.get('teacher_id')
+		#
+		# 	if not subject_id or not teacher_id:
+		# 		continue
+		#
+		# 	insert_relation_query = """
+        #         INSERT INTO relation_teacher_to_subject_group
+        #         (relation_group_local_session_id, subject_id, user_id, enabled, created_at, timestamp, slc_use)
+        #         VALUES (%s, %s, %s, 1, NOW(), NOW(), 1)
+        #     """
+		# 	Database.execute_query(
+        #         insert_relation_query,
+        #         (group_id, subject_id, teacher_id),
+        #         fetch=False
+        #     )
 
 		# Log the update to the audit table
 		new_data = dict(old_data)

@@ -95,6 +95,22 @@ def api_create_group(session_id):
         }),500
 
 
+@groups_bp.route('/api/update_group/<int:group_id>', methods=['POST'])
+def update_group(group_id):
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({
+                "Message": "Nothing to update"
+            }),200
+
+
+    except Exception as e:
+        return jsonify({
+            "Message":f"Error: {e} coming from backend"
+        }),500
+
+
 @groups_bp.route('/api/update-group/<int:group_id>', methods=['POST'])
 def api_update_group(group_id):
     try:
@@ -110,3 +126,30 @@ def api_update_group(group_id):
             "Message": f"Error: {e} coming from backend"
         })
 
+
+@groups_bp.route('/api/disaffect_user_group/<int:session_id>', methods=['POST'])
+def api_disaffect_user_group(session_id):
+    """Remove (disaffect) a user from a group"""
+    try:
+        data = request.get_json()
+
+        if not data:
+            return jsonify({"Message": "No data provided"}), 400
+
+        success, response = disaffect_user_session_service(session_id, data)
+
+        if not success:
+            if response is None:
+                return jsonify({"Message": "Failed to reach server"}), 500
+            try:
+                body = response.json()
+            except ValueError:
+                body = {"Message": "Invalid response from server"}
+            return jsonify(body), response.status_code
+
+        return jsonify(response.json()), 200
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from backend"
+        }), 500
