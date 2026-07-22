@@ -4,19 +4,24 @@ import logging
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from sync.pushers.attendance_pusher import push_add, push_update, send_new_attendance
-from sync.pushers.calendar_pusher import push_calendar_add, push_calendar_update, push_calendar_delete
-from sync.pushers.accountLevel_pusher import push_accountLevelAdd,push_accountLevelUpdate,push_accountLevelDelete
-from sync.pushers.accountSection_pusher import push_accountSectionAdd, push_accountSectionUpdate,push_accountSectionDelete
-from sync.pushers.accountSubject_pusher import push_accountSubjectAdd, push_accountSubjectUpdate, push_accountSubjectDelete
-from sync.pushers.accountTag_pusher import push_accountTagAdd, push_accountTagUpdate, push_accountTagDelete
-from sync.pushers.completionTag_pusher import push_completionTagAdd, push_completionTagUpdate, push_completionTagDelete
-from sync.pushers.association_pusher import push_AssociationAdd, push_AssociationUpdate, push_AssociationDelete,push_FolderNotAssociated
-from sync.pushers.slcdoor_pusher import push_doorAdd, push_doorUpdate, push_doorDelete
-from sync.pushers.camera_pusher import push_cameraAdd, push_cameraUpdate, push_cameraDelete
-from sync.pushers.tablet_pusher import push_tabletAdd, push_tabletUpdate, push_tabletDelete
-from sync.pushers.user_pusher import push_userAdd, push_userUpdate, push_userDelete
-from sync.pushers.virtuel_pusher import push_virtuelAdd, push_virtuelUpdate, push_virtuelDelete
+
+from sync.pushers import (
+    attendance_pusher,
+    calendar_pusher,
+    accountLevel_pusher,
+    accountSection_pusher,
+    accountSubject_pusher,
+    accountTag_pusher,
+    completionTag_pusher,
+    association_pusher,
+    slcdoor_pusher,
+    camera_pusher,
+    tablet_pusher,
+    user_pusher,
+    virtuel_pusher,
+    group_pusher
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -360,7 +365,7 @@ class DataPusher:
             if not virtuel_user_rows:
                 logger.debug("No pending VirtuelUser changes to push")
             else:
-                logger.info("Found %d pending User change(s)", len(user_rows))
+                logger.info("Found %d pending virtuel_user_rows change(s)", len(virtuel_user_rows))
                 self._process_audit_rows(
                     cursor,conn,
                     "virtual_user_audit",
@@ -374,7 +379,28 @@ class DataPusher:
                 )
 
 
-
+            # --- Group ---
+            cursor.execute("""
+                SELECT * 
+                FROM relation_group_local_session_audit
+                WHERE is_synced = 0
+                ORDER BY audit_id
+             """)
+            group_rows = cursor.fetchall()
+            if not group_rows:
+                logger.debug("No pending Group changes to push")
+            else:
+                logger.info("Found %d pending Group chane(s)", len(group_rows))
+                self._process_audit_rows(
+                    cursor,
+                    conn,
+                    "relation_group_local_session_audit",
+                    group_rows,
+                    {
+                        "INSERT": lambda row: group_pusher.push_groupAdd(db, self.settings,row),
+                        "UPDATE": lambda row: group_pusher.push_groupUpdate(db, self.settings,row)
+                    }
+                )
 
         except Exception as e:
             logger.exception("Fatal error in data_pusher: %s", e)

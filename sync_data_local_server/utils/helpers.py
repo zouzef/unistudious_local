@@ -294,3 +294,15 @@ def get_all_group_ids(db):
     except Exception as e:
         print(f"      ❌ Error loading group mappings: {e}")
         return {}
+
+
+def _find_key_by_prefix(data, prefix):
+    """
+    new_data stores keys like 'deleteRelationIds[0,1]' with a dynamic
+    index suffix baked into the key name. This finds the actual key
+    regardless of what's inside the brackets and returns its value.
+	"""
+    for key, value in data.items():
+        if key.startswith(prefix):
+            return value
+    return []

@@ -15,6 +15,7 @@
 /* =====================================================================
  * SECTION 1: LOAD GROUPS
  * ===================================================================== */
+let groupsDataMap = {};
 
 async function loadGroupsToGroupConfig(accountId, sessionId) {
     const container = document.getElementById('group-container');
@@ -35,7 +36,10 @@ async function loadGroupsToGroupConfig(accountId, sessionId) {
         container.innerHTML = '';
 
         if (result.Message === "Success" && result.data && result.data.length > 0) {
+            groupsDataMap = {};
+
             result.data.forEach((group) => {
+                groupsDataMap[group.id] = group;
                 const groupCard = createGroupCard(group);
                 container.innerHTML += groupCard;
             });
@@ -58,7 +62,6 @@ async function loadGroupsToGroupConfig(accountId, sessionId) {
 /* =====================================================================
  * SECTION 2: GROUP CARD RENDERING
  * ===================================================================== */
-
 function createGroupCard(group) {
     const studentItems = group.list_student.map(student => `
         <div class="user-item-session" data-id="${student.relation_id}" data-session-id="${group.session_id}" data-user-id="${student.user_id}">
@@ -76,9 +79,9 @@ function createGroupCard(group) {
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div class="user-details text-start">
                                 <h4 class="user-name mb-0">${group.name}</h4>
-                                <p class="mb-0 text-muted">
-                                    Capacity: ${group.list_student.length}/${group.capacity}
-                                </p>
+                                    <p class="mb-0 text-muted group-capacity-text">
+                                        Capacity: ${group.list_student.length}/${group.capacity}
+                                    </p>
                             </div>
 
                             <div class="dropdown">
@@ -148,7 +151,6 @@ function createGroupCard(group) {
 /* =====================================================================
  * SECTION 3: REMOVE (DISAFFECT) USER FROM GROUP
  * ===================================================================== */
-
 $(document).on('click', '.remove-user-session', async function () {
     const userItemDiv = $(this).closest('.user-item-session');
 
@@ -176,6 +178,10 @@ $(document).on('click', '.remove-user-session', async function () {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
+
+        const capacityText = userItemDiv.closest('.user-content-session').find('.group-capacity-text');
+        const [current, max] = capacityText.text().replace('Capacity:', '').trim().split('/').map(Number);
+        capacityText.text(`Capacity: ${Math.max(current - 1, 0)}/${max}`);
 
         userItemDiv.remove();
 
@@ -253,7 +259,6 @@ function deleteGroup(groupId) {
 /* =====================================================================
  * SEARCH GROUPS BY NAME
  * ===================================================================== */
-
 $(document).on('keyup', '#filtre-group', function () {
     const query = $(this).val().toLowerCase().trim();
     const container = $('#group-container');
@@ -284,7 +289,6 @@ $(document).on('keyup', '#filtre-group', function () {
 /* =====================================================================
  * MANUAL DROPDOWN TOGGLE (GROUP CARDS ONLY)
  * ===================================================================== */
-
 $(document).on('click', '.user-content-session .dropdown > .btn.sharp', function (e) {
     e.preventDefault();
     e.stopPropagation();
@@ -343,11 +347,12 @@ function getTeacherOptions() {
 }
 
 function addRelationItem(relation = null) {
-    const selectedSubject = relation ? relation.subject_id : '';
-    const selectedTeacher = relation ? relation.teacher_id : '';
+    const selectedSubject = relation ? String(relation.subject_id) : '';
+    const selectedTeacher = relation ? String(relation.teacher_id) : '';
+    const relationId = relation ? relation.id : '';   // <-- NEW
 
     const relationForm = `
-        <div class="form-group relation-item mb-3 p-3 border rounded">
+        <div class="form-group relation-item mb-3 p-3 border rounded" data-relation-id="${relationId}">
             <div class="mb-3">
                 <label class="form-label">Subject</label>
                 <select class="form-control relation-subject">
@@ -392,8 +397,11 @@ $(document).on('click', '#updateGroupBtn', async function () {
     $('#relation-collection .relation-item').each(function () {
         const subjectId = $(this).find('.relation-subject').val();
         const teacherId = $(this).find('.relation-teacher').val();
+        const relationId = $(this).data('relation-id');   // <-- NEW
+
         if (subjectId && teacherId) {
             relations.push({
+                relation_id: relationId ? parseInt(relationId) : null,  // <-- NEW
                 subject_id: parseInt(subjectId),
                 teacher_id: parseInt(teacherId)
             });
@@ -431,7 +439,6 @@ $(document).on('click', '#updateGroupBtn', async function () {
 /* =====================================================================
  * SECTION 5: DELETE STUDENT (FROM "SHOW STUDENTS" MODAL)
  * ===================================================================== */
-
 $(document).on('click', '.delete-student', function (e) {
     e.preventDefault();
     const relationId = $(this).data('id');
@@ -441,7 +448,6 @@ $(document).on('click', '.delete-student', function (e) {
 /* =====================================================================
  * SECTION 6: EDIT GROUP
  * ===================================================================== */
-
 $(document).on('click', '.edit-group', function (e) {
     const groupId = $(this).data('id');
     const groupName = $(this).data('name');
@@ -453,29 +459,41 @@ $(document).on('click', '.edit-group', function (e) {
 
     $('#relation-collection').empty();
 
-    $.ajax({
-        url: `/api/groups/${groupId}`,
-        type: 'GET',
-        success: function (response) {
-            if (response.relations && response.relations.length > 0) {
-                response.relations.forEach(relation => {
-                    addRelationItem(relation);
-                });
-            } else {
-                addRelationItem();
-            }
-        },
-        error: function () {
+    function renderRelations() {
+        const group = groupsDataMap[groupId];
+        const relations = group && group.relations ? group.relations : [];
+
+        if (relations.length > 0) {
+            relations.forEach(relation => {
+                addRelationItem(relation);
+            });
+        } else {
             addRelationItem();
         }
-    });
+    }
+
+    // Wait for subjects/teachers dropdown data before building the selects,
+    // otherwise there's nothing for .val() to match against.
+    if (subjectsLoaded && teachersLoaded) {
+        renderRelations();
+    } else {
+        const waitForData = setInterval(() => {
+            if (subjectsLoaded && teachersLoaded) {
+                clearInterval(waitForData);
+                renderRelations();
+            }
+        }, 100);
+    }
 });
 
+$(document).on('click', '#add-relation', function (e) {
+    e.preventDefault();
+    addRelationItem();
+});
 
 /* =====================================================================
  * SECTION 7: SHOW STUDENTS MODAL
  * ===================================================================== */
-
 $(document).on('click', '.show-student', function (e) {
     e.preventDefault();
 
@@ -519,7 +537,6 @@ $(document).on('click', '.show-student', function (e) {
 /* =====================================================================
  * SECTION 8: LOAD USERS NOT AFFECTED TO A GROUP
  * ===================================================================== */
-
 async function loadUsersNotAffected(sessionId, accountId) {
     const container = document.getElementById('external-events');
 
@@ -585,7 +602,6 @@ function createUserElement(user, sessionId) {
 /* =====================================================================
  * SECTION 9: ASSIGN (AFFECT) USER TO GROUP
  * ===================================================================== */
-
 async function assignUserToGroup(userId, groupId, sessionId) {
     try {
         const response = await fetch(`/api/affect_user/${sessionId}`, {
@@ -616,7 +632,6 @@ async function assignUserToGroup(userId, groupId, sessionId) {
 /* =====================================================================
  * SECTION 10: DRAG & DROP (jQuery UI)
  * ===================================================================== */
-
 function initializeDragAndDrop() {
     if (typeof jQuery !== 'undefined' && jQuery.fn.draggable) {
 
@@ -644,7 +659,7 @@ function initializeDragAndDrop() {
                     clone.append('<button class="btn btn-xs btn-danger remove-user-session">x</button>');
                     jQuery(this).append(clone);
 
-                    const capacityText = jQuery(this).closest('.user-content-session').find('.text-muted');
+                    const capacityText = jQuery(this).closest('.user-content-session').find('.group-capacity-text');
                     const [current, max] = capacityText.text().replace('Capacity:', '').trim().split('/').map(Number);
                     capacityText.text(`Capacity: ${current + 1}/${max}`);
 
@@ -671,7 +686,6 @@ function initializeDragAndDrop() {
 /* =====================================================================
  * SECTION 11: ADD GROUP MODAL — SUBMIT + MODAL FEEDBACK
  * ===================================================================== */
-
 $(document).ready(function () {
 
     /* ---------------------------------------------------------------
@@ -868,13 +882,10 @@ $(document).ready(function () {
             return;
         }
 
-        const firstRelation = relations[0];
-
         const formData = {
             group_name: groupName,
             capacity: parseInt(capacity),
-            subject_id: firstRelation.subject_id,
-            teacher_id: firstRelation.teacher_id,
+            relations: relations,
             account_id: accountId,
             local_id: window.LOCAL_ID,
             access_type: 0

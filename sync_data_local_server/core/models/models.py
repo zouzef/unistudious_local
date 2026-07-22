@@ -294,7 +294,7 @@ class RelationGroupLocalSessionAuditModel(BaseModel):
 	table_name = "relation_group_local_session_audit"
 	columns = [
 		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
-		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
+		Column("action_type", "ENUM('INSERT','UPDATE','DELETE','AFFECT','DISAFFECT')"),
 		Column("old_data", "LONGTEXT"),
 		Column("new_data", "LONGTEXT"),
 		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),

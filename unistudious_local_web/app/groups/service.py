@@ -111,6 +111,7 @@ def update_group_service(group_id, data):
     except Exception as e:
         return {"Message": f"Error: {e} coming from update_group service"}, 500
 
+
 def disaffect_user_session_service(session_id: int, data: dict) -> tuple:
     url = f"{current_app.config['BASE_URL']}disaffect_user_group/{session_id}"
     try:

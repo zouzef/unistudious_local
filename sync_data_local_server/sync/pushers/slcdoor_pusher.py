@@ -32,9 +32,9 @@ def _send_create_door_api(settings, payload):
 			logger.error("Invalid JSON response: %s", response.text)
 			return False,None
 		else:
+
 			logger.error("Unexpected status %s: %s", response.status_code,response.text)
 			return False, None
-
 	except requests.exceptions.Timeout:
 		logger.error("Request timeout (10s) — %s", url)
 		return False, None
@@ -59,7 +59,6 @@ def _send_update_door_api(settings, payload, doorId):
 		else:
 			logger.error("Remote API returned %s: %s", response.status_code, response.text)
 			return False
-
 	except Exception as e:
 		logger.exception("Remote API error in _send_update_door_api: %s", e)
 		return False
@@ -147,7 +146,6 @@ def push_doorUpdate(db, settings, row):
 		id_prod = result['id_prod']
 		success = _send_update_door_api(settings, payload, id_prod)
 		return success
-
 	except Exception as e:
 		logger.exception("Error in push_DoorUpdate: %s", e)
 		return False
@@ -165,7 +163,6 @@ def push_doorDelete(db, settings, row):
 		id_prod = result['id_prod']
 		status = _send_delete_door_api(settings, id_prod)
 		return status
-
 	except Exception as e:
 		logger.exception("Error in push_doorDelete: %s", e)
 		return False

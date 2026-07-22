@@ -8,7 +8,8 @@ from app.groups.service import (
     affect_user,
     get_subject_group,
     create_group,
-    disaffect_user_session_service
+    disaffect_user_session_service,
+    update_group_service
 )
 from app.session.service import get_locals
 
@@ -22,6 +23,7 @@ groups_bp = Blueprint('groups', __name__)
 def api_get_groups(session_id, account_id):
     """Get groups with students"""
     result = get_groups(account_id, session_id)
+    print(result)
     return jsonify({"Message": "Success", "data": result}), 200
 
 
@@ -95,20 +97,7 @@ def api_create_group(session_id):
         }),500
 
 
-@groups_bp.route('/api/update_group/<int:group_id>', methods=['POST'])
-def update_group(group_id):
-    try:
-        data = request.get_json()
-        if not data:
-            return jsonify({
-                "Message": "Nothing to update"
-            }),200
 
-
-    except Exception as e:
-        return jsonify({
-            "Message":f"Error: {e} coming from backend"
-        }),500
 
 
 @groups_bp.route('/api/update-group/<int:group_id>', methods=['POST'])
