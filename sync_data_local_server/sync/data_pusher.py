@@ -398,7 +398,8 @@ class DataPusher:
                     group_rows,
                     {
                         "INSERT": lambda row: group_pusher.push_groupAdd(db, self.settings,row),
-                        "UPDATE": lambda row: group_pusher.push_groupUpdate(db, self.settings,row)
+                        "UPDATE": lambda row: group_pusher.push_groupUpdate(db, self.settings,row),
+                        "DELETE": lambda row: group_pusher.push_groupDelete(db, self.settings, row),
                     }
                 )
 

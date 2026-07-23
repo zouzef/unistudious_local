@@ -58,31 +58,34 @@ def get_group(account_id, session_id):
 
        relations_query = """
                  SELECT
-                    rtsg.id as id,
-                    rtsg.relation_group_local_session_id as group_id,
-                    rtsg.subject_id,
-                    rtsg.user_id as teacher_id,
-                    COALESCE(sa.other_subject, sc.name) as subject_name,
-                    t.username as teacher_name
-
-                 FROM relation_teacher_to_subject_group rtsg
-                 INNER JOIN relation_group_local_session g
-                    ON g.id = rtsg.relation_group_local_session_id
-                    AND g.session_id = %s
-                    AND g.account_id = %s
-                    AND g.enabled = 1
-                    AND g.special_group IS NULL
-                 LEFT JOIN account_subject sa
-                    ON sa.id = rtsg.subject_id
-                    AND rtsg.subject_id = 1
-                 LEFT JOIN subject_config sc
-                    ON sc.id = rtsg.subject_id
-                    AND rtsg.subject_id != 1
-                 LEFT JOIN user t
-                    ON t.id = rtsg.user_id
-                    AND t.enabled = 1
-                 WHERE rtsg.enabled = 1
-                 ORDER BY rtsg.relation_group_local_session_id, rtsg.id
+				   rtsg.id as id,
+				   rtsg.relation_group_local_session_id as group_id,
+				   rtsg.subject_id,
+				   rtsg.user_id as teacher_id,
+				   COALESCE(sa.other_subject, sc.name) as subject_name,
+				   t.username as teacher_name
+				
+				FROM relation_teacher_to_subject_group rtsg
+				INNER JOIN relation_group_local_session g
+				   ON g.id = rtsg.relation_group_local_session_id
+				   AND g.session_id = %s
+				   AND g.account_id = %s
+				   AND g.enabled = 1
+				   AND g.special_group IS NULL
+				LEFT JOIN account_subject sa
+				   ON sa.id = rtsg.subject_id
+				   AND rtsg.subject_id = 1
+				   AND sa.enabled = 1
+				   AND sa.status = 1
+				LEFT JOIN subject_config sc
+				   ON sc.id = rtsg.subject_id
+				   AND rtsg.subject_id != 1
+				   AND sc.enabled = 1
+				LEFT JOIN user t
+				   ON t.id = rtsg.user_id
+				   AND t.enabled = 1
+				WHERE rtsg.enabled = 1 
+				ORDER BY rtsg.relation_group_local_session_id, rtsg.id
               """
        relations_results = Database.execute_query(relations_query, (session_id, account_id))
 

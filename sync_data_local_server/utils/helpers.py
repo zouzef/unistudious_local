@@ -72,7 +72,6 @@ def format_date(date_value):
         print(f"❌ Error formatting date {date_value}: {e}")
         return None
 
-
 def get_last_sync_time():
     """
     Get the last sync time from status file
@@ -122,6 +121,20 @@ def get_last_sync_time():
         print("ℹ️  Will perform full sync")
         return None
 
+def safe_int(value):
+    """
+    Safely convert a value to int for DB insertion.
+    Returns None if the value is not a valid integer (e.g. "unknown", "", None).
+    """
+    if value is None:
+        return None
+    if isinstance(value, int):
+        return value
+    try:
+        # handles "123", "123.0", etc. Strings like "unknown" will fail here.
+        return int(str(value).strip())
+    except (ValueError, TypeError):
+        return None
 
 def save_last_sync_time(sync_time):
     """
@@ -173,7 +186,6 @@ def save_last_sync_time(sync_time):
     except Exception as e:
         print(f"❌ Error saving sync time to file: {e}")
 
-
 def check_internet_connection(url="https://www.google.com", timeout=5):
     """
     Check if internet connection is available
@@ -209,7 +221,6 @@ def check_internet_connection(url="https://www.google.com", timeout=5):
         print(f"❌ Error checking internet connection: {e}")
         return False
 
-
 def get_mac_address(db):
     """
     Get the mac address of this slc from the database
@@ -228,7 +239,6 @@ def get_mac_address(db):
     except Exception as e:
         print(f"❌ Error getting MAC address from database: {e}")
         return None
-
 
 def reset_attendance_token(settings, attendance_id):
     """
@@ -259,7 +269,6 @@ def reset_attendance_token(settings, attendance_id):
     except Exception as e:
         print(f"      ❌ Error resetting token: {e}")
         return False
-
 
 def get_all_calendar_ids(db):
     """
@@ -295,7 +304,6 @@ def get_all_group_ids(db):
         print(f"      ❌ Error loading group mappings: {e}")
         return {}
 
-
 def _find_key_by_prefix(data, prefix):
     """
     new_data stores keys like 'deleteRelationIds[0,1]' with a dynamic
@@ -306,3 +314,63 @@ def _find_key_by_prefix(data, prefix):
         if key.startswith(prefix):
             return value
     return []
+
+def _map_ids_to_prod(db, table, id_field, local_ids):
+    """Given a list of local ids, return {local_id: id_prod} for that table."""
+    if not local_ids:
+        return {}
+    cursor = db.connection.cursor(dictionary=True)
+    placeholders = ",".join(["%s"] * len(local_ids))
+    cursor.execute(
+        f"SELECT id, id_prod FROM {table} WHERE {id_field} IN ({placeholders})",
+        tuple(local_ids)
+    )
+    rows = cursor.fetchall()
+    cursor.close()
+    return {row['id']: row['id_prod'] for row in rows}
+
+def _map_subject_ids_to_prod(db, local_ids):
+    """
+    subjectId values coming from the frontend/audit are account_subject.id.
+    Resolve directly to account_subject.id_prod.
+    """
+    if not local_ids:
+        return {}
+
+    cursor = db.connection.cursor(dictionary=True)
+    placeholders = ",".join(["%s"] * len(local_ids))
+    cursor.execute(
+       f"SELECT id, id_prod FROM account_subject WHERE id IN ({placeholders})",
+       tuple(local_ids)
+    )
+    rows = cursor.fetchall()
+    cursor.close()
+
+    return {row['id']: row['id_prod'] for row in rows}
+
+def _flatten_group_payload_to_form(payload):
+    """
+    Convert the group-update payload into PHP-style bracket form-data fields.
+    e.g. updateRelations: [{"id":237,"teacherId":4,"subjectId":1}]
+    ->  updateRelations[0][id]=237, updateRelations[0][teacherId]=4, updateRelations[0][subjectId]=1
+    """
+    form_data = []
+
+    form_data.append(("name", payload.get("name")))
+    form_data.append(("capacity", payload.get("capacity")))
+
+    for i, val in enumerate(payload.get("deleteRelationIds", [])):
+        form_data.append((f"deleteRelationIds[{i}]", val))
+
+    for i, rel in enumerate(payload.get("updateRelations", [])):
+        form_data.append((f"updateRelations[{i}][id]", rel.get("id")))
+        form_data.append((f"updateRelations[{i}][teacherId]", rel.get("teacherId")))
+        form_data.append((f"updateRelations[{i}][subjectId]", rel.get("subjectId")))
+
+    for i, val in enumerate(payload.get("newRelationTeacherId", [])):
+        form_data.append((f"newRelationTeacherId[{i}]", val))
+
+    for i, val in enumerate(payload.get("newRelationSubjectId", [])):
+        form_data.append((f"newRelationSubjectId[{i}]", val))
+
+    return form_data

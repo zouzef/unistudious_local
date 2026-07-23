@@ -34,7 +34,7 @@ async function loadGroupsToGroupConfig(accountId, sessionId) {
         const result = await response.json();
 
         container.innerHTML = '';
-
+        console.log(result);
         if (result.Message === "Success" && result.data && result.data.length > 0) {
             groupsDataMap = {};
 

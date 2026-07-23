@@ -5,7 +5,7 @@ import json
 
 import requests
 from core.auth import get_token
-from utils.helpers import _find_key_by_prefix
+from utils.helpers import _find_key_by_prefix, _map_ids_to_prod, _map_subject_ids_to_prod, _flatten_group_payload_to_form
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
@@ -61,7 +61,10 @@ def _send_update_group_api(settings, payload, group_id, session_id, local_id):
 
 		logger.debug("POST %s | payload: %s", url, payload)
 
-		response = requests.post(url, json=payload, headers=headers, timeout=10)
+		form_data = _flatten_group_payload_to_form(payload)
+		logger.debug("POST %s | form_data: %s", url, form_data)
+		response = requests.post(url, data=form_data, headers=headers, timeout=10)
+
 		if response.status_code == 200:
 			try:
 				response_data = response.json()
@@ -86,11 +89,11 @@ def _send_update_group_api(settings, payload, group_id, session_id, local_id):
 		logger.exception("Remote API error in _send_update_group_api: %s", e)
 		return False, None
 
-def _send_delete_group_api(settings, groupId):
+def _send_delete_group_api(settings, data):
 	try:
 		token = get_token()
 		headers = {"Authorization": f"Bearer {token}"}
-		url = f"{settings.api_base_url}/scl/delete-group"
+		url = f"{settings.api_base_url}/slc/delete-group/{data.get('group_id')}/{data.get('sessionId')}/{data.get('localId')}"
 		response = requests.post(url, headers=headers, timeout=10)
 		if response.status_code == 200:
 			try:
@@ -169,83 +172,165 @@ def push_groupAdd(db, settings, row):
 		logger.exception("Error in push GroupAdd: %s", e)
 		return False, None
 
+
 def push_groupUpdate(db, settings, row):
-	try:
-		new_data = json.loads(row.get('new_data', '{}'))
+    try:
+       new_data = json.loads(row.get('new_data', '{}'))
+       group_id = new_data.get('id')
 
-		group_id = new_data.get('id') or row.get('record_id')
+       cursor = db.connection.cursor(dictionary=True)
+       cursor.execute(
+          "SELECT id_prod, session_id, local_id FROM relation_group_local_session WHERE id = %s",
+          (group_id,)
+       )
+       group_row = cursor.fetchone()
+       cursor.close()
 
-		# id_prod is what the remote API needs, not the local id
-		cursor = db.connection.cursor(dictionary=True)
-		cursor.execute(
-			"SELECT id_prod, session_id, local_id FROM relation_group_local_session WHERE id = %s",
-			(group_id,)
-		)
-		group_row = cursor.fetchone()
-		cursor.close()
+       if not group_row or not group_row.get('id_prod'):
+          logger.warning("push_groupUpdate: no id_prod found for local group id %s, skipping", group_id)
+          return False, None
 
-		if not group_row or not group_row.get('id_prod'):
-			logger.warning("push_groupUpdate: no id_prod found for local group id %s, skipping", group_id)
-			return False, None
+       group_id_prod = group_row['id_prod']
+       session_localId = group_row['session_id']
+       local_localId = group_row['local_id']
 
-		group_id_prod = group_row['id_prod']
-		session_localId = group_row['session_id']
-		local_localId = group_row['local_id']
+       cursor = db.connection.cursor(dictionary=True)
+       cursor.execute(
+          "SELECT id_prod FROM session WHERE id = %s",
+          (session_localId,)
+       )
+       session_row = cursor.fetchone()
+       cursor.close()
 
-		# Resolve session's prod id using the same db connection
-		cursor = db.connection.cursor(dictionary=True)
-		cursor.execute(
-			"SELECT id_prod FROM session WHERE id = %s",
-			(session_localId,)
-		)
-		session_row = cursor.fetchone()
-		cursor.close()
+       if not session_row or not session_row.get('id_prod'):
+          logger.warning("push_groupUpdate: no id_prod found for session id %s, skipping", session_localId)
+          return False, None
 
-		if not session_row or not session_row.get('id_prod'):
-			logger.warning("push_groupUpdate: no id_prod found for session id %s, skipping", session_localId)
-			return False, None
+       session_prodId = session_row['id_prod']
 
-		session_prodId = session_row['id_prod']
+       delete_relation_ids = _find_key_by_prefix(new_data, "deleteRelationIds") or []
+       update_relations = _find_key_by_prefix(new_data, "updateRelations") or []
+       new_teacher_ids = _find_key_by_prefix(new_data, "newRelationTeacherId") or []
+       new_subject_ids = _find_key_by_prefix(new_data, "newRelationSubjectId") or []
 
-		delete_relation_ids = _find_key_by_prefix(new_data, "deleteRelationIds")
-		update_relations = _find_key_by_prefix(new_data, "updateRelations")
-		new_teacher_ids = _find_key_by_prefix(new_data, "newRelationTeacherId")
-		new_subject_ids = _find_key_by_prefix(new_data, "newRelationSubjectId")
+       # --- relations (own row id): local -> id_prod ---
+       update_local_ids = [r.get('id') for r in update_relations if r.get('id') is not None]
+       all_relation_local_ids = list(set(delete_relation_ids + update_local_ids))
+       relation_prod_map = _map_ids_to_prod(db, "relation_teacher_to_subject_group", "id", all_relation_local_ids)
 
-		payload = {
-			"name": new_data.get('name'),
-			"capacity": new_data.get('capacity'),
-			"deleteRelationIds": delete_relation_ids,
-			"updateRelations": update_relations,
-			"newRelationTeacherId": new_teacher_ids,
-			"newRelationSubjectId": new_subject_ids
-		}
+       delete_relation_ids_prod = []
+       for rid in delete_relation_ids:
+          prod_id = relation_prod_map.get(rid)
+          if prod_id is None:
+             logger.warning("push_groupUpdate: no id_prod for delete relation local id %s, skipping", rid)
+             continue
+          delete_relation_ids_prod.append(prod_id)
 
-		print(payload)
-		status, response_data = _send_update_group_api(settings, payload, group_id_prod, session_prodId, local_localId)
+       # --- teachers referenced inside updateRelations (teacherId) ---
+       update_teacher_ids = [r.get('teacherId') for r in update_relations if r.get('teacherId') is not None]
+       update_teacher_prod_map = _map_ids_to_prod(db, "user", "id", list(set(update_teacher_ids)))
 
-		if status:
-			logger.info("Group updated remotely, local id %s -> prod id %s", group_id, group_id_prod)
+       # --- subjects referenced inside updateRelations (subjectId) ---
+       update_subject_ids = [r.get('subjectId') for r in update_relations if r.get('subjectId') is not None]
+       update_subject_prod_map = _map_subject_ids_to_prod(db, list(set(update_subject_ids)))
 
-		return status, response_data
+       update_relations_prod = []
+       for r in update_relations:
+          rel_prod_id = relation_prod_map.get(r.get('id'))
+          teacher_prod_id = update_teacher_prod_map.get(r.get('teacherId'))
+          subject_prod_id = update_subject_prod_map.get(r.get('subjectId'))
 
-	except Exception as e:
-		logger.exception("Error in push_groupUpdate: %s", e)
-		return False, None
+          if rel_prod_id is None or teacher_prod_id is None or subject_prod_id is None:
+             logger.warning(
+                "push_groupUpdate: missing id_prod for update relation %s (rel=%s teacher=%s subject=%s), skipping",
+                r, rel_prod_id, teacher_prod_id, subject_prod_id
+             )
+             continue
 
-def push_groupDelete():
+          update_relations_prod.append({
+             "id": rel_prod_id,
+             "teacherId": teacher_prod_id,
+             "subjectId": subject_prod_id
+          })
+
+       # --- newRelationTeacherId: local user id -> id_prod ---
+       teacher_prod_map = _map_ids_to_prod(db, "user", "id", new_teacher_ids)
+       new_teacher_ids_prod = []
+       for tid in new_teacher_ids:
+          prod_id = teacher_prod_map.get(tid)
+          if prod_id is None:
+             logger.warning("push_groupUpdate: no id_prod for teacher (user) local id %s, skipping", tid)
+             continue
+          new_teacher_ids_prod.append(prod_id)
+
+       # --- newRelationSubjectId: local subject id -> id_prod ---
+       subject_prod_map = _map_subject_ids_to_prod(db, new_subject_ids)
+       new_subject_ids_prod = []
+       for sid in new_subject_ids:
+          prod_id = subject_prod_map.get(sid)
+          if prod_id is None:
+             logger.warning("push_groupUpdate: no id_prod for subject local id %s, skipping", sid)
+             continue
+          new_subject_ids_prod.append(prod_id)
+
+       payload = {
+          "name": new_data.get('name'),
+          "capacity": new_data.get('capacity'),
+          "deleteRelationIds": delete_relation_ids_prod,
+          "updateRelations": update_relations_prod,
+          "newRelationTeacherId": new_teacher_ids_prod,
+          "newRelationSubjectId": new_subject_ids_prod
+       }
+
+       print(payload)
+       status, response_data = _send_update_group_api(settings, payload, group_id_prod, session_prodId, local_localId)
+
+       if status:
+          logger.info("Group updated remotely, local id %s -> prod id %s", group_id, group_id_prod)
+
+       return status, response_data
+
+    except Exception as e:
+       logger.exception("Error in push_groupUpdate: %s", e)
+       return False, None
+
+def push_groupDelete(db, settings, row):
 	try:
 		old_data = json.loads(row.get('old_data', '{}'))
 		groupId = old_data.get('id')
+		sessionId = old_data.get('session_id')
+
 		cursor = db.connection.cursor(dictionary=True)
 		cursor.execute(
-			"""SELECT id_prod FROM relation_group_local_session WHERE id = %s""",
-			(groupId,)
-		)
-		result = cursor.fetchone()
-		id_prod = result['id_prod']
-		status = _send_delete_group_api(settings, id_prod)
-		return status
+            """SELECT id_prod FROM relation_group_local_session WHERE id = %s""",
+            (groupId,)
+        )
+		group_result = cursor.fetchone()
+		cursor.close()
+
+		if not group_result:
+			logger.error("No id_prod found for group id %s", groupId)
+			return False
+
+		cursor = db.connection.cursor(dictionary=True)  # new cursor
+		cursor.execute(
+            """SELECT id_prod FROM session WHERE id = %s""",
+            (sessionId,)
+        )
+		session_result = cursor.fetchone()
+		cursor.close()
+
+		if not session_result:
+			logger.error("No id_prod found for session id %s", sessionId)
+			return False
+
+		payload = {
+            "group_id": group_result['id_prod'],
+            "sessionId": session_result['id_prod'],
+            "localId": old_data.get('local_id')
+		}
+		return _send_delete_group_api(settings, payload)
+
 	except Exception as e:
 		logger.exception("Error in push_groupDelete: %s", e)
 		return False

@@ -70,7 +70,7 @@ def api_update_virtual_student():
         else:
             return jsonify({"Message": result}), 400
     except Exception as e:
-        print(e)
+
         return jsonify({"Message": str(e)}), 500
 
 # ── Delete Student ─────────────────────────────────────────────────────────────

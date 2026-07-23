@@ -27,7 +27,10 @@ def get_subjects():
                     ELSE sc.name
                 END AS subject_identifier
             FROM account_subject a
-            LEFT JOIN subject_config sc ON sc.id = a.subject_config_id
+            LEFT JOIN subject_config sc ON sc.id = a.subject_config_id 
+            WHERE a.enabled = 1 
+              AND a.status = 1
+              AND sc.enabled = 1
         """
         result = Database.execute_query(query, fetch=True)
         return jsonify({
@@ -47,7 +50,7 @@ def get_subject_config():
         query = """
             SELECT *
             FROM subject_config
-            WHERE enabled = 1
+            WHERE enabled = 1 AND status = 1
         """
         result = Database.execute_query(query, fetch=True)
 
@@ -79,7 +82,7 @@ def get_account_subject(account_id):
                 END AS section_name
             FROM account_subject a
             LEFT JOIN subject_config s ON s.id = a.subject_config_id
-            WHERE a.account_id = %s AND a.enabled = 1 AND s.enabled = 1
+            WHERE a.account_id = %s AND a.enabled = 1 AND s.enabled = 1 AND s.status = 1 AND a.status = 1
         """
         result = Database.execute_query(query, (account_id,), fetch=True)
 

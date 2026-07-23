@@ -8,7 +8,7 @@ import os
 # Add parent directories to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from utils.helpers import format_date
+from utils.helpers import format_date, safe_int
 from datetime import datetime
 
 
@@ -136,8 +136,8 @@ def insert_calendars(db, calendar_data):
                     "local_id": calendar.get("localId"),
                     "group_session_id": calendar.get("groupId"),
                     "room_id": calendar.get("roomId"),
-                    "teacher_id": calendar.get("teacherId"),
-                    "subject_id": calendar.get("subjectId"),
+                    "teacher_id": safe_int(calendar.get("teacherId")),
+                    "subject_id": safe_int(calendar.get("subjectId")),
                     "color": calendar.get("color"),
                     "status": 1 if calendar.get("status", True) else 0,
                     "description": calendar.get("description"),
@@ -352,13 +352,13 @@ def update_calendars(db, calendar_data):
 
                 # Prepare new data
                 new_data = {
-                    "session_id": calendar.get("sessionId"),
-                    "account_id": calendar.get("accountId"),
-                    "local_id": calendar.get("localId"),
-                    "group_session_id": calendar.get("groupId"),
-                    "room_id": calendar.get("roomId"),
-                    "teacher_id": calendar.get("teacherId"),
-                    "subject_id": calendar.get("subjectId"),
+                    "session_id": safe_int(calendar.get("sessionId")),
+                    "account_id": safe_int(calendar.get("accountId")),
+                    "local_id": safe_int(calendar.get("localId")),
+                    "group_session_id": safe_int(calendar.get("groupId")),
+                    "room_id": safe_int(calendar.get("roomId")),
+                    "teacher_id": safe_int(calendar.get("teacherId")),
+                    "subject_id": safe_int(calendar.get("subjectId")),
                     "color": calendar.get("color"),
                     "status": 1 if calendar.get("status", True) else 0,
                     "description": calendar.get("description"),
@@ -376,7 +376,6 @@ def update_calendars(db, calendar_data):
                     "useToken": calendar.get("useToken"),
                     "updated_at": format_date(calendar.get("updatedAt")),
                     "timestamp": format_date(calendar.get("timestamp"))
-
                 }
 
                 # Check if record exists
