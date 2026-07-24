@@ -1,395 +1,83 @@
-# Calendar API
+# DataPusher — Local-to-Remote Sync Module
 
-Base URL: `/scl`
+Part of `unistudious_local`'s data synchronization system. `DataPusher` scans local **audit tables** for unsynced rows (`is_synced = 0`) and pushes each change to the remote production server (unistudious.com), marking rows as synced on success.
 
-Authentication required for all endpoints.
+## How it works
 
-## Endpoints
+1. `detect_and_push_local_changes(db)` is the entry point, called on a sync cycle.
+2. For each domain (User, Virtual User, Group, ...), it queries the matching `*_audit` table for rows where `is_synced = 0`, ordered by `audit_id`.
+3. Each batch of rows is handed to `_process_audit_rows()` along with an `action_handlers` dict mapping `action_type` → pusher function.
+4. For every row:
+   - The handler for `row['action_type']` is looked up.
+   - If no handler matches, the row is **skipped and logged as a warning** — it stays `is_synced = 0` and will be retried (uselessly) every cycle unless someone notices the warning.
+   - If a handler exists, it's called with `(db, settings, row)`.
+   - On success (`True`), `is_synced` is set to `1` and committed.
+   - On failure (`False`), the row is left for retry next cycle.
 
-### 1. Delete Calendar Interval
-
-**POST** `/scl/deleting_interval/<session_id>`
-
-Soft delete calendars within a time range.
-
-**Request Body:**
-
-```json
-{
-  "start_date": "2026-01-20 10:00:00",
-  "end_date": "2026-01-25 18:00:00"
-}
+```
+audit table (is_synced = 0)
+        │
+        ▼
+_process_audit_rows()
+        │
+        ▼
+action_handlers[row.action_type](row)
+        │
+   ┌────┴────┐
+ success   failure
+   │           │
+mark synced   retry next cycle
 ```
 
-**Response (200):**
-
-```json
-{
-  "message": "success",
-  "data": [...]
-}
-```
-
----
-
-### 2. Get Calendar by ID
-
-**GET** `/scl/get_calander_id/<id_calender>`
-
-Get a specific calendar by ID.
-
-**Response (200):**
-
-```json
-{
-  "message": "Success",
-  "data": {
-    "id": 123,
-    "title": "Math Class",
-    "start_time": "2026-01-20 10:00:00",
-    ...
-  }
-}
-```
-
----
-
-### 3. Get Group from Calendar
-
-**GET** `/scl/get-group-calender/<calendarId>`
-
-Get the group ID associated with a calendar.
-
-**Response (200):**
-
-```json
-{
-  "group_session_id": 5
-}
-```
-
----
-
-### 4. Get Next Session
-
-**GET** `/scl/get_next_session/<calendarId>`
-
-Get the next calendar session after the current one.
-
-**Response (200):**
-
-```json
-{
-  "data": {
-    "id": 124,
-    "start_time": "2026-01-21 10:00:00"
-  }
-}
-```
-
----
-
-### 5. Get All Today's Calendars
-
-**GET** `/scl/get-all-calender`
-
-Get all calendar sessions for today.
-
-**Response (200):**
-
-```json
-{
-  "data": [
-    {
-      "id": 123,
-      "name": "Math Class",
-      "start": "2026-01-20 10:00:00",
-      "teacherFullName": "Dr. Smith",
-      "subjectName": "Mathematics",
-      ...
-    }
-  ]
-}
-```
-
----
-
-### 6. Get Account Data by Calendar
-
-**GET** `/scl/data_account/<id>`
-
-Get account information for a calendar.
-
-**Response (200):**
-
-```json
-{
-  "status": "ok",
-  "data": [...]
-}
-```
-
----
-
-### 7. Get Calendar by Session and Account
-
-**GET** `/scl/get_calendar_session/<id_session>/<id_account>`
-
-Get calendars filtered by session and account.
-
-**Response (200):**
-
-```json
-{
-  "message": "Success",
-  "data": [...]
-}
-```
-
----
-
-### 8. Create Calendar Entry
-
-**POST** `/scl/create_calender`
-
-Create a new calendar entry (session/class) with conflict validation.
-
-**Request Body:**
-
-```json
-{
-  "session_id": 1,
-  "account_id": 1,
-  "local_id": 1,
-  "group_id": 5,
-  "room_id": 3,
-  "teacher_id": 10,
-  "subject_id": 7,
-  "description": "Math class for beginners",
-  "start_time": "2026-01-29 09:00:00",
-  "end_time": "2026-01-29 11:00:00",
-  "title": "Introduction to Algebra",
-  "type": "lecture"
-}
-```
-
-**Required Fields:**
-
-- `session_id` (int): Session ID
-- `account_id` (int): Account ID
-- `local_id` (int): Local/building ID
-- `group_id` (int): Group ID
-- `room_id` (int): Room ID
-- `teacher_id` (int): Teacher user ID
-- `subject_id` (int): Subject ID
-- `description` (string): Class description
-- `start_time` (string): Start datetime (format: "YYYY-MM-DD HH:MM:SS")
-- `end_time` (string): End datetime (format: "YYYY-MM-DD HH:MM:SS")
-- `title` (string): Session title
-- `type` (string): Session type (e.g., "lecture", "lab", "seminar")
-
-**Process:**
-
-1. Validates all required fields are present and non-empty
-2. Checks for **room conflicts** - ensures room is not double-booked
-3. Checks for **group conflicts** - ensures group doesn't have overlapping sessions
-4. Checks for **teacher conflicts** - ensures teacher is available
-5. Generates a unique color for calendar display
-6. Creates auto-generated reference ID
-7. Inserts calendar entry into database
-
-**Conflict Checks:**
-
-**Room Conflict:**
-
-- Same room on the same date with overlapping time slots
-- Status code: 402
-
-**Group Conflict:**
-
-- Same group on the same date with overlapping time slots
-- Status code: 402
-
-**Teacher Conflict:**
-
-- Same teacher on the same date with overlapping time slots
-- Status code: 402
-
-**Response (201) - Success:**
-
-```json
-{
-  "Message": "Calendar entry created successfully",
-  "calander_id": 123,
-  "ref": "group-51137-456",
-  "color": "#A3C2F1"
-}
-```
-
-**Response (400) - Missing Fields:**
-
-```json
-{
-  "Message": "Missing required fields",
-  "missing_fields": ["teacher_id", "room_id"]
-}
-```
-
-**Response (400) - Empty Fields:**
-
-```json
-{
-  "Message": "Fields cannot be empty",
-  "empty_fields": ["description", "title"]
-}
-```
-
-**Response (402) - Room Conflict:**
-
-```json
-{
-  "Message": "Room already reserved!",
-  "Error": "Room-Conflict"
-}
-```
-
-**Response (402) - Group Conflict:**
-
-```json
-{
-  "Message": "Group not available in this time",
-  "Error": "Group-Conflict"
-}
-```
-
-**Response (402) - Teacher Conflict:**
-
-```json
-{
-  "Message": "Teacher not available in this time",
-  "Error": "Teacher-Conflict"
-}
-```
-
-**Response (402) - Color Generation Failed:**
-
-```json
-{
-  "Message": "Could not find unique color",
-  "Error": "Warning: Could not find unique color after 50 attempts"
-}
-```
-
-**Response (500) - Server Error:**
-
-```json
-{
-  "Message": "Internal Server Error",
-  "error": "error description"
-}
-```
-
-**Field Descriptions:**
-
-- `calander_id`: Newly created calendar entry ID
-- `ref`: Auto-generated reference string (format: `group-{group_id}{session_id}{local_id}{account_id}-{random_3_digits}`)
-- `color`: Randomly generated hex color for calendar display (ensured unique)
-- `status`: Always set to 1 (active)
-- `enabled`: Always set to 1 (enabled)
-- `teacher_present`: Initialized to 0
-- `force_teacher_present`: Initialized to 0
-- `slc_use`: Always set to 1
-
-**Auto-Generated Fields:**
-
-- `color`: Random hex color (#000000 - #FFFFFF), guaranteed unique
-- `ref`: Unique reference identifier
-- `created_at`: Current timestamp
-- `timestamp`: Current timestamp
-- `refresh`: Set to 0
-- `updated_at`: Set to NULL initially
-
-**Validation Logic:**
-
-**Time Overlap Detection:**
-The system checks if a new session overlaps with existing sessions by verifying:
-
-- Same date (based on `start_time`)
-- New session starts before existing session ends (`start_time < existing.end_time`)
-- New session ends after existing session starts (`end_time > existing.start_time`)
-
-**Color Uniqueness:**
-
-- Generates random hex color
-- Checks if color is already in use
-- Retries up to 50 times
-- Fails if no unique color found after 50 attempts
-
-**Notes:**
-
-- All datetime fields must use format: `YYYY-MM-DD HH:MM:SS`
-- Conflict checks only apply to **enabled** calendar entries (`enabled = 1`)
-- Conflicts are checked for the **same day only** (not across different days)
-- Empty strings and null values are both rejected during validation
-- The endpoint returns HTTP 402 for conflicts (not 409) to distinguish from validation errors
-
-**Example Use Cases:**
-
-**Scenario 1: Create Morning Lecture**
-
-```json
-{
-  "session_id": 2,
-  "account_id": 1,
-  "local_id": 1,
-  "group_id": 3,
-  "room_id": 5,
-  "teacher_id": 12,
-  "subject_id": 8,
-  "description": "Introduction to calculus fundamentals",
-  "start_time": "2026-01-30 08:00:00",
-  "end_time": "2026-01-30 10:00:00",
-  "title": "Calculus 101",
-  "type": "lecture"
-}
-```
-
-**Scenario 2: Create Afternoon Lab**
-
-```json
-{
-  "session_id": 3,
-  "account_id": 2,
-  "local_id": 2,
-  "group_id": 8,
-  "room_id": 2,
-  "teacher_id": 15,
-  "subject_id": 4,
-  "description": "Hands-on chemistry experiments",
-  "start_time": "2026-01-29 14:00:00",
-  "end_time": "2026-01-29 16:30:00",
-  "title": "Chemistry Lab Session",
-  "type": "lab"
-}
-```
-
-**Testing Conflicts:**
-
-To test conflict detection, create overlapping sessions:
-
-1. **Room Conflict Test:**
-   - Create session with Room 5, 09:00-11:00
-   - Try creating another with Room 5, 10:00-12:00
-   - Expected: Room conflict error
-
-2. **Group Conflict Test:**
-   - Create session with Group 3, 09:00-11:00
-   - Try creating another with Group 3, 10:30-12:30
-   - Expected: Group conflict error
-
-3. **Teacher Conflict Test:**
-   - Create session with Teacher 10, 14:00-16:00
-   - Try creating another with Teacher 10, 15:00-17:00
-   - Expected: Teacher conflict error
-
----
+## Active domains
+
+| Table | Actions handled | Pusher module |
+|---|---|---|
+| `user_audit` | `CREATE`, `UPDATE`, `DELETE` | `user_pusher` |
+| `virtual_user_audit` | `CREATE`, `UPDATE`, `DELETE` | `virtuel_pusher` |
+| `relation_group_local_session_audit` | `INSERT`, `UPDATE`, `DELETE` | `group_pusher` |
+
+## Disabled domains (commented out)
+
+Calendar, attendance, account level/section/subject/tag, completion tag, association folders/images, and SLC devices (door, camera, tablet) are currently commented out of `detect_and_push_local_changes`. They still have handler logic written but are not being executed. Re-enabling any of them just means uncommenting the relevant block — the `_process_audit_rows` machinery already supports them.
+
+## ⚠️ Known issue: `action_type` mismatches are silently dropped
+
+`_process_audit_rows` only pushes a row if its `action_type` exists as a key in that table's `action_handlers` dict. If `log_audit()` is called elsewhere in the codebase with an `action_type` that isn't one of the registered keys (e.g. `"AFFECT"` / `"DISAFFECT"` instead of `"INSERT"` / `"UPDATE"` / `"DELETE"`), the row:
+
+- **Is not pushed to remote**
+- **Is not marked as synced**
+- Only shows up as a `logger.warning("Unknown action: ...")` line, easy to miss in normal logs
+
+**Fix:** use one of the action types already registered for that table (typically `"INSERT"`, `"UPDATE"`, `"DELETE"`, or `"CREATE"` depending on the domain), and encode the semantic meaning (e.g. "affected"/"disaffected") inside the audit **payload** rather than in `action_type`. `action_type` should stay limited to the small, fixed set of keys each `action_handlers` dict actually recognizes.
+
+## Adding a new domain to sync
+
+1. Ensure the domain has a `*_audit` table with at least `audit_id`, `action_type`, `is_synced`.
+2. Write pusher functions (typically in `sync/pushers/<domain>_pusher.py`) that accept `(db, settings, row)` and return `True`/`False`.
+3. In `detect_and_push_local_changes`, add a block:
+   ```python
+   cursor.execute("""
+       SELECT * FROM <domain>_audit
+       WHERE is_synced = 0
+       ORDER BY audit_id ASC
+   """)
+   rows = cursor.fetchall()
+   if rows:
+       self._process_audit_rows(
+           cursor, conn,
+           "<domain>_audit",
+           rows,
+           {
+               "INSERT": lambda row: <domain>_pusher.push_add(db, self.settings, row),
+               "UPDATE": lambda row: <domain>_pusher.push_update(db, self.settings, row),
+               "DELETE": lambda row: <domain>_pusher.push_delete(db, self.settings, row),
+           }
+       )
+   ```
+4. Make sure every `action_type` your app ever writes via `log_audit()` for this table has a matching key here — otherwise it silently falls into the "unknown action" trap above.
+
+## Open TODO
+
+- Consolidate pusher imports through a central `registry.py` instead of importing each pusher module individually at the top of this file.
+- Consider having `_process_audit_rows` raise/log at a higher severity (or push a metric/alert) when it hits an unknown `action_type`, since a plain `logger.warning` is too easy to miss in production.

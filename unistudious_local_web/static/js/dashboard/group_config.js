@@ -441,7 +441,80 @@ $(document).on('click', '#updateGroupBtn', async function () {
  * ===================================================================== */
 $(document).on('click', '.delete-student', function (e) {
     e.preventDefault();
-    const relationId = $(this).data('id');
+
+    const $btn = $(this);
+    const sessionId = $btn.data('session-id');
+    const userId = $btn.data('user-id');
+    const groupId = $btn.data('group-id');
+    const studentName = $btn.data('name');
+
+    if (!sessionId || !userId || !groupId) {
+        alert('Missing required data to remove user from group');
+        return;
+    }
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: `Remove ${studentName} from this group?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dd3333',
+        cancelButtonColor: '#64c5b1',
+        confirmButtonText: 'Yes, remove.',
+        cancelButtonText: 'Cancel',
+        width: '500px',
+        padding: '20px'
+    }).then(async (result) => {
+        if (!result.isConfirmed) return;
+
+        try {
+            const response = await fetch(`/api/disaffect_user_group/${sessionId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    group_id: groupId
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            // Remove from the modal's student list
+            $btn.closest('li').remove();
+
+            // Remove from the matching card on the main group list
+            const $groupCard = $(`.user-content-session[data-group-id="${groupId}"]`);
+            const $userItem = $groupCard.find(`.user-item-session[data-user-id="${userId}"]`);
+            $userItem.remove();
+
+            // Update capacity counter on that card
+            const capacityText = $groupCard.find('.group-capacity-text');
+            const [current, max] = capacityText.text().replace('Capacity:', '').trim().split('/').map(Number);
+            capacityText.text(`Capacity: ${Math.max(current - 1, 0)}/${max}`);
+
+            // If modal list is now empty, show the empty-state message
+            if ($('#students-list li').length === 0) {
+                $('#students-list').html('<li class="list-group-item text-center text-muted">No students in this group</li>');
+            }
+
+            // Refresh the "not affected" list so this student reappears there
+            const accountId = window.ACCOUNT_ID;
+            await loadUsersNotAffected(sessionId, accountId);
+
+        } catch (error) {
+            console.error('Error deleting user from group:', error);
+            Swal.fire({
+                title: 'Error!',
+                text: 'Failed to remove user from group.',
+                icon: 'error',
+                confirmButtonColor: '#dd3333'
+            });
+        }
+    });
 });
 
 
@@ -579,20 +652,15 @@ async function loadUsersNotAffected(sessionId, accountId) {
 
 function createUserElement(user, sessionId) {
     const userDiv = document.createElement('div');
-    userDiv.className = 'external-event-session btn btn-primary light';
+    userDiv.className = 'external-event-session';
     userDiv.setAttribute('data-id', user.userId);
     userDiv.setAttribute('data-user-id', user.userId);
     userDiv.setAttribute('data-count', user.sessionCount);
     userDiv.setAttribute('data-session-id', sessionId);
 
     userDiv.innerHTML = `
-        <i class="fa fa-move"></i>
-        <span class="user-name">
-            ${user.userName}
-        </span>
-        <small class="badge bg-warning ms-1 session-count">
-            ${user.sessionCount}
-        </small>
+        <span class="user-name">${user.userName}</span>
+        <span class="session-count">${user.sessionCount}</span>
     `;
 
     return userDiv;
@@ -937,4 +1005,56 @@ $(document).ready(function () {
         $('#group-local-session-form')[0].reset();
     });
 
+});
+
+/* =====================================================================
+ * SECTION 12: Load Local Info
+ * ===================================================================== */
+ async function loadLocalInfo(accountId) {
+    const nameEl = document.getElementById('local-name');
+    if (!nameEl) return;
+
+    try {
+        const response = await fetch(`/api/get_slc_info/${accountId}`);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success && result.data && result.data.length > 0) {
+            nameEl.textContent = result.data[0].name;
+        } else {
+            nameEl.textContent = 'Unknown';
+            console.log('No local data found');
+        }
+
+    } catch (error) {
+        console.error('Error loading local info:', error);
+        nameEl.textContent = 'Unknown';
+    }
+}
+
+// Call on page load, alongside your other init calls
+document.addEventListener('DOMContentLoaded', function () {
+    const accountId = window.ACCOUNT_ID;
+    if (accountId) {
+        loadLocalInfo(accountId);
+    } else {
+        console.error('Account ID not found');
+    }
+});
+
+
+/* =====================================================================
+ * SECTION 13: SEARCH STUDENTS NOT AFFECTED BY NAME
+ * ===================================================================== */
+$(document).on('keyup', '#filtre-Student-group', function () {
+    const query = $(this).val().toLowerCase().trim();
+
+    $('#external-events .external-event-session').each(function () {
+        const studentName = $(this).find('.user-name').text().toLowerCase().trim();
+        $(this).toggle(studentName.includes(query));
+    });
 });

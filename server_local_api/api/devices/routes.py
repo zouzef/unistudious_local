@@ -601,7 +601,7 @@ def view_tablet_by_id(id_tablette):
 
 
 @devices_bp.route('/create_door/<int:account_id>', methods=['POST'])
-def create_door():
+def create_door(account_id):
     try:
         data = request.get_json()
         required_fields = ['slc_id', 'room_id', 'mac_id', 'password', 'name']

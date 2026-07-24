@@ -23,7 +23,7 @@ groups_bp = Blueprint('groups', __name__)
 def api_get_groups(session_id, account_id):
     """Get groups with students"""
     result = get_groups(account_id, session_id)
-    print(result)
+
     return jsonify({"Message": "Success", "data": result}), 200
 
 
@@ -88,7 +88,7 @@ def api_create_group(session_id):
 
         if not data:
             return jsonify({"Message": "No data provided"}), 400
-        print(data)
+
         result, status_code = create_group(session_id, data)
         return jsonify(result), status_code
     except Exception as e:

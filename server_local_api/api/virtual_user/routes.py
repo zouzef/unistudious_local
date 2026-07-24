@@ -63,70 +63,70 @@ def get_all_virtuel_user(account_id):
 # ========================================
 @Vusers_bp.route('/delete-virtuel-user/<int:id>', methods=['POST'])
 def delete_virtuel_user(id):
-	try:
-		data = request.get_json(silent=True) or request.form
-		user_id = data.get('userId')
-		account_id = data.get('account_id')
-		virtual_id = data.get('id')
+    try:
+       data = request.get_json(silent=True) or request.form
+       user_id = data.get('userId')
+       account_id = data.get('account_id')
+       virtual_id = data.get('id')
 
-		if not user_id or not account_id or not virtual_id:
-			return jsonify({"success": False, "Message": "userId, account and id are required"}), 400
+       if not user_id or not account_id or not virtual_id:
+          return jsonify({"success": False, "message": "userId, account and id are required"}), 400
 
-		if not (account_exists(account_id)):
-			return jsonify({"success": False, "Message": "account_id dosen't exist"}), 400
+       if not (account_exists(account_id)):
+          return jsonify({"success": False, "message": "account_id dosen't exist"}), 400
 
-		if not (virtuel_user_exists(id, account_id)):
-			return jsonify({"Message": "There is no user with this id"}), 400
+       if not (virtuel_user_exists(id, account_id)):
+          return jsonify({"message": "There is no user with this id"}), 400
 
-		# ── Fetch old_data BEFORE disabling anything (for audit) ──────────
-		old_data_query = """
-            SELECT vu.*, u.*
+       # ── Fetch old_data BEFORE disabling anything (for audit) ──────────
+       old_data_query = """
+            SELECT vu.id, vu.user_id, vu.account_id, vu.name
             FROM virtual_user vu
-            JOIN user u ON u.id = vu.user_id
             WHERE vu.id = %s AND vu.enabled = 1
         """
-		old_data_result = Database.execute_query(old_data_query, (virtual_id,), fetch=True)
-		old_data = old_data_result[0] if old_data_result else None
+       old_data_result = Database.execute_query(old_data_query, (virtual_id,), fetch=True)
+       old_data = old_data_result[0] if old_data_result else None
 
-		disabled_virtual_query = "UPDATE virtual_user SET enabled = 0 WHERE id = %s"
-		Database.execute_query(disabled_virtual_query, (virtual_id,), fetch=False)
+       disabled_virtual_query = "UPDATE virtual_user SET enabled = 0 WHERE id = %s"
+       Database.execute_query(disabled_virtual_query, (virtual_id,), fetch=False)
 
-		disable_user_query = "UPDATE user SET enabled = 0 WHERE id = %s AND isvirtual = 1"
-		Database.execute_query(disable_user_query, (user_id,), fetch=False)
+       disable_user_query = "UPDATE user SET enabled = 0 WHERE id = %s AND isvirtual = 1"
+       Database.execute_query(disable_user_query, (user_id,), fetch=False)
 
-		disable_sessions_query = """
+       disable_sessions_query = """
             UPDATE relation_user_session
             SET enabled = 0
             WHERE user_id = %s AND enabled = 1
         """
-		Database.execute_query(disable_sessions_query, (user_id,), fetch=False)
+       Database.execute_query(disable_sessions_query, (user_id,), fetch=False)
 
-		# ── Audit log ──────────────────────────────────────────────────
-		audit_query = """
+       # ── Audit log ──────────────────────────────────────────────────
+       audit_query = """
             INSERT INTO virtual_user_audit (action_type, record_id, old_data, new_data, is_synced)
             VALUES (%s, %s, %s, %s, %s)
         """
-		Database.execute_query(
-			audit_query,
-			[
-				"DELETE",
-				virtual_id,                                       # record_id → the virtual_user's PK
-				json.dumps(old_data, default=str) if old_data else None,  # old_data → state before deletion
-				None,                                              # new_data → nothing after deletion
-				0
-			],
-			fetch=False
-		)
+       Database.execute_query(
+          audit_query,
+          [
+             "DELETE",
+             virtual_id,                                       # record_id → the virtual_user's PK
+             json.dumps(old_data, default=str) if old_data else None,  # old_data → state before deletion
+             None,                                              # new_data → nothing after deletion
+             0
+          ],
+          fetch=False
+       )
 
-		return jsonify({
-			"success": True,
-			"message": "Student and all related sessions have been deleted successfully"
-		}), 200
+       return jsonify({
+          "success": True,
+          "message": "Student and all related sessions have been deleted successfully"
+       }), 200
 
-	except Exception as e:
-		return jsonify({
-			"Message": f"Error : {e} coming from delete virtuel user"
-		}), 500
+    except Exception as e:
+       print(e)
+       return jsonify({
+          "Message": f"Error : {e} coming from delete virtuel user"
+       }), 500
 
 
 # =============================================
@@ -143,48 +143,51 @@ def update_virtual_student(account_id):
 		phone   = data.get('phone')
 		email   = data.get('email')
 		status  = data.get('status')
+		print("\n \n \n \n STATUS STUDENT: ", status)
 
 		if not user_id or not vu_id:
 			return jsonify({"message": "UserId and Id are required."}), 400
 
 		user_row = Database.execute_query(
-            "SELECT id FROM user WHERE id = %s AND enabled = 1", (user_id,)
-        )
+			"SELECT id FROM user WHERE id = %s AND enabled = 1", (user_id,)
+		)
 		if not user_row:
 			return jsonify({"success": False, "message": "Student not found"}), 400
 
 		vu_row = Database.execute_query(
-            "SELECT id, name, phone, email, status, user_id, account_id FROM virtual_user WHERE user_id = %s AND account_id = %s AND enabled = 1 AND id = %s",
-            (user_id, account_id, vu_id)
+			"SELECT id, name, phone, email, status, user_id, account_id FROM virtual_user WHERE user_id = %s AND account_id = %s AND enabled = 1 AND id = %s",
+			(user_id, account_id, vu_id)
 		)
 
 		if not vu_row:
 			# create
+			status_bool = str(status).strip().lower() in ('1', 'true', 'on', 'yes') if status is not None else False
+
 			insert_query = """
-                INSERT INTO virtual_user (name, phone, email, status, user_id, account_id)
-                VALUES (%s, %s, %s, %s, %s, %s)
-            """
+				INSERT INTO virtual_user (name, phone, email, status, user_id, account_id)
+				VALUES (%s, %s, %s, %s, %s, %s)
+			"""
 			result = Database.execute_query(
 				insert_query,
-                (name, phone, email, bool(status), user_id, account_id),
-                fetch=False
+				(name, phone, email, status_bool, user_id, account_id),
+				fetch=False
 			)
 			vu_id = result
 
 			new_row = Database.execute_query(
-                "SELECT id, name, phone, email, status, user_id, account_id FROM virtual_user WHERE id = %s",
-                (vu_id,)
-            )[0]
+				"SELECT id, name, phone, email, status, user_id, account_id FROM virtual_user WHERE id = %s",
+				(vu_id,)
+			)[0]
 
 			# audit: creation (old_data null, new_data = full new row)
 			Database.execute_query(
-                """
-                INSERT INTO virtual_user_audit (action_type, record_id, old_data, new_data)
-                VALUES (%s, %s, %s, %s)
-                """,
-                ('create', vu_id, None, json.dumps(new_row, default=str)),
-                fetch=False
-            )
+				"""
+				INSERT INTO virtual_user_audit (action_type, record_id, old_data, new_data)
+				VALUES (%s, %s, %s, %s)
+				""",
+				('create', vu_id, None, json.dumps(new_row, default=str)),
+				fetch=False
+			)
 
 		else:
 			old_row = vu_row[0]
@@ -197,8 +200,9 @@ def update_virtual_student(account_id):
 				set_clauses.append("phone = %s"); values.append(phone)
 			if email:
 				set_clauses.append("email = %s"); values.append(email)
-			if status:
-				set_clauses.append("status = %s"); values.append(bool(status))
+			if status is not None:
+				status_bool = str(status).strip().lower() in ('1', 'true', 'on', 'yes')
+				set_clauses.append("status = %s"); values.append(status_bool)
 
 			if set_clauses:
 				values.append(vu_id)
@@ -206,43 +210,24 @@ def update_virtual_student(account_id):
 				Database.execute_query(query, tuple(values), fetch=False)
 
 				new_row = Database.execute_query(
-                    "SELECT id, name, phone, email, status, user_id, account_id FROM virtual_user WHERE id = %s",
-                    (vu_id,)
-                )[0]
+					"SELECT id, name, phone, email, status, user_id, account_id FROM virtual_user WHERE id = %s",
+					(vu_id,)
+				)[0]
 
 				# audit: update (old_data = row before, new_data = row after)
 				Database.execute_query(
-                    """
-                    INSERT INTO virtual_user_audit (action_type, record_id, old_data, new_data)
-                    VALUES (%s, %s, %s, %s)
-                    """,
-                    ('update', vu_id, json.dumps(old_row, default=str), json.dumps(new_row, default=str)),
-                    fetch=False
-                )
+					"""
+					INSERT INTO virtual_user_audit (action_type, record_id, old_data, new_data)
+					VALUES (%s, %s, %s, %s)
+					""",
+					('UPDATE', vu_id, json.dumps(old_row, default=str), json.dumps(new_row, default=str)),
+					fetch=False
+				)
 
-		result = Database.execute_query(
-            "SELECT id, user_id, name, email, phone, status, account_id FROM virtual_user WHERE id = %s",
-            (vu_id,)
-        )
-		vu = result[0]
-
-		return jsonify({
-            "success": True,
-            "message": "Virtual student updated successfully",
-            "student": {
-                "id": vu['id'],
-                "userId": vu['user_id'],
-                "fullName": vu['name'],
-                "email": vu['email'],
-                "phone": vu['phone'],
-                "status": "Active" if vu['status'] else "Inactive",
-                "account": vu['account_id'],
-                "type": "Virtual",
-            }
-        }), 200
+		return jsonify({"success": True, "message": "Virtual student saved successfully."}), 200
 
 	except Exception as e:
-		return jsonify({"success": False, "message": "Error updating virtual student"}), 500
+		return jsonify({"success": False, "message": str(e)}), 500
 
 
 # =============================================

@@ -71,6 +71,8 @@ def insert_virtuelUsers(db, virtualUser_data):
                     continue
 
                 # Prepare new data
+                # NOTE: this section handles brand-new/incoming records, so user_id
+                # and created_at are kept here (needed for INSERT).
                 new_data = {
                     "id_prod": user.get("id"),
                     "account_id": user.get("accountId"),
@@ -155,9 +157,8 @@ def insert_virtuelUsers(db, virtualUser_data):
                         new_data["timestamp"],
                         new_data["created_at"],
                         new_data["updated_at"],
-                        user_id
+                        existing["id"]
                     ))
-
                     result["updated"] += 1
                     print(f"      ✅ Updated successfully")
 
@@ -216,8 +217,8 @@ def update_virtuelUsers(db, virtualUser_data):
     Handle 'updated' VirtualUsers from API
     Logic:
     - Look up by id_prod first, then fall back to local id
-    - If VirtualUser exists in DB → UPDATE it
-    - If VirtualUser does NOT exist → INSERT it (don't skip!)
+    - If VirtualUser exists in DB → UPDATE it (user_id is NEVER touched on update)
+    - If VirtualUser does NOT exist → INSERT it (don't skip! user_id is set here since it's a new row)
 
     Args:
         db: Database instance
@@ -250,11 +251,13 @@ def update_virtuelUsers(db, virtualUser_data):
                 if not user_id:
                     raise ValueError("Missing required field: id")
 
-                # Prepare new data
+                # Prepare new data for the UPDATE path.
+                # NOTE: user_id intentionally excluded here - on update we never
+                # want to touch the user_id column, so it's left out of both the
+                # change-comparison and the UPDATE query/params below.
                 new_data = {
                     "id_prod": user.get("id"),
                     "account_id": user.get("accountId"),
-                    "user_id": user.get("userId"),
                     "created_by_id": user.get("createdById"),
                     "name": user.get("name"),
                     "email": user.get("email"),
@@ -280,7 +283,7 @@ def update_virtuelUsers(db, virtualUser_data):
                 print(f"   [{i}/{len(updated_users)}] VirtualUser ID {user_id}...")
 
                 if existing_records:
-                    # EXISTS → Compare and UPDATE if different
+                    # EXISTS → Compare and UPDATE if different (user_id excluded from both)
                     existing = existing_records[0]
 
                     # Compare data
@@ -297,14 +300,13 @@ def update_virtuelUsers(db, virtualUser_data):
                         result["skipped"] += 1
                         continue
 
-                    # Data is different - UPDATE
+                    # Data is different - UPDATE (user_id column NOT included)
                     print(f"      🔄 Data changed - updating...")
 
                     update_query = """
                         UPDATE virtual_user SET
                             id_prod = %s,
                             account_id = %s,
-                            user_id = %s,
                             created_by_id = %s,
                             name = %s,
                             email = %s,
@@ -323,7 +325,6 @@ def update_virtuelUsers(db, virtualUser_data):
                     db.execute_query(update_query, (
                         new_data["id_prod"],
                         new_data["account_id"],
-                        new_data["user_id"],
                         new_data["created_by_id"],
                         new_data["name"],
                         new_data["email"],
@@ -344,6 +345,8 @@ def update_virtuelUsers(db, virtualUser_data):
 
                 else:
                     # DOES NOT EXIST → INSERT (don't skip!)
+                    # This is a brand-new row, so user_id IS required here -
+                    # pulled fresh from the payload since it wasn't kept in new_data above.
                     print(f"      ⚠️  VirtualUser not found in DB - inserting...")
 
                     insert_query = """
@@ -359,7 +362,7 @@ def update_virtuelUsers(db, virtualUser_data):
                         user_id,
                         new_data["id_prod"],
                         new_data["account_id"],
-                        new_data["user_id"],
+                        user.get("userId"),
                         new_data["created_by_id"],
                         new_data["name"],
                         new_data["email"],

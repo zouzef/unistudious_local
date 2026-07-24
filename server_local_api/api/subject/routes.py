@@ -15,7 +15,6 @@ AUDIT_TABLE = "account_subject_audit"
 
 
 # ─── ENDPOINT 1: Get all sub_subject ──────────────────────────────────────────
-
 @subject_bp.route('/get_sub_subjects', methods=['GET'])
 def get_subjects():
     try:
@@ -43,7 +42,6 @@ def get_subjects():
 
 
 # ─── ENDPOINT 2: Get subject_config ───────────────────────────────────────────
-
 @subject_bp.route('/get_subject_config', methods=['GET'])
 def get_subject_config():
     try:
@@ -64,7 +62,6 @@ def get_subject_config():
 
 
 # ─── ENDPOINT 3: Get account_subject by account_id ────────────────────────────
-
 @subject_bp.route('/get_account_subject/<int:account_id>', methods=['GET'])
 def get_account_subject(account_id):
     try:
@@ -96,7 +93,6 @@ def get_account_subject(account_id):
 
 
 # ─── ENDPOINT 4: View account_subject ─────────────────────────────────────────
-
 @subject_bp.route('/view_account_subject/<int:account_subject_id>', methods=['GET'])
 def view_account_subject(account_subject_id):
     try:
@@ -128,7 +124,6 @@ def view_account_subject(account_subject_id):
 
 
 # ─── ENDPOINT 5: Create account_subject ───────────────────────────────────────
-
 @subject_bp.route('/create_account_subject/<int:account_id>', methods=['POST'])
 def create_account_subject(account_id):
     try:
@@ -174,7 +169,6 @@ def create_account_subject(account_id):
 
 
 # ─── ENDPOINT 6: Update account_subject ───────────────────────────────────────
-
 @subject_bp.route('/update_account_subject/<int:account_subject_id>', methods=['POST'])
 def update_account_subject(account_subject_id):
     try:
@@ -232,7 +226,6 @@ def update_account_subject(account_subject_id):
 
 
 # ─── ENDPOINT 7: Delete account_subject (soft delete) ─────────────────────────
-
 @subject_bp.route('/delete_account_subject/<account_subject_id>', methods=['POST'])
 def delete_account_subject(account_subject_id):
     try:

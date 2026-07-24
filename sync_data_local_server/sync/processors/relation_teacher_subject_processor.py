@@ -15,7 +15,7 @@ def insert_teacher_subject_relations(db, relation_data):
     """
     Handle 'created' teacher-subject relations from API
     Logic:
-    - If record exists in DB (based on group_id, subject_id, teacher_id) → UPDATE it
+    - If record exists in DB (matched by its own id / external_id) → UPDATE it
     - If record does NOT exist → INSERT it
 
     Args:
@@ -63,25 +63,15 @@ def insert_teacher_subject_relations(db, relation_data):
                     "updated_at": format_date(relation.get("updatedAt"))
                 }
 
-                # Check if record exists (based on business key)
+                # Check if record exists — match on the record's own stable id,
+                # NOT on group_id/subject_id/teacher_id. Those fields (especially
+                # teacher_id) are exactly what can change on an "updated" record,
+                # so matching on them would make an existing row look "new".
                 select_query = """
                     SELECT * FROM relation_teacher_to_subject_group
-                    WHERE relation_group_local_session_id = %s 
-                      AND subject_id = %s 
-                      AND user_id = %s
+                    WHERE id = %s
                 """
-                existing_records = db.fetch_query(select_query, (
-                    new_data["group_id"],
-                    new_data["subject_id"],
-                    new_data["teacher_id"]
-                ))
-                prod_id_check = db.fetch_query(
-                    "SELECT id FROM relation_teacher_to_subject_group WHERE id_prod = %s",(external_id,)
-                )
-                if prod_id_check:
-                    print(f"      ⏭️  prod_id {external_id} already exists - skipped")
-                    result["skipped"] += 1
-                    continue
+                existing_records = db.fetch_query(select_query, (external_id,))
 
                 print(f"   [{i}/{len(created_relations)}] External ID {external_id}...")
 
@@ -91,9 +81,21 @@ def insert_teacher_subject_relations(db, relation_data):
 
                     # Compare data
                     has_changes = False
-                    comparison_fields = ["enabled", "release_token", "use_token", "timestamp", "updated_at"]
+                    comparison_fields = ["group_id", "subject_id", "teacher_id", "enabled",
+                                          "release_token", "use_token", "timestamp", "updated_at"]
+                    field_to_column = {
+                        "group_id": "relation_group_local_session_id",
+                        "subject_id": "subject_id",
+                        "teacher_id": "user_id",
+                        "enabled": "enabled",
+                        "release_token": "releaseToken",
+                        "use_token": "useToken",
+                        "timestamp": "timestamp",
+                        "updated_at": "updated_at",
+                    }
                     for field in comparison_fields:
-                        old_value = str(existing.get(field)) if existing.get(field) is not None else None
+                        column = field_to_column[field]
+                        old_value = str(existing.get(column)) if existing.get(column) is not None else None
                         new_value = str(new_data.get(field)) if new_data.get(field) is not None else None
                         if old_value != new_value:
                             has_changes = True
@@ -109,17 +111,22 @@ def insert_teacher_subject_relations(db, relation_data):
 
                     update_query = """
                         UPDATE relation_teacher_to_subject_group SET
+                            relation_group_local_session_id = %s,
+                            subject_id = %s,
+                            user_id = %s,
                             enabled = %s,
                             releaseToken = %s,
                             useToken = %s,
                             timestamp = %s,
                             created_at = %s,
-                            updated_at = %s,
-                            is_sync = 1
+                            updated_at = %s
                         WHERE id = %s
                     """
 
-                    db.execute_query(update_query, (
+                    success = db.execute_query(update_query, (
+                        new_data["group_id"],
+                        new_data["subject_id"],
+                        new_data["teacher_id"],
                         new_data["enabled"],
                         new_data["release_token"],
                         new_data["use_token"],
@@ -129,8 +136,12 @@ def insert_teacher_subject_relations(db, relation_data):
                         existing["id"]
                     ))
 
-                    result["updated"] += 1
-                    print(f"      ✅ Updated successfully (Internal ID: {existing['id']})")
+                    if success:
+                        result["updated"] += 1
+                        print(f"      ✅ Updated successfully (Internal ID: {existing['id']})")
+                    else:
+                        result["errors"] += 1
+                        print(f"      ❌ Update failed for external ID {external_id}")
 
                 else:
                     # DOES NOT EXIST → INSERT
@@ -143,7 +154,7 @@ def insert_teacher_subject_relations(db, relation_data):
                         ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 0, %s)
                     """
 
-                    db.execute_query(insert_query, (
+                    success = db.execute_query(insert_query, (
                         external_id,
                         new_data["group_id"],
                         new_data["subject_id"],
@@ -154,11 +165,15 @@ def insert_teacher_subject_relations(db, relation_data):
                         new_data["timestamp"],
                         new_data["created_at"],
                         new_data["updated_at"],
-                        external_id,  # ✅ id_prod
+                        external_id,  # id_prod
                     ))
 
-                    result["inserted"] += 1
-                    print(f"      ✅ Inserted successfully")
+                    if success:
+                        result["inserted"] += 1
+                        print(f"      ✅ Inserted successfully")
+                    else:
+                        result["errors"] += 1
+                        print(f"      ❌ Insert failed for external ID {external_id}")
 
             except Exception as err:
                 print(f"      ❌ Error processing external ID {relation.get('id', 'unknown')}: {err}")
@@ -179,7 +194,7 @@ def update_teacher_subject_relations(db, relation_data):
     """
     Handle 'updated' teacher-subject relations from API
     Logic:
-    - If record exists in DB → UPDATE it
+    - If record exists in DB (matched by its own id / external_id) → UPDATE it
     - If record does NOT exist → INSERT it (don't skip!)
 
     Args:
@@ -225,18 +240,16 @@ def update_teacher_subject_relations(db, relation_data):
                     "updated_at": format_date(relation.get("updatedAt"))
                 }
 
-                # Check if record exists (based on business key)
+                # Check if record exists — match on the record's own stable id,
+                # NOT on group_id/subject_id/teacher_id. A teacher reassignment
+                # changes teacher_id, so matching on it would make an existing
+                # row look "not found" and trigger a duplicate-key INSERT instead
+                # of the correct UPDATE.
                 select_query = """
                     SELECT * FROM relation_teacher_to_subject_group
-                    WHERE relation_group_local_session_id = %s 
-                      AND subject_id = %s 
-                      AND user_id = %s
+                    WHERE id = %s
                 """
-                existing_records = db.fetch_query(select_query, (
-                    new_data["group_id"],
-                    new_data["subject_id"],
-                    new_data["teacher_id"]
-                ))
+                existing_records = db.fetch_query(select_query, (external_id,))
 
                 print(f"   [{i}/{len(updated_relations)}] External ID {external_id}...")
 
@@ -246,9 +259,21 @@ def update_teacher_subject_relations(db, relation_data):
 
                     # Compare data
                     has_changes = False
-                    comparison_fields = ["enabled", "release_token", "use_token", "timestamp", "updated_at"]
+                    comparison_fields = ["group_id", "subject_id", "teacher_id", "enabled",
+                                          "release_token", "use_token", "timestamp", "updated_at"]
+                    field_to_column = {
+                        "group_id": "relation_group_local_session_id",
+                        "subject_id": "subject_id",
+                        "teacher_id": "user_id",
+                        "enabled": "enabled",
+                        "release_token": "releaseToken",
+                        "use_token": "useToken",
+                        "timestamp": "timestamp",
+                        "updated_at": "updated_at",
+                    }
                     for field in comparison_fields:
-                        old_value = str(existing.get(field)) if existing.get(field) is not None else None
+                        column = field_to_column[field]
+                        old_value = str(existing.get(column)) if existing.get(column) is not None else None
                         new_value = str(new_data.get(field)) if new_data.get(field) is not None else None
                         if old_value != new_value:
                             has_changes = True
@@ -264,16 +289,21 @@ def update_teacher_subject_relations(db, relation_data):
 
                     update_query = """
                         UPDATE relation_teacher_to_subject_group SET
+                            relation_group_local_session_id = %s,
+                            subject_id = %s,
+                            user_id = %s,
                             enabled = %s,
                             releaseToken = %s,
                             useToken = %s,
                             timestamp = %s,
-                            updated_at = %s,
-                            is_sync = 1
+                            updated_at = %s
                         WHERE id = %s
                     """
 
-                    db.execute_query(update_query, (
+                    success = db.execute_query(update_query, (
+                        new_data["group_id"],
+                        new_data["subject_id"],
+                        new_data["teacher_id"],
                         new_data["enabled"],
                         new_data["release_token"],
                         new_data["use_token"],
@@ -282,8 +312,12 @@ def update_teacher_subject_relations(db, relation_data):
                         existing["id"]
                     ))
 
-                    result["updated"] += 1
-                    print(f"      ✅ Updated successfully (Internal ID: {existing['id']})")
+                    if success:
+                        result["updated"] += 1
+                        print(f"      ✅ Updated successfully (Internal ID: {existing['id']})")
+                    else:
+                        result["errors"] += 1
+                        print(f"      ❌ Update failed for external ID {external_id}")
 
                 else:
                     # DOES NOT EXIST → INSERT (don't skip!)
@@ -297,7 +331,7 @@ def update_teacher_subject_relations(db, relation_data):
                     """
 
                     # For records in 'updated' that don't exist, use updated_at as created_at
-                    db.execute_query(insert_query, (
+                    success = db.execute_query(insert_query, (
                         external_id,  # id
                         new_data["group_id"],
                         new_data["subject_id"],
@@ -311,8 +345,12 @@ def update_teacher_subject_relations(db, relation_data):
                         external_id,  # id_prod
                     ))
 
-                    result["inserted"] += 1
-                    print(f"      ✅ Inserted successfully")
+                    if success:
+                        result["inserted"] += 1
+                        print(f"      ✅ Inserted successfully")
+                    else:
+                        result["errors"] += 1
+                        print(f"      ❌ Insert failed for external ID {external_id}")
 
             except Exception as err:
                 print(f"      ❌ Error processing external ID {relation.get('id', 'unknown')}: {err}")

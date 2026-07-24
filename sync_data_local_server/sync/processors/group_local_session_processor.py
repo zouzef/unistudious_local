@@ -117,12 +117,11 @@ def insert_groups(db, group_data):
                             useToken = %s,
                             timestamp = %s,
                             created_at = %s,
-                            updated_at = %s,
-                            is_sync = 1
+                            updated_at = %s
                         WHERE id = %s
                     """
 
-                    db.execute_query(update_query, (
+                    success = db.execute_query(update_query, (
                         new_data["session_id"],
                         new_data["local_id"],
                         new_data["account_id"],
@@ -140,8 +139,12 @@ def insert_groups(db, group_data):
                         group_id
                     ))
 
-                    result["updated"] += 1
-                    print(f"      ✅ Updated successfully")
+                    if success:
+                        result["updated"] += 1
+                        print(f"      ✅ Updated successfully")
+                    else:
+                        result["errors"] += 1
+                        print(f"      ❌ Update failed for group ID {group_id}")
 
                 else:
                     # DOES NOT EXIST → INSERT
@@ -154,7 +157,7 @@ def insert_groups(db, group_data):
                         ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """
 
-                    db.execute_query(insert_query, (
+                    success = db.execute_query(insert_query, (
                         group_id,
                         new_data["session_id"],
                         new_data["local_id"],
@@ -173,8 +176,12 @@ def insert_groups(db, group_data):
                         group_id
                     ))
 
-                    result["inserted"] += 1
-                    print(f"      ✅ Inserted successfully")
+                    if success:
+                        result["inserted"] += 1
+                        print(f"      ✅ Inserted successfully")
+                    else:
+                        result["errors"] += 1
+                        print(f"      ❌ Insert failed for group ID {group_id}")
 
             except Exception as err:
                 print(f"      ❌ Error processing group ID {group.get('id', 'unknown')}: {err}")
@@ -250,8 +257,6 @@ def update_groups(db, group_data):
                 select_query = "SELECT * FROM relation_group_local_session WHERE id = %s"
                 existing_records = db.fetch_query(select_query, (group_id,))
 
-
-
                 print(f"   [{i}/{len(updated_groups)}] Group ID {group_id}...")
 
                 if existing_records:
@@ -289,12 +294,11 @@ def update_groups(db, group_data):
                             releaseToken = %s,
                             useToken = %s,
                             timestamp = %s,
-                            updated_at = %s,
-                            is_sync = 1
+                            updated_at = %s
                         WHERE id = %s
                     """
 
-                    db.execute_query(update_query, (
+                    success = db.execute_query(update_query, (
                         new_data["session_id"],
                         new_data["local_id"],
                         new_data["account_id"],
@@ -311,8 +315,12 @@ def update_groups(db, group_data):
                         group_id
                     ))
 
-                    result["updated"] += 1
-                    print(f"      ✅ Updated successfully")
+                    if success:
+                        result["updated"] += 1
+                        print(f"      ✅ Updated successfully")
+                    else:
+                        result["errors"] += 1
+                        print(f"      ❌ Update failed for group ID {group_id}")
 
                 else:
                     # DOES NOT EXIST → INSERT (don't skip!)
@@ -321,12 +329,12 @@ def update_groups(db, group_data):
                     insert_query = """
                         INSERT INTO relation_group_local_session (
                             id, session_id, local_id, account_id, name, capacity, status, enabled,
-                            special_group, access_type, releaseToken, useToken, timestamp, created_at, updated_at, prod_id
+                            special_group, access_type, releaseToken, useToken, timestamp, created_at, updated_at, id_prod
                         ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """
 
                     # For records in 'updated' that don't exist, use updated_at as created_at
-                    db.execute_query(insert_query, (
+                    success = db.execute_query(insert_query, (
                         group_id,
                         new_data["session_id"],
                         new_data["local_id"],
@@ -345,8 +353,12 @@ def update_groups(db, group_data):
                         group_id
                     ))
 
-                    result["inserted"] += 1
-                    print(f"      ✅ Inserted successfully")
+                    if success:
+                        result["inserted"] += 1
+                        print(f"      ✅ Inserted successfully")
+                    else:
+                        result["errors"] += 1
+                        print(f"      ❌ Insert failed for group ID {group_id}")
 
             except Exception as err:
                 print(f"      ❌ Error processing group ID {group.get('id', 'unknown')}: {err}")
