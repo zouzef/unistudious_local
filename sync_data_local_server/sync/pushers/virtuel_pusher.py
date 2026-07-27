@@ -104,7 +104,44 @@ def _send_delete_virtuelUser_api(settings, payload):
 	except Exception as e:
 		return False
 
+def _send_associate_virtuelUser_api(settings, payload):
+    try:
+       token = get_token()
+       headers = {"Authorization": f"Bearer {token}"}
+       url = f"{settings.api_base_url}/slc/save-virtual-student-sessions"
 
+       form_data = {"userId": payload["userId"]}
+       for i, session_id in enumerate(payload["sessionIds"]):
+          form_data[f"sessionIds[{i}]"] = session_id
+
+       logger.debug("POST %s | payload: %s", url, form_data)
+       response = requests.post(url, data=form_data, headers=headers, verify=False, timeout=10)
+
+       if response.status_code == 200:
+
+          try:
+             response_data = response.json()
+             logger.debug("Response: %s", response_data)
+          except Exception:
+             logger.error("Invalid JSON response: %s", response.text)
+             return False
+
+          if not response_data.get('success'):
+             logger.error("API returned success=false: %s", response_data)
+             return False
+
+          return True
+
+       elif response.status_code == 400:
+          logger.error("Bad request response: %s", response.text)
+          return False
+       else:
+          logger.error("Unexpected status %s: %s", response.status_code, response.text)
+          return False
+
+    except Exception as e:
+       logger.error("Exception in _send_associate_virtuelUser_api: %s", e)
+       return False
 
 
 def push_virtuelAdd(db, settings, row):
@@ -182,7 +219,6 @@ def push_virtuelUpdate(db, settings, row):
     except Exception as e:
         return  False
 
-
 def push_virtuelDelete(db, settings, row):
 	try:
 		old_data             = json.loads(row.get('old_data', '{}'))
@@ -208,3 +244,55 @@ def push_virtuelDelete(db, settings, row):
 
 	except Exception as e:
 		return False
+
+def push_virtuelAssociate(db, settings, row):
+    try:
+       new_data     = json.loads(row.get('new_data', '{}'))
+       user_id      = new_data.get('user_id')
+       account_id   = new_data.get('account_id')
+       session_ids  = new_data.get('session_ids') or []
+       relations_by_session = new_data.get('relations_by_session') or {}
+
+       if not user_id or not session_ids:
+          logger.error("push_virtuelAssociate: missing user_id or session_ids in new_data")
+          return False
+
+       cursor = db.connection.cursor(dictionary=True)
+
+       # Resolve remote id_prod for the user
+       cursor.execute("SELECT id_prod FROM user WHERE id = %s", (user_id,))
+       user_row = cursor.fetchone()
+       if not user_row or not user_row.get('id_prod'):
+          logger.error("push_virtuelAssociate: no id_prod found for user_id=%s", user_id)
+          cursor.close()
+          return False
+       remote_user_id = user_row['id_prod']
+
+       # Resolve remote id_prod for each session
+       remote_session_ids = []
+       for session_id in session_ids:
+          cursor.execute("SELECT id_prod FROM session WHERE id = %s", (session_id,))
+          session_row = cursor.fetchone()
+          if not session_row or not session_row.get('id_prod'):
+             logger.error("push_virtuelAssociate: no id_prod found for session_id=%s", session_id)
+             cursor.close()
+             return False
+          remote_session_ids.append(session_row['id_prod'])
+
+       cursor.close()
+
+       payload = {
+          "userId": remote_user_id,
+          "sessionIds": remote_session_ids
+       }
+
+       api_status = _send_associate_virtuelUser_api(settings, payload)
+
+       if api_status:
+          logger.info("Sessions associated remotely: user_id=%s session_ids=%s", user_id, session_ids)
+
+       return api_status
+
+    except Exception as e:
+       logger.error("Error coming from push_virtuelAssociate: %s", e)
+       return False

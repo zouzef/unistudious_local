@@ -267,10 +267,11 @@ def get_assigned_session_user(user_id):
 def assign_user_session(user_id: int):
     try:
         data = request.get_json(silent=True) or {}
+        print(data)
         if 'account_id' not in data:
             return jsonify({"Message": "Missing account_id in the data"}), 400
-        if 'session_id' not in data:
-            return jsonify({"Message": "Missing session_id in the data"}), 400
+        if 'session_ids' not in data:
+            return jsonify({"Message": "Missing session_ids in the data"}), 400
 
         status_code, response = assign_user_session_service(user_id, data)
         return jsonify(response), status_code

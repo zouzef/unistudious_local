@@ -21,7 +21,12 @@ from config import Config
 from core.database import Database
 from core.middleware import token_required
 from core.checks import *
-from core.association_service import associate_virtual_user as accociate_virtual_user_service# ========================================
+from core.association_service import associate_virtual_user as accociate_virtual_user_service
+from datetime import datetime
+from util.audit import log_audit
+
+
+# ========================================
 # GROUP/USER MANAGEMENT ENDPOINTS
 # ========================================
 
@@ -1150,11 +1155,28 @@ def associate_virtual_user(account_id):
 
 		if not virtual_id or not real_user_id:
 			return jsonify({
-				"success": False,
-				"message": "Virtual or real user not found."
-			}), 400
+             	"success": False,
+             	"message": "Virtual or real user not found."
+          	}), 400
 
 		result = accociate_virtual_user_service(account_id, virtual_id, real_user_id)
+
+		if result.get("success"):
+			audit_query = """
+		              INSERT INTO user_audit (user_id, role, action_type, payload)
+		              VALUES (%s, %s, %s, %s)
+		          """
+			audit_payload = json.dumps({
+				"user_id": real_user_id,
+				"virtual_user_id": virtual_id,
+				"date": datetime.now().isoformat()
+			})
+			Database.execute_query(
+				audit_query,
+				(real_user_id, "user", "ASSOCIATION", audit_payload),
+				fetch=False
+			)
+
 		return jsonify(result), result.get("status_code", 200)
 
 	except Exception as e:
@@ -1162,12 +1184,6 @@ def associate_virtual_user(account_id):
 			"success": False,
 			"message": f"Error: {e} coming from server"
 		}), 500
-
-	except Exception as e:
-		return jsonify({
-          "Message": f"Error: {e} coming from server"
-       }), 500
-
 
 # =============================================
 # ENDPOINT 10: Get All User

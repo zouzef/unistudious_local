@@ -433,7 +433,16 @@ document.getElementById('createVirtualStudentForm').addEventListener('submit', f
         method: 'POST',
         body: formData
     })
-    .then(res => res.json().then(data => ({ ok: res.ok, data })))
+    .then(res => res.text().then(text => {
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch {
+            console.error('❌ Non-JSON response:', res.status, text);
+            throw new Error(`Server returned non-JSON (status ${res.status})`);
+        }
+        return { ok: res.ok, data };
+    }))
     .then(({ ok, data }) => {
         if (!ok) {
             Swal.fire({
@@ -835,12 +844,11 @@ document.getElementById('manageSessionsForm').addEventListener('submit', functio
     e.preventDefault();
 
     const modalEl = document.getElementById('manageSessionsModal');
-    const userId  = document.getElementById('sessionUserId').value; // ✅ real user id (fixed)
+    const userId  = document.getElementById('sessionUserId').value;
 
-    // Only take NEW (not-yet-assigned) selects — assigned ones are plain divs, not selects
     const selects = document.querySelectorAll('#relationsContainer .sessionSelect');
     const sessionIds = Array.from(selects)
-        .map(s => s.value)
+        .map(s => parseInt(s.value))
         .filter(Boolean);
 
     if (sessionIds.length === 0) {
@@ -857,31 +865,28 @@ document.getElementById('manageSessionsForm').addEventListener('submit', functio
     saveBtn.disabled = true;
     saveBtn.textContent = 'Saving...';
 
-    // Fire one request per selected session, sequentially
-    (async () => {
-        const results = [];
-        for (const sessionId of sessionIds) {
-            try {
-                const res = await fetch(`/api/assign_user_session/${userId}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        account_id: state.accountId,          // ✅ fixed (was bare `accountId`)
-                        session_id: parseInt(sessionId)
-                    })
-                });
-                const data = await res.json();
-                results.push({ sessionId, ok: res.ok, data });
-            } catch (err) {
-                results.push({ sessionId, ok: false, data: { Message: err.message } });
-            }
+    fetch(`/api/assign_user_session/${userId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            account_id: state.accountId,
+            session_ids: sessionIds
+        })
+    })
+    .then(res => res.text().then(text => {
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch {
+            console.error('❌ Non-JSON response:', res.status, text);
+            throw new Error(`Server returned non-JSON (status ${res.status})`);
         }
-        return results;
-    })()
-    .then(results => {
-        const failed = results.filter(r => !r.ok);
+        return { ok: res.ok, data };
+    }))
+    .then(({ ok, data }) => {
+        const failed = (data.results || []).filter(r => !r.ok);
 
-        if (failed.length === 0) {
+        if (ok && failed.length === 0) {
             bootstrap.Modal.getInstance(modalEl).hide();
             Swal.fire({
                 icon: 'success',
@@ -890,14 +895,23 @@ document.getElementById('manageSessionsForm').addEventListener('submit', functio
                 confirmButtonColor: '#4c4b9e'
             });
         } else {
-            const failedMsgs = failed.map(r => `Session ${r.sessionId}: ${r.data.Message || 'Failed'}`).join('\n');
+            const failedMsgs = failed.map(r => `Session ${r.session_id}: ${r.Message || 'Failed'}`).join('\n');
             Swal.fire({
                 icon: 'error',
                 title: 'Some sessions failed',
-                text: failedMsgs,
+                text: failedMsgs || data.Message || 'Failed to assign sessions.',
                 confirmButtonColor: '#4c4b9e'
             });
         }
+    })
+    .catch(err => {
+        console.error('❌ Error assigning sessions:', err);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to assign sessions. Please try again.',
+            confirmButtonColor: '#4c4b9e'
+        });
     })
     .finally(() => {
         saveBtn.disabled = false;

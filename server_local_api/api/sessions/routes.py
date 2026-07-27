@@ -2,13 +2,14 @@ from flask import Blueprint, jsonify, request, send_file
 from datetime import datetime
 import sys
 import os
-
-
 # Add parent directories to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from config import Config
 from core.database import Database
 from core.middleware import token_required
+from core.checks import get_virtual_user, user_exists
+from util.audit import log_audit
+
 from core.checks import *
 import uuid
 import json
@@ -653,7 +654,6 @@ def get_sessions_for_user(real_user_id):
 	result = Database.execute_query(query, (real_user_id,))
 	return [{"id": row['id'], "name": row['name']} for row in result]
 
-from core.checks import get_virtual_user, user_exists
 
 @sessions_bp.route('/get_assignedSession_user/<int:user_id>', methods=['POST'])
 def get_assignedSession_user(user_id):
@@ -695,59 +695,91 @@ def get_assignedSession_user(user_id):
 # ENDPOINT 12: assign user to session
 @sessions_bp.route('/associate_user_session/<int:user_id>', methods=['POST'])
 def associate_user_session(user_id):
-	try:
-		data = request.get_json(silent=True) or {}
+    try:
+       data = request.get_json(silent=True) or {}
+       if 'account_id' not in data:
+          return jsonify({"Message": "Missing account_id in the data"}), 400
 
-		if 'account_id' not in data:
-			return jsonify({"Message": "Missing account_id in the data"}), 400
+       session_ids = data.get('session_ids')
+       if session_ids is None:
+          single = data.get('session_id')
+          session_ids = [single] if single is not None else []
 
-		if 'session_id' not in data:
-			return jsonify({"Message": "Missing session_id in the data"}), 400
+       if not isinstance(session_ids, list) or len(session_ids) == 0:
+          return jsonify({"Message": "Missing session_id or session_ids in the data"}), 400
 
-		account_id = data.get('account_id')
-		session_id = data.get('session_id')
+       account_id = data.get('account_id')
 
-		if not(account_exists(account_id)):
-			return jsonify({"Message":"account_id dosen't exist"}),400
+       if not(account_exists(account_id)):
+          return jsonify({"Message":"account_id dosen't exist"}),400
 
-		if not(session_exists(session_id,account_id)):
-			return jsonify({"Message": "session dosen't exist"}),400
-
-		query_relation = """
-            SELECT id, max_group_change
-            FROM session
-            WHERE id = %s AND enabled = 1 AND account_id = %s
-        """
-		result = Database.execute_query(
-            query_relation,
-            (session_id, account_id),
-            fetch=True
-        )
-
-		if not result:
-			return jsonify({"Message": "There is no session with this id for this account"}), 404
-
-		session_row = result[0]
-		try:
-			max_group_change = int(session_row["max_group_change"])
-		except (TypeError, ValueError):
-			max_group_change = 0
-
-		insert_relation_query = """
+       insert_relation_query = """
             INSERT INTO relation_user_session
                 (user_id, session_id, relation_group_local_session_id, ref, enabled, created_at, timestamp)
             VALUES
                 (%s, %s, %s, %s, %s, NOW(), NOW())
         """
 
-		for _ in range(max_group_change):
-			Database.execute_query(
-                insert_relation_query,
-                [user_id, session_id, None, None, 1],
-                fetch=False
-            )
+       results = []
+       associated_session_ids = []
+       relations_by_session = {}
 
-		return jsonify({"Message": "User associated with session successfully"}), 200
+       for session_id in session_ids:
+          if not(session_exists(session_id, account_id)):
+             results.append({"session_id": session_id, "ok": False, "Message": "session dosen't exist"})
+             continue
 
-	except Exception as e:
-		return jsonify({"Message": "An error occurred", "Error": str(e)}), 500
+          query_relation = """
+               SELECT id, max_group_change
+               FROM session
+               WHERE id = %s AND enabled = 1 AND account_id = %s
+           """
+          result = Database.execute_query(
+               query_relation,
+               (session_id, account_id),
+               fetch=True
+           )
+
+          if not result:
+             results.append({"session_id": session_id, "ok": False, "Message": "There is no session with this id for this account"})
+             continue
+
+          session_row = result[0]
+          try:
+             max_group_change = int(session_row["max_group_change"])
+          except (TypeError, ValueError):
+             max_group_change = 0
+
+          inserted_ids = []
+          for _ in range(max_group_change):
+             new_id = Database.execute_query(
+                   insert_relation_query,
+                   [user_id, session_id, None, None, 1],
+                   fetch=False
+               )
+             inserted_ids.append(new_id)
+
+          associated_session_ids.append(session_id)
+          relations_by_session[session_id] = inserted_ids
+          results.append({"session_id": session_id, "ok": True, "relations_created": max_group_change})
+
+       if associated_session_ids:
+          log_audit(
+             table_name="virtual_user_audit",
+             action_type="ASSOCIATE",
+             new_data={
+                "user_id": user_id,
+                "account_id": account_id,
+                "session_ids": associated_session_ids,
+                "relations_by_session": relations_by_session
+             },
+             record_id=user_id
+          )
+
+       failed = [r for r in results if not r["ok"]]
+       status = 200 if not failed else 207
+
+       return jsonify({"Message": "Processed", "results": results}), status
+
+    except Exception as e:
+       return jsonify({"Message": "An error occurred", "Error": str(e)}), 500

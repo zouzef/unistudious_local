@@ -4,6 +4,7 @@ import sys
 import json
 import requests
 from core.auth import get_token
+from utils.helpers import _map_ids_to_prod
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
@@ -65,7 +66,6 @@ def _send_create_student_api(db, settings, new_data, account_id):
     except Exception as e:
         logger.exception("Remote API error in create student: %s", e)
         return False, None
-
 
 def _send_create_manager_api(settings, new_data):
     try:
@@ -130,12 +130,11 @@ def _send_create_manager_api(settings, new_data):
         logger.exception("Remote API error in create manager: %s", e)
         return False, None
 
-
 def _send_create_teacher_api(settings, new_data):
     try:
-        token = get_token()
+        token   = get_token()
         headers = {"Authorization": f"Bearer {token}"}
-        url = f"{settings.api_base_url}/slc/create-teacher"
+        url     = f"{settings.api_base_url}/slc/create-teacher"
 
         payload = [
             ("fullName",     new_data.get("full_name")),
@@ -148,7 +147,7 @@ def _send_create_teacher_api(settings, new_data):
         ]
 
         permissions = new_data.get("allowedPermissionAccess", []) or []
-        sessions = new_data.get("allowedAccessSession", []) or []
+        sessions    = new_data.get("allowedAccessSession", []) or []
 
         for i, perm in enumerate(permissions):
             payload.append((f"allowedPermissionAccess[{i}]", perm))
@@ -186,6 +185,32 @@ def _send_create_teacher_api(settings, new_data):
             return False, None
     except Exception as e:
         logger.exception("Remote API error in create teacher: %s", e)
+        return False, None
+
+def _send_associate_user_api(settings, payload):
+    try:
+        token = get_token()
+        headers = {"Authorization": f"Bearer {token}"}
+        url = f"{settings.api_base_url}/slc/associate-virtual-user"
+        response = requests.post(
+            url,
+            data=payload,
+            headers=headers,
+            verify=False,
+            timeout=10
+        )
+        if response.status_code == 200:
+            try:
+                response_data = response.json()
+                return True, response_data.get("data", {})
+            except Exception:
+                logger.error("Invalid JSON response: %s", response.text)
+                return False, None
+        else:
+            logger.error("Associate Virtueluser with User failed %s: %s", response.status_code, response.text)
+            return False, None
+    except Exception as e:
+        logger.error("Error: %s", e)
         return False, None
 
 
@@ -271,7 +296,6 @@ def push_userAdd(db, settings, row):
         logger.exception("Error in push_userAdd: %s", e)
         return False
 
-
 def push_userUpdate(db, settings, row):
     try:
         new_data = json.loads(row.get('new_data', '{}'))
@@ -304,8 +328,8 @@ def push_userUpdate(db, settings, row):
             "status":       new_data.get("status"),
         }
 
-        token = get_token()
-        headers = {"Authorization": f"Bearer {token}"}
+        token    = get_token()
+        headers  = {"Authorization": f"Bearer {token}"}
         response = requests.post(url, data=payload, headers=headers, verify=False, timeout=10)
 
         if response.status_code == 200:
@@ -317,7 +341,6 @@ def push_userUpdate(db, settings, row):
     except Exception as e:
         logger.exception("Error in push_userUpdate: %s", e)
         return False
-
 
 def push_userDelete(db, settings, row):
     try:
@@ -344,7 +367,7 @@ def push_userDelete(db, settings, row):
             url = f"{settings.api_base_url}/slc/delete-platform-student/{id_prod}"
 
         token = get_token()
-        headers = {"Authorization": f"Bearer {token}"}
+        headers  = {"Authorization": f"Bearer {token}"}
         response = requests.post(url, headers=headers, verify=False, timeout=10)
 
         if response.status_code == 200:
@@ -355,4 +378,49 @@ def push_userDelete(db, settings, row):
             return False
     except Exception as e:
         logger.exception("Error in push_userDelete: %s", e)
+        return False
+
+def push_userAssociation(db, settings, row):
+    try:
+        new_data         = json.loads(row.get('payload', '{}'))
+        local_user_id    = new_data.get('user_id')
+        local_virtuel_id = new_data.get('virtual_user_id')
+
+
+        if not local_user_id or not local_virtuel_id:
+            logger.error("push_userAssociation: missing user_id or virtual_user_id in payload")
+            return False
+
+        local_user_id    = int(local_user_id)
+        local_virtuel_id = int(local_virtuel_id)
+
+
+        user_prod_map    = _map_ids_to_prod(db, "user", "id", [local_user_id])
+        virtual_prod_map = _map_ids_to_prod(db, "virtual_user", "id", [local_virtuel_id])
+
+        remote_user_id    = user_prod_map.get(local_user_id)
+        remote_virtuel_id = virtual_prod_map.get(local_virtuel_id)
+
+        print("\n ======================================================= \n")
+        print("Remote User Id: ", remote_user_id)
+        print("Remote VirtuelUser Id: ", remote_virtuel_id)
+        print("\n ======================================================= \n")
+
+        if not remote_user_id or not remote_virtuel_id:
+            logger.error(
+                "push_userAssociation: missing id_prod for user_id=%s (got %s) or virtual_id=%s (got %s)",
+                local_user_id, remote_user_id, local_virtuel_id, remote_virtuel_id
+            )
+            return False
+
+        payload = {
+            "userId": remote_user_id,
+            "virtualUserId": remote_virtuel_id
+        }
+
+        status, result = _send_associate_user_api(settings, payload)
+        return status
+
+    except Exception as e:
+        logger.error("Error coming from push_userAssociation: %s", e)
         return False

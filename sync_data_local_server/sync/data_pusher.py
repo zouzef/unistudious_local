@@ -84,9 +84,9 @@ class DataPusher:
                     "relation_calander_group_audit",
                     calendar_rows,
                     {
-                        "INSERT": lambda row: push_calendar_add(db, self.settings, row),
-                        "UPDATE": lambda row: push_calendar_update(db, self.settings, row),
-                        "DELETE": lambda row: push_calendar_delete(db, self.settings, row),
+                        "INSERT": lambda row: calendar_pusher.push_calendar_add(db, self.settings, row),
+                        "UPDATE": lambda row: calendar_pusher.push_calendar_update(db, self.settings, row),
+                        "DELETE": lambda row: calendar_pusher.push_calendar_delete(db, self.settings, row),
                     }
                 )
 
@@ -106,9 +106,9 @@ class DataPusher:
                     "attendance_audit",
                     attendance_rows,
                     {
-                        "ADD_STUDENT":       lambda row: push_add(db, self.settings, row),
-                        "UPDATE":            lambda row: push_update(db, self.settings, row),
-                        "INSERT_attendance": lambda row: send_new_attendance(db, self.settings, row),
+                        "ADD_STUDENT":       lambda row: attendance_pusher.push_add(db, self.settings, row),
+                        "UPDATE":            lambda row: attendance_pusher.push_update(db, self.settings, row),
+                        "INSERT_attendance": lambda row: attendance_pusher.send_new_attendance(db, self.settings, row),
                     }
                 )
 
@@ -130,9 +130,9 @@ class DataPusher:
                     "account_level_audit",
                     account_level_rows,
                     {
-                        "INSERT": lambda row: push_accountLevelAdd(db, self.settings, row),
-                        "UPDATE": lambda row: push_accountLevelUpdate(db, self.settings, row),
-                        "DELETE": lambda row: push_accountLevelDelete(db, self.settings, row),
+                        "INSERT": lambda row: accountLevel_pusher.push_accountLevelAdd(db, self.settings, row),
+                        "UPDATE": lambda row: accountLevel_pusher.push_accountLevelUpdate(db, self.settings, row),
+                        "DELETE": lambda row: accountLevel_pusher.push_accountLevelDelete(db, self.settings, row),
                     }
                 )
 
@@ -152,9 +152,9 @@ class DataPusher:
                     "account_section_audit",
                     account_section_rows,
                     {
-                        "INSERT": lambda row: push_accountSectionAdd(db, self.settings, row),
-                        "UPDATE": lambda  row: push_accountSectionUpdate(db, self.settings, row),
-                        "DELETE": lambda row: push_accountSectionDelete(db, self.settings, row),
+                        "INSERT": lambda  row: accountSection_pusher.push_accountSectionAdd(db, self.settings, row),
+                        "UPDATE": lambda  row: accountSection_pusher.push_accountSectionUpdate(db, self.settings, row),
+                        "DELETE": lambda  row: accountSection_pusher.push_accountSectionDelete(db, self.settings, row),
                     }
                 )
 
@@ -174,9 +174,9 @@ class DataPusher:
                     "account_subject_audit",
                     account_subject_rows,
                     {
-                        "INSERT": lambda  row: push_accountSubjectAdd(db, self.settings, row),
-                        "UPDATE": lambda  row: push_accountSubjectUpdate(db, self.settings, row),
-                        "DELETE": lambda  row: push_accountSubjectDelete(db, self.settings, row),
+                        "INSERT": lambda  row: accountSubject_pusher.push_accountSubjectAdd(db, self.settings, row),
+                        "UPDATE": lambda  row: accountSubject_pusher.push_accountSubjectUpdate(db, self.settings, row),
+                        "DELETE": lambda  row: accountSubject_pusher.push_accountSubjectDelete(db, self.settings, row),
                     }
                 )
 
@@ -196,9 +196,9 @@ class DataPusher:
                     "account_tag_audit",
                     account_tag_rows,
                     {
-                        "INSERT": lambda row: push_accountTagAdd(db, self.settings, row),
-                        "UPDATE": lambda row: push_accountTagUpdate(db, self.settings, row),
-                        "DELETE": lambda  row: push_accountTagDelete(db, self.settings, row)
+                        "INSERT": lambda row: accountTag_pusher.push_accountTagAdd(db, self.settings, row),
+                        "UPDATE": lambda row: accountTag_pusher.push_accountTagUpdate(db, self.settings, row),
+                        "DELETE": lambda row: accountTag_pusher.push_accountTagDelete(db, self.settings, row)
                     }
                 )
 
@@ -217,9 +217,9 @@ class DataPusher:
                     "completion_tag_account_audit",
                     completion_tag_rows,
                     {
-                        "INSERT": lambda row: push_completionTagAdd(db, self.settings, row),
-                        "UPDATE": lambda row: push_completionTagUpdate(db, self.settings, row),
-                        "DELETE": lambda row: push_completionTagDelete(db, self.settings, row)
+                        "INSERT": lambda row: completionTag_pusher.push_completionTagAdd(db, self.settings, row),
+                        "UPDATE": lambda row: completionTag_pusher.push_completionTagUpdate(db, self.settings, row),
+                        "DELETE": lambda row: completionTag_pusher.push_completionTagDelete(db, self.settings, row)
                     }
                 )
 
@@ -239,7 +239,7 @@ class DataPusher:
                     "sync_folders",
                     folder_not_associated,
                     {
-                        "INSERT": lambda row: push_FolderNotAssociated(db, self.settings, row),
+                        "INSERT": lambda row: association_pusher.push_FolderNotAssociated(db, self.settings, row),
                         # "UPDATE": lambda row: push_AssociationUpdate(db, self.settings, row),
                         # "DELETE": lambda row: push_AssociationDelete(db, self.settings, row)
                     }
@@ -262,9 +262,9 @@ class DataPusher:
                     "sync_images",
                     assocation_rows,
                     {
-                        "INSERT": lambda row: push_AssociationAdd(db, self.settings, row),
-                        "UPDATE": lambda row: push_AssociationUpdate(db, self.settings, row),
-                        "DELETE": lambda row: push_AssociationDelete(db, self.settings, row)
+                        "INSERT": lambda row: association_pusher.push_AssociationAdd(db, self.settings, row),
+                        "UPDATE": lambda row: association_pusher.push_AssociationUpdate(db, self.settings, row),
+                        "DELETE": lambda row: association_pusher.push_AssociationDelete(db, self.settings, row)
                     }
                 )
 
@@ -285,9 +285,9 @@ class DataPusher:
                     "slc_door_audit",
                     slcdoor_rows,
                     {
-                        'INSERT': lambda row: push_doorAdd(db, self.settings, row),
-                        'UPDATE': lambda row: push_doorUpdate(db, self.settings, row),
-                        'DELETE': lambda row: push_doorDelete(db, self.settings, row)
+                        'INSERT': lambda row: slcdoor_pusher.push_doorAdd(db, self.settings, row),
+                        'UPDATE': lambda row: slcdoor_pusher.push_doorUpdate(db, self.settings, row),
+                        'DELETE': lambda row: slcdoor_pusher.push_doorDelete(db, self.settings, row)
                     }
                 )
 
@@ -307,9 +307,9 @@ class DataPusher:
                     "camera_audit",
                     camera_rows,
                     {
-                        'INSERT': lambda row: push_cameraAdd(db, self.settings, row),
-                        'UPDATE': lambda row: push_cameraUpdate(db, self.settings, row),
-                        'DELETE': lambda row: push_cameraDelete(db, self.settings, row)
+                        'INSERT': lambda row: camera_pusher.push_cameraAdd(db, self.settings, row),
+                        'UPDATE': lambda row: camera_pusher.push_cameraUpdate(db, self.settings, row),
+                        'DELETE': lambda row: camera_pusher.push_cameraDelete(db, self.settings, row)
                     }
                 )
 
@@ -329,9 +329,9 @@ class DataPusher:
                     "tablet_audit",
                     tablet_rows,
                     {
-                        'INSERT': lambda row: push_tabletAdd(db, self.settings, row),
-                        'UPDATE': lambda row: push_tabletUpdate(db, self.settings, row),
-                        'DELETE': lambda row: push_tabletDelete(db, self.settings, row)
+                        'INSERT': lambda row: tablet_pusher.push_tabletAdd(db, self.settings, row),
+                        'UPDATE': lambda row: tablet_pusher.push_tabletUpdate(db, self.settings, row),
+                        'DELETE': lambda row: tablet_pusher.push_tabletDelete(db, self.settings, row)
                     }
                 )
 
@@ -352,9 +352,11 @@ class DataPusher:
                     "user_audit",
                     user_rows,
                     {
-                        "CREATE": lambda row: push_userAdd(db, self.settings, row),
-                        "UPDATE": lambda row: push_userUpdate(db, self.settings, row),
-                        "DELETE": lambda row: push_userDelete(db, self.settings, row),
+                        "CREATE": lambda row: user_pusher.push_userAdd(db, self.settings, row),
+                        "UPDATE": lambda row: user_pusher.push_userUpdate(db, self.settings, row),
+                        "DELETE": lambda row:  user_pusher.push_userDelete(db, self.settings, row),
+                        "ASSOCIATION": lambda row:  user_pusher.push_userAssociation(db, self.settings, row)
+
                     }
                 )
 
@@ -377,6 +379,7 @@ class DataPusher:
                         "CREATE": lambda row: virtuel_pusher.push_virtuelAdd(db, self.settings, row),
                         "UPDATE": lambda row: virtuel_pusher.push_virtuelUpdate(db, self.settings, row),
                         "DELETE": lambda row: virtuel_pusher.push_virtuelDelete(db, self.settings, row),
+                        "ASSOCIATE": lambda row: virtuel_pusher.push_virtuelAssociate(db, self.settings, row),
                     }
                 )
 
