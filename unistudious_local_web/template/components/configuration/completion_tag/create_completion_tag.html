@@ -4,7 +4,7 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Add New Completion Tag</h4>
+                        <h4 class="card-title">{{ t('add_new_completion_tag') }}</h4>
                     </div>
                     <div class="card-body">
                         <form id="completion-tag-form">
@@ -27,11 +27,11 @@
                                                                accept=".png, .jpg, .jpeg">
                                                         <label for="completion_tag_imgFile"
                                                                class="dlab-upload mb-0 btn btn-primary btn-sm">
-                                                            Choose File
+                                                            {{ t('choose_file') }}
                                                         </label>
                                                         <a href="javascript:void(0);"
                                                            class="btn btn-danger light remove-img ms-2 btn-sm"
-                                                           id="remove-img-completion-tag">Remove</a>
+                                                           id="remove-img-completion-tag">{{ t('remove') }}</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -46,7 +46,7 @@
                                         <div class="col-xl-12 col-sm-12">
                                             <div class="mb-3">
                                                 <label class="form-label d-block" for="completion_tag_name">
-                                                    Name <code class="highlighter-rouge">*</code>
+                                                    {{ t('name') }} <code class="highlighter-rouge">*</code>
                                                 </label>
                                                 <input type="text" id="completion_tag_name"
                                                        name="completion_tag[name]"
@@ -58,7 +58,7 @@
                                         <div class="col-xl-12 col-sm-12">
                                             <div class="mb-3">
                                                 <label class="form-label d-block" for="completion_tag_description">
-                                                    Description
+                                                    {{ t('description') }}
                                                 </label>
                                                 <textarea id="completion_tag_description"
                                                           name="completion_tag[description]"
@@ -72,9 +72,9 @@
                             </div>
                             <div class="float-end">
                                 <button type="button" class="btn btn-outline-primary me-3"
-                                        id="create_completion_tag">Create</button>
+                                        id="create_completion_tag">{{ t('create') }}</button>
                                 <a class="btn btn-outline-danger"
-                                   href="/dashboard/show-completion-tag">Close</a>
+                                   href="/dashboard/show-completion-tag">{{ t('close') }}</a>
                             </div>
                         </form>
                     </div>

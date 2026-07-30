@@ -4,7 +4,7 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Subject Details #4</h4>
+                        <h4 class="card-title">{{ t('subject_details') }} #4</h4>
                     </div>
                     <div class="card-body">
                         <form name="account_subject" method="post" id="account-subject-form">
@@ -15,7 +15,7 @@
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
                                                 <label class="form-label" for="account_subject_subjectConfig">
-                                                    Subject <code class="highlighter-rouge">*</code>
+                                                    {{ t('subject') }} <code class="highlighter-rouge">*</code>
                                                 </label>
                                                 <br>
                                                 <select id="account_subject_subjectConfig"
@@ -24,7 +24,7 @@
                                                         class="selectpicker"
                                                         aria-label="Subject"
                                                         data-live-search="true">
-                                                    <option value="">Choose the Subject...</option>
+                                                    <option value="">{{ t('choose_the_subject') }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -32,7 +32,7 @@
                                         <div class="col-xl-6 col-sm-6" id="div-other-title" style="display: none;">
                                             <div class="mb-3">
                                                 <label class="form-label" for="account_subject_otherSubject">
-                                                    Other Subject <code class="highlighter-rouge">*</code>
+                                                    {{ t('other_subject') }} <code class="highlighter-rouge">*</code>
                                                 </label>
                                                 <input type="text"
                                                        id="account_subject_otherSubject"
@@ -44,13 +44,13 @@
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
                                                 <label class="form-label" for="account_subject_status">
-                                                    Status <code class="highlighter-rouge">*</code>
+                                                    {{ t('status') }} <code class="highlighter-rouge">*</code>
                                                 </label>
                                                 <select id="account_subject_status"
                                                         name="account_subject[status]"
                                                         class="selectpicker form-control">
-                                                    <option value="1" selected>Active</option>
-                                                    <option value="0">Inactive</option>
+                                                    <option value="1" selected>{{ t('active') }}</option>
+                                                    <option value="0">{{ t('inactive') }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -58,7 +58,7 @@
                                         <div class="col-xl-12 col-sm-12">
                                             <div class="mb-3">
                                                 <label class="form-label" for="account_subject_description">
-                                                    Description
+                                                    {{ t('description') }}
                                                 </label>
                                                 <textarea id="account_subject_description"
                                                           name="account_subject[description]"
@@ -72,11 +72,11 @@
                                         <div class="col-xl-12 mt-4">
                                             <div class="table-responsive">
                                                 <div class="container mt-5">
-                                                    <h2>Sub Subject</h2>
+                                                    <h2>{{ t('sub_subject') }}</h2>
                                                     <table class="table table-bordered">
                                                         <thead class="thead-dark">
                                                             <tr>
-                                                                <th class="title-column">Sections/levels</th>
+                                                                <th class="title-column">{{ t('sections_levels') }}</th>
                                                                 <th class="title-column" data-id="2">Bac</th>
                                                                 <th class="title-column" data-id="9">Kindergarten</th>
                                                             </tr>
@@ -89,7 +89,7 @@
                                                                             data-bs-toggle="modal"
                                                                             data-bs-target="#subSubjectModal"
                                                                             data-section="2" data-level="2">
-                                                                        Add <i class="fa fa-plus" style="font-size:10px;color:green"></i>
+                                                                        {{ t('add') }} <i class="fa fa-plus" style="font-size:10px;color:green"></i>
                                                                     </button>
                                                                 </td>
                                                                 <td id="cell-2-9">
@@ -97,7 +97,7 @@
                                                                             data-bs-toggle="modal"
                                                                             data-bs-target="#subSubjectModal"
                                                                             data-section="2" data-level="9">
-                                                                        Add <i class="fa fa-plus" style="font-size:10px;color:green"></i>
+                                                                        {{ t('add') }} <i class="fa fa-plus" style="font-size:10px;color:green"></i>
                                                                     </button>
                                                                 </td>
                                                             </tr>
@@ -108,7 +108,7 @@
                                                                             data-bs-toggle="modal"
                                                                             data-bs-target="#subSubjectModal"
                                                                             data-section="5" data-level="2">
-                                                                        Add <i class="fa fa-plus" style="font-size:10px;color:green"></i>
+                                                                        {{ t('add') }} <i class="fa fa-plus" style="font-size:10px;color:green"></i>
                                                                     </button>
                                                                 </td>
                                                                 <td id="cell-5-9">
@@ -116,7 +116,7 @@
                                                                             data-bs-toggle="modal"
                                                                             data-bs-target="#subSubjectModal"
                                                                             data-section="5" data-level="9">
-                                                                        Add <i class="fa fa-plus" style="font-size:10px;color:green"></i>
+                                                                        {{ t('add') }} <i class="fa fa-plus" style="font-size:10px;color:green"></i>
                                                                     </button>
                                                                 </td>
                                                             </tr>
@@ -133,8 +133,8 @@
                             <div class="float-end">
                                 <input type="hidden" id="subSubjects_input" name="subSubjects">
                                 <input type="hidden" id="subSubjects_delete" name="subSubjects_delete">
-                                <button type="submit" class="btn btn-outline-success me-2" id="create_sub_subject">Edit</button>
-                                <a class="btn btn-outline-danger" href="/dashboard/show-subject">Close</a>
+                                <button type="submit" class="btn btn-outline-success me-2" id="create_sub_subject">{{ t('edit') }}</button>
+                                <a class="btn btn-outline-danger" href="/dashboard/show-subject">{{ t('close') }}</a>
                             </div>
 
                             <input type="hidden"
@@ -149,20 +149,20 @@
                             <div class="modal-dialog modal-dialog-center">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="subSubjectModalLabel">New Sub Subject</h1>
+                                        <h1 class="modal-title fs-5" id="subSubjectModalLabel">{{ t('new_sub_subject') }}</h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
-                                            <label for="sub_subject_name" class="form-label">Name</label>
+                                            <label for="sub_subject_name" class="form-label">{{ t('name') }}</label>
                                             <input type="text" class="form-control" id="sub_subject_name" value="">
                                             <input type="hidden" id="section_id" value="">
                                             <input type="hidden" id="level_id" value="">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" id="add_new_sub_subject">Add New Sub Subject</button>
+                                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">{{ t('close') }}</button>
+                                        <button type="button" class="btn btn-primary" id="add_new_sub_subject">{{ t('add_new_sub_subject') }}</button>
                                     </div>
                                 </div>
                             </div>

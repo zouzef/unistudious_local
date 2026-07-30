@@ -2,6 +2,7 @@
 from flask import Flask
 from flask_socketio import SocketIO
 from config import Config
+from app.utils import t, get_lang
 
 socketio = SocketIO(cors_allowed_origins="*",
                     async_mode='threading',
@@ -12,6 +13,18 @@ def create_app():
     app = Flask(__name__,
                 template_folder=Config.TEMPLATE_FOLDER,
                 static_folder="../static")
+
+    @app.context_processor
+    def inject_translations():
+        return dict(t=t, lang=get_lang())
+
+    @app.after_request
+    def add_no_cache_headers(response):
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, private'
+        response.headers['Pragma'] = 'no-cache'
+        return response
+
+
     app.config.from_object(Config)
 
     socketio.init_app(app)

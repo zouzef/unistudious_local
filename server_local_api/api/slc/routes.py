@@ -220,3 +220,9 @@ def get_academie_image(tablet_id):
             "status": "error",
             "message": "Error coming from get_academie_image"
         }), 500
+
+
+# ENDPOINT 6: health
+@slc_bp.route('/health', methods=['GET'])
+def health():
+    return jsonify({"status": "ok"}), 200

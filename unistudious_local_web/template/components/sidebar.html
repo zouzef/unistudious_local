@@ -26,13 +26,13 @@
             <li>
                 <a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
                     <i class="material-symbols-outlined">dns</i>
-                    <span class="nav-text">Server Setting</span>
+                    <span class="nav-text">Smart Devices</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="/dashboard/show-slc">Show Server</a></li>
-                    <li><a href="/dashboard/list-slc-camera">Lists Camera</a></li>
-                    <li><a href="/dashboard/list-slc-tablet">Lists Tablet</a></li>
-                    <li><a href="/dashboard/list-slc-door">Lists Door </a></li>
+                    <li><a href="/dashboard/show-slc">Server</a></li>
+                    <li><a href="/dashboard/list-slc-camera">Cameras</a></li>
+                    <li><a href="/dashboard/list-slc-tablet">Tablets</a></li>
+                    <li><a href="/dashboard/list-slc-door">Doors </a></li>
                 </ul>
             </li>
 
@@ -49,60 +49,73 @@
                         <a class="has-arrow" style="cursor:pointer;">Students</a>
                         <ul aria-expanded="false">
                             <li><a href="/dashboard/platform_student">Platform Students</a></li>
-                            <li><a href="/dashboard/my-student">My students</a></li>
+                            <li><a href="/dashboard/my-student">Centre Students</a></li>
                         </ul>
 
                     </li>
                 </ul>
             </li>
 
-            <li>
-                <a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
-                    <i class="material-icons"> app_registration </i>
-                    <span class="nav-text">Apps</span>
-                </a>
-                <ul aria-expanded="false">
-                    <li><a href="app-profile.html">Profile</a></li>
-                    <li><a href="edit-profile.html">Edit Profile</a></li>
-                    <li><a href="post-details.html">Post Details</a></li>
-                    <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">Email</a>
-                        <ul aria-expanded="false">
-                            <li><a href="email-compose.html">Compose</a></li>
-                            <li><a href="email-inbox.html">Inbox</a></li>
-                            <li><a href="email-read.html">Read</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="app-calender.html">Calendar</a></li>
-                    <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">Shop</a>
-                        <ul aria-expanded="false">
-                            <li><a href="ecom-product-grid.html">Product Grid</a></li>
-                            <li><a href="ecom-product-list.html">Product List</a></li>
-                            <li><a href="ecom-product-detail.html">Product Details</a></li>
-                            <li><a href="ecom-product-order.html">Order</a></li>
-                            <li><a href="ecom-checkout.html">Checkout</a></li>
-                            <li><a href="ecom-invoice.html">Invoice</a></li>
-                            <li><a href="ecom-customers.html">Customers</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
+<!--            <li>-->
+<!--                <a class="has-arrow " href="javascript:void(0);" aria-expanded="false">-->
+<!--                    <i class="material-icons"> app_registration </i>-->
+<!--                    <span class="nav-text">Apps</span>-->
+<!--                </a>-->
+<!--                <ul aria-expanded="false">-->
+<!--                    <li><a href="app-profile.html">Profile</a></li>-->
+<!--                    <li><a href="edit-profile.html">Edit Profile</a></li>-->
+<!--                    <li><a href="post-details.html">Post Details</a></li>-->
+<!--                    <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">Email</a>-->
+<!--                        <ul aria-expanded="false">-->
+<!--                            <li><a href="email-compose.html">Compose</a></li>-->
+<!--                            <li><a href="email-inbox.html">Inbox</a></li>-->
+<!--                            <li><a href="email-read.html">Read</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                    <li><a href="app-calender.html">Calendar</a></li>-->
+<!--                    <li><a class="has-arrow" href="javascript:void(0);" aria-expanded="false">Shop</a>-->
+<!--                        <ul aria-expanded="false">-->
+<!--                            <li><a href="ecom-product-grid.html">Product Grid</a></li>-->
+<!--                            <li><a href="ecom-product-list.html">Product List</a></li>-->
+<!--                            <li><a href="ecom-product-detail.html">Product Details</a></li>-->
+<!--                            <li><a href="ecom-product-order.html">Order</a></li>-->
+<!--                            <li><a href="ecom-checkout.html">Checkout</a></li>-->
+<!--                            <li><a href="ecom-invoice.html">Invoice</a></li>-->
+<!--                            <li><a href="ecom-customers.html">Customers</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </li>-->
             <li>
                 <a href="/dashboard/show-session" aria-expanded="false">
                     <i class="material-symbols-outlined">school</i>
-                    <span class="nav-text">Session Setting</span>
+                    <span class="nav-text">Training Sessions</span>
                 </a>
             </li>
 
             <li>
                 <a class="has-arrow " href="javascript:void(0);" aria-expanded="false">
                     <i class="material-symbols-outlined">payments</i>
-                    <span class="nav-text">Payments</span>
+                    <span class="nav-text">Session Payments</span>
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="/dashboard/show-payment-session">Session Payment</a></li>
                     <li><a href="/dashboard/invoice-payment-session">invoice session</a></li>
 
                 </ul>
+            </li>
+            <li>
+                <div class="lang-switcher" style="display:flex; align-items:center; gap:6px; margin-left:16px;">
+                    <a href="/set-language/en"
+                       style="text-decoration:none; padding:2px 8px; border-radius:4px; font-size:13px; font-weight:{{ 'bold' if lang == 'en' else 'normal' }}; color:{{ '#FB7D5B' if lang == 'en' else '#ffffff' }};">
+                        EN
+                    </a>
+                    <span style="color:#ffffff; opacity:0.5;">|</span>
+                    <a href="/set-language/fr"
+                       style="text-decoration:none; padding:2px 8px; border-radius:4px; font-size:13px; font-weight:{{ 'bold' if lang == 'fr' else 'normal' }}; color:{{ '#FB7D5B' if lang == 'fr' else '#ffffff' }};">
+                        FR
+                    </a>
+                </div>
             </li>
 
 

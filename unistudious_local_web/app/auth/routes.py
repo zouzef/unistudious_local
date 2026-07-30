@@ -48,3 +48,8 @@ def logout():
     return redirect('/login')
 
 
+@auth_bp.route('/set-language/<lang>', methods=['GET'])
+def set_language(lang):
+    if lang in ['en', 'fr']:
+        session['lang'] = lang
+    return redirect(request.referrer or url_for('session.dashboard'))

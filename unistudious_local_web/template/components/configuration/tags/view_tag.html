@@ -4,7 +4,7 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Tag Details</h4>
+                        <h4 class="card-title">{{ t('tag_details') }}</h4>
                     </div>
                     <div class="card-body">
                         <form id="account-tag-form">
@@ -16,7 +16,7 @@
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
                                                 <label class="form-label d-block" for="account_tag_tagConfig">
-                                                    Tag <code class="highlighter-rouge">*</code>
+                                                    {{ t('tag') }} <code class="highlighter-rouge">*</code>
                                                 </label>
                                                 <select id="account_tag_tagConfig"
                                                         name="account_tag[tagConfig]"
@@ -24,7 +24,7 @@
                                                         aria-label="Tag"
                                                         data-live-search="true"
                                                         required>
-                                                    <option value="">Choose the Tag...</option>
+                                                    <option value="">{{ t('choose_the_tag') }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -33,7 +33,7 @@
                                         <div class="col-xl-6 col-sm-6" id="div-other-tag" style="display: none;">
                                             <div class="mb-3">
                                                 <label class="form-label d-block" for="account_tag_otherTag">
-                                                    Other Tag <code class="highlighter-rouge">*</code>
+                                                    {{ t('other_tag') }} <code class="highlighter-rouge">*</code>
                                                 </label>
                                                 <input type="text" id="account_tag_otherTag"
                                                        name="account_tag[otherTag]" class="form-control">
@@ -44,13 +44,13 @@
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
                                                 <label class="form-label d-block" for="account_tag_status">
-                                                    Status <code class="highlighter-rouge">*</code>
+                                                    {{ t('status') }} <code class="highlighter-rouge">*</code>
                                                 </label>
                                                 <select id="account_tag_status"
                                                         name="account_tag[status]"
                                                         class="selectpicker form-control">
-                                                    <option value="1">Active</option>
-                                                    <option value="0">Inactive</option>
+                                                    <option value="1">{{ t('active') }}</option>
+                                                    <option value="0">{{ t('inactive') }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -59,13 +59,13 @@
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
                                                 <label class="form-label d-block" for="account_tag_public">
-                                                    Visibility <code class="highlighter-rouge">*</code>
+                                                    {{ t('visibility') }} <code class="highlighter-rouge">*</code>
                                                 </label>
                                                 <select id="account_tag_public"
                                                         name="account_tag[public]"
                                                         class="selectpicker form-control">
-                                                    <option value="1">Public</option>
-                                                    <option value="0">Private</option>
+                                                    <option value="1">{{ t('public') }}</option>
+                                                    <option value="0">{{ t('private') }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -74,7 +74,7 @@
                                         <div class="col-xl-12 col-sm-12">
                                             <div class="mb-3">
                                                 <label class="form-label d-block" for="account_tag_description">
-                                                    Description
+                                                    {{ t('description') }}
                                                 </label>
                                                 <textarea id="account_tag_description"
                                                           name="account_tag[description]"
@@ -89,8 +89,8 @@
                             </div>
 
                             <div class="float-end">
-                                <button type="submit" class="btn btn-outline-success me-2">Edit</button>
-                                <a class="btn btn-outline-danger" href="/dashboard/show-tag">Close</a>
+                                <button type="submit" class="btn btn-outline-success me-2">{{ t('edit') }}</button>
+                                <a class="btn btn-outline-danger" href="/dashboard/show-tag">{{ t('close') }}</a>
                             </div>
 
                         </form>

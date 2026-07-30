@@ -5,7 +5,7 @@
                 <div class="page-title flex-wrap">
                     <form id="searchForm" method="get" action="/dashboard/show-formation">
                         <div class="input-group search-area mb-3">
-                            <input type="text" class="form-control" placeholder="Search here..."
+                            <input type="text" class="form-control" placeholder="{{ t('search_here') }}"
                                    name="search_formation" value="">
                             <span class="input-group-text">
                                 <a href="javascript:void(0)">
@@ -18,7 +18,7 @@
                             </span>
                         </div>
                     </form>
-                    <a class="btn btn-primary" href="/dashboard/create-formation">+ Formation</a>
+                    <a class="btn btn-outline-primary js-single-click" href="/dashboard/create-formation"><i class="fa fa-plus me-1"></i>{{ t('Training Program') }}</a>
                 </div>
             </div>
 
@@ -47,51 +47,93 @@
                 if (!formations || formations.length === 0) {
                     container.innerHTML = `
                         <div class="col-12 text-center mt-4">
-                            <p class="text-muted">No formations found.</p>
+                            <p class="text-muted">{{ t('no_formations_found') }}</p>
                         </div>`;
                     return;
                 }
 
                 formations.forEach(formation => {
                     const statusBadge = formation.status == 1
-                        ? `<span class="badge badge-lg badge-success light">Active</span>`
-                        : `<span class="badge badge-lg badge-danger light">Inactive</span>`;
+                        ? `<span class="badge badge-success light">{{ t('active') }}</span>`
+                        : `<span class="badge badge-danger light">{{ t('inactive') }}</span>`;
 
                     const img = formation.img_link
                         ? formation.img_link
                         : '../static/assets/images/formation-empty.jpg';
 
+                    const sessionsCount = formation.sessions_count ?? 0;
+                    const level         = formation.level ?? '—';
+                    const section       = formation.section ?? '—';
+                    const createdAt     = formation.created_at ?? '—';
+                    const description   = formation.description
+                        ? formation.description
+                        : '{{ t('no_description_available') }}';
+
                     const card = `
-                        <div class="col-xl-3 col-lg-4 col-sm-6">
-                            <div class="card contact_list text-center">
+                        <div class="col-lg-12 col-xl-6 col-xxl-4 formation-card">
+                            <div class="card">
                                 <div class="card-body">
-                                    <div class="user-content">
-                                        <div class="user-info">
-                                            <div class="modulel flex-wrap mb-3">
-                                                <img src="${img}" alt="" class="img-fluid">
-                                            </div>
-                                            <div class="user-details">
-                                                <p class="short-title mb-3" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; margin: 0 auto;">
-                                                    ${formation.name}
-                                                </p>
+                                    <div class="row m-b-30">
+                                        <div class="col-md-5 col-xxl-12">
+                                            <div class="new-arrival-product mb-4 mb-xxl-4 mb-md-0">
+                                                <div class="new-arrivals-img-contnent">
+                                                    <img class="img-fluid" src="${img}" alt="formation">
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="contact-icon mb-3">
-                                        ${statusBadge}
-                                    </div>
-                                    <div class="d-flex align-items-center mt-4">
-                                        <a href="/dashboard/view_formation/${formation.id}"
-                                           class="btn btn-primary btn-sm w-50 me-2"
-                                           style="height:35px; line-height:23px; padding: 6px 12px;">
-                                            <i class="fa-solid fa-edit me-2"></i>Edit
-                                        </a>
-                                        <a href="javascript:void(0)"
-                                           class="btn btn-danger btn-sm w-50"
-                                           style="height:35px; line-height:23px; padding: 6px 12px;"
-                                           onclick="deleteFormation(${formation.id})">
-                                            <i class="fa-solid fa-trash me-2"></i>Delete
-                                        </a>
+                                        <div class="col-md-7 col-xxl-12">
+                                            <div class="new-arrival-content position-relative">
+                                                <h4>
+                                                    <a href="/dashboard/view_formation/${formation.id}">
+                                                        ${formation.name} <i class="fa-solid fa-pen-to-square me-1"></i>
+                                                    </a>
+                                                </h4>
+                                                <a href="/dashboard/view_formation/${formation.id}">
+                                                    <div class="comment-review star-rating">
+                                                        <span class="review-text">
+                                                            (${sessionsCount} {{ t('sessions') }})
+                                                        </span>
+                                                    </div>
+                                                    <p>
+                                                        <span class="item fs-14">
+                                                            {{ t('status') }}:
+                                                        </span>
+                                                        ${statusBadge}
+                                                    </p>
+                                                    <p>
+                                                        <span class="item fs-14">
+                                                            {{ t('education_level') }}
+                                                        </span>
+                                                        ${level}
+                                                    </p>
+                                                    <p>
+                                                        <span class="item fs-14">
+                                                            {{ t('education_section') }}
+                                                        </span>
+                                                        ${section}
+                                                    </p>
+                                                    <p>
+                                                        <span class="item fs-14">
+                                                            {{ t('created') }}
+                                                        </span>
+                                                        ${createdAt}
+                                                    </p>
+                                                    <p class="text-content">
+                                                        ${description}
+                                                    </p>
+                                                </a>
+                                                <div class="d-flex gap-2 mt-3">
+                                                    <a href="/dashboard/view_formation/${formation.id}" class="btn btn-outline-info btn-sm w-50 js-single-click" data-locked="0">
+                                                        <i class="fa-solid fa-edit me-2"></i>
+                                                        {{ t('edit') }}
+                                                    </a>
+                                                    <button data-id="${formation.id}" class="btn btn-outline-danger btn-sm w-50 delete-formation">
+                                                        <i class="fa-solid fa-trash me-2"></i>
+                                                        {{ t('delete') }}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -104,22 +146,29 @@
                 console.error('Failed to load formations:', err);
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error',
-                    text: 'Failed to load formations.',
+                    title: '{{ t('error') }}',
+                    text: '{{ t('failed_to_load_formations') }}',
                     confirmButtonColor: '#4c4b9e',
                 });
             });
     }
 
-    function deleteFormation(formationId) {
+    // ─── Delete handler (event delegation) ─────────────────────────────
+    document.addEventListener('click', function (e) {
+        const btn = e.target.closest('.delete-formation');
+        if (!btn) return;
+
+        const formationId = btn.dataset.id;
+
         Swal.fire({
-            title: 'Are you sure?',
-            text: 'This formation will be deleted permanently.',
+            title: '{{ t('are_you_sure') }}',
+            text: '{{ t('formation_delete_warning') }}',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
             cancelButtonColor: '#4c4b9e',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: '{{ t('yes_delete') }}',
+            cancelButtonText: '{{ t('cancel') }}'
         }).then(result => {
             if (result.isConfirmed) {
                 fetch(`/api/delete_formation/${ACCOUNT_ID}/${formationId}`, { method: 'POST' })
@@ -127,21 +176,21 @@
                     .then(data => {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Deleted!',
-                            text: 'Formation deleted successfully.',
+                            title: '{{ t('deleted') }}',
+                            text: '{{ t('formation_deleted_success') }}',
                             confirmButtonColor: '#4c4b9e',
                         }).then(() => loadFormations());
                     })
                     .catch(err => {
                         Swal.fire({
                             icon: 'error',
-                            title: 'Error',
-                            text: 'Failed to delete formation.',
+                            title: '{{ t('error') }}',
+                            text: '{{ t('failed_to_delete_formation') }}',
                             confirmButtonColor: '#4c4b9e',
                         });
                     });
             }
         });
-    }
+    });
 
 </script>

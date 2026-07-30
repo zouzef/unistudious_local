@@ -5,17 +5,21 @@ from flask import current_app
 
 
 def get_slc_info_service(account_id: int) -> tuple:
-	""" GET slc_info"""
-	url = f"{current_app.config['BASE_URL']}get_local_detail/{account_id}"
-	try:
-		response = requests.get(url,verify=False,timeout=10)
-		if response.status_code == 200:
-			return True,response.json()
-		else:
-			return False,response.json()
-	except Exception as e:
-		print(f"Error: {e} coming from get_slc_info ")
-		return False,None
+    """ GET slc_info"""
+    url = f"{current_app.config['BASE_URL']}get_local_detail/{account_id}"
+    try:
+        response = requests.get(url, verify=False, timeout=10)
+        if response.status_code == 200:
+            return True, response.json(), 200
+        else:
+            return False, response.json(), response.status_code
+    except requests.exceptions.ConnectionError:
+        return False, {"Message": "Local server unreachable"}, 503
+    except requests.exceptions.Timeout:
+        return False, {"Message": "Local server timed out"}, 504
+    except Exception as e:
+        print(f"Error: {e} coming from get_slc_info")
+        return False, {"Message": str(e)}, 500
 
 # ====================================================== CAMERA services ======================================================
 def get_list_camera_service() -> tuple:

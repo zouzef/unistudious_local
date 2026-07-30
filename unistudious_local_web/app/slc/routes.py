@@ -20,18 +20,15 @@ from app.slc.service import(
 slc_bp = Blueprint('slc', __name__)
 
 
-@slc_bp.route('/api/get_slc_info/<int:account_id>',methods=['GET'])
+@slc_bp.route('/api/get_slc_info/<int:account_id>', methods=['GET'])
 def get_slc_info(account_id):
-	try:
-		status,response = get_slc_info_service(account_id)
-		if status:
-			return jsonify(response),200
-		else:
-			return jsonify(response),400
-	except Exception as e:
-		return jsonify({
-			"Message":f"Error: {e} coming from server"
-		}),500
+    try:
+        status, response, status_code = get_slc_info_service(account_id)
+        return jsonify(response), status_code
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
 
 
 

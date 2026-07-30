@@ -4,8 +4,8 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header flex-wrap px-3">
-                        <h4 class="card-title">List Subjects</h4>
-                        <a href="/dashboard/create-subject" class="btn btn-primary">+ New Subject</a>
+                        <h4 class="card-title">{{ t('list_subjects_title') }}</h4>
+                        <a href="/dashboard/create-subject" class="btn btn-primary">{{ t('new_subject') }}</a>
                     </div>
 
                     <div class="card-body p-0">
@@ -13,7 +13,7 @@
                         <!-- Loading state -->
                         <div id="table-loading" class="text-center py-4">
                             <div class="spinner-border text-primary" role="status"></div>
-                            <p class="mt-2 text-muted">Loading subjects...</p>
+                            <p class="mt-2 text-muted">{{ t('loading_subjects') }}</p>
                         </div>
 
                         <!-- Error state -->
@@ -26,10 +26,10 @@
                             <table id="example" class="display table dataTable no-footer" style="min-width: 845px;">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Subject</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
+                                        <th>{{ t('id') }}</th>
+                                        <th>{{ t('subject') }}</th>
+                                        <th>{{ t('status') }}</th>
+                                        <th>{{ t('actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody id="subjects-tbody">
@@ -122,16 +122,12 @@
                                 </td>
                                 <td>
                                     <div class="d-flex">
-                                        <div class="icon-box icon-box-sm me-2">
-                                            <a href="#" data-id="${subject.id}" class="delete-subject">
-                                                <i class="material-icons" style="font-size:10px;color:red">delete</i>
-                                            </a>
-                                        </div>
-                                        <div class="icon-box icon-box-sm">
-                                            <a href="/dashboard/view_subject/${subject.id}">
-                                                <i class="fas fa-pencil-alt" style="font-size:10px;color:green"></i>
-                                            </a>
-                                        </div>
+                                        <a href="#" data-id="${subject.id}" class="delete-subject btn btn-rounded btn-outline-danger btn-sm me-2">
+                                            <i class="fa fa-trash me-1"></i> {{ t('delete') }}
+                                        </a>
+                                        <a href="/dashboard/view_subject/${subject.id}" class="btn btn-rounded btn-outline-success btn-sm">
+                                            <i class="fa fa-eye me-1"></i> {{ t('view') }}
+                                        </a>
                                     </div>
                                 </td>
                             </tr>`;

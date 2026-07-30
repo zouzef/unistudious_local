@@ -7,12 +7,12 @@
                         <div class="card" id="accordion-one">
                             <div class="card-header flex-wrap px-3">
                                 <div>
-                                    <h4 class="card-title">List Account Tags</h4>
+                                    <h4 class="card-title">{{ t('list_account_tags_title') }}</h4>
                                 </div>
                                 <ul class="nav nav-tabs dzm-tabs" id="myTab" role="tablist">
                                     <li class="nav-item" role="presentation">
-                                        <a href="/dashboard/create-tag" class="btn btn-primary">
-                                            + New Tag
+                                        <a href="/dashboard/create-tag" class="btn btn-outline-primary js-single-click">
+                                            {{ t('new_tag') }}
                                         </a>
                                     </li>
                                 </ul>
@@ -24,15 +24,15 @@
                                         <!-- Loading state -->
                                         <div id="table-loading" class="text-center py-5">
                                             <div class="spinner-border text-primary" role="status">
-                                                <span class="visually-hidden">Loading...</span>
+                                                <span class="visually-hidden">{{ t('loading') }}</span>
                                             </div>
-                                            <p class="mt-2 text-muted">Loading tags...</p>
+                                            <p class="mt-2 text-muted">{{ t('loading_tags') }}</p>
                                         </div>
 
                                         <!-- Error state -->
                                         <div id="table-error" class="d-none text-center py-5">
                                             <i class="fas fa-exclamation-triangle text-danger fa-2x mb-2"></i>
-                                            <p class="text-danger" id="error-message">Something went wrong.</p>
+                                            <p class="text-danger" id="error-message">{{ t('something_went_wrong_short') }}</p>
                                         </div>
 
                                         <!-- Table (hidden until loaded) -->
@@ -41,11 +41,11 @@
                                                    style="min-width: 845px;">
                                                 <thead>
                                                 <tr>
-                                                    <th>ID</th>
-                                                    <th>tag</th>
-                                                    <th>Visibility</th>
-                                                    <th>Status</th>
-                                                    <th>Actions</th>
+                                                    <th>{{ t('id') }}</th>
+                                                    <th>{{ t('tag') }}</th>
+                                                    <th>{{ t('visibility') }}</th>
+                                                    <th>{{ t('status') }}</th>
+                                                    <th>{{ t('actions') }}</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody id="tags-tbody">
@@ -158,16 +158,12 @@
                                 </td>
                                 <td>
                                     <div class="d-flex">
-                                        <div class="icon-box icon-box-sm me-2">
-                                            <a href="#" data-id="${tag.id}" class="delete-tag">
-                                                <i class="material-icons" style="font-size:10px;color:red">delete</i>
-                                            </a>
-                                        </div>
-                                        <div class="icon-box icon-box-sm">
-                                            <a href="/dashboard/view-account-tag/${tag.id}">
-                                                <i class="fas fa-pencil-alt" style="font-size:10px;color:green"></i>
-                                            </a>
-                                        </div>
+                                        <a href="#" data-id="${tag.id}" class="delete-tag btn btn-rounded btn-outline-danger btn-sm me-2">
+                                            <i class="fa fa-trash me-1"></i> {{ t('delete') }}
+                                        </a>
+                                        <a href="/dashboard/view-account-tag/${tag.id}" class="btn btn-rounded btn-outline-success btn-sm">
+                                            <i class="fa fa-eye me-1"></i> {{ t('view') }}
+                                        </a>
                                     </div>
                                 </td>
                             </tr>`;

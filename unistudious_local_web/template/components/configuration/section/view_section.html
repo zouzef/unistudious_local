@@ -4,7 +4,7 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Section Details</h4>
+                        <h4 class="card-title">{{ t('section_details') }}</h4>
                     </div>
                     <div class="card-body">
                         <form name="account_section" method="post" id="account-section-form">
@@ -15,7 +15,7 @@
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
                                                 <label class="form-label" for="account_section_sectionConfig">
-                                                    Section <code class="highlighter-rouge">*</code>
+                                                    {{ t('section') }} <code class="highlighter-rouge">*</code>
                                                 </label>
                                                 <br>
                                                 <select id="account_section_sectionConfig"
@@ -24,7 +24,7 @@
                                                         aria-label="Section"
                                                         data-live-search="true"
                                                         required>
-                                                    <option value="">Choose the Section...</option>
+                                                    <option value="">{{ t('choose_the_section') }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -32,13 +32,13 @@
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
                                                 <label class="form-label" for="account_section_status">
-                                                    Status <code class="highlighter-rouge">*</code>
+                                                    {{ t('status') }} <code class="highlighter-rouge">*</code>
                                                 </label>
                                                 <select id="account_section_status"
                                                         name="account_section[status]"
                                                         class="selectpicker form-control">
-                                                    <option value="1" selected>Active</option>
-                                                    <option value="0">Inactive</option>
+                                                    <option value="1" selected>{{ t('active') }}</option>
+                                                    <option value="0">{{ t('inactive') }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -46,20 +46,20 @@
                                         <div class="col-xl-6 col-sm-6" id="div-other-title" style="display: none;">
                                             <div class="mb-3">
                                                 <label class="form-label" for="account_section_otherSection">
-                                                    Other Section <code class="highlighter-rouge">*</code>
+                                                    {{ t('other_section') }} <code class="highlighter-rouge">*</code>
                                                 </label>
                                                 <input type="text"
                                                        id="account_section_otherSection"
                                                        name="account_section[otherSection]"
                                                        class="form-control"
-                                                       placeholder="Enter new section name...">
+                                                       placeholder="{{ t('enter_new_section_name') }}">
                                             </div>
                                         </div>
 
                                         <div class="col-xl-12 col-sm-12">
                                             <div class="mb-3">
                                                 <label class="form-label" for="account_section_description">
-                                                    Description
+                                                    {{ t('description') }}
                                                 </label>
                                                 <textarea id="account_section_description"
                                                           name="account_section[description]"
@@ -74,8 +74,8 @@
                             </div>
 
                             <div class="float-end">
-                                <button type="submit" class="btn btn-outline-success me-2">Edit</button>
-                                <a class="btn btn-outline-danger" href="/dashboard/show-section">Close</a>
+                                <button type="submit" class="btn btn-outline-success me-2">{{ t('edit') }}</button>
+                                <a class="btn btn-outline-danger" href="/dashboard/show-section">{{ t('close') }}</a>
                             </div>
 
                             <input type="hidden"

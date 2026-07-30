@@ -5,7 +5,6 @@ import json
 import requests
 from core.auth import get_token
 
-from server_local_api.api.account_level.routes import account_level_bp
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
@@ -158,6 +157,22 @@ def push_formationUpdate(db, settings, row):
 	try:
 		new_data = json.loads(row.get('new_data', '{}'))
 		FormationId = new_data.get('id')
+
+		query = """
+			SELECT id_prod
+			FROM formation 
+			WHERE id = %s
+		"""
+		cursor = db.connection.cursor(dictionary=True)
+		cursor.execute(query, (FormationId,))
+		result = cursor.fetchone()
+		remote_formation_id = result['id_prod']
+		if remote_formation_id is None:
+			return False
+
+		return _send_create_formation_api(settings, remote_formation_id)
+
+
 	except Exception as e:
 		logger.exception("Error in push_FormationUpdate: %s", FormationId)
 		return False
@@ -176,6 +191,7 @@ def push_formationDelete(db, settings, row):
 		)
 		result = cursor.fetchone()
 		id_prod = result['id_prod']
+		print(id_prod)
 		status = _send_delete_formation_api(settings, id_prod)
 		return status
 	except Exception as e:

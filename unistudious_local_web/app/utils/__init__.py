@@ -1,6 +1,7 @@
 # app/utils/__init__.py
-
-from flask import render_template, session, redirect, url_for
+import requests
+from flask import render_template, session, redirect, url_for, current_app
+from app.utils.translations import TRANSLATIONS
 
 PAGE_TEMPLATES = {
     'home':                        'home_page.html',
@@ -64,9 +65,30 @@ def render_page(page, **kwargs):
     )
 
 
+def server_alive() -> bool:
+    try:
+        r = requests.get(
+            f"{current_app.config['BASE_URL']}health",
+            timeout=2,
+            verify=current_app.config['VERIFY_SSL']
+        )
+        return r.status_code == 200
+    except requests.exceptions.RequestException:
+        return False
+
+
 def login_required():
     if 'moderator_id' not in session:
+        return redirect(url_for('auth.login_page'))
+    if not server_alive():
+        session.clear()
         return redirect(url_for('auth.login_page'))
     return None
 
 
+def get_lang():
+    return session.get('lang', 'fr')  # default French
+
+def t(key):
+    lang = get_lang()
+    return TRANSLATIONS.get(lang, {}).get(key, key)

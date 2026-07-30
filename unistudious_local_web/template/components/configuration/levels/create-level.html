@@ -4,7 +4,7 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Add new Level</h4>
+                        <h4 class="card-title">{{ t('add_new_level') }}</h4>
                     </div>
                     <div class="card-body">
                         <form name="account_level" method="post" id="account-level-form">
@@ -15,20 +15,20 @@
                                             <div class="col-xl-6 col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="account_level_levelConfig">
-                                                        Level <code class="highlighter-rouge">*</code>
+                                                        {{ t('level') }} <code class="highlighter-rouge">*</code>
                                                     </label>
                                                     <select id="account_level_levelConfig"
                                                             name="account_level[levelConfig]"
                                                             class="selectpicker" aria-label="Level" required
                                                             data-live-search="true">
-                                                        <option value="" selected>Choose the Level...</option>
+                                                        <option value="" selected>{{ t('choose_the_level') }}</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-xl-12 col-sm-12">
                                                 <div class="mb-3">
                                                     <label class="form-label"
-                                                           for="account_level_description">Description</label>
+                                                           for="account_level_description">{{ t('description') }}</label>
                                                     <textarea id="account_level_description"
                                                               name="account_level[description]"
                                                               class="form-control"
@@ -39,8 +39,8 @@
                                         </div>
                                     </div>
                                     <div class="float-end">
-                                        <button type="submit" class="btn btn-outline-primary me-3">Create</button>
-                                        <a class="btn btn-outline-danger" href="/dashboard/show-level">Close</a>
+                                        <button type="submit" class="btn btn-outline-primary me-3">{{ t('create') }}</button>
+                                        <a class="btn btn-outline-danger" href="/dashboard/show-level">{{ t('close') }}</a>
                                     </div>
                                 </div>
                             </div>

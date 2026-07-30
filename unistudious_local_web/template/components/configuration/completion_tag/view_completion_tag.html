@@ -4,7 +4,7 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Completion Tag Details #{{ tag_id }}</h4>
+                        <h4 class="card-title">{{ t('completion_tag_details') }} #{{ tag_id }}</h4>
                     </div>
                     <div class="card-body">
                         <form id="completion-tag-form">
@@ -28,11 +28,11 @@
                                                                accept=".png, .jpg, .jpeg">
                                                         <label for="completion_tag_imgFile"
                                                                class="dlab-upload mb-0 btn btn-primary btn-sm">
-                                                            Choose File
+                                                            {{ t('choose_file') }}
                                                         </label>
                                                         <a href="javascript:void(0);"
                                                            class="btn btn-danger light remove-img ms-2 btn-sm"
-                                                           id="remove-img-completion-tag">Remove</a>
+                                                           id="remove-img-completion-tag">{{ t('remove') }}</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -47,7 +47,7 @@
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
                                                 <label class="form-label d-block" for="completion_tag_name">
-                                                    Name <code class="highlighter-rouge">*</code>
+                                                    {{ t('name') }} <code class="highlighter-rouge">*</code>
                                                 </label>
                                                 <input type="text" id="completion_tag_name"
                                                        name="completion_tag[name]"
@@ -59,14 +59,14 @@
                                         <div class="col-xl-6 col-sm-6">
                                             <div class="mb-3">
                                                 <label class="form-label d-block" for="completion_tag_status">
-                                                    Status <code class="highlighter-rouge">*</code>
+                                                    {{ t('status') }} <code class="highlighter-rouge">*</code>
                                                 </label>
                                                 <select id="completion_tag_status"
                                                         name="completion_tag[status]"
                                                         class="form-control selectpicker"
                                                         style="width: 150px;">
-                                                    <option value="1">Active</option>
-                                                    <option value="0">Inactive</option>
+                                                    <option value="1">{{ t('active') }}</option>
+                                                    <option value="0">{{ t('inactive') }}</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -75,7 +75,7 @@
                                         <div class="col-xl-12 col-sm-12">
                                             <div class="mb-3">
                                                 <label class="form-label d-block" for="completion_tag_description">
-                                                    Description
+                                                    {{ t('description') }}
                                                 </label>
                                                 <textarea id="completion_tag_description"
                                                           name="completion_tag[description]"
@@ -90,9 +90,9 @@
 
                             <div class="float-end">
                                 <button type="button" class="btn btn-outline-success me-3"
-                                        id="edit_completion_tag">Edit</button>
+                                        id="edit_completion_tag">{{ t('edit') }}</button>
                                 <a class="btn btn-outline-danger"
-                                   href="/dashboard/show-completion-tag">Close</a>
+                                   href="/dashboard/show-completion-tag">{{ t('close') }}</a>
                             </div>
 
                         </form>
@@ -159,8 +159,8 @@
                 console.error('Failed to load completion tag:', err);
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error',
-                    text: 'Failed to load completion tag data.',
+                    title: '{{ t('error') }}',
+                    text: '{{ t('failed_to_load_completion_tag') }}',
                     confirmButtonColor: '#4c4b9e',
                 });
             });
@@ -178,8 +178,8 @@
             if (!name) {
                 Swal.fire({
                     icon: 'warning',
-                    title: 'Required!',
-                    text: 'Please enter a name for the completion tag.',
+                    title: '{{ t('required') }}',
+                    text: '{{ t('please_enter_completion_tag_name') }}',
                     confirmButtonColor: '#4c4b9e',
                 });
                 return;
@@ -222,15 +222,15 @@
             if (data.Message && data.Message.toLowerCase().includes('error')) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Oops!',
+                    title: '{{ t('oops') }}',
                     text: data.Message,
                     confirmButtonColor: '#4c4b9e',
                 });
             } else {
                 Swal.fire({
                     icon: 'success',
-                    title: 'Success!',
-                    text: 'Completion tag updated successfully!',
+                    title: '{{ t('success') }}',
+                    text: '{{ t('completion_tag_updated_success') }}',
                     confirmButtonColor: '#4c4b9e',
                 }).then(() => {
                     window.location.href = '/dashboard/show-completion-tag';
@@ -241,8 +241,8 @@
         function handleUpdateError() {
             Swal.fire({
                 icon: 'error',
-                title: 'Server Error',
-                text: 'Something went wrong, please try again.',
+                title: '{{ t('server_error') }}',
+                text: '{{ t('something_went_wrong') }}',
                 confirmButtonColor: '#4c4b9e',
             });
         }

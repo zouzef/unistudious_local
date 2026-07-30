@@ -19,7 +19,8 @@ from sync.pushers import (
     tablet_pusher,
     user_pusher,
     virtuel_pusher,
-    group_pusher
+    group_pusher,
+    fromation_pusher
 )
 
 logger = logging.getLogger(__name__)
@@ -277,6 +278,33 @@ class DataPusher:
                         "DELETE": lambda row: association_pusher.push_AssociationDelete(db, self.settings, row)
                     }
                 )
+
+
+            # --- Formation ---
+            cursor.execute("""
+                SELECT * 
+                 FROM formation_audit
+                WHERE is_synced = 0
+                ORDER BY audit_id ASC
+            """)
+            formation_rows = cursor.fetchall()
+            if not formation_rows:
+                logger.debug("No pending Formation changes to push")
+            else:
+                logger.debug("Found %s PENDING Association change(s)", len(formation_rows))
+                self._process_audit_rows(
+                    cursor,
+                    conn,
+                    "formation_audit",
+                    formation_rows,
+                    {
+                        "INSERT": lambda row: fromation_pusher.push_formationAdd(db, self.settings, row),
+                        "UPDATE": lambda row: fromation_pusher.push_formationUpdate(db, self.settings, row),
+                        "DELETE": lambda row: fromation_pusher.push_formationDelete(db, self.settings, row),
+                    }
+                )
+
+
 
             # ============================================ SLC DEVICES ============================================
             # --- slc_door ---
