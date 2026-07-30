@@ -10,6 +10,7 @@ from datetime import datetime,timedelta
 # File path for sync status
 SYNC_STATUS_FILE = "data/sync_status.json"
 
+print(SYNC_STATUS_FILE)
 
 def format_date(date_value):
     """

@@ -14,7 +14,7 @@ def login_page():
 @auth_bp.route('/login', methods=['POST'])
 def login_post():
     """Handle login form submission"""
-    data = request.get_json()
+    data = request.get_json() or {}
 
     username = data.get('username')
     password = data.get('password')

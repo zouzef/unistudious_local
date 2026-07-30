@@ -382,31 +382,26 @@ def push_userDelete(db, settings, row):
 
 def push_userAssociation(db, settings, row):
     try:
-        new_data         = json.loads(row.get('payload', '{}'))
-        local_user_id    = new_data.get('user_id')
-        local_virtuel_id = new_data.get('virtual_user_id')
-
+        new_data            = json.loads(row.get('payload', '{}'))
+        local_user_id       = new_data.get('user_id')
+        local_virtuel_id    = new_data.get('virtual_user_id')
+        old_virtual_user_id = new_data.get('old_virtual_user_id')
 
         if not local_user_id or not local_virtuel_id:
             logger.error("push_userAssociation: missing user_id or virtual_user_id in payload")
             return False
 
         local_user_id    = int(local_user_id)
-        local_virtuel_id = int(local_virtuel_id)
-
+        old_virtual_user_id = int(old_virtual_user_id)
 
         user_prod_map    = _map_ids_to_prod(db, "user", "id", [local_user_id])
-        virtual_prod_map = _map_ids_to_prod(db, "virtual_user", "id", [local_virtuel_id])
+        remote_user_id   = user_prod_map.get(local_user_id)
 
-        remote_user_id    = user_prod_map.get(local_user_id)
-        remote_virtuel_id = virtual_prod_map.get(local_virtuel_id)
+        old_virtual_user_id_map = _map_ids_to_prod(db, "user","id", [old_virtual_user_id])
+        remote_id_user_virtual  = old_virtual_user_id_map.get(old_virtual_user_id)
 
-        print("\n ======================================================= \n")
-        print("Remote User Id: ", remote_user_id)
-        print("Remote VirtuelUser Id: ", remote_virtuel_id)
-        print("\n ======================================================= \n")
 
-        if not remote_user_id or not remote_virtuel_id:
+        if not remote_user_id or not remote_id_user_virtual:
             logger.error(
                 "push_userAssociation: missing id_prod for user_id=%s (got %s) or virtual_id=%s (got %s)",
                 local_user_id, remote_user_id, local_virtuel_id, remote_virtuel_id
@@ -414,10 +409,9 @@ def push_userAssociation(db, settings, row):
             return False
 
         payload = {
-            "userId": remote_user_id,
-            "virtualUserId": remote_virtuel_id
+            "virtualId": remote_id_user_virtual,
+            "realUserId": remote_user_id
         }
-
         status, result = _send_associate_user_api(settings, payload)
         return status
 

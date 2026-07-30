@@ -1,6 +1,7 @@
 server_local_api/uploads/*
 attendance_system/*
 sync_data_local_server/data/*
+sync_datalocal_server/logs/*
 **/__pycache__/
 *.pyc
 attendance_system/dataset/*

@@ -359,7 +359,6 @@ def process_sync_data(db, data, settings):
             logger.info("Processing RelationCompletionTag...")
             processor_relationCompletionTag(db, n)
 
-
     if 'season' in data:
         n = normalize(data['season'])
         if has_records(n):
@@ -383,7 +382,6 @@ def process_sync_data(db, data, settings):
 
     if 'relationTeacherAccount' in data:
         n= normalize(data['relationTeacherAccount'])
-        print(n)
         if has_records(n):
             from sync.processors.relationTeacherAccount_processor import process_relation_teacher_account
             logger.info("Processing relationTeacherAccount")
@@ -401,9 +399,21 @@ def process_sync_data(db, data, settings):
         if has_records(n):
             from sync.processors.door_processor import process_slc_door
             logger.info("Processing Slc_Door")
-            process_slc_door(db,n)
+            process_slc_door(db, n)
 
+    if 'virtualUserAccount' in data:
+        n = normalize(data['virtualUserAccount'])
+        for record in n.get('created', []):
+            if 'userId' not in record and 'id' in record:
+                record['userId'] = record['id']
+        for record in n.get('updated', []):
+            if 'userId' not in record and 'id' in record:
+                record['userId'] = record['id']
 
+        if has_records(n):
+            from sync.processors.user_processor import process_users
+            logger.info("Processing Virtuel User user")
+            process_users(db, n, token)
 # ---------------------------------------------------------------------------
 # Sync runners
 # ---------------------------------------------------------------------------
@@ -487,7 +497,7 @@ if __name__ == "__main__":
     # Configure logging before anything else.
     # Change log_file path or log_level here as needed.
     setup_logging(
-        log_level=logging.DEBUG,
+        log_level=logging.ERROR,
         log_file="logs/sync_manager.log",   # set to None to disable file logging
     )
 

@@ -42,8 +42,7 @@ def login(username: str, password: str) -> tuple:
             data = response.json()
             session["access_token"] = data.get("access_token")  # ← ADD
             session["account_id"] = data.get("account_id")  # ← ADD
-            print(f"[DEBUG] full API response: {data}")  # ← ADD THIS
-            print(f"[DEBUG] token from API: {data.get('access_token')}")
+
             user_data = {
                 "user_id": data.get("user_id"),
                 "account_id": data.get("account_id"),

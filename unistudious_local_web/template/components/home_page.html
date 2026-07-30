@@ -56,12 +56,8 @@
                             </div>
                             <div class="col-xl-3 col-6">
                                 <div class="content-box">
-                                    <div class="food-data icon-box icon-box-xl bg-dark">
-                                        <svg width="23" height="23" viewBox="0 0 28 34" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M8.25448 0.509167C5.96882 1.64226 4.0464 3.39315 2.70524 5.56327C1.36408 7.7334 0.657848 10.2359 0.666646 12.787V18.7167C0.667705 19.5871 1.01397 20.4216 1.62948 21.0372C2.245 21.6527 3.07951 21.9989 3.94998 22H7.33331V32C7.33331 32.442 7.50891 32.866 7.82147 33.1785C8.13403 33.4911 8.55795 33.6667 8.99998 33.6667C9.44201 33.6667 9.86593 33.4911 10.1785 33.1785C10.4911 32.866 10.6666 32.442 10.6666 32V2C10.6664 1.71598 10.5936 1.43673 10.4552 1.18872C10.3168 0.940703 10.1173 0.732152 9.87574 0.582831C9.63414 0.43351 9.3584 0.348368 9.07467 0.335477C8.79095 0.322585 8.50863 0.382371 8.25448 0.509167ZM7.33331 18.6833L3.99998 18.7167V12.787C3.99498 11.3525 4.28878 9.93273 4.86268 8.61805C5.43658 7.30336 6.27798 6.12261 7.33331 5.151V18.6833ZM24 2V8.66667C23.9994 9.10852 23.8236 9.53211 23.5112 9.84455C23.1988 10.157 22.7752 10.3328 22.3333 10.3333V2C22.3333 1.55797 22.1577 1.13405 21.8452 0.821489C21.5326 0.508929 21.1087 0.333334 20.6666 0.333334C20.2246 0.333334 19.8007 0.508929 19.4881 0.821489C19.1756 1.13405 19 1.55797 19 2V10.3333C18.5581 10.3328 18.1345 10.157 17.8221 9.84455C17.5097 9.53211 17.3339 9.10852 17.3333 8.66667V2C17.3333 1.55797 17.1577 1.13405 16.8452 0.821489C16.5326 0.508929 16.1087 0.333334 15.6666 0.333334C15.2246 0.333334 14.8007 0.508929 14.4881 0.821489C14.1756 1.13405 14 1.55797 14 2V8.66667C14.0014 9.9923 14.5287 11.2632 15.4661 12.2006C16.4034 13.138 17.6743 13.6652 19 13.6667V32C19 32.442 19.1756 32.866 19.4881 33.1785C19.8007 33.4911 20.2246 33.6667 20.6666 33.6667C21.1087 33.6667 21.5326 33.4911 21.8452 33.1785C22.1577 32.866 22.3333 32.442 22.3333 32V13.6667C23.6589 13.6652 24.9299 13.138 25.8672 12.2006C26.8046 11.2632 27.3319 9.9923 27.3333 8.66667V2C27.3333 1.55797 27.1577 1.13405 26.8452 0.821489C26.5326 0.508929 26.1087 0.333334 25.6666 0.333334C25.2246 0.333334 24.8007 0.508929 24.4881 0.821489C24.1756 1.13405 24 1.55797 24 2Z"
-                                                  fill="white"/>
-                                        </svg>
+                                    <div class="food-data icon-box icon-box-xl" ">
+                                       <i class="fa fa-users text-white"></i>
                                     </div>
                                     <div class="chart-num">
                                         <p>Groups</p>
@@ -180,56 +176,47 @@
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
 <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const ctx = document.getElementById('marketChart').getContext('2d');
 
-    async function loadCalendarRequestss() {
-        const accountId = window.ACCOUNT_ID;
-        try {
-            const response = await fetch(`/api/get-calendar-request/${accountId}`);
-            const data = await response.json();
-
-            const tbody = document.querySelector('#example tbody');
-            if (!tbody) return;
-
-            tbody.innerHTML = '';
-            const requests = (data.data || []).slice(0, 5);
-
-            if (requests.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center text-muted">No calendar requests found</td></tr>`;
-                return;
+    fetch('/api/get-user-registration')
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`HTTP error, status: ${res.status}`);
             }
-
-            requests.forEach(item => {
-                let statusBadge = '';
-                if (item.accepted === 0) {
-                    statusBadge = '<span class="badge badge-sm light badge-warning">Pending</span>';
-                } else if (item.accepted === 1) {
-                    statusBadge = '<span class="badge badge-sm light badge-success">Approved</span>';
-                } else if (item.accepted === 2) {
-                    statusBadge = '<span class="badge badge-sm light badge-danger">Rejected</span>';
+            return res.json();
+        })
+        .then(chartData => {
+            new Chart(ctx, {
+                type: 'line', // or 'bar'
+                data: {
+                    labels: chartData.labels,
+                    datasets: [{
+                        label: 'Students Registrations',
+                        data: chartData.data,
+                        borderColor: '#4c4b9e',
+                        backgroundColor: 'rgba(76, 75, 158, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 3
+                    }]
+                },
+                options: {
+                    responsive: false, // canvas already has fixed width/height via style
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
                 }
-
-                const date = item.start_date
-                    ? `${item.start_date} ${item.start_time || ''} - ${item.end_time || ''}`
-                    : 'N/A';
-
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${item.id}</td>
-                        <td>${item.username || 'N/A'}</td>
-                        <td>${item.subject_name || 'N/A'}</td>
-                        <td>${item.room_name || 'N/A'}</td>
-                        <td>${item.session_name || 'N/A'}</td>
-                        <td>${statusBadge}</td>
-                        <td>${date}</td>
-                    </tr>`;
             });
-
-        } catch (error) {
-            console.error('❌ Error loading calendar requests:', error);
-        }
-    }
-
-    // ← call directly, no DOMContentLoaded
-    loadCalendarRequestss();
+        })
+        .catch(err => {
+            console.error('Error loading chart data:', err);
+        });
+});
 </script>

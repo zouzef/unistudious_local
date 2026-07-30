@@ -2196,6 +2196,7 @@ def get_calendar_door(door_id):
             FROM relation_calander_group_session r, session s, user u
             WHERE r.room_id = %s
             AND r.enabled = 1
+            AND r.type = 'P'
             AND r.session_id = s.id
             AND r.teacher_id = u.id AND u.enabled = 1
             AND s.enabled = 1

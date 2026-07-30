@@ -116,3 +116,11 @@ def get_all_real_user_service() -> tuple:
     except Exception as e:
         print(f"Error: {e} in service real_user")
         return False,None
+
+def get_user_registration_service():
+    url= f"{current_app.config['BASE_URL']}get_user_registration"
+    try:
+        response = requests.get(url, verify=False, timeout=10)
+        return response.status_code == 200, response
+    except Exception as e:
+        return False,None

@@ -1,5 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask import send_file
+from werkzeug.utils import secure_filename
+from flask import current_app
 import sys
 import os
 import json
@@ -24,6 +26,7 @@ from core.checks import *
 from core.association_service import associate_virtual_user as accociate_virtual_user_service
 from datetime import datetime
 from util.audit import log_audit
+
 
 
 # ========================================
@@ -71,6 +74,7 @@ ALLOWED_MANAGER_ROLES = {
     "ROLE_MANAGER_MARKETING",
     "ROLE_CUSTOMER_MANAGER_SERVICE",
     "ROLE_MANAGER_ADMINISTRATIVE",
+	"ROLE_ADMIN"
 }
 @users_bp.route('/create_manager/<int:account_id>', methods=['POST'])
 def create_manager(account_id):
@@ -177,6 +181,122 @@ def create_manager(account_id):
         }), 500
 
 
+@users_bp.route('/update_manager/<int:manager_id>', methods=['POST'])
+def update_manager(manager_id):
+	try:
+		if not user_exists(manager_id):
+			return jsonify({"Message": "There is no user with this id"})
+
+		query = """
+			SELECT roles 
+			FROM user 
+			WHERE id = %s AND enabled = 1
+		"""
+		result = Database.execute_query(query, (manager_id,), fetch=True)
+
+		if not result:
+			return jsonify({"Message": "There is no user with this id"})
+
+		raw_roles = result[0]["roles"]
+		try:
+			user_roles = json.loads(raw_roles) if raw_roles else []
+		except (TypeError, json.JSONDecodeError):
+			user_roles = []
+
+		if not any(role in ALLOWED_MANAGER_ROLES for role in user_roles):
+			return jsonify({"Message": f"User {manager_id} is not a manager to update"})
+
+		data = request.form.to_dict()
+		files = request.files
+
+		# roles can arrive either as a single field "roles" or repeated "roles[]"
+		roles = request.form.getlist("roles[]")
+		if not roles:
+			single_role = data.get("roles")
+			if single_role:
+				roles = [single_role]
+
+		if roles:
+			invalid_roles = [r for r in roles if r not in ALLOWED_MANAGER_ROLES]
+			if invalid_roles:
+				return jsonify({
+					"Message": f"Invalid role(s): {', '.join(invalid_roles)}"
+				}), 400
+
+		# Map incoming payload keys -> actual DB column names
+		field_map = {
+			"username": "username",
+			"full_name": "full_name",
+			"email": "email",
+			"phone": "phone",
+			"place_birth": "birth_place",
+			"date_birth": "birth_date",
+			"status": "status",
+			"adress": "address",
+		}
+
+		update_fields = {}
+		for payload_key, db_column in field_map.items():
+			if payload_key in data and data[payload_key] not in (None, ""):
+				update_fields[db_column] = data[payload_key]
+
+		if roles:
+			update_fields["roles"] = json.dumps(roles)
+
+		# ── Handle image upload ──────────────────────────────────────────
+		image_file = files.get("image")
+		if image_file and image_file.filename:
+			filename = secure_filename(image_file.filename)
+			upload_folder = os.path.join(
+				os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+				"uploads", "user_img", f"user_{manager_id}"
+			)
+			os.makedirs(upload_folder, exist_ok=True)
+			save_path = os.path.join(upload_folder, filename)
+			image_file.save(save_path)
+			update_fields["img_link"] = filename
+
+		if not update_fields:
+			return jsonify({"Message": "No valid fields to update"})
+
+		set_clause = ", ".join(f"{col} = %s" for col in update_fields.keys())
+		values = list(update_fields.values())
+		values.append(manager_id)
+
+		update_query = f"UPDATE user SET {set_clause} WHERE id = %s"
+		Database.execute_query(update_query, tuple(values), fetch=False)
+
+		# ── Audit log ──────────────────────────────────────────────────
+		# role column stores the primary/first role for routing purposes
+		# use the new roles if they were part of the update, otherwise fall
+		# back to the roles the user already had
+		if roles:
+			primary_role = roles[0]
+		else:
+			primary_role = user_roles[0] if user_roles else None
+
+		audit_payload = dict(update_fields)
+		audit_payload["id"] = manager_id
+		if roles:
+			audit_payload["roles"] = roles  # store as list in the JSON payload too
+
+		audit_query = """
+			INSERT INTO user_audit (user_id, role, action_type, payload, is_synced)
+			VALUES (%s, %s, %s, %s, %s)
+		"""
+		Database.execute_query(
+			audit_query,
+			[manager_id, primary_role, "UPDATE", json.dumps(audit_payload), 0],
+			fetch=False
+		)
+
+		return jsonify({"Message": "Manager updated successfully"})
+
+	except Exception as e:
+		print(e)
+		return jsonify({
+			"Message": f"Error coming from server: {e}"
+		}), 500
 
 """_______________________________________________________ Teacher ENDPOINT _______________________________________________________"""
 @users_bp.route('/get_teacher/<int:group_id>', methods=['GET'])
@@ -1155,27 +1275,35 @@ def associate_virtual_user(account_id):
 
 		if not virtual_id or not real_user_id:
 			return jsonify({
-             	"success": False,
-             	"message": "Virtual or real user not found."
-          	}), 400
+                "success": False,
+                "message": "Virtual or real user not found."
+            }), 400
+
+		# capture the virtual user's CURRENT linked user_id before it gets overwritten
+		old_row = Database.execute_query(
+           "SELECT user_id FROM virtual_user WHERE id = %s",
+           (virtual_id,),
+           fetch=True
+		)
+		old_virtual_user_id = old_row[0]['user_id'] if old_row else None
 
 		result = accociate_virtual_user_service(account_id, virtual_id, real_user_id)
 
 		if result.get("success"):
 			audit_query = """
-		              INSERT INTO user_audit (user_id, role, action_type, payload)
-		              VALUES (%s, %s, %s, %s)
-		          """
+                     INSERT INTO user_audit (user_id, role, action_type, payload)
+                     VALUES (%s, %s, %s, %s)
+                 """
 			audit_payload = json.dumps({
 				"user_id": real_user_id,
 				"virtual_user_id": virtual_id,
+				"old_virtual_user_id": old_virtual_user_id,
 				"date": datetime.now().isoformat()
 			})
 			Database.execute_query(
 				audit_query,
 				(real_user_id, "user", "ASSOCIATION", audit_payload),
-				fetch=False
-			)
+				fetch=False)
 
 		return jsonify(result), result.get("status_code", 200)
 
@@ -1184,6 +1312,7 @@ def associate_virtual_user(account_id):
 			"success": False,
 			"message": f"Error: {e} coming from server"
 		}), 500
+
 
 # =============================================
 # ENDPOINT 10: Get All User
@@ -1211,3 +1340,39 @@ def get_real_user():
 		return jsonify({
 			"Message":f"Error: {e} coming from server"
 		}),500
+
+
+# =============================================
+# ENDPOINT 10: Get All User
+# =============================================
+@users_bp.route('/get_user_registration', methods=['GET'])
+def get_user_registration():
+    try:
+        query = """
+            SELECT 
+                YEARWEEK(created_at, 1) AS year_week,
+                MIN(DATE(created_at)) AS week_start,
+                COUNT(*) AS user_count
+            FROM user
+            WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 12 WEEK) AND isvirtual = 0
+            GROUP BY YEARWEEK(created_at, 1)
+            ORDER BY year_week ASC
+        """
+
+        results = Database.execute_query(query)
+
+
+
+        labels = [row['week_start'].strftime('%d %b') for row in results]
+        data = [row['user_count'] for row in results]
+
+        return jsonify({
+            "labels": labels,
+            "data": data
+        }), 200
+
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500

@@ -139,6 +139,26 @@ document.addEventListener('click', function (e) {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
+    // ── Live preview when a new image is chosen ───────────────
+    document.getElementById('manager_imgFile').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const preview = document.getElementById('imagePreview');
+        const objectUrl = URL.createObjectURL(file);
+        preview.style.backgroundImage = `url("${objectUrl}")`;
+    });
+
+    // ── Remove image button (optional but you already have the element) ─
+    document.getElementById('remove-img').addEventListener('click', function () {
+        const imgInput = document.getElementById('manager_imgFile');
+        const preview = document.getElementById('imagePreview');
+
+        imgInput.value = '';                                   // clear the selected file
+        preview.style.backgroundImage = `url(/api/get_profile_img/${managerId})`; // revert to current saved photo
+    });
+
+
     const managerId = {{ manager_id }};
 
     // ── Load manager data and fill form ──────────────────────
@@ -192,33 +212,41 @@ document.addEventListener('DOMContentLoaded', function () {
             .filter(option => option.selected)
             .map(option => option.value);
 
-        // ── Build payload ─────────────────────────────────────
-        const payload = {
-            name:        document.getElementById('manager_username').value,
-            email:       document.getElementById('manager_email').value,
-            phone:       document.getElementById('manager_phone').value,
-            status:      parseInt(document.getElementById('manager_status').value),
-            full_name:   document.getElementById('manager_fullName').value,
-            address:     document.getElementById('manager_Address').value,
-            birth_place: document.getElementById('manager_birthPlace').value,
-            birth_date:  document.getElementById('manager_birthDate').value,
-            grand:       document.getElementById('manager_grand').value,
-            roles:       JSON.stringify(selectedRoles),
-        };
+        // ── Build FormData (multipart) matching backend field_map ─
+        const formData = new FormData();
 
-        fetch(`/api/update-user/${managerId}`, {
+        formData.append('username',    document.getElementById('manager_username').value);
+        formData.append('email',       document.getElementById('manager_email').value);
+        formData.append('full_name',   document.getElementById('manager_fullName').value);
+        formData.append('phone',       document.getElementById('manager_phone').value);
+        formData.append('place_birth', document.getElementById('manager_birthPlace').value);
+        formData.append('date_birth',  document.getElementById('manager_birthDate').value);
+        formData.append('adress',      document.getElementById('manager_Address').value); // backend typo, keep as-is
+        formData.append('status',      document.getElementById('manager_status').value);
+
+        // Roles must go in as repeated "roles[]" entries
+        selectedRoles.forEach(role => formData.append('roles[]', role));
+
+        // Optional image upload — backend expects field name "image"
+        const imgInput = document.getElementById('manager_imgFile');
+        if (imgInput.files.length > 0) {
+            formData.append('image', imgInput.files[0]);
+        }
+
+        fetch(`/api/update-manager/${managerId}`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: formData
+            // Do NOT set Content-Type manually — the browser sets the correct
+            // multipart/form-data boundary automatically when using FormData.
         })
         .then(res => {
             return res.json().then(data => ({ status: res.status, data }));
         })
         .then(({ status, data }) => {
-            if (status === 200) {  // ✅ check HTTP status not message string
+            if (status === 200) {
                 Swal.fire({
                     title: 'Success!',
-                    text: data.Message,
+                    text: (data.Response && data.Response.Message) || data.Message,
                     icon: 'success',
                     confirmButtonColor: '#3085d6'
                 }).then(() => {
@@ -227,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 Swal.fire({
                     title: 'Error!',
-                    text: data.Message,
+                    text: (data.Response && data.Response.Message) || data.Message,
                     icon: 'error',
                     confirmButtonColor: '#d33'
                 });

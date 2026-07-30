@@ -43,7 +43,7 @@ function buildManagerCard(manager) {
                         </div>
                         <div class="dropdown">
                             <a href="javascript:void(0);" class="btn sharp btn-light"
-                               data-bs-toggle="dropdown" aria-expanded="false">
+                               data-toggle="custom-dropdown" aria-expanded="false">
                                 ${dropdownSVG}
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
@@ -117,10 +117,11 @@ async function loadManagerCards() {
 
 // ─── Dropdown Toggle ──────────────────────────────────────────────────────────
 document.addEventListener('click', function (e) {
-    const toggle = e.target.closest('[data-bs-toggle="dropdown"]');
+    const toggle = e.target.closest('[data-toggle="custom-dropdown"]');
 
     if (toggle) {
         e.preventDefault();
+        e.stopPropagation();
         const menu = toggle.nextElementSibling;
         document.querySelectorAll('.dropdown-menu.show').forEach(function (m) {
             if (m !== menu) m.classList.remove('show');

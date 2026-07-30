@@ -606,28 +606,44 @@ def delete_relation_user_session(user_id, session_id):
 	try:
 		if not(session_exists(session_id)):
 			return jsonify({
-				"Message":"There is no session with this id"
-			}),400
+             "Message":"There is no session with this id"
+        	}),400
 
 		if not(user_exists(user_id)):
 			return jsonify({"Message": "There is no user with this id"}),400
-
 
 		if not(relation_user_session_exists(session_id,user_id)):
 			return jsonify({
 				"Message":"There is no relation user_session"
 			}),400
 
-		query = """
-            UPDATE relation_user_session
-            SET enabled = 0
+		# capture the relation ids BEFORE soft-deleting them
+		select_query = """
+            SELECT id FROM relation_user_session
             WHERE user_id = %s AND session_id = %s AND enabled = 1
-
         """
+		relations_result = Database.execute_query(select_query, (user_id, session_id), fetch=True)
+		relation_ids = [row['id'] for row in relations_result] if relations_result else []
+
+		query = """
+			UPDATE relation_user_session
+			SET enabled = 0
+			WHERE user_id = %s AND session_id = %s AND enabled = 1
+		"""
 		values = (user_id, session_id)
 
 		result2 = Database.execute_query(query, values, fetch=False)
 		if result2:
+			log_audit(
+				table_name="virtual_user_audit",
+				action_type="DISSOCIATE",
+				new_data={
+    				"user_id": user_id,
+					"session_id": session_id,
+					"relation_ids": relation_ids
+				},
+				record_id=user_id
+			)
 			return jsonify({
 				"Message": "Relation_user_session deleted with success"
 			}), 200
@@ -635,7 +651,6 @@ def delete_relation_user_session(user_id, session_id):
 			return jsonify({
 				"Message": "Error in deleting Relation_user_session"
 			}), 400
-
 
 	except Exception as e:
 		return jsonify({

@@ -70,7 +70,8 @@ class DataPusher:
 
             # --- Calendar ---
             cursor.execute("""
-                SELECT * FROM relation_calander_group_audit
+                SELECT * 
+                 FROM relation_calander_group_audit
                 WHERE is_synced = 0
                 ORDER BY audit_id ASC
             """)
@@ -92,7 +93,8 @@ class DataPusher:
 
             # --- Attendance ---
             cursor.execute("""
-                SELECT * FROM attendance_audit
+                SELECT * 
+                 FROM attendance_audit
                 WHERE is_synced = 0
                 ORDER BY audit_id ASC
             """)
@@ -116,7 +118,8 @@ class DataPusher:
 
             # --- Account_Level ---
             cursor.execute("""
-                SELECT * FROM account_level_audit
+                SELECT * 
+                 FROM account_level_audit
                 WHERE is_synced = 0
                 ORDER BY audit_id ASC
             """)
@@ -138,7 +141,8 @@ class DataPusher:
 
             # --- Account_Section ---
             cursor.execute("""
-                SELECT * FROM account_section_audit
+                SELECT * 
+                 FROM account_section_audit
                 WHERE is_synced = 0
                 ORDER BY audit_id ASC
             """)
@@ -160,7 +164,8 @@ class DataPusher:
 
             # --- Account_Subject
             cursor.execute("""
-                SELECT * FROM account_subject_audit
+                SELECT * 
+                 FROM account_subject_audit
                 WHERE is_synced = 0
                 ORDER BY audit_id ASC
             """)
@@ -182,7 +187,8 @@ class DataPusher:
 
             # --- Account_Tag
             cursor.execute("""
-                SELECT * FROM account_tag_audit
+                SELECT * 
+                 FROM account_tag_audit
                 WHERE is_synced = 0
                 ORDER BY audit_id ASC
             """)
@@ -203,7 +209,9 @@ class DataPusher:
                 )
 
             # --- Compltetion_Tag ---
-            cursor.execute("""SELECT * FROM completion_tag_account_audit
+            cursor.execute("""
+                SELECT * 
+                 FROM completion_tag_account_audit
                 WHERE is_synced = 0
                 ORDER BY audit_id ASC
             """)
@@ -225,7 +233,8 @@ class DataPusher:
 
             # --- Association Folder ---
             cursor.execute("""
-                SELECT * FROM sync_folders
+                SELECT * 
+                 FROM sync_folders
                 WHERE is_synced = 0
                 ORDER BY audit_id ASC
             """)
@@ -248,7 +257,8 @@ class DataPusher:
 
             # --- Association_Sync ---
             cursor.execute("""
-                SELECT * FROM sync_images
+                SELECT * 
+                 FROM sync_images
                 WHERE is_synced = 0
                 ORDER BY audit_id ASC
             """)
@@ -271,7 +281,8 @@ class DataPusher:
             # ============================================ SLC DEVICES ============================================
             # --- slc_door ---
             cursor.execute("""
-                SELECT * FROM slc_door_audit
+                SELECT * 
+                 FROM slc_door_audit
                 WHERE is_synced = 0
                 ORDER BY audit_id ASC
                 """)
@@ -293,8 +304,9 @@ class DataPusher:
 
             # --- camera ---
             cursor.execute("""
-                SELECT * FROM camera_audit
-                WHERE is_synced = 0
+                SELECT * 
+                 FROM camera_audit
+                 WHERE is_synced = 0
                 ORDER BY audit_id ASC
             """)
             camera_rows = cursor.fetchall()
@@ -315,7 +327,8 @@ class DataPusher:
 
             # --- tablet ---
             cursor.execute("""
-                SELECT * FROM tablet_audit
+                SELECT * 
+                 FROM tablet_audit
                 WHERE is_synced = 0
                 ORDER BY audit_id ASC
             """)
@@ -338,7 +351,8 @@ class DataPusher:
             # ============================================ USER ============================================
             # --- User ---
             cursor.execute("""
-                SELECT * FROM user_audit
+                SELECT * 
+                 FROM user_audit
                 WHERE is_synced = 0
                 ORDER BY audit_id ASC
             """)
@@ -352,17 +366,18 @@ class DataPusher:
                     "user_audit",
                     user_rows,
                     {
-                        "CREATE": lambda row: user_pusher.push_userAdd(db, self.settings, row),
-                        "UPDATE": lambda row: user_pusher.push_userUpdate(db, self.settings, row),
-                        "DELETE": lambda row:  user_pusher.push_userDelete(db, self.settings, row),
-                        "ASSOCIATION": lambda row:  user_pusher.push_userAssociation(db, self.settings, row)
+                        "CREATE":      lambda row: user_pusher.push_userAdd(db, self.settings, row),
+                        "UPDATE":      lambda row: user_pusher.push_userUpdate(db, self.settings, row),
+                        "DELETE":      lambda row: user_pusher.push_userDelete(db, self.settings, row),
+                        "ASSOCIATION": lambda row: user_pusher.push_userAssociation(db, self.settings, row)
 
                     }
                 )
 
             # --- virtual_user ---
             cursor.execute("""
-                SELECT * FROM virtual_user_audit
+                SELECT * 
+                 FROM virtual_user_audit
                 WHERE is_synced = 0
                 ORDER BY audit_id
             """)
@@ -376,17 +391,18 @@ class DataPusher:
                     "virtual_user_audit",
                     virtuel_user_rows,
                     {
-                        "CREATE": lambda row: virtuel_pusher.push_virtuelAdd(db, self.settings, row),
-                        "UPDATE": lambda row: virtuel_pusher.push_virtuelUpdate(db, self.settings, row),
-                        "DELETE": lambda row: virtuel_pusher.push_virtuelDelete(db, self.settings, row),
-                        "ASSOCIATE": lambda row: virtuel_pusher.push_virtuelAssociate(db, self.settings, row),
+                        "CREATE":     lambda row: virtuel_pusher.push_virtuelAdd(db, self.settings, row),
+                        "UPDATE":     lambda row: virtuel_pusher.push_virtuelUpdate(db, self.settings, row),
+                        "DELETE":     lambda row: virtuel_pusher.push_virtuelDelete(db, self.settings, row),
+                        "ASSOCIATE":  lambda row: virtuel_pusher.push_virtuelAssociate(db, self.settings, row),
+                        "DISSOCIATE": lambda row: virtuel_pusher.push_virtuelDissociate(db, self.settings, row)
                     }
                 )
 
             # --- Group ---
             cursor.execute("""
                 SELECT * 
-                FROM relation_group_local_session_audit
+                 FROM relation_group_local_session_audit
                 WHERE is_synced = 0
                 ORDER BY audit_id
              """)
