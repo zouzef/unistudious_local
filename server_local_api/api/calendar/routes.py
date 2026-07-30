@@ -2193,19 +2193,19 @@ def get_calendar_door(door_id):
 
         query = """
             SELECT r.*, u.username
-            FROM relation_calander_group_session r, session s, user u
+            FROM relation_calander_group_session r
+            JOIN session s ON r.session_id = s.id AND s.enabled = 1
+            LEFT JOIN user u ON r.teacher_id = u.id AND u.enabled = 1
             WHERE r.room_id = %s
-            AND r.enabled = 1
-            AND r.type = 'P'
-            AND r.session_id = s.id
-            AND r.teacher_id = u.id AND u.enabled = 1
-            AND s.enabled = 1
-            AND r.end_time >= NOW()
-            AND r.start_time >= DATE_SUB(NOW(), INTERVAL 30 MINUTE)
+              AND r.enabled = 1
+              AND r.type = 'P'
+              AND r.end_time >= NOW()
+              AND r.start_time >= DATE_SUB(NOW(), INTERVAL 30 MINUTE)
             ORDER BY r.start_time ASC
         """
         values = (room_id,)
         result = Database.execute_query(query, values)
+
         if result and len(result) > 0:
             for item in result:
                 if 'start_time' in item and item['start_time']:
