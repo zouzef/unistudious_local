@@ -125,7 +125,6 @@ def auth_moderator():
 # ← protected
 # ============================================================
 @moderator_bp.route('/get_data_moderateur/<int:account_id>', methods=["GET"])
-@token_required
 def get_data_moderateur(account_id):
     try:
         query = """

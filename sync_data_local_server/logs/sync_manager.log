@@ -522,3 +522,5 @@ requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: 
 2026-07-30 15:01:56 [ERROR] __main__ - Sync #5 failed.
 2026-07-30 15:02:57 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
 2026-07-30 15:03:58 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-07-31 14:15:17 [ERROR] __main__ - No internet connection. Cannot sync.
+2026-07-31 14:15:17 [ERROR] __main__ - Sync #161 failed.

@@ -51,7 +51,7 @@ def get_group(account_id, session_id):
              AND g.account_id = %s 
              AND g.enabled = 1 
              AND g.special_group IS NULL
-          ORDER BY g.id, u.username
+          ORDER BY g.created_at DESC, u.username
           LIMIT 1000
                 """
        results = Database.execute_query(query, (session_id, account_id))
@@ -385,11 +385,12 @@ def get_user_not_affected(session_id, account_id):
             WHERE r.enabled = 1 
                 AND u.enabled = 1 
                 AND r.session_id = %s
+                
                 AND (r.relation_group_local_session_id IS NULL 
                      OR r.relation_group_local_session_id = 0)
-            ORDER BY u.full_name
+            ORDER BY r.created_at DESC
         """
-        relations = Database.execute_query(query, (session_id,))
+        relations = Database.execute_query(query, (session_id,),fetch=True)
 
         # Group by user and build response
         users = {}

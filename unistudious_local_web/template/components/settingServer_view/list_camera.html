@@ -8,7 +8,7 @@
                             <form id="searchForm" method="get" action="/dashboard/list-slc-camera">
                                 <div class="input-group search-area mb-3">
                                     <input type="text" id="searchInput" class="form-control"
-                                           placeholder="Search here..." name="search_admin" value="">
+                                           placeholder="{{ t('search_here') }}" name="search_admin" value="">
                                     <span class="input-group-text">
                                         <a href="javascript:void(0)">
                                             <svg width="15" height="15" viewBox="0 0 18 18" fill="none"
@@ -21,9 +21,10 @@
                                 </div>
                             </form>
                             <div>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
                                         data-bs-target="#adminNewSlcCameraModal">
-                                    + New Camera
+                                    <i class="fa fa-plus me-1"></i>
+                                    {{ t('new_camera') }}
                                 </button>
                             </div>
                         </div>
@@ -58,54 +59,54 @@
             <form id="slcCameraForm">
                 <input type="hidden" id="account-id" value="3">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5">Camera Details</h1>
+                    <h1 class="modal-title fs-5">{{ t('camera_details') }}</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-xl-12">
                             <div class="mb-3">
-                                <label class="form-label" for="cameraType">Camera Type</label>
+                                <label class="form-label" for="cameraType">{{ t('camera_type') }}</label>
                                 <select class="form-control" id="cameraType" name="cameraType" required>
-                                    <option value="">Select Type</option>
-                                    <option value="ipcam">IP Camera</option>
-                                    <option value="webcam">Webcam</option>
+                                    <option value="">{{ t('select_type') }}</option>
+                                    <option value="ipcam">{{ t('ip_camera') }}</option>
+                                    <option value="webcam">{{ t('webcam') }}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-xl-6">
                             <div class="mb-3">
-                                <label class="form-label">MAC ID</label>
+                                <label class="form-label">{{ t('mac_id') }}</label>
                                 <input type="text" class="form-control" id="cameraMacId" name="macId" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Camera Name</label>
+                                <label class="form-label">{{ t('camera_name') }}</label>
                                 <input type="text" class="form-control" id="cameraName" name="name" required>
                             </div>
                             <div class="ip-camera-fields" style="display:none;">
                                 <div class="mb-3">
-                                    <label class="form-label">Username</label>
+                                    <label class="form-label">{{ t('username') }}</label>
                                     <input type="text" class="form-control" id="cameraUsername" name="username">
                                 </div>
                             </div>
                         </div>
                         <div class="col-xl-6">
                             <div class="mb-3">
-                                <label class="form-label">Local</label>
+                                <label class="form-label">{{ t('local') }}</label>
                                 <select class="form-control" id="cameraSlcLocal" name="slcLocal" required>
-                                    <option value="">Select Local</option>
+                                    <option value="">{{ t('select_local') }}</option>
                                     <!-- locals injected by JS -->
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Room</label>
+                                <label class="form-label">{{ t('room') }}</label>
                                 <select class="form-control" id="cameraRoomId" name="roomId" required>
-                                    <option value="">Select Room</option>
+                                    <option value="">{{ t('select_room') }}</option>
                                 </select>
                             </div>
                             <div class="ip-camera-fields" style="display:none;">
                                 <div class="mb-3">
-                                    <label class="form-label">Password</label>
+                                    <label class="form-label">{{ t('password') }}</label>
                                     <input type="text" class="form-control" id="cameraPassword" name="password">
                                 </div>
                             </div>
@@ -113,8 +114,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save Camera</button>
+                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">{{ t('close') }}</button>
+                    <button type="submit" class="btn btn-primary">{{ t('save_camera') }}</button>
                 </div>
             </form>
         </div>
@@ -126,13 +127,13 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Status Camera</h5>
+                <h5 class="modal-title">{{ t('status_camera') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="statusCameraId" name="id">
                 <div class="mb-3">
-                    <label for="showCameraStatus" class="form-label">Status</label>
+                    <label for="showCameraStatus" class="form-label">{{ t('status') }}</label>
                     <textarea id="showCameraStatus" rows="7" class="form-control" readonly></textarea>
                 </div>
             </div>
@@ -145,39 +146,39 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Camera Details</h5>
+                <h5 class="modal-title">{{ t('camera_details') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="showCameraDetailId" name="id">
                 <div class="mb-3">
-                    <label for="showCameraType" class="form-label">Type</label>
+                    <label for="showCameraType" class="form-label">{{ t('type') }}</label>
                     <input type="text" class="form-control" id="showCameraType" readonly>
                 </div>
                 <div class="mb-3">
-                    <label for="showCameraName" class="form-label">Name</label>
+                    <label for="showCameraName" class="form-label">{{ t('name') }}</label>
                     <input type="text" class="form-control" id="showCameraName" readonly>
                 </div>
                 <div class="mb-3">
-                    <label for="showCameraMac" class="form-label">MAC ID</label>
+                    <label for="showCameraMac" class="form-label">{{ t('mac_id') }}</label>
                     <input type="text" class="form-control" id="showCameraMac" readonly>
                 </div>
                 <div id="showIpCameraFields" style="display:none;">
                     <div class="mb-3">
-                        <label for="showCameraUsername" class="form-label">Username</label>
+                        <label for="showCameraUsername" class="form-label">{{ t('username') }}</label>
                         <input type="text" class="form-control" id="showCameraUsername" readonly>
                     </div>
                     <div class="mb-3">
-                        <label for="showCameraPassword" class="form-label">Password</label>
+                        <label for="showCameraPassword" class="form-label">{{ t('password') }}</label>
                         <input type="text" class="form-control" id="showCameraPassword" readonly>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="showCameraRoom" class="form-label">Room</label>
+                    <label for="showCameraRoom" class="form-label">{{ t('room') }}</label>
                     <input type="text" class="form-control" id="showCameraRoom" readonly>
                 </div>
                 <div class="mb-3">
-                    <label for="showCameraCreatedAt" class="form-label">Created At</label>
+                    <label for="showCameraCreatedAt" class="form-label">{{ t('created_at') }}</label>
                     <input type="text" class="form-control" id="showCameraCreatedAt" readonly>
                 </div>
             </div>
@@ -190,7 +191,7 @@
         <div class="modal-content">
             <form id="editSlcCameraForm">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editSlcCameraModalLabel">Edit Camera</h5>
+                    <h5 class="modal-title" id="editSlcCameraModalLabel">{{ t('edit_camera') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
@@ -198,28 +199,28 @@
                     <input type="hidden" id="editCameraId" name="id">
 
                     <div class="mb-3">
-                        <label for="editCameraType" class="form-label">Type</label>
+                        <label for="editCameraType" class="form-label">{{ t('type') }}</label>
                         <input type="text" class="form-control" id="editCameraType" name="type" readonly>
                     </div>
 
                     <div class="mb-3">
-                        <label for="editCameraName" class="form-label">Name</label>
+                        <label for="editCameraName" class="form-label">{{ t('name') }}</label>
                         <input type="text" class="form-control" id="editCameraName" name="name">
                     </div>
 
                     <div class="mb-3">
-                        <label for="editCameraMac" class="form-label">MAC ID</label>
+                        <label for="editCameraMac" class="form-label">{{ t('mac_id') }}</label>
                         <input type="text" class="form-control" id="editCameraMac" name="macId">
                     </div>
 
                     <div id="editIpCameraFields" style="display:none;">
                         <div class="mb-3">
-                            <label for="editCameraUsername" class="form-label">Username</label>
+                            <label for="editCameraUsername" class="form-label">{{ t('username') }}</label>
                             <input type="text" class="form-control" id="editCameraUsername" name="username">
                         </div>
 
                         <div class="mb-3">
-                            <label for="editCameraPassword" class="form-label">Password</label>
+                            <label for="editCameraPassword" class="form-label">{{ t('password') }}</label>
                             <input type="text" class="form-control" id="editCameraPassword" name="password">
                         </div>
                     </div>
@@ -227,10 +228,10 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">
-                        Close
+                        {{ t('close') }}
                     </button>
                     <button type="submit" class="btn btn-primary">
-                        Save Changes
+                        {{ t('save_changes') }}
                     </button>
                 </div>
             </form>

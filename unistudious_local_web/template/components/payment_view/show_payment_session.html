@@ -1,21 +1,49 @@
 <div class="content-body">
-    <div class="container-fluid">
+    <div class="container-fluid mh-auto">
+        <div class="top-bar">
+            <div class="row align-items-center">
+                <!-- Left Column -->
+                <div class="col-md-4">
+                    <a href="/dashboard" class="btn btn-outline-secondary btn-custom js-single-click" data-locked="0">
+                        <i class="fas fa-arrow-left"></i> Return
+                    </a>
+                </div>
 
-        <div class="page-title flex-wrap">
-            <form id="searchForm">
-                <div class="input-group search-area mb-3">
-                    <input type="text" id="searchInput" class="form-control"
-                           placeholder="Search here..." name="search_payment_session" value="">
-                    <span class="input-group-text">
+                <!-- Right Column with Buttons -->
+                <div class="col-md-8 text-end d-flex justify-content-end gap-2">
+                    <!-- New Group -->
+                    <a href="/dashboard/invoice-payment-session"
+                       class="btn btn-outline-primary btn-custom d-flex align-items-center js-single-click"
+                       data-locked="0">
+                        <i class="fas fa-file-pdf me-2"></i>
+                        All Invoice
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xl-12 pt-4 pb-2">
+                <div class="page-title flex-wrap">
+                    <form id="searchForm">
+                        <div class="input-group search-area mb-3" style="width: 18.875rem;!important;">
+                            <input type="text" id="searchInput" class="form-control"
+                                   placeholder="Search here..." name="search_payment_session" value="">
+                            <span class="input-group-text">
                         <a href="javascript:void(0)">
-                            <svg width="15" height="15" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M17.5605 15.4395L13.7527 11.6317C14.5395 10.446 15 9.02625 15 7.5C15 3.3645 11.6355 0 7.5 0C3.3645 0 0 3.3645 0 7.5C0 11.6355 3.3645 15 7.5 15C9.02625 15 10.446 14.5395 11.6317 13.7527L15.4395 17.5605C16.0245 18.1462 16.9755 18.1462 17.5605 17.5605C18.1462 16.9747 18.1462 16.0252 17.5605 15.4395V15.4395ZM2.25 7.5C2.25 4.605 4.605 2.25 7.5 2.25C10.395 2.25 12.75 4.605 12.75 7.5C12.75 10.395 10.395 12.75 7.5 12.75C4.605 12.75 2.25 10.395 2.25 7.5V7.5Z" fill="#01A3FF"/>
+                            <svg width="15" height="15" viewBox="0 0 18 18" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17.5605 15.4395L13.7527 11.6317C14.5395 10.446 15 9.02625 15 7.5C15 3.3645 11.6355 0 7.5 0C3.3645 0 0 3.3645 0 7.5C0 11.6355 3.3645 15 7.5 15C9.02625 15 10.446 14.5395 11.6317 13.7527L15.4395 17.5605C16.0245 18.1462 16.9755 18.1462 17.5605 17.5605C18.1462 16.9747 18.1462 16.0252 17.5605 15.4395V15.4395ZM2.25 7.5C2.25 4.605 4.605 2.25 7.5 2.25C10.395 2.25 12.75 4.605 12.75 7.5C12.75 10.395 10.395 12.75 7.5 12.75C4.605 12.75 2.25 10.395 2.25 7.5V7.5Z"
+                                      fill="#01A3FF"/>
                             </svg>
                         </a>
                     </span>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
+
 
         <div class="row" id="sessions-row">
             <!-- cards will be loaded dynamically -->
@@ -26,170 +54,190 @@
     </div>
 </div>
 <script>
-const accountId = {{ account_id }};
-const ITEMS_PER_PAGE = 8;
-let allSessions = [];
-let currentPage = 1;
+    const accountId = {{ account_id }};
+    const ITEMS_PER_PAGE = 8;
+    let allSessions = [];
+    let currentPage = 1;
 
-const DEFAULT_SESSION_IMG = "/assets/admin/images/session-defult.png";
+    const DEFAULT_SESSION_IMG = "/assets/admin/images/session-defult.png";
 
-// ─── Build Session Card ───────────────────────────────────────────────────
-function buildSessionCard(item) {
-    const imgSrc = item.img_link
-        ? `/uploads/session/${item.img_link}`
-        : DEFAULT_SESSION_IMG;
+    // ─── Build Session Card ───────────────────────────────────────────────────
+    function buildSessionCard(item) {
+        const imgSrc = item.img_link
+            ? `/uploads/session/${item.img_link}`
+            : DEFAULT_SESSION_IMG;
 
-    const price = item.price
-        ? `${item.price} ${item.currency} / ${item.type_pay}`
-        : "Free";
+        const price = item.price
+            ? `${item.price} ${item.currency} / ${item.type_pay}`
+            : "Free";
 
-    return `
-        <div class="col-xl-3 col-lg-4 col-sm-6">
-            <div class="card contact_list text-center">
-                <div class="card-body">
-                    <div class="user-content">
-                        <div class="user-info">
-                            <div class="modulel flex-wrap mb-3" id="lightgallery">
-                                <a href="/api/get_session_img/${item.id}"
-                                   data-exthumbimage="/api/get_session_img/${item.id}"
-                                   data-src="/api/get_session_img/${item.id}">
-                                    <img src="/api/get_session_img/${item.id}" alt="" class="img-fluid" height="200px" width="200px" >
-                                </a>
-                            </div>
-                            <div class="user-details">
-                                <p class="short-title">${item.name}</p>
+        return `
+            <div class="col-xl-3 col-lg-4 col-sm-6">
+                <div class="card contact_list text-center">
+                    <div class="card-body">
+                        <div class="user-content">
+                            <div class="user-info">
+                                <div class="modulel flex-wrap mb-3" id="lightgallery">
+                                    <a href="/api/get_session_img/${item.id}"
+                                       data-exthumbimage="/api/get_session_img/${item.id}"
+                                       data-src="/api/get_session_img/${item.id}">
+                                        <img src="/api/get_session_img/${item.id}" alt="" class="img-fluid session-thumb">
+                                    </a>
+                                </div>
+                                <div class="user-details">
+                                    <p class="short-title">${item.name}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="contact-icon">
-                        <span class="badge badge-lg badge-primary light">
-                            ${price}
-                        </span>
-                    </div>
-                    <div class="align-items-center">
-                        <a href="/dashboard/show-payment-session-details/${item.id}"
-                           class="btn btn-success btn-sm w-50 me-2">
-                            <i class="fa-solid fa-cart-shopping me-2"></i>Payment
-                        </a>
+                        <div class="contact-icon">
+                            <span class="badge badge-lg badge-primary light">
+                                ${price}
+                            </span>
+                        </div>
+                        <div class="align-items-center">
+                            <a href="/dashboard/show-payment-session-details/${item.id}"
+                               class="btn js-single-click btn-outline-success btn-sm w-50 me-2">
+                                <i class="fa-solid fa-cart-shopping me-2"></i>Payment
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>`;
-}
-
-// ─── Render Pagination ────────────────────────────────────────────────────
-function renderPagination(totalItems) {
-    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-    const nav = document.getElementById("pagination-nav");
-
-    if (totalPages <= 1) {
-        nav.innerHTML = "";
-        return;
+            </div>`;
     }
 
-    let pagesHTML = "";
-    for (let i = 1; i <= totalPages; i++) {
-        pagesHTML += `
-            <li class="page-item ${i === currentPage ? "active" : ""}">
-                <a class="page-link" onclick="goToPage(${i})">${i}</a>
-            </li>`;
-    }
+    // ─── Render Pagination ────────────────────────────────────────────────────
+    function renderPagination(totalItems) {
+        const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+        const nav = document.getElementById("pagination-nav");
 
-    nav.innerHTML = `
-        <ul class="pagination pagination-gutter pagination-primary no-bg">
-            <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
-                <a class="page-link" onclick="goToPage(${currentPage - 1})">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </a>
-            </li>
-            ${pagesHTML}
-            <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
-                <a class="page-link" onclick="goToPage(${currentPage + 1})">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </a>
-            </li>
-        </ul>`;
-}
-
-// ─── Go To Page ───────────────────────────────────────────────────────────
-function goToPage(page) {
-    const searchQuery = document.getElementById("searchInput")?.value.trim().toLowerCase() || "";
-    let filtered = allSessions;
-
-    if (searchQuery.length >= 2) {
-        filtered = filtered.filter(s =>
-            (s.name || "").toLowerCase().includes(searchQuery)
-        );
-    }
-
-    const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
-    if (page < 1 || page > totalPages) return;
-
-    currentPage = page;
-    renderSessions();
-}
-
-// ─── Render Sessions ──────────────────────────────────────────────────────
-function renderSessions() {
-    const container = document.getElementById("sessions-row");
-    const searchQuery = document.getElementById("searchInput")?.value.trim().toLowerCase() || "";
-
-    let filtered = allSessions;
-
-    if (searchQuery.length >= 2) {
-        filtered = filtered.filter(s =>
-            (s.name || "").toLowerCase().includes(searchQuery)
-        );
-    }
-
-    if (currentPage > Math.ceil(filtered.length / ITEMS_PER_PAGE)) {
-        currentPage = 1;
-    }
-
-    const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    const paginated = filtered.slice(start, start + ITEMS_PER_PAGE);
-
-    if (paginated.length === 0) {
-        container.innerHTML = `<p class="text-muted ms-3">No sessions found.</p>`;
-        renderPagination(0);
-        return;
-    }
-
-    container.innerHTML = paginated.map(buildSessionCard).join("");
-    renderPagination(filtered.length);
-}
-
-// ─── Load Sessions ────────────────────────────────────────────────────────
-async function loadSessions() {
-    const container = document.getElementById("sessions-row");
-    container.innerHTML = `<p class="text-muted ms-3">Loading...</p>`;
-
-    try {
-        const res = await fetch(`/api/get-sessions/${accountId}`);
-        const data = await res.json();
-
-        if (!res.ok || !data || data.length === 0) {
-            container.innerHTML = `<p class="text-muted ms-3">No sessions found.</p>`;
+        if (totalPages <= 1) {
+            nav.innerHTML = "";
             return;
         }
 
-        allSessions = data;
-        renderSessions();
+        let pagesHTML = "";
+        for (let i = 1; i <= totalPages; i++) {
+            pagesHTML += `
+                <li class="page-item ${i === currentPage ? "active" : ""}">
+                    <a class="page-link" onclick="goToPage(${i})">${i}</a>
+                </li>`;
+        }
 
-    } catch (err) {
-        console.error("❌ Failed to load sessions:", err);
-        container.innerHTML = `<p class="text-danger ms-3">Error loading sessions.</p>`;
+        nav.innerHTML = `
+            <ul class="pagination pagination-gutter pagination-primary no-bg">
+                <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
+                    <a class="page-link" onclick="goToPage(${currentPage - 1})">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                </li>
+                ${pagesHTML}
+                <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
+                    <a class="page-link" onclick="goToPage(${currentPage + 1})">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>`;
     }
-}
 
-// ─── Init ─────────────────────────────────────────────────────────────────
-document.addEventListener("DOMContentLoaded", function () {
-    loadSessions();
+    // ─── Go To Page ───────────────────────────────────────────────────────────
+    function goToPage(page) {
+        const searchQuery = document.getElementById("searchInput")?.value.trim().toLowerCase() || "";
+        let filtered = allSessions;
 
-    document.getElementById("searchInput").addEventListener("input", renderSessions);
+        if (searchQuery.length >= 2) {
+            filtered = filtered.filter(s =>
+                (s.name || "").toLowerCase().includes(searchQuery)
+            );
+        }
 
-    document.getElementById("searchForm").addEventListener("submit", function (e) {
-        e.preventDefault();
+        const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+        if (page < 1 || page > totalPages) return;
+
+        currentPage = page;
+        renderSessions();
+    }
+
+    // ─── Render Sessions ──────────────────────────────────────────────────────
+    function renderSessions() {
+        const container = document.getElementById("sessions-row");
+        const searchQuery = document.getElementById("searchInput")?.value.trim().toLowerCase() || "";
+
+        let filtered = allSessions;
+
+        if (searchQuery.length >= 2) {
+            filtered = filtered.filter(s =>
+                (s.name || "").toLowerCase().includes(searchQuery)
+            );
+        }
+
+        if (currentPage > Math.ceil(filtered.length / ITEMS_PER_PAGE)) {
+            currentPage = 1;
+        }
+
+        const start = (currentPage - 1) * ITEMS_PER_PAGE;
+        const paginated = filtered.slice(start, start + ITEMS_PER_PAGE);
+
+        if (paginated.length === 0) {
+            container.innerHTML = `<p class="text-muted ms-3">No sessions found.</p>`;
+            renderPagination(0);
+            return;
+        }
+
+        container.innerHTML = paginated.map(buildSessionCard).join("");
+        renderPagination(filtered.length);
+    }
+
+    // ─── Load Sessions ────────────────────────────────────────────────────────
+    async function loadSessions() {
+        const container = document.getElementById("sessions-row");
+        container.innerHTML = `<p class="text-muted ms-3">Loading...</p>`;
+
+        try {
+            const res = await fetch(`/api/get-sessions/${accountId}`);
+            const data = await res.json();
+
+            if (!res.ok || !data || data.length === 0) {
+                container.innerHTML = `<p class="text-muted ms-3">No sessions found.</p>`;
+                return;
+            }
+
+            allSessions = data;
+            renderSessions();
+
+        } catch (err) {
+            console.error("❌ Failed to load sessions:", err);
+            container.innerHTML = `<p class="text-danger ms-3">Error loading sessions.</p>`;
+        }
+    }
+
+    // ─── Init ─────────────────────────────────────────────────────────────────
+    document.addEventListener("DOMContentLoaded", function () {
+        loadSessions();
+
+        document.getElementById("searchInput").addEventListener("input", renderSessions);
+
+        document.getElementById("searchForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+        });
     });
-});
 </script>
+
+<style>
+    .modulel {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+        border-radius: 8px;
+        padding: 1px;      /* creates breathing room, image "zooms out" */
+        box-sizing: border-box;
+        background: #fff;   /* or whatever your card background is */
+    }
+
+    .session-thumb {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 4px;
+    }
+</style>

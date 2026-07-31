@@ -2,13 +2,13 @@
     <div class="container-fluid">
         <div class="row">
             <div class="card-header">
-                <h4 class="card-title">Add New Formation</h4>
+                <h4 class="card-title">{{ t('add_new_formation') }}</h4>
             </div>
             <form id="formation-form" enctype="multipart/form-data">
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="mb-0">Formation Details</h5>
+                            <h5 class="mb-0">{{ t('formation_details') }}</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -31,11 +31,11 @@
                                                                accept=".png, .jpg, .jpeg">
                                                         <label for="formation_logoFile"
                                                                class="dlab-upload mb-0 btn btn-primary btn-sm">
-                                                            Choose File
+                                                            {{ t('choose_file') }}
                                                         </label>
                                                         <a href="javascript:void(0);"
                                                            class="btn btn-danger light remove-img ms-2 btn-sm"
-                                                           id="remove-img">Remove</a>
+                                                           id="remove-img">{{ t('remove') }}</a>
                                                     </div>
                                                     <hr class="mb-4 mt-4">
                                                 </div>
@@ -50,7 +50,7 @@
                                     <!-- Name -->
                                     <div class="mb-3">
                                         <label class="form-label text-primary d-block" for="formation_name">
-                                            Name <code class="highlighter-rouge">*</code>
+                                            {{ t('name') }} <code class="highlighter-rouge">*</code>
                                         </label>
                                         <input type="text" id="formation_name" name="formation[name]"
                                                required class="form-control">
@@ -59,12 +59,12 @@
                                     <!-- Status -->
                                     <div class="mb-3">
                                         <label class="form-label text-primary d-block" for="formation_status">
-                                            Status <code class="highlighter-rouge">*</code>
+                                            {{ t('status') }} <code class="highlighter-rouge">*</code>
                                         </label>
                                         <select id="formation_status" name="formation[status]"
                                                 class="form-control selectpicker">
-                                            <option value="1">Active</option>
-                                            <option value="0">Inactive</option>
+                                            <option value="1">{{ t('active') }}</option>
+                                            <option value="0">{{ t('inactive') }}</option>
                                         </select>
                                     </div>
 
@@ -73,22 +73,22 @@
                                     <!-- Level -->
                                     <div class="mb-3">
                                         <label class="form-label text-primary d-block" for="formation_accountLevel">
-                                            Level
+                                            {{ t('level') }}
                                         </label>
                                         <select id="formation_accountLevel" name="formation[accountLevel]"
                                                 class="form-control selectpicker" aria-label="Level">
-                                            <option value="">Choose the Level...</option>
+                                            <option value="">{{ t('choose_the_level') }}</option>
                                         </select>
                                     </div>
 
                                     <!-- Section -->
                                     <div class="mb-3">
                                         <label class="form-label text-primary d-block" for="formation_accountSection">
-                                            Section
+                                            {{ t('section') }}
                                         </label>
                                         <select id="formation_accountSection" name="formation[accountSection]"
                                                 class="form-control selectpicker" aria-label="Section">
-                                            <option value="">Choose the Section...</option>
+                                            <option value="">{{ t('choose_the_section') }}</option>
                                         </select>
                                     </div>
 
@@ -97,20 +97,20 @@
                                     <!-- Date and Session Analytics -->
                                     <div class="mb-3">
                                         <label class="form-label text-primary d-block" for="formation_typeDate">
-                                            Date and Session Analytics <code class="highlighter-rouge">*</code>
+                                            {{ t('date_session_analytics') }} <code class="highlighter-rouge">*</code>
                                         </label>
                                         <select id="formation_typeDate" name="formation[typeDate]"
                                                 required class="form-control selectpicker">
-                                            <option value="">Choice Date and Session Analytics...</option>
-                                            <option value="total Duration">Total Duration per day</option>
-                                            <option value="By Number Of Sessions">Number Of Sessions per hours</option>
+                                            <option value="">{{ t('choice_date_session_analytics') }}</option>
+                                            <option value="total Duration">{{ t('total_duration_per_day') }}</option>
+                                            <option value="By Number Of Sessions">{{ t('number_sessions_per_hours') }}</option>
                                         </select>
                                     </div>
 
                                     <!-- Other Date (conditional) -->
                                     <div class="mb-3" id="div-other-title-date" style="display: none;">
                                         <label class="form-label text-primary d-block" for="formation_otherTypeDate">
-                                            Other Date and Session Analytics <code class="highlighter-rouge">*</code>
+                                            {{ t('other_date_session_analytics') }} <code class="highlighter-rouge">*</code>
                                         </label>
                                         <input type="text" id="formation_otherTypeDate"
                                                name="formation[otherTypeDate]" class="form-control">
@@ -120,7 +120,7 @@
                                     <div class="mb-3" id="div-duration-day" style="display: none;">
                                         <label class="form-label text-primary d-block"
                                                for="formation_numberDayDuration">
-                                            Duration by Number of Days <code class="highlighter-rouge">*</code>
+                                            {{ t('duration_by_number_days') }} <code class="highlighter-rouge">*</code>
                                         </label>
                                         <input type="text" id="formation_numberDayDuration"
                                                name="formation[numberDayDuration]"
@@ -130,7 +130,7 @@
                                     <!-- Duration by Sessions (conditional) -->
                                     <div class="mb-3" id="div-duration-session" style="display: none;">
                                         <label class="form-label text-primary d-block" for="formation_numberSession">
-                                            Duration by Number of Sessions <code class="highlighter-rouge">*</code>
+                                            {{ t('duration_by_number_sessions') }} <code class="highlighter-rouge">*</code>
                                         </label>
                                         <input type="text" id="formation_numberSession"
                                                name="formation[numberSession]"
@@ -142,21 +142,21 @@
                                     <!-- Session Modes -->
                                     <div class="mb-3">
                                         <label class="form-label text-primary d-block" for="formation_typeSession">
-                                            Session Modes Analysis <code class="highlighter-rouge">*</code>
+                                            {{ t('session_modes_analysis') }} <code class="highlighter-rouge">*</code>
                                         </label>
                                         <select id="formation_typeSession" name="formation[typeSession]"
                                                 required class="form-control selectpicker">
-                                            <option value="">Choice Session Modes Analysis...</option>
-                                            <option value="O">Online</option>
-                                            <option value="P">Presence</option>
-                                            <option value="M">Mixed</option>
+                                            <option value="">{{ t('choice_session_modes_analysis') }}</option>
+                                            <option value="O">{{ t('online') }}</option>
+                                            <option value="P">{{ t('presence') }}</option>
+                                            <option value="M">{{ t('mixed') }}</option>
                                         </select>
                                     </div>
 
                                     <!-- Other Session Mode (conditional) -->
                                     <div class="mb-3" id="div-other-title-session" style="display: none;">
                                         <label class="form-label text-primary d-block" for="formation_otherTypeSession">
-                                            Other Session Modes Analysis <code class="highlighter-rouge">*</code>
+                                            {{ t('other_session_modes_analysis') }} <code class="highlighter-rouge">*</code>
                                         </label>
                                         <input type="text" id="formation_otherTypeSession"
                                                name="formation[otherTypeSession]" class="form-control">
@@ -168,14 +168,14 @@
                                     <div class="mb-3">
                                         <label class="form-label text-primary d-block"
                                                for="formation_conditionOfPassage">
-                                            Passage Conditions and Criteria <code class="highlighter-rouge">*</code>
+                                            {{ t('passage_conditions_criteria') }} <code class="highlighter-rouge">*</code>
                                         </label>
                                         <select id="formation_conditionOfPassage" name="formation[conditionOfPassage]"
                                                 required class="form-control selectpicker">
-                                            <option value="">Choice Passage Conditions and Criteria...</option>
-                                            <option value="Auto">Auto</option>
-                                            <option value="Decision">Decision</option>
-                                            <option value="Formula">Formula</option>
+                                            <option value="">{{ t('choice_passage_conditions_criteria') }}</option>
+                                            <option value="Auto">{{ t('auto') }}</option>
+                                            <option value="Decision">{{ t('decision') }}</option>
+                                            <option value="Formula">{{ t('formula') }}</option>
                                         </select>
                                     </div>
 
@@ -183,15 +183,15 @@
                                     <div class="mb-3" id="div-formulas-passage" style="display: none;">
                                         <label class="form-label text-primary d-block"
                                                for="formation_conditionOfPassageFormule">
-                                            Formulas for Passage Conditions <code class="highlighter-rouge">*</code>
+                                            {{ t('formulas_passage_conditions') }} <code class="highlighter-rouge">*</code>
                                         </label>
                                         <select id="formation_conditionOfPassageFormule"
                                                 name="formation[conditionOfPassageFormule]"
                                                 class="form-control selectpicker">
-                                            <option value="">Choice Formulas for Passage Conditions...</option>
-                                            <option value="Score">Score</option>
-                                            <option value="Present">Present</option>
-                                            <option value="Note And Presence">Note And Presence</option>
+                                            <option value="">{{ t('choice_formulas_passage_conditions') }}</option>
+                                            <option value="Score">{{ t('score') }}</option>
+                                            <option value="Present">{{ t('present') }}</option>
+                                            <option value="Note And Presence">{{ t('note_and_presence') }}</option>
                                         </select>
                                     </div>
 
@@ -199,7 +199,7 @@
                                     <div class="mb-3" id="div-passage-score" style="display: none;">
                                         <label class="form-label text-primary d-block"
                                                for="formation_conditionOfPassageFormuleByNote">
-                                            Passage Requirements by Score <code class="highlighter-rouge">*</code>
+                                            {{ t('passage_requirements_by_score') }} <code class="highlighter-rouge">*</code>
                                         </label>
                                         <input type="text" id="formation_conditionOfPassageFormuleByNote"
                                                name="formation[conditionOfPassageFormuleByNote]" class="form-control">
@@ -209,7 +209,7 @@
                                     <div class="mb-3" id="div-passage-present" style="display: none;">
                                         <label class="form-label text-primary d-block"
                                                for="formation_conditionOfPassageFormuleByPresent">
-                                            Passage Formulas by Presence <code class="highlighter-rouge">*</code>
+                                            {{ t('passage_formulas_by_presence') }} <code class="highlighter-rouge">*</code>
                                         </label>
                                         <input type="text" id="formation_conditionOfPassageFormuleByPresent"
                                                name="formation[conditionOfPassageFormuleByPresent]"
@@ -220,7 +220,7 @@
                                     <div class="mb-3" id="div-passage-note-present" style="display: none;">
                                         <label class="form-label text-primary d-block"
                                                for="formation_conditionOfPassageFormuleByNotePresent">
-                                            Comprehensive Passage Criteria: Scores and Presence
+                                            {{ t('comprehensive_passage_criteria') }}
                                             <code class="highlighter-rouge">*</code>
                                         </label>
                                         <input type="text" id="formation_conditionOfPassageFormuleByNotePresent"
@@ -233,14 +233,14 @@
                                     <!-- Share Resource -->
                                     <div class="mb-3">
                                         <label class="form-label text-primary d-block" for="formation_publicResource">
-                                            Share Resource
+                                            {{ t('share_resource') }}
                                         </label>
                                         <select id="formation_publicResource" name="formation[publicResource]"
                                                 class="form-control selectpicker">
-                                            <option value="">Do you want to share your resource from the file manager?
+                                            <option value="">{{ t('share_resource_question') }}
                                             </option>
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
+                                            <option value="1">{{ t('yes') }}</option>
+                                            <option value="0">{{ t('no') }}</option>
                                         </select>
                                     </div>
 
@@ -249,7 +249,7 @@
                                     <!-- Description -->
                                     <div class="mb-3">
                                         <label class="form-label text-primary d-block" for="formation_description">
-                                            Description
+                                            {{ t('description') }}
                                         </label>
                                         <textarea id="formation_description" name="formation[description]"
                                                   class="form-control" rows="7" data-ckeditor="true"></textarea>
@@ -260,8 +260,8 @@
 
                             </div>
                             <div class="float-end">
-                                <button class="btn btn-outline-primary me-3" id="create_formation">Create</button>
-                                <a href="/dashboard/show-formation" class="btn btn-outline-danger">Close</a>
+                                <button class="btn btn-outline-primary me-3" id="create_formation">{{ t('create') }}</button>
+                                <a href="/dashboard/show-formation" class="btn btn-outline-danger">{{ t('close') }}</a>
                             </div>
                         </div>
                     </div>
@@ -269,7 +269,7 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="mb-0">Season Details</h5>
+                            <h5 class="mb-0">{{ t('season_details') }}</h5>
                         </div>
                         <div class="card-body">
                             <div class="row" id="lists-seasons">
@@ -293,40 +293,39 @@
                                 <div class="modal-dialog modal-dialog-center">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="seasonModalLabel">New Season</h5>
+                                            <h5 class="modal-title" id="seasonModalLabel">{{ t('new_season') }}</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="mb-3">
-                                                <label for="season_title" class="form-label">Title</label>
+                                                <label for="season_title" class="form-label">{{ t('title') }}</label>
                                                 <input type="text" class="form-control" id="season_title">
                                             </div>
                                             <div class="mb-3">
-                                                <label for="season_description" class="form-label">Description</label>
+                                                <label for="season_description" class="form-label">{{ t('description') }}</label>
                                                 <textarea class="form-control" id="season_description"></textarea>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="season_type_of_duration" class="form-label">Type</label>
+                                                <label for="season_type_of_duration" class="form-label">{{ t('type') }}</label>
                                                 <input type="text" class="form-control" id="season_type_of_duration"
                                                        disabled readonly>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="season_number_of_duration"
-                                                       class="form-label">Duration</label>
+                                                       class="form-label">{{ t('duration') }}</label>
                                                 <input type="number" class="form-control"
                                                        id="season_number_of_duration">
                                             </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">
-                                                Close
+                                                {{ t('close') }}
                                             </button>
-                                            <button type="button" class="btn btn-primary" id="add_new_season">Add New
-                                                Season
+                                            <button type="button" class="btn btn-primary" id="add_new_season">{{ t('add_new_season') }}
                                             </button>
                                             <button type="button" class="btn btn-primary" id="update_season"
-                                                    style="display:none;">Update Season
+                                                    style="display:none;">{{ t('update_season') }}
                                             </button>
                                         </div>
                                     </div>
@@ -338,7 +337,7 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="mb-0">Subject Details</h5>
+                            <h5 class="mb-0">{{ t('subject_details') }}</h5>
                         </div>
                         <div class="card-body">
                             <div class="row" id="listSubjects">
@@ -368,13 +367,13 @@
                                 <div class="modal-dialog modal-dialog-center">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">New Subject</h1>
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">{{ t('new_subject') }}</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="row">
-                                                <label for="subject_select" class="form-label">Subject</label>
+                                                <label for="subject_select" class="form-label">{{ t('subject') }}</label>
                                                 <select class="form-control" id="subject_select">
                                                     <option value="1">Math bac info</option>
                                                     <option value="14">test</option>
@@ -382,43 +381,40 @@
                                             </div>
                                             <br>
                                             <div class="row">
-                                                <label for="number_of_session" class="form-label">Number of
-                                                    Hours</label>
+                                                <label for="number_of_session" class="form-label">{{ t('number_of_hours') }}</label>
                                                 <input type="number" class="form-control" id="number_of_session"
                                                        value="">
                                             </div>
                                             <br>
                                             <div class="row">
-                                                <label for="subject_description" class="form-label">Description</label>
+                                                <label for="subject_description" class="form-label">{{ t('description') }}</label>
                                                 <textarea class="form-control" id="subject_description"></textarea>
                                             </div>
                                             <br>
                                             <div class="row" id="season_coefficient_container">
-                                                <label class="form-label">Select Seasons</label>
+                                                <label class="form-label">{{ t('select_seasons') }}</label>
                                                 <div id="season_coefficient_list" class="row">
-                                                    <p class="text-muted">No seasons found. Please add a season
-                                                        first.</p>
+                                                    <p class="text-muted">{{ t('no_seasons_found_add_first') }}</p>
                                                 </div>
                                             </div>
                                             <input type="hidden" id="formation_account_id" value="3">
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">
-                                                Close
+                                                {{ t('close') }}
                                             </button>
-                                            <button type="button" class="btn btn-primary" id="add_new_subject">Add New
-                                                Subject
+                                            <button type="button" class="btn btn-primary" id="add_new_subject">{{ t('add_new_subject_btn') }}
                                             </button>
                                             <button type="button" class="btn btn-primary" id="update_subject"
-                                                    style="display:none;">Update Subject
+                                                    style="display:none;">{{ t('update_subject') }}
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="float-end">
-                                <button class="btn btn-outline-primary me-3" id="create_formation">Create</button>
-                                <a href="/dashboard/show-formation" class="btn btn-outline-danger">Close</a>
+                                <button class="btn btn-outline-primary me-3" id="create_formation">{{ t('create') }}</button>
+                                <a href="/dashboard/show-formation" class="btn btn-outline-danger">{{ t('close') }}</a>
                             </div>
                         </div>
                     </div>

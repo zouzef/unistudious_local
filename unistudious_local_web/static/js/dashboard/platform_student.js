@@ -149,6 +149,14 @@ function renderUsers(users, page) {
               </div>
             </div>
           </div>
+          <div class="d-flex justify-content-center gap-2 mt-2">
+            <a href="javascript:void(0);" class="btn btn-outline-success btn-sm restricted-action">
+              <i class="fa fa-envelope me-1"></i> Invitation
+            </a>
+            <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm restricted-action">
+              <i class="fa fa-user me-1"></i> Profile
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -249,6 +257,16 @@ function initSessionFilter() {
     renderUsers(state.currentUsers, state.currentPage);
   });
 }
+
+
+document.addEventListener('click', function (e) {
+    const btn = e.target.closest('.restricted-action');
+    if (!btn) return;
+
+    e.preventDefault();
+    new bootstrap.Modal(document.getElementById('restrictedActionModal')).show();
+});
+
 
 // ==================== INIT ====================
 function initPage() {

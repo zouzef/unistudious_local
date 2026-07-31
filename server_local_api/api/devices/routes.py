@@ -480,14 +480,18 @@ def get_all_tablets():
     try:
         query = """
             SELECT 
-                id,
-                name,
-                mac_id as mac,
-                password,
-                status,
-                room_id as roomId
-            FROM tablet
-            WHERE enabled = 1
+                t.id,
+                t.name,
+                t.mac_id as mac,
+                t.password,
+                t.status,
+                t.room_id as roomId,
+                r.name roomName,
+                l.name localName
+            FROM tablet t, room r, local l
+            WHERE t.enabled = 1 AND r.enabled = 1 AND l.enabled = 1
+            AND r.id = t.room_id 
+            AND r.local_id = l.id 
         """
         rows = Database.execute_query(query)
 
@@ -501,7 +505,8 @@ def get_all_tablets():
                 "password": row["password"],
                 "status": row["status"],
                 "roomId": row["roomId"],
-                "roomName": f"Room {row['roomId']}" if row["roomId"] else "No Room Assigned"
+                "roomName": f"{row['roomName']}" if row["roomName"] else "No Room Assigned",
+                "localName": row['localName']
             })
 
         return jsonify(formatted_data), 200

@@ -8,7 +8,7 @@
                             <form id="searchForm" method="get" action="/dashboard/list-slc-tablet">
                                 <div class="input-group search-area mb-3">
                                     <input type="text" id="searchInput" class="form-control"
-                                           placeholder="Search here..." name="search_admin">
+                                           placeholder="{{ t('search_here') }}" name="search_admin">
                                     <span class="input-group-text">
                                         <a href="javascript:void(0)">
                                             <svg width="15" height="15" viewBox="0 0 18 18" fill="none"
@@ -21,9 +21,10 @@
                                 </div>
                             </form>
                             <div>
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
                                         data-bs-target="#adminNewSlcTabletModal">
-                                    + New Tablet
+                                    <i class="fa fa-plus me-1"></i>
+                                    {{ t('new_tablet') }}
                                 </button>
                             </div>
                         </div>
@@ -61,48 +62,48 @@
             <form id="slcTabletForm">
                 <input type="hidden" id="account-id" value="3">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5">Tablet Details</h1>
+                    <h1 class="modal-title fs-5">{{ t('tablet_details') }}</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-xl-12">
                             <div class="mb-3">
-                                <label class="form-label">MAC ID</label>
+                                <label class="form-label">{{ t('mac_id') }}</label>
                                 <input type="text" class="form-control" id="tabletMacId" name="macId" required>
                             </div>
                         </div>
                         <div class="col-xl-6">
                             <div class="mb-3">
-                                <label class="form-label">Local</label>
+                                <label class="form-label">{{ t('local') }}</label>
                                 <select class="form-control" id="tabletSlcLocal" name="slcLocal" required>
-                                    <option value="">Select Local</option>
+                                    <option value="">{{ t('select_local') }}</option>
                                     <!-- locals injected by JS -->
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Tablet Name</label>
+                                <label class="form-label">{{ t('tablet_name') }}</label>
                                 <input type="text" class="form-control" id="tabletName" name="name" required>
                             </div>
                         </div>
                         <div class="col-xl-6">
                             <div class="mb-3">
-                                <label class="form-label">Room</label>
+                                <label class="form-label">{{ t('room') }}</label>
                                 <select class="form-control" id="tabletRoomId" name="roomId" required>
-                                    <option value="">Select Room</option>
+                                    <option value="">{{ t('select_room') }}</option>
                                     <!-- rooms injected by JS, no hardcoded options here -->
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Password</label>
+                                <label class="form-label">{{ t('password') }}</label>
                                 <input type="text" class="form-control" id="tabletPassword" name="password">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save Tablet</button>
+                    <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">{{ t('close') }}</button>
+                    <button type="submit" class="btn btn-primary">{{ t('save_tablet') }}</button>
                 </div>
             </form>
         </div>
@@ -114,13 +115,13 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Status Tablet</h5>
+                <h5 class="modal-title">{{ t('status_tablet') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="statusTabletId" name="id">
                 <div class="mb-3">
-                    <label for="showTabletStatus" class="form-label">Status</label>
+                    <label for="showTabletStatus" class="form-label">{{ t('status') }}</label>
                     <textarea id="showTabletStatus" rows="7" class="form-control" readonly></textarea>
                 </div>
             </div>
@@ -133,34 +134,34 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tablet Details</h5>
+                <h5 class="modal-title">{{ t('tablet_details') }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="showTabletId" name="id">
                 <div class="mb-3">
-                    <label for="showTabletSlc" class="form-label">Slc</label>
+                    <label for="showTabletSlc" class="form-label">{{ t('slc') }}</label>
                     <input type="text" class="form-control" id="showTabletSlc" name="slc" readonly>
                 </div>
                 <div class="mb-3">
-                    <label for="showTabletName" class="form-label">Name</label>
+                    <label for="showTabletName" class="form-label">{{ t('name') }}</label>
                     <input type="text" class="form-control" id="showTabletName" name="name" readonly>
                 </div>
                 <div class="mb-3">
-                    <label for="showTabletMac" class="form-label">MAC ID</label>
+                    <label for="showTabletMac" class="form-label">{{ t('mac_id') }}</label>
                     <input type="text" class="form-control" id="showTabletMac" name="macId" readonly>
                 </div>
                 <div class="mb-3">
-                    <label for="showTabletPassword" class="form-label">Password</label>
+                    <label for="showTabletPassword" class="form-label">{{ t('password') }}</label>
                     <input type="text" class="form-control" id="showTabletPassword" name="password" readonly>
                 </div>
 
                 <div class="mb-3">
-                    <label for="showTabletRoom" class="form-label">Room</label>
+                    <label for="showTabletRoom" class="form-label">{{ t('room') }}</label>
                     <input type="text" class="form-control" id="showTabletRoom" name="room" readonly>
                 </div>
                 <div class="mb-3">
-                    <label for="showTabletCreatedAt" class="form-label">Created At</label>
+                    <label for="showTabletCreatedAt" class="form-label">{{ t('created_at') }}</label>
                     <input type="text" class="form-control" id="showTabletCreatedAt" name="createdAt" readonly>
                 </div>
             </div>
@@ -298,15 +299,15 @@ function renderTablets(tablets) {
                         </div>
                     </div>
                     <div class="contact-icon">
-                        <span class="badge badge-success light">Room : ${tablet.roomName}</span>
+                        <span class="badge badge-success light">Local:  ${tablet.localName}</span>
                     </div>
                     <div class="d-flex align-items-center">
-                        <a href="#" class="btn btn-primary btn-sm w-50 me-2 btn-status-slc-tablet"
+                        <a href="#" class="btn btn-outline-primary btn-sm w-50 me-2 btn-status-slc-tablet"
                             data-id="${tablet.id}"
                             data-status="${tablet.status}">
                             <i class="fas fa-circle-check me-2"></i>Status
                         </a>
-                        <a href="#" class="btn btn-sm w-50 btn-details-slc-tablet"
+                        <a href="#" class="btn btn-outline-success btn-sm w-50 btn-details-slc-tablet"
                             data-id="${tablet.id}"
                             data-name="${tablet.name}"
                             data-mac="${tablet.mac}"

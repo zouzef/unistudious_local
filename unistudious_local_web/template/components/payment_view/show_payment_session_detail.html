@@ -3,12 +3,15 @@
         <div class="top-bar mb-4">
             <div class="row justify-content-between align-items-center">
                 <div class="col-md-4">
-                    <a href="/dashboard/show-payment-session" class="btn btn-secondary btn-custom">
+                    <a href="/dashboard/show-payment-session"
+                       class="btn btn-outline-secondary btn-custom js-single-click" data-locked="0">
                         <i class="fas fa-arrow-left"></i> Return
                     </a>
                 </div>
                 <div class="col-md-4 text-end">
-                    <button id="download-all-order-user-pdf" class="btn btn-primary">
+                    <button id="download-all-order-user-pdf" class="btn btn-outline-success" data-session-id="42"
+                            data-session-name="Revision Accélérée Bac 2027" data-type-pay="Month"
+                            data-start-date="26-07-06" data-end-date="26-09-01">
                         <i class="fas fa-download"></i> Download Payment PDF
                     </button>
                 </div>
@@ -53,7 +56,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="changeAmountModal" tabindex="-1" aria-labelledby="changeAmountModalLabel">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -83,186 +85,186 @@
     </div>
 </div>
 <script>
-const sessionId = {{ session_id }};
+    const sessionId = {{ session_id }};
 
-window.addEventListener('load', function() {
+    window.addEventListener('load', function() {
 
-    let dataTableInstance = null;
+        let dataTableInstance = null;
 
-    const formatDate = (dateStr) => {
-        if (!dateStr) return 'N/A';
-        return new Date(dateStr).toLocaleDateString('en-GB');
-    };
-
-    const getStatusBadge = (status) => {
-        const badges = {
-            'Paid':      'badge-success',
-            'Unpaid':    'badge-danger',
-            'Cancelled': 'badge-danger',
-            'Pending':   'badge-warning',
+        const formatDate = (dateStr) => {
+            if (!dateStr) return 'N/A';
+            return new Date(dateStr).toLocaleDateString('en-GB');
         };
-        const cls = badges[status] || 'badge-secondary';
-        return `<span class="badge ${cls} light badge-sm">${status}</span>`;
-    };
 
-    function loadSessionInfo() {
-        fetch(`/api/get-session-info/${sessionId}`)
-            .then(res => res.json())
-            .then(data => {
-                const session = data[0];
-                document.querySelector('[data-field="uuid"]').textContent = session.uuid;
-                document.querySelector('[data-field="name"]').textContent = session.name;
-                document.querySelector('[data-field="price"]').textContent =
-                    `${session.price} ${session.currency} / ${session.type_pay}`;
+        const getStatusBadge = (status) => {
+            const badges = {
+                'Paid':      'badge-success',
+                'Unpaid':    'badge-danger',
+                'Cancelled': 'badge-danger',
+                'Pending':   'badge-warning',
+            };
+            const cls = badges[status] || 'badge-secondary';
+            return `<span class="badge ${cls} light badge-sm">${status}</span>`;
+        };
 
-                const downloadBtn = document.getElementById('download-all-order-user-pdf');
-                downloadBtn.dataset.sessionId   = session.id;
-                downloadBtn.dataset.sessionName = session.name;
-                downloadBtn.dataset.typePay     = session.type_pay;
-                downloadBtn.dataset.startDate   = formatDate(session.start_date);
-                downloadBtn.dataset.endDate     = formatDate(session.end_date);
-            })
-            .catch(err => console.error('Error loading session info:', err));
-    }
+        function loadSessionInfo() {
+            fetch(`/api/get-session-info/${sessionId}`)
+                .then(res => res.json())
+                .then(data => {
+                    const session = data[0];
+                    document.querySelector('[data-field="uuid"]').textContent = session.uuid;
+                    document.querySelector('[data-field="name"]').textContent = session.name;
+                    document.querySelector('[data-field="price"]').textContent =
+                        `${session.price} ${session.currency} / ${session.type_pay}`;
 
-    function loadPaymentData() {
-        fetch(`/api/get_payment_session/${sessionId}`)
-            .then(res => res.json())
-            .then(data => {
-                const payments = data.Data;
+                    const downloadBtn = document.getElementById('download-all-order-user-pdf');
+                    downloadBtn.dataset.sessionId   = session.id;
+                    downloadBtn.dataset.sessionName = session.name;
+                    downloadBtn.dataset.typePay     = session.type_pay;
+                    downloadBtn.dataset.startDate   = formatDate(session.start_date);
+                    downloadBtn.dataset.endDate     = formatDate(session.end_date);
+                })
+                .catch(err => console.error('Error loading session info:', err));
+        }
 
-                if (!payments || payments.length === 0) {
-                    document.getElementById('payment-table-body').innerHTML = `
-                        <tr><td colspan="6" class="text-center">No payment records found</td></tr>`;
-                    return;
-                }
+        function loadPaymentData() {
+            fetch(`/api/get_payment_session/${sessionId}`)
+                .then(res => res.json())
+                .then(data => {
+                    const payments = data.Data;
 
-                document.getElementById('payment-table-body').innerHTML = payments.map(item => `
-                    <tr>
-                        <td>${item.user_id}</td>
-                        <td>${item.full_name}</td>
-                        <td>${item.price}TND</td>
-                        <td>${getStatusBadge(item.status)}</td>
-                        <td>${formatDate(item.date_payment)}</td>
-                        <td>
-                            <button class="btn btn-warning btn-sm"
-                                data-bs-toggle="modal"
-                                data-bs-target="#changeAmountModal"
-                                data-bs-amount="${item.price}"
-                                data-bs-user-id="${item.user_id}"
-                                data-bs-session-id="${item.session_id}"
-                                data-bs-payment-id="${item.id}">
-                                Change Amount
-                            </button>
-                            <a href="/dashboard/show-user-session/${item.user_id}/${sessionId}"
-                                class="btn btn-primary btn-sm">
-                                Go to Payment
-                            </a>
-                        </td>
-                    </tr>
-                `).join('');
-
-                if (dataTableInstance) {
-                    dataTableInstance.destroy();
-                    dataTableInstance = null;
-                }
-
-                dataTableInstance = $('#session-payment-data-table').DataTable({
-                    searching: false,
-                    pageLength: 10,
-                    select: false,
-                    lengthChange: false,
-                    language: {
-                        paginate: {
-                            next: '<i class="fa-solid fa-angle-right"></i>',
-                            previous: '<i class="fa-solid fa-angle-left"></i>'
-                        }
-                    },
-                    drawCallback: function() {
-                        stylePaginationButtons();
+                    if (!payments || payments.length === 0) {
+                        document.getElementById('payment-table-body').innerHTML = `
+                            <tr><td colspan="6" class="text-center">No payment records found</td></tr>`;
+                        return;
                     }
-                });
+
+                    document.getElementById('payment-table-body').innerHTML = payments.map(item => `
+                        <tr>
+                            <td>${item.user_id}</td>
+                            <td>${item.full_name}</td>
+                            <td>${item.price}TND</td>
+                            <td>${getStatusBadge(item.status)}</td>
+                            <td>${formatDate(item.date_payment)}</td>
+                            <td>
+                                <button class="btn btn-outline-warning btn-sm open-change-amount-modal"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#changeAmountModal"
+                                    data-bs-amount="${item.price}"
+                                    data-bs-user-id="${item.user_id}"
+                                    data-bs-session-id="${item.session_id}"
+                                    data-bs-payment-id="${item.id}">
+                                    Change Amount
+                                </button>
+                                <a href="/dashboard/show-user-session/${item.user_id}/${sessionId}"
+                                    class="btn btn-outline-primary btn-sm js-single-click">
+                                    Go to Payment
+                                </a>
+                            </td>
+                        </tr>
+                    `).join('');
+
+                    if (dataTableInstance) {
+                        dataTableInstance.destroy();
+                        dataTableInstance = null;
+                    }
+
+                    dataTableInstance = $('#session-payment-data-table').DataTable({
+                        searching: false,
+                        pageLength: 10,
+                        select: false,
+                        lengthChange: false,
+                        language: {
+                            paginate: {
+                                next: '<i class="fa-solid fa-angle-right"></i>',
+                                previous: '<i class="fa-solid fa-angle-left"></i>'
+                            }
+                        },
+                        drawCallback: function() {
+                            stylePaginationButtons();
+                        }
+                    });
+                })
+                .catch(err => console.error('Error loading payment data:', err));
+        }
+
+        function stylePaginationButtons() {
+            const paginate = document.querySelector('.dataTables_paginate');
+            if (!paginate) return;
+
+            paginate.querySelectorAll('span > a, a.paginate_button').forEach(btn => {
+                btn.style.cssText = `
+                    min-width: 32px; height: 32px; border-radius: 8px;
+                    border: 1.5px solid #e0dfef; background: #fff;
+                    color: #4c4b8f; font-size: 13px; font-weight: 500;
+                    cursor: pointer; display: inline-flex; align-items: center;
+                    justify-content: center; padding: 0 6px; margin: 0 2px;
+                    text-decoration: none; transition: background .15s;
+                `;
+            });
+
+            paginate.querySelectorAll('a.paginate_button.current').forEach(btn => {
+                btn.style.cssText += `background: #4c4b9e !important; color: #fff !important; border-color: #4c4b9e !important;`;
+            });
+
+            paginate.querySelectorAll('a.paginate_button.disabled').forEach(btn => {
+                btn.style.opacity = '0.35';
+                btn.style.cursor = 'default';
+            });
+        }
+
+        document.getElementById('changeAmountModal').addEventListener('show.bs.modal', function(e) {
+            const btn = e.relatedTarget;
+            document.getElementById('oldAmount').value  = btn.dataset.bsAmount;
+            document.getElementById('userId').value     = btn.dataset.bsUserId;
+            document.getElementById('sessionId').value  = btn.dataset.bsSessionId;
+            document.getElementById('paymentId').value  = btn.dataset.bsPaymentId;
+            document.getElementById('newAmount').value  = '';
+        });
+
+        document.getElementById('changeAmountModal').addEventListener('hidden.bs.modal', function() {
+            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        });
+
+        document.getElementById('changeAmountForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const newAmount        = document.getElementById('newAmount').value;
+            const userId           = document.getElementById('userId').value;
+            const paymentSessionId = document.getElementById('sessionId').value;
+            const paymentId        = document.getElementById('paymentId').value;
+
+            fetch(`/api/update_payment_session/${paymentId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    amount:     newAmount,
+                    user_id:    userId,
+                    session_id: paymentSessionId
+                })
             })
-            .catch(err => console.error('Error loading payment data:', err));
-    }
+            .then(res => res.json())
+            .then(data => {
+                if (data.Message === 'Amount updated successfully') {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('changeAmountModal'));
+                    modal.hide();
 
-    function stylePaginationButtons() {
-        const paginate = document.querySelector('.dataTables_paginate');
-        if (!paginate) return;
-
-        paginate.querySelectorAll('span > a, a.paginate_button').forEach(btn => {
-            btn.style.cssText = `
-                min-width: 32px; height: 32px; border-radius: 8px;
-                border: 1.5px solid #e0dfef; background: #fff;
-                color: #4c4b8f; font-size: 13px; font-weight: 500;
-                cursor: pointer; display: inline-flex; align-items: center;
-                justify-content: center; padding: 0 6px; margin: 0 2px;
-                text-decoration: none; transition: background .15s;
-            `;
-        });
-
-        paginate.querySelectorAll('a.paginate_button.current').forEach(btn => {
-            btn.style.cssText += `background: #4c4b9e !important; color: #fff !important; border-color: #4c4b9e !important;`;
-        });
-
-        paginate.querySelectorAll('a.paginate_button.disabled').forEach(btn => {
-            btn.style.opacity = '0.35';
-            btn.style.cursor = 'default';
-        });
-    }
-
-    document.getElementById('changeAmountModal').addEventListener('show.bs.modal', function(e) {
-        const btn = e.relatedTarget;
-        document.getElementById('oldAmount').value  = btn.dataset.bsAmount;
-        document.getElementById('userId').value     = btn.dataset.bsUserId;
-        document.getElementById('sessionId').value  = btn.dataset.bsSessionId;
-        document.getElementById('paymentId').value  = btn.dataset.bsPaymentId;
-        document.getElementById('newAmount').value  = '';
-    });
-
-    document.getElementById('changeAmountModal').addEventListener('hidden.bs.modal', function() {
-        document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
-        document.body.classList.remove('modal-open');
-        document.body.style.overflow = '';
-        document.body.style.paddingRight = '';
-    });
-
-    document.getElementById('changeAmountForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const newAmount        = document.getElementById('newAmount').value;
-        const userId           = document.getElementById('userId').value;
-        const paymentSessionId = document.getElementById('sessionId').value;
-        const paymentId        = document.getElementById('paymentId').value;
-
-        fetch(`/api/update_payment_session/${paymentId}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                amount:     newAmount,
-                user_id:    userId,
-                session_id: paymentSessionId
+                    document.getElementById('changeAmountModal').addEventListener('hidden.bs.modal', function onHidden() {
+                        document.getElementById('changeAmountModal').removeEventListener('hidden.bs.modal', onHidden);
+                        loadPaymentData();
+                    });
+                } else {
+                    alert(data.Message);
+                }
             })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.Message === 'Amount updated successfully') {
-                const modal = bootstrap.Modal.getInstance(document.getElementById('changeAmountModal'));
-                modal.hide();
+            .catch(err => console.error('Error updating amount:', err));
+        });
 
-                document.getElementById('changeAmountModal').addEventListener('hidden.bs.modal', function onHidden() {
-                    document.getElementById('changeAmountModal').removeEventListener('hidden.bs.modal', onHidden);
-                    loadPaymentData();
-                });
-            } else {
-                alert(data.Message);
-            }
-        })
-        .catch(err => console.error('Error updating amount:', err));
+        loadSessionInfo();
+        loadPaymentData();
+
     });
-
-    loadSessionInfo();
-    loadPaymentData();
-
-});
 </script>

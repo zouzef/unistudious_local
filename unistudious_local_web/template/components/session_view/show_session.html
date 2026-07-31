@@ -21,13 +21,13 @@
                     </form>
                     <div class="d-flex justify-content-end gap-2">
                         <div>
-                            <a class="btn btn-primary" href="/dashboard/create-session">
-                                + Session
+                            <a class="btn btn-outline-primary js-single-click" href="/dashboard/create-session">
+                                <i class="fa fa-plus me-1"></i> Training Session
 
                             </a>
                         </div>
                         <div>
-                            <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                            <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
                                     data-bs-target="#createQrSessionModal">
                                 <i class="fa fa-qrcode me-1"></i> QR Code Session
                             </button>
@@ -46,14 +46,14 @@
                         <div class="user-content">
                             <div class="user-info">
                                 <div class="modulel flex-wrap mb-3" id="lightgallery">
-                                    {% set session_img_url = url_for('session.api_get_session_img', session_id=session.id)
+                                    {% set session_img_url = url_for('session.api_get_session_img',
+                                    session_id=session.id)
                                     %}
                                     <a href="{{ session_img_url }}"
                                        data-exthumbimage="{{ session_img_url }}"
                                        data-src="{{ session_img_url }}">
-                                        <img class="img-fluid" src="{{ session_img_url }}"
-
-                                             alt="{{ session.name }}" height="200px" width="200px">
+                                        <img class="img-fluid session-thumb" src="{{ session_img_url }}"
+                                             alt="{{ session.name }}">
                                     </a>
                                 </div>
                                 <div class="user-details">
@@ -66,7 +66,7 @@
                             </div>
                         </div>
                         <div class="dropdown">
-                            <a href="javascript:void(0);" class="btn sharp btn-light" data-bs-toggle="dropdown"
+                            <a href="javascript:void(0);" class="btn sharp" data-bs-toggle="dropdown"
                                aria-expanded="false">
                                 <svg width="24" height="6" viewBox="0 0 24 6" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
@@ -86,7 +86,7 @@
                         </div>
                         <div class="align-items-center">
                             <a href="/dashboard/show-session-config/{{ session.id }}"
-                               class="btn btn-success btn-sm w-50 me-2">
+                               class="btn js-single-click btn-outline-success btn-sm w-50 me-2">
                                 <i class="fa-solid fa-edit me-2"></i>Manager
                             </a>
                         </div>
@@ -99,7 +99,7 @@
                 <i class="fa fa-folder-open fa-3x text-muted mb-3"></i>
                 <h4>No Sessions Found</h4>
                 <p class="text-muted">There are no sessions available for this account.</p>
-                <a href="/dashboard/create-session" class="btn btn-primary mt-3">
+                <a href="/dashboard/create-session" class="btn btn-outline-primary js-single-click">
                     <i class="fa fa-plus me-2"></i>Create New Session
                 </a>
             </div>
@@ -191,3 +191,22 @@
     });
 </script>
 
+<style>
+    .modulel {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+        border-radius: 8px;
+        padding: 1px;      /* creates breathing room, image "zooms out" */
+        box-sizing: border-box;
+        background: #fff;   /* or whatever your card background is */
+    }
+
+    .session-thumb {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 4px;
+    }
+</style>
