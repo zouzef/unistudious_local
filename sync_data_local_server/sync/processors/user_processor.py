@@ -115,6 +115,14 @@ def insert_users(db, user_data, token):
                 select_query = "SELECT * FROM user WHERE id = %s"
                 existing_records = db.fetch_query(select_query, (user_id,))
 
+                # Fallback: match by email, in case this user was created locally
+                # and hasn't been linked via id_prod yet (avoids duplicate row/folder)
+                if not existing_records and user.get("email"):
+                    email_query = "SELECT * FROM user WHERE email = %s"
+                    existing_records = db.fetch_query(email_query, (user.get("email"),))
+                    if existing_records:
+                        print(f"      🔗 Matched existing local user by email — linking id_prod")
+
                 print(f"   [{i}/{len(created_users)}] User ID {user_id}...")
 
                 if existing_records:
@@ -201,15 +209,15 @@ def insert_users(db, user_data, token):
                         new_data["isvirtual"],
                         new_data["door_id"],
                         new_data["password"],
-                        user_id
+                        existing["id"]  # ← fixed: use the local id, not the remote user_id
                     ))
 
                     result["updated"] += 1
                     print(f"      ✅ Updated successfully")
 
-                    download_user_image(user_id, new_data["img_link"], token)
+                    download_user_image(existing["id"], new_data["img_link"], token)
                     if new_data["ref_slc"]:
-                        download_student_reference_images(user_id, token)
+                        download_student_reference_images(existing["id"], token)
 
                 else:
                     print(f"      ✨ New user - inserting...")
@@ -487,9 +495,9 @@ def update_users(db, user_data, token):
                     result["updated"] += 1
                     print(f"      ✅ Updated successfully")
 
-                    download_user_image(user_id, new_data["img_link"], token)
+                    download_user_image(existing["id"], new_data["img_link"], token)
                     if new_data["ref_slc"]:
-                        download_student_reference_images(user_id, token)
+                        download_student_reference_images(existing["id"], token)
 
                 else:
                     print(f"      ⚠️  User not found in DB - inserting...")
@@ -688,6 +696,14 @@ def insert_admins(db, admin_data, token):
                 select_query = "SELECT * FROM user WHERE id = %s"
                 existing_records = db.fetch_query(select_query, (user_id,))
 
+                # Fallback: match by email, in case this admin was created locally
+                # and hasn't been linked via id_prod yet (avoids duplicate row/folder)
+                if not existing_records and user.get("email"):
+                    email_query = "SELECT * FROM user WHERE email = %s"
+                    existing_records = db.fetch_query(email_query, (user.get("email"),))
+                    if existing_records:
+                        print(f"      🔗 Matched existing local user by email — linking id_prod")
+
                 print(f"   [{i}/{len(admins)}] Admin ID {user_id} ({new_data['username']})...")
 
                 if existing_records:
@@ -774,13 +790,13 @@ def insert_admins(db, admin_data, token):
                         new_data["isvirtual"],
                         new_data["door_id"],
                         new_data["password"],
-                        user_id
+                        existing["id"]  # ← fixed: use the local id, not the remote user_id
                     ))
 
                     result["updated"] += 1
                     print(f"      ✅ Updated successfully")
 
-                    download_user_image(user_id, new_data["img_link"], token)
+                    download_user_image(existing["id"], new_data["img_link"], token)
 
                 else:
                     print(f"      ✨ New admin - inserting into user table...")
@@ -1059,7 +1075,7 @@ def update_admins(db, admin_data, token):
                     result["updated"] += 1
                     print(f"      ✅ Updated successfully")
 
-                    download_user_image(user_id, new_data["img_link"], token)
+                    download_user_image(existing["id"], new_data["img_link"], token)
 
                 else:
                     print(f"      ⚠️  Admin not found in DB - inserting...")

@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 # Internal API calls
 # ─────────────────────────────────────────────
 
+# ───────────────────────────────────────────── Create API  ─────────────────────────────────────────────
 def _send_create_student_api(db, settings, new_data, account_id):
     try:
         token = get_token()
@@ -98,13 +99,11 @@ def _send_create_manager_api(settings, new_data):
 
         # Optional image upload
         files = {}
-        img_link = new_data.get("img_link")
         image_fp = None
-        if img_link:
-            local_path = os.path.join(settings.upload_root, img_link.lstrip("/"))
-            if os.path.exists(local_path):
-                image_fp = open(local_path, "rb")
-                files["image"] = (os.path.basename(local_path), image_fp, "image/jpeg")
+        photo_path = new_data.get("photo")
+        if photo_path and os.path.exists(photo_path):
+            image_fp = open(photo_path, "rb")
+            files["image"] = (os.path.basename(photo_path), image_fp, "image/jpeg")
 
         logger.debug("POST %s | payload: %s | roles: %s", url, payload, roles)
 
@@ -214,6 +213,111 @@ def _send_associate_user_api(settings, payload):
         return False, None
 
 
+# ───────────────────────────────────────────── Update API  ─────────────────────────────────────────────
+def _send_update_Manager_api(settings, row, url):
+    try:
+        logger.debug(f"_send_update_Manager_api called with url={url}, row_id={row.get('id')}")
+
+        token = get_token()
+        headers = {"Authorization": f"Bearer {token}"}
+        roles_raw = row.get('roles', '[]')
+
+        if isinstance(roles_raw, str):
+            roles_list = json.loads(roles_raw)
+        else:
+            roles_list = roles_raw or []
+
+        logger.debug(f"roles_raw={roles_raw}, parsed roles_list={roles_list}")
+
+        payload = {
+            "fullName":     row.get('full_name'),
+            "username":     row.get('username'),
+            "email":        row.get('email'),
+            "location":     row.get('address'),
+            "phone_number": row.get('phone'),
+            "roles[]":      roles_list,
+        }
+
+        password = row.get('password')
+        if password:
+            payload["password"] = password
+            logger.debug("password included in payload")
+
+        logger.debug(f"payload built (before files): {payload}")
+
+        files = None
+        image_path = row.get('photo')  # wherever the local image path is stored
+
+        if image_path and os.path.isfile(image_path):
+            logger.debug(f"attaching image from image_path={image_path}")
+            f = open(image_path, 'rb')
+            files = {
+                "image": (os.path.basename(image_path), f, "image/jpeg")  # <-- field name = "image"
+            }
+        else:
+            logger.debug(f"no image attached, image_path={image_path}")
+
+        try:
+            logger.debug(f"sending POST to {url}")
+            response = requests.post(
+                url,
+                data=payload,
+                files=files,
+                headers=headers,
+                verify=False,
+                timeout=10
+            )
+            logger.debug(f"response status_code={response.status_code}")
+        finally:
+            if files:
+                files["image"][1].close()
+
+        if response.status_code == 200:
+            try:
+                response_json = response.json()
+                logger.debug(f"update manager success, response.json()={response_json}")
+                return True
+            except Exception:
+                logger.error("Invalid JSON response: %s", response.text)
+                return False
+        else:
+            logger.error("Update manager failed %s: %s", response.status_code, response.text)
+            return False
+
+    except Exception as e:
+        logger.exception("Error in _send_update_Manager_api: %s", e)
+        return False
+
+
+# ───────────────────────────────────────────── Delete API  ─────────────────────────────────────────────
+def _send_delete_Manager_api(settings, row, url):
+    try:
+        logger.debug(f"_send_delete_Manager_api called with url={url}, row_id={row.get('id')}")
+
+        token = get_token()
+        headers = {"Authorization": f"Bearer {token}"}
+
+        logger.debug(f"sending POST to {url}")
+        response = requests.post(url, headers=headers, verify=False, timeout=10)
+        logger.debug(f"response status_code={response.status_code}")
+
+        if response.status_code == 200:
+            try:
+                response_data = response.json()
+                logger.debug(f"delete manager success, response.json()={response_data}")
+                return True
+            except Exception as e:
+                logger.error(f"Invalid JSON response in delete manager: {e}, raw text={response.text}")
+                return False
+        else:
+            logger.error("Delete manager failed %s: %s", response.status_code, response.text)
+            return False
+
+    except Exception as e:
+        logger.exception("Error in _send_delete_Manager_api: %s", e)
+        return False
+
+
 # ─────────────────────────────────────────────
 # Push functions (called by pusher dispatcher)
 # ─────────────────────────────────────────────
@@ -298,15 +402,14 @@ def push_userAdd(db, settings, row):
 
 def push_userUpdate(db, settings, row):
     try:
-        new_data = json.loads(row.get('new_data', '{}'))
+        new_data = json.loads(row.get('payload', '{}'))
         role     = row.get('role', 'ROLE_USER')
         local_id = new_data.get('id')
-
         cursor = db.connection.cursor(dictionary=True)
         cursor.execute("SELECT id_prod FROM user WHERE id = %s", (local_id,))
         result = cursor.fetchone()
+        print("\n \n \n \n",result)
         cursor.close()
-
         if not result or not result.get('id_prod'):
             logger.error("❌ No id_prod found for local user id=%s, skipping update", local_id)
             return False
@@ -318,6 +421,10 @@ def push_userUpdate(db, settings, row):
             url = f"{settings.api_base_url}/slc/update-teacher/{id_prod}"
         elif role in MANAGER_ROLES:
             url = f"{settings.api_base_url}/slc/update-manager/{id_prod}"
+            manager_data = json.loads(row.get('payload', '{}'))
+            return _send_update_Manager_api(settings, manager_data, url)
+
+
         else:
             url = f"{settings.api_base_url}/slc/update-platform-student/{id_prod}"
 
@@ -344,13 +451,14 @@ def push_userUpdate(db, settings, row):
 
 def push_userDelete(db, settings, row):
     try:
-        old_data = json.loads(row.get('old_data', '{}'))
+        old_data = json.loads(row.get('payload', '{}'))
         role     = row.get('role', 'ROLE_USER')
         local_id = old_data.get('id')
 
         cursor = db.connection.cursor(dictionary=True)
         cursor.execute("SELECT id_prod FROM user WHERE id = %s", (local_id,))
         result = cursor.fetchone()
+        print("\n \n \n \n USER_ID: ",result)
         cursor.close()
 
         if not result or not result.get('id_prod'):
@@ -358,24 +466,15 @@ def push_userDelete(db, settings, row):
             return False
 
         id_prod = result['id_prod']
-
         if role == "ROLE_TEACHER":
             url = f"{settings.api_base_url}/slc/delete-teacher/{id_prod}"
         elif role in MANAGER_ROLES:
             url = f"{settings.api_base_url}/slc/delete-manager/{id_prod}"
+            return _send_delete_Manager_api(settings, row, url)
         else:
             url = f"{settings.api_base_url}/slc/delete-platform-student/{id_prod}"
 
-        token = get_token()
-        headers  = {"Authorization": f"Bearer {token}"}
-        response = requests.post(url, headers=headers, verify=False, timeout=10)
 
-        if response.status_code == 200:
-            logger.info("✅ User deleted remote: local=%s remote=%s", local_id, id_prod)
-            return True
-        else:
-            logger.error("❌ Delete failed %s: %s", response.status_code, response.text)
-            return False
     except Exception as e:
         logger.exception("Error in push_userDelete: %s", e)
         return False

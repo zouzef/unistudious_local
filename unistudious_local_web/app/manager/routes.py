@@ -7,7 +7,9 @@ import base64
 from app.manager.services import (
 	get_manager_info_service,
 	create_manager_service,
-	update_manager_service
+	update_manager_service,
+	delete_manager_service
+
 )
 
 manager_bp = Blueprint('manager',__name__)
@@ -97,4 +99,19 @@ def update_manager(manager_id):
 		print(e)
 		return jsonify({
 			"Message": f"Error: {e} coming from server"
+		}), 500
+
+
+@manager_bp.route('/api/delete-user/<int:manager_id>', methods=['POST'])
+def delete_manager(manager_id):
+	try:
+		status, response = delete_manager_service(manager_id)
+		if status:
+			return jsonify(response.json()), 200
+		else:
+			return jsonify({"Message": "Failed to fetch data"}), 400
+
+	except Exception as e:
+		return jsonify({
+			"Message": f"Error {e} coming from backend"
 		}), 500

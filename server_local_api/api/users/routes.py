@@ -43,13 +43,30 @@ users_bp = Blueprint('users', __name__, url_prefix='/scl')
 @users_bp.route('/get-manager-info',methods=['GET'])
 def get_manager_info():
 	try:
-		query = """
-			SELECT
-			 	id,username,roles,email,full_name,phone,address
-			 FROM user 
-			WHERE roles LIKE '%ROLE_MANAGER_ADMINISTRATIVE%' AND enabled = 1;
+		MANAGER_ROLES = {
+			"ROLE_MANAGER_CONFIG",
+			"ROLE_MANAGER_FINANCE",
+			"ROLE_MANAGER_HR",
+			"ROLE_MANAGER_IT",
+			"ROLE_MANAGER_MARKETING",
+			"ROLE_CUSTOMER_MANAGER_SERVICE",
+			"ROLE_MANAGER_ADMINISTRATIVE",
+		}
+
+		roles_list = list(MANAGER_ROLES)
+		like_clause = " OR ".join(["roles LIKE %s"] * len(roles_list))
+		params = [f"%{role}%" for role in roles_list]
+
+		query = f"""
+		    SELECT
+		        id, username, roles, email, full_name, phone, address
+		    FROM user
+		    WHERE ({like_clause}) AND enabled = 1
+		    ORDER BY created_at DESC
 		"""
-		result= Database.execute_query(query,fetch=True)
+
+		result = Database.execute_query(query, params, fetch=True)
+
 		if result:
 			return jsonify({
 				"Data": result
@@ -74,8 +91,9 @@ ALLOWED_MANAGER_ROLES = {
     "ROLE_MANAGER_MARKETING",
     "ROLE_CUSTOMER_MANAGER_SERVICE",
     "ROLE_MANAGER_ADMINISTRATIVE",
-	"ROLE_ADMIN"
+    "ROLE_ADMIN"
 }
+
 @users_bp.route('/create_manager/<int:account_id>', methods=['POST'])
 def create_manager(account_id):
     try:
@@ -107,22 +125,11 @@ def create_manager(account_id):
                 "Message": "roles is required"
             }), 400
 
-        # Validate every role against the allowed manager roles
         invalid_roles = [r for r in roles if r not in ALLOWED_MANAGER_ROLES]
         if invalid_roles:
             return jsonify({
                 "Message": f"Invalid role(s): {', '.join(invalid_roles)}"
             }), 400
-
-        img_link = None
-        image_file = files.get("image")
-        if image_file and image_file.filename:
-            filename = secure_filename(image_file.filename)
-            upload_folder = os.path.join(current_app.root_path, "static", "uploads", "managers")
-            os.makedirs(upload_folder, exist_ok=True)
-            save_path = os.path.join(upload_folder, filename)
-            image_file.save(save_path)
-            img_link = f"/static/uploads/managers/{filename}"
 
         user_data = {
             "account_id": account_id,
@@ -136,8 +143,6 @@ def create_manager(account_id):
             "status": 1,
             "enabled": 1,
         }
-        if img_link:
-            user_data["img_link"] = img_link
 
         filtered_data = {k: v for k, v in user_data.items() if v is not None}
 
@@ -151,14 +156,38 @@ def create_manager(account_id):
         if not result:
             return jsonify({"Message": "Manager not created"}), 400
 
+        manager_id = result  # new user's id, now available for the upload folder
+
+        # ── Handle image upload (after INSERT, now that manager_id exists) ─
+        img_link = None
+        photo_path = None
+        image_file = files.get("image")
+
+        if image_file and image_file.filename:
+            filename = secure_filename(image_file.filename)
+            upload_folder = os.path.join(
+                os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+                "uploads", "user_img", f"user_{manager_id}"
+            )
+            os.makedirs(upload_folder, exist_ok=True)
+            save_path = os.path.join(upload_folder, filename)
+            image_file.save(save_path)
+
+            img_link = filename
+            photo_path = save_path
+
+            update_query = "UPDATE user SET img_link = %s WHERE id = %s"
+            Database.execute_query(update_query, (img_link, manager_id), fetch=False)
+            filtered_data["img_link"] = img_link
+
         # ── Audit log ──────────────────────────────────────────────────
-        # role column stores the primary/first role for routing purposes
-        # (same pattern as ROLE_TEACHER in create_teacher)
         primary_role = roles[0]
 
         audit_payload = dict(filtered_data)
-        audit_payload["id"] = result
-        audit_payload["roles"] = roles  # store as list in the JSON payload too
+        audit_payload["id"] = manager_id
+        audit_payload["roles"] = roles
+        if photo_path:
+            audit_payload["photo"] = photo_path  # matches row.get('photo') in the pusher
 
         audit_query = """
             INSERT INTO user_audit (user_id, role, action_type, payload, is_synced)
@@ -166,13 +195,13 @@ def create_manager(account_id):
         """
         Database.execute_query(
             audit_query,
-            [result, primary_role, "CREATE", json.dumps(audit_payload), 0],
+            [manager_id, primary_role, "CREATE", json.dumps(audit_payload), 0],
             fetch=False
         )
 
         return jsonify({
             "Message": "Manager created successfully",
-            "user_id": result
+            "user_id": manager_id
         }), 200
 
     except Exception as e:
@@ -180,123 +209,190 @@ def create_manager(account_id):
             "Message": f"Error: {e} coming from server"
         }), 500
 
-
 @users_bp.route('/update_manager/<int:manager_id>', methods=['POST'])
 def update_manager(manager_id):
-	try:
-		if not user_exists(manager_id):
-			return jsonify({"Message": "There is no user with this id"})
+    try:
+       if not user_exists(manager_id):
+          return jsonify({"Message": "There is no user with this id"})
 
-		query = """
-			SELECT roles 
-			FROM user 
-			WHERE id = %s AND enabled = 1
-		"""
-		result = Database.execute_query(query, (manager_id,), fetch=True)
+       query = """
+          SELECT roles 
+          FROM user 
+          WHERE id = %s AND enabled = 1
+       """
+       result = Database.execute_query(query, (manager_id,), fetch=True)
 
-		if not result:
-			return jsonify({"Message": "There is no user with this id"})
+       if not result:
+          return jsonify({"Message": "There is no user with this id"})
 
-		raw_roles = result[0]["roles"]
-		try:
-			user_roles = json.loads(raw_roles) if raw_roles else []
-		except (TypeError, json.JSONDecodeError):
-			user_roles = []
+       raw_roles = result[0]["roles"]
+       try:
+          user_roles = json.loads(raw_roles) if raw_roles else []
+       except (TypeError, json.JSONDecodeError):
+          user_roles = []
 
-		if not any(role in ALLOWED_MANAGER_ROLES for role in user_roles):
-			return jsonify({"Message": f"User {manager_id} is not a manager to update"})
+       if not any(role in ALLOWED_MANAGER_ROLES for role in user_roles):
+          return jsonify({"Message": f"User {manager_id} is not a manager to update"})
 
-		data = request.form.to_dict()
-		files = request.files
+       data = request.form.to_dict()
+       files = request.files
 
-		# roles can arrive either as a single field "roles" or repeated "roles[]"
-		roles = request.form.getlist("roles[]")
-		if not roles:
-			single_role = data.get("roles")
-			if single_role:
-				roles = [single_role]
+       # roles can arrive either as a single field "roles" or repeated "roles[]"
+       roles = request.form.getlist("roles[]")
+       if not roles:
+          single_role = data.get("roles")
+          if single_role:
+             roles = [single_role]
 
-		if roles:
-			invalid_roles = [r for r in roles if r not in ALLOWED_MANAGER_ROLES]
-			if invalid_roles:
-				return jsonify({
-					"Message": f"Invalid role(s): {', '.join(invalid_roles)}"
-				}), 400
+       if roles:
+          invalid_roles = [r for r in roles if r not in ALLOWED_MANAGER_ROLES]
+          if invalid_roles:
+             return jsonify({
+                "Message": f"Invalid role(s): {', '.join(invalid_roles)}"
+             }), 400
 
-		# Map incoming payload keys -> actual DB column names
-		field_map = {
-			"username": "username",
-			"full_name": "full_name",
-			"email": "email",
-			"phone": "phone",
-			"place_birth": "birth_place",
-			"date_birth": "birth_date",
-			"status": "status",
-			"adress": "address",
-		}
+       # Map incoming payload keys -> actual DB column names
+       field_map = {
+          "username": "username",
+          "full_name": "full_name",
+          "email": "email",
+          "phone": "phone",
+          "place_birth": "birth_place",
+          "date_birth": "birth_date",
+          "status": "status",
+          "location": "address",   # <-- was "adress" typo; matches remote API field name
+       }
 
-		update_fields = {}
-		for payload_key, db_column in field_map.items():
-			if payload_key in data and data[payload_key] not in (None, ""):
-				update_fields[db_column] = data[payload_key]
+       update_fields = {}
+       for payload_key, db_column in field_map.items():
+          if payload_key in data and data[payload_key] not in (None, ""):
+             update_fields[db_column] = data[payload_key]
 
-		if roles:
-			update_fields["roles"] = json.dumps(roles)
+       if roles:
+          update_fields["roles"] = json.dumps(roles)
 
-		# ── Handle image upload ──────────────────────────────────────────
-		image_file = files.get("image")
-		if image_file and image_file.filename:
-			filename = secure_filename(image_file.filename)
-			upload_folder = os.path.join(
-				os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-				"uploads", "user_img", f"user_{manager_id}"
-			)
-			os.makedirs(upload_folder, exist_ok=True)
-			save_path = os.path.join(upload_folder, filename)
-			image_file.save(save_path)
-			update_fields["img_link"] = filename
+       # ── Handle image upload ──────────────────────────────────────────
+       photo_path = None
+       image_file = files.get("image")
+       if image_file and image_file.filename:
+          filename = secure_filename(image_file.filename)
+          upload_folder = os.path.join(
+             os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+             "uploads", "user_img", f"user_{manager_id}"
+          )
+          os.makedirs(upload_folder, exist_ok=True)
+          save_path = os.path.join(upload_folder, filename)
+          image_file.save(save_path)
+          update_fields["img_link"] = filename
+          photo_path = save_path   # full path, only needed for audit/pusher, not a DB column
 
-		if not update_fields:
-			return jsonify({"Message": "No valid fields to update"})
+       if not update_fields:
+          return jsonify({"Message": "No valid fields to update"})
 
-		set_clause = ", ".join(f"{col} = %s" for col in update_fields.keys())
-		values = list(update_fields.values())
-		values.append(manager_id)
+       set_clause = ", ".join(f"{col} = %s" for col in update_fields.keys())
+       values = list(update_fields.values())
+       values.append(manager_id)
 
-		update_query = f"UPDATE user SET {set_clause} WHERE id = %s"
-		Database.execute_query(update_query, tuple(values), fetch=False)
+       update_query = f"UPDATE user SET {set_clause} WHERE id = %s"
+       Database.execute_query(update_query, tuple(values), fetch=False)
 
-		# ── Audit log ──────────────────────────────────────────────────
-		# role column stores the primary/first role for routing purposes
-		# use the new roles if they were part of the update, otherwise fall
-		# back to the roles the user already had
-		if roles:
-			primary_role = roles[0]
-		else:
-			primary_role = user_roles[0] if user_roles else None
+       # ── Audit log ──────────────────────────────────────────────────
+       # role column stores the primary/first role for routing purposes
+       # use the new roles if they were part of the update, otherwise fall
+       # back to the roles the user already had
+       if roles:
+          primary_role = roles[0]
+       else:
+          primary_role = user_roles[0] if user_roles else None
 
-		audit_payload = dict(update_fields)
-		audit_payload["id"] = manager_id
-		if roles:
-			audit_payload["roles"] = roles  # store as list in the JSON payload too
+       audit_payload = dict(update_fields)
+       audit_payload["id"] = manager_id
+       if roles:
+          audit_payload["roles"] = roles  # store as list in the JSON payload too
+       if photo_path:
+          audit_payload["photo"] = photo_path  # matches row.get('photo') in the pusher
 
-		audit_query = """
-			INSERT INTO user_audit (user_id, role, action_type, payload, is_synced)
-			VALUES (%s, %s, %s, %s, %s)
-		"""
-		Database.execute_query(
-			audit_query,
-			[manager_id, primary_role, "UPDATE", json.dumps(audit_payload), 0],
-			fetch=False
-		)
+       audit_query = """
+          INSERT INTO user_audit (user_id, role, action_type, payload, is_synced)
+          VALUES (%s, %s, %s, %s, %s)
+       """
+       Database.execute_query(
+          audit_query,
+          [manager_id, primary_role, "UPDATE", json.dumps(audit_payload), 0],
+          fetch=False
+       )
 
-		return jsonify({"Message": "Manager updated successfully"})
+       return jsonify({"Message": "Manager updated successfully"})
 
-	except Exception as e:
-		print(e)
-		return jsonify({
-			"Message": f"Error coming from server: {e}"
-		}), 500
+    except Exception as e:
+       print(e)
+       return jsonify({
+          "Message": f"Error coming from server: {e}"
+       }), 500
+
+@users_bp.route('/delete_manager/<int:manager_id>', methods=['POST'])
+def delete_manager(manager_id):
+    try:
+       if not(user_exists(manager_id)):
+          return jsonify({
+             "Message":"There is no user with this id"
+          }),400
+       else:
+          query = """
+             SELECT roles
+             FROM user
+             WHERE id = %s AND enabled = 1
+          """
+
+          result = Database.execute_query(query, (manager_id,), fetch=True)
+          roles_raw = result[0].get('roles')
+          user_roles = json.loads(roles_raw) if roles_raw else []
+
+          if not any(r in ALLOWED_MANAGER_ROLES for r in user_roles):
+             return jsonify({
+                "Message": "There is no manager with this id"
+             }), 400
+
+          query = """
+             UPDATE user 
+             SET enabled = 0 
+             WHERE id = %s 
+          """
+          result = Database.execute_query(query, (manager_id,), fetch=False)
+
+          if not result:
+             return jsonify({
+                "Message": "Error in deleting Manager"
+             }), 400
+
+          # ── Audit log ──────────────────────────────────────────────────
+          primary_role = user_roles[0] if user_roles else None
+
+          audit_payload = {
+             "id": manager_id,
+             "roles": user_roles,
+             "enabled": 0
+          }
+
+          audit_query = """
+             INSERT INTO user_audit (user_id, role, action_type, payload, is_synced)
+             VALUES (%s, %s, %s, %s, %s)
+          """
+          Database.execute_query(
+             audit_query,
+             [manager_id, primary_role, "DELETE", json.dumps(audit_payload), 0],
+             fetch=False
+          )
+
+          return jsonify({
+             "Message": "Success in delete Manager"
+          }), 200
+
+    except Exception as e:
+       print(e)
+       return jsonify({
+          "Message": f"Error: {e} coming from server"
+       }),500
 
 """_______________________________________________________ Teacher ENDPOINT _______________________________________________________"""
 @users_bp.route('/get_teacher/<int:group_id>', methods=['GET'])
@@ -336,7 +432,6 @@ def get_teacher(group_id):
 	except Exception as e:
 		print(f"Error: {e} coming from get_teacher")
 		return jsonify({"Message": f"Error {e} coming from server"}), 500
-
 
 @users_bp.route('/get_teacher_session/<int:session_id>', methods=['GET'])
 def get_teacher_session(session_id):
@@ -388,7 +483,6 @@ def get_teacher_session(session_id):
 		print(f"Error: {e} coming from get_teacher")
 		return jsonify({"Message": f"Error {e} coming from server"}), 500
 
-
 @users_bp.route('/get_all_teachers', methods=['GET'])
 def get_all_teachers():
 	try:
@@ -415,7 +509,6 @@ def get_all_teachers():
 			"Message": f"Error: {e}",
 
 		}), 500
-
 
 @users_bp.route('/Authentificate-Teacher', methods=['POST'])
 def authentification_teacher():
@@ -478,7 +571,6 @@ def authentification_teacher():
             "Message": "Error coming from server",
             "Error": str(e)
         }), 500
-
 
 @users_bp.route('/create_teacher/<int:account_id>', methods=['POST'])
 def create_teacher(account_id):
@@ -590,7 +682,6 @@ def create_teacher(account_id):
         return jsonify({
             "Message": f"Error: {e} coming from server"
         }), 500
-
 
 # =============================================
 # ENDPOINT 15: check Teacher open door
@@ -777,7 +868,6 @@ def create_user():
             "Message": f"Error: {e} coming from server"
         }), 500
 
-
 # =============================================
 # ENDPOINT 12: GET User info
 # =============================================
@@ -788,7 +878,8 @@ def get_user_info(user_id):
 			SELECT
 			 	id, username,email,full_name, roles, img_link, status, phone,grand,birth_place,birth_date ,address 
 			FROM user 
-			WHERE id = %s AND enabled = 1 
+			WHERE id = %s AND enabled = 1
+			
 		"""
 		values = (user_id,)
 		result = Database.execute_query(query,values,fetch=True)
@@ -804,7 +895,6 @@ def get_user_info(user_id):
 		return jsonify({
 			"Message":f"Error: {e} coming from server"
 		}),500
-
 
 # =============================================
 # ENDPOINT 9: Get Profile image of user
@@ -835,13 +925,11 @@ def get_profile_file(user_id):
 				'static/assets/images/user-profile.png'
 			)
 			return send_file(default_img_path)
-
 		BASE_UPLOAD_FOLDER = os.path.join(
 			os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
 			f'uploads/user_img/user_{user_id}'
 		)
 		img_path = os.path.join(BASE_UPLOAD_FOLDER, img_filename)
-
 		# If image file doesn't exist, return default
 		if not os.path.exists(img_path):
 			default_img_path = os.path.join(
@@ -863,7 +951,6 @@ def get_profile_file(user_id):
 			return send_file(default_img_path)
 		except:
 			return jsonify({"message": "Error loading image"}), 500
-
 
 # =============================================
 # ENDPOINT 8: Update User
@@ -953,7 +1040,6 @@ def update_user(id):
 
     except Exception as e:
         return jsonify({"Message": f"Error: {e} coming from update_user"}), 500
-
 
 # =============================================
 # ENDPOINT 7: Get all users / Get all users (virtuel)
@@ -1057,7 +1143,6 @@ def get_all_user(account_id):
 		return jsonify({
 			"Message": f"Error: {e} coming from get_all_users"
 		}), 500
-
 
 # =============================================
 # ENDPOINT 8: CREATE User
@@ -1232,7 +1317,6 @@ def create_student(account_id):
             "Message": f"Error: {e} coming from server"
         }), 500
 
-
 # =============================================
 # ENDPOINT 8: GET user in session
 # =============================================
@@ -1261,7 +1345,6 @@ def get_student_with_session():
 		return jsonify({
 			"Message":f"Error: {e} coming from server"
 		}),500
-
 
 # =============================================
 # ENDPOINT 9: Associate virtuel user with user
@@ -1313,7 +1396,6 @@ def associate_virtual_user(account_id):
 			"message": f"Error: {e} coming from server"
 		}), 500
 
-
 # =============================================
 # ENDPOINT 10: Get All User
 # =============================================
@@ -1340,7 +1422,6 @@ def get_real_user():
 		return jsonify({
 			"Message":f"Error: {e} coming from server"
 		}),500
-
 
 # =============================================
 # ENDPOINT 10: Get All User

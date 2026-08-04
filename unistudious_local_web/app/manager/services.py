@@ -70,3 +70,13 @@ def update_manager_service(manager_id: int, form_items: list, files: dict) -> tu
 	except Exception as e:
 		print(f"Error: {e} coming from update_manager_service")
 		return False, None
+
+
+def delete_manager_service(manager_id):
+	url = f"{current_app.config['BASE_URL']}delete_manager/{manager_id}"
+	try:
+		response = requests.post(url, verify=False, timeout=10)
+		return response.status_code == 200,response
+
+	except Exception as e:
+		return False

@@ -524,3 +524,111 @@ requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: 
 2026-07-30 15:03:58 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
 2026-07-31 14:15:17 [ERROR] __main__ - No internet connection. Cannot sync.
 2026-07-31 14:15:17 [ERROR] __main__ - Sync #161 failed.
+2026-08-04 10:12:43 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping update
+2026-08-04 10:12:43 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 10:19:53 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping update
+2026-08-04 10:19:53 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 10:20:22 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping update
+2026-08-04 10:20:22 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 10:23:06 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping update
+2026-08-04 10:23:06 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 10:23:32 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping update
+2026-08-04 10:23:32 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 10:23:54 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 10:24:25 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 10:25:58 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 10:26:26 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 11:21:26 [ERROR] sync.pushers.user_pusher - Remote API error in create manager: 'Settings' object has no attribute 'upload_root'
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/user_pusher.py", line 105, in _send_create_manager_api
+    local_path = os.path.join(settings.upload_root, img_link.lstrip("/"))
+AttributeError: 'Settings' object has no attribute 'upload_root'
+2026-08-04 11:21:26 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-04 11:22:27 [ERROR] sync.pushers.user_pusher - Remote API error in create manager: 'Settings' object has no attribute 'upload_root'
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/user_pusher.py", line 105, in _send_create_manager_api
+    local_path = os.path.join(settings.upload_root, img_link.lstrip("/"))
+AttributeError: 'Settings' object has no attribute 'upload_root'
+2026-08-04 11:22:27 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-04 11:23:28 [ERROR] sync.pushers.user_pusher - Remote API error in create manager: 'Settings' object has no attribute 'upload_root'
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/user_pusher.py", line 105, in _send_create_manager_api
+    local_path = os.path.join(settings.upload_root, img_link.lstrip("/"))
+AttributeError: 'Settings' object has no attribute 'upload_root'
+2026-08-04 11:23:28 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-04 11:24:29 [ERROR] sync.pushers.user_pusher - Remote API error in create manager: 'Settings' object has no attribute 'upload_root'
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/user_pusher.py", line 105, in _send_create_manager_api
+    local_path = os.path.join(settings.upload_root, img_link.lstrip("/"))
+AttributeError: 'Settings' object has no attribute 'upload_root'
+2026-08-04 11:24:29 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-04 11:42:24 [ERROR] sync.pushers.user_pusher - Remote API error in create manager: 'Settings' object has no attribute 'upload_root'
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/user_pusher.py", line 105, in _send_create_manager_api
+    local_path = os.path.join(settings.upload_root, img_link.lstrip("/"))
+AttributeError: 'Settings' object has no attribute 'upload_root'
+2026-08-04 11:42:24 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:24:02 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:24:02 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:25:03 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:25:03 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:26:04 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:26:04 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:27:05 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:27:05 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:28:06 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:28:06 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:29:07 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:29:07 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:30:08 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:30:08 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:31:09 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:31:09 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:32:10 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:32:10 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:33:11 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:33:11 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:34:12 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:34:12 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:35:13 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:35:13 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:36:14 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:36:14 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:37:15 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:37:15 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:38:16 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:38:16 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:39:17 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:39:17 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:40:19 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:40:19 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:41:20 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:41:20 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:42:20 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:42:20 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:43:21 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:43:21 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:44:22 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:44:22 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:45:23 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:45:23 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:46:24 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:46:24 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:46:43 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:46:43 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:47:44 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:47:44 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:48:50 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:48:50 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:49:05 [ERROR] sync.pushers.user_pusher - ❌ No id_prod found for local user id=None, skipping delete
+2026-08-04 15:49:05 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:49:49 [ERROR] sync.pushers.user_pusher - Error in _send_delete_Manager_api: name 'Fasle' is not defined
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/user_pusher.py", line 284, in _send_delete_Manager_api
+    response = requests.post(url, verify=Fasle,timeout=10)
+NameError: name 'Fasle' is not defined
+2026-08-04 15:49:49 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-04 15:55:57 [ERROR] sync.data_pusher - user_audit audit #2 failed — will retry next cycle
+2026-08-04 15:56:21 [ERROR] sync.data_pusher - user_audit audit #2 failed — will retry next cycle
+2026-08-04 15:57:12 [ERROR] sync.data_pusher - user_audit audit #2 failed — will retry next cycle
+2026-08-04 15:57:33 [ERROR] sync.data_pusher - user_audit audit #2 failed — will retry next cycle
