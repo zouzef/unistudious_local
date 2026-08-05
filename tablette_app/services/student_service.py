@@ -17,7 +17,7 @@ def get_unknown_students(calendar_id):
         endpoint = config["url"]["show-attendance-unknown"]
         url = f"{base_url}{endpoint}/{calendar_id}"
 
-        response = requests.get(url, headers=headers, verify=False)
+        response = requests.get(url, headers=headers, verify=False, timeout=10)
         response.raise_for_status()
 
         return response.json()
@@ -32,7 +32,7 @@ def get_unknown_student_attendance(calendar_id):
         headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
         url = f"{base_url}{config['url']['get_unknown_student_attendance']}/{calendar_id}"
 
-        response = requests.get(url, headers=headers, verify=False)
+        response = requests.get(url, headers=headers, verify=False, timeout=10)
         response.raise_for_status()
 
         return response.json()
@@ -54,7 +54,7 @@ def associate_folder_to_user(user_id, folder, calendar_id, attendance_id):
             "attendanceId": attendance_id
         }
 
-        response = requests.post(url, headers=headers, json=payload, verify=False)
+        response = requests.post(url, headers=headers, json=payload, verify=False, timeout=10)
         response.raise_for_status()
 
         return {'success': True}
@@ -69,7 +69,7 @@ def get_new_group(calendar_id):
         headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
         url = f"{base_url}{config['url']['get-group']}/{calendar_id}"
 
-        response = requests.get(url, headers=headers, verify=False)
+        response = requests.get(url, headers=headers, verify=False, timeout=10)
         response.raise_for_status()
 
         return response.json()
@@ -87,7 +87,7 @@ def get_students_list(calendar_id):
         headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
         url = f"{base_url}{config['url']['get_list_add_student_attendance']}/{calendar_id}"
 
-        response = requests.get(url, headers=headers, verify=False)
+        response = requests.get(url, headers=headers, verify=False, timeout=10)
         response.raise_for_status()
 
         data = response.json()
@@ -148,7 +148,7 @@ def add_student_to_attendance(user_id, calendar_id, group_id, relation_id=None,
         }
 
         url = f"{base_url}{config['url']['save_user']}"
-        response = requests.post(url, headers=headers, json=payload, verify=False)
+        response = requests.post(url, headers=headers, json=payload, verify=False, timeout=10)
         response.raise_for_status()
 
         if response.json().get('success') == False:
@@ -189,7 +189,7 @@ def delete_unknown_student(calendar_id, folder):
         }
         url = f"{base_url}{config['url']['delete_unknown_student_attendance']}/{calendar_id}"
 
-        response = requests.delete(url, headers=headers, json=payload, verify=False)
+        response = requests.delete(url, headers=headers, json=payload, verify=False, timeout=10)
         response.raise_for_status()
 
         return response.json()
@@ -208,7 +208,7 @@ def delete_image_from_folder(calendar_id, filename, folder):
         }
         url = f"{base_url}{config['url']['delete_image_from_folder']}/{calendar_id}"
 
-        response = requests.post(url, headers=headers, json=payload, verify=False)
+        response = requests.post(url, headers=headers, json=payload, verify=False, timeout=10)
         response.raise_for_status()
 
         if response.status_code == 200:
@@ -225,7 +225,7 @@ def get_student_current_group(calendar_id, user_id):
         headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
         url = f"{base_url}{config['url']['attendance_get_group_student_select']}/{calendar_id}/{user_id}"
 
-        response = requests.get(url, headers=headers, verify=False)
+        response = requests.get(url, headers=headers, verify=False, timeout=10)
         response.raise_for_status()
 
         return response.json()
@@ -240,7 +240,7 @@ def get_unknown_image(session_id, person_folder, filename):
         headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
         url = f"{base_url}/unknown-image/{session_id}/{person_folder}/{filename}"
 
-        response = requests.get(url, headers=headers, verify=False, stream=True)
+        response = requests.get(url, headers=headers, verify=False, stream=True, timeout=10)
         return response
     except Exception as e:
         print(f"Error proxying image: {str(e)}")

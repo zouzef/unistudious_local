@@ -20,7 +20,7 @@ def fetch_attendance():
             headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
             end_point = config["url"]["get_all_calendar"]
             url = f"{base_url}{end_point}"
-            response = requests.get(url, headers=headers, verify=False)
+            response = requests.get(url, headers=headers, verify=False,timeout=10)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.HTTPError as e:
@@ -78,8 +78,7 @@ def get_calendar_details(session_id):
     end_point = config["url"]["get_attendance"]
     url = f"{base_url}{end_point}/{session_id}"
     try:
-        response = requests.get(url, headers=headers, verify=False)
-
+        response = requests.get(url, headers=headers, verify=False, timeout=10)
         response.raise_for_status()
         return response.json()
     except requests.RequestException as e:
@@ -109,7 +108,7 @@ def update_attendance_status(attendance_id, status):
 
         print(f"DEBUG: Updating attendance {attendance_id} with payload: {payload}")
 
-        response = requests.post(url, headers=headers, json=payload, verify=False)
+        response = requests.post(url, headers=headers, json=payload, verify=False, timeout=10)
         response.raise_for_status()
 
         result = response.json()
@@ -138,7 +137,7 @@ def add_attendance_note(attendance_id, note):
         url = f"{base_url}{endpoint}/{attendance_id}"
 
         payload = {"note": note}
-        response = requests.post(url, headers=headers, json=payload, verify=False)
+        response = requests.post(url, headers=headers, json=payload, verify=False, timeout=10)
         response.raise_for_status()
 
         return {"status": "success", "message": "Note added successfully"}
@@ -153,7 +152,7 @@ def get_attendance_statistics(calendar_id):
         url = f"{base_url}{config['url']['get_statics_attendance']}/{calendar_id}"
         headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
 
-        response = requests.get(url, headers=headers, verify=False)
+        response = requests.get(url, headers=headers, verify=False, timeout=10)
         response.raise_for_status()
         return response.json()
     except Exception as e:
@@ -167,7 +166,7 @@ def reset_attendance(calendar_id):
         url = f"{base_url}{config['url']['reset_attendance_api']}/{calendar_id}"
         headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
 
-        response = requests.post(url, headers=headers, verify=False)
+        response = requests.post(url, headers=headers, verify=False, timeout=10)
         response.raise_for_status()
 
         if response.status_code == 200:
@@ -183,7 +182,7 @@ def delete_attendance(calendar_id, user_id):
         url = f"{base_url}{config['url']['delete_attendance_api']}/{calendar_id}/{user_id}"
         headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
 
-        response = requests.delete(url, headers=headers, verify=False)
+        response = requests.delete(url, headers=headers, verify=False, timeout=10)
         response.raise_for_status()
 
         if response.status_code == 200:
@@ -199,7 +198,7 @@ def get_account_data(calendar_id):
         url = f"{base_url}{config['url']['get_data_account']}/{calendar_id}"
         headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
 
-        response = requests.get(url, headers=headers, verify=False)
+        response = requests.get(url, headers=headers, verify=False, timeout=10)
         response.raise_for_status()
 
         if response.status_code == 200:
@@ -214,7 +213,7 @@ def get_account_data(calendar_id):
 def get_account_data_tablet(tablet_id):
     try:
         url = f"{base_url}{config['url']['get_data_account_tablet']}/{tablet_id}"
-        response = requests.get(url,verify=False)
+        response = requests.get(url,verify=False, timeout=10)
         response.raise_for_status()
         if response.status_code == 200:
             return response.json()

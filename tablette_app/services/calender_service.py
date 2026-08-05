@@ -16,7 +16,7 @@ base_url = config["url"]["API_BASE_URL"]
 def fetch_calender_room(room_id):
 	try:
 		url = f"{base_url}/get-calendar-room/{room_id}"
-		response = requests.get(url,verify=False)
+		response = requests.get(url,verify=False, timeout=10)
 		response.raise_for_status()
 		return response.json()
 	except Exception as e:
@@ -25,7 +25,7 @@ def fetch_calender_room(room_id):
 def fetch_group_session(account_id, session_id):
 	try:
 		url = f"{base_url}/get-group/{account_id}/{session_id}"
-		response = requests.get(url, verify=False)
+		response = requests.get(url, verify=False , timeout=10)
 
 		# raise_for_status() will raise an exception for 4xx/5xx status codes
 		response.raise_for_status()
@@ -44,7 +44,7 @@ def fetch_group_session(account_id, session_id):
 def fetch_room(local_id):
 	try:
 		url = f"{base_url}/get_room/{local_id}"
-		response = requests.get(url, verify=False)
+		response = requests.get(url, verify=False,timeout=10)
 		response.raise_for_status()
 		return response.json()
 	except requests.exceptions.RequestException as e:
@@ -57,7 +57,7 @@ def fetch_room(local_id):
 def fetch_session(account_id):
 	try:
 		url = f"{base_url}/get_session_detail/{account_id}"
-		response = requests.get(url,verify=False)
+		response = requests.get(url,verify=False, timeout=10)
 		response.raise_for_status()
 		if response.status_code == 200:
 			return response.json()
@@ -70,7 +70,7 @@ def fetch_session(account_id):
 def fetch_teacher(session_id):
 	try:
 		url = f"{base_url}/get_teacher/{session_id}"
-		response = requests.get(url, verify=False)
+		response = requests.get(url, verify=False, timeout=10)
 		response.raise_for_status()
 		if response.status_code == 200:
 			return response.json()
@@ -83,7 +83,7 @@ def fetch_teacher(session_id):
 def fetch_all_teacher():
 	try:
 		url = f"{base_url}/get_all_teachers"
-		response = requests.get(url,verify=False)
+		response = requests.get(url,verify=False, timeout=10)
 		response.raise_for_status()
 		if response.status_code == 200:
 			return response.json()
@@ -98,7 +98,7 @@ def request_calander(calander_data):
 	try:
 		session_id = calander_data['session_id']
 		url = f"{base_url}/create-calander_request/{session_id}"
-		response = requests.post(url,verify=False,json=calander_data)
+		response = requests.post(url,verify=False,json=calander_data, timeout=10)
 		return response.ok
 	except Exception:
 		return False
@@ -106,7 +106,7 @@ def request_calander(calander_data):
 def fetch_calander_request(room_id):
 	try:
 		url = f"{base_url}/get-calander_request/{room_id}"
-		response = requests.get(url,verify=False)
+		response = requests.get(url,verify=False, timeout=10)
 		response.raise_for_status()
 		if response.status_code == 200:
 			return response.json()
@@ -133,7 +133,7 @@ def create_calander(data):
 def create_special_group(data):
     try:
         url = f"{base_url}/create_calender_special_group"
-        response = requests.post(url, json=data, verify=False)
+        response = requests.post(url, json=data, verify=False, timeout=10)
         resp_json = response.json()
         return response.status_code, resp_json
 
@@ -150,7 +150,7 @@ def create_special_group(data):
 def fetch_completion_tag(account_id):
 	try:
 		url =f"{base_url}/get_all_completion_tag/{account_id}"
-		response = requests.get(url,verify=False)
+		response = requests.get(url,verify=False, timeout=10)
 		response.raise_for_status()
 		if response.status_code == 200:
 			return response.json()

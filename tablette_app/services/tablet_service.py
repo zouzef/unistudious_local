@@ -20,7 +20,7 @@ def fetch_all_tablets():
             headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
             endpoint = config["url"]["get_all_tablets"]
             url = f"{base_url}{endpoint}"
-            response = requests.get(url, headers=headers, verify=False)
+            response = requests.get(url, headers=headers, verify=False, timeout=10)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.HTTPError as e:
@@ -65,7 +65,7 @@ def get_room_name(room_id, tablets):
 def fetch_slc_info():
     try:
         url = f"{base_url}/get_slc_id"
-        response = requests.get(url,verify=False)
+        response = requests.get(url,verify=False, timeout=10)
         response.raise_for_status()
         if response.status_code == 200:
             data=response.json().get("data")
@@ -83,7 +83,7 @@ def fetch_user_profile_image(user_id):
     try:
         headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
         url = f"{base_url}/get-profile-image/{user_id}"
-        response = requests.get(url, headers=headers, verify=False, stream=True)
+        response = requests.get(url, headers=headers, verify=False, stream=True, timeout=10)
 
         if response.ok:
             return response.content, response.headers.get('Content-Type', 'image/jpeg')
@@ -98,7 +98,7 @@ def fetch_user_profile_image(user_id):
 def fech_academie_image(tablet_id):
     try:
         url = f"{base_url}/get_academie_image/{tablet_id}"
-        response = requests.get(url, verify=False,stream=True)
+        response = requests.get(url, verify=False,stream=True, timeout=10)
         if response.ok:
             return response.content,response.headers.get('Content-type', 'image/jpeg')
         else:
@@ -111,7 +111,7 @@ def fech_academie_image(tablet_id):
 def authentification_teacher(data):
     try:
         url = f"{base_url}/Authentificate-Teacher"
-        response = requests.post(url, json=data, verify=False)
+        response = requests.post(url, json=data, verify=False, timeout=10)
 
         return {
             "body": response.json(),
@@ -125,7 +125,7 @@ def authentification_teacher(data):
 def cronjob_calander(calander_id):
     try:
         url = f"{base_url}/cronjob_calander_special/{calander_id}"
-        response = requests.post(url, verify=False)
+        response = requests.post(url, verify=False, timeout=10)
         response.raise_for_status()
         print(f"Cronjob called successfully for calendar_id: {calander_id}")
         return response.json()

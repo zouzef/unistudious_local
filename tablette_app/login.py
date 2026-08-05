@@ -13,23 +13,24 @@ PASSWORD=config["config"]["password"]
 
 
 def login_tablet():
-    url=f"{BASE_URL}/login"
-    payload={
-        "username":USERNAME,
-        "password":PASSWORD
+    url = f"{BASE_URL}/login"
+    payload = {
+        "username": USERNAME,
+        "password": PASSWORD
     }
     try:
-        response=requests.post(url,json=payload,verify=False)
-        login_data= response.json()
-        token=login_data.get("token")
-        if(token):
-            print(f"Successfully logged into local server . Token retrieved.")
+        response = requests.post(url, json=payload, verify=False, timeout=10)
+        response.raise_for_status()
+        login_data = response.json()
+        token = login_data.get("token")
+        if token:
+            print(f"Successfully logged into local server. Token retrieved.")
             return token
         else:
-            print("login failed: TOken not foud in response.")
+            print("Login failed: Token not found in response.")
             return None
-    except Exception as e:
-        print(f"Error loggin into local server at {url}:{e}")
+    except requests.RequestException as e:
+        print(f"Error logging into local server at {url}: {e}")
         return None
 
 

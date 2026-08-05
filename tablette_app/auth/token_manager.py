@@ -41,8 +41,12 @@ class TokenManager:
     def _token_refresh_loop(self):
         """Background loop for token refresh."""
         while True:
-            time.sleep(45 * 60)  # Refresh every 45 minutes
-            self.refresh_token()
+            time.sleep(45 * 60)
+            success = self.refresh_token()
+            if not success:
+                print("⚠️ Token refresh failed, retrying in 60s")
+                time.sleep(60)
+                self.refresh_token()
 
     def _start_refresh_loop(self):
         """Start background token refresh thread."""
