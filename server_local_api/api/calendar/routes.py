@@ -2200,7 +2200,10 @@ def get_calendar_door(door_id):
               AND r.enabled = 1
               AND r.type = 'P'
               AND r.end_time >= NOW()
-              AND r.start_time >= DATE_SUB(NOW(), INTERVAL 30 MINUTE)
+              AND (
+                    NOW() BETWEEN r.start_time AND r.end_time   -- currently ongoing
+                    OR r.start_time >= NOW()                     -- upcoming
+                  )
             ORDER BY r.start_time ASC
         """
         values = (room_id,)

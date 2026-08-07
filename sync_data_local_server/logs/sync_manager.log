@@ -632,3 +632,88 @@ NameError: name 'Fasle' is not defined
 2026-08-04 15:56:21 [ERROR] sync.data_pusher - user_audit audit #2 failed — will retry next cycle
 2026-08-04 15:57:12 [ERROR] sync.data_pusher - user_audit audit #2 failed — will retry next cycle
 2026-08-04 15:57:33 [ERROR] sync.data_pusher - user_audit audit #2 failed — will retry next cycle
+2026-08-05 12:11:02 [ERROR] sync.pushers.user_pusher - Remote API error in create teacher: 'Settings' object has no attribute 'upload_root'
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/user_pusher.py", line 160, in _send_create_teacher_api
+    local_path = os.path.join(settings.upload_root, img_link.lstrip("/"))
+AttributeError: 'Settings' object has no attribute 'upload_root'
+2026-08-05 12:11:02 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:15:14 [ERROR] sync.pushers.user_pusher - Remote API error in create teacher: 'Settings' object has no attribute 'upload_root'
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/user_pusher.py", line 162, in _send_create_teacher_api
+    local_path = os.path.join(settings.upload_root, img_link.lstrip("/"))
+AttributeError: 'Settings' object has no attribute 'upload_root'
+2026-08-05 12:15:14 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:41:23 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:41:40 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:42:41 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:43:42 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:44:44 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:45:45 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:45:59 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:47:00 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:48:01 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:49:02 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:50:04 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:51:05 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:52:06 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:53:07 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:54:08 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:55:09 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:56:10 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:57:11 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:58:13 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 12:59:14 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 13:00:15 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 13:01:16 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 13:02:17 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 13:03:18 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 13:04:19 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 13:05:20 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 13:06:21 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 13:07:23 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 13:08:24 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 13:09:26 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 13:10:27 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 13:11:29 [ERROR] sync.data_pusher - user_audit audit #3 failed — will retry next cycle
+2026-08-05 13:15:20 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-05 13:17:27 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-06 11:38:18 [ERROR] __main__ - SYNC FAILED: 500 Server Error: Internal Server Error for url: https://unistudious.com/slc/get-whats-news
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/sync_manager.py", line 106, in sync_data_once
+    data = fetcher.fetch_data(since_date=since_date)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/data_fetcher.py", line 55, in fetch_data
+    data = self._post_with_form_data(self.whats_new_endpoint, payload)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/data_fetcher.py", line 115, in _post_with_form_data
+    response.raise_for_status()
+  File "/usr/lib/python3/dist-packages/requests/models.py", line 943, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: https://unistudious.com/slc/get-whats-news
+2026-08-06 11:38:18 [ERROR] __main__ - Sync #12 failed.
+2026-08-06 11:40:20 [ERROR] __main__ - SYNC FAILED: 500 Server Error: Internal Server Error for url: https://unistudious.com/slc/get-whats-news
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/sync_manager.py", line 106, in sync_data_once
+    data = fetcher.fetch_data(since_date=since_date)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/data_fetcher.py", line 55, in fetch_data
+    data = self._post_with_form_data(self.whats_new_endpoint, payload)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/data_fetcher.py", line 115, in _post_with_form_data
+    response.raise_for_status()
+  File "/usr/lib/python3/dist-packages/requests/models.py", line 943, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: https://unistudious.com/slc/get-whats-news
+2026-08-06 11:40:20 [ERROR] __main__ - Sync #14 failed.
+2026-08-06 12:15:46 [ERROR] sync.pushers.user_pusher - Error in push_userAdd: cannot unpack non-iterable bool object
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/user_pusher.py", line 365, in push_userAdd
+    status, result = _route_create(role, settings, new_data, db)
+TypeError: cannot unpack non-iterable bool object
+2026-08-06 12:15:46 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-06 12:34:34 [ERROR] sync.pushers.user_pusher - Remote API error in create teacher: name 'NOne' is not defined
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/user_pusher.py", line 169, in _send_create_teacher_api
+    return False, NOne
+NameError: name 'NOne' is not defined
+2026-08-06 12:34:34 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-07 09:07:26 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-07 09:07:49 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-07 09:08:05 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle

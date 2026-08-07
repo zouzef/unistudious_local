@@ -50,7 +50,7 @@ function buildManagerCard(manager) {
                             <div class="dropdown-menu dropdown-menu-end">
                                 <a data-id="${id}" class="dropdown-item delete-manager" style="cursor:pointer;">Delete</a>
                                 <a href="/dashboard/view-manager/${id}" class="dropdown-item">Edit</a>
-                                <a href="/dashboard/reset-manager-password/${id}" class="dropdown-item">Reset Password</a>
+
                             </div>
                         </div>
                     </div>

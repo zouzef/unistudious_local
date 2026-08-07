@@ -5,6 +5,8 @@ import json
 import requests
 from core.auth import get_token
 from utils.helpers import _map_ids_to_prod
+import mimetypes
+
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
@@ -55,7 +57,6 @@ def _send_create_student_api(db, settings, new_data, account_id):
         if response.status_code == 200:
             try:
                 response_data = response.json()
-                print("\n \n \n \n \n \n \n \n ", response_data)
                 remote_id = response_data.get("data", {}).get("id")
                 return True, remote_id
             except Exception:
@@ -129,7 +130,9 @@ def _send_create_manager_api(settings, new_data):
         logger.exception("Remote API error in create manager: %s", e)
         return False, None
 
+
 def _send_create_teacher_api(settings, new_data):
+    image_fp = None
     try:
         token   = get_token()
         headers = {"Authorization": f"Bearer {token}"}
@@ -155,22 +158,23 @@ def _send_create_teacher_api(settings, new_data):
 
         files = {}
         img_link = new_data.get("img_link")
-        image_fp = None
+        local_path = None
         if img_link:
-            local_path = os.path.join(settings.upload_root, img_link.lstrip("/"))
+            local_path = os.path.join(settings.uploads_path, img_link.lstrip("/"))
+            logger.debug("Resolved image path: %s | exists: %s", local_path, os.path.exists(local_path))
             if os.path.exists(local_path):
+                mime_type, _ = mimetypes.guess_type(local_path)
                 image_fp = open(local_path, "rb")
-                files["image"] = (os.path.basename(local_path), image_fp, "image/jpeg")
+                files["image"] = (os.path.basename(local_path), image_fp, mime_type or "application/octet-stream")
+            else:
+                logger.warning("Teacher image not found on disk: %s", local_path)
 
-        logger.debug("POST %s | payload: %s", url, payload)
+        logger.debug("POST %s | payload: %s | files: %s", url, payload, list(files.keys()))
 
         response = requests.post(
             url, data=payload, files=files if files else None,
             headers=headers, verify=False, timeout=10
         )
-
-        if image_fp:
-            image_fp.close()
 
         if response.status_code == 200:
             try:
@@ -182,9 +186,15 @@ def _send_create_teacher_api(settings, new_data):
         else:
             logger.error("Create teacher failed %s: %s", response.status_code, response.text)
             return False, None
+
     except Exception as e:
         logger.exception("Remote API error in create teacher: %s", e)
         return False, None
+
+    finally:
+        if image_fp:
+            image_fp.close()
+
 
 def _send_associate_user_api(settings, payload):
     try:
