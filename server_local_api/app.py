@@ -101,8 +101,9 @@ if __name__ == '__main__':
 
     app = create_app()
     app.run(
+
         host=Config.SERVER_HOST,
         port=Config.SERVER_PORT,
-        debug=Config.DEBUG,
+        debug=False,
         ssl_context=(Config.SSL_CERT, Config.SSL_KEY)
     )

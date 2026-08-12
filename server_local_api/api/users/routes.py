@@ -1256,16 +1256,7 @@ def create_student(account_id):
 		location = data.get("location")
 		phone_number = data.get("phone_number")
 
-		img_link = None
-		image_file = files.get("image")
-		if image_file and image_file.filename:
-			filename = secure_filename(image_file.filename)
-			upload_folder = os.path.join(current_app.root_path, "static", "uploads", "students")
-			os.makedirs(upload_folder, exist_ok=True)
-			save_path = os.path.join(upload_folder, filename)
-			image_file.save(save_path)
-			img_link = f"/static/uploads/students/{filename}"
-
+		# ── Insert user WITHOUT image first (need the id for the folder) ──
 		user_data = {
 			"account_id": account_id,
 			"username": username,
@@ -1279,9 +1270,6 @@ def create_student(account_id):
 			"enabled": 1,
 		}
 
-		if img_link:
-			user_data["img_link"] = img_link
-
 		filtered_data = {k: v for k, v in user_data.items() if v is not None}
 
 		columns = ", ".join(filtered_data.keys())
@@ -1293,6 +1281,29 @@ def create_student(account_id):
 
 		if not result:
 			return jsonify({"Message": "Student not created"}), 400
+
+		# ── Now handle image, using result (user id) for the folder ──
+		img_link = None
+		image_file = files.get("image")
+		if image_file and image_file.filename:
+			filename = secure_filename(image_file.filename)
+			user_folder = os.path.join(
+				current_app.root_path, "uploads", "user_img", f"user_{result}"
+			)
+			print("Trying to create folder at:", user_folder)
+			os.makedirs(user_folder, exist_ok=True)
+			print("Folder exists now?", os.path.isdir(user_folder))
+			save_path = os.path.join(user_folder, filename)
+			image_file.save(save_path)
+
+			img_link = filename  # store ONLY the filename
+
+			Database.execute_query(
+				"UPDATE user SET img_link = %s WHERE id = %s",
+				[img_link, result],
+				fetch=False
+			)
+			filtered_data["img_link"] = img_link
 
 		session_change_groups = []
 		if selected_sessions:
@@ -1377,29 +1388,6 @@ def create_student(account_id):
 				return jsonify({
 					"Message": "Student created but virtual user not created"
 				}), 400
-
-			# ── Audit log for virtual_user creation ─────────────────
-			virtual_audit_payload = dict(filtered_virtual_data)
-			virtual_audit_payload["id"] = virtual_result
-
-			virtual_audit_query = """
-                INSERT INTO virtual_user_audit
-                    (action_type, record_id, old_data, new_data, is_synced)
-                VALUES
-                    (%s, %s, %s, %s, %s)
-            """
-
-			Database.execute_query(
-				virtual_audit_query,
-				[
-					"CREATE",
-					virtual_result,
-					None,
-					json.dumps(virtual_audit_payload, default=str),
-					0
-				],
-				fetch=False
-			)
 
 		else:
 			virtual_result = existing_virtual[0]["id"]

@@ -56,13 +56,10 @@
             <div class="d-flex gap-3 mb-4 align-items-center">
                 <div class="search-wrapper flex-grow-1">
                     <i class="bi bi-search search-icon"></i>
-                    <input type="text" class="form-control search-input"
-                           id="studentSearch"
-                           placeholder="Search by Student ID or Name">
+                    <input type="text" class="form-control search-input" id="studentSearch"
+                        placeholder="Search by Student ID or Name">
                 </div>
-                <button type="button"
-                        class="btn ms-auto"
-                        style="background-color: rgb(90, 71, 207);
+                <button type="button" class="btn ms-auto" style="background-color: rgb(90, 71, 207);
                                color: white;
                                border: none;
                                border-radius: 10px;
@@ -70,10 +67,8 @@
                                font-weight: 500;
                                font-size: 14px;
                                letter-spacing: 0.3px;
-                               white-space: nowrap;"
-                        data-bs-toggle="modal"
-                        data-bs-target="#model-add-student"
-                        onclick="loadStudentList()">
+                               white-space: nowrap;" data-bs-toggle="modal" data-bs-target="#model-add-student"
+                    onclick="loadStudentList()">
                     <i class="bi bi-person-plus"></i> Add Student
                 </button>
             </div>
@@ -82,14 +77,14 @@
             <div class="table-responsive">
                 <table id="attendanceTable">
                     <thead>
-                    <tr>
-                        <th style="width:50px;"></th>
-                        <th>ID</th>
-                        <th>Student Name</th>
-                        <th>Status</th>
-                        <th>Note</th>
-                        <th>Actions</th>
-                    </tr>
+                        <tr>
+                            <th style="width:50px;"></th>
+                            <th>ID</th>
+                            <th>Student Name</th>
+                            <th>Status</th>
+                            <th>Note</th>
+                            <th>Actions</th>
+                        </tr>
                     </thead>
                     <tbody id="attendanceBody">
                     </tbody>
@@ -101,14 +96,12 @@
                 <nav aria-label="Table pagination">
                     <ul class="pagination pagination-custom mb-0" id="paginationNav">
                         <li class="page-item" id="prevPageItem">
-                            <a class="page-link pagination-link" href="#"
-                               onclick="changePage(currentPage - 1)">
+                            <a class="page-link pagination-link" href="#" onclick="changePage(currentPage - 1)">
                                 <i class="bi bi-chevron-left"></i> Previous
                             </a>
                         </li>
                         <li class="page-item" id="nextPageItem">
-                            <a class="page-link pagination-link" href="#"
-                               onclick="changePage(currentPage + 1)">
+                            <a class="page-link pagination-link" href="#" onclick="changePage(currentPage + 1)">
                                 Next <i class="bi bi-chevron-right"></i>
                             </a>
                         </li>
@@ -146,42 +139,64 @@
     </div>
 </div>
 
+
 <!-- add note modal -->
 <div class="modal fade" id="model-add-note" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-g">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" style="font-size: 0.9rem;">add note for user</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content note-modal-content">
+
+            <div class="modal-header note-modal-header">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="header-icon">
+                        <i class="bi bi-journal-text"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title mb-0">Add Note</h5>
+                        <small class="header-subtitle">Attach a note to this student</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <label for="noteTextArea" class="form-label" style="border: none;">Note</label>
-                <textarea class="form-control" id="noteTextArea" rows="3"></textarea>
+
+            <div class="modal-body p-4">
+                <label for="noteTextArea" class="form-label note-label">Note</label>
+                <textarea class="form-control note-textarea" id="noteTextArea" rows="4"
+                    placeholder="Write something about this student..."></textarea>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        style="background-color: rgb(251, 125, 91); border:none;">
+
+            <div class="modal-footer note-modal-footer">
+                <button type="button" class="btn note-close-btn" data-bs-dismiss="modal">
                     Close
                 </button>
-                <button type="button" class="btn btn-primary"
-                        style="border:none; background-color: rgb(77, 68, 181);" id="add-note">
-                    Add note user
+                <button type="button" class="btn note-save-btn" id="add-note">
+                    <i class="bi bi-check2"></i> Add Note
                 </button>
             </div>
         </div>
     </div>
 </div>
 
+
 <!-- Add student modal -->
 <div class="modal fade" id="model-add-student" tabindex="-1" aria-labelledby="exampleModalCenterTitle"
-     aria-hidden="true">
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-g">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" style="font-size: 0.9rem;">Add new student</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content student-modal-content">
+
+            <div class="modal-header student-modal-header">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="header-icon">
+                        <i class="bi bi-person-plus"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title mb-0">Add New Student</h5>
+                        <small class="header-subtitle">Assign a student to this session</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+
+            <div class="modal-body p-4">
                 <div class="recherche">
                     <label for="student-select" class="form-label">Select user</label>
                     <select id="student-select" class="form-select my-select" style="width:100%;"></select>
@@ -220,19 +235,103 @@
                 </div>
             </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        style="background-color: rgb(251, 125, 91); border:none;">
+            <div class="modal-footer student-modal-footer">
+                <button type="button" class="btn student-close-btn" data-bs-dismiss="modal">
                     Close
                 </button>
-                <button type="button" class="btn btn-primary"
-                        style="border:none; background-color: rgb(77, 68, 181);" id="add-new-user">
-                    Add new user
+                <button type="button" class="btn student-save-btn" id="add-new-user">
+                    <i class="bi bi-check2"></i> Add new user
                 </button>
             </div>
         </div>
     </div>
 </div>
+
+
+<!-- payment status modal -->
+<div class="modal fade" id="model-payment-status" tabindex="-1" aria-labelledby="paymentModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content payment-modal-content">
+
+            <!-- Header -->
+            <div class="modal-header payment-modal-header">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="header-icon">
+                        <i class="bi bi-cash-coin"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title mb-0">Payment Details</h5>
+                        <small class="header-subtitle">Wallet and order history</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-4">
+
+                <!-- Info Pills: Session / Student -->
+                <div class="payment-info-grid mb-4">
+                    <div class="info-pill">
+                        <div class="info-pill-icon"><i class="bi bi-calendar-check"></i></div>
+                        <div>
+                            <span class="info-pill-label">Session</span>
+                            <span class="info-pill-value" id="payment-session-name">—</span>
+                        </div>
+                    </div>
+                    <div class="info-pill">
+                        <div class="info-pill-icon"><i class="bi bi-person"></i></div>
+                        <div>
+                            <span class="info-pill-label">Student</span>
+                            <span class="info-pill-value" id="payment-student-name">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Table -->
+                <div class="table-responsive payment-table-wrapper">
+                    <table id="paymentTable" class="w-100">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th>Date Payment</th>
+                            </tr>
+                        </thead>
+                        <tbody id="paymentBody">
+                            <!-- filled by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Loading indicator -->
+                <div id="payment-loading" class="payment-loading" style="display: none;">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2 mb-0">Loading payment data...</p>
+                </div>
+
+                <!-- Empty state -->
+                <div id="payment-empty" class="payment-empty" style="display:none;">
+                    <i class="bi bi-receipt"></i>
+                    <p class="mb-0">No orders found for this student.</p>
+                </div>
+
+            </div>
+
+            <div class="modal-footer payment-modal-footer">
+                <button type="button" class="btn payment-close-btn" data-bs-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- ============================= -->
 <!-- EXTERNAL LIBRARIES -->
@@ -241,1328 +340,4 @@
 <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/select2.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/socket.io.js') }}"></script>
-
-<!-- ============================= -->
-<!-- STYLES SECTION -->
-<!-- ============================= -->
-<style>
-    /* ═══════════════════════════════════════════
-       ANIMATIONS
-       ═══════════════════════════════════════════ */
-    @keyframes pulse {
-        0%   { opacity: 1; }
-        50%  { opacity: 0.5; }
-        100% { opacity: 1; }
-    }
-
-    @keyframes highlight {
-        0%   { background-color: #fff3cd; }
-        100% { background-color: transparent; }
-    }
-
-    /* ═══════════════════════════════════════════
-       MAIN ATTENDANCE CARD
-       ═══════════════════════════════════════════ */
-    .attendance-card {
-        border: none !important;
-        border-radius: 16px !important;
-        box-shadow: 0 2px 16px rgba(77, 68, 181, 0.08);
-        overflow: hidden;
-    }
-
-    .attendance-header {
-        background: linear-gradient(135deg, rgb(77, 68, 181) 0%, rgb(90, 71, 207) 100%);
-        padding: 18px 24px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: none !important;
-    }
-
-    .header-icon {
-        width: 40px;
-        height: 40px;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 18px;
-    }
-
-    .attendance-header .card-title {
-        color: white;
-        font-weight: 700;
-        font-size: 16px;
-        letter-spacing: 0.3px;
-        margin: 0;
-    }
-
-    .header-subtitle {
-        color: rgba(255, 255, 255, 0.7);
-        font-size: 12px;
-    }
-
-    /* ═══════════════════════════════════════════
-       CONNECTION BADGE
-       ═══════════════════════════════════════════ */
-    .connection-badge {
-        display: flex;
-        align-items: center;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 500;
-        transition: all 0.3s ease;
-    }
-
-    .connection-badge.connected {
-        background-color: rgba(255, 255, 255, 0.25);
-        color: white;
-        border: 1px solid rgba(255, 255, 255, 0.4);
-    }
-
-    .connection-badge.disconnected {
-        background-color: rgba(220, 38, 38, 0.25);
-        color: white;
-        border: 1px solid rgba(220, 38, 38, 0.4);
-    }
-
-    .status-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        margin-right: 6px;
-        animation: pulse 2s infinite;
-    }
-
-    .connected .status-dot    { background-color: #4ade80; }
-    .disconnected .status-dot { background-color: #f87171; }
-
-    /* ═══════════════════════════════════════════
-       SESSION INFO PILLS
-       ═══════════════════════════════════════════ */
-    .session-info-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 12px;
-    }
-
-    .info-pill {
-        background: #f8f7ff;
-        border: 1px solid #e8e6f8;
-        border-radius: 12px;
-        padding: 12px 14px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .info-pill-icon {
-        width: 34px;
-        height: 34px;
-        background: rgb(77, 68, 181);
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 15px;
-        flex-shrink: 0;
-    }
-
-    .info-pill-label {
-        display: block;
-        font-size: 10px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.6px;
-        color: rgb(160, 152, 174);
-    }
-
-    .info-pill-value {
-        display: block;
-        font-size: 13px;
-        font-weight: 600;
-        color: rgb(48, 39, 99);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    /* ═══════════════════════════════════════════
-       SEARCH BAR
-       ═══════════════════════════════════════════ */
-    .search-wrapper {
-        position: relative;
-    }
-
-    .search-icon {
-        position: absolute;
-        left: 14px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: rgb(160, 152, 174);
-        font-size: 14px;
-        z-index: 1;
-    }
-
-    .search-input {
-        padding-left: 38px !important;
-        border-radius: 10px !important;
-        border: 1.5px solid #e8e6f8 !important;
-        height: 42px;
-        font-size: 14px;
-        font-weight: 500;
-        color: rgb(48, 39, 99);
-        transition: border-color 0.2s;
-    }
-
-    .search-input:focus {
-        border-color: rgb(77, 68, 181) !important;
-        box-shadow: 0 0 0 3px rgba(77, 68, 181, 0.1) !important;
-        outline: none;
-    }
-
-    /* ═══════════════════════════════════════════
-       ATTENDANCE TABLE
-       ═══════════════════════════════════════════ */
-    #attendanceTable {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    #attendanceTable thead tr {
-        background: #f4f3fc;
-    }
-
-    #attendanceTable th {
-        padding: 12px 16px;
-        text-align: center;
-        font-size: 12px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: rgb(77, 68, 181);
-        border-bottom: 2px solid #e8e6f8;
-    }
-
-    #attendanceTable td {
-        padding: 14px 16px;
-        text-align: center;
-        border-bottom: 1px solid #f0effe;
-        color: rgb(80, 75, 120);
-        font-size: 14px;
-        font-weight: 500;
-    }
-
-    #attendanceTable tbody tr:hover {
-        background-color: #faf9ff;
-    }
-
-    #attendanceTable tbody tr:last-child td {
-        border-bottom: none;
-    }
-
-    /* ═══════════════════════════════════════════
-       STATUS BADGES
-       ═══════════════════════════════════════════ */
-    .status-present {
-        background-color: #e8f8f0;
-        color: #1a7a4a;
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-weight: 600;
-        font-size: 12px;
-        letter-spacing: 0.3px;
-        display: inline-block;
-    }
-
-    .status-absent {
-        background-color: #fff0f0;
-        color: #c0392b;
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        letter-spacing: 0.3px;
-        display: inline-block;
-    }
-
-    /* ═══════════════════════════════════════════
-       ACTION BUTTONS
-       ═══════════════════════════════════════════ */
-    .attendance-toggle-btn.btn-success {
-        background-color: #5A4FCF !important;
-        border-color: #5A4FCF !important;
-        color: white !important;
-        font-weight: 500;
-        font-size: 13px;
-        padding: 7px 16px;
-        border-radius: 8px;
-        height: auto;
-    }
-
-    .attendance-toggle-btn.btn-danger {
-        background-color: #e74c3c !important;
-        border-color: #e74c3c !important;
-        color: white !important;
-        font-weight: 500;
-        font-size: 13px;
-        padding: 7px 16px;
-        border-radius: 8px;
-        height: auto;
-    }
-
-    .attendance-toggle-btn.btn-danger:hover {
-        background-color: #c0392b !important;
-        border-color: #c0392b !important;
-    }
-
-    .btn-note {
-        background-color: #17a2b8;
-        border-color: #17a2b8;
-        color: white;
-        font-weight: 500;
-        font-size: 13px;
-        padding: 7px 16px;
-        border-radius: 8px;
-    }
-
-    /* ═══════════════════════════════════════════
-       NOTE CONTENT
-       ═══════════════════════════════════════════ */
-    .note-content {
-        color: rgb(137, 135, 159);
-        font-style: italic;
-        font-size: 13px;
-    }
-
-    /* ═══════════════════════════════════════════
-       LOADING INDICATOR
-       ═══════════════════════════════════════════ */
-    .loading {
-        text-align: center;
-        padding: 20px;
-        color: #6c757d;
-    }
-
-    /* ═══════════════════════════════════════════
-       ROW HIGHLIGHT (real-time updates)
-       ═══════════════════════════════════════════ */
-    #attendanceBody tr {
-        transition: background-color 0.3s ease;
-    }
-
-    #attendanceBody tr.updated {
-        background-color: #fff3cd;
-        animation: highlight 2s ease-out;
-    }
-
-    /* ═══════════════════════════════════════════
-       DISABLED BUTTON STATES
-       ═══════════════════════════════════════════ */
-    .btn:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
-
-    /* ═══════════════════════════════════════════
-       TOAST
-       ═══════════════════════════════════════════ */
-    .toast-container {
-        z-index: 1050;
-    }
-
-    /* ═══════════════════════════════════════════
-       PAGINATION
-       ═══════════════════════════════════════════ */
-    .pagination-container {
-        background-color: #f8f7ff;
-        border-radius: 8px;
-        padding: 15px;
-        border: 1px solid #e8e6f8;
-        margin-top: 20px;
-    }
-
-    .pagination-custom { gap: 5px; justify-content: center; }
-
-    .pagination-custom .page-item .page-link {
-        border: 1px solid #3D3690;
-        color: #3D3690;
-        background-color: white;
-        padding: 10px 15px;
-        border-radius: 6px;
-        font-weight: 500;
-        transition: all 0.2s ease;
-        text-decoration: none;
-        min-width: 45px;
-        text-align: center;
-    }
-
-    .pagination-custom .page-item .page-link:hover {
-        background-color: #3D3690;
-        color: white;
-        transform: translateY(-1px);
-        box-shadow: 0 2px 4px rgba(61, 54, 144, 0.2);
-    }
-
-    .pagination-custom .page-item.active .page-link {
-        background-color: #3D3690;
-        border-color: #3D3690;
-        color: white;
-        box-shadow: 0 2px 4px rgba(61, 54, 144, 0.3);
-    }
-
-    .pagination-custom .page-item.disabled .page-link {
-        color: rgb(137, 135, 159);
-        background-color: #f8f7ff;
-        border-color: #e8e6f8;
-        cursor: not-allowed;
-    }
-
-    .pagination-custom .page-item.disabled .page-link:hover {
-        background-color: #f8f7ff;
-        color: rgb(137, 135, 159);
-        transform: none;
-        box-shadow: none;
-    }
-
-    /* ═══════════════════════════════════════════
-       SELECT2 OVERRIDES
-       ═══════════════════════════════════════════ */
-    .select2-container .select2-selection--single {
-        height: 40px !important;
-        display: flex;
-        align-items: center;
-        border-radius: 8px;
-        border: 1px solid #ced4da;
-    }
-
-    .select2-container--default .select2-results__group {
-        font-weight: 600;
-        color: #555;
-        font-size: 0.9rem;
-    }
-
-    .select2-container--default .select2-results__option {
-        padding-left: 20px;
-    }
-
-    .select2-container { width: 100% !important; }
-
-    /* ═══════════════════════════════════════════
-       MODAL RECHERCHE SECTION
-       ═══════════════════════════════════════════ */
-    .recherche {
-        border-radius: 5px;
-        padding: 10px;
-        background-color: #edf3f8;
-    }
-
-    .recherche > label { color: rgb(160, 152, 174); }
-
-    /* ═══════════════════════════════════════════
-       CUSTOM CHECKBOX
-       ═══════════════════════════════════════════ */
-    .custom-checkbox input[type="checkbox"] { display: none; }
-
-    .custom-checkbox label {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        font-size: 16px;
-        color: rgb(160, 152, 174);
-    }
-
-    .custom-checkbox .box {
-        display: inline-block;
-        width: 19px;
-        height: 19px;
-        background-color: transparent;
-        border: 1px solid #c4c3c3;
-        border-radius: 4px;
-        margin-right: 8px;
-        position: relative;
-    }
-
-    .custom-checkbox input[type="checkbox"]:checked + label .box {
-        background-color: #673ab7;
-        border-color: #673ab7;
-    }
-
-    .custom-checkbox input[type="checkbox"]:checked + label .box::after {
-        content: "✔";
-        color: white;
-        font-size: 16px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-
-    /* ═══════════════════════════════════════════
-       RESPONSIVE
-       ═══════════════════════════════════════════ */
-    @media (max-width: 768px) {
-        .session-info-grid { grid-template-columns: repeat(2, 1fr); }
-
-        .pagination-custom .page-item .page-link {
-            padding: 8px 12px;
-            min-width: 40px;
-            font-size: 14px;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .session-info-grid { grid-template-columns: 1fr; }
-
-        .pagination-custom .page-item .page-link {
-            padding: 6px 10px;
-            min-width: 35px;
-            font-size: 13px;
-        }
-
-        .pagination-custom { gap: 3px; }
-    }
-
-    .attendance-toggle-btn,
-    .btn-note {
-        min-width: 130px !important;
-        display: inline-flex !important;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-    }
-</style>
-
-<!-- ============================= -->
-<!-- JAVASCRIPT SECTION -->
-<!-- ============================= -->
-<script>
-    // =============================
-    // GLOBAL VARIABLES
-    // =============================
-    let socket;
-    let attendanceData = [];
-    let filteredData = [];
-    let sessionId = '{{ session_info.id }}';
-    let tabletId = '{{ tablet_id }}';
-    let absent_students = 0;
-    let present_students = 0;
-    let entriesPerPage = 8;
-    let totalPages = 1;
-    let groupId = null;
-    let currentCalendarId = null;
-    let currentNoteStudentId = null;
-    let currentNoteAttendanceId = null;
-
-
-
-    // =============================
-    // SOCKET.IO FUNCTIONS
-    // =============================
-    function initializeSocket() {
-        socket = io();
-        socket.on('status', function(data) {
-            showNotification(data.message, 'warning');
-        });
-        socket.on('connect', function() {
-            console.log('Connected to server');
-            updateConnectionStatus(true);
-            socket.emit('join_session', {
-                session_id: sessionId,
-                tablet_id: tabletId
-            });
-        });
-
-        socket.on('disconnect', function() {
-            console.log('Disconnected from server');
-            updateConnectionStatus(false);
-        });
-
-        socket.on('attendance_update', function(data) {
-            if (data.session_id === sessionId) {
-                attendanceData = data.attendance;
-                renderAttendanceTable();
-                showNotification('Attendance data updated!', 'success');
-            }
-        });
-
-        socket.on('status_update', function(data) {
-            updateStudentStatusInTable(data.attendance_id, data.new_status);
-            showNotification('Student status updated!', 'info');
-        });
-
-        socket.on('note_update', function(data) {
-            updateStudentNoteInTable(data.user_id, data.note);
-            showNotification('Note added!', 'info');
-        });
-    }
-
-    function updateConnectionStatus(connected) {
-        const statusElement = document.getElementById('connectionStatus');
-        const statusText = statusElement.querySelector('.status-text');
-
-        if (connected) {
-            statusElement.classList.remove('disconnected');
-            statusElement.classList.add('connected');
-            statusText.textContent = 'Connected';
-        } else {
-            statusElement.classList.remove('connected');
-            statusElement.classList.add('disconnected');
-            statusText.textContent = 'Disconnected';
-        }
-    }
-
-    // =============================
-    // NOTIFICATION FUNCTIONS
-    // =============================
-    function showNotification(message, type = 'info') {
-        const toastElement = document.getElementById('updateNotification');
-        const messageElement = document.getElementById('toastMessage');
-
-        messageElement.textContent = message;
-        toastElement.classList.remove('bg-success', 'bg-info', 'bg-warning');
-
-        switch(type) {
-            case 'success':
-                toastElement.classList.add('bg-success', 'text-white');
-                break;
-            case 'info':
-                toastElement.classList.add('bg-info', 'text-white');
-                break;
-            case 'warning':
-                toastElement.classList.add('bg-warning');
-                break;
-        }
-
-        const toast = new bootstrap.Toast(toastElement);
-        toast.show();
-    }
-
-    // =============================
-    // DATA LOADING FUNCTIONS
-    // =============================
-    function loadcalender(sessionId){
-        fetch(`/attendance/${sessionId}`)
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error("Failed to load session data");
-                }
-                return res.json();
-            })
-            .then(data => {
-                document.getElementById('name_group_label').innerHTML = data.name || 'N/A';
-                document.getElementById('teacher_name').innerHTML = data.teacherFullName || 'N/A';
-                document.getElementById('room_name').innerHTML = data.roomName || 'N/A';
-                document.getElementById('subject_name').innerHTML = data.subjectName || 'N/A';
-            })
-            .catch(err => {
-                console.error("Error loading session data:", err);
-                showNotification('Error loading session data', 'warning');
-            });
-    }
-
-    function loadAttendance(sessionId) {
-        showLoadingIndicator(true);
-
-        fetch(`/calender/${sessionId}`)
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
-                return res.json();
-            })
-            .then(data => {
-                console.log(data);
-                attendanceData = data || [];
-                renderAttendanceTable();
-                showLoadingIndicator(false);
-            })
-            .catch(err => {
-                console.error("Error loading attendance:", err);
-                showLoadingIndicator(false);
-                showNotification('Error loading attendance data', 'warning');
-                const tbody = document.getElementById('attendanceBody');
-                tbody.innerHTML = "<tr><td colspan='5'>Error loading attendance data</td></tr>";
-            });
-    }
-
-    // =============================
-    // TABLE RENDERING FUNCTIONS
-    // =============================
-    function renderAttendanceTable() {
-        const tbody = document.getElementById('attendanceBody');
-        tbody.innerHTML = "";
-
-        const dataToRender = filteredData.length > 0 ? filteredData : attendanceData;
-
-        if (!dataToRender || dataToRender.length === 0) {
-            tbody.innerHTML = "<tr><td colspan='6'>No attendance data found</td></tr>";
-            document.getElementById('paginationNav').style.display = 'none';
-            return;
-        }
-
-        totalPages = Math.ceil(dataToRender.length / entriesPerPage);
-        if (currentPage > totalPages) {
-            currentPage = Math.max(1, totalPages);
-        }
-
-        const startIndex = (currentPage - 1) * entriesPerPage;
-        const endIndex = Math.min(startIndex + entriesPerPage, dataToRender.length);
-        const pageData = dataToRender.slice(startIndex, endIndex);
-
-        pageData.forEach(item => {
-            const statusClass = item.isPresent ? "status-present" : "status-absent";
-            const statusText = item.isPresent ? "Present" : "Absent";
-            const note = item.note ? item.note : "N/A";
-
-            if (item.isPresent) {
-                present_students++;
-            } else {
-                absent_students++;
-            }
-
-            const row = document.createElement('tr');
-            row.setAttribute('data-attendance-id', item.id);
-            row.innerHTML = `
-                <td>
-                    <i class="fa-solid fa-trash" style="font-size:20px;color:red;cursor:pointer" onclick="deleteStudent(${item.userId})"></i>
-                </td>
-                <td>${item.userId}</td>
-                <td>${item.userName}</td>
-                <td><div class="status ${statusClass}">${statusText}</div></td>
-                <td><div class="note-content">${note}</div></td>
-                <td class="buttonss">
-                    <button class="btn attendance-toggle-btn ${item.isPresent ? 'btn-danger' : 'btn-success'}"
-                            data-attendance-id="${item.id}"
-                            data-is-present="${item.isPresent}">
-                        ${item.isPresent ? 'Mark Absent' : 'Mark Present'}
-                    </button>
-                    <button class="btn btn-note"
-                        onclick="addNote(${item.userId}, ${item.id})"
-                        data-bs-toggle="modal"
-                        data-bs-target="#model-add-note"
-                        style="
-                            display: inline-flex;
-                            align-items: center;
-                            gap: 6px;
-                            background: #EEEDFE;
-                            color: #3C3489;
-                            border: 1.5px solid #AFA9EC;
-                            padding: 7px 16px;
-                            border-radius: 8px;
-                            font-size: 13px;
-                            font-weight: 600;
-                            cursor: pointer;
-                            transition: background 0.15s, transform 0.1s;
-                        "
-                        onmouseover="this.style.background='#CECBF6'"
-                        onmouseout="this.style.background='#EEEDFE'"
-                        onmousedown="this.style.transform='scale(0.97)'"
-                        onmouseup="this.style.transform='scale(1)'">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 5v14M5 12h14"/>
-                    </svg>
-                    Add Note
-                </button>
-                </td>
-            `;
-            tbody.appendChild(row);
-        });
-
-        renderPaginationControls();
-    }
-
-    // =============================
-    // REAL-TIME UPDATE FUNCTIONS
-    // =============================
-    function updateStudentStatusInTable(attendanceId, newStatus) {
-        const studentIndex = attendanceData.findIndex(s => s.id === attendanceId);
-        if (studentIndex !== -1) {
-            attendanceData[studentIndex].isPresent = newStatus;
-        }
-
-        const row = document.querySelector(`tr[data-attendance-id="${attendanceId}"]`);
-        if (row) {
-            const statusCell = row.querySelector('.status');
-            const button = row.querySelector('.attendance-toggle-btn');
-
-            if (button) {
-                button.setAttribute('data-is-present', newStatus);
-                button.textContent = newStatus ? 'Mark Absent' : 'Mark Present';
-                button.className = `btn attendance-toggle-btn ${newStatus ? 'btn-danger' : 'btn-success'}`;
-            }
-
-            if (statusCell) {
-                statusCell.className = `status ${newStatus ? 'status-present' : 'status-absent'}`;
-                statusCell.textContent = newStatus ? 'Present' : 'Absent';
-            }
-        }
-    }
-
-    function updateStudentNoteInTable(userId, note) {
-        const studentIndex = attendanceData.findIndex(s => s.userId === userId);
-        if (studentIndex !== -1) {
-            attendanceData[studentIndex].note = note;
-        }
-
-        const rows = document.querySelectorAll('#attendanceBody tr');
-        rows.forEach(row => {
-            const idCell = row.querySelector('td:first-child');
-            if (idCell && idCell.textContent == userId) {
-                const noteCell = row.querySelector('.note-content');
-                if (noteCell) {
-                    noteCell.textContent = note || 'N/A';
-                }
-            }
-        });
-    }
-
-    // =============================
-    // ATTENDANCE STATUS FUNCTIONS
-    // =============================
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('attendance-toggle-btn')) {
-            const button = e.target;
-            const id = parseInt(button.getAttribute('data-attendance-id'));
-            const currentStatus = button.getAttribute('data-is-present') === 'true';
-            markPresent(id, currentStatus);
-        }
-    });
-
-    function markPresent(id, currentStatus) {
-        showLoadingIndicator(true);
-        const newStatus = !currentStatus;
-
-        console.log('Toggling attendance:', {
-            id: id,
-            currentStatus: currentStatus,
-            newStatus: newStatus
-        });
-
-        fetch(`/change-stutatus/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                session_id: sessionId,
-                is_present: newStatus
-            })
-        })
-        .then(res => {
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
-            return res.json();
-        })
-        .then(data => {
-            showLoadingIndicator(false);
-            if (data.status === "success") {
-                const button = document.querySelector(`button[data-attendance-id="${id}"]`);
-                if (button) {
-                    button.setAttribute('data-is-present', newStatus);
-                    button.textContent = newStatus ? 'Mark Absent' : 'Mark Present';
-                    button.className = `btn attendance-toggle-btn ${newStatus ? 'btn-danger' : 'btn-success'}`;
-                }
-                showNotification(`Student marked as ${newStatus ? 'present' : 'absent'} successfully!`, 'success');
-            } else {
-                showNotification(`Failed to update status: ${data.message || 'Unknown error'}`, 'warning');
-            }
-        })
-        .catch(err => {
-            console.error("Error updating status:", err);
-            showLoadingIndicator(false);
-            showNotification("An error occurred while updating status.", 'warning');
-        });
-    }
-
-    // =============================
-    // NOTE MANAGEMENT FUNCTIONS
-    // =============================
-    function addNote(userId, attendanceId) {
-        currentNoteStudentId = userId;
-        currentNoteAttendanceId = attendanceId;
-        document.getElementById('noteTextArea').value = '';
-    }
-
-    document.getElementById('add-note').addEventListener('click', function() {
-        const note = document.getElementById('noteTextArea').value.trim();
-
-        if (!note) {
-            showNotification('Please enter a note before saving.', 'warning');
-            return;
-        }
-
-        if (!currentNoteStudentId || !currentNoteAttendanceId) {
-            showNotification('Error: Student information not found.', 'warning');
-            return;
-        }
-
-        showLoadingIndicator(true);
-
-        const requestBody = {
-            note: note,
-            session_id: sessionId
-        };
-
-        fetch(`/add-note/${currentNoteAttendanceId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(requestBody)
-        })
-        .then(res => {
-            if (!res.ok) {
-                return res.text().then(text => {
-                    throw new Error(`HTTP error! status: ${res.status}, response: ${text}`);
-                });
-            }
-            return res.json();
-        })
-        .then(data => {
-            showLoadingIndicator(false);
-            if (data.status === "success") {
-                showNotification("Note added successfully!", 'success');
-                $('#model-add-note').modal('hide');
-                currentNoteStudentId = null;
-                currentNoteAttendanceId = null;
-            } else {
-                showNotification(`Failed to add note: ${data.message || 'Unknown error'}`, 'warning');
-            }
-        })
-        .catch(err => {
-            console.error("Error adding note:", err);
-            showLoadingIndicator(false);
-            showNotification("An error occurred while adding the note.", 'warning');
-        });
-    });
-
-    document.getElementById('model-add-note').addEventListener('hidden.bs.modal', function () {
-        currentNoteStudentId = null;
-        currentNoteAttendanceId = null;
-        document.getElementById('noteTextArea').value = '';
-    });
-
-    // =============================
-    // SEARCH/FILTER FUNCTIONS
-    // =============================
-    function filterStudents() {
-        const searchTerm = document.getElementById('studentSearch').value.toLowerCase().trim();
-
-        if (!searchTerm) {
-            filteredData = [];
-            currentPage = 1;
-            renderAttendanceTable();
-            return;
-        }
-
-        filteredData = attendanceData.filter(student => {
-            const userName = student.userName.toLowerCase();
-            const userId = student.userId.toString().toLowerCase();
-            return userName.includes(searchTerm) || userId.includes(searchTerm);
-        });
-
-        currentPage = 1;
-
-        if (filteredData.length === 0) {
-            const tbody = document.getElementById('attendanceBody');
-            tbody.innerHTML = "<tr><td colspan='6' style='text-align:center; color:#9490c9; padding:20px; font-style:italic;'>No students found matching your search.</td></tr>";
-            document.getElementById('paginationNav').style.display = 'none';
-            return;
-        }
-
-        renderAttendanceTable();
-    }
-
-    // =============================
-    // PAGINATION FUNCTIONS
-    // =============================
-    function renderPaginationControls() {
-        const paginationNav = document.getElementById('paginationNav');
-
-        if (totalPages <= 1) {
-            paginationNav.style.display = 'none';
-            return;
-        }
-
-        paginationNav.style.display = 'flex';
-
-        const prevItem = document.getElementById('prevPageItem');
-        if (currentPage === 1) {
-            prevItem.classList.add('disabled');
-            prevItem.querySelector('a').setAttribute('tabindex', '-1');
-        } else {
-            prevItem.classList.remove('disabled');
-            prevItem.querySelector('a').removeAttribute('tabindex');
-        }
-
-        const nextItem = document.getElementById('nextPageItem');
-        if (currentPage === totalPages) {
-            nextItem.classList.add('disabled');
-            nextItem.querySelector('a').setAttribute('tabindex', '-1');
-        } else {
-            nextItem.classList.remove('disabled');
-            nextItem.querySelector('a').removeAttribute('tabindex');
-        }
-
-        const existingPages = paginationNav.querySelectorAll('.page-number');
-        existingPages.forEach(page => page.remove());
-
-        for (let i = 1; i <= totalPages; i++) {
-            const pageItem = document.createElement('li');
-            pageItem.className = `page-item page-number ${i === currentPage ? 'active' : ''}`;
-            pageItem.innerHTML = `<a class="page-link pagination-link" href="#" onclick="changePage(${i})">${i}</a>`;
-            nextItem.parentNode.insertBefore(pageItem, nextItem);
-        }
-    }
-
-    function changePage(page) {
-        if (page >= 1 && page <= totalPages && page !== currentPage) {
-            currentPage = page;
-            renderAttendanceTable();
-        }
-    }
-
-    // =============================
-    // STUDENT MANAGEMENT FUNCTIONS
-    // =============================
-    function deleteStudent(userId) {
-        fetch(`/delete_attendance_api/${sessionId}/${userId}`)
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error("Failed to delete user");
-                }
-                return res.json();
-            })
-            .then(data => {
-                 showNotification('success deleting user', 'warning');
-            })
-            .catch(err => {
-                console.error("Error deleting user :", err);
-                showNotification('Error deleting user', 'warning');
-            });
-    }
-
-    function loadStudentList() {
-        currentCalendarId = sessionId;
-
-        fetch(`/slc/list-add-student-attendance/${sessionId}`)
-        .then(res => {
-            if (!res.ok) {
-                throw new Error(`HTTP error! status: ${res.status}`);
-            }
-            return res.json();
-        })
-        .then(data => {
-            const students = data.users || [];
-            const select = document.querySelector("#student-select");
-            select.innerHTML = "";
-
-            const defaultOption = document.createElement("option");
-            defaultOption.value = "";
-            defaultOption.textContent = "Select a student";
-            defaultOption.selected = true;
-            select.appendChild(defaultOption);
-
-            if (students.length === 0) {
-                const option = document.createElement("option");
-                option.textContent = "No students found";
-                option.disabled = true;
-                select.appendChild(option);
-                return;
-            }
-
-            students.forEach(student => {
-                const option = document.createElement("option");
-                option.dataset.relationId = student.relationId || student.id;
-                option.dataset.id = student.id || student.userId;
-                option.dataset.groupId = student.groupId || "default";
-                option.value = student.id || student.userId;
-                option.textContent = student.fullName || student.name || "Unknown Student";
-                select.appendChild(option);
-            });
-
-            $('#student-select').select2({
-                dropdownParent: $('#model-add-student'),
-                placeholder: "Select a student",
-                allowClear: false,
-                width: '100%'
-            });
-        })
-        .catch(err => {
-            console.error("Error loading student list:", err);
-            const select = document.querySelector("#student-select");
-            select.innerHTML = "";
-            const errorOption = document.createElement("option");
-            errorOption.textContent = "Error loading students";
-            errorOption.disabled = true;
-            select.appendChild(errorOption);
-        });
-    }
-
-    function load_current_group(calendarId, userId) {
-        fetch(`/slc/attendance-get-group-student-select/${calendarId}/${userId}`)
-        .then(res => {
-            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-            return res.json();
-        })
-        .then(data => {
-            if (!data.groups || !Array.isArray(data.groups)) {
-                console.error("Expected groups array but got:", data);
-                return;
-            }
-
-            const select = document.getElementById('change-group');
-            select.innerHTML = '';
-
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'Select a group';
-            defaultOption.selected = true;
-            select.appendChild(defaultOption);
-
-            const uniqueGroups = new Map();
-            data.groups.forEach(group => {
-                if (!uniqueGroups.has(group.id)) {
-                    uniqueGroups.set(group.id, group.name);
-                }
-            });
-
-            uniqueGroups.forEach((name, id) => {
-                const option = document.createElement('option');
-                option.value = id;
-                option.textContent = name;
-                select.appendChild(option);
-            });
-
-            document.getElementById('current-group').style.display = 'block';
-        })
-        .catch(err => {
-            console.error("Error loading current group:", err);
-            document.getElementById('current-group').style.display = 'none';
-        });
-    }
-
-    function get_group_from_calender(calender_id) {
-        return fetch(`/api/get-new-group/${calender_id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log(data);
-            if (data.group_session_id) {
-                return data.group_session_id;
-            } else {
-                console.error("Group ID not found in response:", data);
-                return null;
-            }
-        })
-        .catch(error => {
-            console.error("Error fetching group from calendar:", error);
-            return null;
-        });
-    }
-
-    // =============================
-    // UTILITY FUNCTIONS
-    // =============================
-    function showLoadingIndicator(show) {
-        const loadingElement = document.getElementById('loadingIndicator');
-        loadingElement.style.display = show ? 'block' : 'none';
-    }
-
-    // =============================
-    // INITIALIZATION
-    // =============================
-    document.addEventListener('DOMContentLoaded', () => {
-        const searchInput = document.getElementById('studentSearch');
-        searchInput.addEventListener('input', filterStudents);
-
-        if (sessionId) {
-            initializeSocket();
-            loadAttendance(sessionId);
-            loadcalender(sessionId);
-
-            setInterval(() => {
-                if (!socket || !socket.connected) {
-                    loadAttendance(sessionId);
-                }
-            }, 120000);
-        } else {
-            console.error("No session ID found");
-            showNotification('No session ID found', 'warning');
-        }
-
-        const checkbox1 = document.getElementById("checkbox1");
-        const checkbox2 = document.getElementById("checkbox2");
-        const currentGroup = document.getElementById("current-group");
-
-        checkbox1.addEventListener("change", function () {
-            if (this.checked) {
-                currentGroup.style.display = "block";
-                checkbox2.checked = false;
-                checkbox2.disabled = true;
-            } else {
-                currentGroup.style.display = "none";
-                checkbox2.disabled = false;
-            }
-        });
-    });
-
-    window.sessionId = '{{ session_info.id }}';
-    window.sessionInfo = {
-        id: '{{ session_info.id }}',
-        roomId: '{{ session_info.roomId }}',
-        start: "{{ session_info.start }}",
-        end: "{{ session_info.end }}",
-        subject: "{{ session_info.subject if session_info.subject else '' }}"
-    };
-
-    // =============================
-    // JQUERY READY FUNCTIONS
-    // =============================
-    $(document).ready(function () {
-        $('#student-select').select2({
-            dropdownParent: $('#model-add-student'),
-            placeholder: "Select a student",
-            allowClear: false,
-            width: '100%'
-        });
-
-        get_group_from_calender(sessionId).then(id => {
-            groupId = id;
-            console.log("Group ID loaded:", groupId);
-        }).catch(err => {
-            console.error("Failed to load group ID:", err);
-        });
-
-        async function checkConditionsForAddUser() {
-            const checkbox1 = $('#checkbox1').is(':checked');
-            const checkbox2 = $('#checkbox2').is(':checked');
-            const selectedOption = $('#student-select').find("option:selected");
-            const studentId = selectedOption.data("id");
-            const relationId = selectedOption.data("relationId");
-            const studentName = selectedOption.text();
-            const studentSelected = !!studentId;
-
-            if (checkbox2 && studentSelected) {
-                const requestData = {
-                    userId: studentId,
-                    calendarId: sessionId,
-                    groupId: groupId,
-                    relationId: relationId,
-                    checkbox1: checkbox1,
-                    checkbox2: checkbox2,
-                    selectedGroupId: $('#change-group').val()
-                };
-                console.log(requestData);
-
-                $.ajax({
-                    url: '/api/add-student-attendance',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(requestData),
-                    success: function(response) {
-                        $('#model-add-student').modal('hide');
-                    },
-                });
-            }
-            if ((checkbox1 == false ) && (checkbox2 == false) && (studentSelected)) {
-                const requestData = {
-                    userId: studentId,
-                    calendarId: sessionId,
-                    groupId:groupId,
-                    relationId:relationId,
-                    checkbox1:checkbox1,
-                    checkbox2:checkbox2,
-                    selectedGroupId: $('#change-group').val()
-                };
-                $.ajax({
-                    url: '/api/add-student-attendance',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(requestData),
-                    success: function(response) {
-                        $('#model-add-student').modal('hide');
-                    },
-                });
-            }
-            if(checkbox1 && studentSelected){
-                const selectedGroupId = $('#change-group').val();
-                const requestData = {
-                    userId: studentId,
-                    calendarId: sessionId,
-                    groupId:groupId,
-                    relationId:relationId,
-                    checkbox1:checkbox1,
-                    checkbox2:checkbox2,
-                    selectedGroupId: $('#change-group').val()
-                }
-                console.log(requestData);
-
-                $.ajax({
-                    url: '/api/add-student-attendance',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(requestData),
-                    success: function(response) {
-                        $('#model-add-student').modal('hide');
-                    },
-                });
-            }
-        }
-
-        $('#add-new-user').on('click', function() {
-            checkConditionsForAddUser();
-        });
-
-        function checkStudentAndCheckbox() {
-            const checkbox1 = $('#checkbox1').is(':checked');
-            const selectedOption = $('#student-select').find("option:selected");
-            const studentId = selectedOption.data("id");
-            const studentSelected = !!studentId;
-
-            if (checkbox1 && studentSelected) {
-                load_current_group(sessionId, studentId);
-            }
-        }
-
-        $('#model-add-student').on('hidden.bs.modal', function () {
-            $('#checkbox1').prop('checked', false);
-            $('#checkbox2').prop('checked', false);
-            $('#student-select').val('').trigger('change');
-            $('#current-group').hide();
-            $('#checkbox2').prop('disabled', false);
-            $('#change-group').empty();
-        });
-
-        $('#student-select').on('change', function () {
-            const selectedValue = $(this).val();
-            const selectedText = $(this).find("option:selected").text();
-            const studentId = $(this).find("option:selected").data("id");
-            checkStudentAndCheckbox();
-        });
-
-        $('#checkbox1').on('change', function () {
-            if (this.checked) {
-                $('#current-group').show();
-            } else {
-                $('#current-group').hide();
-            }
-            checkStudentAndCheckbox();
-        });
-    });
-</script>
+<script src="{{ url_for('static', filename='js/left-dashboard.js') }}"></script>

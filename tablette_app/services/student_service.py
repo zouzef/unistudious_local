@@ -104,6 +104,7 @@ def get_students_list(calendar_id):
 def add_student_to_attendance(user_id, calendar_id, group_id, relation_id=None,
                               checkbox1_checked=False, checkbox2_checked=False,
                               selected_group_id=None):
+
     """Add a student to attendance with group options."""
     try:
         if not user_id or not calendar_id:
@@ -244,4 +245,46 @@ def get_unknown_image(session_id, person_folder, filename):
         return response
     except Exception as e:
         print(f"Error proxying image: {str(e)}")
+        return None
+
+
+def get_student_payments(session_id, user_id):
+    """Get payment records for a student in a session."""
+    try:
+        headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
+        url = f"{base_url}/get_payment_session_user/{session_id}/{user_id}"
+
+        response = requests.get(url, headers=headers, verify=False, timeout=10)
+        if response.status_code == 404:
+            return []
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
+        print(f"DEBUG: Exception in get_student_payments: {e}")
+        return []
+
+
+def get_payment_session_user_service(calander_id, user_id):
+    url = f"{base_url}/get_payment_calander_user/{calander_id}/{user_id}"
+    try:
+        headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
+        response = requests.get(url, headers=headers, verify=False, timeout=10)
+        if response.status_code == 404:
+            return []
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
+        return None
+
+
+def get_payment_session_calendar_service(calander_id):
+    url = f"{base_url}/get_payment_calander_session/{calander_id}"
+    try:
+        headers = {"Authorization": f"Bearer {token_manager.get_token()}"}
+        response = requests.get(url, headers=headers, verify=False, timeout=10)
+        if response.status_code == 404:
+            return []
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
         return None

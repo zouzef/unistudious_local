@@ -325,3 +325,20 @@ let dataSet = [
 	
 	
 })(jQuery);
+
+
+// dataTable-attendance
+var table = $('#example-attendance').DataTable({
+    searching: false,
+    paging: true,
+    select: false,
+    info: true,
+    lengthChange: false,
+    pageLength: 10,
+    language: {
+        paginate: {
+            next: '<i class="fa-solid fa-angle-right"></i>',
+            previous: '<i class="fa-solid fa-angle-left"></i>'
+        }
+    }
+});

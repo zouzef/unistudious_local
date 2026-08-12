@@ -11,7 +11,10 @@ from services.student_service import (
     delete_unknown_student,
     delete_image_from_folder,
     get_student_current_group,
-    get_unknown_image
+    get_unknown_image,
+    get_student_payments,
+    get_payment_session_user_service,
+    get_payment_session_calendar_service
 )
 
 student_bp = Blueprint('student', __name__)
@@ -193,3 +196,44 @@ def attendance_get_group_student_select(calendar_id, user_id):
     except Exception as e:
         print("DEBUG: Exception in attendance_get_group_student_select:", e)
         return jsonify({"error": str(e)}), 404
+
+
+@student_bp.route('/api/get_payment_session_user/<int:session_id>/<int:user_id>', methods=['G+ET'])
+def get_payment_session_user(session_id,user_id):
+    try:
+        result = get_student_payments(session_id,user_id)
+        if result:
+            return jsonify(result)
+        else:
+            return jsonify({"Message": "Error in getting payments"}), 404
+    except Exception as e:
+        return jsonify({"Message": f"Error: {e} coming from backend"})
+
+
+@student_bp.route('/api/get_payment_calander_user/<int:calander_id>/<int:user_id>', methods=['GET'])
+def get_payment_calander_user(calander_id,user_id):
+    try:
+        result = get_payment_session_user_service(calander_id, user_id)
+        if result:
+            return jsonify(result),200
+        else:
+            return jsonify(result),400
+    except Exception as e:
+        return jsonify({
+            "Message":f"Error: {e} coming from backend"
+        }),500
+
+
+@student_bp.route('/api/get_payment_calander_session/<int:calander_id>', methods=['GET'])
+def get_payment_calander_session(calander_id):
+    try:
+        result = get_payment_session_calendar_service(calander_id)
+        if result:
+            return jsonify(result), 200
+        else:
+            return jsonify(result), 400
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "Message": f"Error: {e} coming from backend"
+        }), 500

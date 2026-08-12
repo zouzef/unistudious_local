@@ -5,11 +5,12 @@ import json
 from pathlib import Path
 import shutil
 
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from config import Config
 from core.database import Database
 from core.middleware import token_required
+
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 
 #create payment blueprint
@@ -54,7 +55,7 @@ def get_payment_session(session_id):
 		}),500
 
 
-@payment_bp.route('/get_payment_session_user/<int:session_id>/<int:user_id>')
+@payment_bp.route('/get_payment_session_user/<int:session_id>/<int:user_id>', methods=['GET'])
 def get_payment_session_user(session_id,user_id):
 	try:
 		query="""
@@ -75,6 +76,40 @@ def get_payment_session_user(session_id,user_id):
 			"Message":f"Error: {e} coming from server"
 		}),500
 
+@payment_bp.route('/get_payment_calander_user/<int:calander_id>/<int:user_id>', methods=['GET'])
+def get_payment_calender_user(calander_id,user_id):
+	try:
+		query = """
+			SELECT session_id 
+			FROM relation_calander_group_session
+			WHERE id = %s AND
+			enabled = 1
+		"""
+		result = Database.execute_query(query,(calander_id,), fetch=True)
+		if not result:
+			return jsonify({
+				"Message": f"There is no calander with this id"
+			}),400
+
+		session_id = result[0]['session_id']
+		print("\n \n \n session_id: ", session_id)
+		query = """
+					SELECT p.id, p.date_payment, p.description, p.status, p.amount, p.type_date,
+					u.full_name as username,s.name
+					FROM payment_session p,user u, session s
+					WHERE session_id = %s AND user_id = %s AND u.id = p.user_id AND s.id = p.session_id AND u.enabled = 1 AND s.enabled = 1 AND p.enabled = 1
+				"""
+		values = (session_id, user_id)
+		result = Database.execute_query(query, values, fetch=True)
+		if result:
+			return jsonify(result), 200
+		else:
+			return jsonify({"Message": "There is no payment session with this id"}), 404
+
+	except Exception as e:
+		return jsonify({
+			"Message": f"Error: {e} coming from server"
+		}),500
 
 @payment_bp.route('/update_payment_session/<int:payment_id>', methods=['POST'])
 def update_payment_session(payment_id):
@@ -277,3 +312,48 @@ def get_invoice_by_id(invoice_id, account_id, admin_user_id):
     except Exception as e:
         print(e)
         return jsonify({"Message": f"Error: {e} coming from server"}), 500
+
+@payment_bp.route('/get_payment_calander_session/<int:calander_id>', methods=['GET'])
+def get_payment_calender_session(calander_id):
+    try:
+        query = """
+            SELECT session_id 
+            FROM relation_calander_group_session
+            WHERE id = %s AND
+            enabled = 1
+        """
+        result = Database.execute_query(query, (calander_id,), fetch=True)
+        if not result:
+            return jsonify({
+                "Message": f"There is no calander with this id"
+            }), 400
+
+        session_id = result[0]['session_id']
+
+        query = """
+            SELECT p.user_id,
+                CASE 
+                    WHEN SUM(p.status = 'Unpaid') > 0 THEN 'Unpaid'
+                    ELSE SUBSTRING_INDEX(GROUP_CONCAT(p.status ORDER BY p.created_at DESC), ',', 1)
+                END AS status
+            FROM payment_session p
+            WHERE p.session_id = %s
+              AND p.enabled = 1
+              AND p.user_id IN (
+                  SELECT a.user_id
+                  FROM attendance a
+                  WHERE a.calander_id = %s
+                    AND a.session_id = %s
+              )
+            GROUP BY p.user_id
+        """
+        values = (session_id, calander_id, session_id)
+        result = Database.execute_query(query, values, fetch=True)
+        print(result)
+        return jsonify(result), 200
+
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500

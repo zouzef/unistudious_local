@@ -48,6 +48,12 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then((data) => {
           console.log("Calendar data received:", data);
+          if (!data) {
+            console.error("Server returned null/empty response for room:", roomId);
+            failureCallback(new Error("No calendar data returned from server"));
+            return;
+          }
+
 
           // Check for "Successfully got calendar room" message
           if (data.Message === "Successfully got calendar room" && data.Data) {

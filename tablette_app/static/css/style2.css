@@ -1,4 +1,11 @@
-/* Custom CSS for HiTech University Dashboard - New Layout */
+/* ═══════════════════════════════════════════════════════════════
+   HITECH UNIVERSITY DASHBOARD — MASTER STYLESHEET
+   ═══════════════════════════════════════════════════════════════ */
+
+
+/* ═══════════════════════════════════════════
+   1. FONT IMPORTS
+   ═══════════════════════════════════════════ */
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&amp;display=swap");
 @import url("https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800");
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700");
@@ -6,13 +13,21 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,500,700");
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,600,700");
 
+
+/* ═══════════════════════════════════════════
+   2. ROOT VARIABLES
+   ═══════════════════════════════════════════ */
 :root {
   --bs-body-font-family: Poppins, sans-serif;
   --bs-body-font-size: 0.875rem;
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
 }
-/* Global Styles */
+
+
+/* ═══════════════════════════════════════════
+   3. GLOBAL / BODY STYLES
+   ═══════════════════════════════════════════ */
 body {
   font-family:
     "Inter",
@@ -40,7 +55,66 @@ body {
   padding-left: 10px;
 }
 
-/* Full Width Header Styles */
+/* Focus outline reset */
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+  outline: none;
+}
+
+/* Border / spacing utilities */
+.border-bottom {
+  border-color: #e9ecef !important;
+}
+
+.pt-3 {
+  padding-top: 1rem !important;
+}
+
+.pb-2 {
+  padding-bottom: 0.5rem !important;
+}
+
+.mb-3 {
+  margin-bottom: 1rem !important;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   4. ANIMATIONS
+   ═══════════════════════════════════════════ */
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes highlight {
+    0% {
+        background-color: #fff3cd;
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+
+/* ═══════════════════════════════════════════
+   5. TOP HEADER
+   ═══════════════════════════════════════════ */
 .top-header {
   padding: 5px;
   position: sticky;
@@ -54,12 +128,23 @@ body {
   font-weight: 600;
 }
 
-/* Horizontal Navigation Styles */
+.top-header.sticky-top {
+  top: 0;
+}
+
+
+/* ═══════════════════════════════════════════
+   6. HORIZONTAL NAVIGATION
+   ═══════════════════════════════════════════ */
 .horizontal-nav {
   position: sticky;
   top: 0;
   z-index: 999;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.horizontal-nav.sticky-top {
+  top: 76px; /* Adjust based on header height */
 }
 
 .nav-link-horizontal {
@@ -96,12 +181,18 @@ body {
   color: white;
 }
 
-/* Main Content Area */
+
+/* ═══════════════════════════════════════════
+   7. MAIN CONTENT AREA
+   ═══════════════════════════════════════════ */
 .main-content {
   padding: 0 15px;
 }
 
-/* Search Bar Styles */
+
+/* ═══════════════════════════════════════════
+   8. SEARCH BAR (legacy input-group style)
+   ═══════════════════════════════════════════ */
 .input-group-text {
   background-color: #f8f9fa;
   border-color: #ced4da;
@@ -120,6 +211,10 @@ body {
   text-align: left;
 }
 
+
+/* ═══════════════════════════════════════════
+   9. FORM STYLES
+   ═══════════════════════════════════════════ */
 .form-control {
   padding-top: 1px;
   text-align: left;
@@ -132,7 +227,89 @@ body {
   box-shadow: 0 0 0 0.25rem rgba(77, 68, 181, 0.5);
 }
 
-/* Card Styles */
+.form-label {
+  font-weight: 500;
+  color: #4d44b5;
+  margin-bottom: 5px;
+}
+
+.form-select {
+  border-color: #ced4da;
+  padding: 8px 12px;
+}
+
+.form-select:focus {
+  border-color: #4d44b5;
+  box-shadow: 0 0 0 0.25rem rgba(77, 68, 181, 0.5);
+}
+
+.form2 {
+  border-color: #dddddd;
+  height: 30px;
+}
+
+.btn-outline-secondary,
+.form-control,
+.input-group-text {
+  border: solid 1.5px;
+  border-color: #dddddd;
+  background-color: transparent;
+}
+
+.btn-outline-secondary:focus {
+  background-color: #4d44b5;
+  color: white;
+  border: none;
+}
+
+
+/* ═══════════════════════════════════════════
+   10. BUTTON STYLES (legacy / general)
+   ═══════════════════════════════════════════ */
+.btn-success {
+  background-color: #3d3690;
+  border: none;
+  padding: 8px 20px;
+  font-weight: 500;
+}
+
+.btn-success:hover {
+  background-color: #4d44b5;
+}
+
+td > .btn {
+  height: 35px;
+  width: 120px;
+  display: inline-block;
+  padding: 5px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+  margin-right: 8px;
+}
+
+td > .btn-present {
+  height: 45px;
+  width: 140px;
+  background-color: #5a47cf; /* Purple */
+}
+
+td > .btn-note {
+  background-color: rgb(38, 185, 177); /* Teal */
+}
+
+td > .btn:hover {
+  opacity: 0.9;
+}
+
+
+/* ═══════════════════════════════════════════
+   11. CARD STYLES (generic)
+   ═══════════════════════════════════════════ */
 .card {
   height: fit-content;
   order: 1;
@@ -163,36 +340,10 @@ body {
   color: black;
 }
 
-/* Form Styles */
-.form-label {
-  font-weight: 500;
-  color: #4d44b5;
-  margin-bottom: 5px;
-}
 
-.form-select {
-  border-color: #ced4da;
-  padding: 8px 12px;
-}
-
-.form-select:focus {
-  border-color: #4d44b5;
-  box-shadow: 0 0 0 0.25rem rgba(77, 68, 181, 0.5);
-}
-
-/* Button Styles */
-.btn-success {
-  background-color: #28a745;
-  border-color: #28a745;
-  padding: 8px 20px;
-  font-weight: 500;
-}
-
-.btn-success:hover {
-  background-color: #4d44b5;
-}
-
-/* Table Styles */
+/* ═══════════════════════════════════════════
+   12. GENERIC TABLE STYLES (legacy)
+   ═══════════════════════════════════════════ */
 .table {
   margin-bottom: 0;
 }
@@ -205,6 +356,7 @@ body {
   text-align: center;
   padding: 15px 12px;
 }
+
 .table #action {
   text-align: center;
 }
@@ -218,6 +370,7 @@ body {
   padding: 15px 12px;
   vertical-align: middle;
 }
+
 td > span {
   text-align: right;
 }
@@ -226,7 +379,10 @@ td > span {
   background-color: #f8f9fa;
 }
 
-/* Attendance Radio Buttons */
+
+/* ═══════════════════════════════════════════
+   13. ATTENDANCE RADIO BUTTONS (legacy)
+   ═══════════════════════════════════════════ */
 .attendance-radio {
   width: 20px;
   height: 20px;
@@ -248,7 +404,10 @@ td > span {
   border-color: #6c757d;
 }
 
-/* Calendar Styles */
+
+/* ═══════════════════════════════════════════
+   14. CALENDAR STYLES
+   ═══════════════════════════════════════════ */
 .calendar-day-header {
   font-weight: 600;
   color: #6c757d;
@@ -279,7 +438,10 @@ td > span {
   color: #adb5bd !important;
 }
 
-/* Summary Cards with full background colors */
+
+/* ═══════════════════════════════════════════
+   15. SUMMARY CARDS (full-background version)
+   ═══════════════════════════════════════════ */
 .summary-card-purple {
   background-color: #5a47cf; /* Purple */
   border: none;
@@ -309,7 +471,6 @@ td > span {
   background-color: rgba(255, 255, 255, 0.466); /* Light transparent circle */
 }
 
-/* Make text inside cards bold and readable */
 .summary-card-purple h3,
 .summary-card-green h3,
 .summary-card-yellow h3 {
@@ -325,264 +486,14 @@ td > span {
   color: white;
   opacity: 0.9;
 }
-/* Profile Image */
-.rounded-circle {
-  object-fit: cover;
-}
 
-/* Responsive Design */
-@media (max-width: 992px) {
-  .horizontal-nav .d-flex {
-    flex-wrap: wrap;
-  }
 
-  .nav-link-horizontal {
-    margin-bottom: 5px;
-    padding: 10px 15px;
-    font-size: 14px;
-  }
-
-  .nav-link-horizontal i {
-    margin-right: 6px;
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 768px) {
-  body {
-    font-size: 90%;
-  }
-
-  .top-header {
-    font-size: 85%;
-    padding-top: 25px;
-    padding-bottom: 25px;
-  }
-
-  .top-header .d-flex {
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .top-header h1 {
-    text-align: center;
-
-    font-size: 1.2rem;
-  }
-  .d-flex {
-    height: 40px;
-    font-size: 15px;
-  }
-
-  .top-header .d-flex:last-child {
-    justify-content: center;
-  }
-
-  .input-group {
-    width: 50% !important;
-  }
-
-  .horizontal-nav .d-flex {
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .nav-link-horizontal {
-    margin: 2px;
-    padding: 8px 12px;
-    font-size: 13px;
-  }
-
-  .calendar-day {
-    font-size: 12px;
-    padding: 6px 2px;
-  }
-
-  .summary-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-  }
-
-  .summary-card-green,
-  .summary-card-yellow,
-  .summary-card-red {
-    height: 50px;
-  }
-
-  .summary-card-yellow h3,
-  .summary-card-green h3,
-  .summary-card-red h3 {
-    padding-top: 5px;
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .top-header h1 {
-    font-size: 1rem;
-  }
-  .btn {
-    height: 30px;
-    width: 100% auto;
-    justify-content: center;
-    font-size: 75%;
-  }
-  .search-ar {
-    display: none;
-    height: 30px;
-    width: 100% auto;
-    justify-content: center;
-    font-size: 75%;
-  }
-  .nav-link-horizontal {
-    padding: 6px 10px;
-    font-size: 12px;
-    margin: 1px;
-  }
-
-  .nav-link-horizontal i {
-    margin-right: 4px;
-    font-size: 12px;
-  }
-
-  .main-content {
-    padding: 0 10px;
-  }
-
-  .card-body {
-    width: 80%;
-    padding: 15px;
-  }
-
-  .table-responsive {
-    font-size: 14px;
-  }
-
-  .calendar {
-    order: 2; /* calendar below */
-  }
-}
-
-/* Focus States */
-.btn:focus,
-.form-control:focus,
-.form-select:focus {
-  outline: none;
-}
-
-/* Border and Shadow Utilities */
-.border-bottom {
-  border-color: #e9ecef !important;
-}
-
-/* Additional Spacing */
-.pt-3 {
-  padding-top: 1rem !important;
-}
-
-.pb-2 {
-  padding-bottom: 0.5rem !important;
-}
-
-.mb-3 {
-  margin-bottom: 1rem !important;
-}
-
-.mb-4 {
-  margin-bottom: 1.5rem !important;
-}
-
-/* Sticky Header Adjustments */
-.top-header.sticky-top {
-  top: 0;
-}
-
-.horizontal-nav.sticky-top {
-  top: 76px; /* Adjust based on header height */
-}
-
-.btn-success {
-  background-color: #3d3690;
-  border: none;
-}
-
-.btn-outline-secondary,
-.form-control,
-.input-group-text {
-  border: solid 1.5px;
-  border-color: #dddddd;
-  background-color: transparent;
-}
-
-.btn-outline-secondary:focus {
-  background-color: #4d44b5;
-  color: white;
-  border: none;
-}
-
-.form2 {
-  border-color: #dddddd;
-  height: 30px;
-}
-
-.status {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: bold;
-  color: white;
-  text-align: center;
-}
-
-.status-present {
-  background-color: #28a745; /* Green */
-}
-
-.status-absent {
-  background-color: #ff5c5c; /* Red */
-}
-
-td > .btn {
-  height: 35px;
-  width: 120px;
-  display: inline-block;
-  padding: 5px;
-  border: none;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: white;
-  cursor: pointer;
-  text-decoration: none;
-  margin-right: 8px;
-}
-
-td > .btn-present {
-  height: 45px;
-  width: 140px;
-  background-color: #5a47cf; /* Purple */
-}
-
-td > .btn-note {
-  height: 45px;
-  width: 140px;
-  background-color: rgb(38, 185, 177); /* Teal */
-}
-
-td > .btn:hover {
-  opacity: 0.9;
-}
-
-.note-na {
-  font-size: 12px;
-  text-align: center;
-  color: #999;
-  font-style: italic;
-}
-
-/* Smaller Summary Cards - Responsive */
+/* ═══════════════════════════════════════════
+   16. SUMMARY CARDS (compact / responsive grid version)
+   NOTE: These class names overlap with section 15 above and
+   override some of those properties later in cascade order —
+   left exactly as originally authored.
+   ═══════════════════════════════════════════ */
 .summary-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -633,25 +544,1311 @@ td > .btn:hover {
   opacity: 0.9;
 }
 
-/* Mobile optimization */
-@media (max-width: 576px) {
-  .summary-cards {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  }
-  .summary-icon {
-    width: 35px;
-    height: 35px;
-    font-size: 16px;
-  }
-  .summary-cards h3 {
-    font-size: 1.2rem;
-  }
-  .summary-cards p {
-    font-size: 0.8rem;
-  }
+
+/* ═══════════════════════════════════════════
+   17. PROFILE IMAGE
+   ═══════════════════════════════════════════ */
+.rounded-circle {
+  object-fit: cover;
+}
+
+
+/* ═══════════════════════════════════════════
+   18. LEGACY STATUS / NOTE HELPERS
+   ═══════════════════════════════════════════ */
+.status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+}
+
+/* NOTE: .status-present / .status-absent are redefined again in
+   section 21 (pill-badge version) further down — later rule wins
+   in the cascade. Left exactly as originally authored. */
+.status-present {
+  background-color: #28a745; /* Green */
+}
+
+.status-absent {
+  background-color: #ff5c5c; /* Red */
+}
+
+.note-na {
+  font-size: 12px;
+  text-align: center;
+  color: #999;
+  font-style: italic;
 }
 
 .buttonss {
   text-align: center;
   horizontal: center;
+}
+
+
+/* ═══════════════════════════════════════════
+   19. GLOBAL MODAL FONT FIX (Poppins)
+   ═══════════════════════════════════════════ */
+.modal,
+.modal *:not(i):not(svg):not(.bi):not(.fa):not(.fas):not(.far):not(.fab):not(.fa-solid):not(.fa-regular):not(.svg-inline--fa) {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   20. MAIN ATTENDANCE CARD
+   ═══════════════════════════════════════════ */
+.attendance-card {
+    border: none !important;
+    border-radius: 16px !important;
+    box-shadow: 0 2px 16px rgba(77, 68, 181, 0.08);
+    overflow: hidden;
+}
+
+.attendance-header {
+    background: linear-gradient(135deg, rgb(77, 68, 181) 0%, rgb(90, 71, 207) 100%);
+    padding: 18px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none !important;
+}
+
+.header-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+}
+
+.attendance-header .card-title {
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.3px;
+    margin: 0;
+}
+
+.header-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+}
+
+
+/* ═══════════════════════════════════════════
+   21. CONNECTION BADGE
+   ═══════════════════════════════════════════ */
+.connection-badge {
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.connection-badge.connected {
+    background-color: rgba(255, 255, 255, 0.25);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.connection-badge.disconnected {
+    background-color: rgba(220, 38, 38, 0.25);
+    color: white;
+    border: 1px solid rgba(220, 38, 38, 0.4);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+}
+
+.connected .status-dot {
+    background-color: #4ade80;
+}
+
+.disconnected .status-dot {
+    background-color: #f87171;
+}
+
+
+/* ═══════════════════════════════════════════
+   22. SESSION INFO PILLS
+   ═══════════════════════════════════════════ */
+.session-info-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.info-pill {
+    background: #f8f7ff;
+    border: 1px solid #e8e6f8;
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-pill-icon {
+    width: 34px;
+    height: 34px;
+    background: rgb(77, 68, 181);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+.info-pill-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: rgb(160, 152, 174);
+}
+
+.info-pill-value {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgb(48, 39, 99);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* ═══════════════════════════════════════════
+   23. SEARCH BAR (attendance card)
+   ═══════════════════════════════════════════ */
+.search-wrapper {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgb(160, 152, 174);
+    font-size: 14px;
+    z-index: 1;
+}
+
+.search-input {
+    padding-left: 38px !important;
+    border-radius: 10px !important;
+    border: 1.5px solid #e8e6f8 !important;
+    height: 42px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgb(48, 39, 99);
+    transition: border-color 0.2s;
+}
+
+.search-input:focus {
+    border-color: rgb(77, 68, 181) !important;
+    box-shadow: 0 0 0 3px rgba(77, 68, 181, 0.1) !important;
+    outline: none;
+}
+
+
+/* ═══════════════════════════════════════════
+   24. ATTENDANCE TABLE
+   ═══════════════════════════════════════════ */
+#attendanceTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#attendanceTable thead tr {
+    background: #f4f3fc;
+}
+
+#attendanceTable th {
+    padding: 12px 16px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgb(77, 68, 181);
+    border-bottom: 2px solid #e8e6f8;
+}
+
+#attendanceTable td {
+    padding: 14px 16px;
+    text-align: center;
+    border-bottom: 1px solid #f0effe;
+    color: rgb(80, 75, 120);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+#attendanceTable tbody tr:hover {
+    background-color: #faf9ff;
+}
+
+#attendanceTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* ═══════════════════════════════════════════
+   25. STATUS BADGES (pill version — attendance table)
+   ═══════════════════════════════════════════ */
+.status-present {
+    background-color: #e8f8f0;
+    color: #1a7a4a;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+    display: inline-block;
+}
+
+.status-absent {
+    background-color: #fff0f0;
+    color: #c0392b;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    display: inline-block;
+}
+
+
+/* ═══════════════════════════════════════════
+   26. ACTION BUTTONS (attendance row)
+   ═══════════════════════════════════════════ */
+.attendance-toggle-btn.btn-success {
+    background-color: #5A4FCF !important;
+    border-color: #5A4FCF !important;
+    color: white !important;
+    font-weight: 500;
+    font-size: 13px;
+    padding: 7px 16px;
+    border-radius: 8px;
+    height: auto;
+}
+
+.attendance-toggle-btn.btn-danger {
+    background-color: #e74c3c !important;
+    border-color: #e74c3c !important;
+    color: white !important;
+    font-weight: 500;
+    font-size: 13px;
+    padding: 7px 16px;
+    border-radius: 8px;
+    height: auto;
+}
+
+.attendance-toggle-btn.btn-danger:hover {
+    background-color: #c0392b !important;
+    border-color: #c0392b !important;
+}
+
+.btn-note {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: white;
+    font-weight: 500;
+    font-size: 13px;
+    border-radius: 8px;
+}
+
+.attendance-toggle-btn,
+.btn-note,
+.btn-payment {
+    width: 108px !important;
+    min-width: 0 !important;
+    white-space: nowrap;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 12px !important;
+}
+
+td.buttonss {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+}
+
+
+/* ═══════════════════════════════════════════
+   27. NOTE CONTENT (attendance table cell)
+   ═══════════════════════════════════════════ */
+.note-content {
+    color: rgb(137, 135, 159);
+    font-style: italic;
+    font-size: 13px;
+}
+
+
+/* ═══════════════════════════════════════════
+   28. LOADING INDICATOR
+   ═══════════════════════════════════════════ */
+.loading {
+    text-align: center;
+    padding: 20px;
+    color: #6c757d;
+}
+
+
+/* ═══════════════════════════════════════════
+   29. ROW HIGHLIGHT (real-time updates)
+   ═══════════════════════════════════════════ */
+#attendanceBody tr {
+    transition: background-color 0.3s ease;
+}
+
+#attendanceBody tr.updated {
+    background-color: #fff3cd;
+    animation: highlight 2s ease-out;
+}
+
+
+/* ═══════════════════════════════════════════
+   30. DISABLED BUTTON STATES
+   ═══════════════════════════════════════════ */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* ═══════════════════════════════════════════
+   31. TOAST
+   ═══════════════════════════════════════════ */
+.toast-container {
+    z-index: 1050;
+}
+
+
+/* ═══════════════════════════════════════════
+   32. PAGINATION
+   ═══════════════════════════════════════════ */
+.pagination-container {
+    background-color: #f8f7ff;
+    border-radius: 8px;
+    padding: 15px;
+    border: 1px solid #e8e6f8;
+    margin-top: 20px;
+}
+
+.pagination-custom {
+    gap: 5px;
+    justify-content: center;
+}
+
+.pagination-custom .page-item .page-link {
+    border: 1px solid #3D3690;
+    color: #3D3690;
+    background-color: white;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    min-width: 45px;
+    text-align: center;
+}
+
+.pagination-custom .page-item .page-link:hover {
+    background-color: #3D3690;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(61, 54, 144, 0.2);
+}
+
+.pagination-custom .page-item.active .page-link {
+    background-color: #3D3690;
+    border-color: #3D3690;
+    color: white;
+    box-shadow: 0 2px 4px rgba(61, 54, 144, 0.3);
+}
+
+.pagination-custom .page-item.disabled .page-link {
+    color: rgb(137, 135, 159);
+    background-color: #f8f7ff;
+    border-color: #e8e6f8;
+    cursor: not-allowed;
+}
+
+.pagination-custom .page-item.disabled .page-link:hover {
+    background-color: #f8f7ff;
+    color: rgb(137, 135, 159);
+    transform: none;
+    box-shadow: none;
+}
+
+
+/* ═══════════════════════════════════════════
+   33. SELECT2 OVERRIDES (global)
+   ═══════════════════════════════════════════ */
+.select2-container .select2-selection--single {
+    height: 40px !important;
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+}
+
+.select2-container--default .select2-results__group {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.select2-container--default .select2-results__option {
+    padding-left: 20px;
+}
+
+.select2-container {
+    width: 100% !important;
+}
+
+
+/* ═══════════════════════════════════════════
+   34. MODAL "RECHERCHE" SECTION (generic box wrapper)
+   ═══════════════════════════════════════════ */
+.recherche {
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #edf3f8;
+}
+
+.recherche>label {
+    color: rgb(160, 152, 174);
+}
+
+
+/* ═══════════════════════════════════════════
+   35. CUSTOM CHECKBOX
+   ═══════════════════════════════════════════ */
+.custom-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.custom-checkbox label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+    color: rgb(160, 152, 174);
+}
+
+.custom-checkbox .box {
+    display: inline-block;
+    width: 19px;
+    height: 19px;
+    background-color: transparent;
+    border: 1px solid #c4c3c3;
+    border-radius: 4px;
+    margin-right: 8px;
+    position: relative;
+}
+
+.custom-checkbox input[type="checkbox"]:checked+label .box {
+    background-color: #673ab7;
+    border-color: #673ab7;
+}
+
+.custom-checkbox input[type="checkbox"]:checked+label .box::after {
+    content: "✔";
+    color: white;
+    font-size: 16px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+/* ═══════════════════════════════════════════
+   36. PAYMENT MODAL
+   ═══════════════════════════════════════════ */
+.payment-modal-content {
+    border: none !important;
+    border-radius: 16px !important;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(77, 68, 181, 0.18);
+}
+
+.payment-modal-header {
+    background: linear-gradient(135deg, rgb(77, 68, 181) 0%, rgb(90, 71, 207) 100%);
+    padding: 18px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none !important;
+}
+
+.payment-modal-header .header-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+}
+
+.payment-modal-header .modal-title {
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.3px;
+}
+
+.payment-modal-header .header-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+}
+
+/* Info pills */
+.payment-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.payment-info-grid .info-pill {
+    background: #f8f7ff;
+    border: 1px solid #e8e6f8;
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.payment-info-grid .info-pill-icon {
+    width: 34px;
+    height: 34px;
+    background: rgb(77, 68, 181);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+.payment-info-grid .info-pill-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: rgb(160, 152, 174);
+}
+
+.payment-info-grid .info-pill-value {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgb(48, 39, 99);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Table */
+.payment-table-wrapper {
+    border: 1px solid #e8e6f8;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+#paymentTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0;
+}
+
+#paymentTable thead tr {
+    background: #f4f3fc;
+}
+
+#paymentTable th {
+    padding: 12px 14px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgb(77, 68, 181);
+    border-bottom: 2px solid #e8e6f8;
+    white-space: nowrap;
+}
+
+#paymentTable td {
+    padding: 12px 14px;
+    text-align: center;
+    border-bottom: 1px solid #f0effe;
+    color: rgb(80, 75, 120);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+#paymentTable tbody tr:hover {
+    background-color: #faf9ff;
+}
+
+#paymentTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Payment status badges */
+.payment-status-paid {
+    background-color: #e8f8f0;
+    color: #1a7a4a;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    display: inline-block;
+}
+
+.payment-status-pending {
+    background-color: #fff8e6;
+    color: #b8860b;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    display: inline-block;
+}
+
+.payment-status-unpaid,
+.payment-status-failed {
+    background-color: #fff0f0;
+    color: #c0392b;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    display: inline-block;
+}
+
+/* Loading state */
+.payment-loading {
+    text-align: center;
+    padding: 30px 20px;
+    color: rgb(137, 135, 159);
+}
+
+.payment-loading .spinner-border {
+    color: rgb(77, 68, 181);
+    width: 2.2rem;
+    height: 2.2rem;
+}
+
+/* Empty state */
+.payment-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: rgb(160, 152, 174);
+}
+
+.payment-empty i {
+    font-size: 32px;
+    color: rgb(200, 195, 225);
+    display: block;
+    margin-bottom: 10px;
+}
+
+.payment-empty p {
+    font-style: italic;
+    font-size: 14px;
+}
+
+/* Footer */
+.payment-modal-footer {
+    border-top: 1px solid #f0effe;
+    padding: 14px 24px;
+}
+
+.payment-close-btn {
+    background-color: rgb(251, 125, 91) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 8px;
+    padding: 9px 20px;
+    transition: background-color 0.15s;
+}
+
+.payment-close-btn:hover {
+    background-color: rgb(230, 105, 72) !important;
+    color: white;
+}
+
+
+/* ═══════════════════════════════════════════
+   37. ADD NOTE MODAL
+   ═══════════════════════════════════════════ */
+.note-modal-content {
+    border: none !important;
+    border-radius: 16px !important;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(77, 68, 181, 0.18);
+}
+
+.note-modal-header {
+    background: linear-gradient(135deg, rgb(77, 68, 181) 0%, rgb(90, 71, 207) 100%);
+    padding: 18px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none !important;
+}
+
+.note-modal-header .header-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+}
+
+.note-modal-header .modal-title {
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.3px;
+}
+
+.note-modal-header .header-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+}
+
+.note-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: rgb(160, 152, 174);
+    margin-bottom: 8px;
+}
+
+.note-textarea {
+    border-radius: 10px !important;
+    border: 1.5px solid #e8e6f8 !important;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgb(48, 39, 99);
+    padding: 12px 14px;
+    resize: vertical;
+    transition: border-color 0.2s;
+}
+
+.note-textarea::placeholder {
+    color: rgb(190, 185, 210);
+    font-weight: 400;
+}
+
+.note-textarea:focus {
+    border-color: rgb(77, 68, 181) !important;
+    box-shadow: 0 0 0 3px rgba(77, 68, 181, 0.1) !important;
+    outline: none;
+}
+
+.note-modal-footer {
+    border-top: 1px solid #f0effe;
+    padding: 14px 24px;
+    gap: 10px;
+}
+
+.note-close-btn {
+    background-color: rgb(251, 125, 91) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 8px;
+    padding: 9px 20px;
+    transition: background-color 0.15s;
+}
+
+.note-close-btn:hover {
+    background-color: rgb(230, 105, 72) !important;
+    color: white;
+}
+
+.note-save-btn {
+    background-color: rgb(77, 68, 181) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 8px;
+    padding: 9px 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.15s;
+}
+
+.note-save-btn:hover {
+    background-color: rgb(65, 57, 155) !important;
+    color: white;
+}
+
+
+/* ═══════════════════════════════════════════
+   38. ADD STUDENT MODAL
+   ═══════════════════════════════════════════ */
+.student-modal-content {
+    border: none !important;
+    border-radius: 16px !important;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(77, 68, 181, 0.18);
+}
+
+.student-modal-header {
+    background: linear-gradient(135deg, rgb(77, 68, 181) 0%, rgb(90, 71, 207) 100%);
+    padding: 18px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none !important;
+}
+
+.student-modal-header .header-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+}
+
+.student-modal-header .modal-title {
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.3px;
+}
+
+.student-modal-header .header-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+}
+
+/* Polish existing .recherche sections without altering structure */
+#model-add-student .recherche {
+    background-color: #f8f7ff;
+    border: 1px solid #e8e6f8;
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+
+#model-add-student .recherche .form-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: rgb(160, 152, 174);
+    margin-bottom: 8px;
+}
+
+#model-add-student > .modal-dialog > .modal-content > .modal-body > label.form-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: rgb(160, 152, 174);
+}
+
+/* Polish checkbox label text color to match theme */
+#model-add-student .custom-checkbox label {
+    color: rgb(80, 75, 120);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+#model-add-student .current-group {
+    background-color: #f8f7ff;
+    border: 1px solid #e8e6f8;
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+
+.student-modal-footer {
+    border-top: 1px solid #f0effe;
+    padding: 14px 24px;
+    gap: 10px;
+}
+
+.student-close-btn {
+    background-color: rgb(251, 125, 91) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 8px;
+    padding: 9px 20px;
+    transition: background-color 0.15s;
+}
+
+.student-close-btn:hover {
+    background-color: rgb(230, 105, 72) !important;
+    color: white;
+}
+
+.student-save-btn {
+    background-color: rgb(77, 68, 181) !important;
+    border: none !important;
+    color: white !important;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 8px;
+    padding: 9px 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.15s;
+}
+
+.student-save-btn:hover {
+    background-color: rgb(65, 57, 155) !important;
+    color: white;
+}
+
+/* Give "Join user to this group?" section the same boxed background,
+   without touching any HTML structure — targets only the direct
+   children of the modal-body (not the ones nested inside .recherche
+   or .current-group) */
+#model-add-student .modal-body > label.form-label {
+    display: block;
+    background-color: #f8f7ff;
+    border: 1px solid #e8e6f8;
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+    padding: 14px 16px 6px 16px;
+    margin-bottom: 0;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: rgb(160, 152, 174);
+}
+
+#model-add-student .modal-body > div.custom-checkbox {
+    background-color: #f8f7ff;
+    border: 1px solid #e8e6f8;
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    padding: 6px 16px 14px 16px;
+    margin-top: 0;
+}
+
+/* Hide the <br> that sits between the label and the checkbox so the
+   two boxed halves sit flush together (br stays in the DOM, JS/logic
+   untouched — this only affects rendering) */
+#model-add-student .form-label + br {
+    display: none;
+}
+
+/* Match Select2 dropdowns to the theme's purple accent (Add Student modal only) */
+#model-add-student .select2-container--default .select2-selection--single {
+    border: 1.5px solid #e8e6f8 !important;
+    border-radius: 8px !important;
+}
+
+#model-add-student .select2-container--default.select2-container--open .select2-selection--single {
+    border-color: rgb(77, 68, 181) !important;
+    box-shadow: 0 0 0 3px rgba(77, 68, 181, 0.1) !important;
+}
+
+#model-add-student .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 40px;
+}
+
+#model-add-student .select2-dropdown {
+    border-color: rgb(77, 68, 181) !important;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#model-add-student .select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: rgb(77, 68, 181) !important;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   39. RESPONSIVE / MEDIA QUERIES
+   (all breakpoints grouped together at the end, in the same
+   order they originally appeared)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ---- ≤ 992px ---- */
+@media (max-width: 992px) {
+  .horizontal-nav .d-flex {
+    flex-wrap: wrap;
+  }
+
+  .nav-link-horizontal {
+    margin-bottom: 5px;
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+
+  .nav-link-horizontal i {
+    margin-right: 6px;
+    font-size: 14px;
+  }
+}
+
+/* ---- ≤ 768px ---- */
+@media (max-width: 768px) {
+  body {
+    font-size: 90%;
+  }
+
+  .top-header {
+    font-size: 85%;
+    padding-top: 25px;
+    padding-bottom: 25px;
+  }
+
+  .top-header .d-flex {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .top-header h1 {
+    text-align: center;
+    font-size: 1.2rem;
+  }
+
+  .d-flex {
+    height: 40px;
+    font-size: 15px;
+  }
+
+  .top-header .d-flex:last-child {
+    justify-content: center;
+  }
+
+  .input-group {
+    width: 50% !important;
+  }
+
+  .horizontal-nav .d-flex {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .nav-link-horizontal {
+    margin: 2px;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .calendar-day {
+    font-size: 12px;
+    padding: 6px 2px;
+  }
+
+  .summary-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .summary-card-green,
+  .summary-card-yellow,
+  .summary-card-red {
+    height: 50px;
+  }
+
+  .summary-card-yellow h3,
+  .summary-card-green h3,
+  .summary-card-red h3 {
+    padding-top: 5px;
+    font-size: 1rem;
+  }
+
+  /* Attendance / pagination (from later block, same breakpoint) */
+  .session-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pagination-custom .page-item .page-link {
+    padding: 8px 12px;
+    min-width: 40px;
+    font-size: 14px;
+  }
+}
+
+/* ---- ≤ 576px ---- */
+@media (max-width: 576px) {
+  .top-header h1 {
+    font-size: 1rem;
+  }
+
+  .btn {
+    height: 30px;
+    width: 100% auto;
+    justify-content: center;
+    font-size: 75%;
+  }
+
+  .search-ar {
+    display: none;
+    height: 30px;
+    width: 100% auto;
+    justify-content: center;
+    font-size: 75%;
+  }
+
+  .nav-link-horizontal {
+    padding: 6px 10px;
+    font-size: 12px;
+    margin: 1px;
+  }
+
+  .nav-link-horizontal i {
+    margin-right: 4px;
+    font-size: 12px;
+  }
+
+  .main-content {
+    padding: 0 10px;
+  }
+
+  .card-body {
+    width: 80%;
+    padding: 15px;
+  }
+
+  .table-responsive {
+    font-size: 14px;
+  }
+
+  .calendar {
+    order: 2; /* calendar below */
+  }
+
+  /* Summary cards (compact grid version) */
+  .summary-cards {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+
+  .summary-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+
+  .summary-cards h3 {
+    font-size: 1.2rem;
+  }
+
+  .summary-cards p {
+    font-size: 0.8rem;
+  }
+
+  /* Attendance card / pagination */
+  .session-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pagination-custom .page-item .page-link {
+    padding: 6px 10px;
+    min-width: 35px;
+    font-size: 13px;
+  }
+
+  .pagination-custom {
+    gap: 3px;
+  }
+
+  /* Payment modal */
+  .payment-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Row highlight for unpaid students */
+.payment-row-unpaid {
+    background-color: #FFEAEA !important;
+}
+
+.payment-row-unpaid:hover {
+    background-color: #FFD9D9 !important;
+}
+
+.payment-row-unpaid td {
+    color: #A32020;
+}
+
+/* Neutral badge for "Not Registered" — was previously wrongly
+   defaulting to the red unpaid badge style */
+.payment-status-not-registered {
+    background-color: #F1F0F5;
+    color: rgb(137, 135, 159);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    display: inline-block;
+}
+
+/* Unpaid highlight — main attendance table */
+#attendanceTable tbody tr.payment-row-unpaid {
+    background-color: #FFEAEA !important;
+}
+
+#attendanceTable tbody tr.payment-row-unpaid:hover {
+    background-color: #FFD9D9 !important;
+}
+
+#attendanceTable tbody tr.payment-row-unpaid td {
+    color: #A32020;
 }

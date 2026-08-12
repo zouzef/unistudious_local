@@ -1,28 +1,28 @@
 from xmlrpc.client import FastParser
-
 from flask import Blueprint, jsonify, request
 from datetime import datetime,timedelta
 import sys
 import os
+import json
+import jwt
+import random
+import string
+import requests
 
-# Add parent directories to path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from util.audit import log_audit
+from datetime import datetime, timedelta
 
 from config import Config
 from core.database import Database
 from core.middleware import token_required
-import random
-import string
-import requests
-import json
-import jwt
-from util.audit import log_audit
-from datetime import datetime, timedelta
+
+
+# Add parent directories to path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 
 # Create blueprint
 calendar_bp = Blueprint('calendar', __name__, url_prefix='/scl')
-
 
 # ========================================
 # ENDPOINT 1: Delete calendar interval
@@ -459,7 +459,7 @@ def _combine_date_time(base_dt_str, new_date):
     same time-of-day as base_dt_str. Used to shift start_time/end_time onto
     each recurrence date while preserving the hour/minute the user picked.
     """
-    base_dt = datetime.strptime(base_dt_str, '%Y-%m-%d %H:%M:%S')
+    base_dt = parse_flexible_datetime(base_dt_str)
     return datetime.combine(new_date, base_dt.time()).strftime('%Y-%m-%d %H:%M:%S')
 
 def _build_occurrence_dates(start_dt, duplicate_type, end_date):
@@ -721,6 +721,14 @@ def _create_single_calendar_row(
         "attendance_created": attendance_created
     }
 
+def parse_flexible_datetime(dt_str):
+	for fmt in ('%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M'):
+		try:
+			return datetime.strptime(dt_str, fmt)
+		except ValueError:
+			continue
+	raise ValueError(f"time data '{dt_str}' does not match expected formats")
+
 @calendar_bp.route('/create_calender', methods=['POST'])
 def create_calander():
     try:
@@ -779,7 +787,7 @@ def create_calander():
         duplicate_type = (data.get('duplicate') or 'none').strip().lower()
         end_date_str = data.get('endDate')
 
-        start_dt = datetime.strptime(start_time_str, '%Y-%m-%d %H:%M:%S')
+        start_dt = parse_flexible_datetime(start_time_str)
 
         if duplicate_type in ('daily', 'weekly', 'biweekly'):
             if not end_date_str:
@@ -923,9 +931,9 @@ def check_room_id(room_id):
 @calendar_bp.route('/get-calendar-room/<int:room_id>', methods=['GET'])
 def get_calendar_room(room_id):
     try:
-        print(room_id)
         # Validate room exists first
         if not check_room_id(room_id):
+
             return jsonify({"Message": "Room not found"}), 404
 
         query = """
@@ -935,7 +943,7 @@ def get_calendar_room(room_id):
             LEFT JOIN user u ON r.teacher_id = u.id
             WHERE r.room_id = %s
               AND r.enabled = 1
-              AND s.enabled = 1 AND s.status = 1
+              AND s.enabled = 1 
         """
         values = (room_id,)
         result = Database.execute_query(query, values)

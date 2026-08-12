@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 # ───────────────────────────────────────────── Create API  ─────────────────────────────────────────────
 def _send_create_student_api(db, settings, new_data, account_id):
+    image_fp = None
     try:
         token = get_token()
         headers = {"Authorization": f"Bearer {token}"}
@@ -51,8 +52,28 @@ def _send_create_student_api(db, settings, new_data, account_id):
         for i, session_id in enumerate(session_ids):
             payload.append((f"sessions[{i}]", session_id))
 
-        logger.debug("POST %s | payload: %s", url, payload)
-        response = requests.post(url, data=payload, headers=headers, verify=False, timeout=10)
+        # ── Attach image if present ──
+        files = {}
+        img_link = new_data.get("img_link")
+        local_user_id = new_data.get("id")
+
+        if img_link and local_user_id:
+            uploads_path = "../server_local_api/uploads/user_img"  # sync_data_local_server -> server_local_api
+            local_path = os.path.join(uploads_path, f"user_{local_user_id}", img_link)
+
+            logger.debug("Resolved student image path: %s | exists: %s", local_path, os.path.exists(local_path))
+            if os.path.exists(local_path):
+                mime_type, _ = mimetypes.guess_type(local_path)
+                image_fp = open(local_path, "rb")
+                files["image"] = (os.path.basename(local_path), image_fp, mime_type or "application/octet-stream")
+            else:
+                logger.warning("Student image not found on disk: %s", local_path)
+
+        logger.debug("POST %s | payload: %s | files: %s", url, payload, list(files.keys()))
+        response = requests.post(
+            url, data=payload, files=files if files else None,
+            headers=headers, verify=False, timeout=10
+        )
 
         if response.status_code == 200:
             try:
@@ -68,6 +89,9 @@ def _send_create_student_api(db, settings, new_data, account_id):
     except Exception as e:
         logger.exception("Remote API error in create student: %s", e)
         return False, None
+    finally:
+        if image_fp:
+            image_fp.close()
 
 def _send_create_manager_api(settings, new_data):
     try:

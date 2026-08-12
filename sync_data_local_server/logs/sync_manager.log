@@ -717,3 +717,52 @@ NameError: name 'NOne' is not defined
 2026-08-07 09:07:26 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
 2026-08-07 09:07:49 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
 2026-08-07 09:08:05 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-10 11:29:50 [ERROR] sync.pushers.virtuel_pusher - Bad request response: {"message":"Name and Phone are required."}
+2026-08-10 11:29:50 [ERROR] sync.data_pusher - virtual_user_audit audit #1 failed — will retry next cycle
+2026-08-10 11:30:51 [ERROR] sync.pushers.virtuel_pusher - Bad request response: {"message":"Name and Phone are required."}
+2026-08-10 11:30:51 [ERROR] sync.data_pusher - virtual_user_audit audit #1 failed — will retry next cycle
+2026-08-10 11:41:17 [ERROR] sync.pushers.virtuel_pusher - Bad request response: {"message":"Name and Phone are required."}
+2026-08-10 11:41:17 [ERROR] sync.data_pusher - virtual_user_audit audit #1 failed — will retry next cycle
+2026-08-10 11:42:19 [ERROR] sync.pushers.virtuel_pusher - Bad request response: {"message":"Name and Phone are required."}
+2026-08-10 11:42:19 [ERROR] sync.data_pusher - virtual_user_audit audit #1 failed — will retry next cycle
+2026-08-10 11:43:28 [ERROR] sync.pushers.virtuel_pusher - Bad request response: {"message":"Name and Phone are required."}
+2026-08-10 11:43:28 [ERROR] sync.data_pusher - virtual_user_audit audit #1 failed — will retry next cycle
+2026-08-10 11:44:30 [ERROR] sync.pushers.virtuel_pusher - Bad request response: {"message":"Name and Phone are required."}
+2026-08-10 11:44:30 [ERROR] sync.data_pusher - virtual_user_audit audit #1 failed — will retry next cycle
+2026-08-10 11:45:40 [ERROR] sync.pushers.user_pusher - Create student failed 400: {"message":"Username or email already exists."}
+2026-08-10 11:45:40 [ERROR] sync.data_pusher - user_audit audit #2 failed — will retry next cycle
+2026-08-10 11:45:41 [ERROR] sync.pushers.virtuel_pusher - Bad request response: {"message":"Name and Phone are required."}
+2026-08-10 11:45:41 [ERROR] sync.data_pusher - virtual_user_audit audit #1 failed — will retry next cycle
+2026-08-10 11:45:41 [ERROR] sync.pushers.virtuel_pusher - Bad request response: {"message":"Name and Phone are required."}
+2026-08-10 11:45:41 [ERROR] sync.data_pusher - virtual_user_audit audit #2 failed — will retry next cycle
+2026-08-10 12:10:59 [ERROR] sync.pushers.user_pusher - Create student failed 400: {"message":"Username or email already exists."}
+2026-08-10 12:10:59 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-10 12:10:59 [ERROR] sync.pushers.virtuel_pusher - Bad request response: {"message":"Name and Phone are required."}
+2026-08-10 12:10:59 [ERROR] sync.data_pusher - virtual_user_audit audit #1 failed — will retry next cycle
+2026-08-10 12:45:41 [ERROR] sync.pushers.user_pusher - Create student failed 400: {"message":"Username or email already exists."}
+2026-08-10 12:45:41 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-10 12:46:43 [ERROR] sync.pushers.user_pusher - Create student failed 400: {"message":"Username or email already exists."}
+2026-08-10 12:46:43 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-10 12:53:57 [ERROR] sync.pushers.user_pusher - Create student failed 400: {"message":"Username or email already exists."}
+2026-08-10 12:53:57 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-10 13:05:56 [ERROR] sync.pushers.user_pusher - Create student failed 400: {"message":"Username or email already exists."}
+2026-08-10 13:05:56 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-10 13:06:57 [ERROR] sync.pushers.user_pusher - Create student failed 400: {"message":"Username or email already exists."}
+2026-08-10 13:06:57 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-10 13:07:59 [ERROR] sync.pushers.user_pusher - Create student failed 400: {"message":"Username or email already exists."}
+2026-08-10 13:07:59 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-10 13:09:00 [ERROR] sync.pushers.user_pusher - Create student failed 400: {"message":"Username or email already exists."}
+2026-08-10 13:09:00 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-10 13:10:02 [ERROR] sync.pushers.user_pusher - Create student failed 400: {"message":"Username or email already exists."}
+2026-08-10 13:10:02 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-10 13:11:03 [ERROR] sync.pushers.user_pusher - Create student failed 400: {"message":"Username or email already exists."}
+2026-08-10 13:11:03 [ERROR] sync.data_pusher - user_audit audit #1 failed — will retry next cycle
+2026-08-10 13:49:30 [ERROR] sync.pushers.user_pusher - Create student failed 400: {"message":"Username or email already exists."}
+2026-08-10 13:49:30 [ERROR] sync.data_pusher - user_audit audit #2 failed — will retry next cycle
+2026-08-10 13:51:27 [ERROR] sync.data_pusher - user_audit audit #2 failed — will retry next cycle
+2026-08-10 13:51:51 [ERROR] sync.data_pusher - user_audit audit #2 failed — will retry next cycle
+2026-08-10 13:52:52 [ERROR] sync.data_pusher - user_audit audit #2 failed — will retry next cycle
+2026-08-10 13:53:30 [ERROR] sync.pushers.user_pusher - Create student failed 400: {"message":"Username or email already exists."}
+2026-08-10 13:53:30 [ERROR] sync.data_pusher - user_audit audit #2 failed — will retry next cycle
+2026-08-10 13:54:32 [ERROR] sync.pushers.user_pusher - Create student failed 400: {"message":"Username or email already exists."}
+2026-08-10 13:54:32 [ERROR] sync.data_pusher - user_audit audit #2 failed — will retry next cycle
