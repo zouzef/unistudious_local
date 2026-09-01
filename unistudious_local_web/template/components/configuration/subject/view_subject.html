@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (selectedOption && selectedOption.dataset.isOther === 'true') {
             divOther.style.display = 'block';
             inputOther.required    = true;
-            inputOther.value       = accountSubject.other_subject ?? '';
+            inputOther.value       = accountSubject.section_name ?? '';
         }
 
         // Pre-fill status

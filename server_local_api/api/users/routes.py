@@ -12,13 +12,6 @@ from flask import Blueprint, request, jsonify
 import uuid
 import random
 import string
-
-# from server_local_api.api.calendar.test import result
-
-# Add parent directories to path
-import uuid as uuid_lib
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from config import Config
 from core.database import Database
 from core.middleware import token_required
@@ -26,6 +19,11 @@ from core.checks import *
 from core.association_service import associate_virtual_user as accociate_virtual_user_service
 from datetime import datetime
 from util.audit import log_audit
+import uuid as uuid_lib
+
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
 
 # ========================================
 # GROUP/USER MANAGEMENT ENDPOINTS
@@ -112,8 +110,20 @@ def create_manager(account_id):
 		location = data.get("location")
 		phone_number = data.get("phone_number")
 
+		existing_user = Database.execute_query(
+			"SELECT id FROM user WHERE email = %s OR username = %s",
+			[email, username],
+			fetch=True
+		)
+
+		if existing_user:
+			return jsonify({
+				"Message": "A user with this email or username already exists"
+			}), 400
+
 		# roles can arrive either as a single field "roles" or repeated "roles[]"
 		roles = request.form.getlist("roles[]")
+
 		if not roles:
 			single_role = data.get("roles")
 			if single_role:
@@ -599,6 +609,17 @@ def create_teacher(account_id):
 		location = data.get("location")
 		phone_number = data.get("phone_number")
 
+		existing_user = Database.execute_query(
+			"SELECT id FROM user WHERE email = %s OR username = %s",
+			[email, username],
+			fetch=True
+		)
+
+		if existing_user:
+			return jsonify({
+				"Message": "A user with this email or username already exists"
+			}), 400
+
 		allowed_permission_access = request.form.getlist("allowedPermissionAccess[]")
 		allowed_access_session = request.form.getlist("allowedAccessSession[]")
 
@@ -710,6 +731,7 @@ def create_teacher(account_id):
 		# ------------------ Audit ------------------
 		audit_payload = {
 			**user_data,
+			"id": result,
 			"allowedPermissionAccess": allowed_permission_access,
 			"allowedAccessSession": allowed_access_session,
 			"relation_teacher_account_id": relation_result,
@@ -1256,6 +1278,17 @@ def create_student(account_id):
 		location = data.get("location")
 		phone_number = data.get("phone_number")
 
+		existing_user = Database.execute_query(
+			"SELECT id FROM user WHERE email = %s OR username = %s",
+			[email, username],
+			fetch=True
+		)
+
+		if existing_user:
+			return jsonify({
+				"Message": "A user with this email or username already exists"
+			}), 400
+
 		# ── Insert user WITHOUT image first (need the id for the folder) ──
 		user_data = {
 			"account_id": account_id,
@@ -1570,3 +1603,49 @@ def get_user_registration():
 		return jsonify({
 			"Message": f"Error: {e} coming from server"
 		}), 500
+
+
+@users_bp.route('/get_history_attendance/<int:session_id>/<int:user_id>', methods=['GET'])
+def get_user_attendance_history(session_id: int, user_id: int):
+	try:
+		if not(session_exists(session_id)):
+			return jsonify({
+				"Message": "There is no session with this id"
+			}),400
+
+		if not(user_exists(user_id)):
+			return jsonify({
+				"Message": "There is no user with this id"
+			}),400
+
+		query = """
+			SELECT 
+				rcg.id,
+				rcg.start_time,
+				rcg.end_time,
+				rcg.title,
+				rcg.type,
+				teacher.full_name AS teacher_name,
+				a.is_present
+			FROM relation_calander_group_session rcg
+			JOIN attendance a 
+				ON a.calander_id = rcg.id
+			JOIN session s 
+				ON s.id = a.session_id
+			JOIN user teacher 
+				ON teacher.id = rcg.teacher_id
+
+			WHERE 
+				a.user_id = %s
+				AND a.session_id = %s
+				AND a.enabled = 1
+				AND rcg.enabled = 1
+				AND teacher.enabled = 1
+				AND s.enabled = 1
+				AND s.status = 1
+				AND rcg.start_time < NOW();
+		"""
+		result = Database.execute_query(query,(user_id,session_id),fetch=True)
+		return jsonify(result),200
+	except Exception as e:
+		return jsonify({"Message": f"Error: {e} coming from server"}),500

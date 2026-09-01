@@ -2,7 +2,7 @@ import requests
 from flask import current_app
 
 
-
+# -------------------------- account services --------------------------
 def get_account_level_service(account_id):
 	try:
 		url = f"{current_app.config['BASE_URL']}get_account_level/{account_id}"
@@ -25,7 +25,7 @@ def delete_account_level_service(account_id,account_level_id):
 	try:
 		url = f"{current_app.config['BASE_URL']}delete_account_level/{account_id}/{account_level_id}"
 		response = requests.post(url,verify=False,timeout=10)
-		return response.status_code==200,response.status_code
+		return response.status_code==200,response
 	except Exception as e:
 		return False,None
 
@@ -56,7 +56,7 @@ def get_level_service():
 		return False,None
 
 
-
+# -------------------------- Account section --------------------------
 def get_account_section_service(account_id):
 	try:
 		url = f"{current_app.config['BASE_URL']}get_account_section/{account_id}"
@@ -109,7 +109,7 @@ def get_section_config_service():
 		return False,None
 
 
-
+# -------------------------- Account Subject Service --------------------------
 def get_account_subject_service(account_id):
 	try:
 		url = f"{current_app.config['BASE_URL']}get_account_subject/{account_id}"
@@ -161,49 +161,12 @@ def view_account_subject_service(account_subject_id):
 		return False,None
 
 
-
-def get_all_foramtion_service(account_id):
-	try:
-		url = f"{current_app.config['BASE_URL']}get-formation-info/{account_id}"
-		response = requests.get(url,verify=False,timeout=10)
-		return response.status_code==200,response
-	except Exception as e:
-		return False,None
-
-def delete_formation_service(formation_id,account_id):
-	try:
-		url =f"{current_app.config['BASE_URL']}delete_formation/{formation_id}/{account_id}"
-		response = requests.post(url,verify=False,timeout=10)
-		return response.status_code == 200,response
-	except Exception as e:
-		return False,None
-
-def view_formation_service(formation_id):
-	try:
-		url = f"{current_app.config['BASE_URL']}view_formation/{formation_id}"
-		response = requests.get(url,verify=False,timeout=10)
-		return response.status_code == 200,response
-	except Exception as e:
-		return False,None
-
-def update_formation_service(formation_id,data):
-	try:
-		url=f"{current_app.config['BASE_URL']}update_formation/{formation_id}"
-		response = requests.post(url,json=data,verify=False,timeout=10)
-		return response.status_code == 200,response
-	except Exception as e:
-		return False,None
-
-def create_formation_service(account_id, data):
-	try:
-		url = f"{current_app.config['BASE_URL']}create_formation/{account_id}"
-		response = requests.post(url, json=data, verify=False, timeout=10)
-		return response.status_code == 200, response
-	except Exception as e:
-		return False, None
+# -------------------------- Formation Service --------------------------
 
 
 
+
+# -------------------------- Tag Service --------------------------
 def get_all_tag_service():
 	try:
 		url = f"{current_app.config['BASE_URL']}get_all_tag"
@@ -256,7 +219,7 @@ def create_account_tag_service(account_id, data):
 		return False,None
 
 
-
+# -------------------------- Completion tag Service --------------------------
 def get_all_completion_tag_serice(account_id):
 	try:
 		url = f"{current_app.config['BASE_URL']}get_all_completion_tag/{account_id}"
@@ -299,7 +262,7 @@ def delete_completion_tag_service(completionTagId):
 		return False,None
 
 
-# =================================================== DOOR SERVICES ===================================================
+# -------------------------- Door Service --------------------------
 def get_all_door_service():
 	try:
 		url = f"{current_app.config['BASE_URL']}get_all_door"
@@ -315,6 +278,7 @@ def create_door_service(data):
 		return response.status_code == 200, response
 	except Exception as e:
 		return False,None
+
 def delete_door_service(door_id):
 	try:
 		url = f"{current_app.config['BASE_URL']}delete_door/{door_id}"

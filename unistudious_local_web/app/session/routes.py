@@ -123,8 +123,6 @@ def update_session(session_id):
         if not data_session:
             return jsonify({"Message": "No data received"}), 400
 
-        print(f"📋 Received data: {data_session}")
-
         status, response = update_session_service(data_session, session_id)
 
         if status:
@@ -242,7 +240,6 @@ def delete_user_session(user_id, session_id):
 def get_assigned_session_user(user_id):
     try:
         data = request.get_json()
-
         if not data or 'is_virtual' not in data:
             return jsonify({"Message": "is_virtual is required"}), 400
 
@@ -280,3 +277,4 @@ def assign_user_session(user_id: int):
         return jsonify({
             "Message": f"Error: {e} coming from backend"
         }), 500
+

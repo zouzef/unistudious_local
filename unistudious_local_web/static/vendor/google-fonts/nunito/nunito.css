@@ -1,0 +1,18 @@
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: url(/static/vendor/google-fonts/nunito/0a8376c189633658cfe207973b3cdb04.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 600;
+  src: url(/static/vendor/google-fonts/nunito/b98140b27ba681590bdbb1a0fa2a2544.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: url(/static/vendor/google-fonts/nunito/f641eab0bea63ac271537cd793f91d28.ttf) format('truetype');
+}

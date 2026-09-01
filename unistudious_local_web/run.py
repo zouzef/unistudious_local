@@ -13,7 +13,7 @@ if __name__ == "__main__":
         app,
         host=Config.HOST,
         port=Config.PORT,
-        debug = False,
+        debug = True,
         ssl_context=(Config.CERTFILE, Config.KEYFILE),
         allow_unsafe_werkzeug=True,
         use_reloader=True

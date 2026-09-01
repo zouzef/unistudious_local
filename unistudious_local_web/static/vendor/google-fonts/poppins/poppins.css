@@ -1,0 +1,36 @@
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 300;
+  src: url(/static/vendor/google-fonts/poppins/58db27ac9aad95f7866692940b1bacc0.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  src: url(/static/vendor/google-fonts/poppins/4a50d3a4bce9d0db7a5f1aac858ec222.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  src: url(/static/vendor/google-fonts/poppins/8f3acbe6e2f863e2d75278b80a17ae7c.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  src: url(/static/vendor/google-fonts/poppins/6f2bf9d18b9ddd3713b63e34d5115a6b.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 700;
+  src: url(/static/vendor/google-fonts/poppins/d157c1931cddf44ac211cbafacba0c11.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 800;
+  src: url(/static/vendor/google-fonts/poppins/eba200722c3909dc6ca25688978ecd26.ttf) format('truetype');
+}

@@ -24,11 +24,6 @@ from app.configuration.service import (
 	create_subject_config_service,
 	update_subject_config_service,
 	view_account_subject_service,
-	get_all_foramtion_service,
-	delete_formation_service,
-	view_formation_service,
-	update_formation_service,
-	create_formation_service,
 	get_all_tag_service,
 	get_all_subject_config_service,
 	delete_account_tag_service,
@@ -63,7 +58,7 @@ def get_account_level(account_id):
 	except Exception as e:
 		return jsonify({
 			"Message":f"Error: {e} coming from backend"
-		})
+		}),500
 
 
 @configuration_bp.route('/api/create_account_config/<int:account_id>', methods=['POST'])
@@ -71,7 +66,7 @@ def create_account_config(account_id):
 	try:
 		data = request.get_json()
 		status, response = create_account_level_service(data, account_id)
-		return jsonify(response.json()), status  # 👈 use .json() and return status directly
+		return jsonify(response.json()), status
 	except Exception as e:
 		print(e)
 		return jsonify({
@@ -83,8 +78,11 @@ def create_account_config(account_id):
 def delete_account_level(account_id,account_level_id):
 	try:
 		status,response = delete_account_level_service(account_id,account_level_id)
+		if response is None:
+			return jsonify({"Message": "Error: could not reach remote server"}), 502
 		return jsonify(response.json()),response.status_code
 	except Exception as e:
+		print(e)
 		return jsonify({
 			"Message":f"Error: {e} coming from backend "
 		}),500
@@ -97,7 +95,7 @@ def view_account_config(account_level_id):
 	except Exception as e:
 		return jsonify({
 			"Message":f"Error: {e} coming from backend"
-		})
+		}),500
 
 @configuration_bp.route('/api/update_account_config/<int:account_level_id>',methods=['POST'])
 def update_account_config(account_level_id):
@@ -200,7 +198,7 @@ def get_section_config():
 	except Exception as e:
 		return jsonify({
 			"Message":f"Error: {e} coming from backend"
-		})
+		}),500
 
 
 # =============================================== ACCOUNT SUBJECT CONFIG ENDPOINTS ===============================================
@@ -255,25 +253,27 @@ def create_account_subject(account_id):
 	except Exception as e:
 		return jsonify({
 			"Message":f"Error: {e} coming from the backend "
-		})
+		}),500
 
 @configuration_bp.route('/api/update_account_subject/<int:account_subject_id>', methods=['POST'])
 def update_subject(account_subject_id):
-    try:
-        data          = request.get_json()
-        subject_id    = data.get('subjectId')      # ← fix key
-        status        = data.get('status') or 1
-        description   = data.get('description') or None
-        other_subject = data.get('otherSubject') or None
+	try:
+		data          = request.get_json()
+		subject_id    = data.get('subjectId')      # ← fix key
+		status        = data.get('status') or 1
+		description   = data.get('description') or None
+		other_subject = data.get('otherSubject') or None
 
-        if not subject_id:
-            return jsonify({"Message": "Missing subject_id"}), 400
+		if not subject_id:
+			return jsonify({"Message": "Missing subject_id"}), 400
 
-        status, response = update_subject_config_service(data, account_subject_id)
-        return jsonify(response.json()), response.status_code
+		status, response = update_subject_config_service(data, account_subject_id)
+		return jsonify(response.json()), response.status_code
 
-    except Exception as e:
-        return jsonify({"Message": f"Error: {e} coming from backend"}), 500
+	except Exception as e:
+		return jsonify({
+			"Message": f"Error: {e} coming from backend"
+		}), 500
 
 @configuration_bp.route('/api/view_account_subject/<int:account_subject_id>',methods=['GET'])
 def view_subject_config(account_subject_id):
@@ -283,119 +283,9 @@ def view_subject_config(account_subject_id):
 	except Exception as e:
 		return jsonify({
 			"Message":f"Error: {e} coming from backend"
-		})
-
-
-# =============================================== FORMATION ENDPOINTS ===============================================
-@configuration_bp.route('/api/get_all_formation/<int:account_id>',methods=['GET'])
-def get_all_formation(account_id):
-	try:
-		status,response = get_all_foramtion_service(account_id)
-		if status:
-			return jsonify(response.json()),response.status_code
-		else:
-			return jsonify({
-				"Message":"There is no data"
-			}),400
-	except Exception as e:
-		return jsonify({
-			"Message":f"Error: {e} coming from backend"
 		}),500
 
-@configuration_bp.route('/api/delete_formation/<int:account_id>/<int:formation_id>',methods=['POST'])
-def delete_formation(account_id,formation_id):
-	try:
-		status,response = delete_formation_service(formation_id,account_id)
-		if status:
-			return jsonify(response.json()),response.status_code
-		else:
-			return jsonify({"Message":"Error in deleting formation"}),400
-	except Exception as e:
-		return jsonify({
-			"Message":f"Error: {e} coming from backend"
-		}),500
 
-@configuration_bp.route('/api/view_formation/<int:formation_id>',methods=['GET'])
-def view_formation(formation_id):
-	try:
-		status,response = view_formation_service(formation_id)
-		if status:
-			return jsonify(response.json()),response.status_code
-		else:
-			return jsonify({
-				"Message":"There is no data for this fomation"
-			}),500
-
-	except Exception as e:
-		return jsonify({
-			"Message":f"Error: {e} coming from backend"
-		})
-
-@configuration_bp.route('/api/update_formation/<int:formation_id>',methods=['POST'])
-def update_session(formation_id):
-	try:
-		data = request.get_json()
-
-		status,response=update_formation_service(formation_id,data)
-		if status:
-			return jsonify(response.json()),response.status_code
-		else:
-			return jsonify({
-				"Message":f"Error in updating formation"
-			}),400
-	except Exception as e:
-		return jsonify({
-			"Message":f"Error: {e} coming from backend"
-		}),500
-
-@configuration_bp.route('/api/create_formation/<int:account_id>', methods=['POST'])
-def create_formation(account_id):
-	try:
-		img_link = None
-		file = request.files.get('formation_logoFile')
-
-		if file and file.filename != '':
-			filename  = secure_filename(file.filename)
-			# Add timestamp to avoid duplicate filenames
-			unique_filename = f"{int(time.time())}_{filename}"
-			save_path = os.path.join(current_app.root_path, '..', 'static', 'assets', 'images', 'formations', unique_filename)
-			os.makedirs(os.path.dirname(save_path), exist_ok=True)
-			file.save(save_path)
-			img_link = f'/static/assets/images/formations/{unique_filename}'
-
-		# ── 2. Collect form fields ──────────────────────────────────
-		payload = {
-            'name':                                    request.form.get('formation[name]'),
-            'status':                                  request.form.get('formation[status]'),
-            'accountLevel':                            request.form.get('formation[accountLevel]'),
-            'accountSection':                          request.form.get('formation[accountSection]'),
-            'typeDate':                                request.form.get('formation[typeDate]'),
-            'otherTypeDate':                           request.form.get('formation[otherTypeDate]'),
-            'numberDayDuration':                       request.form.get('formation[numberDayDuration]'),
-            'numberSession':                           request.form.get('formation[numberSession]'),
-            'typeSession':                             request.form.get('formation[typeSession]'),
-            'otherTypeSession':                        request.form.get('formation[otherTypeSession]'),
-            'conditionOfPassage':                      request.form.get('formation[conditionOfPassage]'),
-            'conditionOfPassageFormule':               request.form.get('formation[conditionOfPassageFormule]'),
-            'conditionOfPassageFormuleByNote':         request.form.get('formation[conditionOfPassageFormuleByNote]'),
-            'conditionOfPassageFormuleByPresent':      request.form.get('formation[conditionOfPassageFormuleByPresent]'),
-            'conditionOfPassageFormuleByNotePresent':  request.form.get('formation[conditionOfPassageFormuleByNotePresent]'),
-            'publicResource':                          request.form.get('formation[publicResource]'),
-            'description':                             request.form.get('formation[description]'),
-            'imgLink':                                 img_link,
-		}
-
-		# ── 3. Forward to local server ──────────────────────────────
-		status, response = create_formation_service(account_id, payload)
-
-		if status:
-			return jsonify(response.json()), response.status_code
-		else:
-			return jsonify({"Message": "Error creating formation"}), 400
-
-	except Exception as e:
-		print(f"error: {e}")
-		return jsonify({"Message": f"Error: {e} coming from backend"}), 500
 
 # =============================================== TAG ENDPOINTS ===============================================
 @configuration_bp.route('/api/get_tag_config',methods=['GET'])
@@ -461,24 +351,24 @@ def view_account_tag(account_tag_id):
 
 @configuration_bp.route('/api/update_account_tag/<int:account_tag_id>', methods=['POST'])
 def api_update_account_tag(account_tag_id):
-    try:
-        if not account_tag_id:
-            return jsonify({"Message": "Account tag ID is required"}), 400
+	try:
+		if not account_tag_id:
+			return jsonify({"Message": "Account tag ID is required"}), 400
 
-        data = request.get_json()
+		data = request.get_json()
 
-        status, response = update_account_tag_service(account_tag_id, data)
-        if status:
-            return jsonify(response.json()), response.status_code
-        else:
-            return jsonify({
-                "Message": "Error in updating account tag"
-            }), 400
+		status, response = update_account_tag_service(account_tag_id, data)
+		if status:
+			return jsonify(response.json()), response.status_code
+		else:
+			return jsonify({
+				"Message": "Error in updating account tag"
+			}), 400
 
-    except Exception as e:
-        return jsonify({
-            "Message": f"Error: {e} coming from backend"
-        }), 500
+	except Exception as e:
+		return jsonify({
+			"Message": f"Error: {e} coming from backend"
+		}), 500
 
 @configuration_bp.route('/api/create_account_tag/<int:account_id>', methods=['POST'])
 def create_account_tag(account_id):
@@ -564,7 +454,9 @@ def view_completion_tag(completion_tag_id):
 @configuration_bp.route('/api/create_completion_tag/<int:account_id>', methods=['POST'])
 def create_completion_tag(account_id):
 	try:
-		data = request.get_json()
+		data = request.get_json(force=True)
+
+
 		status,response = create_completion_tag_service(account_id,data)
 		if status:
 			return jsonify(response.json()),response.status_code
@@ -573,6 +465,7 @@ def create_completion_tag(account_id):
 				"Message":f"Error in creating completion_tag"
 			}),400
 	except Exception as e:
+		print(e)
 		return jsonify({
 			"Message":f"Error: {e} coming from server"
 		}),500
@@ -641,7 +534,7 @@ def delete_door(door_id):
 	try:
 		status,response = delete_door_service(door_id)
 		if status:
-			return jsonify(response.json(), response.status_code)
+			return jsonify(response.json()), response.status_code
 		else:
 			return jsonify({
 				"Message":"Error in deliting door"

@@ -13,7 +13,7 @@ from app.slc.service import(
 	fetch_room_service,
 	view_tablet_service,
 	delete_camera_service,
-
+	get_local_info_service
 
 )
 
@@ -186,4 +186,16 @@ def get_room():
 			"Message":f"Error: {e} coming from backend"
 		}),500
 
+
+# ================================================ Local backend endpoints ================================================
+@slc_bp.route('/api/get_local_detail/<int:account_id>', methods=['GET'])
+def get_local_detail(account_id):
+	try:
+		status,response = get_local_info_service(account_id)
+		if status:
+			return jsonify(response.json()), response.status_code
+		else:
+			return jsonify({"data": []}),response.status_code
+	except Exception as e:
+		return jsonify({"Message": f"Error: {e} coming from backend"}), 500
 

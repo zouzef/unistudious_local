@@ -1,0 +1,21 @@
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: normal;
+  src: url(/static/vendor/google-fonts/open-sans/657cede4cf988c80d9ea7f2565d5738e.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-stretch: normal;
+  src: url(/static/vendor/google-fonts/open-sans/dedc77dc9255692b28f6d50d67cc53bd.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: normal;
+  src: url(/static/vendor/google-fonts/open-sans/b87a223553cf8e895f25e1fa6af70cff.ttf) format('truetype');
+}

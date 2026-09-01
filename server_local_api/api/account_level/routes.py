@@ -47,14 +47,16 @@ def log_audit(action_type, old_data=None, new_data=None):
 
 
 # ─── ENDPOINT 1: Get account levels ───────────────────────────────────────────
-
 @account_level_bp.route('/get_account_level/<int:account_id>', methods=['GET'])
 def get_account_level(account_id):
     try:
         query = """
             SELECT DISTINCT
                 a.*,
-                COALESCE(a.other_level, lc.name) AS level_name
+                CASE
+                    WHEN lc.name = 'Other' THEN a.other_level
+                    ELSE COALESCE(NULLIF(a.other_level, ''), lc.name)
+                END AS level_name
             FROM account_level a
             LEFT JOIN level_config lc ON a.level_config_id = lc.id
             WHERE a.account_id = %s
@@ -70,20 +72,22 @@ def get_account_level(account_id):
 
 
 # ─── ENDPOINT 2: Create account_level ─────────────────────────────────────────
-
 @account_level_bp.route('/create_account_level/<int:account_id>', methods=['POST'])
 def create_account_level(account_id):
     try:
         data = request.get_json()
-
+        print(data)
+        other = data.get('other_level') or None
         insert_query = """
-            INSERT INTO account_level (account_id, level_config_id, description, enabled, created_at, timestamp, slc_edit)
-            VALUES (%s, %s, %s, 1, NOW(), NOW(), 1)
+            INSERT INTO account_level (account_id, level_config_id, other_level , description, enabled, created_at, timestamp, slc_edit)
+            VALUES (%s, %s, %s, %s, 1, NOW(), NOW(), 1)
         """
         values = (
             data.get('account_id'),
             data.get('level_config_id'),
-            data.get('description') or None
+            other,
+            data.get('description') or None,
+
         )
         response = Database.execute_query(insert_query, values, fetch=False)
 
@@ -110,7 +114,6 @@ def create_account_level(account_id):
 
 
 # ─── ENDPOINT 3: Delete account_level (soft delete) ───────────────────────────
-
 @account_level_bp.route('/delete_account_level/<int:account_id>/<int:id_account_level>', methods=['POST'])
 def delete_account_level(account_id, id_account_level):
     try:
@@ -144,7 +147,6 @@ def delete_account_level(account_id, id_account_level):
 
 
 # ─── ENDPOINT 4: View account_level ───────────────────────────────────────────
-
 @account_level_bp.route('/view_account_level/<int:account_level_id>')
 def view_account_level(account_level_id):
     try:
@@ -162,7 +164,6 @@ def view_account_level(account_level_id):
 
 
 # ─── ENDPOINT 5: Edit account_level ───────────────────────────────────────────
-
 @account_level_bp.route('/edit_account_level/<int:account_level_id>', methods=['POST'])
 def update_account_level(account_level_id):
     try:
@@ -221,7 +222,6 @@ def update_account_level(account_level_id):
 
 
 # ─── ENDPOINT 6: Get all levels ───────────────────────────────────────────────
-
 @account_level_bp.route('/get_all_level', methods=['GET'])
 def get_all_level():
     try:

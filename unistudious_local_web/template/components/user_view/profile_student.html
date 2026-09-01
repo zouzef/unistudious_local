@@ -1,0 +1,148 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card h-auto">
+                    <div class="card-header p-0">
+                        <div class="user-bg w-100">
+                            <div class="user-svg">
+                                <svg width="264" height="109" viewBox="0 0 264 109" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="0.0107422" y="0.6521" width="263.592" height="275.13" rx="20"
+                                          fill="#FCC43E"></rect>
+                                </svg>
+                            </div>
+                            <div class="user-svg-1">
+                                <svg width="264" height="59" viewBox="0 0 264 59" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <rect y="0.564056" width="263.592" height="275.13" rx="20" fill="#FB7D5B"></rect>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div class="user">
+                                <div class="user-media">
+                                    <img src="/static/assets/images/avatar/9.jpg" alt="" class="avatar avatar-xxl">
+                                </div>
+                                <div>
+                                    <h2 class="mb-0">Karen Hope</h2>
+                                    <p class="text-primary font-w600">Student</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-xl-3 col-xxl-6 col-sm-6">
+                                <ul class="student-details">
+                                    <li class="me-2">
+                                        <a class="icon-box bg-secondary">
+                                            <img src="/static/assets/images/profile.svg" alt="">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <span>Parents:</span>
+                                        <h5 class="mb-0"></h5>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-xl-3 col-xxl-6 col-sm-6">
+                                <ul class="student-details">
+                                    <li class="me-2">
+                                        <a class="icon-box bg-secondary">
+                                            <img src="/static/assets/images/svg/location.svg" alt="">
+                                        </a>
+                                    </li>
+                                    <li><span>Address:</span><h5 class="mb-0"></h5></li>
+                                </ul>
+                            </div>
+                            <div class="col-xl-3 col-xxl-6 col-sm-6">
+                                <ul class="student-details">
+                                    <li class="me-2">
+                                        <a class="icon-box bg-secondary">
+                                            <img src="/static/assets/images/svg/phone.svg" alt="">
+                                        </a>
+                                    </li>
+                                    <li><span>Phone:</span><h5 class="mb-0"></h5></li>
+                                </ul>
+                            </div>
+                            <div class="col-xl-3 col-xxl-6 col-sm-6">
+                                <ul class="student-details">
+                                    <li class="me-2">
+                                        <a class="icon-box bg-secondary">
+                                            <img src="/static/assets/images/svg/email.svg" alt="">
+                                        </a>
+                                    </li>
+                                    <li><span>Email:</span><h5 class="mb-0"></h5></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card h-auto">
+                    <div class="card-header border-0 p-3 d-flex justify-content-between align-items-center">
+                        <h4 class="heading mb-0">Payment History</h4>
+                        <select id="session-filter" class="form-control w-auto">
+                            <option value="">Select a session</option>
+                        </select>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive basic-tbl">
+                            <div id="example-payment_wrapper" class="dataTables_wrapper no-footer">
+                                <table id="example-payment" class="display dataTable no-footer" style="min-width: 845px"
+                                       aria-describedby="example-payment_info">
+                                    <thead>
+                                    <tr>
+                                        <th>Payment Number</th>
+                                        <th>Date &amp; Time</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- rows injected dynamically by profile_student.js -->
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card h-auto">
+                    <div class="card-header border-0 p-3 d-flex justify-content-between align-items-center">
+                        <h4 class="heading mb-0">Schedule Details</h4>
+                        <select id="schedule-session-filter" class="form-control w-auto">
+                            <option value="">Select a session</option>
+                        </select>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="example-Schedule" class="dataTables_wrapper no-footer">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-responsive-sm">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Calender Title</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                        <th>Teacher</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="example-schedule-body">
+                                    <!-- rows injected dynamically by profile_student.js -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.USER_ID = {{ user_id }};
+    window.ACCOUNT_ID = {{ session.get('account_id') }};
+</script>
+<script src="{{ url_for('static', filename='js/dashboard/profile_student.js')}}"></script>

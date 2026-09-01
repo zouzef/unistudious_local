@@ -1,0 +1,21 @@
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: normal;
+  src: url(/static/vendor/google-fonts/roboto/0143ff08dd82acf5464d232ed5680269.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-stretch: normal;
+  src: url(/static/vendor/google-fonts/roboto/edf23c18b578d20ff99d1b3b4b863389.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-stretch: normal;
+  src: url(/static/vendor/google-fonts/roboto/eca85dc72387ce19dd1f5e852cb6cb4b.ttf) format('truetype');
+}

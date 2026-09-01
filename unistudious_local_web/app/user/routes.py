@@ -14,7 +14,8 @@ from app.user.service import (
     get_student_with_session_service,
     associate_virtuel_user_service,
     get_all_real_user_service,
-    get_user_registration_service
+    get_user_registration_service,
+    get_history_attendance_service
 )
 
 user_bp = Blueprint('user', __name__)
@@ -169,3 +170,18 @@ def get_user_registration():
         return jsonify(response.json()), response.status_code
     except Exception as e:
         return jsonify({"Message": f"Error: {e} coming from backend"}), 500
+
+# ── GET student registration  ──────────────────────────────────────────────────────────
+@user_bp.route('/api/get-user-history/<int:session_id>/<int:user_id>')
+def get_history_attendance(session_id, user_id):
+    try:
+        status_ok, response = get_history_attendance_service(session_id, user_id)
+        print(response)
+        if status_ok:
+            return jsonify(response.json()), 200
+        else:
+            return jsonify({"Message": "Failed to fetch attendance history"}), 500
+
+    except Exception as e:
+        print(e)
+        return jsonify({"Message": f"Error: {e} coming from backend"}),500

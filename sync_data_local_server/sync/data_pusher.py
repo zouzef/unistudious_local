@@ -438,7 +438,7 @@ class DataPusher:
             if not group_rows:
                 logger.debug("No pending Group changes to push")
             else:
-                logger.info("Found %d pending Group chane(s)", len(group_rows))
+                logger.info("Found %d pending Group change(s)", len(group_rows))
                 self._process_audit_rows(
                     cursor,
                     conn,
@@ -450,6 +450,28 @@ class DataPusher:
                         "DELETE":    lambda row:    group_pusher.push_groupDelete(db, self.settings, row),
                         "AFFECT":    lambda row:    group_pusher.push_affect_user(db, self.settings, row),
                         "DISAFFECT": lambda row:    group_pusher.push_disaffect_user(db, self.settings, row)
+                    }
+                )
+
+            # --- Payment ---
+            cursor.execute("""
+                SELECT * 
+                 FROM payment_session_audit 
+                WHERE is_synced = 0
+                ORDER BY audit_id
+            """)
+
+            payment_rows = cursor.fetchall()
+            if not payment_rows:
+                logger.info("Found %s pending Payment change(s)",len(group_rows))
+                self._process_audit_rows(
+                    cursor,
+                    conn,
+                    "payment_session_audit",
+                    payment_rows,
+                    {
+                        "INSERT": lambda row: print("HII"),
+                        "UPDATE": lambda row: print("HIII"),
                     }
                 )
 

@@ -152,3 +152,17 @@ def fetch_room_service() -> tuple:
 	except Exception as e:
 		print(e)
 		return False,None
+
+
+
+# ====================================================== LOCAL service ======================================================
+def get_local_info_service(account_id):
+	url =f"{current_app.config['BASE_URL']}get_local_detail/{account_id}"
+	try:
+		response = requests.get(url, verify=False, timeout=10)
+		if response.status_code == 200:
+			return True, response
+		else:
+			return False, response
+	except Exception as e:
+		return False,None

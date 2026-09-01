@@ -56,6 +56,7 @@ def update_payment_session(payment_session):
 @payment_bp.route('/api/update_payment_session_user/<int:payment_id>/<int:session_id>/<int:user_id>',methods=['POST'])
 def update_payment_user(payment_id,session_id,user_id):
 	try:
+
 		data = request.get_json()
 		status,response = update_payment_user_service(payment_id,session_id,user_id,data)
 

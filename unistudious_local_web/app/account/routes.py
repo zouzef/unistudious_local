@@ -14,8 +14,6 @@ from app.account.services import (
 
 account_bp = Blueprint('account', __name__)
 
-
-
 # ── GET account data ──────────────────────────────────────────────────────────
 @account_bp.route('/api/get_account_data/<int:account_id>', methods=['GET'])
 def get_account_data(account_id):
@@ -31,7 +29,6 @@ def get_account_data(account_id):
         return jsonify({
             "Message":f"Error: {e} coming from server"
         }),500
-
 
 # ── GET account image ──────────────────────────────────────────────────────────
 @account_bp.route('/api/get_account_image/<int:account_id>', methods=['GET'])

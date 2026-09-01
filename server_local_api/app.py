@@ -104,6 +104,6 @@ if __name__ == '__main__':
 
         host=Config.SERVER_HOST,
         port=Config.SERVER_PORT,
-        debug=False,
+        debug=True,
         ssl_context=(Config.SSL_CERT, Config.SSL_KEY)
     )

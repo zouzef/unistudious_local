@@ -84,42 +84,17 @@
         const userId = document.getElementById("admin-form").dataset.userId;
         loadUserData(userId);
 
-        // ── Submit → POST JSON ─────────────────────────────────────
-        document.getElementById("admin-form").addEventListener("submit", async function (e) {
+        // ── Submit → blocked, online only ─────────────────────────────
+        document.getElementById("admin-form").addEventListener("submit", function (e) {
             e.preventDefault();
 
-            const userId = this.dataset.userId;
-
-            const payload = {
-                username:    document.getElementById("admin_username").value.trim(),
-                email:       document.getElementById("admin_email").value.trim(),
-                birth_place: document.getElementById("admin_birthPlace").value.trim(),
-                birth_date:  document.getElementById("admin_birthDate").value.trim(),
-                address:     document.getElementById("admin_Address").value.trim(),
-                full_name:   document.getElementById("admin_fullName").value.trim(),
-                phone:       document.getElementById("admin_phone").value.trim(),
-                grand:       document.getElementById("admin_grand").value,
-            };
-
-            try {
-                const response = await fetch(`/api/update-user/${userId}`, {
-                    method:  "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body:    JSON.stringify(payload),
-                });
-
-                const result = await response.json();
-
-                if (response.ok) {
-                    showToast("success", result.Message ?? "Profile updated successfully");
-                } else {
-                    showToast("error", result.Message ?? "Failed to update profile");
-                }
-
-            } catch (error) {
-                console.error("Update error:", error);
-                showToast("error", "An unexpected error occurred");
-            }
+            Swal.fire({
+                icon: "info",
+                title: "Action non disponible / Not available",
+                text: "La modification du profil ne peut être effectuée que sur la plateforme en ligne, pas en local. / Profile update can only be done on the online platform, not locally.",
+                confirmButtonColor: "#4c4b9e",
+                confirmButtonText: "OK"
+            });
         });
 
         // ── Image preview on file select ───────────────────────────

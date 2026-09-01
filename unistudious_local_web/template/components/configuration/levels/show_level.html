@@ -218,12 +218,12 @@
                 cancelButtonText: I18N.cancel
             }).then((result) => {
                 if (result.isConfirmed) {
-                    apiFetch(`/api/delete_account_config/${ACCOUNT_ID}/${account_level_id}`, {
+                    fetch(`/api/delete_account_config/${ACCOUNT_ID}/${account_level_id}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' }
                     })
                     .then(res => {
-                        if (!res) return null;
+                        if (!res.ok) throw new Error(`Server returned ${res.status}`);
                         return res.json();
                     })
                     .then(data => {

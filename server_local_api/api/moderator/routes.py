@@ -119,7 +119,6 @@ def auth_moderator():
         print(f"[AUTH] Unexpected error: {e}")
         return jsonify({"error": "Internal server error"}), 500
 
-
 # ============================================================
 # ENDPOINT 2: Moderator dashboard statistics
 # ← protected
@@ -154,7 +153,6 @@ def get_data_moderateur(account_id):
         print(f"[DASHBOARD] Error: {e}")
         return jsonify({'success': False, 'error': 'Internal server error'}), 500
 
-
 # ============================================================
 # ENDPOINT 3: Account data
 # ← protected
@@ -174,7 +172,6 @@ def get_account_data(account_id):
         return jsonify({"Message": "There is no data for this account_id"}), 404
     except Exception as e:
         return jsonify({"Message": f"Error: {e} coming from server"}), 500
-
 
 # ============================================================
 # ENDPOINT 4: Account image
@@ -208,7 +205,6 @@ def get_account_image(account_id):
 
     except Exception as e:
         return jsonify({"Message": f"Error: {e} coming from server"}), 500
-
 
 # ============================================================
 # ENDPOINT 5: Update account

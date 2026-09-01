@@ -1,5 +1,5 @@
 # app/__init__.py
-from flask import Flask
+from flask import Flask, redirect, url_for
 from flask_socketio import SocketIO
 from config import Config
 from app.utils import t, get_lang
@@ -26,6 +26,11 @@ def create_app():
 
 
     app.config.from_object(Config)
+
+    @app.route('/')
+    def index():
+        return redirect(url_for('auth.login_page'))
+
 
     socketio.init_app(app)
 

@@ -1,14 +1,13 @@
 <div class="content-body">
     <div class="container-fluid">
         <div class="row">
-            <div class="card-header">
-                <h4 class="card-title">{{ t('add_new_formation') }}</h4>
-            </div>
+
+
             <form id="formation-form" enctype="multipart/form-data">
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="mb-0">{{ t('formation_details') }}</h5>
+                            <h5 class="mb-0">Training Program Details</h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -31,11 +30,11 @@
                                                                accept=".png, .jpg, .jpeg">
                                                         <label for="formation_logoFile"
                                                                class="dlab-upload mb-0 btn btn-primary btn-sm">
-                                                            {{ t('choose_file') }}
+                                                            Choose File
                                                         </label>
                                                         <a href="javascript:void(0);"
                                                            class="btn btn-danger light remove-img ms-2 btn-sm"
-                                                           id="remove-img">{{ t('remove') }}</a>
+                                                           id="remove-img">Remove</a>
                                                     </div>
                                                     <hr class="mb-4 mt-4">
                                                 </div>
@@ -50,45 +49,31 @@
                                     <!-- Name -->
                                     <div class="mb-3">
                                         <label class="form-label text-primary d-block" for="formation_name">
-                                            {{ t('name') }} <code class="highlighter-rouge">*</code>
+                                            Name <code class="highlighter-rouge">*</code>
                                         </label>
                                         <input type="text" id="formation_name" name="formation[name]"
                                                required class="form-control">
                                     </div>
 
-                                    <!-- Status -->
-                                    <div class="mb-3">
-                                        <label class="form-label text-primary d-block" for="formation_status">
-                                            {{ t('status') }} <code class="highlighter-rouge">*</code>
-                                        </label>
-                                        <select id="formation_status" name="formation[status]"
-                                                class="form-control selectpicker">
-                                            <option value="1">{{ t('active') }}</option>
-                                            <option value="0">{{ t('inactive') }}</option>
-                                        </select>
-                                    </div>
-
-                                    <hr class="mb-4 mt-4">
-
                                     <!-- Level -->
                                     <div class="mb-3">
                                         <label class="form-label text-primary d-block" for="formation_accountLevel">
-                                            {{ t('level') }}
+                                            Education Level
                                         </label>
                                         <select id="formation_accountLevel" name="formation[accountLevel]"
                                                 class="form-control selectpicker" aria-label="Level">
-                                            <option value="">{{ t('choose_the_level') }}</option>
+                                            <option value="">Choose the level</option>
                                         </select>
                                     </div>
 
                                     <!-- Section -->
                                     <div class="mb-3">
                                         <label class="form-label text-primary d-block" for="formation_accountSection">
-                                            {{ t('section') }}
+                                            Education Section
                                         </label>
                                         <select id="formation_accountSection" name="formation[accountSection]"
                                                 class="form-control selectpicker" aria-label="Section">
-                                            <option value="">{{ t('choose_the_section') }}</option>
+                                            <option value="">Choose the section</option>
                                         </select>
                                     </div>
 
@@ -97,20 +82,20 @@
                                     <!-- Date and Session Analytics -->
                                     <div class="mb-3">
                                         <label class="form-label text-primary d-block" for="formation_typeDate">
-                                            {{ t('date_session_analytics') }} <code class="highlighter-rouge">*</code>
+                                            Training Duration Type <code class="highlighter-rouge">*</code>
                                         </label>
                                         <select id="formation_typeDate" name="formation[typeDate]"
                                                 required class="form-control selectpicker">
-                                            <option value="">{{ t('choice_date_session_analytics') }}</option>
-                                            <option value="total Duration">{{ t('total_duration_per_day') }}</option>
-                                            <option value="By Number Of Sessions">{{ t('number_sessions_per_hours') }}</option>
+                                            <option value="">Choose the duration type</option>
+                                            <option value="total Duration">Total Duration Per Day</option>
+                                            <option value="By Number Of Sessions">Number Of Sessions</option>
                                         </select>
                                     </div>
 
                                     <!-- Other Date (conditional) -->
                                     <div class="mb-3" id="div-other-title-date" style="display: none;">
                                         <label class="form-label text-primary d-block" for="formation_otherTypeDate">
-                                            {{ t('other_date_session_analytics') }} <code class="highlighter-rouge">*</code>
+                                            Custom Duration Type <code class="highlighter-rouge">*</code>
                                         </label>
                                         <input type="text" id="formation_otherTypeDate"
                                                name="formation[otherTypeDate]" class="form-control">
@@ -120,7 +105,7 @@
                                     <div class="mb-3" id="div-duration-day" style="display: none;">
                                         <label class="form-label text-primary d-block"
                                                for="formation_numberDayDuration">
-                                            {{ t('duration_by_number_days') }} <code class="highlighter-rouge">*</code>
+                                            Number of Training Days <code class="highlighter-rouge">*</code>
                                         </label>
                                         <input type="text" id="formation_numberDayDuration"
                                                name="formation[numberDayDuration]"
@@ -130,7 +115,7 @@
                                     <!-- Duration by Sessions (conditional) -->
                                     <div class="mb-3" id="div-duration-session" style="display: none;">
                                         <label class="form-label text-primary d-block" for="formation_numberSession">
-                                            {{ t('duration_by_number_sessions') }} <code class="highlighter-rouge">*</code>
+                                            Number of Training Sessions <code class="highlighter-rouge">*</code>
                                         </label>
                                         <input type="text" id="formation_numberSession"
                                                name="formation[numberSession]"
@@ -142,21 +127,21 @@
                                     <!-- Session Modes -->
                                     <div class="mb-3">
                                         <label class="form-label text-primary d-block" for="formation_typeSession">
-                                            {{ t('session_modes_analysis') }} <code class="highlighter-rouge">*</code>
+                                            Training Delivery Mode <code class="highlighter-rouge">*</code>
                                         </label>
                                         <select id="formation_typeSession" name="formation[typeSession]"
                                                 required class="form-control selectpicker">
-                                            <option value="">{{ t('choice_session_modes_analysis') }}</option>
-                                            <option value="O">{{ t('online') }}</option>
-                                            <option value="P">{{ t('presence') }}</option>
-                                            <option value="M">{{ t('mixed') }}</option>
+                                            <option value="">Choose the delivery mode</option>
+                                            <option value="O">Online Training</option>
+                                            <option value="P">Classroom Training</option>
+                                            <option value="M">Hybrid Training (Online + Classroom) </option>
                                         </select>
                                     </div>
 
                                     <!-- Other Session Mode (conditional) -->
                                     <div class="mb-3" id="div-other-title-session" style="display: none;">
                                         <label class="form-label text-primary d-block" for="formation_otherTypeSession">
-                                            {{ t('other_session_modes_analysis') }} <code class="highlighter-rouge">*</code>
+                                            Custom Delivery Mode <code class="highlighter-rouge">*</code>
                                         </label>
                                         <input type="text" id="formation_otherTypeSession"
                                                name="formation[otherTypeSession]" class="form-control">
@@ -164,68 +149,70 @@
 
                                     <hr class="mb-4 mt-4">
 
-                                    <!-- Passage Conditions -->
-                                    <div class="mb-3">
-                                        <label class="form-label text-primary d-block"
-                                               for="formation_conditionOfPassage">
-                                            {{ t('passage_conditions_criteria') }} <code class="highlighter-rouge">*</code>
-                                        </label>
-                                        <select id="formation_conditionOfPassage" name="formation[conditionOfPassage]"
-                                                required class="form-control selectpicker">
-                                            <option value="">{{ t('choice_passage_conditions_criteria') }}</option>
-                                            <option value="Auto">{{ t('auto') }}</option>
-                                            <option value="Decision">{{ t('decision') }}</option>
-                                            <option value="Formula">{{ t('formula') }}</option>
-                                        </select>
-                                    </div>
+                                    <!-- Passage Conditions section — hidden (not deleted) to match the Twig
+                                         template's behavior without breaking JS that calls
+                                         document.getElementById('formation_conditionOfPassage') etc. on load. -->
+                                    <div style="display: none;">
+                                        <div class="mb-3">
+                                            <label class="form-label text-primary d-block"
+                                                   for="formation_conditionOfPassage">
+                                                Passage Conditions and Criteria <code class="highlighter-rouge">*</code>
+                                            </label>
+                                            <select id="formation_conditionOfPassage"
+                                                    name="formation[conditionOfPassage]"
+                                                    class="form-control selectpicker">
+                                                <option value="">Choose the passage conditions and criteria</option>
+                                                <option value="Auto">Auto</option>
+                                                <option value="Decision">Decision</option>
+                                                <option value="Formula">Formula</option>
+                                            </select>
+                                        </div>
 
-                                    <!-- Passage Formula (conditional) -->
-                                    <div class="mb-3" id="div-formulas-passage" style="display: none;">
-                                        <label class="form-label text-primary d-block"
-                                               for="formation_conditionOfPassageFormule">
-                                            {{ t('formulas_passage_conditions') }} <code class="highlighter-rouge">*</code>
-                                        </label>
-                                        <select id="formation_conditionOfPassageFormule"
-                                                name="formation[conditionOfPassageFormule]"
-                                                class="form-control selectpicker">
-                                            <option value="">{{ t('choice_formulas_passage_conditions') }}</option>
-                                            <option value="Score">{{ t('score') }}</option>
-                                            <option value="Present">{{ t('present') }}</option>
-                                            <option value="Note And Presence">{{ t('note_and_presence') }}</option>
-                                        </select>
-                                    </div>
+                                        <div class="mb-3" id="div-formulas-passage">
+                                            <label class="form-label text-primary d-block"
+                                                   for="formation_conditionOfPassageFormule">
+                                                Formulas for Passage Conditions <code class="highlighter-rouge">*</code>
+                                            </label>
+                                            <select id="formation_conditionOfPassageFormule"
+                                                    name="formation[conditionOfPassageFormule]"
+                                                    class="form-control selectpicker">
+                                                <option value="">Choose the formula</option>
+                                                <option value="Score">Score</option>
+                                                <option value="Present">Present</option>
+                                                <option value="Note And Presence">Note And Presence</option>
+                                            </select>
+                                        </div>
 
-                                    <!-- By Score (conditional) -->
-                                    <div class="mb-3" id="div-passage-score" style="display: none;">
-                                        <label class="form-label text-primary d-block"
-                                               for="formation_conditionOfPassageFormuleByNote">
-                                            {{ t('passage_requirements_by_score') }} <code class="highlighter-rouge">*</code>
-                                        </label>
-                                        <input type="text" id="formation_conditionOfPassageFormuleByNote"
-                                               name="formation[conditionOfPassageFormuleByNote]" class="form-control">
-                                    </div>
+                                        <div class="mb-3" id="div-passage-score">
+                                            <label class="form-label text-primary d-block"
+                                                   for="formation_conditionOfPassageFormuleByNote">
+                                                Passage Requirements by Score <code class="highlighter-rouge">*</code>
+                                            </label>
+                                            <input type="text" id="formation_conditionOfPassageFormuleByNote"
+                                                   name="formation[conditionOfPassageFormuleByNote]"
+                                                   class="form-control">
+                                        </div>
 
-                                    <!-- By Presence (conditional) -->
-                                    <div class="mb-3" id="div-passage-present" style="display: none;">
-                                        <label class="form-label text-primary d-block"
-                                               for="formation_conditionOfPassageFormuleByPresent">
-                                            {{ t('passage_formulas_by_presence') }} <code class="highlighter-rouge">*</code>
-                                        </label>
-                                        <input type="text" id="formation_conditionOfPassageFormuleByPresent"
-                                               name="formation[conditionOfPassageFormuleByPresent]"
-                                               class="form-control">
-                                    </div>
+                                        <div class="mb-3" id="div-passage-present">
+                                            <label class="form-label text-primary d-block"
+                                                   for="formation_conditionOfPassageFormuleByPresent">
+                                                Passage Formulas by Presence <code class="highlighter-rouge">*</code>
+                                            </label>
+                                            <input type="text" id="formation_conditionOfPassageFormuleByPresent"
+                                                   name="formation[conditionOfPassageFormuleByPresent]"
+                                                   class="form-control">
+                                        </div>
 
-                                    <!-- By Score + Presence (conditional) -->
-                                    <div class="mb-3" id="div-passage-note-present" style="display: none;">
-                                        <label class="form-label text-primary d-block"
-                                               for="formation_conditionOfPassageFormuleByNotePresent">
-                                            {{ t('comprehensive_passage_criteria') }}
-                                            <code class="highlighter-rouge">*</code>
-                                        </label>
-                                        <input type="text" id="formation_conditionOfPassageFormuleByNotePresent"
-                                               name="formation[conditionOfPassageFormuleByNotePresent]"
-                                               class="form-control">
+                                        <div class="mb-3" id="div-passage-note-present">
+                                            <label class="form-label text-primary d-block"
+                                                   for="formation_conditionOfPassageFormuleByNotePresent">
+                                                Comprehensive Passage Criteria: Scores and Presence
+                                                <code class="highlighter-rouge">*</code>
+                                            </label>
+                                            <input type="text" id="formation_conditionOfPassageFormuleByNotePresent"
+                                                   name="formation[conditionOfPassageFormuleByNotePresent]"
+                                                   class="form-control">
+                                        </div>
                                     </div>
 
                                     <hr class="mb-4 mt-4">
@@ -233,15 +220,55 @@
                                     <!-- Share Resource -->
                                     <div class="mb-3">
                                         <label class="form-label text-primary d-block" for="formation_publicResource">
-                                            {{ t('share_resource') }}
+                                            Make Training Resources Public
                                         </label>
                                         <select id="formation_publicResource" name="formation[publicResource]"
                                                 class="form-control selectpicker">
-                                            <option value="">{{ t('share_resource_question') }}
-                                            </option>
-                                            <option value="1">{{ t('yes') }}</option>
-                                            <option value="0">{{ t('no') }}</option>
+                                            <option value="">Do you want to make training resources public?</option>
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
                                         </select>
+                                    </div>
+
+                                    <!-- Resource folder picker (shown when publicResource = yes) -->
+                                    <div id="fileManagerContainerFormation" class="mb-3" style="display: none;">
+                                        <label class="form-label text-primary d-block">Choose Resource Folder</label>
+                                        <input type="text" id="selectedFolder" name="formation[resourceFolder]"
+                                               class="form-control" placeholder="No folder selected" readonly>
+                                        <button type="button" id="openFileManager"
+                                                value="{{ account_id }}"
+                                                class="btn btn-primary mt-2">Choose Folder
+                                        </button>
+                                    </div>
+
+                                    <div class="modal fade" id="fileManagerModal" tabindex="-1"
+                                         aria-labelledby="fileManagerModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="fileManagerModalLabel">
+                                                        <i class="bi bi-folder2-open"></i> Select a Folder
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                </div>
+
+                                                <div class="modal-body" id="share-folder-modal">
+                                                    <ul id="fileManagerList" class="list-group"></ul>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <div>
+                                                        <button type="button" id="selectFoldersBtn"
+                                                                class="btn btn-success">Select
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Close
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <hr class="mb-4 mt-4">
@@ -249,7 +276,7 @@
                                     <!-- Description -->
                                     <div class="mb-3">
                                         <label class="form-label text-primary d-block" for="formation_description">
-                                            {{ t('description') }}
+                                            Description
                                         </label>
                                         <textarea id="formation_description" name="formation[description]"
                                                   class="form-control" rows="7" data-ckeditor="true"></textarea>
@@ -257,19 +284,15 @@
 
                                 </div>
 
-
-                            </div>
-                            <div class="float-end">
-                                <button class="btn btn-outline-primary me-3" id="create_formation">{{ t('create') }}</button>
-                                <a href="/dashboard/show-formation" class="btn btn-outline-danger">{{ t('close') }}</a>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="mb-0">{{ t('season_details') }}</h5>
+                            <h5 class="mb-0">Training Season</h5>
                         </div>
                         <div class="card-body">
                             <div class="row" id="lists-seasons">
@@ -293,39 +316,41 @@
                                 <div class="modal-dialog modal-dialog-center">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="seasonModalLabel">{{ t('new_season') }}</h5>
+                                            <h5 class="modal-title" id="seasonModalLabel">Add Training Season</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="mb-3">
-                                                <label for="season_title" class="form-label">{{ t('title') }}</label>
+                                                <label for="season_title" class="form-label">Title</label>
                                                 <input type="text" class="form-control" id="season_title">
                                             </div>
                                             <div class="mb-3">
-                                                <label for="season_description" class="form-label">{{ t('description') }}</label>
+                                                <label for="season_description" class="form-label">Description</label>
                                                 <textarea class="form-control" id="season_description"></textarea>
                                             </div>
                                             <div class="mb-3">
-                                                <label for="season_type_of_duration" class="form-label">{{ t('type') }}</label>
+                                                <label for="season_type_of_duration" class="form-label">Training
+                                                    Mode</label>
                                                 <input type="text" class="form-control" id="season_type_of_duration"
-                                                       disabled readonly>
+                                                       value="">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="season_number_of_duration"
-                                                       class="form-label">{{ t('duration') }}</label>
+                                                       class="form-label">Duration</label>
                                                 <input type="number" class="form-control"
-                                                       id="season_number_of_duration">
+                                                       id="season_number_of_duration" value="">
                                             </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">
-                                                {{ t('close') }}
+                                                Close
                                             </button>
-                                            <button type="button" class="btn btn-primary" id="add_new_season">{{ t('add_new_season') }}
+                                            <button type="button" class="btn btn-primary" id="add_new_season">
+                                                Add Training Season
                                             </button>
                                             <button type="button" class="btn btn-primary" id="update_season"
-                                                    style="display:none;">{{ t('update_season') }}
+                                                    style="display:none;">Update Training Season
                                             </button>
                                         </div>
                                     </div>
@@ -334,10 +359,11 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="mb-0">{{ t('subject_details') }}</h5>
+                            <h5 class="mb-0">Training Subject</h5>
                         </div>
                         <div class="card-body">
                             <div class="row" id="listSubjects">
@@ -362,59 +388,60 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="modal fade" id="modalFormationSubject" tabindex="-1"
-                                 aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-center">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">{{ t('new_subject') }}</h1>
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Add Training
+                                                Subject</h1>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <div class="row">
-                                                <label for="subject_select" class="form-label">{{ t('subject') }}</label>
-                                                <select class="form-control" id="subject_select">
-                                                    <option value="1">Math bac info</option>
-                                                    <option value="14">test</option>
-                                                </select>
+                                                <label for="subject_select" class="form-label">Education Subject</label>
+                                                <select class="form-control" id="subject_select"></select>
                                             </div>
                                             <br>
                                             <div class="row">
-                                                <label for="number_of_session" class="form-label">{{ t('number_of_hours') }}</label>
+                                                <label for="number_of_session" class="form-label">Number of
+                                                    Hours</label>
                                                 <input type="number" class="form-control" id="number_of_session"
                                                        value="">
                                             </div>
                                             <br>
                                             <div class="row">
-                                                <label for="subject_description" class="form-label">{{ t('description') }}</label>
+                                                <label for="subject_description" class="form-label">Description</label>
                                                 <textarea class="form-control" id="subject_description"></textarea>
                                             </div>
                                             <br>
                                             <div class="row" id="season_coefficient_container">
-                                                <label class="form-label">{{ t('select_seasons') }}</label>
-                                                <div id="season_coefficient_list" class="row">
-                                                    <p class="text-muted">{{ t('no_seasons_found_add_first') }}</p>
-                                                </div>
+                                                <label class="form-label">Select Training Seasons</label>
+                                                <div id="season_coefficient_list" class="row"></div>
                                             </div>
-                                            <input type="hidden" id="formation_account_id" value="3">
+                                            <input type="hidden" id="formation_account_id" value="{{ account_id }}">
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">
-                                                {{ t('close') }}
+                                                Close
                                             </button>
-                                            <button type="button" class="btn btn-primary" id="add_new_subject">{{ t('add_new_subject_btn') }}
+                                            <button type="button" class="btn btn-primary" id="add_new_subject">
+                                                Add Training Subject
                                             </button>
                                             <button type="button" class="btn btn-primary" id="update_subject"
-                                                    style="display:none;">{{ t('update_subject') }}
+                                                    style="display:none;">Update Training Subject
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="float-end">
-                                <button class="btn btn-outline-primary me-3" id="create_formation">{{ t('create') }}</button>
-                                <a href="/dashboard/show-formation" class="btn btn-outline-danger">{{ t('close') }}</a>
+                                <button class="btn btn-outline-primary me-3" id="create_formation">Create</button>
+                                <a href="/dashboard/show-formation"
+                                   class="btn btn-outline-danger js-single-click">Close</a>
                             </div>
                         </div>
                     </div>
@@ -423,7 +450,6 @@
         </div>
     </div>
 </div>
-
 <script>
     const account_id = {{ account_id }};
 
@@ -866,39 +892,6 @@
         });
 
         // ────────────────────────────────────────────────────────────────
-        // Conditional Show/Hide — Condition Of Passage
-        // ────────────────────────────────────────────────────────────────
-        document.getElementById('formation_conditionOfPassage').addEventListener('change', function () {
-            const val = this.value;
-            document.getElementById('div-formulas-passage').style.display     = 'none';
-            document.getElementById('div-passage-score').style.display        = 'none';
-            document.getElementById('div-passage-present').style.display      = 'none';
-            document.getElementById('div-passage-note-present').style.display = 'none';
-
-            if (val === 'Formula') {
-                document.getElementById('div-formulas-passage').style.display = 'block';
-            }
-        });
-
-        // ────────────────────────────────────────────────────────────────
-        // Conditional Show/Hide — Passage Formula
-        // ────────────────────────────────────────────────────────────────
-        document.getElementById('formation_conditionOfPassageFormule').addEventListener('change', function () {
-            const val = this.value;
-            document.getElementById('div-passage-score').style.display        = 'none';
-            document.getElementById('div-passage-present').style.display      = 'none';
-            document.getElementById('div-passage-note-present').style.display = 'none';
-
-            if (val === 'Score') {
-                document.getElementById('div-passage-score').style.display        = 'block';
-            } else if (val === 'Present') {
-                document.getElementById('div-passage-present').style.display      = 'block';
-            } else if (val === 'Note And Presence') {
-                document.getElementById('div-passage-note-present').style.display = 'block';
-            }
-        });
-
-        // ────────────────────────────────────────────────────────────────
         // Submit Formation
         // ────────────────────────────────────────────────────────────────
         document.getElementById('create_formation').addEventListener('click', async function (e) {
@@ -907,17 +900,12 @@
             if (!document.getElementById('formation_name').value.trim()) {
                 return Swal.fire({ icon: 'warning', title: 'Required', text: 'Name is required.', confirmButtonColor: '#4c4b9e' });
             }
-            if (!document.getElementById('formation_status').value) {
-                return Swal.fire({ icon: 'warning', title: 'Required', text: 'Status is required.', confirmButtonColor: '#4c4b9e' });
-            }
+
             if (!document.getElementById('formation_typeDate').value) {
                 return Swal.fire({ icon: 'warning', title: 'Required', text: 'Date and Session Analytics is required.', confirmButtonColor: '#4c4b9e' });
             }
             if (!document.getElementById('formation_typeSession').value) {
                 return Swal.fire({ icon: 'warning', title: 'Required', text: 'Session Modes Analysis is required.', confirmButtonColor: '#4c4b9e' });
-            }
-            if (!document.getElementById('formation_conditionOfPassage').value) {
-                return Swal.fire({ icon: 'warning', title: 'Required', text: 'Passage Conditions is required.', confirmButtonColor: '#4c4b9e' });
             }
 
             const formData = new FormData();
@@ -929,27 +917,17 @@
                 ? CKEDITOR.instances['formation_description'].getData()
                 : document.getElementById('formation_description').value;
 
-            formData.append('formation[name]',                                   document.getElementById('formation_name').value.trim());
-            formData.append('formation[status]',                                 document.getElementById('formation_status').value);
-            formData.append('formation[accountLevel]',                           document.getElementById('formation_accountLevel').value);
-            formData.append('formation[accountSection]',                         document.getElementById('formation_accountSection').value);
-            formData.append('formation[typeDate]',                               document.getElementById('formation_typeDate').value);
-            formData.append('formation[otherTypeDate]',                          document.getElementById('formation_otherTypeDate').value);
-            formData.append('formation[numberDayDuration]',                      document.getElementById('formation_numberDayDuration').value);
-            formData.append('formation[numberSession]',                          document.getElementById('formation_numberSession').value);
-            formData.append('formation[typeSession]',                            document.getElementById('formation_typeSession').value);
-            formData.append('formation[otherTypeSession]',                       document.getElementById('formation_otherTypeSession').value);
-            formData.append('formation[conditionOfPassage]',                     document.getElementById('formation_conditionOfPassage').value);
-            formData.append('formation[conditionOfPassageFormule]',              document.getElementById('formation_conditionOfPassageFormule').value);
-            formData.append('formation[conditionOfPassageFormuleByNote]',        document.getElementById('formation_conditionOfPassageFormuleByNote').value);
-            formData.append('formation[conditionOfPassageFormuleByPresent]',     document.getElementById('formation_conditionOfPassageFormuleByPresent').value);
-            formData.append('formation[conditionOfPassageFormuleByNotePresent]', document.getElementById('formation_conditionOfPassageFormuleByNotePresent').value);
-            formData.append('formation[publicResource]',                         document.getElementById('formation_publicResource').value);
-            formData.append('formation[description]',                            description);
-
-            // Attach seasons and subjects as JSON
-            formData.append('formation[seasons]',  JSON.stringify(seasons));
-            formData.append('formation[subjects]', JSON.stringify(subjects));
+            formData.append('formation[name]',              document.getElementById('formation_name').value.trim());
+            formData.append('formation[accountLevel]',      document.getElementById('formation_accountLevel').value);
+            formData.append('formation[accountSection]',    document.getElementById('formation_accountSection').value);
+            formData.append('formation[typeDate]',          document.getElementById('formation_typeDate').value);
+            formData.append('formation[otherTypeDate]',     document.getElementById('formation_otherTypeDate').value);
+            formData.append('formation[numberDayDuration]', document.getElementById('formation_numberDayDuration').value);
+            formData.append('formation[numberSession]',     document.getElementById('formation_numberSession').value);
+            formData.append('formation[typeSession]',       document.getElementById('formation_typeSession').value);
+            formData.append('formation[otherTypeSession]',  document.getElementById('formation_otherTypeSession').value);
+            formData.append('formation[publicResource]',    document.getElementById('formation_publicResource').value);
+            formData.append('formation[description]',       description);
 
             try {
                 const response = await fetch(`/api/create_formation/${account_id}`, {

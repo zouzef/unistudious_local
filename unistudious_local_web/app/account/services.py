@@ -12,7 +12,6 @@ def get_account_data_service(account_id):
     except Exception as e:
         return False,None
 
-
 def get_account_image_service(account_id: int):
     """Get account image — returns (content, mimetype)"""
     url = f"{current_app.config['BASE_URL']}get_account_image/{account_id}"
@@ -24,7 +23,6 @@ def get_account_image_service(account_id: int):
     except Exception as e:
         print(f"[ACCOUNT ERROR] get_account_image_service: {e}")
         return False, None, None
-
 
 def update_account_service(account_id: int, data: dict, logo_file=None) -> tuple:
     """Update account — sends multipart if logo provided, JSON otherwise"""

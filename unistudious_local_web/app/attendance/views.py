@@ -15,7 +15,6 @@ def show_attendance_page(session_id):
         id_session=session_id,
     )
 
-
 @attendance_view.route('/dashboard/show-attendance-presence/<int:calendar_id>')
 def show_attendance_presence(calendar_id):
     guard = login_required()
@@ -28,7 +27,6 @@ def show_attendance_presence(calendar_id):
         id_calander=calendar_id,
         **data,
     )
-
 
 @attendance_view.route('/dashboard/show-attendance-unknown-student/<int:calendar_id>')
 def show_attendance_unknown(calendar_id):

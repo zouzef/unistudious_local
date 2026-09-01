@@ -36,7 +36,7 @@ def get_payment_session(session_id):
 				p.description, p.forcing, p.enabled, p.created_at, p.timestamp, p.updated_at, p.uuid, u.full_name ,
 				s.name
 				FROM payment_session p, user u, session s
-				WHERE session_id = %s AND p.enabled = 1 AND p.user_id = u.id AND s.id = p.session_id
+				WHERE session_id = %s AND p.enabled = 1 AND p.user_id = u.id AND s.id = p.session_id AND u.enabled = 1
 				GROUP BY user_id
 				ORDER BY created_at DESC
 			"""
@@ -59,7 +59,7 @@ def get_payment_session(session_id):
 def get_payment_session_user(session_id,user_id):
 	try:
 		query="""
-			SELECT p.id, p.date_payment, p.description, p.status, p.amount, p.type_date,
+			SELECT p.id, p.date_payment, p.description, p.status, p.amount, p.type_date,p.price,
 			u.full_name as username,s.name
 			FROM payment_session p,user u, session s
 			WHERE session_id = %s AND user_id = %s AND u.id = p.user_id AND s.id = p.session_id AND u.enabled = 1 AND s.enabled = 1 AND p.enabled = 1
@@ -113,132 +113,217 @@ def get_payment_calender_user(calander_id,user_id):
 
 @payment_bp.route('/update_payment_session/<int:payment_id>', methods=['POST'])
 def update_payment_session(payment_id):
-    try:
-        data = request.get_json()
-        amount = data.get('amount')
-        user_id = data.get('user_id')
-        session_id = data.get('session_id')
+	try:
+		data = request.get_json()
+		amount = data.get('amount')
+		user_id = data.get('user_id')
+		session_id = data.get('session_id')
 
-        if not amount or not user_id or not session_id:
-            return jsonify({"Message": "amount and user_id are required"}), 400
+		if not amount or not user_id or not session_id:
+			return jsonify({"Message": "amount and user_id are required"}), 400
 
-        # Check payment exists
-        query = "SELECT count(*) AS nbr FROM payment_session WHERE id = %s AND user_id = %s"
-        result = Database.execute_query(query, (payment_id, user_id), fetch=True)
-        if result[0]['nbr'] == 0:
-            return jsonify({"Message": "There is no payment session with this id"}), 404
+		# Check payment exists
+		query = "SELECT count(*) AS nbr FROM payment_session WHERE id = %s AND user_id = %s"
+		result = Database.execute_query(query, (payment_id, user_id), fetch=True)
+		if result[0]['nbr'] == 0:
+			return jsonify({"Message": "There is no payment session with this id"}), 404
 
-        # ✅ Fetch old data BEFORE updating
-        query = "SELECT * FROM payment_session WHERE id = %s AND user_id = %s"
-        old_record = Database.execute_query(query, (payment_id, user_id), fetch=True)
-        old_data = json.dumps(old_record[0], default=str)
+		# ✅ Fetch old data BEFORE updating
+		query = "SELECT * FROM payment_session WHERE id = %s AND user_id = %s"
+		old_record = Database.execute_query(query, (payment_id, user_id), fetch=True)
+		old_data = json.dumps(old_record[0], default=str)
 
-        # Perform the update
-        query = "UPDATE payment_session SET amount = %s WHERE id = %s AND user_id = %s"
-        result = Database.execute_query(query, (amount, payment_id, user_id), fetch=False)
 
-        if result:
-            # ✅ Build new data snapshot
-            new_data = json.dumps({**old_record[0], "price": amount}, default=str)
+		query = "UPDATE payment_session SET amount = %s WHERE id = %s AND user_id = %s"
+		result = Database.execute_query(query, (amount, payment_id, user_id), fetch=False)
 
-            # ✅ Insert into audit table
-            audit_query = """
+		if result:
+			# ✅ Build new data snapshot
+			new_data = json.dumps({**old_record[0], "price": amount}, default=str)
+
+			# ✅ Insert into audit table
+			audit_query = """
                 INSERT INTO payment_session_audit (action_type, old_data, new_data)
                 VALUES (%s, %s, %s)
             """
-            Database.execute_query(
-                audit_query,
-                ('UPDATE', old_data, new_data),
-                fetch=False
-            )
+			Database.execute_query(
+				audit_query,
+				('UPDATE', old_data, new_data),
+				fetch=False
+			)
 
-            return jsonify({"Message": "Amount updated successfully"}), 200
-        else:
-            return jsonify({"Message": "Amount update failed"}), 400
+			return jsonify({"Message": "Amount updated successfully"}), 200
+		else:
+			return jsonify({"Message": "Amount update failed"}), 400
 
-    except Exception as e:
-        return jsonify({"Message": f"Error: {e} coming from server"}), 500
+	except Exception as e:
+		return jsonify({"Message": f"Error: {e} coming from server"}), 500
+
+
+EXCLUDED_AUDIT_FIELDS = {'uuid', 'updated_at', 'timestamp', 'created_at', 'enabled', 'type', 'created_by'}
+def filter_audit_fields(record):
+	return {k: v for k, v in record.items() if k not in EXCLUDED_AUDIT_FIELDS}
 
 
 @payment_bp.route('/update_payment_session_user/<int:session_id>/<int:user_id>/<int:payment_id>', methods=['POST'])
 def update_payment_session_user(session_id, user_id, payment_id):
-    try:
-        data = request.get_json()
-
-        # Check if the payment record exists
-        check_query = """
+	try:
+		data = request.get_json()
+		print(data)
+		# Check if the payment record exists
+		check_query = """
             SELECT COUNT(*) AS nbr 
             FROM payment_session
             WHERE user_id = %s AND session_id = %s AND id = %s 
         """
-        result = Database.execute_query(check_query, (user_id, session_id, payment_id), fetch=True)
+		result = Database.execute_query(check_query, (user_id, session_id, payment_id), fetch=True)
 
-        if not result or result[0]['nbr'] == 0:
-            return jsonify({"Message": "Payment record not found"}), 404
+		if not result or result[0]['nbr'] == 0:
+			return jsonify({"Message": "Payment record not found"}), 404
 
-        # Fetch old data BEFORE updating
-        old_record_query = """
+		# Fetch old data BEFORE updating
+		old_record_query = """
             SELECT * FROM payment_session
             WHERE user_id = %s AND session_id = %s AND id = %s
         """
-        old_record = Database.execute_query(old_record_query, (user_id, session_id, payment_id), fetch=True)
-        old_data   = json.dumps(old_record[0], default=str)
+		old_record = Database.execute_query(old_record_query, (user_id, session_id, payment_id), fetch=True)
+		old_data = json.dumps(filter_audit_fields(old_record[0]), default=str)
 
-        # Build dynamic update query based on provided fields only
-        fields = []
-        values = []
+		# Extra fields sent by the frontend, used to compute the status automatically
+		forcing      = data.get('forcing')
+		change_price = data.get('change_price')
+		new_price    = data.get('new_price')
+		amount       = data.get('amount')
 
-        # Always update updated_at
-        fields.append("updated_at = NOW()")
+		# --- Remaining payment handling ---
+		remaining_payment = data.get('remaining_payment')
+		amount_remaining  = data.get('amount_remaining')
 
-        if 'amount' in data and data['amount'] is not None:
-            fields.append("amount = %s")
-            values.append(data['amount'])
+		is_remaining_payment = remaining_payment in (1, '1', True)
+		has_amount_remaining = amount_remaining is not None and str(amount_remaining).strip() != ''
 
-        if 'description' in data and data['description'] is not None:
-            fields.append("description = %s")
-            values.append(data['description'])
+		if is_remaining_payment and has_amount_remaining:
+			try:
+				old_amount = float(old_record[0].get('amount') or 0)
+				amount_remaining_val = float(amount_remaining)
+				amount = old_amount + amount_remaining_val  # overrides amount sent in the payload
+			except (TypeError, ValueError):
+				pass
+		# --- END remaining payment handling ---
 
-        if 'status' in data and data['status'] is not None:
-            fields.append("status = %s")
-            values.append(data['status'])
+		# Current session price, from the existing record
+		current_price = old_record[0].get('price')
 
-        # Only updated_at was added, no real fields to update
-        if len(fields) == 1:
-            return jsonify({"Message": "No fields to update"}), 400
+		is_forcing       = forcing in (1, '1', True)
+		has_change_price = change_price in (1, '1', True)
+		has_new_price     = new_price is not None and str(new_price).strip() != ''
 
-        # Add WHERE clause values
-        values.extend([user_id, session_id, payment_id])
+		computed_status = None
 
-        update_query = f"""
+		if amount is not None and current_price is not None:
+			try:
+				amount_val = float(amount)
+				price_val  = float(current_price)
+			except (TypeError, ValueError):
+				amount_val = None
+				price_val  = None
+
+			if amount_val is not None and price_val is not None:
+
+				# Case 1: amount == price, no forcing, no change_price, no new_price -> Paid
+				if amount_val == price_val and not is_forcing and not has_change_price and not has_new_price:
+					computed_status = 'Paid'
+				# Case 2: amount < price, forcing = 1, no new_price -> Pending
+				elif is_forcing and amount_val < price_val and not has_new_price:
+					computed_status = 'Pending'
+
+				# Case 3: forcing = 1, amount < price, new_price provided -> price changes, then compare
+				elif is_forcing and amount_val < price_val and has_new_price:
+					try:
+						new_price_val = float(new_price)
+						computed_status = 'Paid' if amount_val == new_price_val else 'Pending'
+					except (TypeError, ValueError):
+						computed_status = 'Pending'
+
+		# Case 4: remaining payment that still doesn't reach the price -> Pending
+		if is_remaining_payment and has_amount_remaining and computed_status is None and current_price is not None:
+			try:
+				if float(amount) < float(current_price):
+					computed_status = 'Pending'
+			except (TypeError, ValueError):
+				pass
+
+		# If a status was explicitly sent (e.g. from the Status Update Modal), it takes priority
+		if 'status' in data and data['status'] is not None:
+			computed_status = data['status']
+
+		# Build dynamic update query based on provided fields only
+		fields = []
+		values = []
+
+		# Always update updated_at
+		fields.append("updated_at = NOW()")
+		fields.append("date_payment = NOW()")
+
+		if amount is not None:
+			fields.append("amount = %s")
+			values.append(amount)
+
+		if 'description' in data and data['description'] is not None:
+			fields.append("description = %s")
+			values.append(data['description'])
+
+		# Update the price only when forcing + a real new_price were sent (Case 3)
+		if is_forcing and has_new_price:
+			fields.append("price = %s")
+			values.append(new_price)
+
+		if computed_status is not None:
+			fields.append("status = %s")
+			values.append(computed_status)
+
+		# Only updated_at/date_payment were added, no real fields to update
+		if len(fields) == 2:
+			return jsonify({"Message": "No fields to update"}), 400
+
+		# Add WHERE clause values
+		values.extend([user_id, session_id, payment_id])
+
+		update_query = f"""
             UPDATE payment_session
             SET {', '.join(fields)}
             WHERE user_id = %s AND session_id = %s AND id = %s
         """
-        Database.execute_query(update_query, tuple(values), fetch=False)
+		Database.execute_query(update_query, tuple(values), fetch=False)
 
-        # Build new data snapshot by merging old record with updated fields
-        new_snapshot = {**old_record[0]}
-        if 'amount'      in data and data['amount']      is not None: new_snapshot['amount']      = data['amount']
-        if 'description' in data and data['description'] is not None: new_snapshot['description'] = data['description']
-        if 'status'      in data and data['status']      is not None: new_snapshot['status']      = data['status']
-        new_data = json.dumps(new_snapshot, default=str)
+		# Build new data snapshot by merging old record with updated fields
 
-        # Insert into audit table
-        audit_query = """
+		new_snapshot = filter_audit_fields(old_record[0])
+		if amount is not None:
+			new_snapshot['amount'] = amount
+		if 'description' in data and data['description'] is not None:
+			new_snapshot['description'] = data['description']
+		if is_forcing and has_new_price:
+			new_snapshot['price'] = new_price
+		if computed_status is not None:
+			new_snapshot['status'] = computed_status
+		new_data = json.dumps(new_snapshot, default=str)
+
+		# Insert into audit table
+		audit_query = """
             INSERT INTO payment_session_audit (action_type, old_data, new_data)
             VALUES (%s, %s, %s)
         """
-        Database.execute_query(
+		Database.execute_query(
             audit_query,
             ('UPDATE', old_data, new_data),
             fetch=False
         )
 
-        return jsonify({"Message": "Payment updated successfully"}), 200
+		return jsonify({"Message": "Payment updated successfully"}), 200
 
-    except Exception as e:
-        return jsonify({
+	except Exception as e:
+		return jsonify({
             "Message": f"Error: {e} coming from server"
         }), 500
 

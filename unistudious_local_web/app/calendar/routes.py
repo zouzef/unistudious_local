@@ -15,8 +15,6 @@ from app.calendar.service import (
 calendar_bp = Blueprint('calendar', __name__)
 
 
-
-
 # ==========================================
 # API ROUTES
 # ==========================================

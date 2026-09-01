@@ -102,7 +102,6 @@ def push_formationAdd(db, settings, row):
 	try:
 		new_data = json.loads(row.get('new_data', '{}'))
 		Name = new_data.get('name')
-		Status = new_data.get('status')
 		AccountLevelLocalId = new_data.get('accountLevel')
 		AccountSectionLocalId = new_data.get('accountSection')
 		TypeDate = new_data.get('typeDate')
@@ -148,6 +147,8 @@ def push_formationAdd(db, settings, row):
 			"typeSession": TypeSession,
 
 		}
+
+		print(payload)
 
 	except Exception as e:
 		logger.exception("Error in push FormationAdd: %s", e)

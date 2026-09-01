@@ -1,13 +1,17 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, current_app
 import json
 import sys
 import os
 
+from werkzeug.utils import secure_filename
 # Add parent directories to path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from config import Config
 from core.database import Database
 from util.audit import log_audit
+from werkzeug.utils import secure_filename
+from flask import send_from_directory
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 formation_bp = Blueprint('formation', __name__, url_prefix='/scl')
 
@@ -40,6 +44,7 @@ def get_formation_info(account_id):
 				   f.type_session,
 				   f.number_day_duration,
 				   f.number_session,
+				   f.img_link,
 				   f.condition_of_passage,
 				   f.status,
 				   f.created_at,
@@ -299,42 +304,43 @@ def update_formation(formation_id):
 @formation_bp.route('/create_formation/<int:account_id>', methods=['POST'])
 def create_formation(account_id):
 	try:
-		data = request.get_json()
+		data = request.form
+		files = request.files
 
 		required_fields = [
 			'name',
-			'status',
 			'typeDate',
 			'typeSession',
-			'conditionOfPassage'
 		]
 
 		for field in required_fields:
 			if not data.get(field):
-				return jsonify({
-					"Message": f"'{field}' is required"
-				}), 400
+				return jsonify({"Message": f"'{field}' is required"}), 400
 
-		name = data.get('name', '').strip()
-		status = data.get('status')
+		name = (data.get('name') or '').strip()
+		status = 1
+
 		account_level_id = data.get('accountLevel') or None
 		account_section_id = data.get('accountSection') or None
 		type_date = data.get('typeDate')
-		other_type_date = data.get('otherTypeDate', '').strip() or None
+		other_type_date = (data.get('otherTypeDate') or '').strip() or None
 		number_day_duration = data.get('numberDayDuration') or None
 		number_session = data.get('numberSession') or None
 		type_session = data.get('typeSession')
-		other_type_session = data.get('otherTypeSession', '').strip() or None
+		other_type_session = (data.get('otherTypeSession') or '').strip() or None
 		condition_of_passage = data.get('conditionOfPassage')
 		condition_of_passage_formule = data.get('conditionOfPassageFormule') or None
-		condition_of_passage_formule_by_note = data.get('conditionOfPassageFormuleByNote', '').strip() or None
-		condition_of_passage_formule_by_present = data.get('conditionOfPassageFormuleByPresent', '').strip() or None
-		condition_of_passage_formule_by_note_present = data.get('conditionOfPassageFormuleByNotePresent',
-																'').strip() or None
-		public_resource = data.get('publicResource') or None
-		description = data.get('description', '').strip() or None
-		img_link = data.get('imgLink') or None
+		condition_of_passage_formule_by_note = (data.get('conditionOfPassageFormuleByNote') or '').strip() or None
+		condition_of_passage_formule_by_present = (data.get('conditionOfPassageFormuleByPresent') or '').strip() or None
+		condition_of_passage_formule_by_note_present = (data.get(
+			'conditionOfPassageFormuleByNotePresent') or '').strip() or None
 
+		public_resource = data.get('publicResource') or None
+		description = (data.get('description') or '').strip() or None
+
+		img_link = None  # unknown until after INSERT
+
+		# ------------------ Create formation ------------------
 		query = """
             INSERT INTO formation (
                 account_id,
@@ -391,40 +397,106 @@ def create_formation(account_id):
 			public_resource
 		]
 
-		result = Database.execute_query(
-			query,
-			values,
-			fetch=False
+		result = Database.execute_query(query, values, fetch=False)
+
+		if not result:
+			return jsonify({"Message": "Formation not created"}), 400
+
+		formation_id = result
+
+		# ------------------ Save image ------------------
+		image_file = files.get("formation_logoFile")
+
+		img_link = None
+
+		if image_file and image_file.filename:
+			filename = secure_filename(image_file.filename)
+
+			upload_folder = os.path.join(
+				current_app.root_path,
+				"uploads",
+				"formation_img",
+				f"formation_{formation_id}"
+			)
+
+			try:
+				os.makedirs(upload_folder, exist_ok=True)
+			except Exception as e:
+				print("ERROR creating folder:", e)
+
+			save_path = os.path.join(upload_folder, filename)
+
+			try:
+				image_file.save(save_path)
+
+			except Exception as e:
+				print("ERROR saving image:", e)
+
+			img_link = filename
+
+			print("8 - img_link:", img_link)
+
+			Database.execute_query(
+				"UPDATE formation SET img_link = %s, updated_at = NOW() WHERE id = %s",
+				[img_link, formation_id],
+				fetch=False
+			)
+
+		# ------------------ Fetch final record for audit ------------------
+		new_record = Database.execute_query(
+			"SELECT * FROM formation WHERE id = %s",
+			[formation_id],
+			fetch=True
 		)
 
-		if result:
-			# ✅ Get inserted record
-			new_record = Database.execute_query(
-				"""
-				SELECT *
-				FROM formation
-				WHERE id = LAST_INSERT_ID()
-				""",
-				fetch=True
-			)
-
-			# ✅ Audit log
-			log_audit(
-				table_name="formation_audit",
-				action_type="INSERT",
-				old_data=None,
-				new_data=new_record[0] if new_record else data
-			)
-
-			return jsonify({
-				"Message": "Formation created successfully"
-			}), 200
+		log_audit(
+			table_name="formation_audit",
+			action_type="INSERT",
+			old_data=None,
+			new_data=new_record[0] if new_record else dict(data)
+		)
 
 		return jsonify({
-			"Message": "Error creating formation"
-		}), 400
+			"Message": "Formation created successfully",
+			"formation_id": formation_id,
+			"img_link": img_link
+		}), 200
 
 	except Exception as e:
+		return jsonify({
+			"Message": f"Error: {e} coming from server"
+		}), 500
+
+
+@formation_bp.route('/get_formation_image/<int:formation_id>', methods=['GET'])
+def get_formation_image(formation_id):
+	try:
+		query = """
+		   SELECT img_link 
+		   FROM formation
+		   WHERE id = %s AND enabled = 1
+		"""
+		result = Database.execute_query(query, (formation_id,), fetch=True)
+
+		if not result or not result[0].get('img_link'):
+			return jsonify({"Message": "Image not found"}), 404
+
+		img_link = result[0]['img_link']
+
+		upload_folder = os.path.join(
+			current_app.root_path,
+			"uploads",
+			"formation_img",
+			f"formation_{formation_id}"
+		)
+
+		if not os.path.isfile(os.path.join(upload_folder, img_link)):
+			return jsonify({"Message": "Image file not found on disk"}), 404
+
+		return send_from_directory(upload_folder, img_link)
+
+	except Exception as e:
+		print(e)
 		return jsonify({
 			"Message": f"Error: {e} coming from server"
 		}), 500

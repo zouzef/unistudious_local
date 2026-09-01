@@ -182,10 +182,13 @@ def _send_create_teacher_api(settings, new_data):
 
         files = {}
         img_link = new_data.get("img_link")
-        local_path = None
-        if img_link:
-            local_path = os.path.join(settings.uploads_path, img_link.lstrip("/"))
-            logger.debug("Resolved image path: %s | exists: %s", local_path, os.path.exists(local_path))
+        local_user_id = new_data.get("id")
+
+        if img_link and local_user_id:
+            uploads_path = "../server_local_api/uploads/user_img"  # sync_data_local_server -> server_local_api
+            local_path = os.path.join(uploads_path, f"user_{local_user_id}", img_link)
+
+            logger.debug("Resolved teacher image path: %s | exists: %s", local_path, os.path.exists(local_path))
             if os.path.exists(local_path):
                 mime_type, _ = mimetypes.guess_type(local_path)
                 image_fp = open(local_path, "rb")

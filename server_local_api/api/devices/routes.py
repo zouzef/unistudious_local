@@ -605,8 +605,8 @@ def view_tablet_by_id(id_tablette):
 
 
 
-@devices_bp.route('/create_door/<int:account_id>', methods=['POST'])
-def create_door(account_id):
+@devices_bp.route('/create_door', methods=['POST'])
+def create_door():
     try:
         data = request.get_json()
         required_fields = ['slc_id', 'room_id', 'mac_id', 'password', 'name']
@@ -617,8 +617,8 @@ def create_door(account_id):
             }), 400
 
         query = """
-            INSERT INTO slc_door (slc_id, room_id, mac_id, password, name)
-            VALUES (%s, %s, %s, %s, %s)
+            INSERT INTO slc_door (slc_id, room_id, mac_id, password, name, status)
+            VALUES (%s, %s, %s, %s, %s, 1)
         """
         values = (data.get('slc_id'), data.get('room_id'), data.get('mac_id'), data.get('password'), data.get('name'))
         Database.execute_query(query, values, fetch=False)

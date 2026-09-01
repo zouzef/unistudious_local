@@ -9,13 +9,14 @@ from core.database import Database
 from core.middleware import token_required
 from core.checks import get_virtual_user, user_exists
 from util.audit import log_audit
-
 from core.checks import *
+
 import uuid
 import json
 
 # Create blueprint
 sessions_bp = Blueprint('sessions', __name__, url_prefix='/scl')
+
 
 
 # ========================================
@@ -550,7 +551,6 @@ def get_all_user_sesssion(session_id):
 
 
 # ENDPOINT 8: GET all_group_session
-
 @sessions_bp.route('/get_all_group_session/<int:session_id>', methods=['GET'])
 def get_all_group_session(session_id):
 	try:
@@ -574,13 +574,18 @@ def get_all_group_session(session_id):
 def get_user_session_info(session_id):
 	try:
 		query = """
-            SELECT rus.*, u.username
-            FROM relation_user_session rus
-            JOIN user u ON rus.user_id = u.id
-            WHERE rus.enabled = 1 AND u.enabled = 1
-            AND rus.session_id = %s
-            GROUP BY rus.user_id
-            ORDER BY u.username ASC
+			SELECT rus.*,
+				   MAX(CASE 
+						   WHEN u.isvirtual = 1 THEN vu.name
+						   ELSE u.full_name
+					   END) AS username
+			FROM relation_user_session rus
+			JOIN user u ON rus.user_id = u.id
+			LEFT JOIN virtual_user vu ON vu.user_id = u.id
+			WHERE rus.enabled = 1 AND u.enabled = 1
+			AND rus.session_id = %s
+			GROUP BY rus.user_id
+			ORDER BY username ASC
         """
 		values = (session_id,)
 		result = Database.execute_query(query, values, fetch=True)
@@ -670,6 +675,7 @@ def get_sessions_for_user(real_user_id):
 	return [{"id": row['id'], "name": row['name']} for row in result]
 
 
+# ENDPOINT 12: GET assigned Session User
 @sessions_bp.route('/get_assignedSession_user/<int:user_id>', methods=['POST'])
 def get_assignedSession_user(user_id):
 	try:
@@ -707,7 +713,7 @@ def get_assignedSession_user(user_id):
 		return jsonify({"Message": f"Error: {e} coming from server"}), 500
 
 
-# ENDPOINT 12: assign user to session
+# ENDPOINT 13: Assign user to session
 @sessions_bp.route('/associate_user_session/<int:user_id>', methods=['POST'])
 def associate_user_session(user_id):
     try:

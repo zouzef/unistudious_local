@@ -1,0 +1,24 @@
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  src: url(/static/vendor/google-fonts/montserrat/2d2ad3be3ebfc9e8d6da81e4885570b3.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  src: url(/static/vendor/google-fonts/montserrat/b333a670d90975b52c0d39b16e0e3af1.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  src: url(/static/vendor/google-fonts/montserrat/77193c722eb4e2d76961093c34ad17ba.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  src: url(/static/vendor/google-fonts/montserrat/edd42108299b58b01af0285eb498bb11.ttf) format('truetype');
+}

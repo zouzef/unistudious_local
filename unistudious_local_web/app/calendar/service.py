@@ -15,7 +15,6 @@ def get_calendar_per_session(account_id: int, session_id: int) -> list:
         print(f"[CALENDAR ERROR] get_calendar_per_session: {e}")
         return []
 
-
 def get_calendar_by_id(calendar_id: int) -> dict:
     """Get calendar detail by id"""
     url = f"{current_app.config['BASE_URL']}get_calander_id/{calendar_id}"
@@ -26,7 +25,6 @@ def get_calendar_by_id(calendar_id: int) -> dict:
     except Exception as e:
         print(f"[CALENDAR ERROR] get_calendar_by_id: {e}")
         return {}
-
 
 def delete_calendar_interval(session_id: int, start_date: str, end_date: str) -> tuple:
     """Delete calendar interval"""
@@ -54,7 +52,6 @@ def delete_calendar_interval(session_id: int, start_date: str, end_date: str) ->
         print(f"[CALENDAR ERROR] delete_calendar_interval: {e}")
         return False, "Connection error"
 
-
 def create_calendar(data: dict) -> tuple:
     """Create a new calendar"""
     url = f"{current_app.config['BASE_URL']}create_calender"
@@ -72,7 +69,6 @@ def create_calendar(data: dict) -> tuple:
         print(f"[CALENDAR ERROR] create_calendar: {e}")
         return False, "Connection error"
 
-
 def get_calendar_request(account_id: int) -> list:
     """Get calendar requests"""
     url = f"{current_app.config['BASE_URL']}get-calander_requestt/{account_id}"
@@ -84,7 +80,6 @@ def get_calendar_request(account_id: int) -> list:
         print(f"[CALENDAR ERROR] get_calendar_request: {e}")
         return []
 
-
 def approve_calendar_request(calendar_request_id: int) -> tuple:
     """Approve calendar request"""
     url = f"{current_app.config['BASE_URL']}approve_calander_request/{calendar_request_id}"
@@ -94,7 +89,6 @@ def approve_calendar_request(calendar_request_id: int) -> tuple:
     except Exception as e:
         print(f"[CALENDAR ERROR] approve_calendar_request: {e}")
         return {"Message": str(e)}, 500
-
 
 def reject_calendar_request(calendar_request_id: int) -> tuple:
     """Reject calendar request"""
@@ -107,7 +101,6 @@ def reject_calendar_request(calendar_request_id: int) -> tuple:
         print(f"[CALENDAR ERROR] reject_calendar_request: {e}")
         return False, "Connection error"
 
-
 def delete_calendar_request(calendar_request_id: int) -> tuple:
     """Delete calendar request"""
     url = f"{current_app.config['BASE_URL']}delete_calander_request/{calendar_request_id}"
@@ -118,7 +111,6 @@ def delete_calendar_request(calendar_request_id: int) -> tuple:
     except Exception as e:
         print(f"[CALENDAR ERROR] delete_calendar_request: {e}")
         return False, "Connection error"
-
 
 def get_notification(account_id: int) -> dict:
     """Get notifications for account"""

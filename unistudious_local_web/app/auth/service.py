@@ -15,7 +15,6 @@ def _auth_headers() -> dict:
     token = session.get("access_token", "")
     return {"Authorization": f"Bearer {token}"}
 
-
 def login(username: str, password: str) -> tuple:
     """
     Authenticate against the local API server.
@@ -67,11 +66,9 @@ def login(username: str, password: str) -> tuple:
         print(f"[AUTH SERVICE] Unexpected error: {e}")
         return False, None, "Connection error"
 
-
 # ─────────────────────────────────────────────────────────────────────────────
 # All functions below attach the Bearer token automatically via _auth_headers()
 # ─────────────────────────────────────────────────────────────────────────────
-
 def get_dashboard_data(account_id: int) -> tuple:
     """Returns (success, data, message)"""
     url = f"{current_app.config['BASE_URL']}get_data_moderateur/{account_id}"
@@ -91,7 +88,6 @@ def get_dashboard_data(account_id: int) -> tuple:
     except requests.exceptions.RequestException as e:
         print(f"[SERVICE] get_dashboard_data error: {e}")
         return False, None, "Connection error"
-
 
 def get_account_data(account_id: int) -> tuple:
     """Returns (success, data, message)"""
@@ -114,7 +110,6 @@ def get_account_data(account_id: int) -> tuple:
     except requests.exceptions.RequestException as e:
         print(f"[SERVICE] get_account_data error: {e}")
         return False, None, "Connection error"
-
 
 def update_account(account_id: int, name: str, status: str, logo=None) -> tuple:
     """Returns (success, message)"""

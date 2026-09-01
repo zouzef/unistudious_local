@@ -15,7 +15,6 @@ def get_attendance_by_calendar(calendar_id: int) -> list:
 		print(f"[ATTENDANCE ERROR] get_attendance_by_calendar: {e}")
 		return []
 
-
 def get_list_student(calendar_id: int) -> list:
 	"""Get list of students for the calendar"""
 	url = f"{current_app.config['BASE_URL']}list-add-student-attendance/{calendar_id}"
@@ -26,7 +25,6 @@ def get_list_student(calendar_id: int) -> list:
 	except Exception as e:
 		print(f"[ATTENDANCE ERROR] get_list_student: {e}")
 		return []
-
 
 def update_attendance_status(attendance_id: int, status: int) -> tuple:
 	"""Update attendance status"""
@@ -46,7 +44,6 @@ def update_attendance_status(attendance_id: int, status: int) -> tuple:
 		print(f"[ATTENDANCE ERROR] update_attendance_status: {e}")
 		return False, "Connection error"
 
-
 def update_attendance_note(attendance_id: int, note: str) -> tuple:
 	"""Update attendance note"""
 	url = f"{current_app.config['BASE_URL']}update-attendance-note/{attendance_id}"
@@ -61,7 +58,6 @@ def update_attendance_note(attendance_id: int, note: str) -> tuple:
 		print(f"[ATTENDANCE ERROR] update_attendance_note: {e}")
 		return False, "Connection error"
 
-
 def reset_attendance(calendar_id: int) -> tuple:
 	"""Reset attendance for calendar"""
 	url = f"{current_app.config['BASE_URL']}reset_attendance/{calendar_id}"
@@ -75,7 +71,6 @@ def reset_attendance(calendar_id: int) -> tuple:
 		print(f"[ATTENDANCE ERROR] reset_attendance: {e}")
 		return False, "Connection error"
 
-
 def get_attendance_statistics(calendar_id: int) -> dict:
 	"""Get attendance statistics"""
 	url = f"{current_app.config['BASE_URL']}attendance-statistics/{calendar_id}"
@@ -86,7 +81,6 @@ def get_attendance_statistics(calendar_id: int) -> dict:
 	except Exception as e:
 		print(f"[ATTENDANCE ERROR] get_attendance_statistics: {e}")
 		return {}
-
 
 def get_attendance_page_data(calendar_id: int) -> dict:
 	"""Aggregate all data needed for attendance presence page"""

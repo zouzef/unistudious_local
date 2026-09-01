@@ -15,20 +15,35 @@
                                             <div class="col-xl-6 col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="account_level_levelConfig">
-                                                        {{ t('level') }} <code class="highlighter-rouge">*</code>
+                                                        {{ t('Program Other Level') }} <code
+                                                            class="highlighter-rouge">*</code>
                                                     </label>
+                                                    <br>
                                                     <select id="account_level_levelConfig"
                                                             name="account_level[levelConfig]"
-                                                            class="selectpicker" aria-label="Level" required
-                                                            data-live-search="true">
+                                                            class="js-example-data-array" aria-label="Level" required>
                                                         <option value="" selected>{{ t('choose_the_level') }}</option>
                                                     </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-12 col-sm-12" id="otherLevelWrapper"
+                                                 style="display: none;">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="account_level_otherLevel">
+                                                        {{ t('Program Other Level') }} <code
+                                                            class="highlighter-rouge">*</code>
+                                                    </label>
+                                                    <br>
+                                                    <input type="text" id="account_level_otherLevel"
+                                                           name="account_level[otherLevel]"
+                                                           class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="col-xl-12 col-sm-12">
                                                 <div class="mb-3">
                                                     <label class="form-label"
-                                                           for="account_level_description">{{ t('description') }}</label>
+                                                           for="account_level_description">{{ t('description')
+                                                        }}</label>
                                                     <textarea id="account_level_description"
                                                               name="account_level[description]"
                                                               class="form-control"
@@ -39,8 +54,10 @@
                                         </div>
                                     </div>
                                     <div class="float-end">
-                                        <button type="submit" class="btn btn-outline-primary me-3">{{ t('create') }}</button>
-                                        <a class="btn btn-outline-danger" href="/dashboard/show-level">{{ t('close') }}</a>
+                                        <button type="submit" class="btn btn-outline-primary me-3">{{ t('create') }}
+                                        </button>
+                                        <a class="btn btn-outline-danger" href="/dashboard/show-level">{{ t('close')
+                                            }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -51,6 +68,7 @@
         </div>
     </div>
 </div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Load levels into select
@@ -75,27 +93,59 @@
                 console.error('Failed to load levels:', err);
             });
 
+        // Show/hide "Program Other Level" input when level id = 1 is selected
+        const otherLevelWrapper = document.getElementById('otherLevelWrapper');
+        const otherLevelInput   = document.getElementById('account_level_otherLevel');
+
+        $(document).on('change', '#account_level_levelConfig', function () {
+            if ($(this).find('option:selected').text() === 'Other') {
+                console.log('Selected level id:', $(this).val());
+                otherLevelWrapper.style.display = '';
+                otherLevelInput.setAttribute('required', 'required');
+            } else {
+                otherLevelWrapper.style.display = 'none';
+                otherLevelInput.value = '';
+                otherLevelInput.removeAttribute('required');
+            }
+        });
+
         // Form submit
         document.getElementById('account-level-form').addEventListener('submit', function (e) {
             e.preventDefault();
 
-            const level_config_id = document.getElementById('account_level_levelConfig').value;
+            const levelSelect     = document.getElementById('account_level_levelConfig');
+            const level_config_id = levelSelect.value;
             const description     = document.getElementById('account_level_description').value;
-            const account_id      = {{ account_id }};  // 👈 inject from your template
+            const other_level     = document.getElementById('account_level_otherLevel').value.trim();
+            const account_id      = {{ account_id }};
+
+            const isOtherSelected = levelSelect.options[levelSelect.selectedIndex]?.text === 'Other';
 
             if (!level_config_id) {
                 alert('Please select a level.');
                 return;
             }
 
+            if (isOtherSelected && !other_level) {
+                alert('Please enter the other level name.');
+                document.getElementById('account_level_otherLevel').focus();
+                return;
+            }
+
+            const payload = {
+                account_id      : account_id,
+                level_config_id : level_config_id,
+                description     : description
+            };
+
+            if (isOtherSelected) {
+                payload.other_level = other_level;
+            }
+
             fetch(`/api/create_account_config/${account_id}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    account_id      : account_id,
-                    level_config_id : level_config_id,
-                    description     : description
-                })
+                body: JSON.stringify(payload)
             })
             .then(res => res.json())
             .then(data => {

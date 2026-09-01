@@ -128,12 +128,24 @@ def view_account_subject(account_subject_id):
 def create_account_subject(account_id):
     try:
         data          = request.get_json()
+        print(data)
         subject_id    = data.get('subjectId')
-        other_subject = data.get('other_subject') or None
+        other_subject = data.get('otherSubject')
         description   = data.get('description') or None
 
         if not subject_id:
             return jsonify({"Message": "Missing subject_id"}), 400
+
+        query_test = """
+            SELECT name as Name
+            FROM subject_config 
+            WHERE id = %s AND enabled = 1
+        """
+        result = Database.execute_query(query_test, (subject_id,), fetch=True)
+        Name = result[0]['Name'] if result else None
+        print(Name)
+        if Name and Name.strip().lower() == 'other' and other_subject == None:
+            return jsonify({"Message": "Other_subject must be filled "}),400
 
         query = """
             INSERT INTO account_subject

@@ -50,8 +50,10 @@ def get_local_detail(account_id):
         query = """
             SELECT 
                 l.*,
+                sl.slc_id as slc_id,
                 COALESCE(SUM(CAST(r.capacity AS UNSIGNED)), 0) as capacity
             FROM local l
+            JOIN slc_local sl ON sl.local_id = l.id
             LEFT JOIN room r ON l.id = r.local_id AND r.enabled = 1
             WHERE l.account_id = %s AND l.enabled = 1
             GROUP BY l.id

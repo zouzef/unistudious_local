@@ -116,3 +116,12 @@ def create_teacher_view():
     )
 
 
+@user_views_bp.route('/dashboard/profile-student/<int:user_id>')
+def profile_student_view(user_id):
+    guard = login_required()
+    if guard:
+        return guard
+
+    return render_page('profile_student',
+                       account_id=session.get('account_id'),
+                       user_id= user_id)

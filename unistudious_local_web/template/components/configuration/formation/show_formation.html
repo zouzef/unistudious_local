@@ -18,7 +18,8 @@
                             </span>
                         </div>
                     </form>
-                    <a class="btn btn-outline-primary js-single-click" href="/dashboard/create-formation"><i class="fa fa-plus me-1"></i>{{ t('Training Program') }}</a>
+                    <a class="btn btn-outline-primary js-single-click" href="/dashboard/create-formation"><i
+                            class="fa fa-plus me-1"></i>{{ t('Training Program') }}</a>
                 </div>
             </div>
 
@@ -58,7 +59,7 @@
                         : `<span class="badge badge-danger light">{{ t('inactive') }}</span>`;
 
                     const img = formation.img_link
-                        ? formation.img_link
+                        ? `/api/get_formation_image/${formation.id}`
                         : '../static/assets/images/formation-empty.jpg';
 
                     const sessionsCount = formation.sessions_count ?? 0;
@@ -77,7 +78,7 @@
                                         <div class="col-md-5 col-xxl-12">
                                             <div class="new-arrival-product mb-4 mb-xxl-4 mb-md-0">
                                                 <div class="new-arrivals-img-contnent">
-                                                    <img class="img-fluid" src="${img}" alt="formation">
+                                                    <img class="img-fluid" src="${img}" alt="formation" onerror="this.onerror=null;this.src='../static/assets/images/formation-empty.jpg';">
                                                 </div>
                                             </div>
                                         </div>

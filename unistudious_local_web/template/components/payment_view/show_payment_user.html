@@ -53,6 +53,8 @@
 
     </div>
 </div>
+
+<!-- Payment Details Modal -->
 <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -65,7 +67,7 @@
                 <p><strong>Price:</strong> <span id="modalPrice"></span></p>
                 <p><strong>Date:</strong> <span id="modalTypeDate"></span></p>
 
-                <form id="addPaymentForm">
+                <form id="addPaymentForm" data-locked="0">
                     <input type="hidden" id="hiddenOrderId"     name="orderId">
                     <input type="hidden" id="hiddenUserId"      name="userId">
                     <input type="hidden" id="hiddenSessionId"   name="sessionId">
@@ -73,7 +75,40 @@
 
                     <div class="mb-3">
                         <label for="amount" class="form-label">Amount</label>
-                        <input type="number" class="form-control" id="amount" name="amount" disabled>
+                        <input type="number" class="form-control" id="amount" name="amount" required disabled>
+                    </div>
+
+                    <div class="mb-3" id="remainingPaymentContainer" style="display: none;">
+                        <label for="remainingPayment" class="form-label">Remaining Payment</label>
+                        <input type="number" class="form-control" id="remainingPayment" name="remainingPayment">
+                    </div>
+
+                    <div id="acceptPaymentSection" style="display: none;">
+                        <div class="mb-3">
+                            <label class="form-label">Accept Payment?</label>
+                            <div>
+                                <button type="button" class="btn btn-outline-success" id="acceptYes">Yes</button>
+                                <button type="button" class="btn btn-outline-danger" id="acceptNo">No</button>
+                            </div>
+                        </div>
+
+                        <div id="changePriceSection" style="display: none;">
+                            <div class="mb-3">
+                                <label for="changePrice" class="form-label">Do you want to change the price?</label>
+                                <select class="form-control" id="changePrice">
+                                    <option value="">Select</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+
+                            <div id="newPriceSection" style="display: none;">
+                                <div class="mb-3">
+                                    <label for="newPrice" class="form-label">Enter New Price</label>
+                                    <input type="number" class="form-control" id="newPrice" placeholder="Enter new price">
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="mb-3">
@@ -81,262 +116,49 @@
                         <textarea class="form-control" id="description" name="description"></textarea>
                     </div>
 
-                    <div id="absentMessage" class="alert alert-warning">
+                    <div id="absentMessage" class="alert alert-warning" style="display: none;">
                         <p>If the user is absent, you can click <strong>"Cancelled Payment"</strong> to mark the payment as 0 and change its status to "Cancelled".</p>
                     </div>
-                    <button type="button" class="btn btn-danger" id="cancel-payment">Cancelled Payment</button>
+                    <button type="button" class="btn btn-outline-danger" id="cancel-payment" style="display: none;">Cancelled Payment</button>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" id="save-payment-session-user">Save Payment</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-outline-primary" id="save-payment-session-user">Save Payment</button>
             </div>
         </div>
     </div>
 </div>
-<script>
-    const idSession = {{ id_session }};
-    const idUser    = {{ id_user }};
 
-    const formatDate = (dateStr) => {
-        if (!dateStr) return 'N/A';
-        return new Date(dateStr).toLocaleDateString('en-GB');
-    };
+<!-- Status Update Modal -->
+<div class="modal fade" id="statusUpdateModal" tabindex="-1" aria-labelledby="statusUpdateModalLabel">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="statusUpdateModalLabel">Update Payment Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="changeStatusForm" data-locked="0">
+                    <input type="hidden" id="paymentId" name="paymentId">
+                    <input type="hidden" id="nextPaymentId" name="nextPaymentId">
+                    <input type="hidden" id="currentStatus" name="currentStatus">
+                    <input type="hidden" id="nextStatus" name="nextStatus">
+                    <div class="mb-3">
+                        <label for="statusSelect" class="form-label">Select New Status:</label>
+                        <select id="statusSelect" class="form-control" required>
+                            <option value="Paid">Paid</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-primary" id="confirmStatusUpdate">Confirm Update</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-    const getStatusBadge = (status) => {
-        const badges = {
-            'Paid':      'badge-success',
-            'Unpaid':    'badge-danger',
-            'Cancelled': 'badge-danger',
-            'Pending':   'badge-warning',
-        };
-        const cls = badges[status] || 'badge-secondary';
-        return `<span class="badge ${cls} light badge-sm">${status}</span>`;
-    };
-
-    function stylePaginationButtons() {
-        const paginate = document.querySelector('.dataTables_paginate');
-        if (!paginate) return;
-
-        paginate.querySelectorAll('span > a, a.paginate_button').forEach(btn => {
-            btn.style.cssText = `
-                min-width: 32px; height: 32px; border-radius: 8px;
-                border: 1.5px solid #e0dfef; background: #fff;
-                color: #4c4b8f; font-size: 13px; font-weight: 500;
-                cursor: pointer; display: inline-flex; align-items: center;
-                justify-content: center; padding: 0 6px; margin: 0 2px;
-                text-decoration: none; transition: background .15s;
-            `;
-        });
-
-        paginate.querySelectorAll('a.paginate_button.current').forEach(btn => {
-            btn.style.cssText += `background: #4c4b9e !important; color: #fff !important; border-color: #4c4b9e !important;`;
-        });
-
-        paginate.querySelectorAll('a.paginate_button.disabled').forEach(btn => {
-            btn.style.opacity = '0.35';
-            btn.style.cursor  = 'default';
-        });
-    }
-
-    function loadPaymentData() {
-        fetch(`/api/get_payment_user_info_service/${idSession}/${idUser}`)
-            .then(res => res.json())
-            .then(data => {
-                console.log(data);
-                if (!data || data.length === 0) {
-                    document.getElementById('orders').innerHTML = `
-                        <tr><td colspan="7" class="text-center">No payment records found</td></tr>`;
-                    $('#example').DataTable({
-                        pageLength: 10,
-                        lengthChange: false,
-                        language: {
-                            paginate: {
-                                next:     '<i class="fas fa-angle-right"></i>',
-                                previous: '<i class="fas fa-angle-left"></i>'
-                            }
-                        },
-                        drawCallback: function () { stylePaginationButtons(); }
-                    });
-                    return;
-                }
-
-                // Header info (from first item)
-                const first = data[0];
-                document.getElementById('info-session-name').textContent = first.name;
-                document.getElementById('info-student-name').textContent = first.username;
-                document.getElementById('info-price').textContent        = `${first.amount ? parseFloat(first.amount).toFixed(2) : '0.00'} TND`;
-
-                // Table rows — no button for Cancelled status
-                document.getElementById('orders').innerHTML = data.map(item => `
-                    <tr>
-                        <td class="py-2">${item.id}</td>
-                        <td class="py-2">${item.type_date ?? 'N/A'}</td>
-                        <td class="py-2">${item.description ?? 'N/A'}</td>
-                        <td class="py-2 text-end">${getStatusBadge(item.status)}</td>
-                        <td class="py-2 text-end font-w600">${item.amount ? parseFloat(item.amount).toFixed(2) : '0.00'} TND</td>
-                        <td class="py-2 text-end font-w600">${formatDate(item.date_payment)}</td>
-                        <td class="py-2 text-end">
-                            ${item.status !== 'Cancelled' ? `
-                                <button class="btn btn-info btn-sm"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#paymentModal"
-                                    data-id="${item.id}"
-                                    data-user-id="${idUser}"
-                                    data-session-id="${idSession}"
-                                    data-amount="${item.amount ?? ''}"
-                                    data-price="${item.amount ? parseFloat(item.amount).toFixed(2) : '0.00'} TND"
-                                    data-description="${item.description ?? ''}"
-                                    data-type-date="${item.type_date ?? ''}"
-                                    data-status="${item.status}">
-                                    View Payment
-                                </button>
-                            ` : ''}
-                        </td>
-                    </tr>
-                `).join('');
-
-                // Destroy and re-init DataTable
-                if ($.fn.dataTable.isDataTable('#example')) {
-                    $('#example').DataTable().destroy();
-                }
-                $('#example').DataTable({
-                    pageLength: 10,
-                    lengthChange: false,
-                    order: [[0, 'desc']],
-                    language: {
-                        paginate: {
-                            next:     '<i class="fas fa-angle-right"></i>',
-                            previous: '<i class="fas fa-angle-left"></i>'
-                        }
-                    },
-                    drawCallback: function () { stylePaginationButtons(); }
-                });
-            })
-            .catch(err => console.error('Error loading payment data:', err));
-    }
-
-    function updatePayment(paymentId, sessionId, userId, payload) {
-        return fetch(`/api/update_payment_session_user/${paymentId}/${sessionId}/${userId}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        }).then(res => res.json());
-    }
-
-    window.addEventListener('load', function () {
-
-        // Destroy DataTable if already initialized on page load
-        if ($.fn.dataTable.isDataTable('#example')) {
-            $('#example').DataTable().destroy();
-        }
-
-        loadPaymentData();
-
-        // Fill modal with clicked row's data
-        document.getElementById('paymentModal').addEventListener('show.bs.modal', function (e) {
-            const btn = e.relatedTarget;
-
-            const id          = btn.dataset.id;
-            const userId      = btn.dataset.userId;
-            const sessionId   = btn.dataset.sessionId;
-            const amount      = btn.dataset.amount;
-            const price       = btn.dataset.price;
-            const description = btn.dataset.description;
-            const typeDate    = btn.dataset.typeDate;
-            const status      = btn.dataset.status;
-
-            // Display fields
-            document.getElementById('modalOrderId').textContent  = id;
-            document.getElementById('modalPrice').textContent    = price;
-            document.getElementById('modalTypeDate').textContent = typeDate || 'N/A';
-
-            // Hidden fields
-            document.getElementById('hiddenOrderId').value     = id;
-            document.getElementById('hiddenUserId').value      = userId;
-            document.getElementById('hiddenSessionId').value   = sessionId;
-            document.getElementById('hiddenOrderStatus').value = status;
-
-            // Form fields
-            const amountInput = document.getElementById('amount');
-            amountInput.removeAttribute('readonly');
-            amountInput.removeAttribute('disabled');
-            amountInput.value = amount || '';
-
-            document.getElementById('description').value = description || '';
-
-            // If status is Paid: hide amount field, cancel button and absent message
-            // If status is not Paid: show everything
-            if (status === 'Paid') {
-                document.getElementById('amount').closest('.mb-3').style.display        = 'none';
-                document.getElementById('absentMessage').style.display                  = 'none';
-                document.getElementById('cancel-payment').style.display                 = 'none';
-            } else {
-                document.getElementById('amount').closest('.mb-3').style.display        = '';
-                document.getElementById('absentMessage').style.display                  = '';
-                document.getElementById('cancel-payment').style.display                 = '';
-            }
-        });
-
-        // Clear modal on close
-        document.getElementById('paymentModal').addEventListener('hidden.bs.modal', function () {
-            document.getElementById('addPaymentForm').reset();
-            document.getElementById('modalOrderId').textContent  = '';
-            document.getElementById('modalPrice').textContent    = '';
-            document.getElementById('modalTypeDate').textContent = '';
-
-            // Reset visibility
-            document.getElementById('amount').closest('.mb-3').style.display = '';
-            document.getElementById('absentMessage').style.display           = '';
-            document.getElementById('cancel-payment').style.display          = '';
-        });
-
-        // Save Payment button
-        document.getElementById('save-payment-session-user').addEventListener('click', function () {
-            const paymentId   = document.getElementById('hiddenOrderId').value;
-            const userId      = document.getElementById('hiddenUserId').value;
-            const sessionId   = document.getElementById('hiddenSessionId').value;
-            const status      = document.getElementById('hiddenOrderStatus').value;
-            const amount      = document.getElementById('amount').value;
-            const description = document.getElementById('description').value;
-
-            const payload = {};
-            if (description)         payload.description = description;
-            if (amount && status !== 'Paid') payload.amount = amount;
-
-            if (Object.keys(payload).length === 0) {
-                alert('Please fill in at least one field to update.');
-                return;
-            }
-
-            updatePayment(paymentId, sessionId, userId, payload)
-                .then(res => {
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
-                    modal.hide();
-                    window.location.reload();
-                })
-                .catch(err => console.error('Error saving payment:', err));
-        });
-
-        // Cancelled Payment button
-        document.getElementById('cancel-payment').addEventListener('click', function () {
-            const paymentId = document.getElementById('hiddenOrderId').value;
-            const userId    = document.getElementById('hiddenUserId').value;
-            const sessionId = document.getElementById('hiddenSessionId').value;
-
-            const payload = {
-                status: 'Cancelled',
-                amount: '0'
-            };
-
-            updatePayment(paymentId, sessionId, userId, payload)
-                .then(res => {
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
-                    modal.hide();
-                    window.location.reload();
-                })
-                .catch(err => console.error('Error cancelling payment:', err));
-        });
-
-    });
-</script>
+<script src="{{ url_for('static', filename='js/dashboard/show_payment_user.js') }}"></script>

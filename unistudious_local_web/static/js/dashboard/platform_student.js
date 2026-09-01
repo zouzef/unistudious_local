@@ -153,7 +153,7 @@ function renderUsers(users, page) {
             <a href="javascript:void(0);" class="btn btn-outline-success btn-sm restricted-action">
               <i class="fa fa-envelope me-1"></i> Invitation
             </a>
-            <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm restricted-action">
+            <a href="/dashboard/profile-student/${user.id}" class="btn btn-outline-primary btn-sm">
               <i class="fa fa-user me-1"></i> Profile
             </a>
           </div>
@@ -242,19 +242,63 @@ function attachPaginationEvents(totalPages) {
   }
 }
 
+// ==================== SEARCH + SESSION FILTER (combined) ====================
+function applyFilters() {
+  const searchTerm = (document.getElementById("searchInputUser")?.value ?? "").trim().toLowerCase();
+  const sessionId = document.getElementById("session-select")?.value ?? "";
+
+  let filtered = state.allUsers;
+
+  if (sessionId) {
+    filtered = filtered.filter(user => String(user.session_id) === String(sessionId));
+  }
+
+  if (searchTerm) {
+    filtered = filtered.filter(user =>
+      (user.full_name ?? "").toLowerCase().includes(searchTerm)
+    );
+  }
+
+  state.currentUsers = filtered;
+  state.currentPage = 1;
+  renderUsers(state.currentUsers, state.currentPage);
+}
+
+function initSearch() {
+  const form = document.getElementById("searchForm");
+  const input = document.getElementById("searchInputUser");
+  const button = document.getElementById("searchButton");
+
+  // Pressing Enter inside the search form shouldn't reload the page
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      applyFilters();
+    });
+  }
+
+  // Clicking the magnifier icon
+  if (button) {
+    button.addEventListener("click", function (e) {
+      e.preventDefault();
+      applyFilters();
+    });
+  }
+
+  // Live search as you type
+  if (input) {
+    input.addEventListener("input", function () {
+      applyFilters();
+    });
+  }
+}
+
 // ==================== SESSION FILTER ====================
 function initSessionFilter() {
   const select = document.getElementById("session-select");
 
   select.addEventListener("change", function () {
-    const selectedSessionId = this.value;
-    state.currentPage = 1;
-
-    state.currentUsers = !selectedSessionId
-      ? state.allUsers
-      : state.allUsers.filter(user => String(user.session_id) === String(selectedSessionId));
-
-    renderUsers(state.currentUsers, state.currentPage);
+    applyFilters();
   });
 }
 
@@ -273,6 +317,7 @@ function initPage() {
   loadSessions(state.accountId);
   loadUsers(state.accountId);
   initSessionFilter();
+  initSearch();
 }
 
 if (document.readyState === 'loading') {

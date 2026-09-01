@@ -124,3 +124,15 @@ def get_user_registration_service():
         return response.status_code == 200, response
     except Exception as e:
         return False,None
+
+def get_history_attendance_service(session_id, user_id):
+    url = f"{current_app.config['BASE_URL']}get_history_attendance/{session_id}/{user_id}"
+    try:
+        response = requests.get(url, verify=False, timeout=10)
+        if response.status_code == 200:
+            return True, response
+        else:
+            return False, response
+    except Exception as e:
+        print(e)
+        return False,None
