@@ -2238,3 +2238,41 @@ def get_calendar_door(door_id):
         print(f"Error in get_calendar_door: {e}")
         return jsonify({"Message": f"Error: {e} coming from get calendar door"}), 500
 
+
+@calendar_bp.route('/get-calender-moderateur/<int:session_id>/<int:account_id>', methods=['GET'])
+def get_calander_moderateur(session_id, account_id):
+    try:
+        if not(check_session(session_id)):
+            return jsonify({"Message": f"There is no session with this id"}),404
+
+        query = """
+            SELECT 
+                c.color,
+                c.description,
+                c.start_time,
+                c.end_time,
+                c.title,
+                c.type,
+                t.username as teacherName,
+                r.name as roomName,
+                g.name as groupName
+            FROM relation_calander_group_session c,relation_group_local_session g, room r, user t ,session s
+            WHERE 
+                t.id = c.teacher_id AND
+                r.id = c.room_id AND
+                g.id = c.group_session_id AND 
+                s.id = c.session_id AND
+                c.session_id = %s AND c.account_id = %s AND
+                t.enabled = 1 AND r.enabled = 1 AND c.enabled = 1 AND c.status = 1 AND s.enabled = 1 AND s.status = 1 AND t.enabled = 1 AND t.status = 1
+        
+        """
+        result = Database.execute_query(query, (session_id,account_id),fetch=True)
+        if result:
+            return jsonify({"Message": "Success", "data": result}),200
+        else:
+            return jsonify({"Message": "THere is no data", "data": []}),200
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }),500

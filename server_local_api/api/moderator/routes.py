@@ -22,7 +22,8 @@ REQUIRED_MODERATOR_ROLES = [
     'ROLE_MANAGER_HR',
     'ROLE_MANAGER_IT',
     'ROLE_MANAGER_MARKETING',
-    'ROLE_CUSTOMER_MANAGER_SERVICE'
+    'ROLE_CUSTOMER_MANAGER_SERVICE',
+    'ROLE_ADMIN'
 ]
 
 
@@ -92,12 +93,12 @@ def auth_moderator():
             return jsonify({"error": "Invalid roles format in database"}), 500
 
         user_roles    = list(roles_data.values()) if isinstance(roles_data, dict) else roles_data
-        missing_roles = [r for r in REQUIRED_MODERATOR_ROLES if r not in user_roles]
+        has_required_role = any(r in user_roles for r in REQUIRED_MODERATOR_ROLES)
 
-        if missing_roles:
+        if not has_required_role:
             return jsonify({
-                "message":       "Insufficient permissions",
-                "missing_roles": missing_roles
+                "message": "Insufficient permissions",
+                "required_any_of": REQUIRED_MODERATOR_ROLES
             }), 403
 
         # ── All checks passed → issue JWT ─────────────────────────────────────

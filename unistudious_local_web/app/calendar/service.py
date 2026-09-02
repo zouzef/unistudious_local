@@ -122,3 +122,16 @@ def get_notification(account_id: int) -> dict:
     except Exception as e:
         print(f"[CALENDAR ERROR] get_notification: {e}")
         return {}
+
+def calander_moderateur_service(session_id:int, account_id: int) -> dict:
+    url = f"{current_app.config['BASE_URL']}get-calender-moderateur/{session_id}/{account_id}"
+    try:
+        response = requests.get(
+            url,
+            verify = False,
+            timeout = 10
+        )
+        response.raise_for_status()
+        return True, response.json()
+    except Exception as e:
+        return False,None

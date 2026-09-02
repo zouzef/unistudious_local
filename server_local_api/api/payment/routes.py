@@ -54,7 +54,6 @@ def get_payment_session(session_id):
 			"Message":f"Error: {e} coming from the server"
 		}),500
 
-
 @payment_bp.route('/get_payment_session_user/<int:session_id>/<int:user_id>', methods=['GET'])
 def get_payment_session_user(session_id,user_id):
 	try:
@@ -159,11 +158,9 @@ def update_payment_session(payment_id):
 	except Exception as e:
 		return jsonify({"Message": f"Error: {e} coming from server"}), 500
 
-
 EXCLUDED_AUDIT_FIELDS = {'uuid', 'updated_at', 'timestamp', 'created_at', 'enabled', 'type', 'created_by'}
 def filter_audit_fields(record):
 	return {k: v for k, v in record.items() if k not in EXCLUDED_AUDIT_FIELDS}
-
 
 @payment_bp.route('/update_payment_session_user/<int:session_id>/<int:user_id>/<int:payment_id>', methods=['POST'])
 def update_payment_session_user(session_id, user_id, payment_id):

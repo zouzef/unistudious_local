@@ -9,7 +9,8 @@ from app.calendar.service import (
     approve_calendar_request,
     reject_calendar_request,
     delete_calendar_request,
-    get_notification
+    get_notification,
+    calander_moderateur_service
 )
 
 calendar_bp = Blueprint('calendar', __name__)
@@ -97,3 +98,13 @@ def api_get_notification(account_id):
     result = get_notification(account_id)
     return jsonify(result), 200
 
+@calendar_bp.route('/api/get-calender-moderateur/<int:session_id>/<int:account_id>', methods=['GET'])
+def get_calender_moderateur(session_id,account_id):
+    try:
+        success,result = calander_moderateur_service(session_id,account_id)
+        if success:
+            return jsonify(result),200
+        else:
+            return jsonify(result),400
+    except Exception as e:
+        return jsonify({"Message": f"Error: {e} coming from backend"}),500

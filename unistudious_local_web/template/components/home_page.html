@@ -142,32 +142,31 @@
 
         </div>
         <!-- column-->
+        <!-- column-->
         <div class="col-xl-12">
             <div class="card">
-                <div class="card-header border-0 p-3">
+                <div class="card-header border-0 p-3 d-flex justify-content-between align-items-center">
                     <h4 class="heading mb-0">{{ t('calendar_request') }}</h4>
-                    <div class="">
-                        <a href="/dashboard/show-calander-request/{{session.account_id}}">
-                            <button type="button" class="btn light btn-primary">{{ t('edit') }}</button>
-                        </a>
-                    </div>
+                    <select id="calendar-session-filter" class="form-control w-auto">
+                        <option value="">Select a session</option>
+                    </select>
                 </div>
                 <div class="card-body p-0">
-                    <div class="table-responsive ">
-                        <table id="example" class="display table" style="min-width: 845px">
+                    <div class="table-responsive">
+                        <table id="example-calendar-events" class="display table" style="min-width: 845px">
                             <thead>
                             <tr>
-                                <th>{{ t('id') }}</th>
-                                <th>{{ t('name') }}</th>
-                                <th>{{ t('subject') }}</th>
-                                <th>{{ t('room') }}</th>
-                                <th>{{ t('session') }}</th>
-                                <th>{{ t('status') }}</th>
-                                <th>{{ t('date') }}</th>
+                                <th></th>
+                                <th>Title</th>
+                                <th>Teacher</th>
+                                <th>Room</th>
+                                <th>Start</th>
+                                <th>End</th>
+                                <th>Type</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <!-- Data will be loaded here dynamically -->
+                            <!-- rows injected dynamically by JS -->
                             </tbody>
                         </table>
                     </div>
@@ -176,49 +175,9 @@
         </div>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const ctx = document.getElementById('marketChart').getContext('2d');
-
-        fetch('/api/get-user-registration')
-            .then(res => {
-                if (!res) return null;
-                if (!res.ok) {
-                    throw new Error(`HTTP error, status: ${res.status}`);
-                }
-                return res.json();
-            })
-            .then(chartData => {
-                if (!chartData) return;
-                new Chart(ctx, {
-                    type: 'line', // or 'bar'
-                    data: {
-                        labels: chartData.labels,
-                        datasets: [{
-                            label: 'Students Registrations',
-                            data: chartData.data,
-                            borderColor: '#4c4b9e',
-                            backgroundColor: 'rgba(76, 75, 158, 0.1)',
-                            fill: true,
-                            tension: 0.4,
-                            pointRadius: 3
-                        }]
-                    },
-                    options: {
-                        responsive: false, // canvas already has fixed width/height via style
-                        plugins: {
-                            legend: { display: false }
-                        },
-                        scales: {
-                            y: { beginAtZero: true }
-                        }
-                    }
-                });
-            })
-            .catch(err => {
-                console.error('Error loading chart data:', err);
-            });
-    });
+    window.ACCOUNT_ID = {{ session.get('account_id') }};
 </script>
+<script src="{{ url_for('static', filename='js/dashboard/home.js') }}"></script>

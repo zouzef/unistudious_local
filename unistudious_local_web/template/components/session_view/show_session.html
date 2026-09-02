@@ -193,20 +193,34 @@
 
 <style>
     .modulel {
-        width: 100%;
-        height: 200px;
-        overflow: hidden;
-        border-radius: 8px;
-        padding: 1px;      /* creates breathing room, image "zooms out" */
-        box-sizing: border-box;
-        background: #fff;   /* or whatever your card background is */
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 8px;
+    padding: 1px;
+    box-sizing: border-box;
+    background: #fff;
+}
+
+.session-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 4px;
+}
+
+/* Shrink thumbnail on phones so it doesn't dominate the card */
+@media (max-width: 576px) {
+    .modulel {
+        height: 120px;
+        max-width: 200px;   /* shrinks the box horizontally */
+        margin: 0 auto;     /* centers it in the card */
     }
 
-    .session-thumb {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-        border-radius: 4px;
+
+    .user-details p {
+        font-size: 0.9rem;
     }
+}
 </style>

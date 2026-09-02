@@ -6,7 +6,7 @@ import requests
 from datetime import timedelta
 import sys
 import os
-
+import time
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -90,12 +90,22 @@ class DataFetcher:
                 }
 
                 # Make request with form data (not JSON)
-                response = requests.post(
-                    url,
-                    headers=headers,
-                    data=data,  # Send as form data, not JSON
-                    timeout=self.settings.api_timeout
-                )
+                conn_attempt = 0
+                while True:
+                    try:
+                        response = requests.post(
+                            url,
+                            headers=headers,
+                            data=data,  # Send as form data, not JSON
+                            timeout=self.settings.api_timeout
+                        )
+                        break
+                    except requests.exceptions.ConnectionError as e:
+                        conn_attempt += 1
+                        print(f"🌐 Connection error ({conn_attempt}/3): {e}")
+                        if conn_attempt >= 3:
+                            raise
+                        time.sleep(5)
 
                 # Check for token expiration
                 if response.status_code == 401 or "token expired" in response.text.lower():
