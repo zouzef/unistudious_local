@@ -1,5 +1,5 @@
 # app/__init__.py
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, render_template
 from flask_socketio import SocketIO
 from config import Config
 from app.utils import t, get_lang
@@ -13,6 +13,7 @@ def create_app():
     app = Flask(__name__,
                 template_folder=Config.TEMPLATE_FOLDER,
                 static_folder="../static")
+
 
     @app.context_processor
     def inject_translations():
@@ -31,6 +32,13 @@ def create_app():
     def index():
         return redirect(url_for('auth.login_page'))
 
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('page-error-404.html')
+
+    @app.errorhandler(500)
+    def internal_server_error(e):
+        return render_template('page-error-500.html'),500
 
     socketio.init_app(app)
 

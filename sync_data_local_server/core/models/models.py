@@ -689,6 +689,8 @@ class PaymentSessionModel(BaseModel):
 		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
 		Column("updated_at", "DATETIME"),
 		Column("uuid", "VARCHAR(255)", nullable=False),
+		Column("id_prod", "INT(11)")
+
 	]
 class PaymentSessionAuditModel(BaseModel):
 	table_name = "payment_session_audit"

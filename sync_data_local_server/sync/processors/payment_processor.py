@@ -15,6 +15,7 @@ def insert_payment_sessions(db, payment_data):
     """
     Handle 'created' payment sessions from API
     Logic:
+    - If record already exists as id_prod (from local push) → skip to avoid duplicate
     - If record exists in DB → UPDATE it
     - If record does NOT exist → INSERT it
 
@@ -49,8 +50,19 @@ def insert_payment_sessions(db, payment_data):
                 if not payment_id:
                     raise ValueError("Missing required field: id")
 
+                # ✅ FIRST: Check if this remote ID already exists as id_prod (from local push)
+                check_prod_query = "SELECT id FROM payment_session WHERE id_prod = %s"
+                existing_by_prod = db.fetch_query(check_prod_query, (payment_id,))
+
+                if existing_by_prod:
+                    print(f"   [{i}/{len(created_payments)}] Payment Session ID {payment_id} already exists as id_prod "
+                          f"(local id: {existing_by_prod[0]['id']}) - skipped to avoid duplicate")
+                    result["skipped"] += 1
+                    continue
+
                 # Prepare new data
                 new_data = {
+                    "id_prod": payment.get("id"),
                     "uuid": payment.get("uuid", ""),
                     "session_id": payment.get("sessionId"),
                     "account_id": payment.get("accountId"),
@@ -100,6 +112,7 @@ def insert_payment_sessions(db, payment_data):
 
                     update_query = """
                         UPDATE payment_session SET
+                            id_prod = %s,
                             uuid = %s,
                             session_id = %s,
                             account_id = %s,
@@ -122,6 +135,7 @@ def insert_payment_sessions(db, payment_data):
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["uuid"],
                         new_data["session_id"],
                         new_data["account_id"],
@@ -152,15 +166,16 @@ def insert_payment_sessions(db, payment_data):
 
                     insert_query = """
                         INSERT INTO payment_session (
-                            id, uuid, session_id, account_id, user_id, type, type_date,
+                            id, id_prod, uuid, session_id, account_id, user_id, type, type_date,
                             type_number_session, date_payment, status, amount, created_by,
                             price, description, forcing, enabled, created_at, updated_at, timestamp
                         )
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """
 
                     db.execute_query(insert_query, (
                         payment_id,
+                        new_data["id_prod"],
                         new_data["uuid"],
                         new_data["session_id"],
                         new_data["account_id"],
@@ -203,6 +218,7 @@ def update_payment_sessions(db, payment_data):
     """
     Handle 'updated' payment sessions from API
     Logic:
+    - Look up by id_prod first, then fall back to id
     - If record exists in DB → UPDATE it
     - If record does NOT exist → INSERT it (don't skip!)
 
@@ -239,6 +255,7 @@ def update_payment_sessions(db, payment_data):
 
                 # Prepare new data
                 new_data = {
+                    "id_prod": payment.get("id"),
                     "uuid": payment.get("uuid", ""),
                     "session_id": payment.get("sessionId"),
                     "account_id": payment.get("accountId"),
@@ -259,9 +276,13 @@ def update_payment_sessions(db, payment_data):
                     "timestamp": format_date(payment.get("timestamp"))
                 }
 
-                # Check if record exists
-                select_query = "SELECT * FROM payment_session WHERE id = %s"
-                existing_records = db.fetch_query(select_query, (payment_id,))
+                # Look up by id_prod first, then fall back to id
+                check_prod_query = "SELECT * FROM payment_session WHERE id_prod = %s"
+                existing_records = db.fetch_query(check_prod_query, (payment_id,))
+
+                if not existing_records:
+                    select_query = "SELECT * FROM payment_session WHERE id = %s"
+                    existing_records = db.fetch_query(select_query, (payment_id,))
 
                 print(f"   [{i}/{len(updated_payments)}] Payment Session ID {payment_id}...")
 
@@ -288,6 +309,7 @@ def update_payment_sessions(db, payment_data):
 
                     update_query = """
                         UPDATE payment_session SET
+                            id_prod = %s,
                             uuid = %s,
                             session_id = %s,
                             account_id = %s,
@@ -310,6 +332,7 @@ def update_payment_sessions(db, payment_data):
                     """
 
                     db.execute_query(update_query, (
+                        new_data["id_prod"],
                         new_data["uuid"],
                         new_data["session_id"],
                         new_data["account_id"],
@@ -328,7 +351,7 @@ def update_payment_sessions(db, payment_data):
                         new_data["created_at"],
                         new_data["updated_at"],
                         new_data["timestamp"],
-                        payment_id
+                        existing["id"]
                     ))
 
                     result["updated"] += 1
@@ -340,15 +363,16 @@ def update_payment_sessions(db, payment_data):
 
                     insert_query = """
                         INSERT INTO payment_session (
-                            id, uuid, session_id, account_id, user_id, type, type_date,
+                            id, id_prod, uuid, session_id, account_id, user_id, type, type_date,
                             type_number_session, date_payment, status, amount, created_by,
                             price, description, forcing, enabled, created_at, updated_at, timestamp
                         )
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                     """
 
                     db.execute_query(insert_query, (
                         payment_id,
+                        new_data["id_prod"],
                         new_data["uuid"],
                         new_data["session_id"],
                         new_data["account_id"],

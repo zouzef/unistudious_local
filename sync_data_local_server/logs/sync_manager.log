@@ -3540,3 +3540,67 @@ Traceback (most recent call last):
     raise ConnectionError(e, request=request)
 requests.exceptions.ConnectionError: HTTPSConnectionPool(host='unistudious.com', port=443): Max retries exceeded with url: /slc/get-whats-news (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x71496f6eb0a0>: Failed to establish a new connection: [Errno -3] Temporary failure in name resolution'))
 2026-09-02 11:08:51 [ERROR] __main__ - Sync #11 failed.
+2026-09-03 14:30:20 [ERROR] sync.pushers.payment_pusher - Error in push_UpdatePayment_Amount: name 'Database' is not defined
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/payment_pusher.py", line 36, in push_Amount_PaymentUpdate
+    UserIdProd = Database.execute_query("SELECT id_prod FROM user WHERE id = %s", (user_id,), fetch=True)
+NameError: name 'Database' is not defined
+2026-09-03 14:30:20 [ERROR] sync.data_pusher - payment_session_audit audit #1 failed — will retry next cycle
+2026-09-03 14:31:16 [ERROR] sync.pushers.payment_pusher - Payment Update Failed
+2026-09-03 14:31:16 [ERROR] sync.data_pusher - payment_session_audit audit #1 failed — will retry next cycle
+2026-09-03 14:31:58 [ERROR] sync.pushers.payment_pusher - Payment Update Failed
+2026-09-03 14:31:58 [ERROR] sync.data_pusher - payment_session_audit audit #1 failed — will retry next cycle
+2026-09-03 14:32:22 [ERROR] sync.pushers.payment_pusher - Payment Update Failed
+2026-09-03 14:32:22 [ERROR] sync.data_pusher - payment_session_audit audit #1 failed — will retry next cycle
+2026-09-04 13:33:12 [ERROR] sync.data_pusher - payment_session_audit audit #1 failed — will retry next cycle
+2026-09-04 13:33:56 [ERROR] sync.pushers.payment_pusher - Payment Update Failed
+2026-09-04 13:33:56 [ERROR] sync.data_pusher - payment_session_audit audit #1 failed — will retry next cycle
+2026-09-04 13:34:19 [ERROR] sync.pushers.payment_pusher - Payment Update Failed
+2026-09-04 13:34:19 [ERROR] sync.data_pusher - payment_session_audit audit #1 failed — will retry next cycle
+2026-09-04 13:35:33 [ERROR] sync.pushers.payment_pusher - Payment Update Failed
+2026-09-04 13:35:33 [ERROR] sync.data_pusher - payment_session_audit audit #1 failed — will retry next cycle
+2026-09-04 13:40:14 [ERROR] sync.pushers.payment_pusher - Payment Update Failed
+2026-09-04 13:40:14 [ERROR] sync.data_pusher - payment_session_audit audit #1 failed — will retry next cycle
+2026-09-04 13:40:47 [ERROR] sync.pushers.payment_pusher - Payment Update Failed
+2026-09-04 13:40:47 [ERROR] sync.data_pusher - payment_session_audit audit #2 failed — will retry next cycle
+2026-09-07 11:06:53 [ERROR] __main__ - No internet connection. Cannot sync.
+2026-09-07 11:06:53 [ERROR] __main__ - Sync #4 failed.
+2026-09-07 14:53:17 [ERROR] __main__ - SYNC FAILED: 500 Server Error: Internal Server Error for url: https://unistudious.com/slc/get-whats-news
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/sync_manager.py", line 106, in sync_data_once
+    data = fetcher.fetch_data(since_date=since_date)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/data_fetcher.py", line 55, in fetch_data
+    data = self._post_with_form_data(self.whats_new_endpoint, payload)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/data_fetcher.py", line 125, in _post_with_form_data
+    response.raise_for_status()
+  File "/usr/lib/python3/dist-packages/requests/models.py", line 943, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: https://unistudious.com/slc/get-whats-news
+2026-09-07 14:53:17 [ERROR] __main__ - Sync #2 failed.
+2026-09-07 14:54:49 [ERROR] __main__ - SYNC FAILED: 500 Server Error: Internal Server Error for url: https://unistudious.com/slc/get-whats-news
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/sync_manager.py", line 106, in sync_data_once
+    data = fetcher.fetch_data(since_date=since_date)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/data_fetcher.py", line 55, in fetch_data
+    data = self._post_with_form_data(self.whats_new_endpoint, payload)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/data_fetcher.py", line 125, in _post_with_form_data
+    response.raise_for_status()
+  File "/usr/lib/python3/dist-packages/requests/models.py", line 943, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: https://unistudious.com/slc/get-whats-news
+2026-09-07 14:54:49 [ERROR] __main__ - Sync #1 failed.
+2026-09-07 14:56:52 [ERROR] __main__ - SYNC FAILED: 500 Server Error: Internal Server Error for url: https://unistudious.com/slc/get-whats-news
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/sync_manager.py", line 106, in sync_data_once
+    data = fetcher.fetch_data(since_date=since_date)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/data_fetcher.py", line 55, in fetch_data
+    data = self._post_with_form_data(self.whats_new_endpoint, payload)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/data_fetcher.py", line 125, in _post_with_form_data
+    response.raise_for_status()
+  File "/usr/lib/python3/dist-packages/requests/models.py", line 943, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: https://unistudious.com/slc/get-whats-news
+2026-09-07 14:56:52 [ERROR] __main__ - Sync #3 failed.
+2026-09-07 15:06:54 [ERROR] sync.data_pusher - payment_session_audit audit #1 failed — will retry next cycle
+2026-09-07 15:07:33 [ERROR] sync.data_pusher - payment_session_audit audit #1 failed — will retry next cycle
+2026-09-07 15:07:55 [ERROR] sync.data_pusher - payment_session_audit audit #1 failed — will retry next cycle

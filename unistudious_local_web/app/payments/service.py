@@ -3,7 +3,6 @@ import requests
 from flask import current_app
 
 
-
 def get_paymet_session_service(session_id: int) -> tuple:
 	url = f"{current_app.config['BASE_URL']}get_payment_session/{session_id}"
 	try:
@@ -17,7 +16,6 @@ def get_paymet_session_service(session_id: int) -> tuple:
 		print(f"Error: {e} coming from server!")
 		return False,None
 
-
 def get_payment_user_info_service(user_id: int,session_id: int) -> tuple:
     try:
         url = f"{current_app.config['BASE_URL']}get_payment_session_user/{session_id}/{user_id}"
@@ -29,7 +27,6 @@ def get_payment_user_info_service(user_id: int,session_id: int) -> tuple:
 
     except Exception as e:
         return False,None
-
 
 def update_payment_service(payment_session_id: int, data) -> tuple:
     try:
@@ -43,12 +40,10 @@ def update_payment_service(payment_session_id: int, data) -> tuple:
         print(f"Error: {e} coming from update_payment_service")
         return False, None
 
-
 def update_payment_user_service(payment_id, session_id,user_id,data):
 	url=f"{current_app.config['BASE_URL']}update_payment_session_user/{session_id}/{user_id}/{payment_id}"
 	try:
 		response = requests.post(url,json=data,verify=False)
-		print("response data: ",response.json())
 		if response.status_code == 200:
 			return True,response.json()
 		else:
@@ -57,7 +52,6 @@ def update_payment_user_service(payment_id, session_id,user_id,data):
 	except Exception as e:
 		print(f"Error: {e} coming from update_payment_user_service ")
 		return False,None
-
 
 def fetch_invoices_payment_service(account_id: int) -> tuple:
 	try:
@@ -81,4 +75,25 @@ def fetch_invoice_by_id_service(invoice_id: int, account_id: int, admin_user_id:
 			return False,response
 	except Exception as e:
 		print(e)
+		return False,None
+
+def update_normal_payment_service(data):
+	url = f"{current_app.config['BASE_URL']}change_normal_payment_amount"
+	try:
+		response = requests.post(url, json=data ,verify=False, timeout=10)
+		return response.status_code == 200, response
+
+	except Exception as e:
+		print(e)
+		return False, None
+
+def cancel_normal_payment_service(payment_order):
+	try:
+		url = f"{current_app.config['BASE_URL']}cancel_normal_payment/{payment_order}"
+		response = requests.post(url, verify=False, timeout=10)
+		if response.status_code == 200:
+			return True,response
+		else:
+			return False,response
+	except Exception as e:
 		return False,None

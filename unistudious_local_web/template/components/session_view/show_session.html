@@ -131,6 +131,18 @@
             new bootstrap.Dropdown(el);
         });
 
+        // ── Live filter sessions as you type ──────────────────────────────
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const query = this.value.trim().toLowerCase();
+            const cards = document.querySelectorAll('.row > .col-xl-3.col-lg-4.col-sm-6');
+
+            cards.forEach(function (card) {
+                const nameEl = card.querySelector('.user-details p');
+                const name = nameEl ? nameEl.textContent.trim().toLowerCase() : '';
+                card.style.display = name.startsWith(query) ? '' : 'none';
+            });
+        });
+
         // ── DELETE session ────────────────────────────────────────────────
         document.addEventListener('click', function (e) {
             const btn = e.target.closest('.delete-session');

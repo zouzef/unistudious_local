@@ -20,7 +20,8 @@ from sync.pushers import (
     user_pusher,
     virtuel_pusher,
     group_pusher,
-    fromation_pusher
+    fromation_pusher,
+    payment_pusher
 )
 
 logger = logging.getLogger(__name__)
@@ -463,15 +464,17 @@ class DataPusher:
 
             payment_rows = cursor.fetchall()
             if not payment_rows:
-                logger.info("Found %s pending Payment change(s)",len(group_rows))
+                logger.info("Found %s pending Payment change(s)",len(payment_rows))
+            else:
                 self._process_audit_rows(
                     cursor,
                     conn,
                     "payment_session_audit",
                     payment_rows,
                     {
-                        "INSERT": lambda row: print("HII"),
-                        "UPDATE": lambda row: print("HIII"),
+                        "UPDATE_status": lambda row: payment_pusher.push_Payment_Save(db, self.settings, row),
+                        "UPDATE_Amount": lambda row: payment_pusher.push_Amount_PaymentUpdate(db, self.settings, row),
+                        "CANCEL":        lambda row: payment_pusher.push_Cancel_Payment(db, self.settings, row)
                     }
                 )
 

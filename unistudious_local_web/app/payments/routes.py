@@ -8,8 +8,9 @@ from app.payments.service import(
 	get_payment_user_info_service,
 	update_payment_user_service,
 	fetch_invoices_payment_service,
-	fetch_invoice_by_id_service
-
+	fetch_invoice_by_id_service,
+	update_normal_payment_service,
+	cancel_normal_payment_service
 )
 
 payment_bp = Blueprint('payment', __name__)
@@ -56,10 +57,8 @@ def update_payment_session(payment_session):
 @payment_bp.route('/api/update_payment_session_user/<int:payment_id>/<int:session_id>/<int:user_id>',methods=['POST'])
 def update_payment_user(payment_id,session_id,user_id):
 	try:
-
 		data = request.get_json()
 		status,response = update_payment_user_service(payment_id,session_id,user_id,data)
-
 		return jsonify({
 			"Message":data
 		})
@@ -69,7 +68,44 @@ def update_payment_user(payment_id,session_id,user_id):
 			"Message":f"Error: {e} coming from update_payment_user"
 		}),500
 
+@payment_bp.route('/api/change_normal_payment_amount', methods=['POST'])
+def change_normal_payment():
+	try:
+		data = request.get_json()
+		payload = {
+          "userId": data.get('userId'),
+          "sessionId": data.get('sessionId'),
+          "newAmount": data.get('newAmount')
+		}
+		status, response = update_normal_payment_service(payload)
 
+		if response is None:
+			return jsonify({"Message": "Failed to reach remote service"}), 502
+
+		if status:
+			return jsonify(response.json()), response.status_code
+		else:
+			return jsonify(response.json()), response.status_code
+
+	except Exception as e:
+		print(e)
+		return jsonify({
+          "Message": f"Error: {e} coming from backend"
+		}), 500
+
+@payment_bp.route('/api/cancel_normal_payment/<int:payment_order>', methods=['POST'])
+def cancel_normal_payment(payment_order):
+	try:
+		success, response = cancel_normal_payment_service(payment_order)
+
+		if response is None:
+			return jsonify({"Message": "Error: could not reach backend server"}), 502
+
+		return jsonify(response.json()), response.status_code
+
+	except Exception as e:
+		print(e)
+		return jsonify({"Message": f"Error: {e} coming from backend"}), 500
 #====================================== Invoices payment ======================================
 @payment_bp.route('/api/get_all_invoice_session/<int:account_id>',methods=['GET'])
 def get_all_invoice_session(account_id):

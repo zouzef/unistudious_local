@@ -295,6 +295,14 @@ function updatePayment(paymentId, sessionId, userId, payload) {
     }).then(res => res.json());
 }
 
+/**
+ * Cancel a payment order (status -> Cancelled) via the dedicated cancel endpoint.
+ */
+function cancelPayment(paymentId) {
+    return fetch(`/api/cancel_normal_payment/${paymentId}`, {
+        method: 'POST'
+    }).then(res => res.json());
+}
 
 /* --------------------------------------------------------------------------
    6. Page bootstrap & event wiring
@@ -466,21 +474,17 @@ window.addEventListener('load', function () {
             .catch(err => console.error('Error saving payment:', err));
     });
 
-    // Cancel Payment: mark the record as Cancelled with a zeroed amount.
+    // Cancel Payment: call the dedicated cancel endpoint.
     document.getElementById('cancel-payment').addEventListener('click', function () {
         const paymentId = document.getElementById('hiddenOrderId').value;
-        const userId    = document.getElementById('hiddenUserId').value;
-        const sessionId = document.getElementById('hiddenSessionId').value;
 
-        const payload = {
-            status: 'Cancelled',
-            amount: '0'
-        };
-
-        updatePayment(paymentId, sessionId, userId, payload)
+        cancelPayment(paymentId)
             .then(res => {
                 const modal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
                 modal.hide();
+                if (res.Message && res.Message !== 'Success in canceling payment_order') {
+                    alert(res.Message);
+                }
                 window.location.reload();
             })
             .catch(err => console.error('Error cancelling payment:', err));

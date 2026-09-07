@@ -1155,13 +1155,14 @@ def update_user(id):
 @users_bp.route('/get-all-users/<int:account_id>', methods=['GET'])
 def get_all_user(account_id):
 	try:
+
 		# --- Real users ---
 		base_real_query = """
              SELECT DISTINCT u.id,u.username , u.full_name, u.phone, u.email, u.status, u.account_id
              FROM user u
              JOIN relation_user_session rus ON rus.user_id = u.id AND rus.enabled = 1
              JOIN session s ON s.id = rus.session_id AND s.enabled = 1
-             WHERE u.isvirtual = 0
+             WHERE u.isvirtual = 0 
         """
 
 		real_users = Database.execute_query(

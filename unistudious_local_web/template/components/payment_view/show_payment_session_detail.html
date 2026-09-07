@@ -235,15 +235,14 @@
             const newAmount        = document.getElementById('newAmount').value;
             const userId           = document.getElementById('userId').value;
             const paymentSessionId = document.getElementById('sessionId').value;
-            const paymentId        = document.getElementById('paymentId').value;
 
-            fetch(`/api/update_payment_session/${paymentId}`, {
+            fetch(`/api/change_normal_payment_amount`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    amount:     newAmount,
-                    user_id:    userId,
-                    session_id: paymentSessionId
+                    userId:     userId,
+                    sessionId:  paymentSessionId,
+                    newAmount:  newAmount
                 })
             })
             .then(res => res.json())
