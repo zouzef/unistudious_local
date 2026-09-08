@@ -44,7 +44,7 @@
                         </tr>
                         </thead>
                         <tbody id="orders">
-                            <!-- Populated dynamically -->
+                        <!-- Populated dynamically -->
                         </tbody>
                     </table>
                 </div>
@@ -68,9 +68,9 @@
                 <p><strong>Date:</strong> <span id="modalTypeDate"></span></p>
 
                 <form id="addPaymentForm" data-locked="0">
-                    <input type="hidden" id="hiddenOrderId"     name="orderId">
-                    <input type="hidden" id="hiddenUserId"      name="userId">
-                    <input type="hidden" id="hiddenSessionId"   name="sessionId">
+                    <input type="hidden" id="hiddenOrderId" name="orderId">
+                    <input type="hidden" id="hiddenUserId" name="userId">
+                    <input type="hidden" id="hiddenSessionId" name="sessionId">
                     <input type="hidden" id="hiddenOrderStatus" name="orderStatus">
 
                     <div class="mb-3">
@@ -105,7 +105,8 @@
                             <div id="newPriceSection" style="display: none;">
                                 <div class="mb-3">
                                     <label for="newPrice" class="form-label">Enter New Price</label>
-                                    <input type="number" class="form-control" id="newPrice" placeholder="Enter new price">
+                                    <input type="number" class="form-control" id="newPrice"
+                                           placeholder="Enter new price">
                                 </div>
                             </div>
                         </div>
@@ -117,14 +118,18 @@
                     </div>
 
                     <div id="absentMessage" class="alert alert-warning" style="display: none;">
-                        <p>If the user is absent, you can click <strong>"Cancelled Payment"</strong> to mark the payment as 0 and change its status to "Cancelled".</p>
+                        <p>If the user is absent, you can click <strong>"Cancelled Payment"</strong> to mark the payment
+                            as 0 and change its status to "Cancelled".</p>
                     </div>
-                    <button type="button" class="btn btn-outline-danger" id="cancel-payment" style="display: none;">Cancelled Payment</button>
+                    <button type="button" class="btn btn-outline-danger" id="cancel-payment" style="display: none;">
+                        Cancelled Payment
+                    </button>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-outline-primary" id="save-payment-session-user">Save Payment</button>
+                <button type="submit" class="btn btn-outline-primary" id="save-payment-session-user">Save Payment
+                </button>
             </div>
         </div>
     </div>

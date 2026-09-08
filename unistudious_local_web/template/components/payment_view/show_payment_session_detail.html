@@ -85,9 +85,12 @@
     </div>
 </div>
 <script>
+    // Keep the preloader visible on THIS page until data is loaded
+    window.keepPreloader = true;
+
     const sessionId = {{ session_id }};
 
-    window.addEventListener('load', function() {
+    window.addEventListener('load', function () {
 
         let dataTableInstance = null;
 
@@ -108,7 +111,7 @@
         };
 
         function loadSessionInfo() {
-            fetch(`/api/get-session-info/${sessionId}`)
+            return fetch(`/api/get-session-info/${sessionId}`)
                 .then(res => res.json())
                 .then(data => {
                     const session = data[0];
@@ -128,7 +131,7 @@
         }
 
         function loadPaymentData() {
-            fetch(`/api/get_payment_session/${sessionId}`)
+            return fetch(`/api/get_payment_session/${sessionId}`)
                 .then(res => res.json())
                 .then(data => {
                     const payments = data.Data;
@@ -180,7 +183,7 @@
                                 previous: '<i class="fa-solid fa-angle-left"></i>'
                             }
                         },
-                        drawCallback: function() {
+                        drawCallback: function () {
                             stylePaginationButtons();
                         }
                     });
@@ -213,7 +216,14 @@
             });
         }
 
-        document.getElementById('changeAmountModal').addEventListener('show.bs.modal', function(e) {
+        // ---- PRELOADER: wait for BOTH fetches, then hide ----
+        Promise.all([loadSessionInfo(), loadPaymentData()])
+            .finally(() => {
+                if (window.hidePreloader) window.hidePreloader();
+            });
+        // ------------------------------------------------------
+
+        document.getElementById('changeAmountModal').addEventListener('show.bs.modal', function (e) {
             const btn = e.relatedTarget;
             document.getElementById('oldAmount').value  = btn.dataset.bsAmount;
             document.getElementById('userId').value     = btn.dataset.bsUserId;
@@ -222,14 +232,14 @@
             document.getElementById('newAmount').value  = '';
         });
 
-        document.getElementById('changeAmountModal').addEventListener('hidden.bs.modal', function() {
+        document.getElementById('changeAmountModal').addEventListener('hidden.bs.modal', function () {
             document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
             document.body.classList.remove('modal-open');
             document.body.style.overflow = '';
             document.body.style.paddingRight = '';
         });
 
-        document.getElementById('changeAmountForm').addEventListener('submit', function(e) {
+        document.getElementById('changeAmountForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
             const newAmount        = document.getElementById('newAmount').value;
@@ -240,9 +250,9 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    userId:     userId,
-                    sessionId:  paymentSessionId,
-                    newAmount:  newAmount
+                    userId:    userId,
+                    sessionId: paymentSessionId,
+                    newAmount: newAmount
                 })
             })
             .then(res => res.json())
@@ -261,9 +271,6 @@
             })
             .catch(err => console.error('Error updating amount:', err));
         });
-
-        loadSessionInfo();
-        loadPaymentData();
 
     });
 </script>

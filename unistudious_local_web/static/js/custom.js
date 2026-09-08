@@ -5,12 +5,31 @@ var Akademi  = function(){
    var screenHeight = $( window ).height();
 
    var handlePreloader = function(){
+
+          // Global function any page can call to hide the preloader
+          window.hidePreloader = function(){
+              if (window.__preloaderHidden) return;   // don't run twice
+              window.__preloaderHidden = true;
+              jQuery('#preloader').fadeOut(500, function() {
+                  jQuery(this).remove();
+              });
+              $('#main-wrapper').addClass('show');
+          };
+
+          // Default behavior: hide on page load
           window.addEventListener('load', function() {
-            jQuery('#preloader').fadeOut(500, function() {
-              jQuery(this).remove();
-            });
-            $('#main-wrapper').addClass('show');
+              if (!window.keepPreloader) {
+                  // Page didn't ask to keep it -> hide normally
+                  window.hidePreloader();
+              }
           });
+
+          // Safety net: never leave the preloader stuck more than 15 seconds
+          setTimeout(function(){
+              if (!window.__preloaderHidden) {
+                  window.hidePreloader();
+              }
+          }, 15000);
    }
 
 
@@ -667,12 +686,9 @@ handlePreloader();
 	   },
 
 	   
-	   load:function(){
-		   handlePreloader();
-		   /* handleNiceSelect(); */
-		   //handleMenuWallet();
-		   handleCustomActions();
-	   },
+       load:function(){
+           handleCustomActions();
+       },
 	   
 	   resize:function(){
 		   vHeight();

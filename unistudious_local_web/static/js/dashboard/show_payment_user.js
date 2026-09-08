@@ -16,6 +16,18 @@ const idSession = parseInt(pathParts[pathParts.length - 1], 10);
 // been paid so far). Set once loadPaymentData() fetches the session info.
 let sessionPrice = 0;
 
+// Which statuses are offered in the "Update Status" dropdown, keyed by the
+// status of whatever payment comes right AFTER the row being updated.
+// 'Not Registered' is also used as the fallback key when there is no
+// following payment at all (see loadPaymentData()).
+const STATUS_TRANSITIONS = {
+    'Paid':           ['Paid', 'Cancelled'],
+    'Pending':        ['Paid', 'Unpaid', 'Cancelled'],
+    'Unpaid':         ['Paid', 'Cancelled', 'Unpaid'],
+    'Cancelled':      ['Paid', 'Cancelled'],
+    'Not Registered': ['Paid', 'Unpaid', 'Cancelled']
+};
+
 
 /* --------------------------------------------------------------------------
    2. Formatting helpers
@@ -121,26 +133,41 @@ function updateAcceptSectionVisibility() {
 /**
  * Build the action button(s) for a single payment row, based on its status.
  * Business rules:
- *  - "Not Registered" -> show a button to open the Status Update modal.
+ *  - "Not Registered" -> only the LAST (most recent) "Not Registered" row in
+ *                         the list gets the "Update Status" button; earlier
+ *                         "Not Registered" rows show nothing until that last
+ *                         one has been updated. Once it's updated, the page
+ *                         reloads and the row that was "before last" becomes
+ *                         the new last "Not Registered" row, so it then
+ *                         picks up the button automatically.
  *  - "Cancelled"       -> no action.
  *  - "Unpaid"          -> only the FIRST unpaid row in the list is payable;
  *                         subsequent unpaid rows are locked until the
  *                         earlier one is settled ("pay the previous week first").
  *  - anything else (Paid, Pending, ...) -> open the View Payment modal.
  *
- * @param {Object} item              Payment record from the API.
+ * @param {Object} item                 Payment record from the API.
  * @param {boolean} firstUnpaidHandled  Whether an unpaid row has already been made actionable.
+ * @param {boolean} isLastNotRegistered Whether this row is the last "Not Registered" row in the list.
+ * @param {string} nextStatus           Status of the payment right after the last "Not Registered" row
+ *                                      (or the literal string 'Not Registered' if none follows).
+ * @param {number|null} nextId         Id of that following payment, or null if none follows.
  * @returns {{ html: string, firstUnpaidHandled: boolean }}
  */
-function buildActionButton(item, firstUnpaidHandled) {
+function buildActionButton(item, firstUnpaidHandled, isLastNotRegistered, nextStatus, nextId) {
     if (item.status === 'Not Registered') {
+        if (!isLastNotRegistered) {
+            // Not the last "Not Registered" row yet -> no button shown.
+            return { html: '', firstUnpaidHandled };
+        }
+
         return {
             html: `
                 <button class="btn btn-outline-primary btn-sm update-status-btn"
                     data-id="${item.id}"
                     data-current-status="${item.status}"
-                    data-next-status="Paid"
-                    data-next-id="${item.id}"
+                    data-next-status="${nextStatus}"
+                    data-next-id="${nextId ?? ''}"
                     data-bs-toggle="modal"
                     data-bs-target="#statusUpdateModal">
                     <i class="fa fa-sync-alt"></i> Update Status
@@ -197,8 +224,9 @@ function buildViewPaymentButton(item) {
 /**
  * Render a single <tr> for a payment record.
  */
-function buildRow(item, firstUnpaidHandled) {
-    const { html: actionHtml, firstUnpaidHandled: updatedFlag } = buildActionButton(item, firstUnpaidHandled);
+function buildRow(item, firstUnpaidHandled, isLastNotRegistered, nextStatus, nextId) {
+    const { html: actionHtml, firstUnpaidHandled: updatedFlag } =
+        buildActionButton(item, firstUnpaidHandled, isLastNotRegistered, nextStatus, nextId);
 
     const rowHtml = `
         <tr>
@@ -264,10 +292,42 @@ function loadPaymentData() {
             sessionPrice = parseFloat(first.price) || 0;
             document.getElementById('info-price').textContent = `${sessionPrice.toFixed(2)} TND`;
 
+            // Find the index of the LAST "Not Registered" row so only that
+            // one gets the Update Status button; earlier ones stay blank.
+            let lastNotRegisteredIndex = -1;
+            data.forEach((item, idx) => {
+                if (item.status === 'Not Registered') {
+                    lastNotRegisteredIndex = idx;
+                }
+            });
+
+            // Look ahead to the payment right after that last "Not Registered"
+            // row, same as the Twig lastNotRegistered / nextStatusAfterLastNotRegistered
+            // logic: since lastNotRegisteredIndex is the LAST occurrence of
+            // "Not Registered", the very next item (if any) is guaranteed to
+            // already have a different status, so no further scanning is needed.
+            // If nothing follows it, fall back to 'Not Registered' so the
+            // status dropdown still shows the full Paid/Unpaid/Cancelled set.
+            let nextStatusAfterLastNotRegistered = 'Not Registered';
+            let nextIdAfterLastNotRegistered     = null;
+
+            if (lastNotRegisteredIndex !== -1 && lastNotRegisteredIndex < data.length - 1) {
+                const nextPayment = data[lastNotRegisteredIndex + 1];
+                nextStatusAfterLastNotRegistered = nextPayment.status;
+                nextIdAfterLastNotRegistered     = nextPayment.id;
+            }
+
             // Build all table rows, tracking which unpaid row (if any) is actionable.
             let firstUnpaidHandled = false;
-            const rowsHtml = data.map(item => {
-                const result = buildRow(item, firstUnpaidHandled);
+            const rowsHtml = data.map((item, idx) => {
+                const isLastNotRegistered = idx === lastNotRegisteredIndex;
+                const result = buildRow(
+                    item,
+                    firstUnpaidHandled,
+                    isLastNotRegistered,
+                    nextStatusAfterLastNotRegistered,
+                    nextIdAfterLastNotRegistered
+                );
                 firstUnpaidHandled = result.firstUnpaidHandled;
                 return result.rowHtml;
             }).join('');
@@ -507,7 +567,14 @@ window.addEventListener('load', function () {
         document.getElementById('currentStatus').value  = currentStat;
         document.getElementById('nextStatus').value      = nextStat;
 
-        document.getElementById('statusSelect').value = nextStat;
+        // Build the status options based on what comes right after this
+        // payment (falls back to the 'Not Registered' entry -> Paid/Unpaid/
+        // Cancelled -- when there's nothing after it).
+        const statusSelect = document.getElementById('statusSelect');
+        const options = STATUS_TRANSITIONS[nextStat] || STATUS_TRANSITIONS['Not Registered'];
+        statusSelect.innerHTML = options
+            .map(status => `<option value="${status}">${status}</option>`)
+            .join('');
     });
 
     document.getElementById('statusUpdateModal').addEventListener('hidden.bs.modal', function () {
@@ -515,15 +582,23 @@ window.addEventListener('load', function () {
     });
 
     document.getElementById('confirmStatusUpdate').addEventListener('click', function () {
-        const paymentId = document.getElementById('paymentId').value;
-        const newStatus = document.getElementById('statusSelect').value;
+        const paymentId     = document.getElementById('paymentId').value;
+        const nextPaymentId = document.getElementById('nextPaymentId').value;
+        const currentStatus = document.getElementById('currentStatus').value;
+        const nextStatus    = document.getElementById('nextStatus').value;
+        const newStatus     = document.getElementById('statusSelect').value;
 
         if (!newStatus) {
             alert('Please select a status.');
             return;
         }
 
-        updatePayment(paymentId, idSession, idUser, { status: newStatus })
+        updatePayment(paymentId, idSession, idUser, {
+            status: newStatus,
+            currentStatus: currentStatus,
+            nextPaymentId: nextPaymentId,
+            nextStatus: nextStatus
+        })
             .then(res => {
                 const modal = bootstrap.Modal.getInstance(document.getElementById('statusUpdateModal'));
                 modal.hide();
