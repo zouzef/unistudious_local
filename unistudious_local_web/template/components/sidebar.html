@@ -50,7 +50,6 @@
                             <li><a href="/dashboard/platform_student">Platform Students</a></li>
                             <li><a href="/dashboard/my-student">Centre Students</a></li>
                         </ul>
-
                     </li>
                 </ul>
             </li>
@@ -68,13 +67,31 @@
                     <span class="nav-text">Session Payment</span>
                 </a>
             </li>
-
         </ul>
-        <div class="copyright text-center"
-             style="text-align:center; width:100%; padding:0 0px; box-sizing:border-box;">
-            <p style="white-space:normal; word-wrap:break-word; margin:0;"><strong>Unistudious Admin
-                Dashboard</strong></p>
-            <p class="fs-12" style="margin:0;">Made with <i class="flaticon-heart"></i> by KSI</p>
-        </div>
+    </div><!-- .dlabnav-scroll ends HERE now -->
+
+    <div class="copyright text-center"
+         style="text-align:center; width:100%; padding:10px 0; box-sizing:border-box;">
+        <p style="white-space:normal; word-wrap:break-word; margin:0;"><strong>Unistudious Admin
+            Dashboard</strong></p>
+        <p class="fs-12" style="margin:0;">Made with <i class="flaticon-heart"></i> by KSI</p>
     </div>
-</div>
+</div><!-- .dlabnav ends here -->
+
+<style>
+.dlabnav {
+    position: fixed;
+    height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+
+}
+
+
+
+.copyright {
+    flex: 0 0 auto;
+    background: inherit;
+    border-top: 1px solid rgba(0,0,0,0.08);
+}
+</style>
