@@ -478,6 +478,30 @@ class DataPusher:
                     }
                 )
 
+            # --- Session ---
+            cursor.execute("""
+                SELECT *
+                FROM session_audit 
+                WHERE is_synced = 0 
+                ORDER BY audit_id
+            """)
+            session_rows = cursor.fetchall()
+            if not session_rows:
+                logger.info("Found %s pending session change(s)", len(session_rows))
+            else:
+                self._process_audit_rows(
+                    cursor,
+                    conn,
+                    "session_audit",
+                    session_rows,
+                    {
+                        "INSERT": lambda row:   print("INSERT Session"),
+                        "UPDATE": lambda row:   print("UPDATE Session"),
+                        "DELETE": lambda row:   print("DELETE Session")
+                    }
+
+                )
+
         except Exception as e:
             logger.exception("Fatal error in data_pusher: %s", e)
         finally:
