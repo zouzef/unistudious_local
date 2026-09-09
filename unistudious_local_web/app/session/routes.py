@@ -77,12 +77,13 @@ def api_get_session_img(session_id):
 
 
 @session_bp.route('/api/create-session', methods=['POST'])
-def create_session_route():  # 👈 rename this
+def create_session_route():
     try:
-        session_data = request.get_json()
-        status, code = create_session_local(session_data)  # this calls the service
+        session_data_str = request.form.get('data', '{}')
+        image_file = request.files.get('logoFile')
+        status, code, session_id = create_session_local(session_data_str, image_file)
         if status and code == 200:
-            return jsonify({"Message": "Session created with success"}), 200
+            return jsonify({"Message": "Session created with success", "id": session_id}), 200
         else:
             return jsonify({"Message": "Error in creating session"}), 400
     except Exception as e:

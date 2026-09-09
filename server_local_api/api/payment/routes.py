@@ -191,7 +191,7 @@ def filter_audit_fields(record):
 def update_payment_session_user(session_id, user_id, payment_id):
 	try:
 		data = request.get_json()
-
+		print("\n \n \n Data coming from frontend: ",data)
 		# Check if the payment record exists
 		check_query = """
             SELECT COUNT(*) AS nbr 
@@ -220,6 +220,14 @@ def update_payment_session_user(session_id, user_id, payment_id):
 		# (amount gets overridden below when remaining_payment is used, but the
 		# audit should show null if the user never typed an amount directly.)
 		raw_amount = amount
+
+		# --- Detect "Not Registered" status-change case ---
+		# The frontend sends currentStatus/nextStatus when doing a status transition
+		# (e.g. {'status': 'Cancelled', 'currentStatus': 'Not Registered', 'nextPaymentId': '6724', 'nextStatus': 'Cancelled'})
+		current_status_from_frontend = data.get('currentStatus')
+		effective_current_status = current_status_from_frontend or old_record[0].get('status')
+		is_not_registered_case = effective_current_status == 'Not Registered'
+		# --- END detection ---
 
 		# --- Remaining payment handling ---
 		remaining_payment = data.get('remaining_payment')
@@ -284,28 +292,38 @@ def update_payment_session_user(session_id, user_id, payment_id):
 
 		# --- Build the OLD and NEW audit snapshots ---
 		old_snapshot = {
-			"payment_id":       payment_id,
-			"user_id":          user_id,
-			"session_id":       session_id,
-			"amount":           old_record[0].get('amount'),
-			"price":            old_record[0].get('price'),
-			"new_price":        None,
-			"change_price":     False,
-			"accept_payment":   True,
+			"payment_id": payment_id,
+			"user_id": user_id,
+			"session_id": session_id,
+			"status": old_record[0].get('status'),
+			"amount": old_record[0].get('amount'),
+			"price": old_record[0].get('price'),
+			"new_price": None,
+			"change_price": False,
+			"accept_payment": True,
 			"amount_remaining": None,
 		}
 
-		new_snapshot = {
-			"payment_id":       payment_id,
-			"user_id":          user_id,
-			"session_id":       session_id,
-			"amount":           raw_amount,   # null unless the user actually typed an amount
-			"price":            new_price if (is_forcing and has_new_price) else current_price,
-			"new_price":        new_price if has_new_price else None,
-			"change_price":     has_change_price,
-			"accept_payment":   True,
-			"amount_remaining": amount_remaining if (is_remaining_payment and has_amount_remaining) else None,
-		}
+		if is_not_registered_case:
+			# Store the raw frontend payload as-is, plus the current order id(s),
+			# instead of the computed snapshot.
+			new_snapshot = dict(data)
+			new_snapshot["payment_id"] = payment_id
+			new_snapshot["user_id"] = user_id
+			new_snapshot["session_id"] = session_id
+		else:
+			new_snapshot = {
+				"payment_id": payment_id,
+				"user_id": user_id,
+				"session_id": session_id,
+				"status": computed_status if computed_status is not None else old_record[0].get('status'),
+				"amount": raw_amount,
+				"price": new_price if (is_forcing and has_new_price) else current_price,
+				"new_price": new_price if has_new_price else None,
+				"change_price": has_change_price,
+				"accept_payment": True,
+				"amount_remaining": amount_remaining if (is_remaining_payment and has_amount_remaining) else None,
+			}
 
 		old_data = json.dumps(old_snapshot, default=str)
 		new_data = json.dumps(new_snapshot, default=str)
@@ -348,13 +366,15 @@ def update_payment_session_user(session_id, user_id, payment_id):
 		Database.execute_query(update_query, tuple(values), fetch=False)
 
 		# Insert into audit table
+		action_type = 'UPDATE_STATUS_NOT_REGISTERED' if is_not_registered_case else 'UPDATE_status'
+
 		audit_query = """
             INSERT INTO payment_session_audit (action_type, old_data, new_data)
             VALUES (%s, %s, %s)
         """
 		Database.execute_query(
             audit_query,
-            ('UPDATE_status', old_data, new_data),
+            (action_type, old_data, new_data),
             fetch=False
         )
 
@@ -392,8 +412,8 @@ def get_all_invoice(account_id):
 
 @payment_bp.route('/get_invoice_by_id/<int:invoice_id>/<int:account_id>/<int:admin_user_id>', methods=['GET'])
 def get_invoice_by_id(invoice_id, account_id, admin_user_id):
-    try:
-        query = """
+	try:
+		query = """
             SELECT 
                 i.*,
                 -- Student info
@@ -421,38 +441,38 @@ def get_invoice_by_id(invoice_id, account_id, admin_user_id):
             WHERE i.id         = %s
               AND i.account_id = %s
         """
-        result = Database.execute_query(
+		result = Database.execute_query(
             query,
             (admin_user_id, invoice_id, account_id),
             fetch=True
         )
-        if result:
-            return jsonify(result[0]), 200
-        else:
-            return jsonify({"Message": "Invoice not found"}), 404
+		if result:
+			return jsonify(result[0]), 200
+		else:
+			return jsonify({"Message": "Invoice not found"}), 404
 
-    except Exception as e:
-        print(e)
-        return jsonify({"Message": f"Error: {e} coming from server"}), 500
+	except Exception as e:
+		print(e)
+		return jsonify({"Message": f"Error: {e} coming from server"}), 500
 
 @payment_bp.route('/get_payment_calander_session/<int:calander_id>', methods=['GET'])
 def get_payment_calender_session(calander_id):
-    try:
-        query = """
+	try:
+		query = """
             SELECT session_id 
             FROM relation_calander_group_session
             WHERE id = %s AND
             enabled = 1
         """
-        result = Database.execute_query(query, (calander_id,), fetch=True)
-        if not result:
-            return jsonify({
+		result = Database.execute_query(query, (calander_id,), fetch=True)
+		if not result:
+			return jsonify({
                 "Message": f"There is no calander with this id"
             }), 400
 
-        session_id = result[0]['session_id']
+		session_id = result[0]['session_id']
 
-        query = """
+		query = """
             SELECT p.user_id,
                 CASE 
                     WHEN SUM(p.status = 'Unpaid') > 0 THEN 'Unpaid'
@@ -469,76 +489,76 @@ def get_payment_calender_session(calander_id):
               )
             GROUP BY p.user_id
         """
-        values = (session_id, calander_id, session_id)
-        result = Database.execute_query(query, values, fetch=True)
-        print(result)
-        return jsonify(result), 200
+		values = (session_id, calander_id, session_id)
+		result = Database.execute_query(query, values, fetch=True)
+		print(result)
+		return jsonify(result), 200
 
-    except Exception as e:
-        print(e)
-        return jsonify({
+	except Exception as e:
+		print(e)
+		return jsonify({
             "Message": f"Error: {e} coming from server"
         }), 500
 
 @payment_bp.route('/change_normal_payment_amount', methods=['POST'])
 def change_normal_payment():
-    try:
-       data      =  request.get_json()
-       userId     =  data.get('userId')
-       sessionId  =  data.get('sessionId')
-       newAmount  =  data.get('newAmount')
+	try:
+		data      =  request.get_json()
+		userId     =  data.get('userId')
+		sessionId  =  data.get('sessionId')
+		newAmount  =  data.get('newAmount')
 
-       if not(userId) or not(sessionId) or not(newAmount):
-          return jsonify({
+		if not(userId) or not(sessionId) or not(newAmount):
+			return jsonify({
              "Message": "Missing required fields"
           }),400
 
-       if not(session_exists(sessionId)):
-          return jsonify({"Message": "There is no sesssion with this Id"}),404
+		if not(session_exists(sessionId)):
+			return jsonify({"Message": "There is no sesssion with this Id"}),404
 
-       if not(user_exists(userId)):
-          return jsonify({"Message": "There is no user with this Id"}),404
+		if not(user_exists(userId)):
+			return jsonify({"Message": "There is no user with this Id"}),404
 
-       query_amout = """
+		query_amout = """
           SELECT *
           FROM payment_session 
           WHERE session_id = %s AND user_id = %s AND enabled = 1
        """
-       result = Database.execute_query(query_amout, (sessionId, userId), fetch=True)
+		result = Database.execute_query(query_amout, (sessionId, userId), fetch=True)
 
-       if not(result):
-          return jsonify({"Message": "There is no payment for this user in this session"}),404
+		if not(result):
+			return jsonify({"Message": "There is no payment for this user in this session"}),404
 
-       # Fetch old data BEFORE updating (snapshot for audit)
-       old_data = json.dumps(filter_audit_fields(result[0]), default=str)
+		# Fetch old data BEFORE updating (snapshot for audit)
+		old_data = json.dumps(filter_audit_fields(result[0]), default=str)
 
-       update_query = """
+		update_query = """
           UPDATE payment_session 
           SET price = %s 
           WHERE session_id = %s AND user_id = %s AND enabled = 1
        """
-       Database.execute_query(update_query, (newAmount, sessionId, userId), fetch=False)
+		Database.execute_query(update_query, (newAmount, sessionId, userId), fetch=False)
 
-       # Build new data snapshot by merging old record with the updated field
-       new_snapshot = filter_audit_fields(result[0])
-       new_snapshot['price'] = newAmount
-       new_data = json.dumps(new_snapshot, default=str)
+		# Build new data snapshot by merging old record with the updated field
+		new_snapshot = filter_audit_fields(result[0])
+		new_snapshot['price'] = newAmount
+		new_data = json.dumps(new_snapshot, default=str)
 
-       # Insert into audit table
-       audit_query = """
+		# Insert into audit table
+		audit_query = """
           INSERT INTO payment_session_audit (action_type, old_data, new_data)
           VALUES (%s, %s, %s)
        """
-       Database.execute_query(
-          audit_query,
-          ('UPDATE_Amount', old_data, new_data),
-          fetch=False
-       )
+		Database.execute_query(
+			audit_query,
+			('UPDATE_Amount', old_data, new_data),
+			fetch=False
+		)
 
-       return jsonify({"Message": "Amount updated Successfully"}),200
+		return jsonify({"Message": "Amount updated Successfully"}),200
 
-    except Exception as e:
-       return jsonify({
+	except Exception as e:
+		return jsonify({
           "Message": f"Error: {e} coming from server"
        }), 500
 

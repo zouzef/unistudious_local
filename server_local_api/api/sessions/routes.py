@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, send_file
+from flask import Blueprint, jsonify, request, send_file, current_app
 from datetime import datetime
 import sys
 import os
@@ -197,8 +197,10 @@ def get_session_image(session_id):
 			return send_file(default_img_path)
 		img_filename = result[0]['img_link']
 
-		# If session has no image set, return default
-		if not img_filename or img_filename.strip() == '':
+
+		img_filename = os.path.basename(img_filename.strip())
+
+		if not img_filename:
 			default_img_path = os.path.join(
 				os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
 				'static/assets/images/session-defult.png'
@@ -238,35 +240,39 @@ def get_session_image(session_id):
 			}), 500
 
 
+import json  # make sure this is imported at the top of the file
+
 # ENDPOINT 3: Create session
+import os
+from werkzeug.utils import secure_filename
+
 @sessions_bp.route('/create-session', methods=['POST'])
 def create_session():
-	try:
-		data = request.get_json()
-		new_uuid = str(uuid.uuid4())
-		required_keys = [
-			'account_id',
-			'name',
-			'formation',
-			'capacity',
-			'typePay',
-			'paymentMethode',
-			'userRegisterAfterStart',
-			'startDate',
-			'endDate',
-			'requestChangeGroup',
-		]
+    try:
+        data = json.loads(request.form.get('data', '{}'))
+        image_file = request.files.get('logoFile')
 
-		missing_keys = [key for key in required_keys if key not in data]
-		null_keys = [key for key in required_keys if key in data and (data[key] is None or data[key] == '')]
+        new_uuid = str(uuid.uuid4())
+        required_keys = [
+            'account_id', 'name', 'formation', 'capacity', 'typePay',
+            'paymentMethode', 'userRegisterAfterStart', 'startDate',
+            'endDate', 'requestChangeGroup',
+        ]
+        missing_keys = [k for k in required_keys if k not in data]
+        null_keys = [k for k in required_keys if k in data and (data[k] is None or data[k] == '')]
+        if missing_keys:
+            return jsonify({"Message": f"Missing required keys: {missing_keys}"}), 400
+        if null_keys:
+            return jsonify({"Message": f"These keys cannot be null: {null_keys}"}), 400
 
-		if missing_keys:
-			return jsonify({"Message": f"Missing required keys: {missing_keys}"}), 400
+        raw_extra_data = data.get('extraDataJson')
+        try:
+            extra_data_list = json.loads(raw_extra_data) if raw_extra_data else []
+        except (TypeError, ValueError):
+            extra_data_list = []
+        extra_data_json_str = json.dumps(extra_data_list)
 
-		if null_keys:
-			return jsonify({"Message": f"These keys cannot be null: {null_keys}"}), 400
-
-		query = """
+        query = """
             INSERT INTO session 
             (
                 account_id, name, formation_id, capacity,
@@ -274,80 +280,80 @@ def create_session():
                 payment_methode, price, price_presence, price_online,
                 currency, user_register_after_start, start_date, end_date,
                 request_change_group, max_group_change, special_group,
-                public_resource, description, img_link, uuid
+                public_resource, extra_data, description, img_link, uuid
             )
             VALUES(
                 %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                 'TND',
-                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
             );
         """
+        values = (
+            data.get('account_id'), data.get('name'), data.get('formation'),
+            data.get('capacity'), data.get('typePay'),
+            data.get('numberSessionForPay') or None,
+            data.get('priceStudentAbsent') or None,
+            data.get('paymentMethode'), data.get('price') or None,
+            data.get('pricePresence') or None, data.get('priceOnline') or None,
+            data.get('userRegisterAfterStart'), data.get('startDate'),
+            data.get('endDate'), data.get('requestChangeGroup'),
+            data.get('maxGroupChange') or None, data.get('specialGroup') or None,
+            data.get('publicResource') or None, extra_data_json_str,
+            data.get('description'), None,  # img_link filled in after we know the path
+            new_uuid
+        )
+        session_id = Database.execute_query(query, values, fetch=False)
 
-		values = (
-			data.get('account_id'),
-			data.get('name'),
-			data.get('formation'),
-			data.get('capacity'),
-			data.get('typePay'),
-			data.get('numberSessionForPay') or None,
-			data.get('priceStudentAbsent') or None,
-			data.get('paymentMethode'),
-			data.get('price') or None,
-			data.get('pricePresence') or None,
-			data.get('priceOnline') or None,
-			data.get('userRegisterAfterStart'),
-			data.get('startDate'),
-			data.get('endDate'),
-			data.get('requestChangeGroup'),
-			data.get('maxGroupChange') or None,
-			data.get('specialGroup') or None,
-			data.get('publicResource') or None,
-			data.get('description'),
-			data.get('logoFile'),
-			new_uuid
-		)
-		# result = the new session's ID (last inserted row)
-		result = Database.execute_query(query, values, fetch=False)
+        # --- Create folder & save image now that we have the session_id ---
+        img_link = None
+        if image_file and image_file.filename:
+            session_folder = os.path.join(
+                current_app.root_path, 'uploads', 'session_img', f'session_{session_id}'
+            )
+            os.makedirs(session_folder, exist_ok=True)
 
-		# Build new_data snapshot
-		new_data = {
-			"account_id": data.get('account_id'),
-			"name": data.get('name'),
-			"formation_id": data.get('formation'),
-			"capacity": data.get('capacity'),
-			"type_pay": data.get('typePay'),
-			"number_session_for_pay": data.get('numberSessionForPay') or None,
-			"price_student_absent": data.get('priceStudentAbsent') or None,
-			"payment_methode": data.get('paymentMethode'),
-			"price": data.get('price') or None,
-			"price_presence": data.get('pricePresence') or None,
-			"price_online": data.get('priceOnline') or None,
-			"currency": "TND",
-			"user_register_after_start": data.get('userRegisterAfterStart'),
-			"start_date": data.get('startDate'),
-			"end_date": data.get('endDate'),
-			"request_change_group": data.get('requestChangeGroup'),
-			"max_group_change": data.get('maxGroupChange') or None,
-			"special_group": data.get('specialGroup') or None,
-			"public_resource": data.get('publicResource') or None,
-			"description": data.get('description'),
-			"img_link": data.get('logoFile'),
-			"uuid": new_uuid,
-		}
+            filename = secure_filename(image_file.filename)
+            image_file.save(os.path.join(session_folder, filename))
+            img_link = f"session_img/session_{session_id}/{filename}"
+            print(img_link)
+            Database.execute_query(
+                "UPDATE session SET img_link = %s WHERE id = %s",
+                (img_link, session_id),
+                fetch=False
+            )
 
-		# Audit record — old_data is NULL since this is a fresh insert
-		log_session_audit(
-			action_type='INSERT',
-			old_data=None,
-			new_data=new_data,
-			id_session=result
-		)
+        new_data = {
+            "account_id": data.get('account_id'),
+            "name": data.get('name'),
+            "formation_id": data.get('formation'),
+            "capacity": data.get('capacity'),
+            "type_pay": data.get('typePay'),
+            "number_session_for_pay": data.get('numberSessionForPay') or None,
+            "price_student_absent": data.get('priceStudentAbsent') or None,
+            "payment_methode": data.get('paymentMethode'),
+            "price": data.get('price') or None,
+            "price_presence": data.get('pricePresence') or None,
+            "price_online": data.get('priceOnline') or None,
+            "currency": "TND",
+            "user_register_after_start": data.get('userRegisterAfterStart'),
+            "start_date": data.get('startDate'),
+            "end_date": data.get('endDate'),
+            "request_change_group": data.get('requestChangeGroup'),
+            "max_group_change": data.get('maxGroupChange') or None,
+            "special_group": data.get('specialGroup') or None,
+            "public_resource": data.get('publicResource') or None,
+            "extra_data": extra_data_list,
+            "description": data.get('description'),
+            "img_link": img_link,
+            "uuid": new_uuid,
+        }
+        log_session_audit(action_type='INSERT', old_data=None, new_data=new_data, id_session=session_id)
 
-		return jsonify({"Message": "Session created with success"}), 200
+        return jsonify({"Message": "Session created with success", "id": session_id}), 200
 
-	except Exception as e:
-		print(f"Error: {e} coming from create session")
-		return jsonify({"Message": f"Error {e} in creating session"}), 500
+    except Exception as e:
+        print(f"Error: {e} coming from create session")
+        return jsonify({"Message": f"Error {e} in creating session"}), 500
 
 
 # ENDPOINT 4: Get session info

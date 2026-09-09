@@ -3604,3 +3604,24 @@ requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: 
 2026-09-07 15:06:54 [ERROR] sync.data_pusher - payment_session_audit audit #1 failed — will retry next cycle
 2026-09-07 15:07:33 [ERROR] sync.data_pusher - payment_session_audit audit #1 failed — will retry next cycle
 2026-09-07 15:07:55 [ERROR] sync.data_pusher - payment_session_audit audit #1 failed — will retry next cycle
+2026-09-08 11:52:33 [ERROR] __main__ - SYNC FAILED: 500 Server Error: Internal Server Error for url: https://unistudious.com/slc/get-whats-news
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/sync_manager.py", line 106, in sync_data_once
+    data = fetcher.fetch_data(since_date=since_date)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/data_fetcher.py", line 55, in fetch_data
+    data = self._post_with_form_data(self.whats_new_endpoint, payload)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/data_fetcher.py", line 125, in _post_with_form_data
+    response.raise_for_status()
+  File "/usr/lib/python3/dist-packages/requests/models.py", line 943, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: https://unistudious.com/slc/get-whats-news
+2026-09-08 11:52:33 [ERROR] __main__ - Sync #1 failed.
+2026-09-08 14:34:18 [ERROR] sync.data_pusher - payment_session_audit audit #1 failed — will retry next cycle
+2026-09-09 12:46:55 [ERROR] sync.data_pusher - session_audit audit #1 failed — will retry next cycle
+2026-09-09 12:46:55 [ERROR] sync.data_pusher - session_audit audit #2 failed — will retry next cycle
+2026-09-09 12:47:56 [ERROR] sync.data_pusher - session_audit audit #1 failed — will retry next cycle
+2026-09-09 12:47:56 [ERROR] sync.data_pusher - session_audit audit #2 failed — will retry next cycle
+2026-09-09 12:48:57 [ERROR] sync.data_pusher - session_audit audit #1 failed — will retry next cycle
+2026-09-09 12:48:57 [ERROR] sync.data_pusher - session_audit audit #2 failed — will retry next cycle
+2026-09-09 12:49:57 [ERROR] sync.data_pusher - session_audit audit #1 failed — will retry next cycle
+2026-09-09 12:49:57 [ERROR] sync.data_pusher - session_audit audit #2 failed — will retry next cycle

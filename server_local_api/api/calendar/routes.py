@@ -1,6 +1,6 @@
 from xmlrpc.client import FastParser
 from flask import Blueprint, jsonify, request
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta
 import sys
 import os
 import json
@@ -16,13 +16,12 @@ from config import Config
 from core.database import Database
 from core.middleware import token_required
 
-
 # Add parent directories to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-
 # Create blueprint
 calendar_bp = Blueprint('calendar', __name__, url_prefix='/scl')
+
 
 # ========================================
 # ENDPOINT 1: Delete calendar interval
@@ -31,54 +30,55 @@ calendar_bp = Blueprint('calendar', __name__, url_prefix='/scl')
 @calendar_bp.route('/deleting_interval/<int:session_id>', methods=['POST'])
 # @token_required
 def delete_calendar(session_id):
-    try:
-        data = request.json
-        if not data:
-            return jsonify({"message": "No data provided"}), 400
+	try:
+		data = request.json
+		if not data:
+			return jsonify({"message": "No data provided"}), 400
 
-        start_date_str = data.get('start_date')
+		start_date_str = data.get('start_date')
 
-        end_date_str = data.get('end_date')
+		end_date_str = data.get('end_date')
 
-        # Validate
-        if not start_date_str or not end_date_str:
-            return jsonify({"message": "Missing start_date or end_date"}), 400
+		# Validate
+		if not start_date_str or not end_date_str:
+			return jsonify({"message": "Missing start_date or end_date"}), 400
 
-        try:
-            start_date = datetime.strptime(start_date_str, "%Y-%m-%d %H:%M:%S")
-            end_date = datetime.strptime(end_date_str, "%Y-%m-%d %H:%M:%S")
-        except ValueError:
-            return jsonify({"message": "Invalid date format. Use YYYY-MM-DD HH:MM:SS"}), 400
+		try:
+			start_date = datetime.strptime(start_date_str, "%Y-%m-%d %H:%M:%S")
+			end_date = datetime.strptime(end_date_str, "%Y-%m-%d %H:%M:%S")
+		except ValueError:
+			return jsonify({"message": "Invalid date format. Use YYYY-MM-DD HH:MM:SS"}), 400
 
-        start_date_str = start_date.strftime("%Y-%m-%d %H:%M:%S")
-        end_date_str = end_date.strftime("%Y-%m-%d %H:%M:%S")
+		start_date_str = start_date.strftime("%Y-%m-%d %H:%M:%S")
+		end_date_str = end_date.strftime("%Y-%m-%d %H:%M:%S")
 
-        # Find calendars in the interval
-        query = """
+		# Find calendars in the interval
+		query = """
             SELECT id FROM relation_calander_group_session
             WHERE start_time <= %s AND end_time >= %s
         """
-        results = Database.execute_query(query, (end_date_str, start_date_str))
+		results = Database.execute_query(query, (end_date_str, start_date_str))
 
-        if results:
-            ids = [row['id'] for row in results]
-            placeholders = ','.join(['%s'] * len(ids))
+		if results:
+			ids = [row['id'] for row in results]
+			placeholders = ','.join(['%s'] * len(ids))
 
-            # Soft delete by setting enabled = 0
-            query = f"""
+			# Soft delete by setting enabled = 0
+			query = f"""
                 UPDATE relation_calander_group_session 
                 SET enabled = 0 
                 WHERE id IN ({placeholders})
             """
-            Database.execute_query(query, ids, fetch=False)
+			Database.execute_query(query, ids, fetch=False)
 
-            return jsonify({"message": "success", "data": results}), 200
-        else:
-            return jsonify({"message": "There is no session"}), 400
+			return jsonify({"message": "success", "data": results}), 200
+		else:
+			return jsonify({"message": "There is no session"}), 400
 
-    except Exception as e:
-        print(f"Error {e} coming from deleting function !!")
-        return jsonify({"message": f"Error: {str(e)}"}), 500
+	except Exception as e:
+		print(f"Error {e} coming from deleting function !!")
+		return jsonify({"message": f"Error: {str(e)}"}), 500
+
 
 # ========================================
 # ENDPOINT 2: Get calendar by ID
@@ -86,21 +86,21 @@ def delete_calendar(session_id):
 @calendar_bp.route('/get_calander_id/<int:id_calender>', methods=['GET'])
 # @token_required
 def get_calendar_by_id(id_calender):
-    try:
-        query = """
+	try:
+		query = """
             SELECT * FROM relation_calander_group_session 
             WHERE id = %s AND enabled = 1
         """
-        result = Database.execute_query(query, (id_calender,))
+		result = Database.execute_query(query, (id_calender,))
 
-        if result:
-            return jsonify({"message": "Success", "data": result[0]}), 200
-        else:
-            return jsonify({"message": f"Calendar not found for {id_calender}"}), 404
+		if result:
+			return jsonify({"message": "Success", "data": result[0]}), 200
+		else:
+			return jsonify({"message": f"Calendar not found for {id_calender}"}), 404
 
-    except Exception as e:
-        print(f"DEBUG: error {e}")
-        return jsonify({"message": "Error"}), 500
+	except Exception as e:
+		print(f"DEBUG: error {e}")
+		return jsonify({"message": "Error"}), 500
 
 
 # ========================================
@@ -108,23 +108,23 @@ def get_calendar_by_id(id_calender):
 # ========================================
 @calendar_bp.route('/get-group-calender/<int:calendarId>', methods=["GET"])
 def get_group_calendar(calendarId):
-    try:
-        query = """
+	try:
+		query = """
             SELECT group_session_id FROM relation_calander_group_session 
             WHERE id = %s LIMIT 1
         """
-        calendar = Database.execute_query(query, (calendarId,))
+		calendar = Database.execute_query(query, (calendarId,))
 
-        if not calendar:
-            return jsonify({"error": "calendar not found"}), 404
+		if not calendar:
+			return jsonify({"error": "calendar not found"}), 404
 
-        group_id = calendar[0]['group_session_id']
+		group_id = calendar[0]['group_session_id']
 
-        return jsonify({"group_session_id": group_id}), 200
+		return jsonify({"group_session_id": group_id}), 200
 
-    except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({"error": "Internal server error"}), 500
+	except Exception as e:
+		print(f"Error: {e}")
+		return jsonify({"error": "Internal server error"}), 500
 
 
 # ========================================
@@ -132,35 +132,35 @@ def get_group_calendar(calendarId):
 # ========================================
 @calendar_bp.route('/get_next_session/<int:calendarId>', methods=["GET"])
 def get_next_session(calendarId):
-    try:
-        # Get the current calendar's start time
-        query = """
+	try:
+		# Get the current calendar's start time
+		query = """
             SELECT start_time FROM relation_calander_group_session 
             WHERE id = %s
         """
-        selected_time = Database.execute_query(query, (calendarId,))
+		selected_time = Database.execute_query(query, (calendarId,))
 
-        if not selected_time:
-            return jsonify({"error": "Calendar not found"}), 404
+		if not selected_time:
+			return jsonify({"error": "Calendar not found"}), 404
 
-        # Get the next session after this time
-        query = """
+		# Get the next session after this time
+		query = """
             SELECT start_time, id 
             FROM relation_calander_group_session 
             WHERE start_time > %s 
             ORDER BY start_time ASC
             LIMIT 1
         """
-        next_session = Database.execute_query(query, (selected_time[0]["start_time"],))
+		next_session = Database.execute_query(query, (selected_time[0]["start_time"],))
 
-        if next_session:
-            return jsonify({"data": next_session[0]}), 200
-        else:
-            return jsonify({"data": None, "message": "No next session found"}), 200
+		if next_session:
+			return jsonify({"data": next_session[0]}), 200
+		else:
+			return jsonify({"data": None, "message": "No next session found"}), 200
 
-    except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({"error": "Internal server error"}), 500
+	except Exception as e:
+		print(f"Error: {e}")
+		return jsonify({"error": "Internal server error"}), 500
 
 
 # ========================================
@@ -168,8 +168,8 @@ def get_next_session(calendarId):
 # ========================================
 @calendar_bp.route('/get-all-calender', methods=['GET'])
 def get_todays_sessions():
-    try:
-        query = """
+	try:
+		query = """
             SELECT 
                 r.id,
                 r.title AS name,
@@ -200,33 +200,33 @@ def get_todays_sessions():
             LEFT JOIN session s ON r.session_id = s.id
             WHERE r.enabled = 1 AND s.enabled = 1
         """
-        rows = Database.execute_query(query)
+		rows = Database.execute_query(query)
 
-        now = datetime.utcnow()
-        today = now.date()
-        filtered_rows = []
+		now = datetime.utcnow()
+		today = now.date()
+		filtered_rows = []
 
-        for row in rows:
-            start_time_dt = row.get("start")
+		for row in rows:
+			start_time_dt = row.get("start")
 
-            if isinstance(start_time_dt, str):
-                start_time_dt = datetime.fromisoformat(start_time_dt)
+			if isinstance(start_time_dt, str):
+				start_time_dt = datetime.fromisoformat(start_time_dt)
 
-            if start_time_dt and start_time_dt.date() == today:
-                end_time_dt = row.get("end")
-                if isinstance(end_time_dt, str):
-                    end_time_dt = datetime.fromisoformat(end_time_dt)
+			if start_time_dt and start_time_dt.date() == today:
+				end_time_dt = row.get("end")
+				if isinstance(end_time_dt, str):
+					end_time_dt = datetime.fromisoformat(end_time_dt)
 
-                if end_time_dt and now <= end_time_dt + timedelta(minutes=5):
-                    filtered_rows.append(row)
+				if end_time_dt and now <= end_time_dt + timedelta(minutes=5):
+					filtered_rows.append(row)
 
-        filtered_rows.sort(key=lambda x: x["start"])
+		filtered_rows.sort(key=lambda x: x["start"])
 
-        return jsonify({"data": filtered_rows}), 200
+		return jsonify({"data": filtered_rows}), 200
 
-    except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({"error": "Internal server error"}), 500
+	except Exception as e:
+		print(f"Error: {e}")
+		return jsonify({"error": "Internal server error"}), 500
 
 
 # ========================================
@@ -234,22 +234,22 @@ def get_todays_sessions():
 # ========================================
 @calendar_bp.route('/data_account/<int:id>', methods=['GET'])
 def data_account_api(id):
-    try:
-        query = """
+	try:
+		query = """
             SELECT a.*
             FROM account a 
             JOIN relation_calander_group_session rcg ON rcg.id = %s
             WHERE rcg.account_id = a.id
         """
-        rows = Database.execute_query(query, (id,))
+		rows = Database.execute_query(query, (id,))
 
-        return jsonify({"status": "ok", "data": rows}), 200
+		return jsonify({"status": "ok", "data": rows}), 200
 
-    except Exception as e:
-        print("ERROR IN data_account:", e)
-        import traceback
-        traceback.print_exc()
-        return jsonify({"error": str(e)}), 500
+	except Exception as e:
+		print("ERROR IN data_account:", e)
+		import traceback
+		traceback.print_exc()
+		return jsonify({"error": str(e)}), 500
 
 
 # ========================================
@@ -257,65 +257,66 @@ def data_account_api(id):
 # ========================================
 @calendar_bp.route('/get_calendar_session/<int:id_session>/<int:id_account>', methods=['GET'])
 def get_calendar_session(id_session, id_account):
-    try:
+	try:
 
-        query = """
+		query = """
             SELECT * FROM relation_calander_group_session 
             WHERE enabled = 1 AND session_id = %s AND account_id = %s
         """
-        result = Database.execute_query(query, (id_session, id_account))
+		result = Database.execute_query(query, (id_session, id_account))
 
-        if result:
-            # Convert datetime objects to Tunisia timezone (UTC+1)
-            timezone_offset = timedelta(hours=1)
+		if result:
+			# Convert datetime objects to Tunisia timezone (UTC+1)
+			timezone_offset = timedelta(hours=1)
 
-            for event in result:
-                # Convert start_time if it exists and is a datetime object
-                if event.get('start_time') and isinstance(event['start_time'], datetime):
-                    event['start_time'] = event['start_time'] + timezone_offset
-                    event['start_time'] = event['start_time'].isoformat()
+			for event in result:
+				# Convert start_time if it exists and is a datetime object
+				if event.get('start_time') and isinstance(event['start_time'], datetime):
+					event['start_time'] = event['start_time'] + timezone_offset
+					event['start_time'] = event['start_time'].isoformat()
 
-                # Convert end_time if it exists and is a datetime object
-                if event.get('end_time') and isinstance(event['end_time'], datetime):
-                    event['end_time'] = event['end_time'] + timezone_offset
-                    event['end_time'] = event['end_time'].isoformat()
+				# Convert end_time if it exists and is a datetime object
+				if event.get('end_time') and isinstance(event['end_time'], datetime):
+					event['end_time'] = event['end_time'] + timezone_offset
+					event['end_time'] = event['end_time'].isoformat()
 
-                # Convert other datetime fields if needed
-                if event.get('created_at') and isinstance(event['created_at'], datetime):
-                    event['created_at'] = (event['created_at'] + timezone_offset).isoformat()
+				# Convert other datetime fields if needed
+				if event.get('created_at') and isinstance(event['created_at'], datetime):
+					event['created_at'] = (event['created_at'] + timezone_offset).isoformat()
 
-                if event.get('updated_at') and isinstance(event['updated_at'], datetime):
-                    event['updated_at'] = (event['updated_at'] + timezone_offset).isoformat()
+				if event.get('updated_at') and isinstance(event['updated_at'], datetime):
+					event['updated_at'] = (event['updated_at'] + timezone_offset).isoformat()
 
-                if event.get('timestamp') and isinstance(event['timestamp'], datetime):
-                    event['timestamp'] = (event['timestamp'] + timezone_offset).isoformat()
+				if event.get('timestamp') and isinstance(event['timestamp'], datetime):
+					event['timestamp'] = (event['timestamp'] + timezone_offset).isoformat()
 
-            return jsonify({"message": "Success", "data": result}), 200
-        else:
-            return jsonify({"message": f"Calendar not found for {id_session}/{id_account}"}), 404
+			return jsonify({"message": "Success", "data": result}), 200
+		else:
+			return jsonify({"message": f"Calendar not found for {id_session}/{id_account}"}), 404
 
-    except Exception as e:
-        print(f"Debug Error {e}")
-        return jsonify({"message": "Error from server"}), 500
+	except Exception as e:
+		print(f"Debug Error {e}")
+		return jsonify({"message": "Error from server"}), 500
 
 
-#================ create calender part ==============
+# ================ create calender part ==============
 
 # Generate color random for the calander
 def generate_random_color():
-    return f'#{random.randint(0,0xFFFFFF):06X}'
+	return f'#{random.randint(0, 0xFFFFFF):06X}'
+
 
 # Generate ref id for the calendar+
-def generate_unique_ref(group_id,session_id,local_id,account_id):
-    prefix = "group-"
-    suffix = ''.join(random.choices(string.digits,k=3))
-    return f"{prefix}{group_id}{session_id}{local_id}{account_id}-{suffix}"
+def generate_unique_ref(group_id, session_id, local_id, account_id):
+	prefix = "group-"
+	suffix = ''.join(random.choices(string.digits, k=3))
+	return f"{prefix}{group_id}{session_id}{local_id}{account_id}-{suffix}"
 
 
 # Function to test if the room reserved or no
 def isRoomReserved(room_id, start_date, start_time, end_time):
-    try:
-        query = """
+	try:
+		query = """
             SELECT COUNT(*) as nbr FROM relation_calander_group_session 
             WHERE room_id = %s 
             AND DATE(start_time) = %s
@@ -323,24 +324,24 @@ def isRoomReserved(room_id, start_date, start_time, end_time):
             AND TIME(end_time) > %s
             AND enabled = 1 
         """
-        values = (room_id, start_date, end_time, start_time)
+		values = (room_id, start_date, end_time, start_time)
 
-        result = Database.execute_query(query, values)
-        print(f"DEBUG isRoomReserved -> result:{result}")
+		result = Database.execute_query(query, values)
+		print(f"DEBUG isRoomReserved -> result:{result}")
 
-        if result and len(result) > 0:
-            return result[0]['nbr'] > 0
-        return False
+		if result and len(result) > 0:
+			return result[0]['nbr'] > 0
+		return False
 
-    except Exception as db_error:
-        print(f"Database Error: {db_error}")
-        return False
+	except Exception as db_error:
+		print(f"Database Error: {db_error}")
+		return False
 
 
 # Check if the group is alreay in the time or no
 def isGroupTypeConflit(group_id, start_date, start_time, end_time):
-    try:
-        query = """
+	try:
+		query = """
             SELECT COUNT(*) as nbr FROM relation_calander_group_session 
             WHERE group_session_id = %s 
             AND DATE(start_time) = %s
@@ -348,22 +349,22 @@ def isGroupTypeConflit(group_id, start_date, start_time, end_time):
             AND TIME(end_time) > %s
             AND enabled = 1
         """
-        values = (group_id, start_date, end_time, start_time)
+		values = (group_id, start_date, end_time, start_time)
 
-        result = Database.execute_query(query, values)
-        if result and len(result) > 0:
-            return result[0]['nbr'] > 0
-        return False
+		result = Database.execute_query(query, values)
+		if result and len(result) > 0:
+			return result[0]['nbr'] > 0
+		return False
 
-    except Exception as e:
-        print(f"Database Error: {e}")
-        return False
+	except Exception as e:
+		print(f"Database Error: {e}")
+		return False
 
 
 # Check if the subject and the teacher is on the time or no
 def isSubjectTeacherConflit(teacher_id, start_date, start_time, end_time):
-    try:
-        query = """
+	try:
+		query = """
             SELECT COUNT(*) AS nbr FROM relation_calander_group_session
             WHERE teacher_id = %s
             AND DATE(start_time) = %s
@@ -371,273 +372,276 @@ def isSubjectTeacherConflit(teacher_id, start_date, start_time, end_time):
             AND TIME(end_time) > %s
             AND enabled = 1 
         """
-        values = (teacher_id, start_date, end_time, start_time)
+		values = (teacher_id, start_date, end_time, start_time)
 
-        result = Database.execute_query(query, values)
-        print(f"DEBUG Teacher -> result: {result}")
+		result = Database.execute_query(query, values)
+		print(f"DEBUG Teacher -> result: {result}")
 
-        if result and len(result) > 0:
-            return result[0]['nbr'] > 0
-        return False
+		if result and len(result) > 0:
+			return result[0]['nbr'] > 0
+		return False
 
-    except Exception as e:
-        print(f"Database Error: {e}")
-        return False
+	except Exception as e:
+		print(f"Database Error: {e}")
+		return False
 
 
 # Check if the color generated or no
 def check_color(color):
-    try:
-        query = """
+	try:
+		query = """
             SELECT COUNT(*) AS nbr FROM relation_calander_group_session
             WHERE color = %s AND enabled = 1
         """
-        values = (color,)
+		values = (color,)
 
-        result = Database.execute_query(query,values)
-        if result and len(result)>0:
-            return result[0]['nbr'] > 0  # FIXED
+		result = Database.execute_query(query, values)
+		if result and len(result) > 0:
+			return result[0]['nbr'] > 0  # FIXED
 
-    except Exception as e:
-        print(f"Database Error: {e}")
-        return True
+	except Exception as e:
+		print(f"Database Error: {e}")
+		return True
 
 
 # ========================================
 # ENDPOINT 8: Create calendar api
 # ========================================
 def get_name_group(id):
-    try:
-        query = """
+	try:
+		query = """
             SELECT name 
             FROM relation_group_local_session
             WHERE id = %s
         """
-        values = (id,)
-        result = Database.execute_query(query, values, fetch=True)
+		values = (id,)
+		result = Database.execute_query(query, values, fetch=True)
 
-        # ✅ Check if result exists and return the name
-        if result and len(result) > 0:
-            return result[0]['name']  # Return the name from first row
-        else:
-            return None  # No group found
+		# ✅ Check if result exists and return the name
+		if result and len(result) > 0:
+			return result[0]['name']  # Return the name from first row
+		else:
+			return None  # No group found
 
-    except Exception as e:
-        print(f"❌ Error getting group name: {e}")
-        return None
+	except Exception as e:
+		print(f"❌ Error getting group name: {e}")
+		return None
 
 
 def create_completion_tag(data, calender_id):
-    try:
-        completion_tags = data.get('completionTags')
-        account_id = data.get('account_id')
+	try:
+		completion_tags = data.get('completionTags')
+		account_id = data.get('account_id')
 
-        # Nothing to insert if no tags were selected
-        if not completion_tags:
-            return True
+		# Nothing to insert if no tags were selected
+		if not completion_tags:
+			return True
 
-        query = """
+		query = """
             INSERT INTO relation_completion_tag
                 (tag_id, account_id, calander_group_id)
             VALUES (%s, %s, %s)
         """
 
-        for tag_id in completion_tags:
-            values = (tag_id, account_id, calender_id)
-            Database.execute_query(query, values, fetch=False)
+		for tag_id in completion_tags:
+			values = (tag_id, account_id, calender_id)
+			Database.execute_query(query, values, fetch=False)
 
-        return True
+		return True
 
-    except Exception as e:
-        print(f"Error from Server (create_completion_tag): {e}")
-        return False
+	except Exception as e:
+		print(f"Error from Server (create_completion_tag): {e}")
+		return False
+
 
 def _combine_date_time(base_dt_str, new_date):
-    """
-    Takes an original 'YYYY-MM-DD HH:MM:SS' string and a new date, and
-    returns a new 'YYYY-MM-DD HH:MM:SS' string on new_date but keeping the
-    same time-of-day as base_dt_str. Used to shift start_time/end_time onto
-    each recurrence date while preserving the hour/minute the user picked.
-    """
-    base_dt = parse_flexible_datetime(base_dt_str)
-    return datetime.combine(new_date, base_dt.time()).strftime('%Y-%m-%d %H:%M:%S')
+	"""
+	Takes an original 'YYYY-MM-DD HH:MM:SS' string and a new date, and
+	returns a new 'YYYY-MM-DD HH:MM:SS' string on new_date but keeping the
+	same time-of-day as base_dt_str. Used to shift start_time/end_time onto
+	each recurrence date while preserving the hour/minute the user picked.
+	"""
+	base_dt = parse_flexible_datetime(base_dt_str)
+	return datetime.combine(new_date, base_dt.time()).strftime('%Y-%m-%d %H:%M:%S')
+
 
 def _build_occurrence_dates(start_dt, duplicate_type, end_date):
-    """
-    Returns the list of date objects on which a calendar row should be
-    created, given the original start date, the duplicate/recurrence type,
-    and the end date of the interval (inclusive).
+	"""
+	Returns the list of date objects on which a calendar row should be
+	created, given the original start date, the duplicate/recurrence type,
+	and the end date of the interval (inclusive).
 
-    - 'none' / falsy / missing end_date -> just the original start date.
-    - 'daily'    -> every day from start_dt.date() to end_date inclusive.
-    - 'weekly'   -> every 7 days from start_dt.date() to end_date inclusive.
-    - 'biweekly' -> every 14 days from start_dt.date() to end_date inclusive.
-    """
-    occurrence_dates = [start_dt.date()]
+	- 'none' / falsy / missing end_date -> just the original start date.
+	- 'daily'    -> every day from start_dt.date() to end_date inclusive.
+	- 'weekly'   -> every 7 days from start_dt.date() to end_date inclusive.
+	- 'biweekly' -> every 14 days from start_dt.date() to end_date inclusive.
+	"""
+	occurrence_dates = [start_dt.date()]
 
-    step_days_by_type = {
-        'daily': 1,
-        'weekly': 7,
-        'biweekly': 14,
-    }
+	step_days_by_type = {
+		'daily': 1,
+		'weekly': 7,
+		'biweekly': 14,
+	}
 
-    step_days = step_days_by_type.get(duplicate_type)
-    if step_days and end_date:
-        current_date = start_dt.date() + timedelta(days=step_days)
-        while current_date <= end_date:
-            occurrence_dates.append(current_date)
-            current_date += timedelta(days=step_days)
+	step_days = step_days_by_type.get(duplicate_type)
+	if step_days and end_date:
+		current_date = start_dt.date() + timedelta(days=step_days)
+		while current_date <= end_date:
+			occurrence_dates.append(current_date)
+			current_date += timedelta(days=step_days)
 
-    return occurrence_dates
+	return occurrence_dates
+
 
 def _create_single_calendar_row(
-    session_id, account_id, local_id, group_id, room_id, teacher_id,
-    subject_id, description, start_time, end_time, title, type_val,
-    start_date, data
+		session_id, account_id, local_id, group_id, room_id, teacher_id,
+		subject_id, description, start_time, end_time, title, type_val,
+		start_date, data
 ):
-    """
-    Runs the conflict checks + insert + audit + completion tags + attendance
-    creation for exactly one calendar row (one occurrence). Returns a dict:
-      {"ok": True, "calander_id": ..., "ref": ..., "color": ..., "attendance_created": ...}
-    or
-      {"ok": False, "Message": ..., "Error": ..., "status": <http status>}
-    on conflict / failure, so the caller can decide whether to keep going or
-    stop the recurrence loop.
-    """
-    # Conflict checks — same as the original single-entry logic, run per
-    # occurrence date so a recurring series can't double-book a room/group/
-    # teacher on any one of its dates.
-    if isRoomReserved(room_id, start_date, start_time, end_time):
-        return {
-            "ok": False,
-            "Message": f"Room already reserved on {start_date}!",
-            "Error": "Room-Conflict",
-            "status": 402
-        }
+	"""
+	Runs the conflict checks + insert + audit + completion tags + attendance
+	creation for exactly one calendar row (one occurrence). Returns a dict:
+	  {"ok": True, "calander_id": ..., "ref": ..., "color": ..., "attendance_created": ...}
+	or
+	  {"ok": False, "Message": ..., "Error": ..., "status": <http status>}
+	on conflict / failure, so the caller can decide whether to keep going or
+	stop the recurrence loop.
+	"""
+	# Conflict checks — same as the original single-entry logic, run per
+	# occurrence date so a recurring series can't double-book a room/group/
+	# teacher on any one of its dates.
+	if isRoomReserved(room_id, start_date, start_time, end_time):
+		return {
+			"ok": False,
+			"Message": f"Room already reserved on {start_date}!",
+			"Error": "Room-Conflict",
+			"status": 402
+		}
 
-    if isGroupTypeConflit(group_id, start_date, start_time, end_time):
-        return {
-            "ok": False,
-            "Message": f"Group not available on {start_date}",
-            "Error": "Group-Conflict",
-            "status": 402
-        }
+	if isGroupTypeConflit(group_id, start_date, start_time, end_time):
+		return {
+			"ok": False,
+			"Message": f"Group not available on {start_date}",
+			"Error": "Group-Conflict",
+			"status": 402
+		}
 
-    if isSubjectTeacherConflit(teacher_id, start_date, start_time, end_time):
-        return {
-            "ok": False,
-            "Message": f"Teacher not available on {start_date}",
-            "Error": "Teacher-Conflict",
-            "status": 402
-        }
+	if isSubjectTeacherConflit(teacher_id, start_date, start_time, end_time):
+		return {
+			"ok": False,
+			"Message": f"Teacher not available on {start_date}",
+			"Error": "Teacher-Conflict",
+			"status": 402
+		}
 
-    # Generate unique color
-    color = generate_random_color()
-    attempts = 0
-    max_attempts = 50
-    while check_color(color) and attempts < max_attempts:
-        color = generate_random_color()
-        attempts += 1
+	# Generate unique color
+	color = generate_random_color()
+	attempts = 0
+	max_attempts = 50
+	while check_color(color) and attempts < max_attempts:
+		color = generate_random_color()
+		attempts += 1
 
-    if attempts >= max_attempts:
-        return {
-            "ok": False,
-            "Message": "Could not find unique color",
-            "Error": "Warning: Could not find unique color after 50 attempts",
-            "status": 402
-        }
+	if attempts >= max_attempts:
+		return {
+			"ok": False,
+			"Message": "Could not find unique color",
+			"Error": "Warning: Could not find unique color after 50 attempts",
+			"status": 402
+		}
 
-    # Generate additional fields
-    status = 1
-    ref = generate_unique_ref(group_id, session_id, local_id, account_id)
-    enabled = 1
-    create_time = datetime.now()
-    timestamp = create_time
-    teacher_present = 0
-    force_teacher_present = 0
+	# Generate additional fields
+	status = 1
+	ref = generate_unique_ref(group_id, session_id, local_id, account_id)
+	enabled = 1
+	create_time = datetime.now()
+	timestamp = create_time
+	teacher_present = 0
+	force_teacher_present = 0
 
-    query = """
+	query = """
         INSERT INTO relation_calander_group_session
         (session_id, account_id, local_id, group_session_id, room_id, teacher_id, subject_id, color, status, description, start_time, end_time, ref, refresh, title, enabled, created_at, timestamp, updated_at, type, teacher_present, force_teacher_present, slc_use)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
 
-    values = (
-        session_id,
-        account_id,
-        local_id,
-        group_id,
-        room_id,
-        teacher_id,
-        subject_id,
-        color,
-        status,
-        description,
-        start_time,
-        end_time,
-        ref,
-        0,
-        title,
-        enabled,
-        create_time,
-        timestamp,
-        None,
-        type_val,
-        teacher_present,
-        force_teacher_present,
-        1
-    )
+	values = (
+		session_id,
+		account_id,
+		local_id,
+		group_id,
+		room_id,
+		teacher_id,
+		subject_id,
+		color,
+		status,
+		description,
+		start_time,
+		end_time,
+		ref,
+		0,
+		title,
+		enabled,
+		create_time,
+		timestamp,
+		None,
+		type_val,
+		teacher_present,
+		force_teacher_present,
+		1
+	)
 
-    calander_id = Database.execute_query(query, values, fetch=False)
-    attendance_created = 0
+	calander_id = Database.execute_query(query, values, fetch=False)
+	attendance_created = 0
 
-    if calander_id:
-        # Audit: log the new calendar entry
-        new_data = {
-            "session_id": session_id,
-            "account_id": account_id,
-            "local_id": local_id,
-            "group_id": group_id,
-            "room_id": room_id,
-            "teacher_id": teacher_id,
-            "subject_id": subject_id,
-            "color": color,
-            "status": status,
-            "description": description,
-            "start_time": start_time,
-            "end_time": end_time,
-            "ref": ref,
-            "title": title,
-            "type": type_val,
-            "created_at": create_time.isoformat(),
-        }
-        audit_query = """
+	if calander_id:
+		# Audit: log the new calendar entry
+		new_data = {
+			"session_id": session_id,
+			"account_id": account_id,
+			"local_id": local_id,
+			"group_id": group_id,
+			"room_id": room_id,
+			"teacher_id": teacher_id,
+			"subject_id": subject_id,
+			"color": color,
+			"status": status,
+			"description": description,
+			"start_time": start_time,
+			"end_time": end_time,
+			"ref": ref,
+			"title": title,
+			"type": type_val,
+			"created_at": create_time.isoformat(),
+		}
+		audit_query = """
             INSERT INTO relation_calander_group_audit
                 (action_type, old_data, new_data, is_synced, id_calander)
             VALUES (%s, %s, %s, %s, %s)
         """
-        Database.execute_query(audit_query, (
-            "INSERT",
-            None,
-            json.dumps(new_data),
-            0,
-            calander_id
-        ), fetch=False)
+		Database.execute_query(audit_query, (
+			"INSERT",
+			None,
+			json.dumps(new_data),
+			0,
+			calander_id
+		), fetch=False)
 
-        # Completion tags for this occurrence
-        create_completion_tag(data, calander_id)
+		# Completion tags for this occurrence
+		create_completion_tag(data, calander_id)
 
-        # Attendance rows for every user enrolled in this group
-        query = """
+		# Attendance rows for every user enrolled in this group
+		query = """
             SELECT DISTINCT user_id
             FROM relation_user_session
             WHERE relation_group_local_session_id = %s
         """
-        user_result = Database.execute_query(query, (group_id,), fetch=True)
-        user_ids = [row['user_id'] for row in user_result]
+		user_result = Database.execute_query(query, (group_id,), fetch=True)
+		user_ids = [row['user_id'] for row in user_result]
 
-        for user_id in user_ids:
-            attendance_query = """
+		for user_id in user_ids:
+			attendance_query = """
                 INSERT INTO attendance 
                 (
                     user_id,
@@ -656,25 +660,25 @@ def _create_single_calendar_row(
                 )
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """
-            attendance_values = (
-                user_id,
-                session_id,
-                account_id,
-                group_id,  # group_session_id
-                calander_id,
-                0,  # is_present: 0 = absent by default
-                start_date,  # day: extracted earlier from start_time
-                None,  # note: empty by default
-                1,  # is_editable: 1 = editable
-                1,  # enabled
-                create_time,
-                timestamp,
-                1  # slc_edit
-            )
-            attendance_id = Database.execute_query(attendance_query, attendance_values, fetch=False)
-            if attendance_id:
-                attendance_created += 1
-                audit_query = """
+			attendance_values = (
+				user_id,
+				session_id,
+				account_id,
+				group_id,  # group_session_id
+				calander_id,
+				0,  # is_present: 0 = absent by default
+				start_date,  # day: extracted earlier from start_time
+				None,  # note: empty by default
+				1,  # is_editable: 1 = editable
+				1,  # enabled
+				create_time,
+				timestamp,
+				1  # slc_edit
+			)
+			attendance_id = Database.execute_query(attendance_query, attendance_values, fetch=False)
+			if attendance_id:
+				attendance_created += 1
+				audit_query = """
                     INSERT INTO attendance_audit(
                         action_type,
                         old_data,
@@ -685,41 +689,42 @@ def _create_single_calendar_row(
                     )
                     VALUES (%s, %s, %s, %s, %s, %s)
                 """
-                attendance_new_data = {
-                    "user_id": user_id,
-                    "session_id": session_id,
-                    "account_id": account_id,
-                    "group_session_id": group_id,
-                    "calander_id": calander_id,
-                    "is_present": 0,
-                    # FIX: start_date is a date object (occurrence_date from
-                    # the recurrence loop) — json.dumps can't serialize it
-                    # directly, causing "Object of type date is not JSON
-                    # serializable". Convert to string only for this audit
-                    # payload; the actual DB insert above still uses the raw
-                    # date object in attendance_values, which is fine.
-                    "day": start_date.isoformat() if hasattr(start_date, 'isoformat') else start_date,
-                    "note": None,
-                    "is_editable": 1,
-                    "enabled": 1
-                }
-                audit_values = (
-                    "INSERT_attendance",
-                    None,
-                    json.dumps(attendance_new_data),
-                    0,
-                    attendance_id,
-                    calander_id
-                )
-                Database.execute_query(audit_query, audit_values, fetch=False)
+				attendance_new_data = {
+					"user_id": user_id,
+					"session_id": session_id,
+					"account_id": account_id,
+					"group_session_id": group_id,
+					"calander_id": calander_id,
+					"is_present": 0,
+					# FIX: start_date is a date object (occurrence_date from
+					# the recurrence loop) — json.dumps can't serialize it
+					# directly, causing "Object of type date is not JSON
+					# serializable". Convert to string only for this audit
+					# payload; the actual DB insert above still uses the raw
+					# date object in attendance_values, which is fine.
+					"day": start_date.isoformat() if hasattr(start_date, 'isoformat') else start_date,
+					"note": None,
+					"is_editable": 1,
+					"enabled": 1
+				}
+				audit_values = (
+					"INSERT_attendance",
+					None,
+					json.dumps(attendance_new_data),
+					0,
+					attendance_id,
+					calander_id
+				)
+				Database.execute_query(audit_query, audit_values, fetch=False)
 
-    return {
-        "ok": True,
-        "calander_id": calander_id,
-        "ref": ref,
-        "color": color,
-        "attendance_created": attendance_created
-    }
+	return {
+		"ok": True,
+		"calander_id": calander_id,
+		"ref": ref,
+		"color": color,
+		"attendance_created": attendance_created
+	}
+
 
 def parse_flexible_datetime(dt_str):
 	for fmt in ('%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M'):
@@ -729,214 +734,214 @@ def parse_flexible_datetime(dt_str):
 			continue
 	raise ValueError(f"time data '{dt_str}' does not match expected formats")
 
+
 @calendar_bp.route('/create_calender', methods=['POST'])
 def create_calander():
-    try:
-        data = request.get_json() or {}
+	try:
+		data = request.get_json() or {}
 
-        if not data:
-            return jsonify({"Message": "No data from the request"}), 400
+		if not data:
+			return jsonify({"Message": "No data from the request"}), 400
 
-        # Required fields
-        required_keys = [
-            'session_id', 'account_id', 'local_id', 'group_id',
-            'room_id', 'teacher_id', 'subject_id',
-            'start_time', 'end_time', 'title', 'type'
-        ]
+		# Required fields
+		required_keys = [
+			'session_id', 'account_id', 'local_id', 'group_id',
+			'room_id', 'teacher_id', 'subject_id',
+			'start_time', 'end_time', 'title', 'type'
+		]
 
-        # Check for missing fields
-        missing_fields = [key for key in required_keys if key not in data]
-        if missing_fields:
-            return jsonify({
-                "Message": "Missing required fields",
-                "missing_fields": missing_fields
-            }), 400
+		# Check for missing fields
+		missing_fields = [key for key in required_keys if key not in data]
+		if missing_fields:
+			return jsonify({
+				"Message": "Missing required fields",
+				"missing_fields": missing_fields
+			}), 400
 
-        # Check for empty values
-        empty_fields = []
-        for key in required_keys:
-            value = data[key]
-            if value is None:
-                empty_fields.append(key)
-            elif isinstance(value, str) and value.strip() == "":
-                empty_fields.append(key)
+		# Check for empty values
+		empty_fields = []
+		for key in required_keys:
+			value = data[key]
+			if value is None:
+				empty_fields.append(key)
+			elif isinstance(value, str) and value.strip() == "":
+				empty_fields.append(key)
 
-        if empty_fields:
-            return jsonify({
-                "Message": "Fields cannot be empty",
-                "empty_fields": empty_fields
-            }), 400
+		if empty_fields:
+			return jsonify({
+				"Message": "Fields cannot be empty",
+				"empty_fields": empty_fields
+			}), 400
 
-        # Extract values
-        session_id = data['session_id']
-        account_id = data['account_id']
-        local_id = data['local_id']
-        group_id = data['group_id']
-        room_id = data['room_id']
-        teacher_id = data['teacher_id']
-        subject_id = data['subject_id']
-        description = data.get('description') or ''
-        start_time_str = data['start_time']
-        end_time_str = data['end_time']
-        title = get_name_group(group_id) or "Unknown Group"
-        type_val = data['type']
+		# Extract values
+		session_id = data['session_id']
+		account_id = data['account_id']
+		local_id = data['local_id']
+		group_id = data['group_id']
+		room_id = data['room_id']
+		teacher_id = data['teacher_id']
+		subject_id = data['subject_id']
+		description = data.get('description') or ''
+		start_time_str = data['start_time']
+		end_time_str = data['end_time']
+		title = get_name_group(group_id) or "Unknown Group"
+		type_val = data['type']
 
-        # 'duplicate' field: 'none' | 'daily' | 'weekly' | 'biweekly' (or
-        # missing/empty, treated the same as 'none'). endDate is only
-        # required when duplicate_type isn't 'none'.
-        duplicate_type = (data.get('duplicate') or 'none').strip().lower()
-        end_date_str = data.get('endDate')
+		# 'duplicate' field: 'none' | 'daily' | 'weekly' | 'biweekly' (or
+		# missing/empty, treated the same as 'none'). endDate is only
+		# required when duplicate_type isn't 'none'.
+		duplicate_type = (data.get('duplicate') or 'none').strip().lower()
+		end_date_str = data.get('endDate')
 
-        start_dt = parse_flexible_datetime(start_time_str)
+		start_dt = parse_flexible_datetime(start_time_str)
 
-        if duplicate_type in ('daily', 'weekly', 'biweekly'):
-            if not end_date_str:
-                return jsonify({
-                    "Message": "endDate is required when duplicate is not 'none'",
-                    "Error": "Missing-EndDate"
-                }), 400
-            try:
-                end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
-            except ValueError:
-                return jsonify({
-                    "Message": "endDate must be in YYYY-MM-DD format",
-                    "Error": "Invalid-EndDate"
-                }), 400
+		if duplicate_type in ('daily', 'weekly', 'biweekly'):
+			if not end_date_str:
+				return jsonify({
+					"Message": "endDate is required when duplicate is not 'none'",
+					"Error": "Missing-EndDate"
+				}), 400
+			try:
+				end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+			except ValueError:
+				return jsonify({
+					"Message": "endDate must be in YYYY-MM-DD format",
+					"Error": "Invalid-EndDate"
+				}), 400
 
-            if end_date < start_dt.date():
-                return jsonify({
-                    "Message": "endDate cannot be before the event's start date",
-                    "Error": "Invalid-EndDate"
-                }), 400
-        else:
-            end_date = None
+			if end_date < start_dt.date():
+				return jsonify({
+					"Message": "endDate cannot be before the event's start date",
+					"Error": "Invalid-EndDate"
+				}), 400
+		else:
+			end_date = None
 
-        occurrence_dates = _build_occurrence_dates(start_dt, duplicate_type, end_date)
+		occurrence_dates = _build_occurrence_dates(start_dt, duplicate_type, end_date)
 
-        created_entries = []
-        total_attendance_created = 0
+		created_entries = []
+		total_attendance_created = 0
 
-        for occurrence_date in occurrence_dates:
-            occurrence_start_time = _combine_date_time(start_time_str, occurrence_date)
-            occurrence_end_time = _combine_date_time(end_time_str, occurrence_date)
+		for occurrence_date in occurrence_dates:
+			occurrence_start_time = _combine_date_time(start_time_str, occurrence_date)
+			occurrence_end_time = _combine_date_time(end_time_str, occurrence_date)
 
-            result = _create_single_calendar_row(
-                session_id, account_id, local_id, group_id, room_id,
-                teacher_id, subject_id, description,
-                occurrence_start_time, occurrence_end_time, title, type_val,
-                occurrence_date, data
-            )
+			result = _create_single_calendar_row(
+				session_id, account_id, local_id, group_id, room_id,
+				teacher_id, subject_id, description,
+				occurrence_start_time, occurrence_end_time, title, type_val,
+				occurrence_date, data
+			)
 
-            if not result["ok"]:
-                # Stop at the first conflict/failure. Anything already
-                # created earlier in the loop stays created (no automatic
-                # rollback here — see note below if you need all-or-nothing).
-                return jsonify({
-                    "Message": result["Message"],
-                    "Error": result["Error"],
-                    "occurrence_date": occurrence_date.isoformat(),
-                    "created_before_failure": created_entries
-                }), result["status"]
+			if not result["ok"]:
+				# Stop at the first conflict/failure. Anything already
+				# created earlier in the loop stays created (no automatic
+				# rollback here — see note below if you need all-or-nothing).
+				return jsonify({
+					"Message": result["Message"],
+					"Error": result["Error"],
+					"occurrence_date": occurrence_date.isoformat(),
+					"created_before_failure": created_entries
+				}), result["status"]
 
-            created_entries.append({
-                "calander_id": result["calander_id"],
-                "date": occurrence_date.isoformat(),
-                "ref": result["ref"],
-                "color": result["color"],
-                "attendance_created": result["attendance_created"]
-            })
-            total_attendance_created += result["attendance_created"]
+			created_entries.append({
+				"calander_id": result["calander_id"],
+				"date": occurrence_date.isoformat(),
+				"ref": result["ref"],
+				"color": result["color"],
+				"attendance_created": result["attendance_created"]
+			})
+			total_attendance_created += result["attendance_created"]
 
-        return jsonify({
-            "Message": "Calendar entry created successfully"
-            if len(created_entries) == 1
-            else f"{len(created_entries)} calendar entries created successfully",
-            "entries": created_entries,
-            "attendance_created": total_attendance_created
-        }), 200
+		return jsonify({
+			"Message": "Calendar entry created successfully"
+			if len(created_entries) == 1
+			else f"{len(created_entries)} calendar entries created successfully",
+			"entries": created_entries,
+			"attendance_created": total_attendance_created
+		}), 200
 
-    except Exception as e:
-        print(f"Error from Server: {e}")
-        return jsonify({
-            "Message": "Internal Server Error",
-            "error": str(e)
-        }), 500
+	except Exception as e:
+		print(f"Error from Server: {e}")
+		return jsonify({
+			"Message": "Internal Server Error",
+			"error": str(e)
+		}), 500
 
 
 # =======================================
 # ENDPOINT 9: Create subject_account api
-#========================================
+# ========================================
 
-@calendar_bp.route('/get-subject-account/<int:account_id>',methods=['GET'])
+@calendar_bp.route('/get-subject-account/<int:account_id>', methods=['GET'])
 def get_subject_account(account_id):
-    try:
-        query = """
+	try:
+		query = """
             SELECT * from account_subject
             WHERE account_id = %s AND enabled = 1
         """
 
-        values = (account_id,)
-        subjects = Database.execute_query(query, values)
+		values = (account_id,)
+		subjects = Database.execute_query(query, values)
 
-        seen_subjects = set()
-        result = []
+		seen_subjects = set()
+		result = []
 
-        for subject in subjects:
-            subject_name = None
+		for subject in subjects:
+			subject_name = None
 
-            if subject.get('other_subject') and subject['other_subject'].strip() != '':
-                subject_name = subject['other_subject']
-            else:
-                config_query = """
+			if subject.get('other_subject') and subject['other_subject'].strip() != '':
+				subject_name = subject['other_subject']
+			else:
+				config_query = """
                     SELECT name FROM subject_config
                     WHERE id = %s AND enabled = 1 
                 """
-                config_result = Database.execute_query(config_query, (subject['subject_config_id'],))
+				config_result = Database.execute_query(config_query, (subject['subject_config_id'],))
 
-                if config_result and len(config_result) > 0:
-                    subject_name = config_result[0]['name']
+				if config_result and len(config_result) > 0:
+					subject_name = config_result[0]['name']
 
-            # Only add if subject_name is not None and not already in result
-            if subject_name and subject_name not in seen_subjects:
-                seen_subjects.add(subject_name)
-                subject['subject_name'] = subject_name
-                result.append(subject)
+			# Only add if subject_name is not None and not already in result
+			if subject_name and subject_name not in seen_subjects:
+				seen_subjects.add(subject_name)
+				subject['subject_name'] = subject_name
+				result.append(subject)
 
-        print(f"Found {len(result)} unique subjects")
-        return jsonify({"Message": "Successfully got subject account", "Data": result}), 200
+		print(f"Found {len(result)} unique subjects")
+		return jsonify({"Message": "Successfully got subject account", "Data": result}), 200
 
-    except Exception as e:
-        print(f"Error in get_subject_account: {str(e)}")
-        return jsonify({"Message": f"Error: {e} in getting subject_account"}), 500  # ← Added status code
-
+	except Exception as e:
+		print(f"Error in get_subject_account: {str(e)}")
+		return jsonify({"Message": f"Error: {e} in getting subject_account"}), 500  # ← Added status code
 
 
 # =======================================
 # ENDPOINT 10: Get Calendar per Room
-#========================================
+# ========================================
 def check_room_id(room_id):
-    try:
-        query = """
+	try:
+		query = """
             SELECT COUNT(*) AS nbr FROM room WHERE id = %s
         """
-        values = (room_id,)
-        result = Database.execute_query(query, values)
-        if result and len(result) > 0:
-            return result[0]['nbr'] > 0
-        return False  # Explicit return for empty results
-    except Exception as e:
-        print(f"Error checking room_id: {e}")  # Log the error
-        return False
+		values = (room_id,)
+		result = Database.execute_query(query, values)
+		if result and len(result) > 0:
+			return result[0]['nbr'] > 0
+		return False  # Explicit return for empty results
+	except Exception as e:
+		print(f"Error checking room_id: {e}")  # Log the error
+		return False
+
 
 @calendar_bp.route('/get-calendar-room/<int:room_id>', methods=['GET'])
 def get_calendar_room(room_id):
-    try:
-        # Validate room exists first
-        if not check_room_id(room_id):
+	try:
+		# Validate room exists first
+		if not check_room_id(room_id):
+			return jsonify({"Message": "Room not found"}), 404
 
-            return jsonify({"Message": "Room not found"}), 404
-
-        query = """
+		query = """
             SELECT r.*, u.username
             FROM relation_calander_group_session r
             INNER JOIN session s ON r.session_id = s.id
@@ -945,181 +950,184 @@ def get_calendar_room(room_id):
               AND r.enabled = 1
               AND s.enabled = 1 
         """
-        values = (room_id,)
-        result = Database.execute_query(query, values)
+		values = (room_id,)
+		result = Database.execute_query(query, values)
 
-        if result and len(result) > 0:
-            # Convert datetime objects to ISO format strings
-            for item in result:
-                if 'start_time' in item and item['start_time']:
-                    item['start_time'] = item['start_time'].isoformat()
-                if 'end_time' in item and item['end_time']:
-                    item['end_time'] = item['end_time'].isoformat()
-                if 'created_at' in item and item['created_at']:
-                    item['created_at'] = item['created_at'].isoformat()
-                if 'updated_at' in item and item['updated_at']:
-                    item['updated_at'] = item['updated_at'].isoformat()
-                if 'timestamp' in item and item['timestamp']:
-                    item['timestamp'] = item['timestamp'].isoformat()
+		if result and len(result) > 0:
+			# Convert datetime objects to ISO format strings
+			for item in result:
+				if 'start_time' in item and item['start_time']:
+					item['start_time'] = item['start_time'].isoformat()
+				if 'end_time' in item and item['end_time']:
+					item['end_time'] = item['end_time'].isoformat()
+				if 'created_at' in item and item['created_at']:
+					item['created_at'] = item['created_at'].isoformat()
+				if 'updated_at' in item and item['updated_at']:
+					item['updated_at'] = item['updated_at'].isoformat()
+				if 'timestamp' in item and item['timestamp']:
+					item['timestamp'] = item['timestamp'].isoformat()
 
-            return jsonify({"Message": "Successfully got calendar room", "Data": result}), 200
-        else:
-            return jsonify({"Message": "No calendar data found for this room"}), 404
+			return jsonify({"Message": "Successfully got calendar room", "Data": result}), 200
+		else:
+			return jsonify({"Message": "No calendar data found for this room"}), 404
 
-    except Exception as e:
-        print(f"Error in get_calendar_room: {e}")
-        return jsonify({"Message": f"Error: {e} coming from get calendar room"}), 500
-
+	except Exception as e:
+		print(f"Error in get_calendar_room: {e}")
+		return jsonify({"Message": f"Error: {e} coming from get calendar room"}), 500
 
 
 # =======================================
 # ENDPOINT 11: Create calander request
-#========================================
+# ========================================
 def check_session(session_id):
-    try:
-        query = """SELECT COUNT(*) AS nbr FROM session WHERE id = %s"""
-        values = (session_id,)
-        result = Database.execute_query(query,values)
-        if result and len(result) > 0:
-            return result[0]['nbr'] > 0
-        return False
-    except Exception:
-        return False
+	try:
+		query = """SELECT COUNT(*) AS nbr FROM session WHERE id = %s"""
+		values = (session_id,)
+		result = Database.execute_query(query, values)
+		if result and len(result) > 0:
+			return result[0]['nbr'] > 0
+		return False
+	except Exception:
+		return False
+
 
 def check_group(group_id):
-    try:
-        query = """SELECT COUNT(*) AS nbr FROM relation_group_local_session WHERE id = %s"""
-        values = (group_id,)
-        result = Database.execute_query(query,values)
-        if result and len(result)> 0 :
-            return result[0]['nbr']>0
-        return False
+	try:
+		query = """SELECT COUNT(*) AS nbr FROM relation_group_local_session WHERE id = %s"""
+		values = (group_id,)
+		result = Database.execute_query(query, values)
+		if result and len(result) > 0:
+			return result[0]['nbr'] > 0
+		return False
 
-    except Exception as e:
-        return False
+	except Exception as e:
+		return False
+
 
 def check_user(user_id):
-    try:
-        query = """SELECT COUNT(*) AS nbr FROM user WHERE id = %s """
-        values = (user_id,)
-        result = Database.execute_query(query,values)
-        if result and len(result)> 0:
-            return result[0]['nbr']
-    except Exception:
-        return False
+	try:
+		query = """SELECT COUNT(*) AS nbr FROM user WHERE id = %s """
+		values = (user_id,)
+		result = Database.execute_query(query, values)
+		if result and len(result) > 0:
+			return result[0]['nbr']
+	except Exception:
+		return False
+
 
 def check_subject(subject_id):
-    try:
-        query =""" SELECT COUNT(*) AS nbr FROM subject_config where id = %s """
-        values = (subject_id,)
-        result = Database.execute_query(query,values)
-        if result and len(result)>0:
-            return result[0]['nbr']
+	try:
+		query = """ SELECT COUNT(*) AS nbr FROM subject_config where id = %s """
+		values = (subject_id,)
+		result = Database.execute_query(query, values)
+		if result and len(result) > 0:
+			return result[0]['nbr']
 
-    except Exception :
-        return False
+	except Exception:
+		return False
 
 
 # ================================ NOTIFICATION PART ================================
 
 def save_notification(notification_payload, user_id):
-    try:
-        query = """
+	try:
+		query = """
             INSERT INTO notification (user_id, title, message, type, notif_data)
             VALUES (%s, %s, %s, %s, %s) 
         """
-        values = (
-            user_id,
-            notification_payload.get('title', 'New Notification'),
-            notification_payload.get('message', ''),
-            "tablet_notif",
-            json.dumps(notification_payload)  # Convert dict to JSON string
-        )
-        Database.execute_query(query, values,fetch=False)
-        return True
-    except Exception as e:
-        print(f"❌ Failed to save notification: {e}")
-        return False
+		values = (
+			user_id,
+			notification_payload.get('title', 'New Notification'),
+			notification_payload.get('message', ''),
+			"tablet_notif",
+			json.dumps(notification_payload)  # Convert dict to JSON string
+		)
+		Database.execute_query(query, values, fetch=False)
+		return True
+	except Exception as e:
+		print(f"❌ Failed to save notification: {e}")
+		return False
+
 
 def send_notification(notification_payload):
-    # Save notification to database FIRST (so it's always stored)
-    user_id = notification_payload.get('account_id')
+	# Save notification to database FIRST (so it's always stored)
+	user_id = notification_payload.get('account_id')
 
-    if user_id:
-        save_notification(notification_payload, user_id)
+	if user_id:
+		save_notification(notification_payload, user_id)
 
-    # Then send real-time notification to Academie Platform
-    try:
-        academie_url = " https://192.168.1.246:5015/api/notify-calendar-request"
-        response = requests.post(
-            academie_url,
-            json=notification_payload,
-            verify=False,
-            timeout=5
-        )
+	# Then send real-time notification to Academie Platform
+	try:
+		academie_url = " https://192.168.1.246:5015/api/notify-calendar-request"
+		response = requests.post(
+			academie_url,
+			json=notification_payload,
+			verify=False,
+			timeout=5
+		)
 
-        if response.status_code == 200:
-            print(f"✅ Notification sent to Academie Platform for account ")
-        else:
-            print(f"⚠️ Failed to send notification: {response.status_code}")
-            print(f"⚠️ Response content: {response.text}")
+		if response.status_code == 200:
+			print(f"✅ Notification sent to Academie Platform for account ")
+		else:
+			print(f"⚠️ Failed to send notification: {response.status_code}")
+			print(f"⚠️ Response content: {response.text}")
 
-    except requests.exceptions.Timeout as timeout_error:
-        print(f"⏱️ Timeout error: {timeout_error}")
-    except requests.exceptions.ConnectionError as conn_error:
-        print(f"🔌 Connection error: {conn_error}")
-    except requests.exceptions.RequestException as req_error:
-        print(f"❌ Request error: {req_error}")
-    except Exception as notify_error:
-        print(f"⚠️ Unexpected error sending notification: {type(notify_error).__name__}")
-        print(f"⚠️ Error details: {notify_error}")
-        import traceback
-        print(f"⚠️ Traceback:\n{traceback.format_exc()}")
+	except requests.exceptions.Timeout as timeout_error:
+		print(f"⏱️ Timeout error: {timeout_error}")
+	except requests.exceptions.ConnectionError as conn_error:
+		print(f"🔌 Connection error: {conn_error}")
+	except requests.exceptions.RequestException as req_error:
+		print(f"❌ Request error: {req_error}")
+	except Exception as notify_error:
+		print(f"⚠️ Unexpected error sending notification: {type(notify_error).__name__}")
+		print(f"⚠️ Error details: {notify_error}")
+		import traceback
+		print(f"⚠️ Traceback:\n{traceback.format_exc()}")
 
 
 @calendar_bp.route('/create-calander_request/<int:session_id>', methods=['POST'])
 def create_calander_request(session_id):
-    try:
-        if not (check_session(session_id)):
-            return jsonify({
-                "Message": "There is no session_id"
-            }), 404
+	try:
+		if not (check_session(session_id)):
+			return jsonify({
+				"Message": "There is no session_id"
+			}), 404
 
-        calander_data = request.get_json()
+		calander_data = request.get_json()
 
-        room_id = calander_data.get('room_id')
-        group_id = calander_data.get('group_id')
-        subject_id = calander_data.get('subject_id')
-        user_id = calander_data.get('user_id')
-        completion_tag = calander_data.get('tag')
-        duplicate = calander_data.get('duplicate')
-        start_date = calander_data.get('start_date')
-        start_time = calander_data.get('start_time')
-        end_time = calander_data.get('end_time')
-        end_date = calander_data.get('end_date')
-        description = calander_data.get('description')
-        account_id = calander_data.get('account_id')
-        create_time = datetime.now()
-        type_session = calander_data.get('type')
+		room_id = calander_data.get('room_id')
+		group_id = calander_data.get('group_id')
+		subject_id = calander_data.get('subject_id')
+		user_id = calander_data.get('user_id')
+		completion_tag = calander_data.get('tag')
+		duplicate = calander_data.get('duplicate')
+		start_date = calander_data.get('start_date')
+		start_time = calander_data.get('start_time')
+		end_time = calander_data.get('end_time')
+		end_date = calander_data.get('end_date')
+		description = calander_data.get('description')
+		account_id = calander_data.get('account_id')
+		create_time = datetime.now()
+		type_session = calander_data.get('type')
 
-        # Convert list to comma-separated string
-        if isinstance(completion_tag, list):
-            completion_tag = ','.join(map(str, completion_tag))
+		# Convert list to comma-separated string
+		if isinstance(completion_tag, list):
+			completion_tag = ','.join(map(str, completion_tag))
 
-        # Convert empty strings to None for date/time fields
-        if start_date == '' or start_date is None:
-            start_date = None
-        if end_date == '' or end_date is None:
-            end_date = None
-        if start_time == '' or start_time is None:
-            start_time = None
-        if end_time == '' or end_time is None:
-            end_time = None
+		# Convert empty strings to None for date/time fields
+		if start_date == '' or start_date is None:
+			start_date = None
+		if end_date == '' or end_date is None:
+			end_date = None
+		if start_time == '' or start_time is None:
+			start_time = None
+		if end_time == '' or end_time is None:
+			end_time = None
 
-        if not (check_room_id(room_id) and check_user(user_id) and check_subject(subject_id) and check_group(group_id)):
-            return jsonify({"Message": "Invalid params"}), 400
+		if not (check_room_id(room_id) and check_user(user_id) and check_subject(subject_id) and check_group(group_id)):
+			return jsonify({"Message": "Invalid params"}), 400
 
-        query = """INSERT INTO calendar_request(
+		query = """INSERT INTO calendar_request(
                         session_id, group_id, room_id, subject_id, user_id,
                         completion_tags, duplicate, start_date, start_time, end_time, end_date,
                         description, account_id, type, created_at
@@ -1127,59 +1135,59 @@ def create_calander_request(session_id):
                         %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
                     );"""
 
-        values = (session_id, group_id, room_id, subject_id, user_id, completion_tag, duplicate,
-                  start_date, start_time, end_time, end_date, description, account_id, type_session, create_time)
+		values = (session_id, group_id, room_id, subject_id, user_id, completion_tag, duplicate,
+				  start_date, start_time, end_time, end_date, description, account_id, type_session, create_time)
 
-        result = Database.execute_query(query, values, fetch=False)
-        if result:
-            notification_payload = {
-                    'request_id': result,
-                    'account_id': account_id,
-                    'session_id': session_id,
-                    'room_id': room_id,
-                    'group_id': group_id,
-                    'subject_id': subject_id,
-                    'user_id': user_id,
-                    'description': description,
-                    'start_date': str(start_date) if start_date else None,
-                    'start_time': str(start_time) if start_time else None,
-                    'end_time': str(end_time) if end_time else None,
-                    'end_date': str(end_date) if end_date else None,
-                    'type': type_session,
-                    'created_at': create_time.strftime('%Y-%m-%d %H:%M:%S')
-                 }
-            print("\n \n \n \n \n",notification_payload)
-            send_notification(notification_payload)
-            return jsonify({
-                "success":True,
-                "message":"Calendar request created successfully"
-            })
+		result = Database.execute_query(query, values, fetch=False)
+		if result:
+			notification_payload = {
+				'request_id': result,
+				'account_id': account_id,
+				'session_id': session_id,
+				'room_id': room_id,
+				'group_id': group_id,
+				'subject_id': subject_id,
+				'user_id': user_id,
+				'description': description,
+				'start_date': str(start_date) if start_date else None,
+				'start_time': str(start_time) if start_time else None,
+				'end_time': str(end_time) if end_time else None,
+				'end_date': str(end_date) if end_date else None,
+				'type': type_session,
+				'created_at': create_time.strftime('%Y-%m-%d %H:%M:%S')
+			}
+			print("\n \n \n \n \n", notification_payload)
+			send_notification(notification_payload)
+			return jsonify({
+				"success": True,
+				"message": "Calendar request created successfully"
+			})
 
-        else:
-            return jsonify({"bad":""}),404
+		else:
+			return jsonify({"bad": ""}), 404
 
 
-    except Exception as e:
-        print(f"❌ Query error: {e}")
-        import traceback
-        print(f"❌ Traceback:\n{traceback.format_exc()}")
-        return jsonify({
-            "Message": "Error in create_calendar_request",
-            "error": str(e)
-        }), 500
+	except Exception as e:
+		print(f"❌ Query error: {e}")
+		import traceback
+		print(f"❌ Traceback:\n{traceback.format_exc()}")
+		return jsonify({
+			"Message": "Error in create_calendar_request",
+			"error": str(e)
+		}), 500
 
 
 # =======================================
 # ENDPOINT 12: get calander request
-#========================================
+# ========================================
 
 @calendar_bp.route('/get-calander_request/<int:room_id>', methods=['GET'])
 def get_calander_request(room_id):
-    try:
-        if not (check_room_id(room_id)):
-            return jsonify({"Message": f"Error: this room doesn't exist"}), 404
+	try:
+		if not (check_room_id(room_id)):
+			return jsonify({"Message": f"Error: this room doesn't exist"}), 404
 
-        query = """
+		query = """
             SELECT 
                 cr.id,
                 cr.session_id,
@@ -1217,41 +1225,41 @@ def get_calander_request(room_id):
                 AND cr.accepted = 0 
                 AND cr.enabled = 1
         """
-        result = Database.execute_query(query, (room_id,))
+		result = Database.execute_query(query, (room_id,))
 
-        serialized_result = []
-        for row in result:
-            serialized_result.append({
-                'id':              row['id'],
-                'start_date':      row['start_date'].strftime('%Y-%m-%d')        if row['start_date']  else None,
-                'end_date':        row['end_date'].strftime('%Y-%m-%d')          if row['end_date']    else None,
-                'start_time':      str(row['start_time'])                        if row['start_time']  else None,
-                'end_time':        str(row['end_time'])                          if row['end_time']    else None,
-                'created_at':      row['created_at'].strftime('%Y-%m-%d %H:%M:%S') if row['created_at'] else None,
-                'updated_at':      row['updated_at'].strftime('%Y-%m-%d %H:%M:%S') if row['updated_at'] else None,
-                'session_id':      row['session_id'],
-                'group_id':        row['group_id'],
-                'type':            row['type'],
-                'room_id':         row['room_id'],
-                'subject_id':      row['subject_id'],
-                'user_id':         row['user_id'],
-                'username':        row['username'],
-                'completion_tags': row['completion_tags'],
-                'duplicate':       row['duplicate'],
-                'description':     row['description'],
-                'account_id':      row['account_id'],
-                'accepted':        row['accepted'],
-                'enabled':         row['enabled'],
-                'group_name':      row['group_name'],
-                'session_name':    row['session_name'],
-                'subject_name':    row['subject_name'],
-            })
+		serialized_result = []
+		for row in result:
+			serialized_result.append({
+				'id': row['id'],
+				'start_date': row['start_date'].strftime('%Y-%m-%d') if row['start_date'] else None,
+				'end_date': row['end_date'].strftime('%Y-%m-%d') if row['end_date'] else None,
+				'start_time': str(row['start_time']) if row['start_time'] else None,
+				'end_time': str(row['end_time']) if row['end_time'] else None,
+				'created_at': row['created_at'].strftime('%Y-%m-%d %H:%M:%S') if row['created_at'] else None,
+				'updated_at': row['updated_at'].strftime('%Y-%m-%d %H:%M:%S') if row['updated_at'] else None,
+				'session_id': row['session_id'],
+				'group_id': row['group_id'],
+				'type': row['type'],
+				'room_id': row['room_id'],
+				'subject_id': row['subject_id'],
+				'user_id': row['user_id'],
+				'username': row['username'],
+				'completion_tags': row['completion_tags'],
+				'duplicate': row['duplicate'],
+				'description': row['description'],
+				'account_id': row['account_id'],
+				'accepted': row['accepted'],
+				'enabled': row['enabled'],
+				'group_name': row['group_name'],
+				'session_name': row['session_name'],
+				'subject_name': row['subject_name'],
+			})
 
-        return jsonify({"Message": "Success", "data": serialized_result}), 200
+		return jsonify({"Message": "Success", "data": serialized_result}), 200
 
-    except Exception as e:
-        print(f"Error in get_calander_request: {str(e)}")
-        return jsonify({"Message": f"Error: {str(e)} from get_calander_request"}), 500
+	except Exception as e:
+		print(f"Error in get_calander_request: {str(e)}")
+		return jsonify({"Message": f"Error: {str(e)} from get_calander_request"}), 500
 
 
 # =======================================
@@ -1259,8 +1267,8 @@ def get_calander_request(room_id):
 # =======================================
 @calendar_bp.route('/get-notification/<account_id>', methods=['GET'])
 def get_notification(account_id):
-    try:
-        query = """
+	try:
+		query = """
             SELECT 
                 n.id,
                 n.user_id,
@@ -1274,71 +1282,70 @@ def get_notification(account_id):
             WHERE user_id = %s
             ORDER BY is_read ASC, created_at DESC
         """
-        values = (account_id,)
-        result = Database.execute_query(query, values)
+		values = (account_id,)
+		result = Database.execute_query(query, values)
 
-        if result:
-            notifications = []
-            unread_count = 0
+		if result:
+			notifications = []
+			unread_count = 0
 
-            for row in result:
-                # Parse JSON data if it exists
-                notif_data = None
-                if row['notif_data']:
-                    try:
-                        notif_data = json.loads(row['notif_data'])
-                    except:
-                        notif_data = row['notif_data']
+			for row in result:
+				# Parse JSON data if it exists
+				notif_data = None
+				if row['notif_data']:
+					try:
+						notif_data = json.loads(row['notif_data'])
+					except:
+						notif_data = row['notif_data']
 
-                notification = {
-                    'id': row['id'],
-                    'user_id': row['user_id'],
-                    'title': row['title'],
-                    'message': row['message'],
-                    'type': row['type'],
-                    'is_read': bool(row['is_read']),
-                    'created_at': row['created_at'].isoformat() if row['created_at'] else None,
-                    'data': notif_data
-                }
+				notification = {
+					'id': row['id'],
+					'user_id': row['user_id'],
+					'title': row['title'],
+					'message': row['message'],
+					'type': row['type'],
+					'is_read': bool(row['is_read']),
+					'created_at': row['created_at'].isoformat() if row['created_at'] else None,
+					'data': notif_data
+				}
 
-                notifications.append(notification)
+				notifications.append(notification)
 
-                if not row['is_read']:
-                    unread_count += 1
+				if not row['is_read']:
+					unread_count += 1
 
-            return jsonify({
-                'success': True,
-                'notifications': notifications,
-                'total': len(notifications),
-                'unread_count': unread_count
-            }), 200
-        else:
-            return jsonify({
-                'success': True,
-                'notifications': [],
-                'total': 0,
-                'unread_count': 0
-            }), 200
+			return jsonify({
+				'success': True,
+				'notifications': notifications,
+				'total': len(notifications),
+				'unread_count': unread_count
+			}), 200
+		else:
+			return jsonify({
+				'success': True,
+				'notifications': [],
+				'total': 0,
+				'unread_count': 0
+			}), 200
 
-    except Exception as e:
-        print(f"❌ Error fetching notifications: {e}")
-        return jsonify({
-            'success': False,
-            'error': str(e),
-            'notifications': [],
-            'total': 0,
-            'unread_count': 0
-        }), 500
-
-
+	except Exception as e:
+		print(f"❌ Error fetching notifications: {e}")
+		return jsonify({
+			'success': False,
+			'error': str(e),
+			'notifications': [],
+			'total': 0,
+			'unread_count': 0
+		}), 500
 
 
-    except Exception as e:
-        return jsonify({
-            "Message": f"Error: {e} coming from get_notification ",
 
-        }),500
 
+	except Exception as e:
+		return jsonify({
+			"Message": f"Error: {e} coming from get_notification ",
+
+		}), 500
 
 
 # =======================================
@@ -1346,9 +1353,9 @@ def get_notification(account_id):
 # =======================================
 @calendar_bp.route('/get-calander_requestt/<int:account_id>', methods=['GET'])
 def get_calander_req(account_id):
-    try:
+	try:
 
-        query = """
+		query = """
             SELECT 
                 cr.id,
                 cr.session_id,
@@ -1388,87 +1395,87 @@ def get_calander_req(account_id):
                 cr.account_id = %s
                 AND cr.enabled = 1
         """
-        values=(account_id,)
-        result = Database.execute_query(query,values)
-        if result:
-            # Convert the result to JSON-serializable format
-            serialized_result = []
-            for row in result:
-                serialized_row = {
-                    'start_date': row['start_date'],
-                    'id': row['id'],
-                    'session_id': row['session_id'],
-                    'group_id': row['group_id'],
-                    'type': row['type'],
-                    'room_id': row['room_id'],
-                    'room_name':row['room_name'],
-                    'subject_id': row['subject_id'],
-                    'user_id': row['user_id'],
-                    'username': row['username'],
-                    'completion_tags': row['completion_tags'],
-                    'duplicate': row['duplicate'],
-                    # Convert timedelta to string (HH:MM:SS format)
-                    'start_time': str(row['start_time']) if row['start_time'] else None,
-                    'end_time': str(row['end_time']) if row['end_time'] else None,
-                    # Convert date to string (YYYY-MM-DD format)
-                    'end_date': row['end_date'].strftime('%Y-%m-%d') if row['end_date'] else None,
-                    'description': row['description'],
-                    'account_id': row['account_id'],
-                    'accepted': row['accepted'],
-                    # Convert datetime to string (YYYY-MM-DD HH:MM:SS format)
-                    'created_at': row['created_at'].strftime('%Y-%m-%d %H:%M:%S') if row['created_at'] else None,
-                    'updated_at': row['updated_at'].strftime('%Y-%m-%d %H:%M:%S') if row['updated_at'] else None,
-                    'enabled': row['enabled'],
-                    # Additional joined fields
-                    'group_name': row['group_name'],
-                    'session_name': row['session_name'],
-                    'subject_name': row['subject_name']
-                }
-                serialized_result.append(serialized_row)
+		values = (account_id,)
+		result = Database.execute_query(query, values)
+		if result:
+			# Convert the result to JSON-serializable format
+			serialized_result = []
+			for row in result:
+				serialized_row = {
+					'start_date': row['start_date'],
+					'id': row['id'],
+					'session_id': row['session_id'],
+					'group_id': row['group_id'],
+					'type': row['type'],
+					'room_id': row['room_id'],
+					'room_name': row['room_name'],
+					'subject_id': row['subject_id'],
+					'user_id': row['user_id'],
+					'username': row['username'],
+					'completion_tags': row['completion_tags'],
+					'duplicate': row['duplicate'],
+					# Convert timedelta to string (HH:MM:SS format)
+					'start_time': str(row['start_time']) if row['start_time'] else None,
+					'end_time': str(row['end_time']) if row['end_time'] else None,
+					# Convert date to string (YYYY-MM-DD format)
+					'end_date': row['end_date'].strftime('%Y-%m-%d') if row['end_date'] else None,
+					'description': row['description'],
+					'account_id': row['account_id'],
+					'accepted': row['accepted'],
+					# Convert datetime to string (YYYY-MM-DD HH:MM:SS format)
+					'created_at': row['created_at'].strftime('%Y-%m-%d %H:%M:%S') if row['created_at'] else None,
+					'updated_at': row['updated_at'].strftime('%Y-%m-%d %H:%M:%S') if row['updated_at'] else None,
+					'enabled': row['enabled'],
+					# Additional joined fields
+					'group_name': row['group_name'],
+					'session_name': row['session_name'],
+					'subject_name': row['subject_name']
+				}
+				serialized_result.append(serialized_row)
 
-            return jsonify({
-                "Message": "Success",
-                "data": serialized_result
-            }), 200
-        else:
-            return jsonify({
-                "Message": "No calendar requests found"
-            }), 404
-
-
+			return jsonify({
+				"Message": "Success",
+				"data": serialized_result
+			}), 200
+		else:
+			return jsonify({
+				"Message": "No calendar requests found"
+			}), 404
 
 
-    except Exception as e:
-        print(f"Error {e} coming from calander_req")
-        return jsonify({
-            "Message":"Error"
-        }),500
 
+
+	except Exception as e:
+		print(f"Error {e} coming from calander_req")
+		return jsonify({
+			"Message": "Error"
+		}), 500
 
 
 # =======================================
 # ENDPOINT 15: APPROVE CALANDER_REQUEST
 # =======================================
 def check_calander_request_id(calander_id):
-    try:
-        query = """
+	try:
+		query = """
             SELECT COUNT(*) AS nbr FROM calendar_request 
             WHERE enabled = 1 AND id = %s
         """
-        values =(calander_id,)
-        result = Database.execute_query(query,values)
+		values = (calander_id,)
+		result = Database.execute_query(query, values)
 
-        return result[0]['nbr']>0
-    except Exception:
-        return False
+		return result[0]['nbr'] > 0
+	except Exception:
+		return False
+
 
 @calendar_bp.route('/approve_calander_request/<int:request_id>', methods=['POST'])
 def approve_calander_request(request_id):
-    try:
-        if not(check_calander_request_id(request_id)):
-            return jsonify({"Message": "Error: check the id of the calander_request"}), 404
+	try:
+		if not (check_calander_request_id(request_id)):
+			return jsonify({"Message": "Error: check the id of the calander_request"}), 404
 
-        query = """
+		query = """
             SELECT
                 cr.*,
                 l.id as local_id,
@@ -1479,197 +1486,197 @@ def approve_calander_request(request_id):
                 cr.account_id = l.account_id AND 
                 cr.group_id = grp.id 
         """
-        calander_data = Database.execute_query(query, (request_id,), fetch=True)
+		calander_data = Database.execute_query(query, (request_id,), fetch=True)
 
-        if not calander_data:
-            return jsonify({"Message": "Request Not Found"}), 404
+		if not calander_data:
+			return jsonify({"Message": "Request Not Found"}), 404
 
-        calander_data = calander_data[0]
+		calander_data = calander_data[0]
 
-        # Extract values
-        session_id  = calander_data['session_id']
-        group_id    = calander_data['group_id']
-        room_id     = calander_data['room_id']
-        subject_id  = calander_data['subject_id']
-        teacher_id  = calander_data['user_id']
-        account_id  = calander_data['account_id']
-        description = calander_data['description']
-        type_val    = calander_data['type']
-        local_id    = calander_data['local_id']
-        title       = calander_data['name']
+		# Extract values
+		session_id = calander_data['session_id']
+		group_id = calander_data['group_id']
+		room_id = calander_data['room_id']
+		subject_id = calander_data['subject_id']
+		teacher_id = calander_data['user_id']
+		account_id = calander_data['account_id']
+		description = calander_data['description']
+		type_val = calander_data['type']
+		local_id = calander_data['local_id']
+		title = calander_data['name']
 
-        # Convert timedelta to proper time string "HH:MM:SS"
-        def timedelta_to_str(td):
-            total_seconds = int(td.total_seconds())
-            hours, remainder = divmod(total_seconds, 3600)
-            minutes, seconds = divmod(remainder, 60)
-            return f"{hours:02}:{minutes:02}:{seconds:02}"
+		# Convert timedelta to proper time string "HH:MM:SS"
+		def timedelta_to_str(td):
+			total_seconds = int(td.total_seconds())
+			hours, remainder = divmod(total_seconds, 3600)
+			minutes, seconds = divmod(remainder, 60)
+			return f"{hours:02}:{minutes:02}:{seconds:02}"
 
-        start_time = timedelta_to_str(calander_data['start_time'])
-        end_time   = timedelta_to_str(calander_data['end_time'])
+		start_time = timedelta_to_str(calander_data['start_time'])
+		end_time = timedelta_to_str(calander_data['end_time'])
 
-        # Convert date to string "YYYY-MM-DD"
-        start_date = calander_data['start_date'].strftime('%Y-%m-%d') if calander_data['start_date'] else None
+		# Convert date to string "YYYY-MM-DD"
+		start_date = calander_data['start_date'].strftime('%Y-%m-%d') if calander_data['start_date'] else None
 
-        # ── Conflict checks (pass start_date, start_time, end_time separately) ───
-        if isRoomReserved(room_id, start_date, start_time, end_time):
-            print("Room Reserved")
-            reject_calander_request(request_id)
-            return jsonify({
-                "Message": "Room already reserved",
-                "Error": "Room-Conflict"
-            }), 402
+		# ── Conflict checks (pass start_date, start_time, end_time separately) ───
+		if isRoomReserved(room_id, start_date, start_time, end_time):
+			print("Room Reserved")
+			reject_calander_request(request_id)
+			return jsonify({
+				"Message": "Room already reserved",
+				"Error": "Room-Conflict"
+			}), 402
 
-        if isGroupTypeConflit(group_id, start_date, start_time, end_time):
-            print("Group Reserved")
-            reject_calander_request(request_id)
-            return jsonify({
-                "Message": "Group not available in this time",
-                "Error": "Group-Conflict"
-            }), 402
+		if isGroupTypeConflit(group_id, start_date, start_time, end_time):
+			print("Group Reserved")
+			reject_calander_request(request_id)
+			return jsonify({
+				"Message": "Group not available in this time",
+				"Error": "Group-Conflict"
+			}), 402
 
-        if isSubjectTeacherConflit(teacher_id, start_date, start_time, end_time):
-            print("Teacher Reserved")
-            reject_calander_request(request_id)
-            return jsonify({
-                "Message": "Teacher not available in this time",
-                "Error": "Teacher-Conflict"
-            }), 402
+		if isSubjectTeacherConflit(teacher_id, start_date, start_time, end_time):
+			print("Teacher Reserved")
+			reject_calander_request(request_id)
+			return jsonify({
+				"Message": "Teacher not available in this time",
+				"Error": "Teacher-Conflict"
+			}), 402
 
+		# ── Generate unique color ─────────────────────────────────────
+		color = generate_random_color()
+		attempts = 0
+		max_attempts = 50
+		while check_color(color) and attempts < max_attempts:
+			color = generate_random_color()
+			attempts += 1
 
+		if attempts >= max_attempts:
+			return jsonify({
+				"Message": "Could not generate unique color",
+				"Error": "Warning: could not find unique color after 50 attempts"
+			}), 402
 
-        # ── Generate unique color ─────────────────────────────────────
-        color = generate_random_color()
-        attempts = 0
-        max_attempts = 50
-        while check_color(color) and attempts < max_attempts:
-            color = generate_random_color()
-            attempts += 1
+		# ── Generate additional fields ────────────────────────────────
+		status = 1
+		ref = generate_unique_ref(group_id, session_id, local_id, account_id)
+		enabled = 1
+		create_time = datetime.now()
+		timestamp = create_time
+		teacher_present = 0
+		force_teacher_present = 0
 
-        if attempts >= max_attempts:
-            return jsonify({
-                "Message": "Could not generate unique color",
-                "Error": "Warning: could not find unique color after 50 attempts"
-            }), 402
+		# Combine date + time for DB insert
+		start_datetime = f"{start_date} {start_time}"
+		end_datetime = f"{start_date} {end_time}"
 
-        # ── Generate additional fields ────────────────────────────────
-        status                = 1
-        ref                   = generate_unique_ref(group_id, session_id, local_id, account_id)
-        enabled               = 1
-        create_time           = datetime.now()
-        timestamp             = create_time
-        teacher_present       = 0
-        force_teacher_present = 0
-
-        # Combine date + time for DB insert
-        start_datetime = f"{start_date} {start_time}"
-        end_datetime   = f"{start_date} {end_time}"
-
-        # ── Insert into calendar table ────────────────────────────────
-        insert_query = """
+		# ── Insert into calendar table ────────────────────────────────
+		insert_query = """
             INSERT INTO relation_calander_group_session
             (session_id, account_id, local_id, group_session_id, room_id, teacher_id, subject_id,
             color, status, description, start_time, end_time, ref, refresh, title, enabled,
             created_at, timestamp, updated_at, type, teacher_present, force_teacher_present, slc_use)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-        insert_values = (
-            session_id,
-            account_id,
-            local_id,
-            group_id,
-            room_id,
-            teacher_id,
-            subject_id,
-            color,
-            status,
-            description,
-            start_datetime,  # full datetime for DB
-            end_datetime,    # full datetime for DB
-            ref,
-            0,
-            title,
-            enabled,
-            create_time,
-            timestamp,
-            None,
-            type_val,
-            teacher_present,
-            force_teacher_present,
-            1
-        )
-        new_calander_id = Database.execute_query(insert_query, insert_values, fetch=False)
+		insert_values = (
+			session_id,
+			account_id,
+			local_id,
+			group_id,
+			room_id,
+			teacher_id,
+			subject_id,
+			color,
+			status,
+			description,
+			start_datetime,  # full datetime for DB
+			end_datetime,  # full datetime for DB
+			ref,
+			0,
+			title,
+			enabled,
+			create_time,
+			timestamp,
+			None,
+			type_val,
+			teacher_present,
+			force_teacher_present,
+			1
+		)
+		new_calander_id = Database.execute_query(insert_query, insert_values, fetch=False)
 
-        # ── Mark request as accepted ──────────────────────────────────
-        update_query = "UPDATE calendar_request SET accepted = 1 WHERE id = %s"
-        Database.execute_query(update_query, (request_id,), fetch=False)
+		# ── Mark request as accepted ──────────────────────────────────
+		update_query = "UPDATE calendar_request SET accepted = 1 WHERE id = %s"
+		Database.execute_query(update_query, (request_id,), fetch=False)
 
-        return jsonify({
-            "Message": "Calendar entry created and request approved successfully",
-            "calander_id": new_calander_id,
-            "request_id": request_id,
-            "ref": ref,
-            "color": color
-        }), 200
+		return jsonify({
+			"Message": "Calendar entry created and request approved successfully",
+			"calander_id": new_calander_id,
+			"request_id": request_id,
+			"ref": ref,
+			"color": color
+		}), 200
 
-    except Exception as e:
-        return jsonify({"Message": f"Error: {e} coming from the server!!"}), 500
+	except Exception as e:
+		return jsonify({"Message": f"Error: {e} coming from the server!!"}), 500
+
 
 # =======================================
 # ENDPOINT 16: REJECT CALANDER_REQUEST
 # =======================================
-@calendar_bp.route('/reject_calander_request/<int:request_id>',methods=['POST'])
+@calendar_bp.route('/reject_calander_request/<int:request_id>', methods=['POST'])
 def reject_calander_request(request_id):
-    try:
-        if not(check_calander_request_id(request_id)):
-            return jsonify({
-                "Message":"Error: check calander_request_id"
-            }),404
-        query = """
+	try:
+		if not (check_calander_request_id(request_id)):
+			return jsonify({
+				"Message": "Error: check calander_request_id"
+			}), 404
+		query = """
             UPDATE calendar_request 
             SET accepted = 2 
             WHERE id = %s AND enabled = 1;
         """
-        values = (request_id,)
-        response = Database.execute_query(query,values,fetch=False)
+		values = (request_id,)
+		response = Database.execute_query(query, values, fetch=False)
 
-        return jsonify({
-            "Message":"calander_request_rejected"
-        }),200
+		return jsonify({
+			"Message": "calander_request_rejected"
+		}), 200
 
-    except Exception as e:
-        print(f"Error: {e} from reject_calander_request")
-        return jsonify({
-            "Message":f"Error: {e} from reject_calander_request"
-        }),5000
+	except Exception as e:
+		print(f"Error: {e} from reject_calander_request")
+		return jsonify({
+			"Message": f"Error: {e} from reject_calander_request"
+		}), 5000
+
 
 # =======================================
 # ENDPOINT 17: DELETE CALANDER_REQUEST
 # =======================================
 
-@calendar_bp.route('/delete_calander_request/<int:request_id>',methods=['POST'])
+@calendar_bp.route('/delete_calander_request/<int:request_id>', methods=['POST'])
 def delete_calander_request(request_id):
-    try:
-        if not(check_calander_request_id(request_id)):
-            return jsonify({
-                "Message":"check you calander_request_id"
-            }),404
+	try:
+		if not (check_calander_request_id(request_id)):
+			return jsonify({
+				"Message": "check you calander_request_id"
+			}), 404
 
-        query ="""
+		query = """
             UPDATE calendar_request
             SET enabled = 0 
             WHERE id = %s
         """
-        values = (request_id,)
-        Result = Database.execute_query(query,values,fetch=False)
-        return jsonify({
-            "Message":"Requeset Deleted succefully"
-        }),200
-    except Exception as e:
-        print(f"Error: {e} in deleting calander_reqeust")
-        return jsonify({
-            "Message":f"Error: {e} in deleting calander_request"
-        }),500
+		values = (request_id,)
+		Result = Database.execute_query(query, values, fetch=False)
+		return jsonify({
+			"Message": "Requeset Deleted succefully"
+		}), 200
+	except Exception as e:
+		print(f"Error: {e} in deleting calander_reqeust")
+		return jsonify({
+			"Message": f"Error: {e} in deleting calander_request"
+		}), 500
 
 
 # =======================================
@@ -1677,9 +1684,9 @@ def delete_calander_request(request_id):
 # =======================================
 
 def create_special_group(data):
-    try:
+	try:
 
-        query = """
+		query = """
             INSERT INTO relation_group_local_session 
             (
                 session_id,
@@ -1710,31 +1717,30 @@ def create_special_group(data):
                 1
             )
         """
-        values = (
-            data['session_id'],
-            data['local_id'],
-            data['account_id'],
-            data['name'],
-            data['capacity'],
-            data['is_special'],
-            data['access_type'],
-            1
-        )
-        result = Database.execute_query(query,values,fetch=False)
+		values = (
+			data['session_id'],
+			data['local_id'],
+			data['account_id'],
+			data['name'],
+			data['capacity'],
+			data['is_special'],
+			data['access_type'],
+			1
+		)
+		result = Database.execute_query(query, values, fetch=False)
 
+		if result:
+			return True, result
+		else:
+			return False
 
+	except Exception as e:
+		print(f"Error:{e} coming from create_special_group")
 
-        if result :
-            return True,result
-        else:
-            return False
-
-    except Exception as e:
-        print(f"Error:{e} coming from create_special_group")
 
 def create_calander_special(data):
-    try:
-        query = """
+	try:
+		query = """
             INSERT INTO relation_calander_group_session(
                 session_id,
                 account_id,
@@ -1781,33 +1787,34 @@ def create_calander_special(data):
                 %s,
                 1);
         """
-        values = (
-            data['session_id'],
-            data['account_id'],
-            data['local_id'],
-            data['group_session_id'],
-            data['room_id'],
-            data['teacher_id'],
-            data['subject_id'],
-            data['color'],
-            data['description'],
-            data['start_time'],
-            data['end_time'],
-            data['ref'],
-            data['title'],
-            data['type']
-        )
-        result = Database.execute_query(query,values,fetch=False)
-        if result:
-            return True,result
-        else:
-            return False,None
-    except Exception as e:
-        return False,None
+		values = (
+			data['session_id'],
+			data['account_id'],
+			data['local_id'],
+			data['group_session_id'],
+			data['room_id'],
+			data['teacher_id'],
+			data['subject_id'],
+			data['color'],
+			data['description'],
+			data['start_time'],
+			data['end_time'],
+			data['ref'],
+			data['title'],
+			data['type']
+		)
+		result = Database.execute_query(query, values, fetch=False)
+		if result:
+			return True, result
+		else:
+			return False, None
+	except Exception as e:
+		return False, None
+
 
 def create_relation_teacher_to_subject(data):
-    try:
-        query ="""
+	try:
+		query = """
             INSERT INTO relation_teacher_to_subject_group
             (
                 relation_group_local_session_id,
@@ -1825,265 +1832,261 @@ def create_relation_teacher_to_subject(data):
                 NOW()
             ); 
         """
-        values=(data['group_session_id'],data['subject_id'],data['teacher_id'])
-        result = Database.execute_query(query, values, fetch=False)
-        if result:
-            return True,result
-        else:
-            return False,None
+		values = (data['group_session_id'], data['subject_id'], data['teacher_id'])
+		result = Database.execute_query(query, values, fetch=False)
+		if result:
+			return True, result
+		else:
+			return False, None
 
-    except Exception as e:
-        return False,None
+	except Exception as e:
+		return False, None
 
 
-
-@calendar_bp.route('/create_calender_special_group',methods=['POST'])
+@calendar_bp.route('/create_calender_special_group', methods=['POST'])
 def create_calander_special_group():
-    try:
-        data = request.get_json() or {}
-        if not data :
-            return jsonify({
-                "Message":"No data from the request"
-            }),400
+	try:
+		data = request.get_json() or {}
+		if not data:
+			return jsonify({
+				"Message": "No data from the request"
+			}), 400
 
-        # Required fields
-        required_keys = [
-            'name', 'teacher_id', 'subject_id', 'capacity',
-            'session_id', 'access_type', 'type', 'room_id',
-            'start_date', 'start_time', 'end_time',
-            'description', 'is_special', 'completion_tags'
-        ]
+		# Required fields
+		required_keys = [
+			'name', 'teacher_id', 'subject_id', 'capacity',
+			'session_id', 'access_type', 'type', 'room_id',
+			'start_date', 'start_time', 'end_time',
+			'description', 'is_special', 'completion_tags'
+		]
 
-        nullable_keys = ['end_date']
+		nullable_keys = ['end_date']
 
-        # Check for missing fields
-        missing_fields = [key for key in required_keys + nullable_keys if key not in data]
+		# Check for missing fields
+		missing_fields = [key for key in required_keys + nullable_keys if key not in data]
 
+		if missing_fields:
+			return jsonify({
+				"Message": "Missing required fields",
+				"Missing_fields": missing_fields
+			}), 400
 
-        if missing_fields:
-            return jsonify({
-                "Message":"Missing required fields",
-                "Missing_fields": missing_fields
-            }),400
+		# Check for empty values
+		empty_fields = []
+		for key in required_keys:
+			value = data[key]
+			if value is None:
+				empty_fields.append(key)
+			elif isinstance(value, str) and value.strip() == "":
+				empty_fields.append(key)
 
-        # Check for empty values
-        empty_fields = []
-        for key in required_keys:
-            value = data[key]
-            if value is None:
-               empty_fields.append(key)
-            elif isinstance(value,str) and value.strip() == "":
-                empty_fields.append(key)
+		if empty_fields:
+			return jsonify({
+				"Message": "Fields cannot be empty",
+				"empty_fields": empty_fields
+			}), 400
 
-        if empty_fields:
-            return jsonify({
-                "Message":"Fields cannot be empty",
-                "empty_fields": empty_fields
-            }), 400
+		# Extract values
 
-        # Extract values
+		name = data['name']
+		teacher_id = data['teacher_id']
+		subject_id = data['subject_id']
+		capacity = data['capacity']
+		session_id = data['session_id']
+		access_type = data['access_type']
+		type = data['type']
+		room_id = data['room_id']
+		start_date = data['start_date']
+		start_time = data['start_time']
+		end_time = data['end_time']
+		description = data['description']
+		is_special = data['is_special']
+		completion_tags = data['completion_tags']
+		local_id = data['local_id']
+		account_id = data['account_id']
 
-        name = data['name']
-        teacher_id= data['teacher_id']
-        subject_id = data['subject_id']
-        capacity = data['capacity']
-        session_id = data['session_id']
-        access_type = data['access_type']
-        type = data['type']
-        room_id = data['room_id']
-        start_date = data['start_date']
-        start_time = data['start_time']
-        end_time = data['end_time']
-        description = data['description']
-        is_special = data['is_special']
-        completion_tags = data['completion_tags']
-        local_id = data['local_id']
-        account_id = data['account_id']
+		if isRoomReserved(room_id, start_date, start_time, end_time):
+			return jsonify({
+				"Message": "Room already reserved!",
+				"Error": "Room-Conflict",
+			}), 402
 
-        if isRoomReserved(room_id, start_date, start_time, end_time):
-            return jsonify({
-                "Message": "Room already reserved!",
-                "Error": "Room-Conflict",
-            }), 402
+		if isSubjectTeacherConflit(teacher_id, start_date, start_time, end_time):
+			return jsonify({
+				"Message": "Teacher not available in this time",
+				"Error": "Teacher-Conflict"
+			}), 402
 
+		payload1 = {
+			'session_id': session_id,
+			'local_id': local_id,
+			'account_id': account_id,
+			'name': name,
+			'capacity': capacity,
+			'is_special': is_special,
+			'access_type': access_type
+		}
+		reponse, group_id = create_special_group(payload1)
+		print("ID new Goup: ", group_id)
+		start_datetime = f"{start_date} {start_time}:00"  # → "2026-04-06 10:10:00"
+		end_datetime = f"{start_date} {end_time}:00"  # → "2026-04-06 10:20:00"
 
-        if isSubjectTeacherConflit(teacher_id, start_date, start_time, end_time):
-            return jsonify({
-                "Message": "Teacher not available in this time",
-                "Error": "Teacher-Conflict"
-            }), 402
+		payload2 = {
+			'session_id': session_id,
+			'account_id': account_id,
+			'local_id': local_id,
+			'group_session_id': group_id,
+			'room_id': room_id,
+			'teacher_id': teacher_id,
+			'subject_id': subject_id,
+			'color': generate_random_color(),
+			'description': description,
+			'start_time': start_datetime,
+			'end_time': end_datetime,
+			'ref': generate_unique_ref(group_id, session_id, local_id, account_id),
+			'title': name,
+			'type': type,
+		}
+		resp_calander, calander_id = create_calander_special(payload2)
+		resp_rel_teach, rel_id = create_relation_teacher_to_subject(payload2)
 
-        payload1 = {
-            'session_id': session_id,
-            'local_id': local_id,
-            'account_id': account_id,
-            'name': name,
-            'capacity': capacity,
-            'is_special': is_special,
-            'access_type': access_type
-        }
-        reponse,group_id = create_special_group(payload1)
-        print("ID new Goup: ",group_id)
-        start_datetime = f"{start_date} {start_time}:00"  # → "2026-04-06 10:10:00"
-        end_datetime = f"{start_date} {end_time}:00"  # → "2026-04-06 10:20:00"
-
-        payload2={
-            'session_id': session_id,
-            'account_id': account_id,
-            'local_id':local_id,
-            'group_session_id': group_id,
-            'room_id': room_id,
-            'teacher_id':teacher_id,
-            'subject_id':subject_id,
-            'color':generate_random_color(),
-            'description':description,
-            'start_time':start_datetime,
-            'end_time':end_datetime,
-            'ref':generate_unique_ref(group_id,session_id,local_id,account_id),
-            'title':name,
-            'type':type,
-        }
-        resp_calander, calander_id = create_calander_special(payload2)
-        resp_rel_teach, rel_id = create_relation_teacher_to_subject(payload2)
-
-        if resp_calander == False or resp_rel_teach == False:
-            return jsonify({
-                "Message": "Error in creating calender"
-            }), 500
-        else:
-            # Audit: log the new calendar entry
-            if calander_id:
-                new_data = {
-                    "session_id": session_id,
-                    "account_id": account_id,
-                    "local_id": local_id,
-                    "group_id": group_id,
-                    "room_id": room_id,
-                    "teacher_id": teacher_id,
-                    "subject_id": subject_id,
-                    "description": description,
-                    "start_time": start_datetime,
-                    "end_time": end_datetime,
-                    "title": name,
-                    "type": type,
-                    "is_special": is_special,
-                }
-                audit_query = """
+		if resp_calander == False or resp_rel_teach == False:
+			return jsonify({
+				"Message": "Error in creating calender"
+			}), 500
+		else:
+			# Audit: log the new calendar entry
+			if calander_id:
+				new_data = {
+					"session_id": session_id,
+					"account_id": account_id,
+					"local_id": local_id,
+					"group_id": group_id,
+					"room_id": room_id,
+					"teacher_id": teacher_id,
+					"subject_id": subject_id,
+					"description": description,
+					"start_time": start_datetime,
+					"end_time": end_datetime,
+					"title": name,
+					"type": type,
+					"is_special": is_special,
+				}
+				audit_query = """
                     INSERT INTO relation_calander_group_audit
                         (action_type, old_data, new_data, is_synced, id_calander)
                     VALUES (%s, %s, %s, %s, %s)
                 """
-                Database.execute_query(audit_query, (
-                    "INSERT",
-                    None,
-                    json.dumps(new_data),
-                    0,
-                    calander_id
-                ), fetch=False)
+				Database.execute_query(audit_query, (
+					"INSERT",
+					None,
+					json.dumps(new_data),
+					0,
+					calander_id
+				), fetch=False)
 
-            return jsonify({
-                "Message": "calender created with success for special group"
-            }), 200
+			return jsonify({
+				"Message": "calender created with success for special group"
+			}), 200
 
 
-    except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({
-            "Message":f"Error: {e} coming from server"
-        }),500
+	except Exception as e:
+		print(f"Error: {e}")
+		return jsonify({
+			"Message": f"Error: {e} coming from server"
+		}), 500
 
 
 # =======================================
 # ENDPOINT 19: cron job
 # =======================================
 def test_special_group(calander_id):
-    try:
-        query = """
+	try:
+		query = """
             SELECT group_session_id FROM relation_calander_group_session WHERE id = %s 
         """
-        result = Database.execute_query(query, (calander_id,))
-        if result is None or len(result) == 0:
-            return False, None
+		result = Database.execute_query(query, (calander_id,))
+		if result is None or len(result) == 0:
+			return False, None
 
-        group_id = result[0]['group_session_id']  # ✅ dict access
+		group_id = result[0]['group_session_id']  # ✅ dict access
 
-        if not group_id or group_id == 0:
-            print("Invalid group_id:", group_id)
-            return False, None
+		if not group_id or group_id == 0:
+			print("Invalid group_id:", group_id)
+			return False, None
 
-        query = """
+		query = """
             SELECT special_group FROM relation_group_local_session WHERE id = %s
         """
-        is_special = Database.execute_query(query, (group_id,))
-        print("test_special_group: ", is_special)
+		is_special = Database.execute_query(query, (group_id,))
+		print("test_special_group: ", is_special)
 
-        if is_special is None or len(is_special) == 0:
-            return False, None
+		if is_special is None or len(is_special) == 0:
+			return False, None
 
-        if is_special[0]['special_group'] == 1:  # ✅ dict access
-            return True, group_id
-        return False, None
+		if is_special[0]['special_group'] == 1:  # ✅ dict access
+			return True, group_id
+		return False, None
 
-    except Exception as e:
-        print(f"Error in test_special_group: {e}")
-        return False, None
+	except Exception as e:
+		print(f"Error in test_special_group: {e}")
+		return False, None
 
 
 @calendar_bp.route('/cronjob_calander_special/<int:calander_id>', methods=['POST'])
 def cronjob_calander_special(calander_id):
-    try:
-        is_special, group_id = test_special_group(calander_id)
-        print("\n is_special: ",is_special)
-        print("\n group_id: ",group_id)
-        if is_special:  # ✅ boolean check, not function call
-            query = """
+	try:
+		is_special, group_id = test_special_group(calander_id)
+		print("\n is_special: ", is_special)
+		print("\n group_id: ", group_id)
+		if is_special:  # ✅ boolean check, not function call
+			query = """
                 SELECT * FROM relation_user_session 
                 WHERE relation_group_local_session_id = %s
             """
-            result = Database.execute_query(query, (group_id,))
+			result = Database.execute_query(query, (group_id,))
 
-            if not result:
-                return jsonify({"Message": "No users found"}), 404
+			if not result:
+				return jsonify({"Message": "No users found"}), 404
 
-            query = """
+			query = """
                 UPDATE relation_user_session 
                 SET relation_group_local_session_id = NULL , slc_use = 1
                 WHERE relation_group_local_session_id = %s
             """
-            update_result = Database.execute_query(query, (group_id,),fetch=False)
+			update_result = Database.execute_query(query, (group_id,), fetch=False)
 
-            if update_result:
-                return jsonify({"Message": "Success"}), 200
-            else:
-                return jsonify({"Message": "Update failed"}), 500
+			if update_result:
+				return jsonify({"Message": "Success"}), 200
+			else:
+				return jsonify({"Message": "Update failed"}), 500
 
-        return jsonify({"Message": "Group is not special"}), 200
+		return jsonify({"Message": "Group is not special"}), 200
 
-    except Exception as e:
-        print(f"Error in cronjob_calander_special: {e}")
-        return jsonify({"Message": f"Error: {str(e)}"}), 500
-
+	except Exception as e:
+		print(f"Error in cronjob_calander_special: {e}")
+		return jsonify({"Message": f"Error: {str(e)}"}), 500
 
 
 @calendar_bp.route('/get-id-prod/<int:calendar_id>', methods=['GET'])
 def get_calendar_id_prod(calendar_id):
-    try:
-        query = """
+	try:
+		query = """
             SELECT id_prod FROM relation_calander_group_session 
             WHERE id = %s
         """
-        result = Database.execute_query(query, (calendar_id,))
-        if result and result[0]['id_prod']:
-            return jsonify({
-                "id_prod": result[0]['id_prod']
-            }), 200
-        else:
-            return jsonify({
-                "id_prod": None
-            }), 200
-    except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({"error": str(e)}), 500
+		result = Database.execute_query(query, (calendar_id,))
+		if result and result[0]['id_prod']:
+			return jsonify({
+				"id_prod": result[0]['id_prod']
+			}), 200
+		else:
+			return jsonify({
+				"id_prod": None
+			}), 200
+	except Exception as e:
+		print(f"Error: {e}")
+		return jsonify({"error": str(e)}), 500
 
 
 # =======================================
@@ -2091,8 +2094,8 @@ def get_calendar_id_prod(calendar_id):
 # =======================================
 @calendar_bp.route('/get_TeacherId_calander/<int:calender_id>', methods=['GET'])
 def get_TeacherCalender(calender_id):
-    try:
-        query = """
+	try:
+		query = """
             SELECT u.username, u.id
              FROM relation_calander_group_session rcgs, user u
             WHERE 
@@ -2102,18 +2105,18 @@ def get_TeacherCalender(calender_id):
                 rcgs.id = %s
                 
         """
-        result = Database.execute_query(query,(calender_id,))
-        if result:
-            return jsonify(result)
-        else:
-            return jsonify({
-                "Message":"There is no calander with this id"
-            }),404
+		result = Database.execute_query(query, (calender_id,))
+		if result:
+			return jsonify(result)
+		else:
+			return jsonify({
+				"Message": "There is no calander with this id"
+			}), 404
 
-    except Exception as e:
-        return jsonify({
-            "Message":f"Error: {e} coming from server "
-        }),500
+	except Exception as e:
+		return jsonify({
+			"Message": f"Error: {e} coming from server "
+		}), 500
 
 
 # =======================================
@@ -2121,8 +2124,8 @@ def get_TeacherCalender(calender_id):
 # =======================================
 @calendar_bp.route('/get_calander_now/<string:date>/<string:time>')
 def get_calander_now(date, time):
-    try:
-        query = """
+	try:
+		query = """
             SELECT 
                 rcgs.subject_id,
                 rcgs.status,
@@ -2139,40 +2142,41 @@ def get_calander_now(date, time):
             AND rcgs.enabled = 1 AND u.enabled = 1
             
         """
-        result = Database.execute_query(query, (date, time))
+		result = Database.execute_query(query, (date, time))
 
-        if result:
-            return jsonify(result)
-        else:
-            return jsonify({
-                "Message": "There is no calendar for this date and time"
-            }), 404
+		if result:
+			return jsonify(result)
+		else:
+			return jsonify({
+				"Message": "There is no calendar for this date and time"
+			}), 404
 
-    except Exception as e:
-        return jsonify({
-            "Message": f"Error: {e} coming from get_calander_now"
-        }), 500
+	except Exception as e:
+		return jsonify({
+			"Message": f"Error: {e} coming from get_calander_now"
+		}), 500
 
 
 # =======================================
 # ENDPOINT 21: get calander with door_id
 # =======================================
 def check_door_id(door_id):
-    try:
-        query = """
+	try:
+		query = """
             SELECT id
             FROM slc_door
             WHERE mac_id = %s AND enabled = 1
         """
-        result = Database.execute_query(query, (door_id,))
-        print(result)
-        return result is not None and len(result) > 0
-    except Exception as e:
-        return False
+		result = Database.execute_query(query, (door_id,))
+		print(result)
+		return result is not None and len(result) > 0
+	except Exception as e:
+		return False
+
 
 def get_room_id(door_id):
-    try:
-        query = """
+	try:
+		query = """
             SELECT d.room_id
             FROM slc_door d, room r
             WHERE r.id = d.room_id
@@ -2180,26 +2184,26 @@ def get_room_id(door_id):
             AND r.enabled = 1
             AND d.enabled = 1
         """
-        result = Database.execute_query(query, (door_id,))
-        if result is not None and len(result) > 0:
-            return result[0]['room_id']  # ✅ just return the value directly
-        return None
-    except Exception as e:
-        print(f"Error in get_room_id: {e}")
-        return None
+		result = Database.execute_query(query, (door_id,))
+		if result is not None and len(result) > 0:
+			return result[0]['room_id']  # ✅ just return the value directly
+		return None
+	except Exception as e:
+		print(f"Error in get_room_id: {e}")
+		return None
 
 
 @calendar_bp.route('/get-calendar-door/<string:door_id>', methods=['GET'])
 def get_calendar_door(door_id):
-    try:
-        if not check_door_id(door_id):
-            return jsonify({"Message": "Door not found"}), 404
+	try:
+		if not check_door_id(door_id):
+			return jsonify({"Message": "Door not found"}), 404
 
-        room_id = get_room_id(door_id)
-        if room_id is None:
-            return jsonify({"Message": "No room linked to this door"}), 404
+		room_id = get_room_id(door_id)
+		if room_id is None:
+			return jsonify({"Message": "No room linked to this door"}), 404
 
-        query = """
+		query = """
             SELECT r.*, u.username
             FROM relation_calander_group_session r
             JOIN session s ON r.session_id = s.id AND s.enabled = 1
@@ -2214,65 +2218,67 @@ def get_calendar_door(door_id):
                   )
             ORDER BY r.start_time ASC
         """
-        values = (room_id,)
-        result = Database.execute_query(query, values)
+		values = (room_id,)
+		result = Database.execute_query(query, values)
 
-        if result and len(result) > 0:
-            for item in result:
-                if 'start_time' in item and item['start_time']:
-                    item['start_time'] = item['start_time'].isoformat()
-                if 'end_time' in item and item['end_time']:
-                    item['end_time'] = item['end_time'].isoformat()
-                if 'created_at' in item and item['created_at']:
-                    item['created_at'] = item['created_at'].isoformat()
-                if 'updated_at' in item and item['updated_at']:
-                    item['updated_at'] = item['updated_at'].isoformat()
-                if 'timestamp' in item and item['timestamp']:
-                    item['timestamp'] = item['timestamp'].isoformat()
+		if result and len(result) > 0:
+			for item in result:
+				if 'start_time' in item and item['start_time']:
+					item['start_time'] = item['start_time'].isoformat()
+				if 'end_time' in item and item['end_time']:
+					item['end_time'] = item['end_time'].isoformat()
+				if 'created_at' in item and item['created_at']:
+					item['created_at'] = item['created_at'].isoformat()
+				if 'updated_at' in item and item['updated_at']:
+					item['updated_at'] = item['updated_at'].isoformat()
+				if 'timestamp' in item and item['timestamp']:
+					item['timestamp'] = item['timestamp'].isoformat()
 
-            return jsonify({"Message": "Successfully got calendar door", "Data": result}), 200
-        else:
-            return jsonify({"Message": "No calendar data found for this door"}), 404
+			return jsonify({"Message": "Successfully got calendar door", "Data": result}), 200
+		else:
+			return jsonify({"Message": "No calendar data found for this door"}), 404
 
-    except Exception as e:
-        print(f"Error in get_calendar_door: {e}")
-        return jsonify({"Message": f"Error: {e} coming from get calendar door"}), 500
+	except Exception as e:
+		print(f"Error in get_calendar_door: {e}")
+		return jsonify({"Message": f"Error: {e} coming from get calendar door"}), 500
 
 
 @calendar_bp.route('/get-calender-moderateur/<int:session_id>/<int:account_id>', methods=['GET'])
 def get_calander_moderateur(session_id, account_id):
-    try:
-        if not(check_session(session_id)):
-            return jsonify({"Message": f"There is no session with this id"}),404
+	try:
+		if not (check_session(session_id)):
+			return jsonify({"Message": f"There is no session with this id"}), 404
 
-        query = """
+		query = """
             SELECT 
-                c.color,
-                c.description,
-                c.start_time,
-                c.end_time,
-                c.title,
-                c.type,
-                t.username as teacherName,
-                r.name as roomName,
-                g.name as groupName
-            FROM relation_calander_group_session c,relation_group_local_session g, room r, user t ,session s
-            WHERE 
-                t.id = c.teacher_id AND
-                r.id = c.room_id AND
-                g.id = c.group_session_id AND 
-                s.id = c.session_id AND
-                c.session_id = %s AND c.account_id = %s AND
-                t.enabled = 1 AND r.enabled = 1 AND c.enabled = 1 AND c.status = 1 AND s.enabled = 1 AND s.status = 1 AND t.enabled = 1 AND t.status = 1
-        
+				c.color,
+				c.description,
+				c.start_time,
+				c.end_time,
+				c.title,
+				c.type,
+				t.username as teacherName,
+				r.name as roomName,
+				g.name as groupName
+			FROM relation_calander_group_session c, relation_group_local_session g, room r, user t, session s
+			WHERE 
+				t.id = c.teacher_id AND
+				r.id = c.room_id AND
+				g.id = c.group_session_id AND 
+				s.id = c.session_id AND
+				c.session_id = %s AND c.account_id = %s AND
+				DATE(c.start_time) = CURDATE() AND
+				t.enabled = 1 AND r.enabled = 1 AND c.enabled = 1 AND c.status = 1 AND 
+				s.enabled = 1 AND s.status = 1 AND t.enabled = 1 AND t.status = 1
+            
         """
-        result = Database.execute_query(query, (session_id,account_id),fetch=True)
-        if result:
-            return jsonify({"Message": "Success", "data": result}),200
-        else:
-            return jsonify({"Message": "THere is no data", "data": []}),200
+		result = Database.execute_query(query, (session_id, account_id), fetch=True)
+		if result:
+			return jsonify({"Message": "Success", "data": result}), 200
+		else:
+			return jsonify({"Message": "THere is no data", "data": []}), 200
 
-    except Exception as e:
-        return jsonify({
-            "Message": f"Error: {e} coming from server"
-        }),500
+	except Exception as e:
+		return jsonify({
+			"Message": f"Error: {e} coming from server"
+		}), 500

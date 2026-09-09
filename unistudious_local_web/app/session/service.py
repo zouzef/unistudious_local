@@ -69,18 +69,30 @@ def get_session_image(session_id: int):
         return None, None
 
 
-def create_session_local(session_data):
+def create_session_local(session_data_str, image_file=None):
     url = f"{current_app.config['BASE_URL']}create-session"
     try:
-        response = requests.post(url, headers=auth_headers(), json=session_data, verify=False, timeout=10)
+        files = {}
+        if image_file and image_file.filename:
+            files['logoFile'] = (image_file.filename, image_file.stream, image_file.mimetype)
+
+        response = requests.post(
+            url,
+            headers=auth_headers(),  # don't set Content-Type manually — requests sets multipart boundary
+            data={'data': session_data_str},
+            files=files if files else None,
+            verify=False,
+            timeout=10
+        )
         response.raise_for_status()
         if response.status_code == 200:
-            return True, 200
+            resp_json = response.json()
+            return True, 200, resp_json.get('id')
         else:
-            return False, 400
+            return False, 400, None
     except Exception as e:
         print(f"Error in create_session service: {e}")
-        return False, 500
+        return False, 500, None
 
 
 def get_session_info_service(session_id):

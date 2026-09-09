@@ -50,36 +50,42 @@
                                         <label class="form-label text-primary" for="session_name">Name <code
                                                 class="highlighter-rouge">*</code></label>
                                         <input type="text" id="session_name" name="" required="required"
+                                               placeholder="Example: Full Stack Web Development - July 2026"
                                                class="form-control"><br>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label text-primary" for="session_formation">
-                                            Formation <code>*</code>
+                                            Training Program<small class="text-muted"> Select the training program
+                                            linked to this session.</small><code>*</code>
                                         </label>
                                         <select id="session_formation" name="session[formation]" required
                                                 class="form-control no-selectpicker">
-                                            <option value="" selected>Choose the Formation...</option>
-                                            <option value="13" data-type="M">Étude math bac info (Mixed)</option>
-                                            <option value="18" data-type="Presence">Étude math bac eco (Unknown)
-                                            </option>
+                                            <option value="" selected>Select a training program...</option>
                                         </select>
                                     </div>
                                     <hr class="mb-4 mt-4">
                                     <div class="mb-3">
-                                        <label class="form-label text-primary" for="session_capacity">Capacity <code
-                                                class="highlighter-rouge">*</code></label>
+                                        <label class="form-label text-primary" for="session_capacity">Maximum
+                                            Participants <small class="text-muted"> Enter the maximum number of
+                                                participants allowed for this session</small> <code
+                                                    class="highlighter-rouge">*</code></label>
+                                        <br>
                                         <input type="number" id="session_capacity" name=""
-                                               required="required" class="form-control"><br>
+                                               required="required" class="form-control"
+                                               placeholder="Example: 30 students"><br>
                                     </div>
                                     <hr class="mb-4 mt-4">
+
                                     <div class="row">
                                         <div class="mb-3">
                                             <label class="form-label text-primary" for="session_typePay">
-                                                Type Payment <code>*</code>
+                                                Payment Frequency <small class="text-muted">Choose how often students
+                                                will be charged. Example: Monthly, Weekly </small> <code>*</code>
                                             </label>
+                                            <br>
                                             <select id="session_typePay" name="session[typePay]" required
                                                     class="form-control no-selectpicker">
-                                                <option value="" selected>Choose the Type Payment...</option>
+                                                <option value="" selected>Select payment frequency...</option>
                                                 <option value="Session">Per Session</option>
                                                 <option value="Week">Per Week</option>
                                                 <option value="Month">Per Month</option>
@@ -88,13 +94,15 @@
                                                 <option value="Year">Per Year</option>
                                             </select>
                                         </div>
+                                        <br>
                                         <div id="numberSessionForPay" style="display: none">
                                             <br>
                                             <div class="row">
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label text-primary"
                                                            for="session_numberSessionForPay">
-                                                        Number of sessions for payment <code
+                                                        Number of sessions for payment <small class="text-muted">Example:
+                                                        4 sessions means payment is calculated every 4 sessions.</small><code
                                                             class="highlighter-rouge">*</code>
                                                     </label>
                                                     <input type="number" id="session_numberSessionForPay"
@@ -103,17 +111,21 @@
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label text-primary"
                                                            for="session_priceStudentAbsent">
-                                                        Price for a student who is absent
+                                                        Price for a student who is absent <small class="text-muted">
+                                                        Amount charged when a student misses a session, Example:
+                                                        0TND.</small>
                                                     </label>
                                                     <input type="number" id="session_priceStudentAbsent"
                                                            name="session[priceStudentAbsent]" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
+                                        <br>
                                         <div class="mb-3">
                                             <br>
                                             <label class="form-label text-primary" for="session_paymentMethode">
-                                                Payment Methode <code>*</code>
+                                                Payment Methode <small class="text-muted"> Choose when students should
+                                                pay: before or after the service.</small> <code>*</code>
                                             </label>
                                             <select id="session_paymentMethode" name="session[paymentMethode]" required
                                                     class="form-control no-selectpicker">
@@ -122,15 +134,26 @@
                                                 <option value="Regular">Regular</option>
                                             </select>
                                         </div>
+                                        <div class="mb-3">
+                                            <br>
+                                            <label class="form-label text-primary" for="payment_deadline">Payment
+                                                Deadline <small class="text-muted"> Enter the number or Session of days
+                                                    a student has to complete payment.</small></label>
+                                            <input type="number" id="payment_deadline" class="form-control"
+                                                   placeholder="Enter number of days before payment is due">
+                                        </div>
+
+
                                     </div>
                                     <div id="priceTotal" style="">
                                         <hr class="mb-4 mt-4">
                                         <div class="row">
                                             <div class="mb-3 col-md-12">
                                                 <label class="form-label text-primary" for="session_price">Price
-                                                    Total</label>
-                                                € <input type="text" id="session_price" name="session[price]"
-                                                         class="form-control"><br>
+                                                    Total</label><small class="text-muted"> The complete price of the
+                                                training session. €</small>
+                                                <input type="text" id="session_price" name="session[price]"
+                                                       class="form-control" placeholder="Example: 250 TND"><br>
                                             </div>
 
                                         </div>
@@ -203,12 +226,13 @@
                                     <div class="row">
                                         <div class="mb-3">
                                             <label class="form-label text-primary" for="session_userRegisterAfterStart">
-                                                Allow Registration After Session Start <code>*</code>
-                                            </label>
+                                                Allow Late Registration
+                                            </label><small class="text-muted"> Allow students to register after the
+                                            session has already started.</small><code>*</code>
                                             <select id="session_userRegisterAfterStart"
                                                     name="session[userRegisterAfterStart]" required
                                                     class="form-control no-selectpicker">
-                                                <option value="">Can the user register after session start?</option>
+
                                                 <option value="1" selected>Yes</option>
                                                 <option value="0">No</option>
                                             </select>
@@ -218,24 +242,38 @@
                                     <div class="row">
                                         <div class="mb-3 col-md-6">
                                             <label class="form-label text-primary" for="session_startDate">Open Date
-                                                <code
-                                                        class="highlighter-rouge">*</code></label>
+                                            </label><small class="text-muted"> The date when students can start can
+                                            start accessing the session </small><code
+                                                class="highlighter-rouge">*</code>
                                             <input type="date" id="session_startDate" name="session[startDate]"
                                                    required="required" class="form-control"><br>
                                         </div>
                                         <div class="mb-3 col-md-6">
                                             <label class="form-label text-primary" for="session_endDate">Close Date
-                                                <code
-                                                        class="highlighter-rouge">*</code></label>
+                                            </label><small class="text-muted"> After this date the session will no
+                                            longer be available</small><code
+                                                class="highlighter-rouge">*</code>
                                             <input type="date" id="session_endDate" name="session[endDate]"
                                                    required="required" class="form-control"><br>
                                         </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary" for="training_season">
+                                            Training Season
+                                        </label><small class="text-muted"> Select the academic/training period</small>
+                                        <select id="training_season"
+                                                class="form-control no-selectpicker">
+                                            <option value="" selected>-- Select Season --</option>
+
+                                        </select>
                                     </div>
 
                                     <hr class="mb-4 mt-4">
                                     <div class="mb-3">
                                         <label for="multi-value-select" class="form-label text-primary">
-                                            Local <span class="required">*</span>
+                                            Locations <small class="text-muted"> Select where this session will take
+                                            place. You can choose multiple locations. </small><span
+                                                class="required">*</span>
                                         </label>
                                         <input type="hidden" id="account-id" value="3">
                                         <select id="multi-value-select" name="multi-value-select[]" multiple
@@ -249,71 +287,78 @@
                                     <div class="row">
                                         <div class="mb-3 col-md-6">
                                             <label for="session_requestChangeGroup" class="form-label text-primary">
-                                                Request change groups <span class="required">*</span>
-                                            </label>
+                                                Allow Group Changes
+                                            </label><small class="text-muted"> Allow students to request moving between
+                                            groups. </small><span class="required">*</span>
                                             <select id="session_requestChangeGroup" name="session[requestChangeGroup]"
                                                     required class="form-control no-selectpicker">
-                                                <option value="" selected>User can change current group?</option>
+                                                <option value="" selected>Allow students to change groups</option>
                                                 <option value="1">Yes</option>
                                                 <option value="0">No</option>
                                             </select>
                                         </div>
                                         <div class="mb-3 col-md-6">
-                                            <label class="form-label text-primary" for="session_maxGroupChange">Max
-                                                Group <code
-                                                        class="highlighter-rouge">*</code></label>
+                                            <label class="form-label text-primary" for="session_maxGroupChange">Maximum
+                                                Group Changes </label><small class="text-muted"> Maximum allowed value
+                                            is 10 </small>
+                                            <code
+                                                    class="highlighter-rouge">*</code>
                                             <input type="number" id="session_maxGroupChange"
-                                                   name="session[maxGroupChange]" class="form-control"><br>
+                                                   name="session[maxGroupChange]" class="form-control"
+                                                   placeholder="Maximum number of times a student can change groups."><br>
                                         </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="session_specialGroup" class="form-label text-primary">
-                                            Allow Registration User Without Group
-                                        </label>
+                                            Allow Registration Without a Group
+                                        </label><small class="text-muted"> Students can register in special
+                                        groups</small>
                                         <select id="session_specialGroup" name="session[specialGroup]"
                                                 class="form-control no-selectpicker">
-                                            <option value="">Can the user registration without group?</option>
+                                            <option value="" selected>Allow registration without assigning a group
+                                            </option>
                                             <option value="1">Yes</option>
                                             <option value="0">No</option>
                                         </select>
                                     </div>
+
+
                                     <hr class="mb-4 mt-4">
 
-                                    <div id="fileManagerContainer" class="mb-3" style="display: none;">
-                                        <label class="form-label text-primary">Select Folder</label>
-                                        <input type="text" id="selectedFolder" class="form-control"
-                                               placeholder="No folder selected" readonly="">
-                                        <button type="button" id="openFileManager" class="btn btn-primary mt-2">Choose
-                                            Folder
-                                        </button>
+                                    <div class="mb-3">
+                                        <label class="form-label text-primary" for="publicResource">Special session data
+                                            <small class="text-muted">Collect additional information from students
+                                                during registration.</small>
+                                        </label>
+                                        <select id="publicResource"
+                                                class="form-control no-selectpicker">
+                                            <option value="" selected>Collect additional information during
+                                                registration?
+                                            </option>
+                                            <option value="1">Yes</option>
+                                            <option value="0">No</option>
+                                        </select>
+                                        <br>
                                     </div>
-                                    <div class="modal fade" id="fileManagerModal" tabindex="-1"
-                                         aria-labelledby="fileManagerModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="fileManagerModalLabel">
-                                                        <i class="bi bi-folder2-open"></i> Select a Folder
-                                                    </h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body" id="share-folder-modal">
-                                                    <ul id="fileManagerList" class="list-group"></ul>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <div>
-                                                        <button type="button" id="selectFoldersBtn"
-                                                                class="btn btn-success">Select
-                                                        </button>
-                                                        <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Close
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
+
+                                    <div class="mb-3" id="extraDataWrapper" style="display: none">
+                                        <label class="form-label text-primary">Additional Registration Information
+                                            <small class="text-muted">Add custom fields required from students. Example:
+                                                ID card, allergies, documents.</small>
+                                        </label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="extraDataJsonView"
+                                                   placeholder="No extra data added" readonly="">
+                                            <button type="button" class="btn btn-outline-primary"
+                                                    id="openExtraDataModal"
+                                                    data-bs-toggle="modal" data-bs-target="#extraDataModal">Add / Edit
+                                                Data
+                                            </button>
                                         </div>
+                                        <input type="hidden" id="extraDataJson" name="extraDataJson">
                                     </div>
+
+                                    <hr class="mb-4 mt-4">
 
                                     <div class="mb-3">
                                         <label class="form-label text-primary"
@@ -327,15 +372,60 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="float-end">
                     <a href="/dashboard/show-session" class="btn btn-outline-danger me-3">Close</a>
                     <button class="btn btn-primary" id="create_session">Create</button>
                 </div>
             </form>
+
         </div>
     </div>
 
 </div>
 
+<div class="modal fade" id="extraDataModal" tabindex="-1" aria-labelledby="extraDataModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="extraDataModalLabel">Add Extra Information for the Session</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="extraDataContainer">
+                    <div class="extra-data-row mb-3" data-row-id="1"><input type="text" class="form-control mb-2"
+                                                                            placeholder="Field Name"
+                                                                            name="extraDataName[]"><select
+                            class="form-control mb-2 extraDataSessionSelect" name="extraDataType[]">
+                        <option value="string">Text</option>
+                        <option value="integer">Number</option>
+                        <option value="float">Decimal Number</option>
+                        <option value="image">Photo</option>
+                        <option value="file">File Upload</option>
+                        <option value="date">Date</option>
+                        <option value="Boolean">Yes / No</option>
+                        <option value="Link">Link</option>
+                    </select>
+                        <div class="form-check mb-2"><input class="form-check-input" type="checkbox"
+                                                            name="extraDataRequired[]" id="requiredCheck1"><label
+                                class="form-check-label" for="requiredCheck1">Required</label></div>
+                        <input type="text" class="form-control mb-2" placeholder="Example value"
+                               name="extraDataExample[]"><input type="text" class="form-control mb-2"
+                                                                placeholder="Description (optional)"
+                                                                name="extraDataDescription[]">
+                        <button type="button" class="btn btn-danger btn-sm removeExtraData">Remove</button>
+                        <hr>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-outline-success btn-sm" id="addExtraDataRow">Add Another Field
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline-primary" id="saveExtraData">Save Information</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="/static/js/dashboard/session.js"></script>
