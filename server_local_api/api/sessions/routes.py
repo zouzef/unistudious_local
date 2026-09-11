@@ -1,7 +1,11 @@
 from flask import Blueprint, jsonify, request, send_file, current_app
+from werkzeug.utils import secure_filename
+
 from datetime import datetime
 import sys
 import os
+import uuid
+import json
 # Add parent directories to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from config import Config
@@ -11,8 +15,6 @@ from core.checks import get_virtual_user, user_exists
 from util.audit import log_audit
 from core.checks import *
 
-import uuid
-import json
 
 # Create blueprint
 sessions_bp = Blueprint('sessions', __name__, url_prefix='/scl')
@@ -240,12 +242,6 @@ def get_session_image(session_id):
 			}), 500
 
 
-import json  # make sure this is imported at the top of the file
-
-# ENDPOINT 3: Create session
-import os
-from werkzeug.utils import secure_filename
-
 @sessions_bp.route('/create-session', methods=['POST'])
 def create_session():
     try:
@@ -277,13 +273,13 @@ def create_session():
             (
                 account_id, name, formation_id, capacity,
                 type_pay, number_session_for_pay, price_student_absent,
-                payment_methode, price, price_presence, price_online,
+                payment_methode, payment_deadline, price, price_presence, price_online,
                 currency, user_register_after_start, start_date, end_date,
                 request_change_group, max_group_change, special_group,
                 public_resource, extra_data, description, img_link, uuid
             )
             VALUES(
-                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                 'TND',
                 %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
             );
@@ -293,7 +289,9 @@ def create_session():
             data.get('capacity'), data.get('typePay'),
             data.get('numberSessionForPay') or None,
             data.get('priceStudentAbsent') or None,
-            data.get('paymentMethode'), data.get('price') or None,
+            data.get('paymentMethode'),
+            data.get('paymentDeadline') or None,
+            data.get('price') or None,
             data.get('pricePresence') or None, data.get('priceOnline') or None,
             data.get('userRegisterAfterStart'), data.get('startDate'),
             data.get('endDate'), data.get('requestChangeGroup'),
@@ -331,6 +329,7 @@ def create_session():
             "number_session_for_pay": data.get('numberSessionForPay') or None,
             "price_student_absent": data.get('priceStudentAbsent') or None,
             "payment_methode": data.get('paymentMethode'),
+            "payment_deadline": data.get('paymentDeadline') or None,
             "price": data.get('price') or None,
             "price_presence": data.get('pricePresence') or None,
             "price_online": data.get('priceOnline') or None,
@@ -385,22 +384,36 @@ def get_session_info(session_id):
 # ENDPOINT 5: Update session
 @sessions_bp.route('/update_session/<int:session_id>', methods=['POST'])
 def update_session(session_id):
-	try:
-		data = request.get_json(force=True)
-		if not data:
-			return jsonify({"Message": "No data received"}), 400
+    try:
+        data = json.loads(request.form.get('data', '{}'))
+        image_file = request.files.get('logoFile')
 
-		# 1️⃣ Fetch old data before updating
-		fetch_query = "SELECT * FROM session WHERE id = %s AND enabled = 1"
-		old_records = Database.execute_query(fetch_query, (session_id,), fetch=True)
+        if not data:
+            return jsonify({"Message": "No data received"}), 400
 
-		if not old_records:
-			return jsonify({"Message": "Session not found"}), 404
+        # 1️⃣ Fetch old data before updating
+        fetch_query = "SELECT * FROM session WHERE id = %s AND enabled = 1"
+        old_records = Database.execute_query(fetch_query, (session_id,), fetch=True)
 
-		old_data = old_records[0]  # assuming it returns a list of dicts
+        if not old_records:
+            return jsonify({"Message": "Session not found"}), 404
 
-		# 2️⃣ Update the session
-		update_query = """
+        old_data = old_records[0]
+
+        # 2️⃣ Handle image (save file + resolve img_link) BEFORE the update query
+        img_link = old_data.get('img_link')  # keep existing image unless a new one is uploaded
+        if image_file and image_file.filename:
+            session_folder = os.path.join(
+                current_app.root_path, 'uploads', 'session_img', f'session_{session_id}'
+            )
+            os.makedirs(session_folder, exist_ok=True)
+
+            filename = secure_filename(image_file.filename)
+            image_file.save(os.path.join(session_folder, filename))
+            img_link = f"session_img/session_{session_id}/{filename}"
+
+        # 3️⃣ Update the session
+        update_query = """
             UPDATE session
             SET
                 name                      = %s,
@@ -423,78 +436,85 @@ def update_session(session_id):
                 public_resource           = %s,
                 description               = %s,
                 season_id                 = %s,
+                status                    = %s,
+                img_link                  = %s,
                 updated_at                = NOW()
             WHERE id = %s AND enabled = 1
         """
 
-		values = (
-			data.get('name'),
-			data.get('formation') or None,
-			data.get('capacity'),
-			data.get('typePay'),
-			data.get('numberSessionForPay') or None,
-			data.get('priceStudentAbsent') or None,
-			data.get('paymentMethode') or None,
-			data.get('price') or None,
-			data.get('pricePresence') or None,
-			data.get('priceOnline') or None,
-			data.get('currency') or None,
-			data.get('userRegisterAfterStart'),
-			data.get('startDate'),
-			data.get('endDate'),
-			data.get('requestChangeGroup') or None,
-			data.get('maxGroupChange') or None,
-			data.get('specialGroup') or None,
-			data.get('publicResource') or None,
-			data.get('description'),
-			data.get('season') or None,
-			session_id
-		)
+        values = (
+            data.get('name'),
+            data.get('formation') or None,
+            data.get('capacity'),
+            data.get('typePay'),
+            data.get('numberSessionForPay') or None,
+            data.get('priceStudentAbsent') or None,
+            data.get('paymentMethode') or None,
+            data.get('price') or None,
+            data.get('pricePresence') or None,
+            data.get('priceOnline') or None,
+            data.get('currency') or None,
+            data.get('userRegisterAfterStart'),
+            data.get('startDate'),
+            data.get('endDate'),
+            data.get('requestChangeGroup') or None,
+            data.get('maxGroupChange') or None,
+            data.get('specialGroup') or None,
+            data.get('publicResource') or None,
+            data.get('description'),
+            data.get('season') or None,
+            data.get('status') or None,
+            img_link,
+            session_id
+        )
 
-		Database.execute_query(update_query, values, fetch=False)
+        Database.execute_query(update_query, values, fetch=False)
 
-		# 3️⃣ Build new_data snapshot from the incoming request
-		new_data = {
-			"name": data.get('name'),
-			"formation_id": data.get('formation') or None,
-			"capacity": data.get('capacity'),
-			"type_pay": data.get('typePay'),
-			"number_session_for_pay": data.get('numberSessionForPay') or None,
-			"price_student_absent": data.get('priceStudentAbsent') or None,
-			"payment_methode": data.get('paymentMethode') or None,
-			"price": data.get('price') or None,
-			"price_presence": data.get('pricePresence') or None,
-			"price_online": data.get('priceOnline') or None,
-			"currency": data.get('currency') or None,
-			"user_register_after_start": data.get('userRegisterAfterStart'),
-			"start_date": data.get('startDate'),
-			"end_date": data.get('endDate'),
-			"request_change_group": data.get('requestChangeGroup') or None,
-			"max_group_change": data.get('maxGroupChange') or None,
-			"special_group": data.get('specialGroup') or None,
-			"public_resource": data.get('publicResource') or None,
-			"description": data.get('description'),
-			"season_id": data.get('season') or None,
-		}
+        # 4️⃣ Build new_data snapshot from the incoming request
+        new_data = {
+            "id": session_id,
+            "name": data.get('name'),
+            "formation_id": data.get('formation') or None,
+            "capacity": data.get('capacity'),
+            "type_pay": data.get('typePay'),
+            "number_session_for_pay": data.get('numberSessionForPay') or None,
+            "price_student_absent": data.get('priceStudentAbsent') or None,
+            "payment_methode": data.get('paymentMethode') or None,
+            "price": data.get('price') or None,
+            "price_presence": data.get('pricePresence') or None,
+            "price_online": data.get('priceOnline') or None,
+            "currency": data.get('currency') or None,
+            "user_register_after_start": data.get('userRegisterAfterStart'),
+            "start_date": data.get('startDate'),
+            "end_date": data.get('endDate'),
+            "request_change_group": data.get('requestChangeGroup') or None,
+            "max_group_change": data.get('maxGroupChange') or None,
+            "special_group": data.get('specialGroup') or None,
+            "public_resource": data.get('publicResource') or None,
+            "description": data.get('description'),
+            "season_id": data.get('season') or None,
+            "status": data.get('status') or None,
+            "img_link": img_link,
+        }
 
-		# 4️⃣ Audit record
-		log_session_audit(
-			action_type='UPDATE',
-			old_data=old_data,
-			new_data=new_data,
-			id_session=session_id
-		)
+        # 5️⃣ Audit record
+        log_session_audit(
+            action_type='UPDATE',
+            old_data=old_data,
+            new_data=new_data,
+            id_session=session_id
+        )
 
-		return jsonify({
-			"Message": "Session updated with success",
-			"session_id": session_id
-		}), 200
+        return jsonify({
+            "Message": "Session updated with success",
+            "session_id": session_id
+        }), 200
 
-	except Exception as e:
-		print(f"❌ Error: {e}")
-		return jsonify({
-			"Message": f"Error: {e} coming from server"
-		}), 500
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        return jsonify({
+            "Message": f"Error: {e} coming from server"
+        }), 500
 
 
 # ENDPOINT 6: Delete session

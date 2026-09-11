@@ -86,12 +86,12 @@
                                             <select id="session_typePay" name="session[typePay]" required
                                                     class="form-control no-selectpicker">
                                                 <option value="" selected>Select payment frequency...</option>
-                                                <option value="Session">Per Session</option>
-                                                <option value="Week">Per Week</option>
-                                                <option value="Month">Per Month</option>
-                                                <option value="Trimester">Per Trimester</option>
-                                                <option value="Semester">Per Semester</option>
-                                                <option value="Year">Per Year</option>
+                                                <option value="Session">Every Session</option>
+                                                <option value="Week">Weekly</option>
+                                                <option value="Month">Monthly</option>
+                                                <option value="Trimester">Every Trimester (3 Months)</option>
+                                                <option value="Semester">Every Semester (6 Months)</option>
+                                                <option value="Year">Yearly</option>
                                             </select>
                                         </div>
                                         <br>
@@ -130,8 +130,8 @@
                                             <select id="session_paymentMethode" name="session[paymentMethode]" required
                                                     class="form-control no-selectpicker">
                                                 <option value="" selected>Choose the Payment Methode...</option>
-                                                <option value="Advance">Advance</option>
-                                                <option value="Regular">Regular</option>
+                                                <option value="Advance">Pay Before Service</option>
+                                                <option value="Regular">Pay After Service</option>
                                             </select>
                                         </div>
                                         <div class="mb-3">
@@ -285,27 +285,31 @@
                                     </div>
                                     <hr class="mb-4 mt-4">
                                     <div class="row">
-                                        <div class="mb-3 col-md-6">
-                                            <label for="session_requestChangeGroup" class="form-label text-primary">
-                                                Allow Group Changes
-                                            </label><small class="text-muted"> Allow students to request moving between
-                                            groups. </small><span class="required">*</span>
+                                        <div class="mb-3 col-md-6 d-flex flex-column">
+                                            <div>
+                                                <label for="session_requestChangeGroup" class="form-label text-primary">
+                                                    Allow Group Changes
+                                                </label><small class="text-muted"> Allow students to request moving
+                                                between
+                                                groups. </small><span class="required">*</span>
+                                            </div>
                                             <select id="session_requestChangeGroup" name="session[requestChangeGroup]"
-                                                    required class="form-control no-selectpicker">
+                                                    required class="form-control no-selectpicker mt-auto">
                                                 <option value="" selected>Allow students to change groups</option>
                                                 <option value="1">Yes</option>
                                                 <option value="0">No</option>
                                             </select>
                                         </div>
-                                        <div class="mb-3 col-md-6">
-                                            <label class="form-label text-primary" for="session_maxGroupChange">Maximum
-                                                Group Changes </label><small class="text-muted"> Maximum allowed value
-                                            is 10 </small>
-                                            <code
-                                                    class="highlighter-rouge">*</code>
+                                        <div class="mb-3 col-md-6 d-flex flex-column">
+                                            <div>
+                                                <label class="form-label text-primary" for="session_maxGroupChange">Maximum
+                                                    Group Changes </label><small class="text-muted"> Maximum allowed
+                                                value
+                                                is 10 </small><code class="highlighter-rouge">*</code>
+                                            </div>
                                             <input type="number" id="session_maxGroupChange"
-                                                   name="session[maxGroupChange]" class="form-control"
-                                                   placeholder="Maximum number of times a student can change groups."><br>
+                                                   name="session[maxGroupChange]" class="form-control mt-auto"
+                                                   placeholder="Maximum number of times a student can change groups.">
                                         </div>
                                     </div>
                                     <div class="mb-3">
@@ -374,8 +378,8 @@
                 </div>
 
                 <div class="float-end">
-                    <a href="/dashboard/show-session" class="btn btn-outline-danger me-3">Close</a>
-                    <button class="btn btn-primary" id="create_session">Create</button>
+                    <a href="/dashboard/show-session" class="btn btn-outline-danger js-single-click">Close</a>
+                    <button class="btn btn-outline-primary me-3" id="create_session">Create</button>
                 </div>
             </form>
 

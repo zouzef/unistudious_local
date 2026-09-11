@@ -21,7 +21,8 @@ from sync.pushers import (
     virtuel_pusher,
     group_pusher,
     fromation_pusher,
-    payment_pusher
+    payment_pusher,
+    session_pusher
 )
 
 logger = logging.getLogger(__name__)
@@ -495,9 +496,9 @@ class DataPusher:
                     "session_audit",
                     session_rows,
                     {
-                        "INSERT": lambda row:   print("INSERT Session"),
-                        "UPDATE": lambda row:   print("UPDATE Session"),
-                        "DELETE": lambda row:   print("DELETE Session")
+                        "INSERT": lambda row:  session_pusher.push_sessionAdd(db,self.settings,row),
+                        "UPDATE": lambda row:  session_pusher.push_sessionUpdate(db,self.settings, row),
+                        "DELETE": lambda row:  session_pusher.push_sessionDelete(db, self.settings,row)
                     }
 
                 )

@@ -96,14 +96,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Show/hide extra data section based on publicResource select
-    document.getElementById('publicResource').addEventListener('change', function () {
-        const extraDataWrapper = document.getElementById('extraDataWrapper');
-        if (this.value === '1') {
-            extraDataWrapper.style.display = 'block';
-        } else {
-            extraDataWrapper.style.display = 'none';
-        }
-    });
+    const publicResourceEl = document.getElementById('publicResource');
+    if (publicResourceEl) {
+        publicResourceEl.addEventListener('change', function () {
+            const extraDataWrapper = document.getElementById('extraDataWrapper');
+            if (this.value === '1') {
+                extraDataWrapper.style.display = 'block';
+            } else {
+                extraDataWrapper.style.display = 'none';
+            }
+        });
+    }
 
     // ---- Add / Remove extra data field rows inside the "Extra Data" modal ----
     let extraDataRowCount = 1; // the static row already in the HTML has data-row-id="1"
@@ -201,38 +204,49 @@ document.addEventListener('DOMContentLoaded', function () {
         return el.value;
     };
 
+    // Shared setVal() helper — mirror of val(), but for WRITING values safely.
+    // Prevents "Cannot set properties of null" crashes when a field doesn't
+    // exist on a given page's HTML (e.g. payment_deadline missing on view-session.html).
+    const setVal = (id, value) => {
+        const el = document.getElementById(id);
+        if (!el) { console.warn(`❌ Element not found (setVal): ${id}`); return; }
+        el.value = value ?? '';
+    };
+
     // Shared function to collect form data (JSON part only — logoFile is sent separately as a real file)
     function collectSessionDataForSubmit() {
-        return {
-            account_id: accountId,
-            name: val('session_name'),
-            formation: val('session_formation'),
-            capacity: val('session_capacity'),
-            typePay: val('session_typePay'),
-            numberSessionForPay: val('session_numberSessionForPay'),
-            priceStudentAbsent: val('session_priceStudentAbsent'),
-            paymentMethode: val('session_paymentMethode'),
-            price: val('session_price'),
-            pricePresence: val('session_pricePresence'),
-            priceOnline: val('session_priceOnline'),
-            currency: val('session_currency'),
-            userRegisterAfterStart: val('session_userRegisterAfterStart'),
-            startDate: val('session_startDate'),
-            endDate: val('session_endDate'),
-            season: val('season_select'),
-            locals: Array.from(document.getElementById('multi-value-select').selectedOptions).map(o => ({
-                value: o.value,
-                label: o.text
-            })),
-            requestChangeGroup: val('session_requestChangeGroup'),
-            maxGroupChange: val('session_maxGroupChange'),
-            specialGroup: val('session_specialGroup'),
-            publicResource: val('publicResource'),
-            extraSession: val('session_extraSession'),
-            extraDataJson: val('extraDataJson'),
-            description: val('session_description'),
-        };
-    }
+    return {
+        account_id: accountId,
+        name: val('session_name'),
+        status: val('session_status'),
+        formation: val('session_formation'),
+        capacity: val('session_capacity'),
+        typePay: val('session_typePay'),
+        numberSessionForPay: val('session_numberSessionForPay'),
+        priceStudentAbsent: val('session_priceStudentAbsent'),
+        paymentMethode: val('session_paymentMethode'),
+        paymentDeadline: val('payment_deadline'),
+        price: val('session_price'),
+        pricePresence: val('session_pricePresence'),
+        priceOnline: val('session_priceOnline'),
+        currency: val('session_currency'),
+        userRegisterAfterStart: val('session_userRegisterAfterStart'),
+        startDate: val('session_startDate'),
+        endDate: val('session_endDate'),
+        season: val('season_select'),
+        locals: Array.from(document.getElementById('multi-value-select').selectedOptions).map(o => ({
+            value: o.value,
+            label: o.text
+        })),
+        requestChangeGroup: val('session_requestChangeGroup'),
+        maxGroupChange: val('session_maxGroupChange'),
+        specialGroup: val('session_specialGroup'),
+        publicResource: val('publicResource'),
+        extraSession: val('session_extraSession'),
+        extraDataJson: val('extraDataJson'),
+        description: val('session_description'),
+    };
+}
 
     // Shared helper: build a FormData payload (JSON blob + real image file)
     function buildSessionFormData() {
@@ -267,14 +281,31 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 console.log('✅ Response:', data);
                 if (data.Message === 'Session created with success') {
-                    alert('✅ Session created successfully!');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Session created with success',
+                        confirmButtonColor: '#4c4b9e'
+                    }).then(() => {
+                        window.location.href = 'https://172.28.20.156:5016/dashboard/show-session';
+                    });
                 } else {
-                    alert('❌ ' + data.Message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.Message,
+                        confirmButtonColor: '#4c4b9e'
+                    });
                 }
             })
             .catch(error => {
                 console.error('❌ Error:', error);
-                alert('❌ Something went wrong, please try again.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Something went wrong, please try again.',
+                    confirmButtonColor: '#4c4b9e'
+                });
             });
         });
     }
@@ -296,14 +327,31 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 console.log('✅ Response:', data);
                 if (data.Message === 'Session updated with success') {
-                    alert('✅ Session updated successfully!');
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Session updated with success',
+                        confirmButtonColor: '#4c4b9e'
+                    }).then(() => {
+                        window.location.href = 'https://172.28.20.156:5016/dashboard/show-session';
+                    });
                 } else {
-                    alert('❌ ' + data.Message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.Message,
+                        confirmButtonColor: '#4c4b9e'
+                    });
                 }
             })
             .catch(error => {
                 console.error('❌ Error:', error);
-                alert('❌ Something went wrong, please try again.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Something went wrong, please try again.',
+                    confirmButtonColor: '#4c4b9e'
+                });
             });
         });
     }
@@ -320,12 +368,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const s = sessionData[0];
 
             // Basic Info
-            document.getElementById('session_name').value     = s.name ?? '';
-            document.getElementById('session_status').value   = s.status ?? '';
-            document.getElementById('session_capacity').value = s.capacity ?? '';
-            document.getElementById('session_description').value = s.description ?? '';
+            setVal('session_name', s.name);
+            setVal('session_status', s.status);
+            setVal('session_capacity', s.capacity);
+            setVal('session_description', s.description);
 
-           // Formation
+            // Formation
             const formationSelect = document.getElementById('session_formation');
             formationSelect.value = s.formation_id ?? '';
 
@@ -339,42 +387,43 @@ document.addEventListener('DOMContentLoaded', function () {
             if (formationType === 'M' || formationType === 'Mixed') {
                 document.getElementById('priceMixed').style.display = 'block';
                 document.getElementById('priceTotal').style.display = 'none';
-                document.getElementById('session_pricePresence').value = s.price_presence ?? '';
-                document.getElementById('session_priceOnline').value   = s.price_online ?? '';
+                setVal('session_pricePresence', s.price_presence);
+                setVal('session_priceOnline', s.price_online);
             } else {
                 document.getElementById('priceTotal').style.display = 'block';
                 document.getElementById('priceMixed').style.display = 'none';
-                document.getElementById('session_price').value = s.price ?? '';
+                setVal('session_price', s.price);
             }
 
             // Payment
-            document.getElementById('session_typePay').value         = s.type_pay ?? '';
-            document.getElementById('session_paymentMethode').value  = s.payment_methode ?? '';
-            document.getElementById('session_numberSessionForPay').value = s.number_session_for_pay ?? '';
-            document.getElementById('session_priceStudentAbsent').value  = s.price_student_absent ?? '';
+            setVal('session_typePay', s.type_pay);
+            setVal('session_paymentMethode', s.payment_methode);
+            setVal('session_numberSessionForPay', s.number_session_for_pay);
+            setVal('session_priceStudentAbsent', s.price_student_absent);
+            setVal('payment_deadline', s.payment_deadline);
 
             // Show numberSessionForPay section if type is Session
-            if (s.type_pay === 'Session') {
-                document.getElementById('numberSessionForPay').style.display = 'block';
-            } else {
-                document.getElementById('numberSessionForPay').style.display = 'none';
+            const numberSessionForPayEl = document.getElementById('numberSessionForPay');
+            if (numberSessionForPayEl) {
+                numberSessionForPayEl.style.display = (s.type_pay === 'Session') ? 'block' : 'none';
             }
 
             // Currency — show the field and set value
-            document.getElementById('currencySession').style.display = 'block';
-            document.getElementById('session_currency').value = s.currency ?? '';
+            const currencySessionEl = document.getElementById('currencySession');
+            if (currencySessionEl) currencySessionEl.style.display = 'block';
+            setVal('session_currency', s.currency);
 
             // Dates
             if (s.start_date)
-                document.getElementById('session_startDate').value = new Date(s.start_date).toISOString().split('T')[0];
+                setVal('session_startDate', new Date(s.start_date).toISOString().split('T')[0]);
             if (s.end_date)
-                document.getElementById('session_endDate').value = new Date(s.end_date).toISOString().split('T')[0];
+                setVal('session_endDate', new Date(s.end_date).toISOString().split('T')[0]);
 
             // Registration & Groups
-            document.getElementById('session_userRegisterAfterStart').value = s.user_register_after_start ?? '';
-            document.getElementById('session_requestChangeGroup').value     = s.request_change_group ?? '';
-            document.getElementById('session_maxGroupChange').value         = s.max_group_change ?? '';
-            document.getElementById('session_specialGroup').value           = s.special_group ?? '';
+            setVal('session_userRegisterAfterStart', s.user_register_after_start);
+            setVal('session_requestChangeGroup', s.request_change_group);
+            setVal('session_maxGroupChange', s.max_group_change);
+            setVal('session_specialGroup', s.special_group);
 
             // Locals — pre-select matching options
             if (s.locals && Array.isArray(s.locals)) {
@@ -387,32 +436,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Season
             const seasonSelect = document.getElementById('season_select');
-            if (seasonSelect) seasonSelect.value = s.season ?? '';
+            if (seasonSelect) seasonSelect.value = s.season_id ?? s.season ?? '';
 
             // Extra fields
             const publicResource = document.getElementById('publicResource');
             if (publicResource) {
                 publicResource.value = s.public_resource ?? '';
                 // Show/hide the extra data section to match the loaded value
-                document.getElementById('extraDataWrapper').style.display =
-                    (String(s.public_resource) === '1') ? 'block' : 'none';
+                const extraDataWrapperEl = document.getElementById('extraDataWrapper');
+                if (extraDataWrapperEl) {
+                    extraDataWrapperEl.style.display =
+                        (String(s.public_resource) === '1') ? 'block' : 'none';
+                }
             }
 
             const extraSession = document.getElementById('session_extraSession');
             if (extraSession) extraSession.value = s.extra_session ?? '';
 
-            // Extra data JSON — populate hidden input, preview, and rebuild modal rows
+            // Extra data — API returns it under "extra_data" (can be null,
+            // a JSON string, or an already-parsed array depending on the endpoint)
             const extraDataJsonInput = document.getElementById('extraDataJson');
             const extraDataJsonView = document.getElementById('extraDataJsonView');
             let parsedExtraData = [];
 
-            if (s.extra_data_json) {
+            const rawExtraData = s.extra_data ?? s.extra_data_json;
+            if (rawExtraData) {
                 try {
-                    parsedExtraData = typeof s.extra_data_json === 'string'
-                        ? JSON.parse(s.extra_data_json)
-                        : s.extra_data_json;
+                    parsedExtraData = typeof rawExtraData === 'string'
+                        ? JSON.parse(rawExtraData)
+                        : rawExtraData;
                 } catch (e) {
-                    console.warn('❌ Could not parse extra_data_json:', e);
+                    console.warn('❌ Could not parse extra_data:', e);
                     parsedExtraData = [];
                 }
             }
@@ -468,7 +522,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // Image preview
-            document.getElementById('imagePreview').src = `/api/get_session_img/${s.id}`;
+            const imagePreviewEl = document.getElementById('imagePreview');
+            if (imagePreviewEl) imagePreviewEl.src = `/api/get_session_img/${s.id}`;
 
             console.log('✅ Session info loaded:', s);
         })

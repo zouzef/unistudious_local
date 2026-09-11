@@ -3,6 +3,8 @@ from flask import Blueprint, render_template, request, jsonify, session, redirec
 import io
 import os
 import base64
+import json
+from werkzeug.utils import secure_filename
 from app.session.service import (
     get_all_sessions, get_moderator,
     get_locals, get_room, get_teacher,
@@ -106,25 +108,30 @@ def get_local_info(account_id):
 @session_bp.route('/api/get-session-info/<int:session_id>', methods=['GET'])
 def get_session_info(session_id):
     try:
-        result,session_info = get_session_info_service(session_id)
+        result, session_info = get_session_info_service(session_id)
         if result:
             return jsonify(session_info), 200
+        else:
+            return jsonify({
+                "Message": "Session not found"
+            }), 404
     except Exception as e:
         print(f"Error: {e} coming from server")
         return jsonify({
-            "Message":"Error from server"
-        }),500
+            "Message": "Error from server"
+        }), 500
 
 
 @session_bp.route('/api/update-session/<int:session_id>', methods=['POST'])
 def update_session(session_id):
     try:
-        data_session = request.get_json(force=True)
+        session_data_str = request.form.get('data', '{}')
+        image_file = request.files.get('logoFile')
 
-        if not data_session:
+        if not session_data_str:
             return jsonify({"Message": "No data received"}), 400
 
-        status, response = update_session_service(data_session, session_id)
+        status, response = update_session_service(session_data_str, session_id, image_file)
 
         if status:
             return jsonify({
@@ -141,7 +148,7 @@ def update_session(session_id):
         print(f"❌ Error: {e}")
         return jsonify({
             "Message": f"Error: {e} coming from server"
-        }), 500  # ← was missing status code
+        }), 500
 
 
 @session_bp.route('/api/delete-session/<int:session_id>',methods=['POST'])

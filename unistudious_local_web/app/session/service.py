@@ -2,6 +2,7 @@
 import requests
 from flask import current_app
 from app.utils.auth import auth_headers
+from werkzeug.utils import secure_filename
 
 def get_all_sessions(account_id: int) -> list:
     url = f"{current_app.config['BASE_URL']}get_session_detail/{account_id}"
@@ -108,10 +109,21 @@ def get_session_info_service(session_id):
         return False, None
 
 
-def update_session_service(session_data, session_id):
+def update_session_service(session_data_str, session_id, image_file=None):
     url = f"{current_app.config['BASE_URL']}update_session/{session_id}"
     try:
-        response = requests.post(url, headers=auth_headers(), json=session_data, verify=False, timeout=10)
+        files = {}
+        if image_file and image_file.filename:
+            files['logoFile'] = (image_file.filename, image_file.stream, image_file.mimetype)
+
+        response = requests.post(
+            url,
+            headers=auth_headers(),
+            data={'data': session_data_str},
+            files=files if files else None,
+            verify=False,
+            timeout=10
+        )
         if response.status_code == 200:
             return True, response.json()
         else:

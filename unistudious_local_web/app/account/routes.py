@@ -1,6 +1,7 @@
 # app/account/routes.py
 from http.client import responses
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for, send_file, current_app, Response
+from werkzeug.utils import secure_filename
 import io
 import os
 import base64

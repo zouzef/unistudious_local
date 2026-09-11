@@ -1,6 +1,5 @@
 <div class="content-body" style="min-height: 1113px;">
     <div class="container-fluid mh-auto">
-
         <div class="row">
             <div class="col-xl-12">
                 <div class="page-title flex-wrap">
@@ -36,7 +35,6 @@
                 </div>
             </div>
         </div>
-
         <div class="row">
             {% if sessions %}
             {% for session in sessions %}
@@ -80,7 +78,7 @@
                             </div>
                         </div>
                         <div class="contact-icon">
-                        <span class="badge badge-lg {{ session.status_class }} light">
+                        <span class="badge badge-lg badge-success light">
                             {{ session.formation or 'N/A' }}
                         </span>
                         </div>
@@ -164,39 +162,40 @@
                 cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch(`/api/delete-session/${sessionId}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.Message === 'Session Deleted successfully') {
-                            Swal.fire({
-                                title: 'Deleted!',
-                                text: 'The session has been deleted.',
-                                icon: 'success',
-                                confirmButtonColor: '#3085d6'
-                            }).then(() => {
-                                window.location.reload();
-                            });
-                        } else {
-                            Swal.fire({
-                                title: 'Error!',
-                                text: data.Message,
-                                icon: 'error',
-                                confirmButtonColor: '#d33'
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
+                fetch(`/api/delete-session/${sessionId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                .then(response => response.json().then(data => ({ status: response.status, data })))
+                .then(({ status, data }) => {
+                    if (status === 200) {
+                        Swal.fire({
+                            title: 'Deleted!',
+                            text: 'The session has been deleted.',
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
                         Swal.fire({
                             title: 'Error!',
-                            text: 'Something went wrong, please try again.',
+                            text: data.Message || 'Something went wrong.',
                             icon: 'error',
                             confirmButtonColor: '#d33'
                         });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Something went wrong, please try again.',
+                        icon: 'error',
+                        confirmButtonColor: '#d33'
                     });
+                });
+
                 }
             });
         });

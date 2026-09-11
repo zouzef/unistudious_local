@@ -87,7 +87,8 @@ def insert_sessions(db, session_data, token):
                     "created_at": format_date(session.get("createdAt")),
                     "updated_at": format_date(session.get("updatedAt")),
                     "timestamp": format_date(session.get("timestamp")),
-                    "payment_methode": None,
+                    "payment_methode": session.get("paymentMethode"),
+                    "payment_deadline": session.get("payment_deadline"),
                     "number_session_for_pay": None,
                     "price_student_absent": None,
                     "public_resource": None,
@@ -110,7 +111,7 @@ def insert_sessions(db, session_data, token):
                     # Compare data
                     has_changes = False
                     for key, value in new_data.items():
-                        if key in ["payment_methode", "number_session_for_pay", "price_student_absent",
+                        if key in ["number_session_for_pay", "price_student_absent",
                                    "public_resource", "price_presence", "price_online", "passage", "season_id"]:
                             # Skip comparison for fields that are always None in new_data
                             continue
@@ -156,6 +157,7 @@ def insert_sessions(db, session_data, token):
                             updated_at = %s,
                             timestamp = %s,
                             payment_methode = %s,
+                            payment_deadline = %s,
                             number_session_for_pay = %s,
                             price_student_absent = %s,
                             public_resource = %s,
@@ -192,6 +194,7 @@ def insert_sessions(db, session_data, token):
                         new_data["updated_at"],
                         new_data["timestamp"],
                         new_data["payment_methode"],
+                        new_data["payment_deadline"],
                         new_data["number_session_for_pay"],
                         new_data["price_student_absent"],
                         new_data["public_resource"],
@@ -217,12 +220,12 @@ def insert_sessions(db, session_data, token):
                             start_date, end_date, capacity, price, currency, type_pay,
                             request_change_group, max_group_change, special_group, enabled, 
                             user_register_after_start, releaseToken, useToken, created_at, 
-                            updated_at, timestamp, payment_methode, number_session_for_pay, 
+                            updated_at, timestamp, payment_methode, payment_deadline, number_session_for_pay, 
                             price_student_absent, public_resource, price_presence, price_online, 
                             passage, season_id
                         ) VALUES (
                             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
-                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
                         )
                     """
 
@@ -253,6 +256,7 @@ def insert_sessions(db, session_data, token):
                         new_data["updated_at"],
                         new_data["timestamp"],
                         new_data["payment_methode"],
+                        new_data["payment_deadline"],
                         new_data["number_session_for_pay"],
                         new_data["price_student_absent"],
                         new_data["public_resource"],
@@ -346,7 +350,9 @@ def update_sessions(db, session_data, token):
                     "releaseToken": 1 if session.get("releaseToken", False) else 0,
                     "useToken": session.get("useToken"),
                     "updated_at": format_date(session.get("updatedAt")),
-                    "timestamp": format_date(session.get("timestamp"))
+                    "timestamp": format_date(session.get("timestamp")),
+                    "payment_methode": session.get("paymentMethode"),
+                    "payment_deadline": session.get("payment_deadline")
                 }
 
                 # Check if session exists by id_prod first, then by id
@@ -369,7 +375,7 @@ def update_sessions(db, session_data, token):
                                          "price", "currency", "type_pay", "request_change_group",
                                          "max_group_change", "special_group", "enabled",
                                          "user_register_after_start", "releaseToken", "useToken",
-                                         "updated_at", "timestamp"]
+                                         "updated_at", "timestamp", "payment_methode", "payment_deadline"]
 
                     has_changes = False
                     for field in comparison_fields:
@@ -411,7 +417,9 @@ def update_sessions(db, session_data, token):
                             releaseToken = %s,
                             useToken = %s,
                             updated_at = %s,
-                            timestamp = %s
+                            timestamp = %s,
+                            payment_methode = %s,
+                            payment_deadline = %s
                         WHERE id = %s
                     """
 
@@ -439,6 +447,8 @@ def update_sessions(db, session_data, token):
                         new_data["useToken"],
                         new_data["updated_at"],
                         new_data["timestamp"],
+                        new_data["payment_methode"],
+                        new_data["payment_deadline"],
                         existing["id"]  # ← use actual local id (handles both id_prod and id matches)
                     ))
 
@@ -457,12 +467,12 @@ def update_sessions(db, session_data, token):
                             start_date, end_date, capacity, price, currency, type_pay,
                             request_change_group, max_group_change, special_group, enabled, 
                             user_register_after_start, releaseToken, useToken, created_at, 
-                            updated_at, timestamp, payment_methode, number_session_for_pay, 
+                            updated_at, timestamp, payment_methode, payment_deadline, number_session_for_pay, 
                             price_student_absent, public_resource, price_presence, price_online, 
                             passage, season_id
                         ) VALUES (
                             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
-                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+                            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
                         )
                     """
 
@@ -494,7 +504,8 @@ def update_sessions(db, session_data, token):
                         new_data["updated_at"],  # Use updated_at as created_at
                         new_data["updated_at"],
                         new_data["timestamp"],
-                        None,  # payment_methode
+                        new_data["payment_methode"],
+                        new_data["payment_deadline"],
                         None,  # number_session_for_pay
                         None,  # price_student_absent
                         None,  # public_resource
