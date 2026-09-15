@@ -7,12 +7,13 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 from config import Config
 from core.database import Database
 from core.middleware import token_required
+from datetime import datetime, date
+from decimal import Decimal
 
 account_level_bp = Blueprint('account_level', __name__, url_prefix='/scl')
 
 
-from datetime import datetime, date
-from decimal import Decimal
+
 
 def serialize_for_audit(obj):
     """Custom JSON serializer for types not serializable by default."""

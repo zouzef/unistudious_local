@@ -262,7 +262,7 @@ def update_completion_tag_account(db, tag_data):
                             release_token = %s,
                             use_token     = %s,
                             timestamp     = %s,
-                            updated_at    = %s,
+                            updated_at    = %s
                         WHERE id = %s
                     """
 

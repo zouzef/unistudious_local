@@ -414,6 +414,18 @@ def process_sync_data(db, data, settings):
             from sync.processors.user_processor import process_users
             logger.info("Processing Virtuel User user")
             process_users(db, n, token)
+
+    if 'subSubject' in data:
+        n = normalize(data['subSubject'])
+        if has_records(n):
+            logger.info("Processing SubSubject")
+            from sync.processors.account_sub_subject_processor import process_subsubject
+            process_subsubject(db, n)
+
+            # 🔍 VERIFY using the SAME connection the sync just used
+            row = db.fetch_query("SELECT DATABASE() AS db_name, COUNT(*) AS cnt FROM account_sub_subject")
+            print(f"🔎 Sanity check → DB: {row[0]['db_name']}, rows in account_sub_subject: {row[0]['cnt']}")
+
 # ---------------------------------------------------------------------------
 # Sync runners
 # ---------------------------------------------------------------------------

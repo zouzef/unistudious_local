@@ -58,78 +58,42 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="float-end">
-                                <button type="submit" class="btn btn-outline-primary me-3">{{ t('create') }}</button>
-                                <a class="btn btn-outline-danger" href="/dashboard/show-subject">{{ t('close') }}</a>
+                            <div class="col-xl-12 mt-4">
+                                <div class="table-responsive">
+                                    <div class="container mt-5">
+                                        <h2>{{ t('sub_subject') }}</h2>
+                                        <table class="table table-bordered" id="subSubjectTable">
+                                            <thead class="thead-dark">
+                                            <tr id="subSubjectHeadRow">
+                                                <th class="title-column">{{ t('sections_levels') }}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="subSubjectBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
 
                             <input type="hidden"
                                    id="account_subject__token"
                                    name="account_subject[_token]"
                                    value="">
-                        </form>
-                        <!-- Sub Subject Table -->
-                        <div class="col-xl-12 mt-4">
-                            <div class="table-responsive">
-                                <div class="container mt-5">
-                                    <h2>{{ t('sub_subject') }}</h2>
-                                    <table class="table table-bordered">
-                                        <thead class="thead-dark">
-                                            <tr>
-                                                <th class="title-column">{{ t('sections_levels') }}</th>
-                                                <th class="title-column" data-id="2">Bac</th>
-                                                <th class="title-column" data-id="9">Kindergarten</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <th class="title-column" data-id="2">Info</th>
-                                                <td id="cell-2-2">
-                                                    <button type="button" class="btn btn-outline-primary me-3"
-                                                            data-bs-toggle="modal" data-bs-target="#subSubjectModal"
-                                                            data-section="2" data-level="2">
-                                                        {{ t('add') }} <i class="fa fa-plus" style="font-size:10px;color:green"></i>
-                                                    </button>
-                                                </td>
-                                                <td id="cell-2-9">
-                                                    <button type="button" class="btn btn-outline-primary me-3"
-                                                            data-bs-toggle="modal" data-bs-target="#subSubjectModal"
-                                                            data-section="2" data-level="9">
-                                                        {{ t('add') }} <i class="fa fa-plus" style="font-size:10px;color:green"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th class="title-column" data-id="5">economie et gestion</th>
-                                                <td id="cell-5-2">
-                                                    <button type="button" class="btn btn-outline-primary me-3"
-                                                            data-bs-toggle="modal" data-bs-target="#subSubjectModal"
-                                                            data-section="5" data-level="2">
-                                                        {{ t('add') }} <i class="fa fa-plus" style="font-size:10px;color:green"></i>
-                                                    </button>
-                                                </td>
-                                                <td id="cell-5-9">
-                                                    <button type="button" class="btn btn-outline-primary me-3"
-                                                            data-bs-toggle="modal" data-bs-target="#subSubjectModal"
-                                                            data-section="5" data-level="9">
-                                                        {{ t('add') }} <i class="fa fa-plus" style="font-size:10px;color:green"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <div class="float-end">
+                                <button type="submit" class="btn btn-outline-primary me-3">{{ t('create') }}</button>
+                                <a class="btn btn-outline-danger" href="/dashboard/show-subject">{{ t('close') }}</a>
                             </div>
-                        </div>
-
+                        </form>
+                        <!-- table skeleton needs ids so JS can target it -->
                         <!-- Sub Subject Modal -->
-                        <div class="modal fade" id="subSubjectModal" tabindex="-1" aria-labelledby="subSubjectModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="subSubjectModal" tabindex="-1"
+                             aria-labelledby="subSubjectModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-center">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="subSubjectModalLabel">{{ t('new_sub_subject') }}</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <h1 class="modal-title fs-5" id="subSubjectModalLabel">{{ t('new_sub_subject')
+                                            }}</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
@@ -140,8 +104,12 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">{{ t('close') }}</button>
-                                        <button type="button" class="btn btn-primary" id="add_new_sub_subject">{{ t('add_new_sub_subject') }}</button>
+                                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">{{
+                                            t('close') }}
+                                        </button>
+                                        <button type="button" class="btn btn-primary" id="add_new_sub_subject">{{
+                                            t('save') }}
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -152,11 +120,14 @@
         </div>
     </div>
 </div>
-
 <script>
     const ACCOUNT_ID = {{ account_id }};
 
     window.addEventListener('load', function () {
+
+        // ══════════════════════════════════════════════════════════════════
+        // ── PART 1: Create Subject form (existing logic, unchanged) ────────
+        // ══════════════════════════════════════════════════════════════════
 
         const select     = document.getElementById('account_subject_subjectConfig');
         const divOther   = document.getElementById('div-other-title');
@@ -200,7 +171,204 @@
             }
         });
 
-        // ── Form submit ───────────────────────────────────────────────────
+        // ══════════════════════════════════════════════════════════════════
+        // ── PART 2: Sub-Subject table — load sections/levels from API ──────
+        // ══════════════════════════════════════════════════════════════════
+
+        const headRow   = document.getElementById('subSubjectHeadRow');
+        const tableBody = document.getElementById('subSubjectBody');
+
+        let sections = [];
+        let levels   = [];
+
+        // Handles both success (array) and "no data" (404 + {Message}) responses
+        function fetchListOrEmpty(url) {
+            return fetch(url)
+                .then(res => res.json().then(body => ({ status: res.status, body })))
+                .then(({ status, body }) => {
+                    if (status === 404) return [];        // "no section/level for this account"
+                    if (!Array.isArray(body)) return [];   // any other non-array response
+                    return body;
+                });
+        }
+
+        Promise.all([
+            fetchListOrEmpty(`/api/get_all_account_section/${ACCOUNT_ID}`),
+            fetchListOrEmpty(`/api/get_all_account_level/${ACCOUNT_ID}`)
+        ])
+        .then(([sectionsData, levelsData]) => {
+            sections = sectionsData;
+            levels   = levelsData;
+            buildSubSubjectTable();
+        })
+        .catch(err => {
+            console.error('Failed to load sections/levels:', err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Server Error',
+                text: 'Failed to load sections/levels, please try again.',
+                confirmButtonColor: '#4c4b9e',
+            });
+        });
+
+        function buildSubSubjectTable() {
+            levels.forEach(level => {
+                const th = document.createElement('th');
+                th.className   = 'title-column';
+                th.dataset.id  = level.id;
+                th.textContent = level.level_name;
+                headRow.appendChild(th);
+            });
+
+            tableBody.innerHTML = '';
+
+            sections.forEach(section => {
+                const tr = document.createElement('tr');
+
+                const rowTh = document.createElement('th');
+                rowTh.className   = 'title-column';
+                rowTh.dataset.id  = section.id;
+                rowTh.textContent = section.section_name;
+                tr.appendChild(rowTh);
+
+                levels.forEach(level => {
+                    const td = document.createElement('td');
+                    td.id = `cell-${section.id}-${level.id}`;
+
+                    const button = document.createElement('button');
+                    button.type      = 'button';
+                    button.className = 'btn btn-outline-primary me-3';
+                    button.setAttribute('data-bs-toggle', 'modal');
+                    button.setAttribute('data-bs-target', '#subSubjectModal');
+                    button.dataset.section = section.id;
+                    button.dataset.level   = level.id;
+                    button.innerHTML = `{{ t('add') }} <i class="fa fa-plus" style="font-size:10px;color:green"></i>`;
+
+                    td.appendChild(button);
+                    tr.appendChild(td);
+                });
+
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // ── PART 3: Sub-Subject modal — add / delete (local, then submitted)
+        // ══════════════════════════════════════════════════════════════════
+
+        const subSubjectModalEl = document.getElementById('subSubjectModal');
+        const subSubjectNameInput = document.getElementById('sub_subject_name');
+        const sectionIdInput      = document.getElementById('section_id');
+        const levelIdInput        = document.getElementById('level_id');
+        const addNewSubSubjectBtn = document.getElementById('add_new_sub_subject');
+
+        // ── Capture section/level from whichever "+" button opened the modal ──
+        subSubjectModalEl.addEventListener('show.bs.modal', function (event) {
+            const triggerBtn = event.relatedTarget;
+            if (!triggerBtn) return;
+
+            sectionIdInput.value = triggerBtn.dataset.section || '';
+            levelIdInput.value   = triggerBtn.dataset.level   || '';
+            subSubjectNameInput.value = '';
+        });
+
+        // ── Add button click ────────────────────────────────────────────────
+        addNewSubSubjectBtn.addEventListener('click', function () {
+            const name      = subSubjectNameInput.value.trim();
+            const sectionId = sectionIdInput.value;
+            const levelId   = levelIdInput.value;
+
+            if (!name) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Required',
+                    text: 'Please enter a name.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+                return;
+            }
+
+            fillSubSubjectCell(sectionId, levelId, name);
+
+            // close modal
+            const modalInstance = bootstrap.Modal.getInstance(subSubjectModalEl);
+            modalInstance.hide();
+        });
+
+        // ── Renders name + delete icon inside the target cell (local only) ────
+        function fillSubSubjectCell(sectionId, levelId, name) {
+            const cell = document.getElementById(`cell-${sectionId}-${levelId}`);
+            if (!cell) return;
+
+            cell.innerHTML = '';
+
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = name;
+            nameSpan.className = 'me-2';
+            nameSpan.dataset.name = name; // keep raw name accessible for collection
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.type = 'button';
+            deleteBtn.className = 'btn btn-danger btn-sm sub-subject-delete-btn';
+            deleteBtn.innerHTML = '<i class="fa fa-trash"></i>';
+            deleteBtn.dataset.section = sectionId;
+            deleteBtn.dataset.level   = levelId;
+
+            cell.appendChild(nameSpan);
+            cell.appendChild(deleteBtn);
+        }
+
+        // ── Delete icon click → revert cell back to "Add +" (local only) ──────
+        tableBody.addEventListener('click', function (event) {
+            const deleteBtn = event.target.closest('.sub-subject-delete-btn');
+            if (!deleteBtn) return;
+
+            const sectionId = deleteBtn.dataset.section;
+            const levelId    = deleteBtn.dataset.level;
+
+            resetSubSubjectCell(sectionId, levelId);
+        });
+
+        function resetSubSubjectCell(sectionId, levelId) {
+            const cell = document.getElementById(`cell-${sectionId}-${levelId}`);
+            if (!cell) return;
+
+            cell.innerHTML = '';
+
+            const button = document.createElement('button');
+            button.type      = 'button';
+            button.className = 'btn btn-outline-primary me-3';
+            button.setAttribute('data-bs-toggle', 'modal');
+            button.setAttribute('data-bs-target', '#subSubjectModal');
+            button.dataset.section = sectionId;
+            button.dataset.level   = levelId;
+            button.innerHTML = `{{ t('add') }} <i class="fa fa-plus" style="font-size:10px;color:green"></i>`;
+
+            cell.appendChild(button);
+        }
+
+        // ── Collect all filled sub-subject cells into an array ────────────────
+        function collectSubSubjects() {
+            const subSubjects = [];
+
+            tableBody.querySelectorAll('.sub-subject-delete-btn').forEach(deleteBtn => {
+                const cell     = deleteBtn.closest('td');
+                const nameSpan = cell ? cell.querySelector('span') : null;
+
+                subSubjects.push({
+                    name      : nameSpan ? nameSpan.textContent.trim() : '',
+                    sectionId : deleteBtn.dataset.section,
+                    levelId   : deleteBtn.dataset.level
+                });
+            });
+
+            return subSubjects;
+        }
+
+        // ══════════════════════════════════════════════════════════════════
+        // ── PART 1 (cont'd): Form submit — now includes subSubject data ────
+        // ══════════════════════════════════════════════════════════════════
+
         document.getElementById('account-subject-form').addEventListener('submit', function (e) {
             e.preventDefault();
 
@@ -231,6 +399,8 @@
                 return;
             }
 
+            const subSubject = collectSubSubjects();
+
             // ── Send request ───────────────────────────────────────────────
             fetch(`/api/create_account_subject/${ACCOUNT_ID}`, {
                 method  : 'POST',
@@ -238,7 +408,8 @@
                 body    : JSON.stringify({
                     subjectId    : subject_id,
                     description  : description,
-                    otherSubject : isOther ? otherSubject : null
+                    otherSubject : isOther ? otherSubject : null,
+                    subSubject   : subSubject
                 })
             })
             .then(res => res.json())
@@ -272,4 +443,5 @@
         });
 
     });
+
 </script>

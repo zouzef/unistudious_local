@@ -98,6 +98,37 @@ class RelationTeacherAccountAudit(BaseModel):
 	]
 
 
+class AccountSubSubject(BaseModel):
+	table_name = "account_sub_subject"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("account_id", "INT(11)", default=None),
+		Column("account_section_id", "INT(11)", default=None ),
+		Column("account_level_id", "INT(11)", default=None),
+		Column("account_subject_id", "INT(11)", default=None),
+		Column("name", "VARCHAR(255)", nullable=False),
+		Column("status", "TINYINT(1)", nullable=False, default="1"),
+		Column("description", "LONGTEXT",default=None),
+		Column("enabled", "TINYINT(1)", nullable=False, default="1"),
+		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("updated_at", "DATETIME"),
+		Column("release_token", "TINYINT(1)", default=0),
+		Column("use_token", "VARCHAR(255)", default=None),
+		Column("id_prod", "INT(11)", default=None),
+	]
+
+class AccountSubSubjectAudit(BaseModel):
+	table_name = "account_sub_subject_audit"
+	columns = [
+		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
+		Column("old_data", "LONGTEXT"),
+		Column("new_data", "LONGTEXT"),
+		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("is_synced", "TINYINT(1)", default="0"),
+	]
+
 # ----------------------------------- TAG Models -----------------------------------
 class TagConfigModel(BaseModel):
 	table_name = "tag_config"
@@ -1168,6 +1199,8 @@ class SyncFoldersModel(BaseModel):
 	]
 
 
+
+
 # ============================================================= CREATION OF THE MODELS =============================================================
 ALL_MODELS = [
 	AccountModel,
@@ -1244,5 +1277,7 @@ ALL_MODELS = [
 	SlcDoorModel,
 	SlcDoorAuditModel,
 	CompletionTagUser,
-	CompletionTagUserAudit
+	CompletionTagUserAudit,
+	AccountSubSubject,
+	AccountSubSubjectAudit
 ]

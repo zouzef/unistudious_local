@@ -181,7 +181,6 @@ def insert_account_subjects(db, account_subject_data):
     return result
 
 
-
 def update_account_subjects(db, account_subject_data):
     """
     Handle 'updated' account_subjects from API

@@ -73,54 +73,13 @@
                                             <div class="table-responsive">
                                                 <div class="container mt-5">
                                                     <h2>{{ t('sub_subject') }}</h2>
-                                                    <table class="table table-bordered">
+                                                    <table class="table table-bordered" id="subSubjectTable">
                                                         <thead class="thead-dark">
-                                                            <tr>
-                                                                <th class="title-column">{{ t('sections_levels') }}</th>
-                                                                <th class="title-column" data-id="2">Bac</th>
-                                                                <th class="title-column" data-id="9">Kindergarten</th>
-                                                            </tr>
+                                                        <tr id="subSubjectHeadRow">
+                                                            <th class="title-column">{{ t('sections_levels') }}</th>
+                                                        </tr>
                                                         </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <th class="title-column" data-id="2">Info</th>
-                                                                <td id="cell-2-2">
-                                                                    <button type="button" class="btn btn-outline-primary me-3"
-                                                                            data-bs-toggle="modal"
-                                                                            data-bs-target="#subSubjectModal"
-                                                                            data-section="2" data-level="2">
-                                                                        {{ t('add') }} <i class="fa fa-plus" style="font-size:10px;color:green"></i>
-                                                                    </button>
-                                                                </td>
-                                                                <td id="cell-2-9">
-                                                                    <button type="button" class="btn btn-outline-primary me-3"
-                                                                            data-bs-toggle="modal"
-                                                                            data-bs-target="#subSubjectModal"
-                                                                            data-section="2" data-level="9">
-                                                                        {{ t('add') }} <i class="fa fa-plus" style="font-size:10px;color:green"></i>
-                                                                    </button>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th class="title-column" data-id="5">economie et gestion</th>
-                                                                <td id="cell-5-2">
-                                                                    <button type="button" class="btn btn-outline-primary me-3"
-                                                                            data-bs-toggle="modal"
-                                                                            data-bs-target="#subSubjectModal"
-                                                                            data-section="5" data-level="2">
-                                                                        {{ t('add') }} <i class="fa fa-plus" style="font-size:10px;color:green"></i>
-                                                                    </button>
-                                                                </td>
-                                                                <td id="cell-5-9">
-                                                                    <button type="button" class="btn btn-outline-primary me-3"
-                                                                            data-bs-toggle="modal"
-                                                                            data-bs-target="#subSubjectModal"
-                                                                            data-section="5" data-level="9">
-                                                                        {{ t('add') }} <i class="fa fa-plus" style="font-size:10px;color:green"></i>
-                                                                    </button>
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
+                                                        <tbody id="subSubjectBody"></tbody>
                                                     </table>
                                                 </div>
                                             </div>
@@ -133,7 +92,9 @@
                             <div class="float-end">
                                 <input type="hidden" id="subSubjects_input" name="subSubjects">
                                 <input type="hidden" id="subSubjects_delete" name="subSubjects_delete">
-                                <button type="submit" class="btn btn-outline-success me-2" id="create_sub_subject">{{ t('edit') }}</button>
+                                <button type="submit" class="btn btn-outline-success me-2" id="create_sub_subject">{{
+                                    t('edit') }}
+                                </button>
                                 <a class="btn btn-outline-danger" href="/dashboard/show-subject">{{ t('close') }}</a>
                             </div>
 
@@ -145,12 +106,15 @@
                         </form>
 
                         <!-- Sub Subject Modal -->
-                        <div class="modal fade" id="subSubjectModal" tabindex="-1" aria-labelledby="subSubjectModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="subSubjectModal" tabindex="-1"
+                             aria-labelledby="subSubjectModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-center">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="subSubjectModalLabel">{{ t('new_sub_subject') }}</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <h1 class="modal-title fs-5" id="subSubjectModalLabel">{{ t('new_sub_subject')
+                                            }}</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="row">
@@ -161,8 +125,12 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">{{ t('close') }}</button>
-                                        <button type="button" class="btn btn-primary" id="add_new_sub_subject">{{ t('add_new_sub_subject') }}</button>
+                                        <button type="button" class="btn btn-danger light" data-bs-dismiss="modal">{{
+                                            t('close') }}
+                                        </button>
+                                        <button type="button" class="btn btn-primary" id="add_new_sub_subject">{{
+                                            t('add_new_sub_subject') }}
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -174,157 +142,359 @@
         </div>
     </div>
 </div>
+
 <script>
     const ACCOUNT_ID         = {{ account_id }};
-const ACCOUNT_SUBJECT_ID = {{ subject_id }};
+    const ACCOUNT_SUBJECT_ID = {{ subject_id }};
 
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
 
-    const select     = document.getElementById('account_subject_subjectConfig');
-    const divOther   = document.getElementById('div-other-title');
-    const inputOther = document.getElementById('account_subject_otherSubject');
+        const select     = document.getElementById('account_subject_subjectConfig');
+        const divOther   = document.getElementById('div-other-title');
+        const inputOther = document.getElementById('account_subject_otherSubject');
 
-    // ─── Load subjects + prefill form ─────────────────────────────────
-    Promise.all([
-        fetch('/api/get_subject').then(res => res.json()),
-        fetch(`/api/view_account_subject/${ACCOUNT_SUBJECT_ID}`).then(res => res.json())
-    ])
-    .then(([subjects, accountSubjectArr]) => {
-        const accountSubject = accountSubjectArr[0];
+        // ─── Load subjects + prefill form ─────────────────────────────────
+        Promise.all([
+            fetch('/api/get_subject').then(res => res.json()),
+            fetch(`/api/view_account_subject/${ACCOUNT_SUBJECT_ID}`).then(res => res.json())
+        ])
+        .then(([subjects, accountSubjectArr]) => {
+            const accountSubject = accountSubjectArr[0];
 
-        // Load all subjects into select
-        subjects.forEach(subject => {
-            const option       = document.createElement('option');
-            option.value       = subject.id;
-            option.textContent = subject.name;
-            if (subject.name.toLowerCase() === 'other') {
-                option.dataset.isOther = 'true';
-            }
-            if (subject.id === accountSubject.subject_config_id) {
-                option.selected = true;
-            }
-            select.appendChild(option);
-        });
-
-        $('#account_subject_subjectConfig').selectpicker('refresh');
-
-        // Show "Other" input if the selected subject is "Other"
-        const selectedOption = select.options[select.selectedIndex];
-        if (selectedOption && selectedOption.dataset.isOther === 'true') {
-            divOther.style.display = 'block';
-            inputOther.required    = true;
-            inputOther.value       = accountSubject.section_name ?? '';
-        }
-
-        // Pre-fill status
-        document.getElementById('account_subject_status').value = accountSubject.status;
-        $('#account_subject_status').selectpicker('refresh');
-
-        // Pre-fill description
-        if (accountSubject.description) {
-            document.getElementById('account_subject_description').value = accountSubject.description;
-            if (typeof CKEDITOR !== 'undefined') {
-                CKEDITOR.instances['account_subject_description']?.setData(accountSubject.description);
-            }
-        }
-    })
-    .catch(err => {
-        console.error('Failed to load data:', err);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to load subject data.',
-            confirmButtonColor: '#4c4b9e',
-        });
-    });
-
-    // ─── Show / hide "Other" input on change ──────────────────────────
-    $('#account_subject_subjectConfig').on('change', function () {
-        const selectedOption = this.options[this.selectedIndex];
-        const isOther        = selectedOption.dataset.isOther === 'true';
-
-        if (isOther) {
-            divOther.style.display = 'block';
-            inputOther.required    = true;
-        } else {
-            divOther.style.display = 'none';
-            inputOther.required    = false;
-            inputOther.value       = '';
-        }
-    });
-
-    // ─── Form submit (Edit) ────────────────────────────────────────────
-    document.getElementById('account-subject-form').addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const subject_id     = select.value;
-        const selectedOption = select.options[select.selectedIndex];
-        const isOther        = selectedOption.dataset.isOther === 'true';
-        const otherSubject   = inputOther.value.trim();
-        const status         = document.getElementById('account_subject_status').value;
-        const description    = document.getElementById('account_subject_description').value.trim() || null;
-
-        // ── Validation ─────────────────────────────────────────────────
-        if (!subject_id) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Required!',
-                text: 'Please select a subject.',
-                confirmButtonColor: '#4c4b9e',
+            // Load all subjects into select
+            subjects.forEach(subject => {
+                const option       = document.createElement('option');
+                option.value       = subject.id;
+                option.textContent = subject.name;
+                if (subject.name.toLowerCase() === 'other') {
+                    option.dataset.isOther = 'true';
+                }
+                if (subject.id === accountSubject.subject_config_id) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
             });
-            return;
-        }
 
-        if (isOther && !otherSubject) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Required!',
-                text: 'Please enter the name of the other subject.',
-                confirmButtonColor: '#4c4b9e',
-            });
-            return;
-        }
+            $('#account_subject_subjectConfig').selectpicker('refresh');
 
-        // ── Send request ───────────────────────────────────────────────
-        fetch(`/api/update_account_subject/${ACCOUNT_SUBJECT_ID}`, {
-            method  : 'POST',
-            headers : { 'Content-Type': 'application/json' },
-            body    : JSON.stringify({
-                subjectId   : subject_id,
-                status      : status,
-                description : description,
-                otherSubject: isOther ? otherSubject : null
-            })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.Message === 'account_subject updated successfully') {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'Subject updated successfully!',
-                    confirmButtonColor: '#4c4b9e',
-                }).then(() => {
-                    window.location.href = '/dashboard/show-subject';
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops!',
-                    text: data.Message,
-                    confirmButtonColor: '#4c4b9e',
-                });
+            // Show "Other" input if the selected subject is "Other"
+            const selectedOption = select.options[select.selectedIndex];
+            if (selectedOption && selectedOption.dataset.isOther === 'true') {
+                divOther.style.display = 'block';
+                inputOther.required    = true;
+                inputOther.value       = accountSubject.section_name ?? '';
+            }
+
+            // Pre-fill status
+            document.getElementById('account_subject_status').value = accountSubject.status;
+            $('#account_subject_status').selectpicker('refresh');
+
+            // Pre-fill description
+            if (accountSubject.description) {
+                document.getElementById('account_subject_description').value = accountSubject.description;
+                if (typeof CKEDITOR !== 'undefined') {
+                    CKEDITOR.instances['account_subject_description']?.setData(accountSubject.description);
+                }
             }
         })
         .catch(err => {
+            console.error('Failed to load data:', err);
             Swal.fire({
                 icon: 'error',
-                title: 'Server Error',
-                text: 'Something went wrong, please try again.',
+                title: 'Error',
+                text: 'Failed to load subject data.',
                 confirmButtonColor: '#4c4b9e',
             });
         });
+
+        // ─── Show / hide "Other" input on change ──────────────────────────
+        $('#account_subject_subjectConfig').on('change', function () {
+            const selectedOption = this.options[this.selectedIndex];
+            const isOther        = selectedOption.dataset.isOther === 'true';
+
+            if (isOther) {
+                divOther.style.display = 'block';
+                inputOther.required    = true;
+            } else {
+                divOther.style.display = 'none';
+                inputOther.required    = false;
+                inputOther.value       = '';
+            }
+        });
+
+        // ══════════════════════════════════════════════════════════════════
+        // ── Sub-Subject table — load sections/levels from API ──────────────
+        // ══════════════════════════════════════════════════════════════════
+
+        const headRow   = document.getElementById('subSubjectHeadRow');
+        const tableBody = document.getElementById('subSubjectBody');
+
+        let sections = [];
+        let levels   = [];
+
+        // Pending changes to send on form submit
+        let subSubjectsToAdd    = [];  // [{ account_section_id, account_level_id, name }]
+        let subSubjectsToDelete = [];  // [id, id, ...]
+
+        // Handles both success (array) and "no data" (404 + {Message}) responses
+        function fetchListOrEmpty(url) {
+            return fetch(url)
+                .then(res => res.json().then(body => ({ status: res.status, body })))
+                .then(({ status, body }) => {
+                    if (status === 404) return [];        // "no section/level for this account"
+                    if (!Array.isArray(body)) return [];   // any other non-array response
+                    return body;
+                });
+        }
+
+        Promise.all([
+            fetchListOrEmpty(`/api/get_all_account_section/${ACCOUNT_ID}`),
+            fetchListOrEmpty(`/api/get_all_account_level/${ACCOUNT_ID}`)
+        ])
+        .then(([sectionsData, levelsData]) => {
+            sections = sectionsData;
+            levels   = levelsData;
+            buildSubSubjectTable();
+
+            // after the grid exists, fetch & display existing sub-subjects
+            return fetchListOrEmpty(`/api/get_sub_subject/${ACCOUNT_SUBJECT_ID}`);
+        })
+        .then(existingSubSubjects => {
+            existingSubSubjects.forEach(sub => {
+                fillSubSubjectCell(sub.account_section_id, sub.account_level_id, sub.name, sub.id);
+            });
+        })
+        .catch(err => {
+            console.error('Failed to load sections/levels:', err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Server Error',
+                text: 'Failed to load sections/levels, please try again.',
+                confirmButtonColor: '#4c4b9e',
+            });
+        });
+
+        function buildSubSubjectTable() {
+            levels.forEach(level => {
+                const th = document.createElement('th');
+                th.className   = 'title-column';
+                th.dataset.id  = level.id;
+                th.textContent = level.level_name;
+                headRow.appendChild(th);
+            });
+
+            tableBody.innerHTML = '';
+
+            sections.forEach(section => {
+                const tr = document.createElement('tr');
+
+                const rowTh = document.createElement('th');
+                rowTh.className   = 'title-column';
+                rowTh.dataset.id  = section.id;
+                rowTh.textContent = section.section_name;
+                tr.appendChild(rowTh);
+
+                levels.forEach(level => {
+                    const td = document.createElement('td');
+                    td.id = `cell-${section.id}-${level.id}`;
+                    appendAddButton(td, section.id, level.id);
+                    tr.appendChild(td);
+                });
+
+                tableBody.appendChild(tr);
+            });
+        }
+
+        // ── Builds the "Add +" button into a cell ───────────────────────────
+        function appendAddButton(cell, sectionId, levelId) {
+            const button = document.createElement('button');
+            button.type      = 'button';
+            button.className = 'btn btn-outline-primary me-3';
+            button.setAttribute('data-bs-toggle', 'modal');
+            button.setAttribute('data-bs-target', '#subSubjectModal');
+            button.dataset.section = sectionId;
+            button.dataset.level   = levelId;
+            button.innerHTML = `{{ t('add') }} <i class="fa fa-plus" style="font-size:10px;color:green"></i>`;
+            cell.appendChild(button);
+        }
+
+        // ── Renders name + delete icon inside the target cell ──────────────
+        // id = the sub-subject's DB id if it already exists on the server,
+        //      null/undefined if it's a newly-added one not yet saved.
+        function fillSubSubjectCell(sectionId, levelId, name, id = null) {
+            const cell = document.getElementById(`cell-${sectionId}-${levelId}`);
+            if (!cell) return;
+
+            cell.innerHTML = '';
+
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = name;
+            nameSpan.className = 'me-2';
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.type = 'button';
+            deleteBtn.className = 'btn btn-outline-danger btn-sm remove-sub-subject-view';
+            deleteBtn.innerHTML = '<i class="fa fa-trash"></i>';
+            deleteBtn.dataset.section = sectionId;
+            deleteBtn.dataset.level   = levelId;
+            deleteBtn.dataset.id      = id ?? '';
+
+            cell.appendChild(nameSpan);
+            cell.appendChild(deleteBtn);
+        }
+
+        // ── Reverts cell back to "Add +" ────────────────────────────────────
+        function resetSubSubjectCell(sectionId, levelId) {
+            const cell = document.getElementById(`cell-${sectionId}-${levelId}`);
+            if (!cell) return;
+
+            cell.innerHTML = '';
+            appendAddButton(cell, sectionId, levelId);
+        }
+
+        // ── Delete click handler (delegated on the table body) ──────────────
+        tableBody.addEventListener('click', function (e) {
+            const btn = e.target.closest('.remove-sub-subject-view');
+            if (!btn) return;
+
+            const sectionId = btn.dataset.section;
+            const levelId   = btn.dataset.level;
+            const id        = btn.dataset.id;
+
+            if (id) {
+                // already saved on server → mark its id for deletion
+                subSubjectsToDelete.push(id);
+            } else {
+                // not yet saved → just drop it from the pending "add" list
+                subSubjectsToAdd = subSubjectsToAdd.filter(
+                    s => !(String(s.account_section_id) === sectionId && String(s.account_level_id) === levelId)
+                );
+            }
+
+            resetSubSubjectCell(sectionId, levelId);
+        });
+
+        // ══════════════════════════════════════════════════════════════════
+        // ── Sub-Subject modal — capture section/level on open ──────────────
+        // ══════════════════════════════════════════════════════════════════
+
+        const subSubjectModalEl   = document.getElementById('subSubjectModal');
+        const subSubjectNameInput = document.getElementById('sub_subject_name');
+        const sectionIdInput      = document.getElementById('section_id');
+        const levelIdInput        = document.getElementById('level_id');
+
+        subSubjectModalEl.addEventListener('show.bs.modal', function (event) {
+            const triggerBtn = event.relatedTarget;
+            if (!triggerBtn) return;
+
+            sectionIdInput.value = triggerBtn.dataset.section || '';
+            levelIdInput.value   = triggerBtn.dataset.level   || '';
+            subSubjectNameInput.value = '';
+        });
+
+        // ── Confirm "add" button inside the modal ───────────────────────────
+        document.getElementById('add_new_sub_subject').addEventListener('click', function () {
+            const name      = subSubjectNameInput.value.trim();
+            const sectionId = sectionIdInput.value;
+            const levelId   = levelIdInput.value;
+
+            if (!name) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Required!',
+                    text: 'Please enter a name.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+                return;
+            }
+
+            subSubjectsToAdd.push({
+                account_section_id: sectionId,
+                account_level_id: levelId,
+                name: name
+            });
+
+            fillSubSubjectCell(sectionId, levelId, name); // no id yet — not saved
+
+            const modalInstance = bootstrap.Modal.getInstance(subSubjectModalEl);
+            modalInstance?.hide();
+        });
+
+        // ─── Form submit (Edit) ────────────────────────────────────────────
+        document.getElementById('account-subject-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const subject_id     = select.value;
+            const selectedOption = select.options[select.selectedIndex];
+            const isOther        = selectedOption.dataset.isOther === 'true';
+            const otherSubject   = inputOther.value.trim();
+            const status         = document.getElementById('account_subject_status').value;
+            const description    = document.getElementById('account_subject_description').value.trim() || null;
+
+            // ── Validation ─────────────────────────────────────────────────
+            if (!subject_id) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Required!',
+                    text: 'Please select a subject.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+                return;
+            }
+
+            if (isOther && !otherSubject) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Required!',
+                    text: 'Please enter the name of the other subject.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+                return;
+            }
+
+            // ── Send request ───────────────────────────────────────────────
+            fetch(`/api/update_account_subject/${ACCOUNT_SUBJECT_ID}`, {
+                method  : 'POST',
+                headers : { 'Content-Type': 'application/json' },
+                body    : JSON.stringify({
+                    subjectId          : subject_id,
+                    status             : status,
+                    description        : description,
+                    otherSubject       : isOther ? otherSubject : null,
+                    subSubjects        : subSubjectsToAdd,
+                    subSubjects_delete : subSubjectsToDelete
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.Message === 'account_subject updated successfully') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: 'Subject updated successfully!',
+                        confirmButtonColor: '#4c4b9e',
+                    }).then(() => {
+                        window.location.href = '/dashboard/show-subject';
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops!',
+                        text: data.Message,
+                        confirmButtonColor: '#4c4b9e',
+                    });
+                }
+            })
+            .catch(err => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Server Error',
+                    text: 'Something went wrong, please try again.',
+                    confirmButtonColor: '#4c4b9e',
+                });
+            });
+        });
+
     });
 
-});
 </script>
