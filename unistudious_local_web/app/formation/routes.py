@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for, Response
+import json
 
 from app.formation.service import (
 	fetch_formation_info,
@@ -9,7 +10,6 @@ from app.formation.service import (
 	update_formation_service,
 	get_formation_image_service
 )
-
 
 formation_bp = Blueprint('formation', __name__)
 
@@ -49,6 +49,18 @@ def create_formation(account_id):
 			'publicResource': form.get('formation[publicResource]'),
 			'description': form.get('formation[description]'),
 		}
+
+		# parse seasons/subjects JSON payloads sent by the JS
+		try:
+			data['seasons'] = json.loads(form.get('formation[seasons]') or '[]')
+		except (TypeError, ValueError):
+			return jsonify({"Message": "Invalid seasons payload"}), 400
+
+		try:
+			data['subjects'] = json.loads(form.get('formation[subjects]') or '[]')
+		except (TypeError, ValueError):
+			return jsonify({"Message": "Invalid subjects payload"}), 400
+
 		print(data)
 
 		if not data.get('name'):
@@ -60,8 +72,6 @@ def create_formation(account_id):
 			print(f"[local create_formation] received file: {file.filename!r}")  # debug — remove later
 			if file.filename != '':
 				files = {
-					# read() instead of file.stream — avoids sending an
-					# empty/consumed stream if anything upstream touched it
 					'formation_logoFile': (file.filename, file.read(), file.mimetype)
 				}
 
@@ -166,6 +176,3 @@ def get_formation_image(formation_id):
 		return jsonify({
 			"Message": f"Error: {e} coming from backend"
 		}), 500
-
-
-

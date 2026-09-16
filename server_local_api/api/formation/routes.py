@@ -338,12 +338,26 @@ def create_formation(account_id):
 		public_resource = data.get('publicResource') or None
 		description = (data.get('description') or '').strip() or None
 
+		# ------------------ Parse seasons & subjects JSON (not persisted yet) ------------------
+		try:
+			seasons_data = json.loads(data.get('seasons') or '[]')
+		except (TypeError, ValueError):
+			seasons_data = []
+
+		try:
+			subjects_data = json.loads(data.get('subjects') or '[]')
+		except (TypeError, ValueError):
+			subjects_data = []
+
+		print("seasons_data:", seasons_data)
+		print("subjects_data:", subjects_data)
+
 		img_link = None  # unknown until after INSERT
 
 		# ------------------ Create formation ------------------
 		query = """
             INSERT INTO formation (
-                account_id,
+                a	ccount_id,
                 account_level_id,
                 account_section_id,
                 name,
@@ -404,6 +418,15 @@ def create_formation(account_id):
 
 		formation_id = result
 
+		# ----------------- Insert Season ---------------
+		query_season = """
+			INSERT INTO season 
+				(formation_id, account_id, title, description, type_duration, number_duration)
+			VALUES (%s, %s, %s, %s, %s, %s)
+		"""
+		values = (formation_id, account_id, seasons_data.get('title'), seasons_data.get(''))
+
+
 		# ------------------ Save image ------------------
 		image_file = files.get("formation_logoFile")
 
@@ -459,7 +482,9 @@ def create_formation(account_id):
 		return jsonify({
 			"Message": "Formation created successfully",
 			"formation_id": formation_id,
-			"img_link": img_link
+			"img_link": img_link,
+			"seasons": seasons_data,
+			"subjects": subjects_data
 		}), 200
 
 	except Exception as e:

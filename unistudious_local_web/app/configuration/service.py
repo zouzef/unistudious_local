@@ -184,7 +184,13 @@ def get_sub_subject_service(account_subject_id):
 	except Exception as e:
 		return False, None
 
-
+def get_sub_subject_formation_service(section_id, level_id):
+	url = f"{current_app.config['BASE_URL']}get_sub_subject/{section_id}/{level_id}"
+	try:
+		response = requests.get(url, verify=False, timeout=10)
+		return response
+	except Exception as e:
+		return None
 # -------------------------- Tag Service --------------------------
 def get_all_tag_service():
 	try:

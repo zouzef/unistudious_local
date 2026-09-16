@@ -2,7 +2,7 @@
 import requests
 from flask import current_app,Response
 from datetime import datetime
-
+import json
 
 
 # Service: Get formation info
@@ -21,11 +21,16 @@ def fetch_formation_info(account_id):
 # Service: Create formation Service
 def create_formation_service(account_id, data, files=None):
     url = f"{current_app.config['BASE_URL']}create_formation/{account_id}"
+
+    payload = dict(data)  # shallow copy so we don't mutate caller's dict
+    payload['seasons'] = json.dumps(payload.get('seasons') or [])
+    payload['subjects'] = json.dumps(payload.get('subjects') or [])
+
     try:
         response = requests.post(
             url,
             verify=False,
-            data=data,
+            data=payload,
             files=files,
             timeout=10
         )

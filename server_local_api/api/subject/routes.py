@@ -233,7 +233,7 @@ def create_account_subject(account_id):
 def update_account_subject(account_subject_id):
 	try:
 		data = request.get_json()
-
+		print(data)
 		subject_id = data.get('subjectId')
 		status = data.get('status') or 1
 		description = data.get('description') or None
@@ -430,3 +430,25 @@ def get_account_sub_subject(account_subject_id):
 
 	except Exception as e:
 		return jsonify({"Message": f"Error: {e} coming from server"}), 500
+
+
+@subject_bp.route('/get_sub_subject/<int:section_id>/<int:level_id>', methods=['GET'])
+def get_sub_subject(section_id, level_id):
+	try:
+
+		query_fetch = """
+			SELECT id ,account_subject_id, name
+			FROM account_sub_subject 
+			WHERE account_section_id = %s AND account_level_id = %s 
+			AND enabled = 1
+		"""
+		values = (section_id, level_id)
+		result = Database.execute_query(query_fetch, values, fetch=True)
+		if result:
+			return jsonify(result), 200
+		else:
+			return jsonify({"Message": "Error There is no subject_config with this id"}), 404
+	except Exception as e:
+		return jsonify({
+			"Message": f"Error: {e} coming from server"
+		}),500

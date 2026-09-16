@@ -40,7 +40,8 @@ from app.configuration.service import (
 	update_door_service,
 	view_door_service,
 	create_door_service,
-	get_sub_subject_service
+	get_sub_subject_service,
+	get_sub_subject_formation_service
 
 )
 
@@ -307,7 +308,15 @@ def get_sub_subject(account_subject_id):
 			"Message": f"Error: {e} coming from backend"
 		})
 
-
+@configuration_bp.route('/api/get_sub_subject_formation/<int:section_id>/<int:level_id>', methods=['GET'])
+def get_sub_subject_formation(section_id, level_id):
+	try:
+		response = get_sub_subject_formation_service(section_id, level_id)
+		return jsonify(response.json()), response.status_code
+	except Exception as e:
+		return jsonify({
+			"Message": f"Error: {e} coming from backend"
+		})
 
 # =============================================== TAG ENDPOINTS ===============================================
 @configuration_bp.route('/api/get_tag_config', methods=['GET'])
