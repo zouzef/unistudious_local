@@ -899,6 +899,37 @@ class RelationTeacherToSubjectGroupAuditModel(BaseModel):
 	]
 
 
+# ----------------------------------- Formation Subject Models -------------------------
+class FormationSubjectModel(BaseModel):
+	table_name = "formation_subject"
+	columns = [
+		Column("id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("account_sub_subject_id", "INT(11)", default=None),
+		Column("formation_id", "INT(11)", default=None),
+		Column("status", "TINYINT(1)", nullable=False, default=1),
+		Column("description", "LONGTEXT", default=None),
+		Column("number_hours", "VARCHAR(255)", default=None),
+		Column("enabled", "TINYINT(1)", nullable=False, default=1),
+		Column("created_at", "DATETIME", nullable=False, default="current_timestamp()"),
+		Column("timestamp", "DATETIME", default="current_timestamp()"),
+		Column("updated_at", "DATETIME", default=None),
+		Column("ref", "VARCHAR(255)", default=None),
+		Column("release_token", "TINYINT(1)", default=0),
+		Column("use_token", "VARCHAR(255)", default=None),
+		Column("id_prod", "INT(11)", default=None),
+	]
+class FormationSubjectAuditModel(BaseModel):
+	table_name = "formation_subject_audit"
+	columns = [
+		Column("audit_id", "INT(11)", primary_key=True, auto_increment=True, nullable=False),
+		Column("action_type", "ENUM('INSERT','UPDATE','DELETE')"),
+		Column("old_data", "LONGTEXT"),
+		Column("new_data", "LONGTEXT"),
+		Column("changed_at", "TIMESTAMP", nullable=False, default="current_timestamp()"),
+		Column("is_synced", "TINYINT(1)", default="0"),
+	]
+
+
 # ----------------------------------- USER Models -----------------------------------
 class UserModel(BaseModel):
     table_name = "user"
@@ -1279,5 +1310,7 @@ ALL_MODELS = [
 	CompletionTagUser,
 	CompletionTagUserAudit,
 	AccountSubSubject,
-	AccountSubSubjectAudit
+	AccountSubSubjectAudit,
+	FormationSubjectModel,
+	FormationSubjectAuditModel,
 ]

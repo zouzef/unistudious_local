@@ -53,6 +53,7 @@ def create_formation(account_id):
 		# parse seasons/subjects JSON payloads sent by the JS
 		try:
 			data['seasons'] = json.loads(form.get('formation[seasons]') or '[]')
+			print("Data of the season: ",data['seasons'])
 		except (TypeError, ValueError):
 			return jsonify({"Message": "Invalid seasons payload"}), 400
 

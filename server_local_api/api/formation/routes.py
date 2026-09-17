@@ -349,15 +349,12 @@ def create_formation(account_id):
 		except (TypeError, ValueError):
 			subjects_data = []
 
-		print("seasons_data:", seasons_data)
-		print("subjects_data:", subjects_data)
-
 		img_link = None  # unknown until after INSERT
 
 		# ------------------ Create formation ------------------
 		query = """
             INSERT INTO formation (
-                a	ccount_id,
+                account_id,
                 account_level_id,
                 account_section_id,
                 name,
@@ -419,13 +416,48 @@ def create_formation(account_id):
 		formation_id = result
 
 		# ----------------- Insert Season ---------------
-		query_season = """
-			INSERT INTO season 
-				(formation_id, account_id, title, description, type_duration, number_duration)
-			VALUES (%s, %s, %s, %s, %s, %s)
-		"""
-		values = (formation_id, account_id, seasons_data.get('title'), seasons_data.get(''))
 
+		for i in seasons_data:
+			query_season = """
+				INSERT INTO season
+					(formation_id, account_id, title, description, type_duration, number_duration, ref)
+				VALUES (%s, %s, %s, %s, %s, %s, %s)
+			"""
+
+			values = (formation_id, account_id, i.get('title'), i.get('description'), i.get('type'), i.get('duration'),
+					  i.get('id_season_ref'))
+			result = Database.execute_query(query_season, values, fetch=False)
+			if not result:
+				return jsonify({"Message": "Formation not created"}), 400
+
+		for i in subjects_data:
+			query_subject = """
+				INSERT INTO formation_subject
+				   (account_sub_subject_id, formation_id, description, number_hours, ref)
+				VALUES (%s, %s, %s, %s, %s)
+			"""
+			values = (i.get('accountSubjectId'), formation_id, i.get('description'), i.get('hours'),
+					  i.get('id_subject_ref'))
+			formation_sub_subject_id = Database.execute_query(query_subject, values, fetch=False)
+			if not result:
+				return jsonify({"Message": "Formation Not Created"}), 400
+
+			for j in i.get('seasons'):
+				query_season_id = """
+			        SELECT id
+			        FROM season
+			        WHERE ref = %s
+			    """
+				values = (j,)
+				season_rows = Database.execute_query(query_season_id, values, fetch=True)
+				for row in season_rows:
+					query_season_sub_subject = """
+				            INSERT INTO season_sub_subject
+				                (season_id, formation_sub_subject)
+				            VALUES (%s, %s)
+				        """
+					values = (row.get('id'), formation_sub_subject_id)
+					result = Database.execute_query(query_season_sub_subject, values, fetch=False)
 
 		# ------------------ Save image ------------------
 		image_file = files.get("formation_logoFile")
@@ -488,6 +520,7 @@ def create_formation(account_id):
 		}), 200
 
 	except Exception as e:
+		print(e)
 		return jsonify({
 			"Message": f"Error: {e} coming from server"
 		}), 500

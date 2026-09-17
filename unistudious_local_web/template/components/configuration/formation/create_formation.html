@@ -419,12 +419,14 @@
         </div>
     </div>
 </div>
+
 <script>
     const account_id = {{ account_id }};
 
     // ────────────────────────────────────────────────────────────────
     // Local stores
     // ────────────────────────────────────────────────────────────────
+
     let seasons = [];
     let editingSeasonIndex = null;
 
@@ -436,6 +438,17 @@
         'By Number Of Sessions': 'Number Of Sessions per hours',
         'other':                 'Other'
     };
+
+    // ────────────────────────────────────────────────────────────────
+    // Generate reference id — format: PREFIX-YYYYMMDDHHMMSS
+    // e.g. SEA-20260917111730 / SUB-20260917111730
+    // ────────────────────────────────────────────────────────────────
+    function generateRef(prefix) {
+        const now = new Date();
+        const pad = n => String(n).padStart(2, '0');
+        const stamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+        return `${prefix}-${stamp}`;
+    }
 
     // ────────────────────────────────────────────────────────────────
     // Render season cards
@@ -491,6 +504,7 @@
 
     // ────────────────────────────────────────────────────────────────
     // Render season checkboxes inside subject modal
+    // Checkbox value/id keyed on season.id_season_ref
     // ────────────────────────────────────────────────────────────────
     function renderSeasonCheckboxes() {
         const container = document.getElementById('season_coefficient_list');
@@ -500,16 +514,16 @@
             return;
         }
 
-        container.innerHTML = seasons.map((season, index) => `
+        container.innerHTML = seasons.map((season) => `
             <div class="col-12 mb-2">
                 <div class="form-check">
                     <input
                         class="form-check-input season-checkbox"
                         type="checkbox"
-                        id="season_check_${index}"
-                        value="${index}"
+                        id="season_check_${season.id_season_ref}"
+                        value="${season.id_season_ref}"
                     >
-                    <label class="form-check-label" for="season_check_${index}">
+                    <label class="form-check-label" for="season_check_${season.id_season_ref}">
                         ${season.title} (${season.type})
                     </label>
                 </div>
@@ -535,9 +549,9 @@
                         <div class="user-content">
                             <div class="user-info">
                                 <div class="user-img mb-3">
-                                    <img src="../static/assets/images/subject-default.png"
+                                    <img src="../static/assets/images/subject-formation-collection.png"
                                          alt="" style="width:110px; height:110px; object-fit:contain;"
-                                         onerror="this.onerror=null; this.src='/assets/admin/images/formation-empty.jpg';">
+                                         onerror="this.onerror=null; this.src='../static/assets/admin/images/formation-empty.jpg';">
                                 </div>
                                 <table class="table table-borderless mb-4" style="width:100%;">
                                     <tbody>
@@ -623,6 +637,7 @@
 
     // ────────────────────────────────────────────────────────────────
     // Edit subject — open modal prefilled
+    // subject.seasons is an array of id_season_ref values
     // ────────────────────────────────────────────────────────────────
     function editSubject(index) {
         editingSubjectIndex = index;
@@ -637,8 +652,8 @@
 
             // Render checkboxes then re-check saved ones
             renderSeasonCheckboxes();
-            subject.seasons.forEach(si => {
-                const cb = document.getElementById(`season_check_${si}`);
+            subject.seasons.forEach(idSeasonRef => {
+                const cb = document.getElementById(`season_check_${idSeasonRef}`);
                 if (cb) cb.checked = true;
             });
 
@@ -828,7 +843,7 @@
         });
 
         // ────────────────────────────────────────────────────────────────
-        // Add New Season
+        // Add New Season — generates id_season_ref (SEA-YYYYMMDDHHMMSS)
         // ────────────────────────────────────────────────────────────────
         document.getElementById('add_new_season').addEventListener('click', function () {
             const title    = document.getElementById('season_title').value.trim();
@@ -859,10 +874,11 @@
             }
 
             seasons.push({
-                title:       title,
-                description: document.getElementById('season_description').value.trim(),
-                type:        type,
-                duration:    duration,
+                id_season_ref: generateRef('SEA'),
+                title:         title,
+                description:   document.getElementById('season_description').value.trim(),
+                type:          type,
+                duration:      duration,
             });
 
             renderSeasons();
@@ -870,7 +886,7 @@
         });
 
         // ────────────────────────────────────────────────────────────────
-        // Update Season
+        // Update Season — keeps the original id_season_ref
         // ────────────────────────────────────────────────────────────────
         document.getElementById('update_season').addEventListener('click', function () {
             const title    = document.getElementById('season_title').value.trim();
@@ -898,10 +914,11 @@
             }
 
             seasons[editingSeasonIndex] = {
-                title:       title,
-                description: document.getElementById('season_description').value.trim(),
-                type:        type,
-                duration:    duration,
+                id_season_ref: seasons[editingSeasonIndex].id_season_ref,
+                title:         title,
+                description:   document.getElementById('season_description').value.trim(),
+                type:          type,
+                duration:      duration,
             };
 
             renderSeasons();
@@ -909,7 +926,8 @@
         });
 
         // ────────────────────────────────────────────────────────────────
-        // Add New Subject
+        // Add New Subject — generates id_subject_ref (SUB-YYYYMMDDHHMMSS)
+        // selectedSeasons holds id_season_ref values
         // ────────────────────────────────────────────────────────────────
         document.getElementById('add_new_subject').addEventListener('click', function () {
             const subjectSelect = document.getElementById('subject_select');
@@ -919,7 +937,7 @@
             const hours         = document.getElementById('number_of_session').value.trim();
             const description   = document.getElementById('subject_description').value.trim();
             const selectedSeasons = [...document.querySelectorAll('.season-checkbox:checked')]
-                                        .map(cb => parseInt(cb.value));
+                                        .map(cb => cb.value);
 
             if (!subjectId) {
                 return Swal.fire({ icon: 'warning', title: 'Required', text: 'Please select a subject.', confirmButtonColor: '#4c4b9e' });
@@ -928,14 +946,22 @@
                 return Swal.fire({ icon: 'warning', title: 'Required', text: 'Number of hours is required.', confirmButtonColor: '#4c4b9e' });
             }
 
-            subjects.push({ subjectId, accountSubjectId, name: subjectName, hours, description, seasons: selectedSeasons });
+            subjects.push({
+                id_subject_ref:   generateRef('SUB'),
+                subjectId,
+                accountSubjectId,
+                name:             subjectName,
+                hours,
+                description,
+                seasons:          selectedSeasons
+            });
             renderSubjects();
 
             bootstrap.Modal.getInstance(document.getElementById('modalFormationSubject')).hide();
         });
 
         // ────────────────────────────────────────────────────────────────
-        // Update Subject
+        // Update Subject — keeps the original id_subject_ref
         // ────────────────────────────────────────────────────────────────
         document.getElementById('update_subject').addEventListener('click', function () {
             const subjectSelect = document.getElementById('subject_select');
@@ -945,7 +971,7 @@
             const hours         = document.getElementById('number_of_session').value.trim();
             const description   = document.getElementById('subject_description').value.trim();
             const selectedSeasons = [...document.querySelectorAll('.season-checkbox:checked')]
-                                        .map(cb => parseInt(cb.value));
+                                        .map(cb => cb.value);
 
             if (!subjectId) {
                 return Swal.fire({ icon: 'warning', title: 'Required', text: 'Please select a subject.', confirmButtonColor: '#4c4b9e' });
@@ -954,7 +980,15 @@
                 return Swal.fire({ icon: 'warning', title: 'Required', text: 'Number of hours is required.', confirmButtonColor: '#4c4b9e' });
             }
 
-            subjects[editingSubjectIndex] = { subjectId, accountSubjectId, name: subjectName, hours, description, seasons: selectedSeasons };
+            subjects[editingSubjectIndex] = {
+                id_subject_ref:   subjects[editingSubjectIndex].id_subject_ref,
+                subjectId,
+                accountSubjectId,
+                name:             subjectName,
+                hours,
+                description,
+                seasons:          selectedSeasons
+            };
             renderSubjects();
 
             bootstrap.Modal.getInstance(document.getElementById('modalFormationSubject')).hide();
@@ -1009,7 +1043,10 @@
             formData.append('formation[description]',       description);
 
             // ── Seasons & Subjects — sent as JSON strings, decode with
-            // json.loads(...) on the backend ──
+            // json.loads(...) on the backend. Each season carries
+            // id_season_ref (SEA-...); each subject carries id_subject_ref
+            // (SUB-...) plus a seasons array of id_season_ref strings
+            // pointing back to the seasons it belongs to ──
             formData.append('formation[seasons]',  JSON.stringify(seasons));
             formData.append('formation[subjects]', JSON.stringify(subjects));
 
