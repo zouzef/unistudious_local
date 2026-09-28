@@ -81,19 +81,20 @@ def get_Teacher_Session(session_id):
 		return jsonify({"Message":f"Error: {str(e)}"}),500
 
 
-@calendar_bp.route('/api/get-all-teacher',methods=['GET'])
+@calendar_bp.route('/api/get-all-teacher', methods=['GET'])
 def get_all_teacher():
 	try:
-		teachers_data = fetch_all_teacher()
-
-		if teachers_data:
-			return jsonify(teachers_data), 200
-		else:
-			return jsonify({"Message": "No data found or Error in parms"}), 404
+		print("hiiii")
+		# teachers_data = fetch_all_teacher()
+		# print(teachers_data)
+		# if teachers_data:
+		# 	return jsonify(teachers_data), 200
+		# else:
+		# 	return jsonify({"Message": "No data found or Error in parms", "Data": []}), 404
 	except Exception as e:
 		return jsonify({
-			"Message":"Error coming from get_all_teacher"
-		}),500
+			"Message": f"Error: {e} coming from get_all_teacher"
+		}), 500
 
 
 @calendar_bp.route('/create-calander_request/<int:session_id>', methods=['POST'])

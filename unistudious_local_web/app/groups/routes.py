@@ -1,19 +1,20 @@
 # app/groups/routes.py
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
 from app.groups.service import (
-    get_groups,
-    delete_group,
-    delete_user_from_group,
-    get_users_not_affected,
-    affect_user,
-    get_subject_group,
-    create_group,
-    disaffect_user_session_service,
-    update_group_service
+	get_groups,
+	delete_group,
+	delete_user_from_group,
+	get_users_not_affected,
+	affect_user,
+	get_subject_group,
+	create_group,
+	disaffect_user_session_service,
+	update_group_service
 )
 from app.session.service import get_locals
 
 groups_bp = Blueprint('groups', __name__)
+
 
 # ==========================================
 # API ROUTES
@@ -21,124 +22,120 @@ groups_bp = Blueprint('groups', __name__)
 
 @groups_bp.route('/api/get-group/<int:session_id>/<int:account_id>')
 def api_get_groups(session_id, account_id):
-    """Get groups with students"""
-    result = get_groups(account_id, session_id)
+	"""Get groups with students"""
+	result = get_groups(account_id, session_id)
 
-    return jsonify({"Message": "Success", "data": result}), 200
+	return jsonify({"Message": "Success", "data": result}), 200
 
 
 @groups_bp.route('/api/delete-group/<int:group_id>', methods=['DELETE'])
 def api_delete_group(group_id):
-    """Delete a group"""
-    success, message = delete_group(group_id)
-    if success:
-        return jsonify({"Message": message}), 200
-    return jsonify({"Message": message}), 404
+	"""Delete a group"""
+	success, message = delete_group(group_id)
+	if success:
+		return jsonify({"Message": message}), 200
+	return jsonify({"Message": message}), 404
 
 
 @groups_bp.route('/api/delete_user_f_group/<int:session_id>/<int:user_id>', methods=['POST'])
 def api_delete_user_from_group(session_id, user_id):
-    """Delete user from group"""
-    success, message = delete_user_from_group(session_id, user_id)
-    if success:
-        return jsonify({"Message": message}), 200
-    return jsonify({"Message": message}), 400
+	"""Delete user from group"""
+	success, message = delete_user_from_group(session_id, user_id)
+	if success:
+		return jsonify({"Message": message}), 200
+	return jsonify({"Message": message}), 400
 
 
 @groups_bp.route('/api/show_user_not_affected/<int:session_id>/<int:account_id>')
 def api_get_users_not_affected(session_id, account_id):
-    """Get users not affected to any group"""
-    result = get_users_not_affected(session_id, account_id)
-    return jsonify({"Message": "Success", "students": result}), 200
+	"""Get users not affected to any group"""
+	result = get_users_not_affected(session_id, account_id)
+	return jsonify({"Message": "Success", "students": result}), 200
 
 
 @groups_bp.route('/api/affect_user/<int:session_id>', methods=['POST'])
 def api_affect_user(session_id):
-    """Affect user to a group"""
-    data = request.get_json()
+	"""Affect user to a group"""
+	data = request.get_json()
 
-    if not data:
-        return jsonify({"Message": "No data provided"}), 400
+	if not data:
+		return jsonify({"Message": "No data provided"}), 400
 
-    user_id = data.get('user_id')
-    group_id = data.get('group_id')
+	user_id = data.get('user_id')
+	group_id = data.get('group_id')
 
-    if not user_id or not group_id:
-        return jsonify({"Message": "Missing user_id or group_id"}), 400
+	if not user_id or not group_id:
+		return jsonify({"Message": "Missing user_id or group_id"}), 400
 
-    success, result = affect_user(session_id, user_id, group_id)
-    if success:
-        return jsonify({"Message": "Success", "data": result}), 200
-    return jsonify({"Message": result}), 400
+	success, result = affect_user(session_id, user_id, group_id)
+	if success:
+		return jsonify({"Message": "Success", "data": result}), 200
+	return jsonify({"Message": result}), 400
 
 
 @groups_bp.route('/api/get_subject_group/<int:account_id>', methods=['GET'])
 def api_get_subject_group(account_id):
-    """Get subjects for account"""
-    result = get_subject_group(account_id)
-    return jsonify(result), 200
+	"""Get subjects for account"""
+	result = get_subject_group(account_id)
+	return jsonify(result), 200
 
 
 @groups_bp.route('/api/create_group/<int:session_id>', methods=['POST'])
 def api_create_group(session_id):
-    """Create a new group"""
+	"""Create a new group"""
+	try:
+		data = request.get_json()
 
-    try:
-        data = request.get_json()
+		if not data:
+			return jsonify({"Message": "No data provided"}), 400
 
-        if not data:
-            return jsonify({"Message": "No data provided"}), 400
-
-        result, status_code = create_group(session_id, data)
-        return jsonify(result), status_code
-    except Exception as e:
-        return jsonify({
-            "Message":f"Error: {e} coming from backend"
-        }),500
-
-
-
+		result, status_code = create_group(session_id, data)
+		return jsonify(result), status_code
+	except Exception as e:
+		return jsonify({
+			"Message": f"Error: {e} coming from backend"
+		}), 500
 
 
 @groups_bp.route('/api/update-group/<int:group_id>', methods=['POST'])
 def api_update_group(group_id):
-    try:
-        data = request.get_json()
-        if not data:
-            return jsonify({"Message": "No data provided "}), 400
+	try:
+		data = request.get_json()
+		if not data:
+			return jsonify({"Message": "No data provided "}), 400
 
-        result, status_code = update_group_service(group_id, data)
-        return jsonify(result), status_code
+		result, status_code = update_group_service(group_id, data)
+		return jsonify(result), status_code
 
-    except Exception as e:
-        return jsonify({
-            "Message": f"Error: {e} coming from backend"
-        })
+	except Exception as e:
+		return jsonify({
+			"Message": f"Error: {e} coming from backend"
+		})
 
 
 @groups_bp.route('/api/disaffect_user_group/<int:session_id>', methods=['POST'])
 def api_disaffect_user_group(session_id):
-    """Remove (disaffect) a user from a group"""
-    try:
-        data = request.get_json()
+	"""Remove (disaffect) a user from a group"""
+	try:
+		data = request.get_json()
 
-        if not data:
-            return jsonify({"Message": "No data provided"}), 400
+		if not data:
+			return jsonify({"Message": "No data provided"}), 400
 
-        success, response = disaffect_user_session_service(session_id, data)
+		success, response = disaffect_user_session_service(session_id, data)
 
-        if not success:
-            if response is None:
-                return jsonify({"Message": "Failed to reach server"}), 500
-            try:
-                body = response.json()
-            except ValueError:
-                body = {"Message": "Invalid response from server"}
-            return jsonify(body), response.status_code
+		if not success:
+			if response is None:
+				return jsonify({"Message": "Failed to reach server"}), 500
+			try:
+				body = response.json()
+			except ValueError:
+				body = {"Message": "Invalid response from server"}
+			return jsonify(body), response.status_code
 
-        return jsonify(response.json()), 200
+		return jsonify(response.json()), 200
 
-    except Exception as e:
-        return jsonify({
-            "Message": f"Error: {e} coming from backend"
-        }), 500
+	except Exception as e:
+		return jsonify({
+			"Message": f"Error: {e} coming from backend"
+		}), 500

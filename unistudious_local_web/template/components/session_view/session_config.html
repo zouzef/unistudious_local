@@ -1,6 +1,5 @@
 <div class="content-body">
     <div class="container-fluid">
-
         <div id="calendar-info"
              data-session-id="{{ id_session }}"
              data-account-id="{{ account_id }}">
@@ -231,28 +230,30 @@
                         <div class="col-xl-12">
                             <div class="card" style="background-color: transparent;">
                                 <div class="card" style="background-color: transparent;">
-                                    <div class="session-calendar-header pt-4 px-3 px-sm-5 pb-3">
+                                    <div class="card-header pb-3 border-0 d-flex align-items-center justify-content-between flex-wrap gap-3">
                                         <div>
                                             <h2 class="heading mb-0 fw-bold text-primary"> Session Calendar</h2>
-
                                         </div>
 
-                                        <div class="d-flex flex-wrap align-items-center gap-2 header-controls">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <label for="eventFilter" class="fw-semibold text-muted mb-0">Filter by
+                                        <div class="d-flex align-items-center gap-2 flex-grow-1">
+                                            <div class="d-flex align-items-center gap-2 mx-auto">
+                                                <label for="eventFilter"
+                                                       class="fw-semibold text-muted text-nowrap mb-0">Filter by
                                                     Type:</label>
                                                 <select id="eventFilter"
-                                                        class="form-control native-select rounded-pill px-3 py-2">
+                                                        class="form-control native-select rounded-3 px-3 py-2 w-auto">
                                                     <option value="all">All</option>
                                                     <option value="online">Online</option>
                                                     <option value="in_person">In-Person</option>
                                                 </select>
                                             </div>
 
-                                            <a href="/dashboard/show-attendance-sessions/{{ id_session }}"
-                                               class="btn btn-outline-primary rounded-pill px-4 py-2 fw-semibold shadow-sm js-single-click">
-                                                <i class="fas fa-edit me-1"></i> Attendance
-                                            </a>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <a href="/dashboard/show-attendance-sessions/{{ id_session }}"
+                                                   class="btn btn-outline-primary rounded-3 px-3 py-2 fw-semibold js-single-click">
+                                                    <i class="fas fa-clipboard-check me-1"></i> Attendance
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -363,100 +364,6 @@
             </div>
         </div>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-
-                // ── Reinitialize Bootstrap dropdowns ─────────────────────────────
-                document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(function (el) {
-                    new bootstrap.Dropdown(el);
-                });
-
-                // ── Fetch user count ──────────────────────────────────────────────
-                const sessionId = document.getElementById('calendar-info').getAttribute('data-session-id');
-
-                fetch(`/api/get-nbr-user-session/${sessionId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('nbr-users').textContent = data.nbruser;
-                    })
-                    .catch(error => {
-                        console.error('Error fetching user count:', error);
-                        document.getElementById('nbr-users').textContent = '0';
-                    });
-
-                // ── Fetch group count ─────────────────────────────────────────────
-                fetch(`/api/get-nbr-group-session/${sessionId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('nbr-group').textContent = data.nbrgroup;
-                    })
-                    .catch(error => {
-                        console.error('Error fetching group count:', error);
-                        document.getElementById('nbr-group').textContent = '0';
-                    });
-
-                // ── DELETE session ────────────────────────────────────────────────
-                document.addEventListener('click', function (e) {
-                    const btn = e.target.closest('.delete_session');
-                    if (!btn) return;
-
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    const sessionId = btn.getAttribute('data-id');
-
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        html: `This Session will be deleted permanently.<br>You will not be able to undo this action.`,
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#6c757d',
-                        confirmButtonText: 'Yes, delete it!',
-                        cancelButtonText: 'Cancel'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            fetch(`/api/delete-session/${sessionId}`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' }
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.Message === 'Session Deleted successfully') {
-                                    Swal.fire({
-                                        title: 'Deleted!',
-                                        text: 'The session has been deleted.',
-                                        icon: 'success',
-                                        confirmButtonColor: '#3085d6'
-                                    }).then(() => {
-                                        window.location.href = '/dashboard/show-session';
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        title: 'Error!',
-                                        text: data.Message,
-                                        icon: 'error',
-                                        confirmButtonColor: '#d33'
-                                    });
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                Swal.fire({
-                                    title: 'Error!',
-                                    text: 'Something went wrong, please try again.',
-                                    icon: 'error',
-                                    confirmButtonColor: '#d33'
-                                });
-                            });
-                        }
-                    });
-                });
-
-            });
-        </script>
-
-
         <!-- BEGIN MODAL -->
         <div class="modal fade none-border" id="event-modal">
             <div class="modal-dialog">
@@ -522,3 +429,95 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // ── Reinitialize Bootstrap dropdowns ─────────────────────────────
+        document.querySelectorAll('[data-bs-toggle="dropdown"]').forEach(function (el) {
+            new bootstrap.Dropdown(el);
+        });
+
+        // ── Fetch user count ──────────────────────────────────────────────
+        const sessionId = document.getElementById('calendar-info').getAttribute('data-session-id');
+
+        fetch(`/api/get-nbr-user-session/${sessionId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('nbr-users').textContent = data.nbruser;
+            })
+            .catch(error => {
+                console.error('Error fetching user count:', error);
+                document.getElementById('nbr-users').textContent = '0';
+            });
+
+        // ── Fetch group count ─────────────────────────────────────────────
+        fetch(`/api/get-nbr-group-session/${sessionId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('nbr-group').textContent = data.nbrgroup;
+            })
+            .catch(error => {
+                console.error('Error fetching group count:', error);
+                document.getElementById('nbr-group').textContent = '0';
+            });
+
+        // ── DELETE session ────────────────────────────────────────────────
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.delete_session');
+            if (!btn) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            const sessionId = btn.getAttribute('data-id');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                html: `This Session will be deleted permanently.<br>You will not be able to undo this action.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/api/delete-session/${sessionId}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.Message === 'Session Deleted successfully') {
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: 'The session has been deleted.',
+                                icon: 'success',
+                                confirmButtonColor: '#3085d6'
+                            }).then(() => {
+                                window.location.href = '/dashboard/show-session';
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: data.Message,
+                                icon: 'error',
+                                confirmButtonColor: '#d33'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Something went wrong, please try again.',
+                            icon: 'error',
+                            confirmButtonColor: '#d33'
+                        });
+                    });
+                }
+            });
+        });
+
+    });
+</script>

@@ -219,6 +219,8 @@ class DataPusher:
                 ORDER BY audit_id ASC
             """)
             completion_tag_rows = cursor.fetchall()
+
+            # --- Association Folder ---
             if not completion_tag_rows:
                 logger.debug("No pending CompletionTag changes to push")
             else:
@@ -233,8 +235,6 @@ class DataPusher:
                         "DELETE": lambda row: completionTag_pusher.push_completionTagDelete(db, self.settings, row)
                     }
                 )
-
-            # --- Association Folder ---
             cursor.execute("""
                 SELECT * 
                  FROM sync_folders
@@ -301,7 +301,7 @@ class DataPusher:
                     formation_rows,
                     {
                         "INSERT": lambda row: fromation_pusher.push_formationAdd(db, self.settings, row),
-                        "UPDATE": lambda row: fromation_pusher.push_formationUpdate(db, self.settings, row),
+                        # "UPDATE": lambda row: fromation_pusher.push_formationUpdate(db, self.settings, row),
                         "DELETE": lambda row: fromation_pusher.push_formationDelete(db, self.settings, row),
                     }
                 )

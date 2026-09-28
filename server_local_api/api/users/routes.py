@@ -503,11 +503,11 @@ def get_teacher_session(session_id):
 def get_all_teachers():
 	try:
 		query = """
-		    SELECT u.username, u.id	, email, full_name, roles , img_link ,status
-		    FROM user u
-		    WHERE u.enabled = 1 AND
-		    (JSON_CONTAINS(u.roles, '"ROLE_TEACHER"') OR JSON_CONTAINS(u.roles, '"ROLE_ADMIN"'))
-
+			SELECT DISTINCT u.username, u.id, u.email, u.full_name, u.roles, u.img_link
+			FROM user u
+			JOIN relation_teacher_account rta ON rta.user_id = u.id AND rta.enabled = 1
+			WHERE u.enabled = 1
+			AND (JSON_CONTAINS(u.roles, '"ROLE_TEACHER"') OR JSON_CONTAINS(u.roles, '"ROLE_ADMIN"'))
 		"""
 		result = Database.execute_query(query, fetch=True)
 		if result:
@@ -517,15 +517,14 @@ def get_all_teachers():
 			}), 200
 		else:
 			return jsonify({
-				"Message": "There is no Teacher"
+				"Message": "There is no Teacher",
+				"Data": []
 			}), 404
 
 	except Exception as e:
 		return jsonify({
 			"Message": f"Error: {e}",
-
 		}), 500
-
 
 @users_bp.route('/Authentificate-Teacher', methods=['POST'])
 def authentification_teacher():

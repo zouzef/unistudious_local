@@ -38,28 +38,28 @@ def get_formation_info(account_id):
 	try:
 		query = """
 			SELECT 
-				   f.id,
-				   f.name,
-				   f.description,
-				   f.type_session,
-				   f.number_day_duration,
-				   f.number_session,
-				   f.img_link,
-				   f.condition_of_passage,
-				   f.status,
-				   f.created_at,
-				   acs.other_section as section,
-				   al.other_level as level,
-				   COUNT(s.id) AS sessions_count
+				f.id,
+				f.name,
+				f.description,
+				f.type_session,
+				f.number_day_duration,
+				f.number_session,
+				f.img_link,
+				f.condition_of_passage,
+				f.status,
+				f.created_at,
+				acs.other_section AS section,
+				al.other_level AS level,
+				COUNT(s.id) AS sessions_count
 			FROM formation f
-			JOIN account_section acs ON acs.id = f.account_section_id
-			JOIN account_level al ON al.id = f.account_level_id
+			LEFT JOIN account_section acs ON acs.id = f.account_section_id
+			LEFT JOIN account_level al ON al.id = f.account_level_id
 			LEFT JOIN session s ON s.formation_id = f.id 
 			WHERE f.account_id = %s
-			  AND f.enabled = 1
+				AND f.enabled = 1
 			GROUP BY f.id, f.name, f.description, f.type_session, f.number_day_duration,
-					f.number_session, f.condition_of_passage, f.status, f.created_at,
-					acs.other_section, al.other_level
+				f.number_session, f.img_link, f.condition_of_passage, f.status, f.created_at,
+				acs.other_section, al.other_level
 			ORDER BY f.created_at DESC
 		"""
 		values = (account_id,)
@@ -74,7 +74,6 @@ def get_formation_info(account_id):
 				"Message": "Error",
 				"Data": []
 			}), 404
-
 
 	except Exception as e:
 		return jsonify({
@@ -305,6 +304,7 @@ def update_formation(formation_id):
 def create_formation(account_id):
 	try:
 		data = request.form
+
 		files = request.files
 
 		required_fields = [
@@ -328,14 +328,7 @@ def create_formation(account_id):
 		number_session = data.get('numberSession') or None
 		type_session = data.get('typeSession')
 		other_type_session = (data.get('otherTypeSession') or '').strip() or None
-		condition_of_passage = data.get('conditionOfPassage')
-		condition_of_passage_formule = data.get('conditionOfPassageFormule') or None
-		condition_of_passage_formule_by_note = (data.get('conditionOfPassageFormuleByNote') or '').strip() or None
-		condition_of_passage_formule_by_present = (data.get('conditionOfPassageFormuleByPresent') or '').strip() or None
-		condition_of_passage_formule_by_note_present = (data.get(
-			'conditionOfPassageFormuleByNotePresent') or '').strip() or None
-
-		public_resource = data.get('publicResource') or None
+		public_resource = (data.get('publicResource') or '').strip() or None
 		description = (data.get('description') or '').strip() or None
 
 		# ------------------ Parse seasons & subjects JSON (not persisted yet) ------------------
@@ -349,42 +342,39 @@ def create_formation(account_id):
 		except (TypeError, ValueError):
 			subjects_data = []
 
+
 		img_link = None  # unknown until after INSERT
+
 
 		# ------------------ Create formation ------------------
 		query = """
-            INSERT INTO formation (
-                account_id,
-                account_level_id,
-                account_section_id,
-                name,
-                description,
-                status,
-                type_date,
-                other_type_date,
-                type_session,
-                other_type_session,
-                number_day_duration,
-                number_session,
-                condition_of_passage,
-                condition_of_passage_formule,
-                condition_of_passage_formule_by_note,
-                condition_of_passage_formule_by_present,
-                condition_of_passage_formule_by_note_present,
-                img_link,
-                public_resource,
-                enabled,
-                created_at,
-                updated_at
-            ) VALUES (
-                %s,%s,%s,%s,%s,
-                %s,%s,%s,%s,%s,
-                %s,%s,%s,%s,%s,
-                %s,%s,%s,%s,
-                1,
-                NOW(),NOW()
-            )
-        """
+		          INSERT INTO formation (
+		              account_id,
+		              account_level_id,
+		              account_section_id,
+		              name,
+		              description,
+		              status,
+		              type_date,
+		              other_type_date,
+		              type_session,
+		              other_type_session,
+		              number_day_duration,
+		              number_session,
+		              img_link,
+		              public_resource,
+		              enabled,
+		              created_at,
+		              updated_at
+		          ) VALUES (
+		              %s,%s,%s,%s,%s,
+		              1,
+		              %s,%s,%s,%s,
+		              %s,%s,%s,%s,
+		              1,
+		              NOW(),NOW()
+		          )
+		      """
 
 		values = [
 			account_id,
@@ -392,18 +382,12 @@ def create_formation(account_id):
 			account_section_id,
 			name,
 			description,
-			status,
 			type_date,
 			other_type_date,
 			type_session,
 			other_type_session,
 			number_day_duration,
 			number_session,
-			condition_of_passage,
-			condition_of_passage_formule,
-			condition_of_passage_formule_by_note,
-			condition_of_passage_formule_by_present,
-			condition_of_passage_formule_by_note_present,
 			img_link,
 			public_resource
 		]
@@ -414,8 +398,7 @@ def create_formation(account_id):
 			return jsonify({"Message": "Formation not created"}), 400
 
 		formation_id = result
-
-		# ----------------- Insert Season ---------------
+		# # ----------------- Insert Season ---------------
 
 		for i in seasons_data:
 			query_season = """
@@ -430,6 +413,8 @@ def create_formation(account_id):
 			if not result:
 				return jsonify({"Message": "Formation not created"}), 400
 
+		# ----------------- Insert Subjects + season links ---------------
+
 		for i in subjects_data:
 			query_subject = """
 				INSERT INTO formation_subject
@@ -439,10 +424,10 @@ def create_formation(account_id):
 			values = (i.get('accountSubjectId'), formation_id, i.get('description'), i.get('hours'),
 					  i.get('id_subject_ref'))
 			formation_sub_subject_id = Database.execute_query(query_subject, values, fetch=False)
-			if not result:
+			if not formation_sub_subject_id:
 				return jsonify({"Message": "Formation Not Created"}), 400
 
-			for j in i.get('seasons'):
+			for j in (i.get('seasons') or []):
 				query_season_id = """
 			        SELECT id
 			        FROM season
@@ -497,18 +482,56 @@ def create_formation(account_id):
 				fetch=False
 			)
 
-		# ------------------ Fetch final record for audit ------------------
+		# ------------------ Fetch final records for audit ------------------
 		new_record = Database.execute_query(
 			"SELECT * FROM formation WHERE id = %s",
 			[formation_id],
 			fetch=True
 		)
 
+		seasons_rows = Database.execute_query(
+			"SELECT * FROM season WHERE formation_id = %s",
+			[formation_id],
+			fetch=True
+		) or []
+
+		subjects_rows = Database.execute_query(
+			"SELECT * FROM formation_subject WHERE formation_id = %s",
+			[formation_id],
+			fetch=True
+		) or []
+
+		season_links_rows = Database.execute_query(
+			"""
+			SELECT sss.*
+			FROM season_sub_subject sss
+			JOIN season s ON s.id = sss.season_id
+			WHERE s.formation_id = %s
+			""",
+			[formation_id],
+			fetch=True
+		) or []
+
+		# attach the linked season ids to each subject
+		links_by_subject = {}
+		for link in season_links_rows:
+			links_by_subject.setdefault(link.get('formation_sub_subject'), []).append(link.get('season_id'))
+
+		subjects_audit = []
+		for s in subjects_rows:
+			s = dict(s)
+			s['season_ids'] = links_by_subject.get(s.get('id'), [])
+			subjects_audit.append(s)
+
+		audit_data = dict(new_record[0]) if new_record else dict(data)
+		audit_data['seasons'] = [dict(s) for s in seasons_rows]
+		audit_data['subjects'] = subjects_audit
+
 		log_audit(
 			table_name="formation_audit",
 			action_type="INSERT",
 			old_data=None,
-			new_data=new_record[0] if new_record else dict(data)
+			new_data=audit_data
 		)
 
 		return jsonify({

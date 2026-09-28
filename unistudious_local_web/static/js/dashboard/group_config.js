@@ -340,8 +340,9 @@ function getTeacherOptions() {
 
     let options = '<option value="" selected="selected">Choose the Teacher...</option>';
     teachersData.forEach(teacher => {
+        const teacherId = teacher.id ?? teacher.user_id;
         const teacherName = teacher.full_name || teacher.username || teacher.email || 'Unknown';
-        options += `<option value="${teacher.user_id}">${teacherName}</option>`;
+        options += `<option value="${teacherId}">${teacherName}</option>`;
     });
     return options;
 }
@@ -816,28 +817,32 @@ $(document).ready(function () {
 
     async function loadTeachers() {
         try {
-            const sessionId = window.SESSION_ID;
-
-            if (!sessionId) {
-                console.error('Session ID not found');
-                return;
-            }
-
-            const response = await fetch(`/api/get_teacher/${sessionId}`);
+            const response = await fetch(`/api/get_teacher`);
+            const text = await response.text();
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const result = await response.json();
-
-            if (result.data) {
-                teachersData = result.data;
-                teachersLoaded = true;
-            } else if (result.teacher) {
-                teachersData = result.teacher;
-                teachersLoaded = true;
+            let result;
+            try {
+                result = JSON.parse(text);
+            } catch (parseError) {
+                console.error('get-all-teacher did not return JSON:', response.status, response.url, response.redirected, text.slice(0, 200));
+                throw parseError;
             }
+
+            const list = result.Data || result.data || result.teacher || [];
+
+            // The API can return the same teacher more than once — keep one row per id
+            const seen = new Set();
+            teachersData = list.filter(teacher => {
+                const id = teacher.id ?? teacher.user_id;
+                if (seen.has(id)) return false;
+                seen.add(id);
+                return true;
+            });
+            teachersLoaded = true;
         } catch (error) {
             console.error('Error loading teachers:', error);
             showErrorModal('Failed to load teachers. Please refresh the page.');
@@ -933,7 +938,7 @@ $(document).ready(function () {
         }
 
         const relations = [];
-        $('.relation-item').each(function () {
+        $('#relation_group_local_session_relationTeacherToSubjectGroups .relation-item').each(function () {
             const subjectId = $(this).find('.relation-subject').val();
             const teacherId = $(this).find('.relation-teacher').val();
 

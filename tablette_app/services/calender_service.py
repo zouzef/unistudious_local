@@ -84,6 +84,7 @@ def fetch_all_teacher():
 	try:
 		url = f"{base_url}/get_all_teachers"
 		response = requests.get(url,verify=False, timeout=10)
+		print(response)
 		response.raise_for_status()
 		if response.status_code == 200:
 			return response.json()

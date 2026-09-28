@@ -6,6 +6,74 @@ document.addEventListener('DOMContentLoaded', function () {
     const sessionId = parseInt(lastPart);
     const isEditPage = !isNaN(sessionId) && sessionId > 0;
 
+    // ══════════════════════════════════════════════════════════════
+    // PAYMENT LOGIC
+    // ══════════════════════════════════════════════════════════════
+
+    // ── Currency select ───────────────────────────────────────────
+    function populateCurrencySelect() {
+        const select = document.getElementById('session_currency');
+        if (!select || select.tagName !== 'SELECT') return;
+
+        if (select.options.length <= 1) {
+            select.innerHTML = '<option value="">Choose currency</option>';
+            Intl.supportedValuesOf('currency').forEach(currency => {
+                const option = document.createElement('option');
+                option.value = currency;
+                option.textContent = currency;
+                select.appendChild(option);
+            });
+        }
+    }
+
+    // ── typePay toggle ────────────────────────────────────────────
+    function toggleTypePay() {
+        const typePayEl = document.getElementById('session_typePay');
+        const numberSessionForPay = document.getElementById('numberSessionForPay');
+        const numberSessionInput = document.getElementById('session_numberSessionForPay');
+        if (!typePayEl || !numberSessionForPay) return;
+
+        if (typePayEl.value === 'Session') {
+            numberSessionForPay.style.display = 'block';
+            if (numberSessionInput) numberSessionInput.required = true;
+        } else {
+            numberSessionForPay.style.display = 'none';
+            if (numberSessionInput) {
+                numberSessionInput.required = false;
+                numberSessionInput.value = '';
+            }
+            const priceAbsent = document.getElementById('session_priceStudentAbsent');
+            if (priceAbsent) priceAbsent.value = '';
+        }
+    }
+
+    // ── Price fields toggle ───────────────────────────────────────
+    function togglePriceFields() {
+        const typePayEl = document.getElementById('session_typePay');
+        const formationSelect = document.getElementById('session_formation');
+        const priceMixed = document.getElementById('priceMixed');
+        const priceTotal = document.getElementById('priceTotal');
+        if (!priceMixed || !priceTotal) return;
+
+        const typePay = typePayEl ? typePayEl.value : '';
+        const selectedOption = formationSelect ? formationSelect.options[formationSelect.selectedIndex] : null;
+        const dataType = selectedOption ? selectedOption.getAttribute('data-type') : null;
+        const isMixed = dataType === 'M' || dataType === 'Mixed';
+
+        if (typePay === 'Session' && isMixed) {
+            priceTotal.style.display = 'none';
+            priceMixed.style.display = 'block';
+        } else {
+            priceTotal.style.display = 'block';
+            priceMixed.style.display = 'none';
+        }
+    }
+
+    // Initial state
+    populateCurrencySelect();
+    toggleTypePay();
+    togglePriceFields();
+
     // Load formations
     const formationsLoaded = fetch(`/api/get-formation-info/${accountId}`)
         .then(response => response.json())
@@ -67,32 +135,27 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(error => console.error('❌ Failed to load locals:', error));
 
-    // Show/hide price fields based on formation type
+    // Formation change → currency + price fields
     document.getElementById('session_formation').addEventListener('change', function () {
-        const selectedOption = this.options[this.selectedIndex];
-        const type = selectedOption.getAttribute('data-type');
+        const currencySession = document.getElementById('currencySession');
         const priceMixed = document.getElementById('priceMixed');
         const priceTotal = document.getElementById('priceTotal');
 
-        if (type === 'M' || type === 'Mixed') {
-            priceMixed.style.display = 'block';
-            priceTotal.style.display = 'none';
-        } else {
-            priceMixed.style.display = 'none';
-            priceTotal.style.display = 'block';
+        if (!this.value) {
+            if (currencySession) currencySession.style.display = 'none';
+            if (priceTotal) priceTotal.style.display = 'none';
+            if (priceMixed) priceMixed.style.display = 'none';
+            return;
         }
+
+        if (currencySession) currencySession.style.display = 'block';
+        togglePriceFields();
     });
 
-    // Show/hide number of sessions for payment based on type pay
+    // typePay change → number of sessions + price fields
     document.getElementById('session_typePay').addEventListener('change', function () {
-        const numberSessionForPay = document.getElementById('numberSessionForPay');
-        if (this.value === 'Session') {
-            numberSessionForPay.style.display = 'block';
-        } else {
-            numberSessionForPay.style.display = 'none';
-            document.getElementById('session_numberSessionForPay').value = '';
-            document.getElementById('session_priceStudentAbsent').value = '';
-        }
+        toggleTypePay();
+        togglePriceFields();
     });
 
     // Show/hide extra data section based on publicResource select
@@ -383,18 +446,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             console.log('🏗️ Formation type:', formationType);
 
-            // Manually show/hide price sections based on formation type
-            if (formationType === 'M' || formationType === 'Mixed') {
-                document.getElementById('priceMixed').style.display = 'block';
-                document.getElementById('priceTotal').style.display = 'none';
-                setVal('session_pricePresence', s.price_presence);
-                setVal('session_priceOnline', s.price_online);
-            } else {
-                document.getElementById('priceTotal').style.display = 'block';
-                document.getElementById('priceMixed').style.display = 'none';
-                setVal('session_price', s.price);
-            }
-
             // Payment
             setVal('session_typePay', s.type_pay);
             setVal('session_paymentMethode', s.payment_methode);
@@ -402,11 +453,14 @@ document.addEventListener('DOMContentLoaded', function () {
             setVal('session_priceStudentAbsent', s.price_student_absent);
             setVal('payment_deadline', s.payment_deadline);
 
-            // Show numberSessionForPay section if type is Session
-            const numberSessionForPayEl = document.getElementById('numberSessionForPay');
-            if (numberSessionForPayEl) {
-                numberSessionForPayEl.style.display = (s.type_pay === 'Session') ? 'block' : 'none';
-            }
+            // Prices
+            setVal('session_price', s.price);
+            setVal('session_pricePresence', s.price_presence);
+            setVal('session_priceOnline', s.price_online);
+
+            // Apply payment logic (number of sessions + price fields)
+            toggleTypePay();
+            togglePriceFields();
 
             // Currency — show the field and set value
             const currencySessionEl = document.getElementById('currencySession');

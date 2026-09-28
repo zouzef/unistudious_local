@@ -876,6 +876,7 @@ def create_calander():
 @calendar_bp.route('/get-subject-account/<int:account_id>', methods=['GET'])
 def get_subject_account(account_id):
 	try:
+		print(account_id)
 		query = """
             SELECT * from account_subject
             WHERE account_id = %s AND enabled = 1
@@ -883,7 +884,7 @@ def get_subject_account(account_id):
 
 		values = (account_id,)
 		subjects = Database.execute_query(query, values)
-
+		print(subjects)
 		seen_subjects = set()
 		result = []
 

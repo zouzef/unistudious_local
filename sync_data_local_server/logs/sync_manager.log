@@ -448,3 +448,786 @@ Traceback (most recent call last):
     accountLevelIdProd = result['id_prod']
 TypeError: 'NoneType' object is not subscriptable
 2026-09-17 15:16:53 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-17 15:17:54 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-17 15:17:54 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-17 15:18:55 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-17 15:18:55 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-17 15:19:56 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-17 15:19:56 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-17 15:20:58 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-17 15:20:58 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-17 15:21:59 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-17 15:21:59 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-17 15:23:00 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-17 15:23:00 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-17 15:24:01 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-17 15:24:01 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-17 15:25:02 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-17 15:25:02 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-17 15:26:03 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-17 15:26:03 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-17 15:27:04 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-17 15:27:04 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-17 15:28:05 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-17 15:28:05 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-17 15:29:06 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-17 15:29:06 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-17 15:30:07 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-17 15:30:07 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:32:01 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:32:01 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:33:02 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:33:02 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:34:03 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:34:03 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:35:04 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:35:04 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:36:05 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:36:05 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:37:06 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:37:06 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:38:07 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:38:07 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:39:08 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:39:08 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:40:09 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:40:09 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:41:10 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:41:10 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:42:10 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:42:10 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:43:11 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:43:11 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:44:13 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:44:13 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:45:13 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:45:13 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:46:14 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:46:14 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:47:15 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:47:15 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:48:16 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:48:16 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:49:17 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:49:17 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:50:18 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:50:18 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:51:19 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:51:19 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:52:20 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:52:20 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:53:21 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:53:21 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:54:22 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:54:22 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:55:23 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:55:23 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:56:24 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:56:24 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:57:26 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:57:26 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:58:26 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:58:26 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 09:59:27 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 09:59:27 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:00:28 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:00:28 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:01:29 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:01:29 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:02:30 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:02:30 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:03:31 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:03:31 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:04:31 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:04:31 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:05:32 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:05:32 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:06:33 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:06:33 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:07:34 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:07:34 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:08:35 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:08:35 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:09:36 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:09:36 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:10:37 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:10:37 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:11:38 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:11:38 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:12:39 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:12:39 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:13:40 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:13:40 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:14:40 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:14:40 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:15:41 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:15:41 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:16:42 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:16:42 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:17:43 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:17:43 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:18:44 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:18:44 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:19:45 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:19:45 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:20:46 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:20:46 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:21:47 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:21:47 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:22:48 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:22:48 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:23:49 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:23:49 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:24:50 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:24:50 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:25:51 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:25:51 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:26:52 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:26:52 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:27:52 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:27:52 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:28:53 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:28:53 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:29:54 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:29:54 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:30:55 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:30:55 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:31:56 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:31:56 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:32:57 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:32:57 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:33:58 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:33:58 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:34:59 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:34:59 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:36:00 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:36:00 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:37:01 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:37:01 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:38:02 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:38:02 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:39:03 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:39:03 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:40:04 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:40:04 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:41:05 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:41:05 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:42:06 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:42:06 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:43:07 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:43:07 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:44:08 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:44:08 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:45:09 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:45:09 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:46:09 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:46:09 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:47:10 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:47:10 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:48:11 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:48:11 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:49:12 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:49:12 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:50:13 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:50:13 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:51:14 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:51:14 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:52:15 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:52:15 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:53:16 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:53:16 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:54:17 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:54:17 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:55:18 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:55:18 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:56:19 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:56:19 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:57:20 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:57:20 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:58:20 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:58:20 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 10:59:21 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 10:59:21 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:00:22 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:00:22 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:01:23 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:01:23 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:02:24 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:02:24 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:03:25 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:03:25 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:04:26 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:04:26 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:05:27 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:05:27 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:06:28 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:06:28 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:07:29 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:07:29 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:08:30 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:08:30 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:09:31 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:09:31 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:10:32 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:10:32 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:11:33 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:11:33 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:12:34 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:12:34 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:13:35 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:13:35 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:14:36 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:14:36 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:15:37 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:15:37 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:16:38 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:16:38 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:17:39 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:17:39 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:18:40 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:18:40 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:19:41 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:19:41 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:20:42 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:20:42 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:21:43 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:21:43 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:22:44 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:22:44 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:23:45 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:23:45 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:24:46 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:24:46 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 11:25:47 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    accountLevelIdProd = result['id_prod']
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 11:25:47 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 13:21:57 [ERROR] sync.pushers.fromation_pusher - Error in push FormationAdd: 'NoneType' object is not subscriptable
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/fromation_pusher.py", line 128, in push_formationAdd
+    return _send_create_formation_api(settings, remote_formation_id)
+TypeError: 'NoneType' object is not subscriptable
+2026-09-22 13:21:57 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 13:26:01 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 13:36:06 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-22 13:37:24 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-24 10:19:56 [ERROR] sync.pushers.accountSubject_pusher - Error in push accountSubjectAdd: name 'subSubjectId' is not defined
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/pushers/accountSubject_pusher.py", line 131, in push_accountSubjectAdd
+    subSubjectId.append(sub.get('id_prod') or '')
+NameError: name 'subSubjectId' is not defined
+2026-09-24 10:19:56 [ERROR] sync.data_pusher - account_subject_audit audit #1 failed — will retry next cycle
+
+
+2026-09-28 12:19:41 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-28 12:27:22 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-28 12:27:36 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-28 12:27:56 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-28 12:39:02 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-28 12:40:04 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-28 12:40:31 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-28 14:26:54 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-28 15:06:15 [ERROR] sync.data_pusher - formation_audit audit #1 failed — will retry next cycle
+2026-09-28 15:31:22 [ERROR] sync.data_pusher - formation_audit audit #2 failed — will retry next cycle

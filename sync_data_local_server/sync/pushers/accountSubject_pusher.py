@@ -128,7 +128,6 @@ def push_accountSubjectAdd(db, settings, row):
 		subSubjectSectionId = []
 
 		for sub in sub_subjects:
-			subSubjectId.append(sub.get('id_prod') or '')
 			subSubjectName.append(sub.get('name') or '')
 			subSubjectLevelId.append(sub.get('account_level_id') or '')
 			subSubjectSectionId.append(sub.get('account_section_id') or '')
