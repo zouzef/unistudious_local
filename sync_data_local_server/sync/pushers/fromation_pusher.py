@@ -20,6 +20,7 @@ def _send_create_formation_api(settings, payload, files=None):
 		if response.status_code == 200:
 			try:
 				response_data = response.json()
+				print("\n \n Response_data: ",response_data)
 			except Exception:
 				logger.error("Invalid JSON response: %s", response.text)
 				return False, None
@@ -191,14 +192,12 @@ def push_formationAdd(db, settings, row):
 		if logo_path and os.path.isfile(logo_path):
 			files = {"logoFile": (os.path.basename(logo_path), open(logo_path, 'rb'))}
 
-		print(f"Payload: {data}")
-
 		# ---- Send ----
 		ok, remote = _send_create_formation_api(settings, data, files)
 		if not ok:
 			return False
 
-		# ---- Store remote ids (formation + seasons + subjects) in one commit ----
+		# ---- Store remote ids (formation + seasons + subjects + relations) in one commit ----
 		cursor = db.connection.cursor(dictionary=True)
 
 		cursor.execute(
@@ -216,6 +215,27 @@ def push_formationAdd(db, settings, row):
 			cursor.execute(
 				"UPDATE formation_subject SET id_prod = %s WHERE ref = %s AND formation_id = %s",
 				(sub.get('id'), sub.get('ref'), local_formation_id)
+			)
+
+		for rel in remote.get('seasonSubjectRelations') or []:
+			cursor.execute(
+				"""
+				UPDATE season_sub_subject sss
+				JOIN season s ON s.id = sss.season_id
+				JOIN formation_subject fs ON fs.id = sss.formation_sub_subject
+				SET sss.id_prod = %s
+				WHERE s.ref = %s
+				  AND fs.ref = %s
+				  AND s.formation_id = %s
+				  AND fs.formation_id = %s
+				""",
+				(
+					rel.get('id'),
+					rel.get('seasonRef'),
+					rel.get('subjectRef'),
+					local_formation_id,
+					local_formation_id
+				)
 			)
 
 		db.connection.commit()

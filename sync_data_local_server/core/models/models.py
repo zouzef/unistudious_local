@@ -1046,7 +1046,9 @@ class Season(BaseModel):
 		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
 		Column("updated_at", "DATETIME"),
 		Column("id_prod", "INT(11)", default=None),
-		Column("ref", "VARCHAR(255)", default=None)
+		Column("ref", "VARCHAR(255)", default=None),
+		Column("release_token", "TINYINT(1)", nullable=False, default="0"),
+		Column("use_token", "VARCHAR(255)", default=None)
 	]
 class SeasonAudit(BaseModel):
 	table_name = "season_audit"
