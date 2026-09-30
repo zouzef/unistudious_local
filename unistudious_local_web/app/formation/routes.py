@@ -62,8 +62,6 @@ def create_formation(account_id):
 		except (TypeError, ValueError):
 			return jsonify({"Message": "Invalid subjects payload"}), 400
 
-		print(data)
-
 		if not data.get('name'):
 			return jsonify({"Message": "Missing required fields"}), 400
 
@@ -147,16 +145,27 @@ def view_formation(formation_id):
 @formation_bp.route('/api/update_formation/<int:formation_id>', methods=['POST'])
 def update_formation(formation_id):
 	try:
-		data = request.get_json()
+		if request.is_json:
+			data = request.get_json() or {}
+		else:
+			data = {}
+			for key, value in request.form.items():
+				# formation[name] -> name
+				if key.startswith('formation[') and key.endswith(']'):
+					key = key[len('formation['):-1]
+				data[key] = value
 
-		status, response = update_formation_service(formation_id, data)
+		image_file = request.files.get('formation_logoFile')
+
+		status, response = update_formation_service(formation_id, data, image_file)
 		if status:
 			return jsonify(response.json()), response.status_code
 		else:
 			return jsonify({
-				"Message": f"Error in updating formation"
+				"Message": "Error in updating formation"
 			}), 400
 	except Exception as e:
+		print(e)
 		return jsonify({
 			"Message": f"Error: {e} coming from backend"
 		}), 500

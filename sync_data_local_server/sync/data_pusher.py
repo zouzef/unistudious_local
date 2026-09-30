@@ -301,7 +301,7 @@ class DataPusher:
                     formation_rows,
                     {
                         "INSERT": lambda row: fromation_pusher.push_formationAdd(db, self.settings, row),
-                        # "UPDATE": lambda row: fromation_pusher.push_formationUpdate(db, self.settings, row),
+                        "UPDATE": lambda row: fromation_pusher.push_formationUpdate(db, self.settings, row),
                         "DELETE": lambda row: fromation_pusher.push_formationDelete(db, self.settings, row),
                     }
                 )
