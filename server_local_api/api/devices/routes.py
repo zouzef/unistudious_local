@@ -494,7 +494,7 @@ def get_all_tablets():
             AND r.local_id = l.id 
         """
         rows = Database.execute_query(query)
-
+        print(rows)
         # Transform the data to match the desired format
         formatted_data = []
         for row in rows:

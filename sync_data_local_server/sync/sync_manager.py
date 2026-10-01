@@ -236,6 +236,7 @@ def process_sync_data(db, data, settings):
 	if 'local_with_room' in data:
 		n = normalize(data['local_with_room'])
 		if has_records(n):
+			print(n)
 			from sync.processors.local_room_processor import process_local_and_rooms
 			logger.info("Processing Locals and Rooms...")
 			process_local_and_rooms(db, n)

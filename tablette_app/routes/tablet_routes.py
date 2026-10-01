@@ -30,6 +30,7 @@ def tablet_page(tablet_id):
     """Display tablet page with current session info."""
     try:
         tablette = fetch_all_tablets()
+        print(tablette)
         if not is_tablet_registered(tablet_id, tablette):
             return render_template("not_found.html", message="Tablet not registered")
 

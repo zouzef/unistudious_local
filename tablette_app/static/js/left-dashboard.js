@@ -43,7 +43,9 @@ function initializeSocket() {
     socket.on('attendance_update', function (data) {
         if (data.session_id === sessionId) {
             attendanceData = data.attendance;
-            renderAttendanceTable();
+            // FIX: refresh payment statuses so newly added students get the
+            // correct color. loadPaymentStatuses() re-renders the table itself.
+            loadPaymentStatuses(sessionId);
             showNotification('Attendance data updated!', 'success');
         }
     });
@@ -151,7 +153,7 @@ function loadAttendance(sessionId) {
 }
 
 function loadPaymentStatuses(sessionId) {
-    fetch(`/api/get_payment_calander_session/${sessionId}`)
+    return fetch(`/api/get_payment_calander_session/${sessionId}`)
         .then(res => {
             if (!res.ok) {
                 throw new Error(`HTTP error! status: ${res.status}`);
@@ -167,7 +169,15 @@ function loadPaymentStatuses(sessionId) {
         })
         .catch(err => {
             console.error("Error loading payment statuses:", err);
+            // Still render the table even if statuses failed to load
+            renderAttendanceTable();
         });
+}
+
+// Refresh both attendance list and payment statuses
+function refreshAttendanceAndPayments() {
+    loadAttendance(sessionId);
+    loadPaymentStatuses(sessionId);
 }
 
 // =============================
@@ -547,6 +557,8 @@ function deleteStudent(userId) {
         })
         .then(data => {
             showNotification('success deleting user', 'warning');
+            // FIX: keep the table and payment colors in sync after delete
+            refreshAttendanceAndPayments();
         })
         .catch(err => {
             console.error("Error deleting user :", err);
@@ -709,6 +721,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!socket || !socket.connected) {
                 loadAttendance(sessionId);
             }
+            // FIX: always keep payment statuses fresh (payments can change
+            // from other devices without any attendance event)
+            loadPaymentStatuses(sessionId);
         }, 120000);
     } else {
         console.error("No session ID found");
@@ -759,6 +774,12 @@ $(document).ready(function () {
         console.error("Failed to load group ID:", err);
     });
 
+    // FIX: shared success handler, refreshes the list AND the payment colors
+    function onStudentAdded() {
+        $('#model-add-student').modal('hide');
+        refreshAttendanceAndPayments();
+    }
+
     async function checkConditionsForAddUser() {
         const checkbox1 = $('#checkbox1').is(':checked');
         const checkbox2 = $('#checkbox2').is(':checked');
@@ -785,9 +806,7 @@ $(document).ready(function () {
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(requestData),
-                success: function (response) {
-                    $('#model-add-student').modal('hide');
-                },
+                success: onStudentAdded,
             });
         }
 
@@ -807,9 +826,7 @@ $(document).ready(function () {
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(requestData),
-                success: function (response) {
-                    $('#model-add-student').modal('hide');
-                },
+                success: onStudentAdded,
             });
         }
 
@@ -831,9 +848,7 @@ $(document).ready(function () {
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(requestData),
-                success: function (response) {
-                    $('#model-add-student').modal('hide');
-                },
+                success: onStudentAdded,
             });
         }
     }
