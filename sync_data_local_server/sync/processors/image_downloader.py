@@ -218,3 +218,50 @@ def download_student_reference_images(user_id, token):
 			print(f"     Could not download {file_path} for user {user_id}: {e}")
 
 	return result
+
+
+FORMATION_IMG_ROOT = os.environ.get(
+    "FORMATION_IMG_ROOT",
+    "/home/kernelsipc/Bureau/unistudious_local/server_local_api/uploads/formation_img"
+)
+
+def download_formation_image(local_id, remote_id, img_link, token):
+    """Download the formation image from the remote into the local folder."""
+    if not img_link:
+        print("   [img] no img_link, nothing to download")
+        return False
+
+    dest_dir = os.path.join(FORMATION_IMG_ROOT, f"formation_{local_id}")
+    dest = os.path.join(dest_dir, img_link)
+
+    if os.path.isfile(dest):
+        print(f"   [img] already exists: {dest}")
+        return True
+
+    url = f"{REMOTE_IMAGE_PUBLIC_BASE_URL}{img_link}"
+    print(f"   [img] POST {url}")
+    print(f"   [img] saving to {dest}")
+
+    try:
+        r = requests.post(
+            url,
+            headers={"Authorization": f"Bearer {token}"},
+            timeout=30,
+        )
+        content_type = r.headers.get("Content-Type", "")
+        print(f"   [img] status={r.status_code} type={content_type} size={len(r.content)}")
+
+        if r.status_code != 200 or not content_type.startswith("image"):
+            print(f"   [img] FAILED body: {r.text[:200]}")
+            return False
+
+        os.makedirs(dest_dir, exist_ok=True)
+        with open(dest, "wb") as f:
+            f.write(r.content)
+        print("   [img] saved OK")
+        return True
+    except Exception as e:
+        print(f"   [img] EXCEPTION: {e}")
+        return False
+
+

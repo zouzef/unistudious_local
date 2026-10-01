@@ -1278,3 +1278,33 @@ Traceback (most recent call last):
     raise HTTPError(http_error_msg, response=self)
 requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: https://unistudious.com/slc/get-whats-news
 2026-09-30 15:24:51 [ERROR] __main__ - Sync #193 failed.
+2026-10-01 13:51:21 [ERROR] __main__ - SYNC FAILED: cannot import name 'download_formation_image' from 'processors.image_downloader' (/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/processors/image_downloader.py)
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/sync_manager.py", line 122, in sync_data_once
+    process_sync_data(db, data, settings)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/sync_manager.py", line 211, in process_sync_data
+    from sync.processors.formation_processor import process_formations
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/processors/formation_processor.py", line 12, in <module>
+    from processors.image_downloader import download_formation_image
+ImportError: cannot import name 'download_formation_image' from 'processors.image_downloader' (/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/processors/image_downloader.py)
+2026-10-01 13:51:21 [ERROR] __main__ - Sync #1 failed.
+2026-10-01 13:53:59 [ERROR] __main__ - SYNC FAILED: process_formations() missing 1 required positional argument: 'token'
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/sync_manager.py", line 122, in sync_data_once
+    process_sync_data(db, data, settings)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/sync_manager.py", line 213, in process_sync_data
+    process_formations(db, n)
+TypeError: process_formations() missing 1 required positional argument: 'token'
+2026-10-01 13:53:59 [ERROR] __main__ - Sync #1 failed.
+2026-10-01 14:07:56 [ERROR] __main__ - SYNC FAILED: name 'download_' is not defined
+Traceback (most recent call last):
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/sync_manager.py", line 122, in sync_data_once
+    process_sync_data(db, data, settings)
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/sync_manager.py", line 169, in process_sync_data
+    from sync.processors.account_processor import process_accounts
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/processors/account_processor.py", line 13, in <module>
+    from processors.image_downloader import download_academie_image
+  File "/home/kernelsipc/Bureau/unistudious_local/sync_data_local_server/sync/processors/image_downloader.py", line 256, in <module>
+    download_
+NameError: name 'download_' is not defined
+2026-10-01 14:07:56 [ERROR] __main__ - Sync #1 failed.

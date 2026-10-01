@@ -210,7 +210,7 @@ def process_sync_data(db, data, settings):
 		if has_records(n):
 			from sync.processors.formation_processor import process_formations
 			logger.info("Processing Formations...")
-			process_formations(db, n)
+			process_formations(db, n,token)
 
 	if 'slcLocal' in data:
 		n = normalize(data['slcLocal'])

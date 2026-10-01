@@ -5,8 +5,9 @@
                 <div class="page-title flex-wrap">
                     <form id="searchForm" method="get" action="/dashboard/show-formation">
                         <div class="input-group search-area mb-3">
-                            <input type="text" class="form-control" placeholder="{{ t('search_here') }}"
-                                   name="search_formation" value="">
+                            <input type="text" id="formationSearchInput" class="form-control"
+                                   placeholder="{{ t('search_here') }}"
+                                   name="search_formation" value="" autocomplete="off">
                             <span class="input-group-text">
                                 <a href="javascript:void(0)">
                                     <svg width="15" height="15" viewBox="0 0 18 18" fill="none"
@@ -33,115 +34,27 @@
 </div>
 
 <script>
+    let allFormations = [];
+
     document.addEventListener('DOMContentLoaded', function () {
         loadFormations();
+
+        const form  = document.getElementById('searchForm');
+        const input = document.getElementById('formationSearchInput');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            renderFormations();
+        });
+        input.addEventListener('input', renderFormations);
     });
 
     function loadFormations() {
         fetch(`/api/get_all_formation/${ACCOUNT_ID}`)
             .then(res => res.json())
             .then(data => {
-                const formations = Array.isArray(data) ? data : (data.Data || []);
-                const container  = document.getElementById('formation-container');
-                container.innerHTML = '';
-
-                if (!formations || formations.length === 0) {
-                    container.innerHTML = `
-                        <div class="col-12 text-center mt-4">
-                            <p class="text-muted">{{ t('no_formations_found') }}</p>
-                        </div>`;
-                    return;
-                }
-
-                formations.forEach(formation => {
-                    const statusBadge = formation.status == 1
-                        ? `<span class="badge badge-success light">{{ t('active') }}</span>`
-                        : `<span class="badge badge-danger light">{{ t('inactive') }}</span>`;
-
-                    const img = formation.img_link
-                        ? `/api/get_formation_image/${formation.id}`
-                        : '../static/assets/images/formation-empty.jpg';
-
-                    const sessionsCount = formation.sessions_count ?? 0;
-                    const level         = formation.level ?? '—';
-                    const section       = formation.section ?? '—';
-                    const createdAt     = formation.created_at ?? '—';
-                    const description   = formation.description
-                        ? formation.description
-                        : '{{ t('no_description_available') }}';
-
-                    const card = `
-                        <div class="col-lg-12 col-xl-6 col-xxl-4 formation-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row m-b-30">
-                                        <div class="col-md-5 col-xxl-12">
-                                            <div class="new-arrival-product mb-4 mb-xxl-4 mb-md-0">
-                                                <div class="new-arrivals-img-contnent">
-                                                    <img class="img-fluid" src="${img}" alt="formation" onerror="this.onerror=null;this.src='../static/assets/images/formation-empty.jpg';">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-7 col-xxl-12">
-                                            <div class="new-arrival-content position-relative">
-                                                <h4>
-                                                    <a href="/dashboard/view_formation/${formation.id}">
-                                                        ${formation.name} <i class="fa-solid fa-pen-to-square me-1"></i>
-                                                    </a>
-                                                </h4>
-                                                <a href="/dashboard/view_formation/${formation.id}">
-                                                    <div class="comment-review star-rating">
-                                                        <span class="review-text">
-                                                            (${sessionsCount} {{ t('sessions') }})
-                                                        </span>
-                                                    </div>
-                                                    <p>
-                                                        <span class="item fs-14">
-                                                            {{ t('status') }}:
-                                                        </span>
-                                                        ${statusBadge}
-                                                    </p>
-                                                    <p>
-                                                        <span class="item fs-14">
-                                                            {{ t('education_level') }}
-                                                        </span>
-                                                        ${level}
-                                                    </p>
-                                                    <p>
-                                                        <span class="item fs-14">
-                                                            {{ t('education_section') }}
-                                                        </span>
-                                                        ${section}
-                                                    </p>
-                                                    <p>
-                                                        <span class="item fs-14">
-                                                            {{ t('created') }}
-                                                        </span>
-                                                        ${createdAt}
-                                                    </p>
-                                                    <p class="text-content">
-                                                        ${description}
-                                                    </p>
-                                                </a>
-                                                <div class="d-flex gap-2 mt-3">
-                                                    <a href="/dashboard/view_formation/${formation.id}" class="btn btn-outline-info btn-sm w-50 js-single-click" data-locked="0">
-                                                        <i class="fa-solid fa-edit me-2"></i>
-                                                        {{ t('edit') }}
-                                                    </a>
-                                                    <button data-id="${formation.id}" class="btn btn-outline-danger btn-sm w-50 delete-formation">
-                                                        <i class="fa-solid fa-trash me-2"></i>
-                                                        {{ t('delete') }}
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>`;
-
-                    container.insertAdjacentHTML('beforeend', card);
-                });
+                allFormations = Array.isArray(data) ? data : (data.Data || []);
+                renderFormations();
             })
             .catch(err => {
                 console.error('Failed to load formations:', err);
@@ -152,6 +65,108 @@
                     confirmButtonColor: '#4c4b9e',
                 });
             });
+    }
+
+    function renderFormations() {
+        const q = document.getElementById('formationSearchInput').value.trim().toLowerCase();
+
+        const formations = !q ? allFormations : allFormations.filter(f =>
+            [f.name, f.level, f.section, f.description, f.created_at]
+                .some(v => String(v ?? '').toLowerCase().includes(q))
+        );
+
+        const container = document.getElementById('formation-container');
+        container.innerHTML = '';
+
+        if (!formations.length) {
+            container.innerHTML = `
+                <div class="col-12 text-center mt-4">
+                    <p class="text-muted">{{ t('no_formations_found') }}</p>
+                </div>`;
+            return;
+        }
+
+        formations.forEach(formation => {
+            const statusBadge = formation.status == 1
+                ? `<span class="badge badge-success light">{{ t('active') }}</span>`
+                : `<span class="badge badge-danger light">{{ t('inactive') }}</span>`;
+
+            const img = formation.img_link
+                ? `/api/get_formation_image/${formation.id}`
+                : '../static/assets/images/formation-empty.jpg';
+
+            const sessionsCount = formation.sessions_count ?? 0;
+            const level         = formation.level ?? '—';
+            const section       = formation.section ?? '—';
+            const createdAt     = formation.created_at ?? '—';
+            const description   = formation.description
+                ? formation.description
+                : '{{ t('no_description_available') }}';
+
+            const card = `
+                <div class="col-lg-12 col-xl-6 col-xxl-4 formation-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row m-b-30">
+                                <div class="col-md-5 col-xxl-12">
+                                    <div class="new-arrival-product mb-4 mb-xxl-4 mb-md-0">
+                                        <div class="new-arrivals-img-contnent">
+                                            <img class="img-fluid" src="${img}" alt="formation" onerror="this.onerror=null;this.src='../static/assets/images/formation-empty.jpg';">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7 col-xxl-12">
+                                    <div class="new-arrival-content position-relative">
+                                        <h4>
+                                            <a href="/dashboard/view_formation/${formation.id}">
+                                                ${formation.name} <i class="fa-solid fa-pen-to-square me-1"></i>
+                                            </a>
+                                        </h4>
+                                        <a href="/dashboard/view_formation/${formation.id}">
+                                            <div class="comment-review star-rating">
+                                                <span class="review-text">
+                                                    (${sessionsCount} {{ t('sessions') }})
+                                                </span>
+                                            </div>
+                                            <p>
+                                                <span class="item fs-14">{{ t('status') }}:</span>
+                                                ${statusBadge}
+                                            </p>
+                                            <p>
+                                                <span class="item fs-14">{{ t('education_level') }}</span>
+                                                ${level}
+                                            </p>
+                                            <p>
+                                                <span class="item fs-14">{{ t('education_section') }}</span>
+                                                ${section}
+                                            </p>
+                                            <p>
+                                                <span class="item fs-14">{{ t('created') }}</span>
+                                                ${createdAt}
+                                            </p>
+                                            <p class="text-content">
+                                                ${description}
+                                            </p>
+                                        </a>
+                                        <div class="d-flex gap-2 mt-3">
+                                            <a href="/dashboard/view_formation/${formation.id}" class="btn btn-outline-info btn-sm w-50 js-single-click" data-locked="0">
+                                                <i class="fa-solid fa-edit me-2"></i>
+                                                {{ t('edit') }}
+                                            </a>
+                                            <button data-id="${formation.id}" class="btn btn-outline-danger btn-sm w-50 delete-formation">
+                                                <i class="fa-solid fa-trash me-2"></i>
+                                                {{ t('delete') }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+            container.insertAdjacentHTML('beforeend', card);
+        });
     }
 
     // ─── Delete handler (event delegation) ─────────────────────────────
@@ -193,5 +208,4 @@
             }
         });
     });
-
 </script>

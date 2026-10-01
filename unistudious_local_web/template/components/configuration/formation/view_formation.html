@@ -870,9 +870,19 @@
                 }
             }
 
+            
             // Image
             if (formation.img_link) {
-                document.getElementById('imagePreview').src = formation.img_link;
+                const img = document.getElementById('imagePreview');
+                const emptyImg = "{{ url_for('static', filename='assets/images/formation-empty.jpg') }}";
+
+                // If the endpoint returns 404, fall back to the placeholder
+                img.onerror = function () {
+                    this.onerror = null;
+                    this.src = emptyImg;
+                };
+
+                img.src = `/api/get_formation_image/${FORMATION_ID}?t=${Date.now()}`;
             }
 
             // Seasons & subjects

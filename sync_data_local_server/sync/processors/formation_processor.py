@@ -9,9 +9,10 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from utils.helpers import format_date
+from processors.image_downloader import download_formation_image
 
 
-def insert_formations(db, formation_data):
+def insert_formations(db, formation_data, token):
 	"""
 	Handle 'created' formations from API
 	Logic:
@@ -22,6 +23,7 @@ def insert_formations(db, formation_data):
 	Args:
 		db: Database instance
 		formation_data: Dictionary with 'created' key
+		token: Authentication token for image download
 
 	Returns:
 		dict: Statistics (inserted, updated, skipped, errors)
@@ -50,7 +52,7 @@ def insert_formations(db, formation_data):
 				if not formation_id:
 					raise ValueError("Missing required field: id")
 
-				# ✅ FIRST: Check if this remote ID already exists as id_prod (from local push)
+				# FIRST: Check if this remote ID already exists as id_prod (from local push)
 				check_prod_query = "SELECT id FROM formation WHERE id_prod = %s"
 				existing_by_prod = db.fetch_query(check_prod_query, (formation_id,))
 
@@ -108,6 +110,7 @@ def insert_formations(db, formation_data):
 
 					if not has_changes:
 						print(f"      ⏭️  Already exists with same data - skipped")
+						download_formation_image(existing["id"], formation_id, new_data["img_link"], token)
 						result["skipped"] += 1
 						continue
 
@@ -173,6 +176,9 @@ def insert_formations(db, formation_data):
 					result["updated"] += 1
 					print(f"      ✅ Updated successfully")
 
+					# Download the image under the name given by the remote
+					download_formation_image(existing["id"], formation_id, new_data["img_link"], token)
+
 				else:
 					print(f"      ✨ New record - inserting...")
 
@@ -225,6 +231,8 @@ def insert_formations(db, formation_data):
 					result["inserted"] += 1
 					print(f"      ✅ Inserted successfully")
 
+					download_formation_image(formation_id, formation_id, new_data["img_link"], token)
+
 			except Exception as err:
 				print(f"      ❌ Error processing formation ID {formation.get('id', 'unknown')}: {err}")
 				result["errors"] += 1
@@ -240,16 +248,18 @@ def insert_formations(db, formation_data):
 	return result
 
 
-def update_formations(db, formation_data):
+def update_formations(db, formation_data, token):
 	"""
 	Handle 'updated' formations from API
 	Logic:
-	- If record exists in DB → UPDATE it
+	- Look up by id_prod first, then by id
+	- If record exists in DB → UPDATE it (using the local id)
 	- If record does NOT exist → INSERT it (don't skip!)
 
 	Args:
 		db: Database instance
 		formation_data: Dictionary with 'updated' key
+		token: Authentication token for image download
 
 	Returns:
 		dict: Statistics (inserted, updated, skipped, errors)
@@ -306,7 +316,7 @@ def update_formations(db, formation_data):
 					"updated_at": format_date(formation.get("updatedAt")),
 				}
 
-				# ✅ Check by id_prod first, then fall back to id
+				# Check by id_prod first, then fall back to id
 				check_prod_query = "SELECT * FROM formation WHERE id_prod = %s"
 				existing_records = db.fetch_query(check_prod_query, (formation_id,))
 
@@ -329,6 +339,7 @@ def update_formations(db, formation_data):
 
 					if not has_changes:
 						print(f"      ⏭️  Data is identical - skipped")
+						download_formation_image(existing["id"], formation_id, new_data["img_link"], token)
 						result["skipped"] += 1
 						continue
 
@@ -386,11 +397,14 @@ def update_formations(db, formation_data):
 						new_data["enabled"],
 						new_data["timestamp"],
 						new_data["updated_at"],
-						existing["id"]  # ← use actual local id (handles both cases)
+						existing["id"]  # use actual local id (handles both cases)
 					))
 
 					result["updated"] += 1
 					print(f"      ✅ Updated successfully")
+
+					# Download the image under the name given by the remote
+					download_formation_image(existing["id"], formation_id, new_data["img_link"], token)
 
 				else:
 					print(f"      ⚠️  Record not found in DB - inserting...")
@@ -444,6 +458,8 @@ def update_formations(db, formation_data):
 					result["inserted"] += 1
 					print(f"      ✅ Inserted successfully")
 
+					download_formation_image(formation_id, formation_id, new_data["img_link"], token)
+
 			except Exception as err:
 				print(f"      ❌ Error processing formation ID {formation.get('id', 'unknown')}: {err}")
 				result["errors"] += 1
@@ -459,13 +475,14 @@ def update_formations(db, formation_data):
 	return result
 
 
-def process_formations(db, formation_data):
+def process_formations(db, formation_data, token):
 	"""
 	Process formation data (handles both 'created' and 'updated' sections)
 
 	Args:
 		db: Database instance
 		formation_data: Dictionary with 'created' and/or 'updated' keys
+		token: Authentication token for image download
 
 	Returns:
 		dict: Combined statistics
@@ -481,12 +498,12 @@ def process_formations(db, formation_data):
 	# Process 'created' section
 	if formation_data.get("created"):
 		print(f"\n✨ Processing 'created' section ({len(formation_data['created'])} records)...")
-		results["created_section"] = insert_formations(db, formation_data)
+		results["created_section"] = insert_formations(db, formation_data, token)
 
 	# Process 'updated' section
 	if formation_data.get("updated"):
 		print(f"\n🔄 Processing 'updated' section ({len(formation_data['updated'])} records)...")
-		results["updated_section"] = update_formations(db, formation_data)
+		results["updated_section"] = update_formations(db, formation_data, token)
 
 	# Print total summary
 	total_inserted = results["created_section"]["inserted"] + results["updated_section"]["inserted"]
