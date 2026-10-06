@@ -53,7 +53,9 @@ PAGE_TEMPLATES = {
     'change_password_profile':     'user_view/change_password_profile.html',
     'create-platform-student':     'user_view/create_platform_student.html',
     'show_slc_door':               'configuration/door/show_slc_door.html',
-    'profile_student':             'user_view/profile_student.html'
+    'profile_student':             'user_view/profile_student.html',
+    'show_local':                  'configuration/local/show_local.html',
+    'view_local':                  'configuration/local/view_local.html',
 }
 
 

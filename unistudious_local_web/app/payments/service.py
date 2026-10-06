@@ -97,3 +97,12 @@ def cancel_normal_payment_service(payment_order):
 			return False,response
 	except Exception as e:
 		return False,None
+
+def fetch_payment_report_service(session_id: int, payload: dict) -> tuple:
+	try:
+		url = f"{current_app.config['BASE_URL']}get_payment_report/{session_id}"
+		response = requests.post(url, json=payload, verify=False, timeout=30)
+		return response.status_code == 200, response
+	except Exception as e:
+		print(f"Error: {e} coming from fetch_payment_report_service")
+		return False, None

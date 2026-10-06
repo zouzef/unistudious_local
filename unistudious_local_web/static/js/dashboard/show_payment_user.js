@@ -408,7 +408,9 @@ window.addEventListener('load', function () {
         amountInput.value = amount || '';
 
         // Amount is only editable when the order isn't already Paid or Pending.
-        if (status === 'Paid' || status === 'Pending') {
+        const paidAmount = parseFloat(amount) || 0;
+
+        if (status === 'Paid' || (status === 'Pending' && paidAmount > 0)) {
             amountInput.setAttribute('disabled', 'disabled');
         } else {
             amountInput.removeAttribute('disabled');

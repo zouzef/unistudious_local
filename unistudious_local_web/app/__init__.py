@@ -68,6 +68,7 @@ def create_app():
     from app.calendar.views import calendar_view
     from app.groups.views import groups_view
 
+
     app.register_blueprint(auth_bp)
     app.register_blueprint(session_bp)
     app.register_blueprint(calendar_bp)
@@ -91,5 +92,6 @@ def create_app():
     app.register_blueprint(attendance_view)
     app.register_blueprint(calendar_view)
     app.register_blueprint(groups_view)
+
 
     return app

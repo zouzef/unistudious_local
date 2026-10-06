@@ -6,29 +6,55 @@ slc_view_bp = Blueprint('slc_view', __name__)
 
 @slc_view_bp.route('/dashboard/show-slc')
 def show_slc():
-    guard = login_required()
-    if guard: return guard
+	guard = login_required()
+	if guard: return guard
 
-    return render_page('show-slc',
-        account_id=session.get('account_id'),
-    )
+	return render_page('show-slc',
+					   account_id=session.get('account_id'),
+					   )
 
 
 @slc_view_bp.route('/dashboard/list-slc-camera')
 def show_list_camera():
-    guard = login_required()
-    if guard: return guard
+	guard = login_required()
+	if guard: return guard
 
-    return render_page('show-list-camera',
-        account_id=session.get('account_id'),
-    )
+	return render_page('show-list-camera',
+					   account_id=session.get('account_id'),
+					   )
 
 
 @slc_view_bp.route('/dashboard/list-slc-tablet')
 def show_list_tablet():
-    guard = login_required()
-    if guard: return guard
+	guard = login_required()
+	if guard: return guard
 
-    return render_page('show-list-tablet',
-        account_id=session.get('account_id'),
-    )
+	return render_page('show-list-tablet',
+					   account_id=session.get('account_id'),
+					   )
+
+
+@slc_view_bp.route('/dashboard/show-local')
+def show_local_dashboard():
+	guard = login_required()
+	if guard: return guard
+
+	account_id = session.get('account_id')
+	return render_page('show_local',
+					   account_id=account_id
+					   )
+
+@slc_view_bp.route('/dashboard/view-local/<int:local_id>')
+def view_local_dashboard(local_id):
+
+	guard = login_required()
+	if guard: return guard
+	account_id = session.get('account_id')
+	local_id = local_id
+
+	return render_page(
+		'view_local',
+		account_id=account_id,
+		local_id=local_id
+
+	)

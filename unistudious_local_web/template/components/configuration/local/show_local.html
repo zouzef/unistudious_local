@@ -1,0 +1,149 @@
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header flex-wrap px-3">
+                        <h4 class="card-title">List Locals</h4>
+                        <a href="/dashboard/create-local" class="btn btn-outline-primary js-single-click"
+                           data-locked="0">
+                            <i class="fa fa-plus me-1"></i> New Local
+                        </a>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table id="example" class="display table" style="min-width: 845px;">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Address</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody id="local-table-body">
+                                <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Keep the preloader visible on THIS page until data is loaded
+    window.keepPreloader = true;
+
+    const accountId = {{ session.get('account_id') }};
+
+    window.addEventListener('load', function () {
+
+        const escapeHtml = (value) => String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+
+        const getStatusBadge = (status) => {
+            const isActive = Number(status) === 1;
+            const cls   = isActive ? 'badge-success' : 'badge-danger';
+            const icon  = isActive ? 'text-success' : 'text-danger';
+            const label = isActive ? 'Active' : 'Inactive';
+            return `
+                <span class="badge light ${cls}">
+                    <i class="fa fa-circle ${icon} me-1"></i> ${label}
+                </span>`;
+        };
+
+        function destroyTable() {
+            // destroy any instance, including one created by a global script
+            if ($.fn.DataTable.isDataTable('#example')) {
+                $('#example').DataTable().destroy();
+            }
+        }
+
+        function renderLocals(locals) {
+            const tbody = document.getElementById('local-table-body');
+
+            destroyTable();
+
+            if (!locals || locals.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center">No locals found</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = locals.map(local => `
+                <tr>
+                    <td><span class="text-primary font-w600">${escapeHtml(local.id)}</span></td>
+                    <td>${escapeHtml(local.name)}</td>
+                    <td>${escapeHtml(local.address)}</td>
+                    <td>${getStatusBadge(local.status)}</td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <a data-id="${escapeHtml(local.id)}"
+                               class="delete-local btn btn-rounded btn-outline-danger btn-sm">
+                                <i class="fa fa-trash"></i> delete
+                            </a>
+                            <a href="/dashboard/view-local/${escapeHtml(local.id)}"
+                               class="btn btn-rounded btn-outline-success btn-sm">
+                                <i class="fa fa-eye"></i> View
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+
+            $('#example').DataTable({
+                searching: true,
+                pageLength: 10,
+                lengthChange: true,
+                language: {
+                    paginate: {
+                        next: '<i class="fa-solid fa-angle-right"></i>',
+                        previous: '<i class="fa-solid fa-angle-left"></i>'
+                    }
+                }
+            });
+        }
+
+        function loadLocals() {
+            return fetch(`/api/get_local_detail/${accountId}`)
+                .then(res => res.json())
+                .then(result => renderLocals(result.data))
+                .catch(err => {
+                    console.error('Error loading locals:', err);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to load locals.',
+                        confirmButtonColor: '#4c4b9e'
+                    });
+                });
+        }
+
+        // ---- Delete: only allowed on the remote (online) website ----
+        $(document).on('click', '.delete-local', function (e) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'info',
+                title: 'Action not allowed',
+                text: 'This action can only be done on the remote website (en ligne), not on the local platform.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#4c4b9e'
+            });
+        });
+        // -------------------------------------------------------------
+
+        // ---- PRELOADER: hide once data is loaded ----
+        loadLocals().finally(() => {
+            if (window.hidePreloader) window.hidePreloader();
+        });
+        // ---------------------------------------------
+
+    });
+</script>

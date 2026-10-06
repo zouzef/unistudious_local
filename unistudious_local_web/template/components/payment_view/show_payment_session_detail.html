@@ -9,9 +9,11 @@
                     </a>
                 </div>
                 <div class="col-md-4 text-end">
-                    <button id="download-all-order-user-pdf" class="btn btn-outline-success" data-session-id="42"
-                            data-session-name="Revision Accélérée Bac 2027" data-type-pay="Month"
-                            data-start-date="26-07-06" data-end-date="26-09-01">
+                    <button id="download-all-order-user-pdf" type="button" class="btn btn-outline-success"
+                            data-bs-toggle="modal" data-bs-target="#paymentModal"
+                            data-session-id="" data-session-name="" data-type-pay=""
+                            data-start-date="" data-end-date=""
+                            data-start-iso="" data-end-iso="">
                         <i class="fas fa-download"></i> Download Payment PDF
                     </button>
                 </div>
@@ -56,6 +58,8 @@
         </div>
     </div>
 </div>
+
+<!-- Change amount modal -->
 <div class="modal fade" id="changeAmountModal" tabindex="-1" aria-labelledby="changeAmountModalLabel">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -74,7 +78,7 @@
                         <input type="number" step="0.01" class="form-control" id="newAmount" required>
                     </div>
                     <input type="hidden" id="userId">
-                    <input type="hidden" id="sessionId">
+                    <input type="hidden" id="changeSessionId">
                     <input type="hidden" id="paymentId">
                     <div class="d-grid mt-4">
                         <button type="submit" class="btn btn-primary">Save changes</button>
@@ -84,6 +88,86 @@
         </div>
     </div>
 </div>
+
+<!-- Download payment PDF modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="paymentModalLabel">Select Payment Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="payment-form" data-locked="0">
+                    <input type="hidden" id="sessionId" value="">
+                    <input type="hidden" id="sessionTypePay" value="">
+                    <input type="hidden" id="intervalArray" name="intervalArray" value="">
+
+                    <div class="mb-3">
+                        <label for="session-name" class="form-label">Session Name</label>
+                        <input type="text" id="session-name" class="form-control" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="start-date" class="form-label">Start Date</label>
+                        <input type="text" id="start-date" class="form-control" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="end-date" class="form-label">End Date</label>
+                        <input type="text" id="end-date" class="form-control" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="interval-type" class="form-label">Payment Type</label>
+                        <input type="text" id="interval-type" class="form-control" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="fromInterval" class="form-label">From <span class="text-danger">*</span></label>
+                        <select id="fromInterval" class="form-control"></select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="toInterval" class="form-label">To <span class="text-danger">*</span></label>
+                        <select id="toInterval" class="form-control"></select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Payment Status <span class="text-danger">*</span></label><br>
+                        <div id="form-check">
+                            <input type="checkbox" id="allOrder" name="status" value="All Orders"
+                                   class="form-check-input">
+                            <label class="form-check-label" for="allOrder">All Status</label><br>
+
+                            <input type="checkbox" id="paid" name="status" value="Paid" class="form-check-input">
+                            <label class="form-check-label" for="paid">Paid</label><br>
+
+                            <input type="checkbox" id="unpaid" name="status" value="Unpaid" class="form-check-input">
+                            <label class="form-check-label" for="unpaid">Unpaid</label><br>
+
+                            <input type="checkbox" id="pending" name="status" value="Pending" class="form-check-input">
+                            <label class="form-check-label" for="pending">Pending</label><br>
+
+                            <input type="checkbox" id="cancelled" name="status" value="Cancelled"
+                                   class="form-check-input">
+                            <label class="form-check-label" for="cancelled">Cancelled</label><br>
+
+                            <input type="checkbox" id="not-registered" name="status" value="Not Registered"
+                                   class="form-check-input">
+                            <label class="form-check-label" for="not-registered">Not Registered</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-primary" id="downloadAllOrderSession">Download</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     // Keep the preloader visible on THIS page until data is loaded
     window.keepPreloader = true;
@@ -97,6 +181,15 @@
         const formatDate = (dateStr) => {
             if (!dateStr) return 'N/A';
             return new Date(dateStr).toLocaleDateString('en-GB');
+        };
+
+        const toIso = (dateStr) => {
+            if (!dateStr) return '';
+            const d = new Date(dateStr);
+            if (isNaN(d)) return '';
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${d.getFullYear()}-${m}-${day}`;
         };
 
         const getStatusBadge = (status) => {
@@ -126,6 +219,8 @@
                     downloadBtn.dataset.typePay     = session.type_pay;
                     downloadBtn.dataset.startDate   = formatDate(session.start_date);
                     downloadBtn.dataset.endDate     = formatDate(session.end_date);
+                    downloadBtn.dataset.startIso    = toIso(session.start_date);
+                    downloadBtn.dataset.endIso      = toIso(session.end_date);
                 })
                 .catch(err => console.error('Error loading session info:', err));
         }
@@ -223,13 +318,176 @@
             });
         // ------------------------------------------------------
 
+        // ---- Download PDF modal: fill fields + month intervals ----
+        function buildMonthOptions(startIso, endIso) {
+            if (!startIso || !endIso) return [];
+            let [y, m] = startIso.split('-').map(Number);
+            const [ey, em] = endIso.split('-').map(Number);
+            const options = [];
+            while (y < ey || (y === ey && m <= em)) {
+                const value = `${y}-${String(m).padStart(2, '0')}-01`;
+                const label = new Date(y, m - 1, 1)
+                    .toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                options.push({ value, label });
+                m++;
+                if (m > 12) { m = 1; y++; }
+            }
+            return options;
+        }
+
+        function fillSelect(select, options) {
+            select.innerHTML = options
+                .map(o => `<option value="${o.value}" data-string="${o.label}">${o.label}</option>`)
+                .join('');
+        }
+
+        const paymentModalEl = document.getElementById('paymentModal');
+
+        paymentModalEl.addEventListener('show.bs.modal', function (e) {
+            const btn = e.relatedTarget || document.getElementById('download-all-order-user-pdf');
+            const d = btn.dataset;
+
+            document.getElementById('sessionId').value       = d.sessionId || sessionId;
+            document.getElementById('sessionTypePay').value  = d.typePay || '';
+            document.getElementById('session-name').value    = d.sessionName || '';
+            document.getElementById('start-date').value      = d.startDate || '';
+            document.getElementById('end-date').value        = d.endDate || '';
+            document.getElementById('interval-type').value   = d.typePay || '';
+            document.getElementById('intervalArray').value   = '';
+
+            const months = buildMonthOptions(d.startIso, d.endIso);
+            const fromSel = document.getElementById('fromInterval');
+            const toSel   = document.getElementById('toInterval');
+            fillSelect(fromSel, months);
+            fillSelect(toSel, months);
+            if (months.length) toSel.value = months[months.length - 1].value;
+
+            // if bootstrap-select is active on these selects, refresh them
+            if (window.jQuery && jQuery.fn.selectpicker) {
+                jQuery(fromSel).add(toSel).selectpicker('refresh');
+            }
+
+            document.querySelectorAll('#payment-form input[name="status"]').forEach(c => c.checked = false);
+        });
+
+        paymentModalEl.addEventListener('hidden.bs.modal', function () {
+            document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        });
+
+        // ---- "All Status" checkbox logic ----
+        const allOrderCb = document.getElementById('allOrder');
+        const statusCbs  = [...document.querySelectorAll('#payment-form input[name="status"]')]
+            .filter(c => c.id !== 'allOrder');
+
+        allOrderCb.addEventListener('change', function () {
+            statusCbs.forEach(c => c.checked = allOrderCb.checked);
+        });
+
+        statusCbs.forEach(c => {
+            c.addEventListener('change', function () {
+                allOrderCb.checked = statusCbs.every(x => x.checked);
+            });
+        });
+
+        // ---- Download PDF ----
+        document.getElementById('downloadAllOrderSession').addEventListener('click', async function () {
+            const btn = this;
+
+            const statuses = [...document.querySelectorAll('#payment-form input[name="status"]:checked')]
+                .map(c => c.value);
+            const fromSelEl    = document.getElementById('fromInterval');
+            const toSelEl      = document.getElementById('toInterval');
+            const fromInterval = fromSelEl.value;
+            const toInterval   = toSelEl.value;
+            const modalSession = document.getElementById('sessionId').value;
+
+            if (!fromInterval || !toInterval) {
+                return Swal.fire({
+                    icon: 'warning',
+                    title: 'Select the period',
+                    confirmButtonColor: '#4c4b9e'
+                });
+            }
+
+            if (fromSelEl.selectedIndex > toSelEl.selectedIndex) {
+                return Swal.fire({
+                    icon: 'warning',
+                    title: '"From" must be before "To"',
+                    confirmButtonColor: '#4c4b9e'
+                });
+            }
+
+            if (!statuses.length) {
+                return Swal.fire({
+                    icon: 'warning',
+                    title: 'Select at least one status',
+                    confirmButtonColor: '#4c4b9e'
+                });
+            }
+
+            // every month between From and To, as label AND iso value
+            const intervals = [...fromSelEl.options]
+                .slice(fromSelEl.selectedIndex, toSelEl.selectedIndex + 1)
+                .flatMap(o => [o.dataset.string, o.value]);
+
+            btn.disabled = true;
+            const originalText = btn.textContent;
+            btn.textContent = 'Generating...';
+
+            try {
+                const res = await fetch('/api/download_payment_pdf', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sessionId:    modalSession,
+                        fromInterval: fromInterval,
+                        toInterval:   toInterval,
+                        intervals:    intervals,
+                        statuses:     statuses
+                    })
+                });
+
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    throw new Error(err.Message || 'Failed to generate PDF');
+                }
+
+                const blob = await res.blob();
+                const url  = URL.createObjectURL(blob);
+                const a    = document.createElement('a');
+                a.href     = url;
+                a.download = `payments_session_${modalSession}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+
+                bootstrap.Modal.getInstance(paymentModalEl).hide();
+            } catch (err) {
+                console.error('Error downloading PDF:', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: err.message,
+                    confirmButtonColor: '#4c4b9e'
+                });
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        });
+        // -----------------------------------------------------------
+
         document.getElementById('changeAmountModal').addEventListener('show.bs.modal', function (e) {
             const btn = e.relatedTarget;
-            document.getElementById('oldAmount').value  = btn.dataset.bsAmount;
-            document.getElementById('userId').value     = btn.dataset.bsUserId;
-            document.getElementById('sessionId').value  = btn.dataset.bsSessionId;
-            document.getElementById('paymentId').value  = btn.dataset.bsPaymentId;
-            document.getElementById('newAmount').value  = '';
+            document.getElementById('oldAmount').value        = btn.dataset.bsAmount;
+            document.getElementById('userId').value           = btn.dataset.bsUserId;
+            document.getElementById('changeSessionId').value  = btn.dataset.bsSessionId;
+            document.getElementById('paymentId').value        = btn.dataset.bsPaymentId;
+            document.getElementById('newAmount').value        = '';
         });
 
         document.getElementById('changeAmountModal').addEventListener('hidden.bs.modal', function () {
@@ -244,7 +502,7 @@
 
             const newAmount        = document.getElementById('newAmount').value;
             const userId           = document.getElementById('userId').value;
-            const paymentSessionId = document.getElementById('sessionId').value;
+            const paymentSessionId = document.getElementById('changeSessionId').value;
 
             fetch(`/api/change_normal_payment_amount`, {
                 method: 'POST',
@@ -255,21 +513,41 @@
                     newAmount: newAmount
                 })
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.Message === 'Amount updated successfully') {
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('changeAmountModal'));
+            .then(async res => ({ ok: res.ok, data: await res.json() }))
+            .then(({ ok, data }) => {
+                if (ok) {
+                    const modalEl = document.getElementById('changeAmountModal');
+                    const modal = bootstrap.Modal.getInstance(modalEl);
                     modal.hide();
 
-                    document.getElementById('changeAmountModal').addEventListener('hidden.bs.modal', function onHidden() {
-                        document.getElementById('changeAmountModal').removeEventListener('hidden.bs.modal', onHidden);
+                    modalEl.addEventListener('hidden.bs.modal', function onHidden() {
+                        modalEl.removeEventListener('hidden.bs.modal', onHidden);
                         loadPaymentData();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success',
+                            text: data.Message,
+                            confirmButtonColor: '#4c4b9e'
+                        });
                     });
                 } else {
-                    alert(data.Message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.Message,
+                        confirmButtonColor: '#4c4b9e'
+                    });
                 }
             })
-            .catch(err => console.error('Error updating amount:', err));
+            .catch(err => {
+                console.error('Error updating amount:', err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Something went wrong while updating the amount.',
+                    confirmButtonColor: '#4c4b9e'
+                });
+            });
         });
 
     });

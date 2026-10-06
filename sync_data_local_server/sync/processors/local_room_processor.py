@@ -361,7 +361,15 @@ def update_local_and_rooms(db, local_data):
 
 def process_rooms_for_local(db, local_id, rooms, operation_type):
 	"""
-	Process rooms for a specific local
+	Process rooms for a specific local (id_prod logic, same as tablets)
+
+	'created':
+	- If the remote id already exists as id_prod (from a local push) → skip (avoid duplicate)
+	- Else look up by id → UPDATE if changed, INSERT if missing
+
+	'updated':
+	- Look up by id_prod first, then fall back to id
+	- UPDATE if changed, INSERT if missing (don't skip!)
 
 	Args:
 		db: Database instance
@@ -394,22 +402,45 @@ def process_rooms_for_local(db, local_id, rooms, operation_type):
 
 			# Prepare room data
 			new_room_data = {
+				"id_prod": room_id,
 				"local_id": room.get("localId", local_id),  # Use local_id if localId not provided
 				"name": room.get("name", ""),
 				"capacity": room.get("capacity", ""),
-				"created_at": format_date(room.get("createdAt")),
 				"updated_at": format_date(room.get("updatedAt"))
 			}
+			# 'updated' must never overwrite created_at
+			if operation_type == "created":
+				new_room_data["created_at"] = format_date(room.get("createdAt"))
 
-			# Check if room exists
-			select_query = "SELECT * FROM room WHERE id = %s"
-			existing_room_records = db.fetch_query(select_query, (room_id,))
+			# ---------- FIND EXISTING ROOM ----------
+			if operation_type == "created":
+				# FIRST: does this remote ID already exist as id_prod (from a local push)?
+				existing_by_prod = db.fetch_query(
+					"SELECT id FROM room WHERE id_prod = %s", (room_id,)
+				)
+				if existing_by_prod:
+					print(f"         ⏭️  Room ID {room_id} already exists as id_prod "
+						f"(local id: {existing_by_prod[0]['id']}) - skipped to avoid duplicate")
+					room_stats["skipped"] += 1
+					continue
+
+				existing_room_records = db.fetch_query(
+					"SELECT * FROM room WHERE id = %s", (room_id,)
+				)
+			else:
+				# Check by id_prod first, then fall back to id
+				existing_room_records = db.fetch_query(
+					"SELECT * FROM room WHERE id_prod = %s", (room_id,)
+				)
+				if not existing_room_records:
+					existing_room_records = db.fetch_query(
+						"SELECT * FROM room WHERE id = %s", (room_id,)
+					)
 
 			if existing_room_records:
 				# ROOM EXISTS → Compare and UPDATE if different
 				existing_room = existing_room_records[0]
 
-				# Compare room data
 				room_has_changes = False
 				for key, value in new_room_data.items():
 					old_value = str(existing_room.get(key)) if existing_room.get(key) is not None else None
@@ -422,45 +453,26 @@ def process_rooms_for_local(db, local_id, rooms, operation_type):
 					room_stats["skipped"] += 1
 					continue
 
-				# Update room
-				update_query = """
-					UPDATE room SET
-						local_id = %s,
-						name = %s,
-						capacity = %s,
-						created_at = %s,
-						updated_at = %s
-					WHERE id = %s
-				"""
+				# Update room (columns come from new_room_data, so created_at is only touched on 'created')
+				set_clause = ", ".join(f"{col} = %s" for col in new_room_data)
+				update_query = f"UPDATE room SET {set_clause} WHERE id = %s"
 				db.execute_query(update_query, (
-					new_room_data["local_id"],
-					new_room_data["name"],
-					new_room_data["capacity"],
-					new_room_data["created_at"],
-					new_room_data["updated_at"],
-					room_id
+					*new_room_data.values(),
+					existing_room["id"]  # actual local id (handles both id and id_prod lookup)
 				))
 				room_stats["updated"] += 1
 
 			else:
 				# ROOM DOES NOT EXIST → INSERT
-				if operation_type == "updated":
+				insert_data = {"id": room_id, **new_room_data}
+				if "created_at" not in insert_data:
 					# For 'updated' operation, use updated_at as created_at
-					new_room_data["created_at"] = new_room_data["updated_at"]
+					insert_data["created_at"] = new_room_data["updated_at"]
 
-				insert_query = """
-					INSERT INTO room (
-						id, local_id, name, capacity, created_at, updated_at
-					) VALUES (%s, %s, %s, %s, %s, %s)
-				"""
-				db.execute_query(insert_query, (
-					room_id,
-					new_room_data["local_id"],
-					new_room_data["name"],
-					new_room_data["capacity"],
-					new_room_data["created_at"],
-					new_room_data["updated_at"]
-				))
+				columns = ", ".join(insert_data)
+				placeholders = ", ".join(["%s"] * len(insert_data))
+				insert_query = f"INSERT INTO room ({columns}) VALUES ({placeholders})"
+				db.execute_query(insert_query, tuple(insert_data.values()))
 				room_stats["inserted"] += 1
 
 		except Exception as err:

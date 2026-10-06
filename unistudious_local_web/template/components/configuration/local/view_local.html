@@ -1,0 +1,403 @@
+<div class="content-body">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Local Details #<span id="local-title-id"></span></h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="local-form" method="post" data-locked="0">
+                            <div class="row">
+                                <div class="col-xl-6 col-sm-6 mb-3">
+                                    <label class="form-label" for="local_name">Name <code
+                                            class="highlighter-rouge">*</code></label>
+                                    <input type="text" id="local_name" name="local[name]" required class="form-control"
+                                           value="">
+                                </div>
+
+                                <div class="col-xl-6 col-sm-6 mb-3">
+                                    <label class="form-label" for="local_status">Status <code class="highlighter-rouge">*</code></label>
+                                    <select id="local_status" name="local[status]" class="form-control">
+                                        <option value="1">Active</option>
+                                        <option value="0">Inactive</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-xl-6 col-sm-6 mb-3">
+                                    <label class="form-label" for="local_address">Address <code
+                                            class="highlighter-rouge">*</code></label>
+                                    <input type="text" id="local_address" name="local[address]" required
+                                           class="form-control" value="">
+                                </div>
+                            </div>
+
+                            <h4 class="card-title">Edit Rooms</h4>
+                            <div class="row" id="listRooms">
+                                <!-- Room cards are inserted here before the add card -->
+
+                                <!-- add room card -->
+                                <div class="col-xl-3 col-lg-4 col-sm-6" id="adddiv">
+                                    <div class="card contact_list text-center">
+                                        <div class="card-body">
+                                            <br><br>
+                                            <button type="button" class="btn p-0 border-0 bg-transparent"
+                                                    data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                <img src="{{ url_for('static', filename='assets/images/plus.png') }}"
+                                                     alt="" class="avatar avatar-xl">
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Room modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-center">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">New Room</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="room_name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="room_name">
+                </div>
+                <div class="mb-3">
+                    <label for="room_capacity" class="form-label">Capacity</label>
+                    <input type="number" class="form-control" id="room_capacity">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-primary" id="add_new_room">add new room</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Update Room modal -->
+<div class="modal fade" id="editRoomModal" tabindex="-1" aria-labelledby="editRoomModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-center">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editRoomModalLabel">Edit Room</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit_room_id" value="">
+                <div class="mb-3">
+                    <label for="edit_room_name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="edit_room_name">
+                </div>
+                <div>
+                    <label for="edit_room_capacity" class="form-label">Capacity</label>
+                    <input type="number" class="form-control" id="edit_room_capacity">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger light" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-primary" id="save_edit_room">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Keep the preloader visible on THIS page until data is loaded
+    window.keepPreloader = true;
+
+    const accountId = {{ session.get('account_id') }};
+    const ROOM_IMG  = "{{ url_for('static', filename='assets/images/rooms.png') }}";
+
+    // local id comes from the URL: /dashboard/view-local/8
+    const localId = Number(window.location.pathname.split('/').filter(Boolean).pop());
+
+    window.addEventListener('load', function () {
+
+        const escapeHtml = (value) => String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+
+        function showError(text) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: text,
+                confirmButtonColor: '#4c4b9e'
+            });
+        }
+
+        // ---------- LOCAL ----------
+        function fillLocal(local) {
+            document.getElementById('local-title-id').textContent = local.id;
+            document.getElementById('local_name').value    = local.name ?? '';
+            document.getElementById('local_address').value = local.address ?? '';
+
+            const statusSel = document.getElementById('local_status');
+            statusSel.value = String(Number(local.status) === 1 ? 1 : 0);
+
+            // refresh bootstrap-select if the theme applied it to this select
+            if (window.jQuery && jQuery.fn.selectpicker) {
+                jQuery(statusSel).selectpicker('refresh');
+            }
+        }
+
+        function loadLocal() {
+            return fetch(`/api/get_local_detail/${accountId}`)
+                .then(res => res.json())
+                .then(result => {
+                    const local = (result.data || []).find(l => Number(l.id) === localId);
+                    if (!local) {
+                        showError('Local not found.');
+                        return;
+                    }
+                    fillLocal(local);
+                })
+                .catch(err => {
+                    console.error('Error loading local:', err);
+                    showError('Failed to load local details.');
+                });
+        }
+
+        // ---------- ROOMS ----------
+        function roomCardHtml(room) {
+            const id       = escapeHtml(room.id);
+            const name     = escapeHtml(room.name);
+            const capacity = escapeHtml(room.capacity);
+            return `
+                <div class="col-xl-3 col-lg-4 col-sm-6" id="adddiv_${id}_room" data-room-id="${id}">
+                    <div class="card contact_list text-center">
+                        <div class="card-body">
+                            <div class="user-img">
+                                <img src="${ROOM_IMG}" alt="" class="avatar avatar-xl">
+                            </div>
+                            <div class="row">
+                                <div class="col"><b>Name:</b></div>
+                                <div class="col room-name">${name}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col"><b>Capacity:</b></div>
+                                <div class="col room-capacity">${capacity}</div>
+                            </div>
+                            <div class="mt-3">
+                                <button type="button" class="btn btn-outline-primary btn-sm me-2 edit-room"
+                                        data-id="${id}" data-name="${name}" data-capacity="${capacity}">
+                                    <i class="fa-solid fa-pen me-2"></i>Edit
+                                </button>
+                                <button type="button" class="btn btn-outline-danger btn-sm remove-room-view"
+                                        data-id="${id}">
+                                    <i class="fa-solid fa-trash me-2"></i>Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function renderRooms(rooms) {
+            const list   = document.getElementById('listRooms');
+            const addDiv = document.getElementById('adddiv');
+
+            // remove old room cards (keep the add card)
+            list.querySelectorAll('[data-room-id]').forEach(el => el.remove());
+
+            // only show rooms of THIS local (rooms without a local id are kept as a fallback)
+            const mine = (rooms || []).filter(r => {
+                const lid = r.local_id ?? r.localId;
+                return lid === undefined || lid === null || Number(lid) === localId;
+            });
+
+            addDiv.insertAdjacentHTML('beforebegin', mine.map(roomCardHtml).join(''));
+        }
+
+        function loadRooms() {
+            return fetch('/api/get_room')
+                .then(res => res.json())
+                .then(result => renderRooms(result.data))
+                .catch(err => {
+                    console.error('Error loading rooms:', err);
+                    showError('Failed to load rooms.');
+                });
+        }
+
+        // ---- Create room ----
+        const roomModalEl = document.getElementById('exampleModal');
+
+        document.getElementById('add_new_room').addEventListener('click', async function () {
+            const btn      = this;
+            const name     = document.getElementById('room_name').value.trim();
+            const capacity = document.getElementById('room_capacity').value;
+
+            if (!name || !capacity) {
+                return Swal.fire({
+                    icon: 'warning',
+                    title: 'Name and capacity are required',
+                    confirmButtonColor: '#4c4b9e'
+                });
+            }
+
+            btn.disabled = true;
+            try {
+                const res = await fetch('/api/create_room', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: name, capacity: capacity, local_id: localId })
+                });
+                const data = await res.json().catch(() => ({}));
+
+                if (!res.ok) {
+                    throw new Error(data.Message || 'Failed to create room');
+                }
+
+                bootstrap.Modal.getInstance(roomModalEl).hide();
+                await loadRooms();
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Room created',
+                    confirmButtonColor: '#4c4b9e'
+                });
+            } catch (err) {
+                console.error('Error creating room:', err);
+                showError(err.message);
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        // clear the create modal fields each time it closes
+        roomModalEl.addEventListener('hidden.bs.modal', function () {
+            document.getElementById('room_name').value = '';
+            document.getElementById('room_capacity').value = '';
+        });
+
+        // ---- Edit room ----
+        const editModalEl = document.getElementById('editRoomModal');
+
+        // open the edit modal and fill it with the room's data
+        document.getElementById('listRooms').addEventListener('click', function (e) {
+            const btn = e.target.closest('.edit-room');
+            if (!btn) return;
+
+            document.getElementById('edit_room_id').value       = btn.dataset.id;
+            document.getElementById('edit_room_name').value     = btn.dataset.name;
+            document.getElementById('edit_room_capacity').value = btn.dataset.capacity;
+
+            bootstrap.Modal.getOrCreateInstance(editModalEl).show();
+        });
+
+        // save the edit
+        document.getElementById('save_edit_room').addEventListener('click', async function () {
+            const btn      = this;
+            const id       = document.getElementById('edit_room_id').value;
+            const name     = document.getElementById('edit_room_name').value.trim();
+            const capacity = document.getElementById('edit_room_capacity').value;
+
+            if (!name || !capacity) {
+                return Swal.fire({
+                    icon: 'warning',
+                    title: 'Name and capacity are required',
+                    confirmButtonColor: '#4c4b9e'
+                });
+            }
+
+            btn.disabled = true;
+            try {
+                const res = await fetch(`/api/update_room/${encodeURIComponent(id)}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: name, capacity: capacity })
+                });
+                const data = await res.json().catch(() => ({}));
+
+                if (!res.ok) {
+                    throw new Error(data.Message || 'Failed to update room');
+                }
+
+                bootstrap.Modal.getInstance(editModalEl).hide();
+                await loadRooms();
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Room updated',
+                    confirmButtonColor: '#4c4b9e'
+                });
+            } catch (err) {
+                console.error('Error updating room:', err);
+                showError(err.message);
+            } finally {
+                btn.disabled = false;
+            }
+        });
+
+        // clear the edit modal fields each time it closes
+        editModalEl.addEventListener('hidden.bs.modal', function () {
+            document.getElementById('edit_room_id').value = '';
+            document.getElementById('edit_room_name').value = '';
+            document.getElementById('edit_room_capacity').value = '';
+        });
+
+        // ---- Delete room (event delegation) -> reload page on success ----
+        document.getElementById('listRooms').addEventListener('click', async function (e) {
+            const btn = e.target.closest('.remove-room-view');
+            if (!btn) return;
+
+            const roomId = btn.dataset.id;
+
+            const confirm = await Swal.fire({
+                icon: 'warning',
+                title: 'Delete this room?',
+                text: 'This action cannot be undone.',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: '#dc3545'
+            });
+            if (!confirm.isConfirmed) return;
+
+            btn.disabled = true;
+            try {
+                const res = await fetch(`/api/delete_room/${encodeURIComponent(roomId)}`, {
+                    method: 'POST'
+                });
+                const data = await res.json().catch(() => ({}));
+
+                if (!res.ok) {
+                    throw new Error(data.Message || 'Failed to delete room');
+                }
+
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Room deleted',
+                    timer: 1200,
+                    showConfirmButton: false
+                });
+
+                window.location.reload();
+            } catch (err) {
+                console.error('Error deleting room:', err);
+                btn.disabled = false;
+                showError(err.message);
+            }
+        });
+
+        // ---- PRELOADER: wait for BOTH fetches, then hide ----
+        Promise.all([loadLocal(), loadRooms()])
+            .finally(() => {
+                if (window.hidePreloader) window.hidePreloader();
+            });
+        // ------------------------------------------------------
+    });
+</script>

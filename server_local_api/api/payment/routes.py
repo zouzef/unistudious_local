@@ -607,3 +607,87 @@ def cancel_normal_payment(payment_order):
 		return jsonify({
 			"Message": f"Error coming from server"
 		}),500
+
+@payment_bp.route('/get_payment_report/<int:session_id>', methods=['POST'])
+def get_payment_report(session_id):
+	try:
+		data = request.get_json(silent=True) or {}
+		intervals = data.get('intervals') or []
+		statuses = data.get('statuses') or []
+
+		allowed = {'Paid', 'Unpaid', 'Pending', 'Cancelled', 'Not Registered'}
+
+		if not intervals or not statuses:
+			return jsonify({"Message": "Missing required fields"}), 400
+
+		session_query = """
+			SELECT name, price, currency, type_pay, start_date, end_date
+			FROM session
+			WHERE id = %s AND enabled = 1
+		"""
+		session_result = Database.execute_query(session_query, (session_id,), fetch=True)
+		if not session_result:
+			return jsonify({"Message": "session Not found"}), 404
+
+		query = """
+			SELECT p.id, p.user_id, u.full_name, vu.name AS virtual_name,
+				p.price, p.amount, p.status, p.type_date, p.date_payment
+			FROM payment_session p
+			JOIN user u ON u.id = p.user_id
+			JOIN session s ON s.id = p.session_id
+			LEFT JOIN virtual_user vu ON vu.id = (
+				SELECT MAX(vu2.id)
+				FROM virtual_user vu2
+				WHERE vu2.user_id = u.id
+				  AND vu2.account_id = s.account_id
+				  AND vu2.enabled = 1
+			)
+			WHERE p.session_id = %s
+			  AND p.enabled = 1
+			  AND u.enabled = 1
+		"""
+		values = [session_id]
+
+		query += f" AND p.type_date IN ({', '.join(['%s'] * len(intervals))})"
+		values.extend(intervals)
+
+		if 'All Orders' not in statuses:
+			selected = [s for s in statuses if s in allowed]
+			if not selected:
+				return jsonify({"Message": "Invalid statuses"}), 400
+			query += f" AND p.status IN ({', '.join(['%s'] * len(selected))})"
+			values.extend(selected)
+
+		query += " ORDER BY p.id ASC"
+		rows = Database.execute_query(query, tuple(values), fetch=True)
+
+		payments = []
+		for r in rows:
+			payments.append({
+				"id": r['id'],
+				"user_id": r['user_id'],
+				"full_name": r['full_name'],
+				"virtual_name": r['virtual_name'],
+				"price": float(r['price'] or 0),
+				"amount": float(r['amount'] or 0),
+				"status": r['status'],
+				"type_date": str(r['type_date']) if r['type_date'] else None,
+				"date_payment": str(r['date_payment'])[:10] if r['date_payment'] else None,
+			})
+
+		s = session_result[0]
+		return jsonify({
+			"Message": "Success",
+			"Session": {
+				"name": s['name'],
+				"price": float(s['price'] or 0),
+				"currency": s['currency'],
+				"type_pay": s['type_pay'],
+				"start_date": str(s['start_date'])[:10] if s['start_date'] else None,
+				"end_date": str(s['end_date'])[:10] if s['end_date'] else None,
+			},
+			"Data": payments
+		}), 200
+
+	except Exception as e:
+		return jsonify({"Message": f"Error: {e} coming from server"}), 500

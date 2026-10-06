@@ -478,6 +478,8 @@ class RoomModel(BaseModel):
 		Column("timestamp", "DATETIME", nullable=False, default="current_timestamp()"),
 		Column("updated_at", "DATETIME"),
 		Column("slc_use", "INT(11)", default="0"),
+		Column("id_prod", "INT(11)", default=None)
+
 	]
 class RoomAuditModel(BaseModel):
 	table_name = "room_audit"

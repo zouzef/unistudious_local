@@ -1,8 +1,9 @@
 # app/payments/routes.py
-from csv import excel_tab
+from app.utils.generate_payment_report_pdf import generate_payment_report_pdf
+import io
 
-from flask import Blueprint, render_template,request, jsonify, session, redirect, url_for,send_file
-from app.payments.service import(
+from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for, send_file
+from app.payments.service import (
 	get_paymet_session_service,
 	update_payment_service,
 	get_payment_user_info_service,
@@ -10,7 +11,8 @@ from app.payments.service import(
 	fetch_invoices_payment_service,
 	fetch_invoice_by_id_service,
 	update_normal_payment_service,
-	cancel_normal_payment_service
+	cancel_normal_payment_service,
+	fetch_payment_report_service
 )
 
 payment_bp = Blueprint('payment', __name__)
@@ -74,9 +76,9 @@ def change_normal_payment():
 	try:
 		data = request.get_json()
 		payload = {
-          "userId": data.get('userId'),
-          "sessionId": data.get('sessionId'),
-          "newAmount": data.get('newAmount')
+			"userId": data.get('userId'),
+			"sessionId": data.get('sessionId'),
+			"newAmount": data.get('newAmount')
 		}
 		status, response = update_normal_payment_service(payload)
 
@@ -91,7 +93,7 @@ def change_normal_payment():
 	except Exception as e:
 		print(e)
 		return jsonify({
-          "Message": f"Error: {e} coming from backend"
+			"Message": f"Error: {e} coming from backend"
 		}), 500
 
 @payment_bp.route('/api/cancel_normal_payment/<int:payment_order>', methods=['POST'])
@@ -107,6 +109,70 @@ def cancel_normal_payment(payment_order):
 	except Exception as e:
 		print(e)
 		return jsonify({"Message": f"Error: {e} coming from backend"}), 500
+
+#====================================== Payment report PDF ======================================
+@payment_bp.route('/api/download_payment_pdf', methods=['POST'])
+def download_payment_pdf():
+	try:
+		body          = request.get_json(silent=True) or {}
+		session_id    = body.get('sessionId')
+		from_interval = body.get('fromInterval')
+		to_interval   = body.get('toInterval')
+		intervals     = body.get('intervals') or []
+		statuses      = body.get('statuses') or []
+
+		required = {
+			"sessionId":    session_id,
+			"fromInterval": from_interval,
+			"toInterval":   to_interval,
+			"intervals":    intervals,
+			"statuses":     statuses,
+		}
+		missing = [k for k, v in required.items() if not v]
+		if missing:
+			print("Missing parameters:", missing, "| body received:", body)
+			return jsonify({"Message": f"Missing parameters: {', '.join(missing)}"}), 400
+
+		payload = {
+			"fromInterval": from_interval,
+			"toInterval":   to_interval,
+			"intervals":    intervals,
+			"statuses":     statuses,
+		}
+		status, response = fetch_payment_report_service(session_id, payload)
+
+		if response is None:
+			return jsonify({"Message": "Failed to reach remote service"}), 502
+
+		if response.status_code != 200:
+			print("Main server error:", response.status_code, response.text[:300])
+			return jsonify(response.json()), response.status_code
+
+		result = response.json()
+
+		if not result.get('Data'):
+			print("Empty report. Session:", result.get('Session'), "intervals:", intervals, "statuses:", statuses)
+			return jsonify({"Message": "No payments found for this selection"}), 404
+
+		pdf_bytes = generate_payment_report_pdf(
+			result['Session'],
+			result['Data'],
+			from_interval,
+			to_interval,
+			statuses
+		)
+
+		return send_file(
+			io.BytesIO(pdf_bytes),
+			mimetype='application/pdf',
+			as_attachment=True,
+			download_name=f"payments_session_{session_id}.pdf"
+		)
+
+	except Exception as e:
+		print(e)
+		return jsonify({"Message": f"Error: {e} coming from backend"}), 500
+
 #====================================== Invoices payment ======================================
 @payment_bp.route('/api/get_all_invoice_session/<int:account_id>',methods=['GET'])
 def get_all_invoice_session(account_id):
@@ -124,7 +190,7 @@ def get_invoice_by_id(invoice_id, account_id, admin_user_id):
 		status, response = fetch_invoice_by_id_service(invoice_id, account_id, admin_user_id)
 		if not status or response is None:
 			return jsonify({"Message": "Invoice not found"}), 404
-		return jsonify(response.json()), response.status_code  # ✅ fixed
+		return jsonify(response.json()), response.status_code
 	except Exception as e:
 		return jsonify({"Message": f"Error: {e} coming from backend"})
 
@@ -132,7 +198,6 @@ def get_invoice_by_id(invoice_id, account_id, admin_user_id):
 def download_invoice(invoice_id):
 	try:
 		from app.utils.generate_invoice_pdf import generate_invoice_pdf
-		import io
 
 		account_id    = session.get('account_id')
 		admin_user_id = session.get('user_id')
@@ -148,34 +213,34 @@ def download_invoice(invoice_id):
 		row = response.json()
 
 		invoice = {
-            "invoice_number": row["id"],
-            "created_at":     row["created_at"],
-            "from_name":      row.get("academy_name",    ""),
-            "from_address":   row.get("academy_address", ""),
-            "from_phone":     row.get("agent_phone",     ""),
-            "from_email":     row.get("agent_email",     ""),
-            "to_name":        row.get("student_name",    ""),
-            "to_address":     row.get("student_address", ""),
-            "to_phone":       row.get("student_phone",   ""),
-            "to_email":       row.get("student_email",   ""),
-            "order_id":       row["payment_session_id"],
-            "order_type":     row["type"],
-            "description":    row["description"],
-            "status":         "Paid" if row["is_status"] else "Unpaid",
-            "price":          row["total_amount"],
-            "total_amount":   row["total_amount"],
-            "agent_name":     row.get("agent_name",  ""),
-            "agent_phone":    row.get("agent_phone", ""),
-            "agent_email":    row.get("agent_email", ""),
-        }
+			"invoice_number": row["id"],
+			"created_at":     row["created_at"],
+			"from_name":      row.get("academy_name",    ""),
+			"from_address":   row.get("academy_address", ""),
+			"from_phone":     row.get("agent_phone",     ""),
+			"from_email":     row.get("agent_email",     ""),
+			"to_name":        row.get("student_name",    ""),
+			"to_address":     row.get("student_address", ""),
+			"to_phone":       row.get("student_phone",   ""),
+			"to_email":       row.get("student_email",   ""),
+			"order_id":       row["payment_session_id"],
+			"order_type":     row["type"],
+			"description":    row["description"],
+			"status":         "Paid" if row["is_status"] else "Unpaid",
+			"price":          row["total_amount"],
+			"total_amount":   row["total_amount"],
+			"agent_name":     row.get("agent_name",  ""),
+			"agent_phone":    row.get("agent_phone", ""),
+			"agent_email":    row.get("agent_email", ""),
+		}
 
 		pdf_bytes = generate_invoice_pdf(invoice)
 
 		return send_file(
-            io.BytesIO(pdf_bytes),
-            mimetype='application/pdf',
-            as_attachment=True,
-            download_name=f"invoice_{invoice_id}.pdf"
+			io.BytesIO(pdf_bytes),
+			mimetype='application/pdf',
+			as_attachment=True,
+			download_name=f"invoice_{invoice_id}.pdf"
 		)
 
 	except Exception as e:

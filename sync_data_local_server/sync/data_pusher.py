@@ -22,7 +22,8 @@ from sync.pushers import (
     group_pusher,
     fromation_pusher,
     payment_pusher,
-    session_pusher
+    session_pusher,
+    room_pusher
 )
 
 logger = logging.getLogger(__name__)
@@ -503,6 +504,30 @@ class DataPusher:
 
                 )
 
+
+            # --- Room ---
+            cursor.execute("""
+                SELECT *
+                FROM room_audit
+                WHERE is_synced = 0 
+                ORDER BY audit_id
+            """)
+            room_rows = cursor.fetchall()
+            if not room_rows:
+                logger.info("Found %s pending room change(s)", len(room_rows))
+            else:
+                self._process_audit_rows(
+                    cursor,
+                    conn,
+                    "room_audit",
+                    room_rows,
+                    {
+                        "INSERT": lambda row:  room_pusher.push_room_Create(db,self.settings,row),
+                        "UPDATE": lambda row:  room_pusher.push_room_Update(db,self.settings, row),
+                        "DELETE": lambda row:  room_pusher.push_room_Delete(db, self.settings,row)
+                    }
+
+                )
         except Exception as e:
             logger.exception("Fatal error in data_pusher: %s", e)
         finally:
