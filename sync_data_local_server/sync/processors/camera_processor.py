@@ -102,21 +102,20 @@ def insert_cameras(db, camera_data):
                     print(f"      🔄 Already exists but data changed - updating...")
 
                     update_query = """
-                        UPDATE camera SET
-                            id_prod    = %s,
-                            slc_id     = %s,
-                            room_id    = %s,
-                            name       = %s,
-                            mac_id     = %s,
-                            username   = %s,
-                            password   = %s,
-                            type       = %s,
-                            status     = %s,
-                            enabled    = %s,
-                            timestamp  = %s,
-                            created_at = %s,
-                            updated_at = %s
-                        WHERE id = %s
+                    	UPDATE camera SET
+                    		id_prod    = %s,
+                    		slc_id     = %s,
+                    		room_id    = %s,
+                    		name       = %s,
+                    		mac_id     = %s,
+                    		username   = %s,
+                    		password   = %s,
+                    		type       = %s,
+                    		status     = %s,
+                    		enabled    = %s,
+                    		timestamp  = %s,
+                    		updated_at = %s
+                    	WHERE id = %s
                     """
 
                     db.execute_query(update_query, (

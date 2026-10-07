@@ -52,6 +52,7 @@ def _send_create_accountTag_api(settings,payload):
 
 def _send_update_accountTag_api(settings, payload, accountTagId):
 	try:
+		print("payload accountTag: ",payload)
 		token = get_token()
 		headers= {"Authorization": f"Bearer {token}"}
 		url = f"{settings.api_base_url}/slc/update-account-tag/{accountTagId}"
@@ -69,6 +70,7 @@ def _send_update_accountTag_api(settings, payload, accountTagId):
 			return False
 
 	except Exception as e:
+		print(e)
 		logger.exception("Remote API error in _send_update_calander: %s", e)
 		return False
 
@@ -130,7 +132,7 @@ def push_accountTagUpdate(db, settings, row):
 		new_data = json.loads(row.get('new_data', '{}'))
 		TagConfig = new_data.get('tag_config_id') or None
 		OtherTag = new_data.get('other_tag') or None
-		Public = new_data.get('public')
+		Public = bool(new_data.get('public'))
 		Description = new_data.get('description')
 		AccountTagIdLocal = new_data.get('id')
 		payload = {
