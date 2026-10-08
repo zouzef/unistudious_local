@@ -9,6 +9,50 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 
 logger = logging.getLogger(__name__)
 
+# Remote understood the request and refused the data -> undo the local action, no retry
+# (403 and 404 are NOT here: 403 is a permission problem, and 404 on create-room/{local_id} can mean a wrong local_id)
+REJECT_CODES = {400, 409, 422}
+
+
+def _rejected(response):
+	"""Returned instead of None when the remote refuses the data."""
+	return {
+		"rejected": True,
+		"status_code": response.status_code,
+		"reason": response.text,
+	}
+
+
+# => Local rollback
+def _rollback_local_room(db, room_id):
+	"""Delete the local room that the remote refused.
+	Only deletes when id_prod IS NULL, so an already-synced room is never removed."""
+	cursor = None
+	try:
+		cursor = db.connection.cursor(dictionary=True)
+
+		cursor.execute("SELECT id_prod FROM room WHERE id = %s", (room_id,))
+		row = cursor.fetchone()
+		if not row:
+			logger.warning("Rollback: local room id=%s already gone", room_id)
+			return True
+		if row.get("id_prod"):
+			logger.error("Rollback skipped: room id=%s already has id_prod=%s", room_id, row["id_prod"])
+			return False
+
+		cursor.execute("DELETE FROM room WHERE id = %s AND id_prod IS NULL", (room_id,))
+		db.connection.commit()
+
+		logger.warning("🗑️ Local room id=%s deleted: remote rejected it", room_id)
+		return True
+	except Exception as e:
+		db.connection.rollback()
+		logger.exception("Rollback failed for local room id=%s: %s", room_id, e)
+		return False
+	finally:
+		if cursor:
+			cursor.close()
+
 
 # => API Sync function
 def _send_insert_Room_api(settings, payload, local_id):
@@ -29,6 +73,10 @@ def _send_insert_Room_api(settings, payload, local_id):
 			if not room_id_prod:
 				logger.error("Room created remotely but no id in response: %s", response.text)
 			return True, room_id_prod
+
+		if response.status_code in REJECT_CODES:
+			logger.error("Create room REJECTED (%s): %s", response.status_code, response.text)
+			return False, _rejected(response)
 
 		logger.error("Create room failed (%s): %s", response.status_code, response.text)
 		return False, None
@@ -103,9 +151,21 @@ def push_room_Create(db, settings, row):
 			"name": name,
 			"capacity": capacity,
 		}
-		success, room_id_prod = _send_insert_Room_api(settings, payload, local_id)
+		success, result = _send_insert_Room_api(settings, payload, local_id)
 
-		if success and room_id_prod:
+		if not success:
+			# Remote refused the data -> undo the local action
+			if isinstance(result, dict) and result.get("rejected"):
+				logger.error(
+					"Remote rejected room local=%s [%s]: %s",
+					room_id, result.get("status_code"), result.get("reason")
+				)
+				_rollback_local_room(db, room_id)
+				return True  # handled: the audit row must not be retried
+			return False  # network / 403 / 404 / 5xx: retry later
+
+		room_id_prod = result
+		if room_id_prod:
 			cursor = db.connection.cursor(dictionary=True)
 			cursor.execute(
 				"UPDATE room SET id_prod = %s WHERE id = %s",

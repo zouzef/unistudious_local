@@ -110,16 +110,25 @@ def create_manager(account_id):
 		location = data.get("location")
 		phone_number = data.get("phone_number")
 
-		existing_user = Database.execute_query(
-			"SELECT id FROM user WHERE email = %s OR username = %s",
-			[email, username],
-			fetch=True
-		)
+		checks = [
+			("email", "email", email),
+			("username", "username", username),
+		]
 
-		if existing_user:
-			return jsonify({
-				"Message": "A user with this email or username already exists"
-			}), 400
+		if phone_number:
+			checks.append(("phone", "phone", phone_number))
+
+		for label, column, value in checks:
+			existing = Database.execute_query(
+				f"SELECT id FROM user WHERE {column} = %s LIMIT 1",
+				[value],
+				fetch=True
+			)
+			if existing:
+				return jsonify({
+					"Message": f"A user with this {label} already exists",
+					"field": label
+				}), 400
 
 		# roles can arrive either as a single field "roles" or repeated "roles[]"
 		roles = request.form.getlist("roles[]")
@@ -608,22 +617,31 @@ def create_teacher(account_id):
 		location = data.get("location")
 		phone_number = data.get("phone_number")
 
-		existing_user = Database.execute_query(
-			"SELECT id FROM user WHERE email = %s OR username = %s",
-			[email, username],
-			fetch=True
-		)
+		# ------------------ Duplicate checks ------------------
+		checks = [
+			("email", "email", email),
+			("username", "username", username),
+		]
+		if phone_number:
+			checks.append(("phone", "phone", phone_number))
 
-		if existing_user:
-			return jsonify({
-				"Message": "A user with this email or username already exists"
-			}), 400
+		for label, column, value in checks:
+			existing = Database.execute_query(
+				f"SELECT id FROM user WHERE {column} = %s LIMIT 1",
+				[value],
+				fetch=True
+			)
+			if existing:
+				return jsonify({
+					"Message": f"A user with this {label} already exists",
+					"field": label
+				}), 400
 
 		allowed_permission_access = request.form.getlist("allowedPermissionAccess[]")
 		allowed_access_session = request.form.getlist("allowedAccessSession[]")
 
 		image_file = files.get("image")
-		print(image_file)
+
 		# ------------------ Create user ------------------
 		user_data = {
 			"account_id": account_id,
@@ -652,11 +670,7 @@ def create_teacher(account_id):
 		img_link = None
 
 		if image_file and image_file.filename:
-			print("1 - Image received")
 			filename = secure_filename(image_file.filename)
-			print("2 - Filename:", filename)
-
-			print("3 - Flask root:", current_app.root_path)
 
 			upload_folder = os.path.join(
 				current_app.root_path,
@@ -665,33 +679,21 @@ def create_teacher(account_id):
 				f"user_{result}"
 			)
 
-			print("4 - Upload folder:", upload_folder)
 			try:
 				os.makedirs(upload_folder, exist_ok=True)
-				print("5 - Folder created")
-			except Exception as e:
-				print("ERROR creating folder:", e)
-
-			save_path = os.path.join(upload_folder, filename)
-
-			print("6 - Save path:", save_path)
-
-			try:
+				save_path = os.path.join(upload_folder, filename)
 				image_file.save(save_path)
-				print("7 - Image saved")
-				print("Exists:", os.path.exists(save_path))
+				img_link = filename
+
+				Database.execute_query(
+					"UPDATE user SET img_link = %s WHERE id = %s",
+					[img_link, result],
+					fetch=False
+				)
 			except Exception as e:
-				print("ERROR saving image:", e)
+				logger.error("Teacher user_id=%s image save failed: %s", result, e)
+				img_link = None
 
-			img_link = filename
-
-			print("8 - img_link:", img_link)
-
-			Database.execute_query(
-				"UPDATE user SET img_link = %s WHERE id = %s",
-				[img_link, result],
-				fetch=False
-			)
 		# ------------------ Relation Teacher Account ------------------
 		relation_uuid = str(uuid_lib.uuid4())
 
@@ -740,10 +742,10 @@ def create_teacher(account_id):
 			audit_payload["img_link"] = img_link
 
 		audit_query = """
-            INSERT INTO user_audit
-            (user_id, role, action_type, payload, is_synced)
-            VALUES (%s, %s, %s, %s, %s)
-        """
+			INSERT INTO user_audit
+			(user_id, role, action_type, payload, is_synced)
+			VALUES (%s, %s, %s, %s, %s)
+		"""
 
 		Database.execute_query(
 			audit_query,
@@ -765,6 +767,7 @@ def create_teacher(account_id):
 		}), 200
 
 	except Exception as e:
+		logger.exception("create_teacher failed")
 		return jsonify({
 			"Message": f"Error: {e} coming from server"
 		}), 500
@@ -1278,16 +1281,25 @@ def create_student(account_id):
 		location = data.get("location")
 		phone_number = data.get("phone_number")
 
-		existing_user = Database.execute_query(
-			"SELECT id FROM user WHERE email = %s OR username = %s",
-			[email, username],
-			fetch=True
-		)
+		# ------------------ Duplicate checks ------------------
+		checks = [
+			("email", "email", email),
+			("username", "username", username),
+		]
+		if phone_number:
+			checks.append(("phone", "phone", phone_number))
 
-		if existing_user:
-			return jsonify({
-				"Message": "A user with this email or username already exists"
-			}), 400
+		for label, column, value in checks:
+			existing = Database.execute_query(
+				f"SELECT id FROM user WHERE {column} = %s LIMIT 1",
+				[value],
+				fetch=True
+			)
+			if existing:
+				return jsonify({
+					"Message": f"A user with this {label} already exists",
+					"field": label
+				}), 400
 
 		# ── Insert user WITHOUT image first (need the id for the folder) ──
 		user_data = {
