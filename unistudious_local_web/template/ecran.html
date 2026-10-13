@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Piuma Academy - Calendar</title>
+
+    <!-- Same theme + FullCalendar files as the tablet calendar page -->
+    <link rel="stylesheet" href="/static/vendor/fullcalendar-5.11.0/lib/main.css">
+    <link href="/static/css/style.css" rel="stylesheet">
+    <script src="/static/vendor/fullcalendar-5.11.0/lib/main.js"></script>
+
+    <style>
+        #clock { font-size: 2rem; font-weight: 700; color: #4c4b9e; }
+
+        /* hover tooltip */
+        #tip {
+            position: fixed;
+            z-index: 9999;
+            display: none;
+            min-width: 220px;
+            max-width: 340px;
+            padding: 12px 16px;
+            background: #4c4b9e;
+            color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .3);
+            font-size: 1rem;
+            line-height: 1.5;
+            pointer-events: none;
+        }
+        #tip .t-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 4px; }
+        #tip .t-row span { opacity: .75; }
+
+        /* ---------- layout: calendar fills the whole page ---------- */
+        html, body { height: 100%; margin: 0 !important; padding: 0 !important; overflow: hidden; }
+        #main-wrapper,
+        .content-body,
+        .container-fluid,
+        .container-fluid > .row,
+        .col-xl-12 { height: 100%; }
+
+        .content-body { margin: 0 !important; padding: 0 !important; }
+        .container-fluid { padding: 0 !important; max-width: 100% !important; }
+        .container-fluid > .row { margin: 0 !important; }
+        .col-xl-12 { padding: 0 !important; }
+
+        .card { height: 100%; margin: 0 !important; border-radius: 0; }
+        .card-body { height: 100%; padding: 6px 10px !important; }
+        #calendar { height: 100%; }
+
+
+
+        /* session modal */
+        #ev-modal {
+            position: fixed; inset: 0; z-index: 10000;
+            display: none; align-items: center; justify-content: center;
+            background: rgba(0, 0, 0, .55);
+        }
+        #ev-modal .m-box {
+            position: relative; width: 90%; max-width: 560px;
+            background: #fff; border-radius: 14px; padding: 28px 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, .35);
+        }
+        #ev-modal-close {
+            position: absolute; top: 10px; right: 16px;
+            border: 0; background: none; font-size: 2rem; line-height: 1; cursor: pointer; color: #666;
+        }
+        #ev-modal .m-title { font-size: 1.6rem; font-weight: 700; color: #4c4b9e; padding-left: 12px; margin-bottom: 18px; }
+        #ev-modal .m-row { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 1.15rem; }
+        #ev-modal .m-row span { min-width: 90px; color: #888; }
+        #ev-modal .m-row b { font-weight: 600; color: #222; }
+    </style>
+</head>
+<body>
+
+<!-- "show" class: the theme keeps #main-wrapper invisible until its own JS adds it -->
+<div id="main-wrapper" class="show">
+    <div class="content-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="calendar" class="app-fullcalendar" data-account-id="{{ account_id }}" data-view="timeGridWeek"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ev-modal">
+    <div class="m-box">
+        <button id="ev-modal-close" type="button">&times;</button>
+        <div id="ev-modal-body"></div>
+    </div>
+</div>
+
+<div id="tip"></div>
+
+<script src="/static/js/ecran.js?v=5"></script>
+</body>
+</html>

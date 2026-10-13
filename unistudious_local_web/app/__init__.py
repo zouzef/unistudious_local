@@ -56,6 +56,7 @@ def create_app():
     from app.account.routes import account_bp
     from app.manager.routes import manager_bp
     from app.teacher.routes import teacher_bp
+    from app.ecran.routes import ecran_bp
 
 
     # VIEWS imports
@@ -83,6 +84,7 @@ def create_app():
     app.register_blueprint(account_bp)
     app.register_blueprint(manager_bp)
     app.register_blueprint(teacher_bp)
+    app.register_blueprint(ecran_bp)
     # view Blueprint
     app.register_blueprint(user_views_bp)
     app.register_blueprint(session_view_bp)

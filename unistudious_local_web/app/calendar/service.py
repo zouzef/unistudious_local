@@ -135,3 +135,12 @@ def calander_moderateur_service(session_id:int, account_id: int) -> dict:
         return True, response.json()
     except Exception as e:
         return False,None
+
+def get_all_calander_service(account_id: int):
+    try:
+        url = f"{current_app.config['BASE_URL']}get_all_calander/{account_id}"
+        response = requests.get(url, verify=False, timeout=10)
+        return response.status_code == 200, response.json()
+    except Exception as e:
+        print(f"[CALENDAR ERROR] get_all_calander_service: {e}")
+        return False, None

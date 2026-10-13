@@ -2283,3 +2283,47 @@ def get_calander_moderateur(session_id, account_id):
 		return jsonify({
 			"Message": f"Error: {e} coming from server"
 		}), 500
+
+
+@calendar_bp.route('/get_all_calander/<int:account_id>', methods=['GET'])
+def get_all_calander(account_id):
+	try:
+		query = """
+			SELECT DISTINCT
+				r.session_id,
+				s.name as session_name,
+				r.group_session_id,
+				grp.name,
+				r.room_id,
+				room.name,
+				r.teacher_id,
+				u.username,
+				r.color,
+				r.subject_id,
+				r.description,
+				r.start_time,
+				r.end_time,
+				r.title,
+				r.type
+			FROM 
+				relation_calander_group_session r,
+				room ,
+				user u,
+				relation_group_local_session grp,
+				session s
+			WHERE 
+				r.teacher_id = u.id AND
+				r.room_id = room.id AND
+				r.group_session_id = grp.id AND 
+				r.session_id = s.id AND 
+				r.enabled = 1 AND
+				r.account_id = %s 
+		"""
+		result = Database.execute_query(query, (account_id,), fetch=True)
+		if result:
+			return jsonify({"Message": "Success", "data": result}), 200
+		else:
+			return jsonify({"Message": "There is no data", "data": []}), 200
+
+	except Exception as e:
+		return jsonify({"Message": f"Error: {e} coming from server"}), 500
