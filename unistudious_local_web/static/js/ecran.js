@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	var DEFAULT_VIEW = calendarEl.dataset.view || 'dayGridMonth';
 	var REFRESH_MS = 60000;      // reload events every minute
 	var IDLE_RESET_MS = 120000;  // after 2 min without mouse activity, go back to today + default view
+	var MAX_PER_DAY = 3;         // more sessions than this in one day -> "+N more"
 
 	// ---------- clock ----------
 	function tick() {
@@ -112,6 +113,18 @@ document.addEventListener('DOMContentLoaded', function () {
 		return window.innerHeight - calendarEl.getBoundingClientRect().top - 16;
 	}
 
+	// ---------- scroll to the current day (month view) ----------
+	var needScroll = true;
+
+	function scrollToToday() {
+		var todayEl = calendarEl.querySelector('.fc-daygrid-day.fc-day-today');
+		if (!todayEl) return;
+		var scroller = todayEl.closest('.fc-scroller');
+		if (!scroller) return;
+		var top = todayEl.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop;
+		scroller.scrollTop = Math.max(0, top - 10);
+	}
+
 	// ---------- calendar (the user can navigate, but nothing can be edited) ----------
 	var calendar = new FullCalendar.Calendar(calendarEl, {
 		initialView: DEFAULT_VIEW,
@@ -123,11 +136,25 @@ document.addEventListener('DOMContentLoaded', function () {
 		},
 		expandRows: true,
 		height: fitHeight(),
-		dayMaxEvents: false,  // show all events in the cell, no "+N more"
+		dayMaxEvents: MAX_PER_DAY, // max 3 sessions per day, then "+N more" (click opens a popup)
+		moreLinkClick: 'popover',
 		navLinks: true,       // click a day number to open that day
 		editable: false,      // no drag, no resize
 		droppable: false,
 		selectable: false,
+
+		// every time the visible dates change, scroll again once the events are drawn
+		datesSet: function () {
+			needScroll = true;
+		},
+
+		// events are drawn -> row heights are final -> scroll to today (only once per date change,
+		// so the minute refresh does not move the screen)
+		eventsSet: function () {
+			if (!needScroll) return;
+			needScroll = false;
+			setTimeout(scrollToToday, 0);
+		},
 
 		events: function (info, successCallback, failureCallback) {
 			if (!ACCOUNT_ID) {
@@ -189,7 +216,10 @@ document.addEventListener('DOMContentLoaded', function () {
 	function refit() {
 		calendar.setOption('height', fitHeight());
 	}
-	window.addEventListener('load', refit);
+	window.addEventListener('load', function () {
+		refit();
+		setTimeout(scrollToToday, 100); // once more after the final layout
+	});
 	window.addEventListener('resize', refit);
 
 	// reload the events every minute (does NOT move the user away from the date he is looking at)
@@ -208,5 +238,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		closeModal();
 		if (calendar.view.type !== DEFAULT_VIEW) calendar.changeView(DEFAULT_VIEW);
 		calendar.today();
+		setTimeout(scrollToToday, 50);
 	}, 30000);
 });
