@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', function () {
 	// account id comes from data-account-id on #calendar (set from the URL: /ecran/3)
 	var ACCOUNT_ID = parseInt(calendarEl.dataset.accountId, 10);
 	var DEFAULT_VIEW = calendarEl.dataset.view || 'dayGridMonth';
-	var REFRESH_MS = 60000;      // reload events every minute
-	var IDLE_RESET_MS = 120000;  // after 2 min without mouse activity, go back to today + default view
-	var MAX_PER_DAY = 3;         // more sessions than this in one day -> "+N more"
+	var REFRESH_MS = 60000;
+	var IDLE_RESET_MS = 120000;
+	var MAX_PER_DAY = 3;
 
 	// ---------- clock ----------
 	function tick() {
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	document.getElementById('ev-modal-close').addEventListener('click', closeModal);
 	modalEl.addEventListener('click', function (e) {
-		if (e.target === modalEl) closeModal(); // click on the dark background
+		if (e.target === modalEl) closeModal();
 	});
 	document.addEventListener('keydown', function (e) {
 		if (e.key === 'Escape') closeModal();
