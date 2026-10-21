@@ -11,7 +11,8 @@ from app.calendar.service import (
     delete_calendar_request,
     get_notification,
     calander_moderateur_service,
-    get_all_calander_service
+    get_all_calander_service,
+    get_calander_per_room_service
 )
 
 calendar_bp = Blueprint('calendar', __name__)
@@ -121,3 +122,17 @@ def get_all_calander(account_id):
 
     except Exception as e:
         return jsonify({"Message": f"Error: {e} coming from backend"}), 500
+
+
+@calendar_bp.route('/api/get_calander_per_room/<int:room_id>', methods=['GET'])
+def get_calander_per_room(room_id):
+    try:
+        success , response = get_calander_per_room_service(room_id)
+        if success:
+            return jsonify(response), 200
+        return jsonify({"Message": "Failed to get calendars per room"}), 400
+
+    except Exception as e:
+        return jsonify({
+            "Message": f"Error: {e} coming from backend"
+        }),500

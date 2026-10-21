@@ -938,6 +938,7 @@ def check_room_id(room_id):
 @calendar_bp.route('/get-calendar-room/<int:room_id>', methods=['GET'])
 def get_calendar_room(room_id):
 	try:
+		print(room_id)
 		# Validate room exists first
 		if not check_room_id(room_id):
 			return jsonify({"Message": "Room not found"}), 404
@@ -953,7 +954,7 @@ def get_calendar_room(room_id):
         """
 		values = (room_id,)
 		result = Database.execute_query(query, values)
-
+		print(result)
 		if result and len(result) > 0:
 			# Convert datetime objects to ISO format strings
 			for item in result:

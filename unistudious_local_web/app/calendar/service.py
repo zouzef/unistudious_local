@@ -144,3 +144,13 @@ def get_all_calander_service(account_id: int):
     except Exception as e:
         print(f"[CALENDAR ERROR] get_all_calander_service: {e}")
         return False, None
+
+def get_calander_per_room_service(room_id):
+    try:
+        url = f"{current_app.config['BASE_URL']}get-calendar-room/{room_id}"
+        response = requests.get(url, verify=False, timeout=10)
+        return response.status_code == 200, response.json()
+
+    except Exception as e:
+        print(f"[CALENDAR ERROR] get_calander_per_room: {e}")
+        return False, None
