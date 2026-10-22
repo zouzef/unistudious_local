@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -100,6 +100,21 @@
             color: #2f2e6e;
         }
 
+        /* ---------- day header row (Lun 19/10 ...) ---------- */
+        .fc .fc-col-header-cell {
+            background: #ecebf8;
+        }
+        .fc .fc-col-header-cell-cushion {
+            display: block;
+            padding: 10px 4px !important;
+            font-size: 1.3rem !important;
+            font-weight: 700;
+            color: #2f2e6e;
+            text-transform: uppercase;
+            letter-spacing: .03em;
+            text-decoration: none !important;
+        }
+
         /* hide prev / next / today (keypad + idle reset still work, they are in the JS) */
         .fc .fc-header-toolbar .fc-toolbar-chunk:first-child .fc-button-group,
         .fc .fc-header-toolbar .fc-prev-button,
@@ -158,11 +173,6 @@
             background: #fff;
         }
 
-        /* optional: bigger day names / day numbers (remove the comment marks to use)
-        .fc .fc-col-header-cell-cushion { font-size: 1.3rem !important; }
-        .fc .fc-daygrid-day-number { font-size: 1.3rem !important; }
-        */
-
         /* session modal */
         #ev-modal {
             position: fixed; inset: 0; z-index: 10000;
@@ -213,6 +223,38 @@
 
 <div id="tip"></div>
 
+<!-- Display options added BEFORE ecran.js (French day headers + start time). No logic changed. -->
+<script>
+(function () {
+    var DAYS = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+    var SLOT_MIN_TIME = '06:00:00';   // first hour shown in the week/day grid
+
+    function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+    function dayWithDate(arg) {
+        var d = arg.date.marker;
+        return DAYS[d.getUTCDay()] + ' ' + pad(d.getUTCDate()) + '/' + pad(d.getUTCMonth() + 1);
+    }
+    function dayOnly(arg) {
+        return DAYS[arg.date.marker.getUTCDay()];
+    }
+
+    var Original = FullCalendar.Calendar;
+    FullCalendar.Calendar = class extends Original {
+        constructor(el, options) {
+            options = options || {};
+            if (!options.slotMinTime) options.slotMinTime = SLOT_MIN_TIME;
+            if (!options.scrollTime) options.scrollTime = SLOT_MIN_TIME;
+            options.views = Object.assign({
+                timeGridWeek: { dayHeaderFormat: dayWithDate },
+                timeGridDay: { dayHeaderFormat: dayWithDate },
+                dayGridMonth: { dayHeaderFormat: dayOnly }
+            }, options.views || {});
+            super(el, options);
+        }
+    };
+})();
+</script>
 <script src="/static/js/ecran.js?v=6"></script>
 </body>
 </html>

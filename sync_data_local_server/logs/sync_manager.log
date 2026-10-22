@@ -1399,3 +1399,5 @@ Traceback (most recent call last):
     raise ReadTimeout(e, request=request)
 requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='unistudious.com', port=443): Read timed out. (read timeout=30)
 2026-10-19 10:15:52 [ERROR] __main__ - Sync #5 failed.
+2026-10-22 10:02:56 [ERROR] __main__ - No internet connection. Cannot sync.
+2026-10-22 10:02:56 [ERROR] __main__ - Sync #30 failed.
