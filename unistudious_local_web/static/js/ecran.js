@@ -177,7 +177,13 @@ document.addEventListener('DOMContentLoaded', function () {
 	function updateRoomLabel() {
 		var btn = calendarEl.querySelector('.fc-roomLabel-button');
 		if (!btn) return;
-		btn.textContent = currentKey ? ROOMS[currentKey].name : 'All salles';
+		var label = currentKey ? ROOMS[currentKey].name : 'All salles';
+
+		// keep only ONE text node (FullCalendar re-renders can leave a second copy)
+		while (btn.childNodes.length > 1) btn.removeChild(btn.lastChild);
+		if (btn.firstChild && btn.firstChild.nodeType === 3) btn.firstChild.nodeValue = label;
+		else btn.textContent = label;
+
 		btn.classList.toggle('room-active', !!currentKey);
 	}
 
@@ -312,28 +318,28 @@ document.addEventListener('DOMContentLoaded', function () {
         // the keypad sends Arrow Down / Arrow Up (or letters D / C), so a normal keyboard works too
         var SCROLL_STEP = 0.6; // fraction of the visible height scrolled by one press
 
-        	function findScroller() {
-		var best = null;
-		var bestOverflow = 1;
-		var all = calendarEl.querySelectorAll('*');
-		for (var i = 0; i < all.length; i++) {
-			var el = all[i];
-			var oy = getComputedStyle(el).overflowY;
-			if (oy !== 'auto' && oy !== 'scroll' && oy !== 'hidden') continue;
-			var overflow = el.scrollHeight - el.clientHeight;
-			if (overflow > bestOverflow) {
-				best = el;
-				bestOverflow = overflow;
-			}
-		}
-		if (!best) {
-			var page = document.scrollingElement || document.documentElement;
-			console.log('ecran: no scroller. page', page.scrollHeight, 'vs', page.clientHeight,
+        function findScroller() {
+		    var best = null;
+		    var bestOverflow = 1;
+		    var all = calendarEl.querySelectorAll('*');
+		    for (var i = 0; i < all.length; i++) {
+			    var el = all[i];
+			    var oy = getComputedStyle(el).overflowY;
+			    if (oy !== 'auto' && oy !== 'scroll' && oy !== 'hidden') continue;
+			        var overflow = el.scrollHeight - el.clientHeight;
+			        if (overflow > bestOverflow) {
+				        best = el;
+				        bestOverflow = overflow;
+			        }
+		    }
+		    if (!best) {
+			    var page = document.scrollingElement || document.documentElement;
+			    console.log('ecran: no scroller. page', page.scrollHeight, 'vs', page.clientHeight,
 				'| calendar', calendarEl.scrollHeight, 'vs', calendarEl.clientHeight);
-			if (page.scrollHeight > page.clientHeight + 1) best = page;
-		}
-		return best;
-	}
+			    if (page.scrollHeight > page.clientHeight + 1) best = page;
+		    }
+		    return best;
+	    }
 
         function scrollCalendar(direction) {
             var target = findScroller();
